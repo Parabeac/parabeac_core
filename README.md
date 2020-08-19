@@ -5,7 +5,7 @@
 
 Parabeac-Core is an open-source repository that converts design files into Flutter code.
 
-![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac)
+![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
 # How it works
 Parabeac-Core is essentially broken up into 3 pieces which you can see in the list or animation below. While most of the magic is in the interpretation engine, you can view more animations & information here.
