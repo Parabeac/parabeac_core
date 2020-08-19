@@ -98,7 +98,7 @@ We're very happy to have any help we can get on our tool as those with the best 
 * Helping others
 
 **Feature Development**
-There are a number of new features and objectives we're hoping to reach and as a contributor, your work can help take us there. Please feel free to look over the Issues section of our GitHub and find any issues with the "Feature Work" Label. These issues are things we're looking to add going forward and are depending on the community to assist with. Feel free to join our [discord](https://discord.gg/mZTkke) and chat with us to determine the best course of action and to help with guidance. 
+There are a number of new features and objectives we're hoping to reach and as a contributor, your work can help take us there. Please feel free to look over the Issues section of our GitHub and find any issues with the "Feature Work" Label. These issues are things we're looking to add going forward and are depending on the community to assist with. Feel free to join our [discord](https://discord.com/invite/qUrghes) and chat with us to determine the best course of action and to help with guidance. 
 **Triage**
 As more people use and more features get implemented on Parabeac Core more issues are created. One of the best, and most straight forward, ways to help is by helping us solve bugs. Within the Issues section of our GitHub, you'll find a number of issues that have tags denoting an issue area of relevance. It may be defined by the service or more specifically the node/widget that's being affected. By stepping in and solving these issues you'll be able to speed up our development of features going forward. 
 **Helping Others**
@@ -107,7 +107,7 @@ One of the best ways to help is by not only by helping out in the code but also 
 **Feature Development**
 The following process should be kept in mind when doing feature development for Parabeac Core:
 1. Be Kind and Courteous to Others 
-2. When Branching and determining which feature to work on make sure to join #ParabeacHackers channel on our [discord](https://discord.gg/mZTkke), you'll need to request the contributor role, to ensure there isn't duplicated work. 
+2. When Branching and determining which feature to work on make sure to join #ParabeacHackers channel on our [discord](https://discord.com/invite/qUrghes), you'll need to request the contributor role, to ensure there isn't duplicated work. 
 3. Make sure your Parabeac Core Developer Environment is configured to the correct version for the feature at hand.
 4. Once you've finished working on the task, make a PR and reach out to one of the Discord Members that have the "Team" Role.
 5. When performing a code review make sure all edge cases and test cases have been accounted for and that a Parabeac Team member is invited. If a Parabeac Team Member is not present during the code review, the PR will be automatically declined.
@@ -115,7 +115,7 @@ The following process should be kept in mind when doing feature development for 
 
 **Triage**
 1. Be Kind and Courteous to Others 
-2. When picking which issues to work on make sure to join the #ParabeacHackers channel and the #ParabeacTriage channel on our [discord](https://discord.gg/mZTkke), you'll need to request the contributor role, to stay up to date on the latest progress and to ensure no duplicated work. 
+2. When picking which issues to work on make sure to join the #ParabeacHackers channel and the #ParabeacTriage channel on our [discord](https://discord.com/invite/qUrghes), you'll need to request the contributor role, to stay up to date on the latest progress and to ensure no duplicated work. 
 3. Make sure your development environment is up to date with the correct version in the Issue and make sure to read the corresponding page associated with the task at hand. 
 4. Once you've finished working on the task, make a PR and reach out to one of the Discord Members that have the "Team" Role.
 5. When performing a code review make sure all edge cases and test cases have been accounted for and that a Parabeac Team member is invited. If a Parabeac Team Member is not present during the code review, the PR will be automatically declined.
