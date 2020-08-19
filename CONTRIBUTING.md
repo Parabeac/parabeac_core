@@ -3,7 +3,7 @@ First and foremost, thanks for considering contribution here at Parabeac Core!
 
 Below you'll find a set of guidelines around how to contribute here at Parabeac. These aren't rules set in stone, feel free to use your best guidance, and if you have any ideas feel to make a Pull Request and suggest changes. 
 
-** Table Of Contents ** 
+**Table Of Contents** 
 
 [Code of Conduct](#code-of-conduct)
 
