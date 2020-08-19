@@ -1,0 +1,17 @@
+{
+  "lerna": "3.4.3",
+  "version": "0.5.0",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "bootstrap": {
+      "ci": false,
+      "hoist": true,
+      "nohoist": "puppeteer"
+    }
+  },
+  "npmClientArgs": [
+    "--no-package-lock"
+  ]
+}

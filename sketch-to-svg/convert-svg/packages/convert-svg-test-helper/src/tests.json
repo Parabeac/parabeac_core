@@ -1,0 +1,199 @@
+[
+  {
+    "name": "when width/height attributes only: no resizing",
+    "file": "width-height-only.svg",
+    "message": "should be 550x600"
+  },
+  {
+    "name": "when width/height attributes only: resize to smaller than it is",
+    "file": "width-height-only.svg",
+    "options": { "width": 200, "height": 200 },
+    "message": "should be 200x200 and cropped"
+  },
+  {
+    "name": "when width/height attributes only: resize to larger than it is",
+    "file": "width-height-only.svg",
+    "options": { "width": 900, "height": 900 },
+    "message": "should be 900x900 and expanded with empty space in the bottom right"
+  },
+  {
+    "name": "when viewBox attribute only: resized to 100x400",
+    "file": "viewbox-only.svg",
+    "options": { "width": 100, "height": 400 },
+    "message": "should be 100x400 and vertically centered"
+  },
+  {
+    "name": "when viewBox attribute only: resized to 100 width",
+    "file": "viewbox-only.svg",
+    "options": { "width": 100 },
+    "message": "should be 100x118, nicely scaled"
+  },
+  {
+    "name": "when viewBox attribute only: resized to 100 height",
+    "file": "viewbox-only.svg",
+    "options": { "height": 100 },
+    "message": "should be 85x100, nicely scaled"
+  },
+  {
+    "name": "when percent width/height attributes and viewBox attribute: resized to 100x400",
+    "file": "percent-width-height-viewbox.svg",
+    "options": { "width": 100, "height": 400 },
+    "message": "should be 100x400 and vertically centered, a full circle (not a quarter one)"
+  },
+  {
+    "name": "when percent width/height attributes and viewBox attribute: resized to 100 width",
+    "file": "percent-width-height-viewbox.svg",
+    "options": { "width": 100 },
+    "message": "should be 100x100, nicely scaled, a full circle (not a quarter one)"
+  },
+  {
+    "name": "when percent width/height attributes and viewBox attribute: resized to 200 height",
+    "file": "percent-width-height-viewbox.svg",
+    "options": { "height": 200 },
+    "message": "should be 200x200, nicely scaled, a full circle (not a quarter one)"
+  },
+  {
+    "name": "when width/height and viewBox attributes: no resizing",
+    "file": "width-height-viewbox.svg",
+    "message": "should be 505x505 and not have any green borders"
+  },
+  {
+    "name": "when width/height and viewBox attributes: resized to a height of 100",
+    "file": "width-height-viewbox.svg",
+    "options": { "height": 100 },
+    "message": "should be 100x100 and not have any green borders"
+  },
+  {
+    "name": "when width/height and viewBox attributes: resized to 100x600",
+    "file": "width-height-viewbox-2.svg",
+    "options": { "width": 100, "height": 600 },
+    "message": "should be 100x600, vertically centered, and with a transparent background"
+  },
+  {
+    "name": "when no width/height and no viewBox: resized to smaller than it is",
+    "file": "no-size-indicators.svg",
+    "options": { "width": 100, "height": 100 },
+    "message": "should be cropped to upper left"
+  },
+  {
+    "name": "when no width/height and no viewBox: resized to larger than it is",
+    "file": "no-size-indicators.svg",
+    "options": { "width": 1000, "height": 1000 },
+    "message": "should be expanded with empty space in the bottom right"
+  },
+  {
+    "name": "when width/height in px, and viewBox: no resizing",
+    "file": "width-height-viewbox-3.svg",
+    "message": "should be 148x35"
+  },
+  {
+    "name": "when with media queries",
+    "file": "media-queries.svg",
+    "message": "zebra should be red; size should be 167x344",
+    "skip": true
+  },
+  {
+    "name": "when with media queries, resized",
+    "file": "media-queries.svg",
+    "options": { "width": 500 },
+    "message": "zebra should be blue; size should be 500x1032"
+  },
+  {
+    "name": "when viewBox attribute only: resized to 100x400",
+    "file": "viewbox-only-2.svg",
+    "options": { "width": 640, "height": 640 },
+    "message": "should be 640x640"
+  },
+  {
+    "name": "when including an external file with <image> (setting baseFile option)",
+    "file": "external-file.svg",
+    "includeBaseFile": true,
+    "message": "should show the kittens"
+  },
+  {
+    "name": "when including an external file with <image> (setting baseUrl option)",
+    "file": "external-file.svg",
+    "includeBaseUrl": true,
+    "message": "should show the kittens"
+  },
+  {
+    "name": "when using a font inlined as a data URL",
+    "file": "data-url-font.svg",
+    "options": { "width": 500, "height": 500 },
+    "message": "the X should be centered"
+  },
+  {
+    "name": "when using non-ASCII characters",
+    "file": "non-ascii-text.svg",
+    "message": "text should have diacritics (tête-à-tête)"
+  },
+  {
+    "name": "when setting scale option to 0.5",
+    "file": "standard.svg",
+    "options": { "width": 200, "height": 200, "scale": 0.5 },
+    "message": "should shrink image size by half"
+  },
+  {
+    "name": "when setting scale option to 1",
+    "file": "standard.svg",
+    "options": { "width": 200, "height": 200, "scale": 1 },
+    "message": "should maintain image size"
+  },
+  {
+    "name": "when setting scale option to 2",
+    "file": "standard.svg",
+    "options": { "width": 200, "height": 200, "scale": 2 },
+    "message": "should double image size"
+  },
+  {
+    "name": "when setting scale option without width/height options",
+    "file": "standard.svg",
+    "options": { "scale": 3 },
+    "message": "should double image size derived from image"
+  },
+  {
+    "name": "when setting background option",
+    "file": "standard.svg",
+    "options": { "background": "#FF0000" },
+    "message": "should apply background color transparent regions"
+  },
+  {
+    "name": "when setting both baseFile and baseUrl options",
+    "file": "external-file.svg",
+    "includeBaseFile": true,
+    "includeBaseUrl": true,
+    "error": "Both baseFile and baseUrl options specified. Use only one"
+  },
+  {
+    "name": "when invalid.svg",
+    "file": "invalid.svg",
+    "error": "SVG element open tag not found in input. Check the SVG input"
+  },
+  {
+    "name": "when no width/height attributes or viewBox attribute; no dimensions passed",
+    "file": "no-size-indicators.svg",
+    "error": "Unable to derive width and height from SVG. Consider specifying corresponding options"
+  },
+  {
+    "name": "when no width/height attributes; viewBox attribute; no dimensions passed",
+    "file": "viewbox-only.svg",
+    "error": "Unable to derive width and height from SVG. Consider specifying corresponding options"
+  },
+  {
+    "name": "when percent width/height attributes; viewBox attribute; no dimensions passed",
+    "file": "percent-width-height-viewbox.svg",
+    "error": "Unable to derive width and height from SVG. Consider specifying corresponding options"
+  },
+  {
+    "name": "when no width/height attributes or viewBox attribute; passing only width",
+    "file": "no-size-indicators.svg",
+    "options": { "width": 100 },
+    "error": "Unable to derive width and height from SVG. Consider specifying corresponding options"
+  },
+  {
+    "name": "when no width/height attributes or viewBox attribute; passing only height",
+    "file": "no-size-indicators.svg",
+    "options": { "width": 200 },
+    "error": "Unable to derive width and height from SVG. Consider specifying corresponding options"
+  }
+]

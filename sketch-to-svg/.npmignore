@@ -1,0 +1,7 @@
+source
+out
+node_modules
+__tests__
+index.js
+tsconfig.json
+.vscode

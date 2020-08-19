@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only: master
+    docker:
+      - image: google/dart
+    steps:
+      - checkout
+      - run:
+          name: Get Dependencies
+          command: |
+            pub get
+      - run:
+          name: Runing Parabeac Core tests 
+          command: |
+            pub run test
+  test:
+    docker:
+      - image: google/dart
+    steps:
+      - checkouts
+      - run:
+          name: Parabeac Core Test
+          command: pub run test
+
+          

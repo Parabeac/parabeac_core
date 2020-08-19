@@ -1,0 +1,41 @@
+{
+  "name": "convert-svg-to-png",
+  "version": "0.5.0",
+  "description": "Converts SVG to PNG using headless Chromium",
+  "homepage": "https://github.com/neocotic/convert-svg",
+  "bugs": {
+    "url": "https://github.com/neocotic/convert-svg/issues"
+  },
+  "author": {
+    "name": "Alasdair Mercer",
+    "email": "mercer.alasdair@gmail.com",
+    "url": "https://neocotic.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "converter",
+    "svg",
+    "png",
+    "headless",
+    "chromium"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neocotic/convert-svg.git"
+  },
+  "dependencies": {
+    "convert-svg-core": "^0.5.0"
+  },
+  "devDependencies": {
+    "convert-svg-test-helper": "^0.5.0",
+    "mocha": "^5.2.0"
+  },
+  "bin": {
+    "convert-svg-to-png": "bin/convert-svg-to-png"
+  },
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=8"
+  }
+}

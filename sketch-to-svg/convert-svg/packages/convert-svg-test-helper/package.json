@@ -1,0 +1,40 @@
+{
+  "name": "convert-svg-test-helper",
+  "version": "0.5.0",
+  "description": "Helper for testing convert-svg-core implementations",
+  "homepage": "https://github.com/neocotic/convert-svg",
+  "bugs": {
+    "url": "https://github.com/neocotic/convert-svg/issues"
+  },
+  "author": {
+    "name": "Alasdair Mercer",
+    "email": "mercer.alasdair@gmail.com",
+    "url": "https://neocotic.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "converter",
+    "svg",
+    "core",
+    "test",
+    "helper",
+    "headless",
+    "chromium"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neocotic/convert-svg.git"
+  },
+  "dependencies": {
+    "file-url": "^2.0.2",
+    "lodash.clonedeep": "^4.5.0",
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2",
+    "sinon": "^7.1.1"
+  },
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=8"
+  }
+}

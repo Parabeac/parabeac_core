@@ -1,0 +1,68 @@
+# <center>Parabeac-Core
+
+![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/Parabeac_Open-Source_README_Logo.png)
+
+
+Parabeac-Core is an open-source repository that converts design files into Flutter code.
+
+![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac)
+
+# How it works
+Parabeac-Core is essentially broken up into 3 pieces which you can see in the list or animation below. While most of the magic is in the interpretation engine, you can view more animations & information here.
+
+ 1. Convert design file into Parabeac design protocol
+ 2. [Interpretation Engine](https://github.com/Parabeac/parabeac-core/wiki/Parabeac-Interpretation-Engine-Overview)
+ 3. Generate Flutter code 
+  
+![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
+
+
+
+# Get Started
+
+Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
+
+### Dependencies
+
+ - Dart
+ - Flutter
+ - Docker (*We're working on removing this*)
+
+To test out a Sketch file feel free to download [this Sketch file](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)!
+
+### Running the conversion
+
+Follow these steps in order to run PBCore on your local environment:
+
+1. Clone the Parabeac Core repo in order to get the code on your machine
+2. Make sure you have docker running
+3. If you have any plugins make sure to put the plugins in the plugin folder
+4. In your terminal move to the root Parabeac Core directory and run:
+``` bash
+ $ dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName>
+```
+
+
+# Running the exported code
+### Requirement(s)
+
+- Download [Flutter](https://flutter.dev/docs/get-started/install)
+- Traverse to main.dart
+- Call the screen you want to view
+- Execute `flutter run`
+
+# How to contribute
+Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/open_source_prep/wiki).
+
+
+# How to create & run Parabeac eggs
+Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
+
+To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
+
+# Upcoming & Known Issues
+
+ - Plugin Duplication in the Plugin Service
+ - Remove Docker Dependency
+ - Support for Figma
+ - Egg Marketplace

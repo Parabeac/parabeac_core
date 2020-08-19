@@ -1,0 +1,32 @@
+[
+  {
+    "name": "when setting quality option to 0",
+    "file": "standard.svg",
+    "options": { "quality": 0 },
+    "message": "should be produce output at min quality"
+  },
+  {
+    "name": "when setting quality option to 50",
+    "file": "standard.svg",
+    "options": { "quality": 50 },
+    "message": "should be produce output at half quality"
+  },
+  {
+    "name": "when setting quality option to 100",
+    "file": "standard.svg",
+    "options": { "quality": 100 },
+    "message": "should be produce output at max quality"
+  },
+  {
+    "name": "when setting quality option to -1",
+    "file": "standard.svg",
+    "options": { "quality": -1 },
+    "error": "Value for quality option out of range. Use value between 0-100 (inclusive)"
+  },
+  {
+    "name": "when setting quality option to 101",
+    "file": "standard.svg",
+    "options": { "quality": 101 },
+    "error": "Value for quality option out of range. Use value between 0-100 (inclusive)"
+  }
+]

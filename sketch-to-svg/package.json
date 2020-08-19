@@ -1,0 +1,47 @@
+{
+  "name": "sketch-to-svg",
+  "version": "1.0.1",
+  "description": "Convert layers in a Sketch file to SVG",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "start": "node index.js",
+    "test": "jest",
+    "clean": "rm -rf dist",
+    "clobber": "npm run clean && rm -rf node_modules"
+  },
+  "repository": "github:design-ops/sketch-to-swiftUI",
+  "author": "Design Operations Collective",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/design-ops/sketch-to-swiftUI/issues"
+  },
+  "dependencies": {
+    "@types/extract-zip": "^1.6.2",
+    "@types/sharp": "^0.23.0",
+    "@types/uuid": "^3.4.6",
+    "@ycm.jason/svg-to-img": "^0.1.4",
+    "canvas": "^2.5.0",
+    "canvg": "^3.0.6",
+    "express": "^4.17.1",
+    "extract-zip": "^1.6.7",
+    "jsdom": "^16.2",
+    "paper": "0.12.3",
+    "sketch-constructor": "^1.14.0",
+    "source-map-support": "^0.5.12",
+    "uuid": "^3.3.3",
+    "xml-formatter": "^1.2.0"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.23.2"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "typescript": "^3.7.2"
+  },
+  "jest": {
+    "verbose": true
+  }
+}

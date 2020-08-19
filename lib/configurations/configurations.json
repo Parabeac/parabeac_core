@@ -1,0 +1,13 @@
+{
+    "default": {
+        "widgetStyle": "Material",
+        "widgetType": "Stateless",
+        "widgetSpacing": "Expanded"
+    },
+    "This will be replaced by a Object ID to determine specific configurations for each page": {
+        "widgetStyle": "Material",
+        "widgetType": "Stateless",
+        "widgetSpacing": "Expanded"
+    },
+    "root": "AC2E7423-4609-4F37-8BCA-7E915944FFE2"
+}
