@@ -37,7 +37,7 @@ In Flutter, there are only a couple ways to achieve alignment. We recognized the
 
 Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
 
-![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service.gif)
+![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
 
 
 # Get Started
