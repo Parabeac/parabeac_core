@@ -61,13 +61,12 @@ Follow these steps in order to run Parabeac Core on your local environment:
 2. Make sure you have docker running
 3. Within your terminal navigate to the sketch-to-svg folder within the Parabeac Core root directory. From here run `docker build -t sketch .`
 4. Within the same sketch-to-svg directory run `docker run -p 5555:8081 -d sketch` 
- > :warning: **Steps 3 and 4 create a docker container in the background, we know this is not ideal and are working to remove this currently. To remove the docker instance run `docker ps` to identify the container Id and then `docker kill <containerId>` to remove it. Please see the Docker docs for more details.**
 5. If you have any plugins make sure to put the plugins in the plugin folder
 6. In your terminal move to the root PBCore directory and run:
 ``` bash
  $dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
-
+ > :warning: **Note: Steps 3 and 4 create a docker container in the background, we know this is not ideal and are working to remove this currently. To remove the docker instance run `docker ps` to identify the container Id and then `docker kill <containerId>` to remove it. Please see the Docker docs for more details.**
 
 # Running the exported code
 ### Requirement(s)
