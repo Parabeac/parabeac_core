@@ -74,8 +74,6 @@ Follow these steps in order to run PBCore on your local environment:
 
 And your done! Keep an eye on the terminal and your flutter project should ready to use in only a few moments. 
 
-### Understanding the Code Export 
-
 ## How Can I Contribute
 ### Filiing Issues
 #### What to do when you run into a problem
