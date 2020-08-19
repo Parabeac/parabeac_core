@@ -41,7 +41,7 @@ void main(List<String> args) async {
         break;
       case '-c':
         // handle configurations
-        configurationPath = 'lib/configrations/configrations.json';
+        configurationPath = 'lib/configurations/configurations.json';
         break;
     }
   }
