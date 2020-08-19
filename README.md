@@ -16,6 +16,27 @@ Parabeac-Core is essentially broken up into 3 pieces which you can see in the li
   
 ![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
 
+## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
+These are mostly built by a one to one relationship from the Paraebac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
+
+![Parabeac Visual Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-visual-generation-service.gif)
+
+## [Layout Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Layout-Generation-Service)
+This service is a bit more interesting, as we break down each group of nodes to be laid out by the layout service. The service takes the first 2 nodes compares them & generates a layout, we grab the next node, compare it to the layout & then the leaves if needed to and continuously traverse the rest of the layer into the laid out tree that we construct.
+
+![Parabeac Layout Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-layout-generation-service.gif)
+
+
+## [Alignment Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Alignment-Generation-Service)
+In Flutter, there are only a couple ways to achieve alignment. We recognized the following as the most common:
+* Flex-based layouts
+* Padding/margin
+* Positioning (Stacks)
+* Alignment (Container/Single Child/Visual Node)
+
+Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
+
+![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service.gif)
 
 
 # Get Started
