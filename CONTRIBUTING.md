@@ -49,7 +49,7 @@ Finally, in the Generation Phase, the Parabeac Intermediate Nodes are then conve
 With a clear picture of how each of the different phases within the Parabeac Export Process works let's take a look at what it takes to run Parabeac Core on your machine.
 
 ### Running Parabeac Core Locally
-### What You'll need
+#### What You'll need
 You'll need the following tools to run Parabeac Core, as well as a text editor or IDE of your choice (we recommend Visual Studio Code with the Dart and Flutter Extensions)
 * Git
 * Dart
