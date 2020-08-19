@@ -37,8 +37,9 @@ abstract class PBGenerationManager {
   ///* Keep track of the instance variable a class may have
   /// I think the following three may be only for Flutter (?)
 
-  List<PBParam> constructorVariables;
-  Map<String, String> dependencies;
+  List<PBParam> constructorVariables = [];
+  List<PBParam> instanceVariables = [];
+  Map<String, String> dependencies = {};
 
   PBGenerationManager(
     this.pageWriter,

@@ -23,8 +23,6 @@ class PBFlutterGenerator extends PBGenerationManager {
     body = StringBuffer();
   }
 
-  List<PBParam> instanceVariables;
-
   String generateStatefulWidget(String body, String name) {
     name = PBInputFormatter.formatLabel(name,
         isTitle: true, space_to_underscore: false);
