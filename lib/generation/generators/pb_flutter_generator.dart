@@ -153,6 +153,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     pageWriter.addDependency(packageName, version);
   }
 
+  @override
   void addInstanceVariable(PBParam param) => instanceVariables.add(param);
 
   @override

@@ -8,6 +8,8 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.d
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
+import 'pb_param.dart';
+
 /**
  * The caller of the method `generate()` is going to look at the configurations and decide if the page is
  * going to become `STATEFUL_WIDGET` or `STATELESS_WIDGET`.
@@ -54,4 +56,6 @@ abstract class PBGenerationManager {
   String getPath(String uuid) => PBGenCache().getPath(uuid);
 
   void addConstructorVariable(PBParam param);
+
+  void addInstanceVariable(PBParam variable);
 }
