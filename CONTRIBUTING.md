@@ -35,6 +35,8 @@ We've divided the code conversion and export process into 3 key phases:
 * Conversion Phase (Parabeac Interpretation Engine)
 * Exportation Phase (Parabeac Generation Service)
 
+![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation.gif)
+
 First, in the Design Phase, designers build their UI/UX elements within the design language of their choice (at the moment we only support sketch but have plans to shortly support other platforms like Figma). From here Designers can use the **_Parabeac Design Protocol_** to denote the elements they would like PBCore to generate. After the designs are ready to be converted they are handed to PBCore where we're able to convert the platform specific files into our intermediate design language: **_PBDL_**.
 
 Next, in the Conversion Phase, the newly created PBDL code is sent to the Parabeac Interpretation Engine within PBCore. This then works to convert the PBDL into **_Parabeac Intermediate Nodes_**, the last form it will take before becoming Flutter Code. The Interpretation Engine is divided into the following three primary services:
