@@ -12,6 +12,7 @@ Parabeac-Core is essentially broken up into 3 pieces which you can see in the li
 
  1. Convert design file into Parabeac design protocol
  2. [Interpretation Engine](https://github.com/Parabeac/parabeac-core/wiki/Parabeac-Interpretation-Engine-Overview)
+ > Made up of the Visual, Layout, & Alignment generation services.
  3. Generate Flutter code 
   
 ![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
