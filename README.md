@@ -18,7 +18,7 @@ Parabeac-Core is essentially broken up into 3 pieces which you can see in the li
 ![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
 
 ## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
-These are mostly built by a one to one relationship from the Paraebac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
+These are mostly built by a one to one relationship from the Parabeac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
 
 ![Parabeac Visual Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-visual-generation-service.gif)
 
