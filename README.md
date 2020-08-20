@@ -19,6 +19,9 @@ Parabeac-Core is essentially broken up into 3 pieces which you can see in the li
   
 ![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
 
+## [Parabeac Design Protocol](https://docs.parabeac.com/)
+Parabeac Design Protocol is our way of helping define UI/UX elements within Design Files for cleaner and more succinct code conversion. By adding naming-semantics to elements, symbols, and layer names to the design file, Parabeac-Core is able to identify specific UI elements & override interpretation & generation with a specific implementation.
+
 ## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
 These are mostly built by a one to one relationship from the Parabeac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
 
@@ -82,6 +85,8 @@ Welcome! The best way to contribute to Parabeac is through pull requests, filing
 
 # How to create & run Parabeac eggs
 Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
+
+You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
 
 To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
 
