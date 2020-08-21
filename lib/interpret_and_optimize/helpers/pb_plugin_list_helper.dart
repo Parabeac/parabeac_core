@@ -1,10 +1,9 @@
-import'package:parabeac_core/plugins/injected_tab_bar.dart';
-import'package:parabeac_core/plugins/injected_app_bar.dart';
+import 'package:parabeac_core/plugins/switch.dart';
+import 'package:parabeac_core/plugins/injected_tab_bar.dart';
+import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/layers/symbol_instance.dart';
-import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/plugins/injected_tab.dart';
-import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -15,11 +14,11 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-'.*tabbar' :  InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), currentContext: context),
-'.*navbar' :  InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), currentContext: context),
-      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(),
+      '.*switch': Switch(Point(0, 0), Point(0, 0), Uuid().v4(),
           currentContext: context),
       '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(),
+          currentContext: context),
+      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(),
           currentContext: context),
       '.*tab': Tab(Point(0, 0), Point(0, 0),
           currentContext: context, UUID: Uuid().v4()),

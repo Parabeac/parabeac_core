@@ -29,7 +29,7 @@ class InjectedPositioned extends PBIntermediateNode
     verticalAlignType = positionedHolder.v_type.toString()?.split('.')[1];
     horizontalAlignValue = positionedHolder.h_value;
     verticalAlignValue = positionedHolder.v_value;
-    generator = PBPositionedGenerator(currentContext.generationManager);
+    generator = PBPositionedGenerator();
   }
 
   @override

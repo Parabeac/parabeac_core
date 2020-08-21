@@ -63,7 +63,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }) : super(topLeftCorner, bottomRightCorner, currentContext) {
     UUID = originalRef.do_objectID;
 
-    generator = PBMasterSymbolGenerator(currentContext.generationManager);
+    generator = PBMasterSymbolGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
         originalRef.frame.x + originalRef.frame.width,

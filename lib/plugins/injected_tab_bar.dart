@@ -13,7 +13,6 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-
 class InjectedTabBar extends PBNakedPluginNode
     implements PBInjectedIntermediate {
   final String UUID;
@@ -29,7 +28,7 @@ class InjectedTabBar extends PBNakedPluginNode
     this.UUID, {
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBTabBarGenerator(currentContext.generationManager);
+    generator = PBTabBarGenerator();
   }
 
   @override
@@ -67,9 +66,9 @@ class InjectedTabBar extends PBNakedPluginNode
     // TODO: implement extractInformation
   }
 }
+
 class PBTabBarGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-  PBTabBarGenerator(this.manager) : super('TABBAR');
+  PBTabBarGenerator() : super('TABBAR');
 
   @override
   String generate(PBIntermediateNode source) {

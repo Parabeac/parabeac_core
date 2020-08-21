@@ -26,7 +26,7 @@ class InjectedNavbar extends PBNakedPluginNode
   InjectedNavbar(Point topLeftCorner, Point bottomRightCorner, this.UUID,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBAppBarGenerator(currentContext.generationManager);
+    generator = PBAppBarGenerator();
   }
 
   @override
@@ -82,8 +82,7 @@ class InjectedNavbar extends PBNakedPluginNode
 }
 
 class PBAppBarGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-  PBAppBarGenerator(this.manager) : super('AppBar');
+  PBAppBarGenerator() : super('AppBar');
 
   @override
   String generate(PBIntermediateNode source) {
