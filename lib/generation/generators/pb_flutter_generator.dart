@@ -162,4 +162,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   void addToConstructor(PBParam parameter) {
     // TODO: implement addToConstructor
   }
+
+  @override
+  void addImport(String value) => imports.add(value);
 }

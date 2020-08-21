@@ -44,9 +44,7 @@ abstract class PBGenerationManager {
   PBGenerationManager(
     this.pageWriter,
   );
-  void addImport(String uuid, String absPath) {
-    PBGenCache().addToCache(uuid, absPath);
-  }
+  void addImport(String value);
 
   void addToConstructor(PBParam parameter);
 

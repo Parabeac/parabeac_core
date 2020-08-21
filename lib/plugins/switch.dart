@@ -53,6 +53,7 @@ class SwitchGenerator extends PBGenerator {
       var value = PBParam('switchValue', 'bool', false);
       manager.addInstanceVariable(value);
       manager.addDependencies('list_tile_switch', '^0.0.2');
+      manager.addImport('package:list_tile_switch/list_tile_switch.dart');
       var buffer = StringBuffer();
       buffer.write('''ListTileSwitch(  
         value: switchValue,  
