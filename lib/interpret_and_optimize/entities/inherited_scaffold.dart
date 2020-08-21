@@ -123,7 +123,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   // @override
-  // PBNakedPluginNode generatePluginNode(
+  // PBEgg generatePluginNode(
   //     Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
   //   return InheritedScaffold(originalRef,
   //       currentContext: currentContext,

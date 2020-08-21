@@ -29,13 +29,13 @@ class PBPluginListHelper {
 
   PBPluginListHelper._internal();
 
-  Map<String, PBNakedPluginNode> allowListNames;
+  Map<String, PBEgg> allowListNames;
 
   List<String> baseNames = ['.*background', '.*navbar', '.*tabbar', '.*tab'];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist
-  void addNode(PBNakedPluginNode node) {
+  void addNode(PBEgg node) {
     if (!allowListNames.containsKey(node.semanticName)) {
       allowListNames[node.semanticName] = node;
     }
@@ -43,7 +43,7 @@ class PBPluginListHelper {
 
   /// Remove `node` from list if not part of internal plugin nodes
   /// and if the node is present in the list.
-  void removeNode(PBNakedPluginNode node) {
+  void removeNode(PBEgg node) {
     if (!baseNames.contains(node.semanticName)) {
       allowListNames.remove(node.semanticName);
     }
@@ -51,7 +51,7 @@ class PBPluginListHelper {
 
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
-  PBNakedPluginNode returnAllowListNodeIfExists(SketchNode node) {
+  PBEgg returnAllowListNodeIfExists(SketchNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
     for (String key in allowListNames.keys) {
       if (node.name.contains(key)) {

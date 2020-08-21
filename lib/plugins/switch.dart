@@ -11,7 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import '../input/entities/layers/abstract_layer.dart';
 import '../interpret_and_optimize/helpers/pb_context.dart';
 
-class Switch extends PBNakedPluginNode implements PBInjectedIntermediate {
+class Switch extends PBEgg implements PBInjectedIntermediate {
   Switch(Point topLeftCorner, Point bottomRightCorner, this.UUID,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
@@ -36,7 +36,7 @@ class Switch extends PBNakedPluginNode implements PBInjectedIntermediate {
   void extractInformation(SketchNode incomingNode) {}
 
   @override
-  PBNakedPluginNode generatePluginNode(
+  PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
     return Switch(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
@@ -52,6 +52,7 @@ class SwitchGenerator extends PBGenerator {
     if (source is Switch) {
       var value = PBParam('switchValue', 'bool', false);
       manager.addInstanceVariable(value);
+      manager.addConstructorVariable(value);
       manager.addDependencies('list_tile_switch', '^0.0.2');
       manager.addImport('package:list_tile_switch/list_tile_switch.dart');
       var buffer = StringBuffer();

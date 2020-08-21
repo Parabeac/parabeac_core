@@ -27,13 +27,14 @@ class PBFlutterGenerator extends PBGenerationManager {
     name = PBInputFormatter.formatLabel(name,
         isTitle: true, space_to_underscore: false);
     var widgetName = name;
+    var constructorName = '_$name';
     var buffer = StringBuffer();
     buffer.write('class ${widgetName} extends StatefulWidget{\n'
         '\tconst ${widgetName}() : super();\n'
         '@override\n_${widgetName} createState() => _${widgetName}();\n}\n\n'
         'class _${widgetName} extends State<${widgetName}>{\n'
         '${generateInstanceVariables()}\n'
-        '${generateConstructor(widgetName)}\n'
+        '${generateConstructor(constructorName)}\n'
         '@override\nWidget build(BuildContext context){\n'
         'return ${body};\n}\n}');
     return generateImports() + buffer.toString();
@@ -43,10 +44,11 @@ class PBFlutterGenerator extends PBGenerationManager {
     name = PBInputFormatter.formatLabel(name,
         isTitle: true, space_to_underscore: false);
     var buffer = StringBuffer();
+    var constructorName = '_$name';
     buffer.write('class ${name} extends StatelessWidget{\n'
         '\tconst ${name}({Key key}) : super(key : key);\n'
         '${generateInstanceVariables()}\n'
-        '${generateConstructor(name)}\n'
+        '${generateConstructor(constructorName)}\n'
         '\t@override\n\tWidget build(BuildContext context){\n\t return ${body};}}');
     return generateImports() + buffer.toString();
   }
@@ -55,8 +57,8 @@ class PBFlutterGenerator extends PBGenerationManager {
     if (constructorVariables == null || constructorVariables.isEmpty) {
       return '';
     }
-    List<PBParam> variables;
-    List<PBParam> optionalVariables;
+    List<PBParam> variables = [];
+    List<PBParam> optionalVariables = [];
     constructorVariables.forEach((param) {
       // Only accept constructor variable if they are
       // part of the variable instances
