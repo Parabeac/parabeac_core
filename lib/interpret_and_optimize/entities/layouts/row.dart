@@ -46,7 +46,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   PBIntermediateRowLayout(this.UUID, {this.currentContext})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext) {
-    generator = PBRowGenerator(currentContext.generationManager);
+    generator = PBRowGenerator();
     checkCrossAxisAlignment();
   }
 

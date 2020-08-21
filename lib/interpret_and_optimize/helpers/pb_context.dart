@@ -6,10 +6,6 @@ class PBContext {
   PBConfiguration configuration;
   Point screenTopLeftCorner, screenBottomRightCorner;
   Map jsonConfigurations;
-  PBGenerationManager _generationManager;
-  PBGenerationManager get generationManager => _generationManager;
-  set generationManager(PBGenerationManager manager) =>
-      _generationManager = manager;
 
   PBContext({this.jsonConfigurations}) {
     assert(jsonConfigurations != null);

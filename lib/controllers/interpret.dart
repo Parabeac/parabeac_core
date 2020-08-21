@@ -44,7 +44,7 @@ class Interpret {
     log = Logger(runtimeType.toString());
     this.projectName = projectName;
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
-    _interpret._generationManager = PBFlutterGenerator(PBFlutterWriter());
+    // _interpret._generationManager = PBFlutterGenerator(PBFlutterWriter());
   }
 
   Future<PBIntermediateTree> interpretAndOptimize(SketchNodeTree tree) async {
@@ -101,7 +101,7 @@ class Interpret {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
-    currentContext.generationManager = _generationManager;
+    // currentContext.generationManager = _generationManager;
     var parentComponent = item.root;
     PBIntermediateNode parentVisualIntermediateNode;
 
@@ -197,7 +197,7 @@ class Interpret {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
-    currentContext.generationManager = _generationManager;
+    // currentContext.generationManager = _generationManager;
 
     PBIntermediateNode parentVisualIntermediateNode;
 
