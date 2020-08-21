@@ -150,7 +150,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   @override
-  String addDependencies(String packageName, String version) {
+  void addDependencies(String packageName, String version) {
     pageWriter.addDependency(packageName, version);
   }
 
@@ -159,11 +159,6 @@ class PBFlutterGenerator extends PBGenerationManager {
 
   @override
   void addConstructorVariable(PBParam param) => constructorVariables.add(param);
-
-  @override
-  void addToConstructor(PBParam parameter) {
-    // TODO: implement addToConstructor
-  }
 
   @override
   void addImport(String value) => imports.add(value);

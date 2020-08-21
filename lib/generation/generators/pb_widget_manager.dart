@@ -46,11 +46,9 @@ abstract class PBGenerationManager {
   );
   void addImport(String value);
 
-  void addToConstructor(PBParam parameter);
-
   String generate(PBIntermediateNode rootNode, {type});
 
-  String addDependencies(String packageName, String version);
+  void addDependencies(String packageName, String version);
 
   String getPath(String uuid) => PBGenCache().getPath(uuid);
 
