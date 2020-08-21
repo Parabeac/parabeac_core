@@ -8,9 +8,7 @@ import '../pb_widget_manager.dart';
 
 class PBFlexibleGenerator extends PBGenerator {
   var log = Logger('Flexible Generator');
-  PBFlexibleGenerator(this.manager) : super('FLEXIBLE');
-
-  final PBGenerationManager manager;
+  PBFlexibleGenerator() : super('FLEXIBLE');
 
   @override
   String generate(PBIntermediateNode source) {

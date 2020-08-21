@@ -8,9 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dar
 
 class PBAlignGenerator extends PBGenerator {
   var log = Logger('Align Generator');
-  PBAlignGenerator(this.manager) : super('ALIGN');
-
-  final PBGenerationManager manager;
+  PBAlignGenerator() : super('ALIGN');
 
   @override
   String generate(PBIntermediateNode source) {
