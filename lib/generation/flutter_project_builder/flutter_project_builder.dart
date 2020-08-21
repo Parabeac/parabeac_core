@@ -166,12 +166,13 @@ class FlutterProjectBuilder {
 
       // Create single FlutterGenerator for all symbols
       if (isSymbolsDir) {
-        flutterGenerator = await PBFlutterGenerator(pageWriter);
+        flutterGenerator = PBFlutterGenerator(pageWriter);
         bodyBuffer = StringBuffer();
       }
 
       for (var intermediateItem in directory.items) {
         var fileName = intermediateItem.node.name ?? 'defaultName';
+
         var name = isSymbolsDir ? SYMBOL_DIR_NAME : fileName;
         var symbolFilePath =
             '${projectName}/lib/screens/${directoryName}/${name.toLowerCase()}.dart';
@@ -180,7 +181,7 @@ class FlutterProjectBuilder {
         // TODO: Need FlutterGenerator for each page because otherwise
         // we'd add all imports to every single dart page. Discuss alternatives
         if (!isSymbolsDir) {
-          flutterGenerator = await PBFlutterGenerator(pageWriter);
+          flutterGenerator = PBFlutterGenerator(pageWriter);
         }
 
         // Add to cache if node is scaffold or symbol master
@@ -201,6 +202,8 @@ class FlutterProjectBuilder {
               : flutterGenerator.imports.addAll(_findImports(
                   intermediateItem.node,
                   isSymbolsDir ? symbolFilePath : fileNamePath));
+
+          // intermediateItem.node.generator.manager = flutterGenerator;
 
           var page = flutterGenerator.generate(intermediateItem.node);
 
