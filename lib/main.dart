@@ -29,6 +29,7 @@ void main(List<String> args) async {
       case '-p':
         path = args[i + 1];
         pathToSketchFile = path;
+        MainInfo().sketchPath = pathToSketchFile;
         // If outputPath is empty, assume we are outputting to sketch path
         MainInfo().outputPath ??= getCleanPath(path);
         break;

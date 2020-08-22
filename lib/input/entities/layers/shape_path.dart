@@ -86,7 +86,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(toJson());
+    var image = await convertImageLocal(do_objectID);
     return Future.value(
         InheritedShapePath(this, currentContext: currentContext, image: image));
   }
