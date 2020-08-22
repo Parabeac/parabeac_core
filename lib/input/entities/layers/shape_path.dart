@@ -16,7 +16,7 @@ part 'shape_path.g.dart';
 @JsonSerializable(nullable: false)
 class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'shapePath';
 
   ShapePath(
@@ -86,7 +86,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(json.encode(toJson()));
+    var image = await convertImage(toJson());
     return Future.value(
         InheritedShapePath(this, currentContext: currentContext, image: image));
   }

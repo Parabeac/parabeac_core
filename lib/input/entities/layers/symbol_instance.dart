@@ -20,7 +20,7 @@ class SymbolInstance extends SketchNode
     with SymbolNodeMixin
     implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'symbolInstance';
   final List<OverridableValue> overrideValues;
   final double scale;

@@ -35,7 +35,7 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
@@ -62,6 +62,7 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'userInfo': instance.userInfo,
       'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      '_class': instance.CLASS_NAME,
       'image': instance.image,
       'fillReplacesImage': instance.fillReplacesImage,
       'intendedDPI': instance.intendedDPI,

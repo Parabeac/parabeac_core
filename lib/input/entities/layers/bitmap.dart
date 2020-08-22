@@ -18,7 +18,7 @@ part 'bitmap.g.dart';
 // description: Bitmap layers house a single image
 class Bitmap extends SketchNode implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'bitmap';
   final ImageRef image;
   final bool fillReplacesImage;

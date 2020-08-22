@@ -20,7 +20,7 @@ class SymbolMaster extends AbstractGroupLayer
     with SymbolNodeMixin
     implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'symbolMaster';
   final Color backgroundColor;
   final bool hasBackgroundColor;

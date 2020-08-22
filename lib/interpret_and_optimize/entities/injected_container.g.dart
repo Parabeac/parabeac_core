@@ -16,6 +16,7 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
     color: json['color'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
+    ..name = json['name'] as String
     ..child = json['child']
     ..size = json['size'] as Map<String, dynamic>
     ..margins = json['margins'] as Map<String, dynamic>
@@ -30,6 +31,7 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'subsemantic': instance.subsemantic,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
+      'name': instance.name,
       'alignX': instance.alignX,
       'alignY': instance.alignY,
       'color': instance.color,
