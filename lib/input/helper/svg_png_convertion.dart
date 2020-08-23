@@ -29,15 +29,25 @@ Future<Uint8List> convertImage(Map json) async {
 }
 
 /// Converts the svg to a png by passing the uuid to the local sketchtool
-Future<Uint8List> convertImageLocal(String uuid) async {
+Future<Uint8List> convertImageLocal(String uuid, num width, num height) async {
   try {
-    var body = {'uuid': uuid, 'path': MainInfo().sketchPath};
+    var body = {
+      'uuid': uuid,
+      'path': MainInfo().sketchPath,
+      'width': width,
+      'height': height
+    };
 
     var response = await http.post(
       svg_convertion_endpoint_local,
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode(body),
     );
+
+    if (response.statusCode >= 400) {
+      var bodyMap = jsonDecode(response.body);
+      log.error(bodyMap['error']);
+    }
     return response?.bodyBytes;
   } catch (e) {
     log.error(e);
