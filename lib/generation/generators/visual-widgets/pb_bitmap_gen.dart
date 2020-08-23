@@ -14,7 +14,7 @@ class PBBitmapGenerator extends PBGenerator {
   String generate(PBIntermediateNode source) {
     var buffer = StringBuffer();
     buffer.write(
-        'Image.asset(\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.name + '.png')}\', ${_sizehelper.generate(source)})');
+        'Image.asset(\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source)})');
     return buffer.toString();
   }
 }
