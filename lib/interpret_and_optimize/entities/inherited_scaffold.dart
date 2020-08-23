@@ -122,15 +122,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     child = align;
   }
 
-  // @override
-  // PBEgg generatePluginNode(
-  //     Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
-  //   return InheritedScaffold(originalRef,
-  //       currentContext: currentContext,
-  //       topLeftCorner: topLeftCorner,
-  //       bottomRightCorner: bottomRightCorner);
-  // }
-
   Map<String, Object> toJson() => _$InheritedScaffoldToJson(this);
   factory InheritedScaffold.fromJson(Map<String, Object> json) =>
       _$InheritedScaffoldFromJson(json);

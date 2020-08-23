@@ -203,8 +203,6 @@ class FlutterProjectBuilder {
                   intermediateItem.node,
                   isSymbolsDir ? symbolFilePath : fileNamePath));
 
-          // intermediateItem.node.generator.manager = flutterGenerator;
-
           var page = flutterGenerator.generate(intermediateItem.node);
 
           // If writing symbols, write to buffer, otherwise write a file
