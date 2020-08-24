@@ -27,7 +27,7 @@ void main() {
     });
 
     test('Checking for appbar', () {
-      PBNakedPluginNode pNode = helper.returnAllowListNodeIfExists(sketchNode);
+      PBEgg pNode = helper.returnAllowListNodeIfExists(sketchNode);
       expect(pNode.runtimeType, InjectedNavbar);
     });
   });

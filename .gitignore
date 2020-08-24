@@ -6,6 +6,7 @@ pubspec.lock
 sketch-to-svg/node_modules/
 # Conventional directory for build outputs
 build/
+TestingSketch/
 
 # Directory created by dartdoc
 doc/api/

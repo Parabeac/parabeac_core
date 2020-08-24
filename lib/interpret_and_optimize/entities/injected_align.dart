@@ -14,7 +14,7 @@ class InjectedAlign extends PBVisualIntermediateNode
   InjectedAlign(
       Point topLeftCorner, Point bottomRightCorner, PBContext currentContext)
       : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBAlignGenerator(currentContext.generationManager);
+    generator = PBAlignGenerator();
   }
 
   @override

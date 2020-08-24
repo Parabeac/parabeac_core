@@ -4,14 +4,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-abstract class PBNakedPluginNode extends PBVisualIntermediateNode {
+abstract class PBEgg extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
   String semanticName;
 
   final String UUID;
 
-  PBNakedPluginNode(
-      Point topLeftCorner, Point bottomRightCorner, PBContext currentContext,
+  PBEgg(Point topLeftCorner, Point bottomRightCorner, PBContext currentContext,
       {this.UUID})
       : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID);
 
@@ -20,7 +19,7 @@ abstract class PBNakedPluginNode extends PBVisualIntermediateNode {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) =>
       layer;
 
-  PBNakedPluginNode generatePluginNode(
+  PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef);
 
   void extractInformation(SketchNode incomingNode);

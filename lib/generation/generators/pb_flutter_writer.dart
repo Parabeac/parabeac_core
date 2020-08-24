@@ -19,20 +19,22 @@ class PBFlutterWriter implements PBPageWriter {
 
   void submitDependencies(String yamlAbsPath) async {
     var line = 0;
-    var readYaml = File(yamlAbsPath).readAsLinesSync();
+    if (dependencies.isNotEmpty) {
+      var readYaml = File(yamlAbsPath).readAsLinesSync();
 
-    line = readYaml.indexOf('dependencies:') + 1;
-    if (line > 0) {
-      dependencies.forEach((packageName, version) {
-        readYaml.insert(++line, '${packageName}: ${version}');
-      });
+      line = readYaml.indexOf('dependencies:');
+      if (line > 0) {
+        dependencies.forEach((packageName, version) {
+          readYaml.insert(++line, '  ${packageName}: ${version}');
+        });
 
-      var writeYaml = File(yamlAbsPath).openWrite(mode: FileMode.write);
+        var writeYaml = File(yamlAbsPath).openWrite(mode: FileMode.write);
 
-      for (var i = 0; i < readYaml.length; ++i) {
-        writeYaml.writeln(readYaml[i]);
+        for (var i = 0; i < readYaml.length; ++i) {
+          writeYaml.writeln(readYaml[i]);
+        }
+        await writeYaml.flush();
       }
-      await writeYaml.flush();
     }
   }
 }

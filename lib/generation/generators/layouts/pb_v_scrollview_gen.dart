@@ -4,8 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import '../pb_flutter_generator.dart';
 
 class PBVerticalScrollViewGen extends PBLayoutGenerator {
-  final PBGenerationManager manager;
-  PBVerticalScrollViewGen(this.manager) : super('VERTICAL_SCROLLVIEW');
+  PBVerticalScrollViewGen() : super('VERTICAL_SCROLLVIEW');
 // PBIntermediateColumnLayout
   @override
   String generate(PBIntermediateNode source) {

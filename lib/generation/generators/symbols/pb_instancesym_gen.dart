@@ -6,8 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:quick_log/quick_log.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-  PBSymbolInstanceGenerator(this.manager) : super('SYMBOL_INSTANCE');
+  PBSymbolInstanceGenerator() : super('SYMBOL_INSTANCE');
 
   var log = Logger('Symbol Instance Generator');
 

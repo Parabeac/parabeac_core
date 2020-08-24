@@ -43,7 +43,7 @@ class InjectedContainer extends PBVisualIntermediateNode
     this.color,
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBContainerGenerator(currentContext.generationManager);
+    generator = PBContainerGenerator();
 
     if (currentContext.screenBottomRightCorner == null &&
         currentContext.screenTopLeftCorner == null) {

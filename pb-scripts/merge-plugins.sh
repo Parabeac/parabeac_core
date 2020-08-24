@@ -48,7 +48,7 @@ do
 
     # -> To get file class name
     temporal="`grep -n "class" $f`"
-    temporal=${temporal%\ extends PBNakedPluginNode*}
+    temporal=${temporal%\ extends PBEgg*}
     temporal=${temporal##*class }
     classSaved[counter]=$temporal
     #echo $temporal # Uncomment to debug
@@ -86,7 +86,7 @@ do
         # echo "${#ADDR[@]}" # Uncomment to debug
         if [ "${#ADDR[@]}" -gt 1 ]
         then
-            echo "[ERROR]: ${ADDR[0]} class did not extend PBNakedPluginNode"
+            echo "[ERROR]: ${ADDR[0]} class did not extend PBEgg"
         else
             if [ -z "${inline[newCounter]}" ]
             then

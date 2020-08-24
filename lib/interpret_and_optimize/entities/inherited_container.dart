@@ -48,7 +48,7 @@ class InheritedContainer extends PBVisualIntermediateNode
       this.originalRef, this.topLeftCorner, this.bottomRightCorner,
       {this.alignX, this.alignY, this.currentContext, this.borderInfo})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBContainerGenerator(currentContext.generationManager);
+    generator = PBContainerGenerator();
 
     borderInfo ??= {};
     UUID = originalRef.do_objectID ?? '';
