@@ -80,8 +80,8 @@ For more information about git submodules, click [here](https://git-scm.com/book
 
 Follow these steps in order to run Parabeac Core on your local environment:
 1. Clone PBCore repo in order to get the code on your machine
-5. If you have any plugins make sure to put the plugins in the plugin folder
-6. In your terminal change directory to the root PBCore directory and run:
+2. If you have any plugins make sure to put the plugins in the plugin folder
+3. In your terminal change directory to the root PBCore directory and run:
 ``` bash
  $dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
