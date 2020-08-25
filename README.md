@@ -60,7 +60,7 @@ To test out a Sketch file feel free to download [this Sketch file](https://drive
 ## Cloning the Repo
 Because parabeac-core contains the Sketch-Asset-Converter submodule, it is easier to clone the repo using the following command:
 ```
-git clone --recursive https://github.com/Parabeac/Parabeac-Core.git
+git clone --recurse-submodules https://github.com/Parabeac/Parabeac-Core.git
 ```
 
 If you have already cloned the repo without the submodule, simply run the following command which will add Sketch-Asset-Converter:
