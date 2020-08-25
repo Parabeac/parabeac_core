@@ -8,8 +8,6 @@ import 'package:quick_log/quick_log.dart';
 import '../pb_flutter_generator.dart';
 
 class PBMasterSymbolGenerator extends PBGenerator {
-  final PBFlutterGenerator manager;
-
   final _parametersType = {
     'image': 'var',
     'stringValue': 'var',
@@ -18,7 +16,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
   };
   List<PBSymbolMasterParameter> _parameterDefinition = [];
 
-  PBMasterSymbolGenerator(this.manager) : super('PBSymbolMaster');
+  PBMasterSymbolGenerator() : super('PBSymbolMaster');
 
   ///Generating the parameters of the symbol master, keeping [definitions] so
   ///we can replace the generic names of the paramters by that of the real overridable node's name.

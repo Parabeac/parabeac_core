@@ -12,8 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
-class Tab extends PBNakedPluginNode
-    implements PBInjectedIntermediate {
+class Tab extends PBEgg implements PBInjectedIntermediate {
   PBContext currentContext;
 
   String widgetType = 'Tab';
@@ -24,7 +23,7 @@ class Tab extends PBNakedPluginNode
     UUID,
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
-    generator = PBTabGenerator(currentContext.generationManager);
+    generator = PBTabGenerator();
   }
 
   @override
@@ -36,7 +35,7 @@ class Tab extends PBNakedPluginNode
   String semanticName;
 
   @override
-  PBNakedPluginNode generatePluginNode(
+  PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
     var tab = Tab(topLeftCorner, bottomRightCorner,
         currentContext: currentContext, UUID: Uuid().v4());
@@ -79,9 +78,9 @@ class Tab extends PBNakedPluginNode
     // TODO: implement extractInformation
   }
 }
+
 class PBTabGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-  PBTabGenerator(this.manager) : super('Tab');
+  PBTabGenerator() : super('Tab');
 
   @override
   String generate(PBIntermediateNode source) {

@@ -33,7 +33,7 @@ class PBPluginControlService implements PBGenerationService {
       var currentLayer = queue.removeAt(0);
 
       for (var currentIntermediateNode in currentLayer.nodeLayer) {
-        if (currentIntermediateNode is PBNakedPluginNode) {
+        if (currentIntermediateNode is PBEgg) {
           var layerToReplace =
               currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
           if (layerToReplace == null && currentLayer.nodeLayer != null) {

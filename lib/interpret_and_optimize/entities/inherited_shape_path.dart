@@ -91,7 +91,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
         Point brc = Point(originalRef.frame.x + originalRef.frame.width,
             originalRef.frame.y + originalRef.frame.height);
 
-        generator = PBContainerGenerator(currentContext.generationManager);
+        generator = PBContainerGenerator();
         color = originalRef.style.borders[0].color.toHex();
       }
     }

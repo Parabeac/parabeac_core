@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/pb_param.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -19,24 +20,22 @@ enum BUILDER_TYPE {
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   PBFlutterGenerator(pageWriter) : super(pageWriter) {
-    imports = [];
     body = StringBuffer();
   }
-
-  List<PBParam> instanceVariables;
 
   String generateStatefulWidget(String body, String name) {
     name = PBInputFormatter.formatLabel(name,
         isTitle: true, space_to_underscore: false);
     var widgetName = name;
+    var constructorName = '_$name';
     var buffer = StringBuffer();
     buffer.write('class ${widgetName} extends StatefulWidget{\n'
         '\tconst ${widgetName}() : super();\n'
         '@override\n_${widgetName} createState() => _${widgetName}();\n}\n\n'
         'class _${widgetName} extends State<${widgetName}>{\n'
         '${generateInstanceVariables()}\n'
-        '${generateConstructor(widgetName)}\n'
-        '\n@override\nWidget build(BuildContext context){\n'
+        '${generateConstructor(constructorName)}\n'
+        '@override\nWidget build(BuildContext context){\n'
         'return ${body};\n}\n}');
     return generateImports() + buffer.toString();
   }
@@ -45,10 +44,11 @@ class PBFlutterGenerator extends PBGenerationManager {
     name = PBInputFormatter.formatLabel(name,
         isTitle: true, space_to_underscore: false);
     var buffer = StringBuffer();
+    var constructorName = '_$name';
     buffer.write('class ${name} extends StatelessWidget{\n'
         '\tconst ${name}({Key key}) : super(key : key);\n'
         '${generateInstanceVariables()}\n'
-        '${generateConstructor(name)}\n'
+        '${generateConstructor(constructorName)}\n'
         '\t@override\n\tWidget build(BuildContext context){\n\t return ${body};}}');
     return generateImports() + buffer.toString();
   }
@@ -57,8 +57,8 @@ class PBFlutterGenerator extends PBGenerationManager {
     if (constructorVariables == null || constructorVariables.isEmpty) {
       return '';
     }
-    List<PBParam> variables;
-    List<PBParam> optionalVariables;
+    List<PBParam> variables = [];
+    List<PBParam> optionalVariables = [];
     constructorVariables.forEach((param) {
       // Only accept constructor variable if they are
       // part of the variable instances
@@ -96,10 +96,10 @@ class PBFlutterGenerator extends PBGenerationManager {
   /// Formats and returns imports in the list
   String generateImports() {
     StringBuffer buffer = StringBuffer();
-    buffer.write('import \'package:flutter/material.dart\';');
+    buffer.write('import \'package:flutter/material.dart\';\n');
 
     for (String import in imports) {
-      buffer.write('import \'$import\';');
+      buffer.write('import \'$import\';\n');
     }
     return buffer.toString();
   }
@@ -120,6 +120,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     rootNode.builder_type = type;
 
     rootNode.generator.manager = this;
+
     var gen = rootNode.generator;
 
     if (gen != null) {
@@ -149,17 +150,16 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   @override
-  String addDependencies(String packageName, String version) {
+  void addDependencies(String packageName, String version) {
     pageWriter.addDependency(packageName, version);
   }
 
+  @override
   void addInstanceVariable(PBParam param) => instanceVariables.add(param);
 
   @override
   void addConstructorVariable(PBParam param) => constructorVariables.add(param);
 
   @override
-  void addToConstructor(PBParam parameter) {
-    // TODO: implement addToConstructor
-  }
+  void addImport(String value) => imports.add(value);
 }

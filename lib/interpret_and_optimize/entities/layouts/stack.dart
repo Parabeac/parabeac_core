@@ -35,7 +35,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   PBIntermediateStackLayout(this.UUID, {this.currentContext})
       : super(STACK_RULES, [], currentContext) {
-    generator = PBStackGenerator(currentContext.generationManager);
+    generator = PBStackGenerator();
   }
 
   @override

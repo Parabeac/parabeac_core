@@ -7,9 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import '../pb_flutter_generator.dart';
 
 class PBScaffoldGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-
-  PBScaffoldGenerator(this.manager) : super('Scaffold');
+  PBScaffoldGenerator() : super('Scaffold');
 
   @override
   String generate(PBIntermediateNode source) {

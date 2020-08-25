@@ -54,7 +54,7 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
           originalRef.do_objectID,
           currentContext: currentContext,
         ) {
-    generator = PBSymbolInstanceGenerator(currentContext.generationManager);
+    generator = PBSymbolInstanceGenerator();
 
     UUID = originalRef.do_objectID;
 
