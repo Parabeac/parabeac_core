@@ -31,7 +31,7 @@ class Flexible extends PBVisualIntermediateNode {
     this.topLeftCorner,
     this.bottomRightCorner,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
-    generator = PBFlexibleGenerator(currentContext.generationManager);
+    generator = PBFlexibleGenerator();
   }
 
   @JsonKey(ignore: true)

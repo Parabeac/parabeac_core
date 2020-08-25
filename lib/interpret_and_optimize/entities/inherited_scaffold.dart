@@ -19,7 +19,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'inherited_scaffold.g.dart';
 
 @JsonSerializable(nullable: false)
-class InheritedScaffold extends PBVisualIntermediateNode implements
+class InheritedScaffold extends PBVisualIntermediateNode
+    implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
   SketchNode originalRef;
@@ -54,7 +55,7 @@ class InheritedScaffold extends PBVisualIntermediateNode implements
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
 
-    generator = PBScaffoldGenerator(currentContext.generationManager);
+    generator = PBScaffoldGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
         originalRef.frame.x + originalRef.frame.width,
@@ -120,15 +121,6 @@ class InheritedScaffold extends PBVisualIntermediateNode implements
     align.alignChild();
     child = align;
   }
-
-  // @override
-  // PBNakedPluginNode generatePluginNode(
-  //     Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
-  //   return InheritedScaffold(originalRef,
-  //       currentContext: currentContext,
-  //       topLeftCorner: topLeftCorner,
-  //       bottomRightCorner: bottomRightCorner);
-  // }
 
   Map<String, Object> toJson() => _$InheritedScaffoldToJson(this);
   factory InheritedScaffold.fromJson(Map<String, Object> json) =>

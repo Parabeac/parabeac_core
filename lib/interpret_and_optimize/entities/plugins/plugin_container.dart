@@ -12,7 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'plugin_container.g.dart';
 
 @JsonSerializable(nullable: false)
-class PluginContainer extends PBVisualIntermediateNode implements PBNakedPluginNode {
+class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   @override
   Point bottomRightCorner;
 
@@ -57,7 +57,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBNakedPluginN
     this.color,
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBContainerGenerator(currentContext.generationManager);
+    generator = PBContainerGenerator();
     size = {
       'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
       'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
@@ -84,7 +84,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBNakedPluginN
   }
 
   @override
-  PBNakedPluginNode generatePluginNode(
+  PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
     return PluginContainer(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);

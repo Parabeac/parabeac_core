@@ -60,6 +60,7 @@ You'll need the following tools to run Parabeac Core, as well as a text editor o
     * Install latest version (If using Visual Studio Code simply install the Dart Extension)
 * [node.js](https://nodejs.org/en/download/)
     * node.js is needed in order to run the Sketch-Asset-Converter.
+    
 #### Running PBCore
 Follow these steps in order to run PBCore on your local environment:
 

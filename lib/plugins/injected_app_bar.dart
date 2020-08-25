@@ -10,8 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-class InjectedNavbar extends PBNakedPluginNode
-    implements PBInjectedIntermediate {
+class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   var leadingItem;
   var middleItem;
   var trailingItem;
@@ -26,7 +25,7 @@ class InjectedNavbar extends PBNakedPluginNode
   InjectedNavbar(Point topLeftCorner, Point bottomRightCorner, this.UUID,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = PBAppBarGenerator(currentContext.generationManager);
+    generator = PBAppBarGenerator();
   }
 
   @override
@@ -66,7 +65,7 @@ class InjectedNavbar extends PBNakedPluginNode
   void alignChild() {}
 
   @override
-  PBNakedPluginNode generatePluginNode(
+  PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, originalRef) {
     return InjectedNavbar(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
@@ -82,8 +81,7 @@ class InjectedNavbar extends PBNakedPluginNode
 }
 
 class PBAppBarGenerator extends PBGenerator {
-  final PBGenerationManager manager;
-  PBAppBarGenerator(this.manager) : super('AppBar');
+  PBAppBarGenerator() : super('AppBar');
 
   @override
   String generate(PBIntermediateNode source) {

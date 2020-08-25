@@ -50,7 +50,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
     this.currentContext,
     this.UUID,
   }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext) {
-    generator = PBColumnGenerator(currentContext.generationManager);
+    generator = PBColumnGenerator();
     checkCrossAxisAlignment();
   }
 

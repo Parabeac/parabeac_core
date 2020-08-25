@@ -10,8 +10,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 class PBContainerGenerator extends PBGenerator {
   String color;
-  final PBGenerationManager manager;
-  PBContainerGenerator(this.manager) : super('CONTAINER');
+
+  PBContainerGenerator() : super('CONTAINER');
 
   @override
   String generate(PBIntermediateNode source) {

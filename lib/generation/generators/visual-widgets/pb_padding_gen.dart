@@ -7,8 +7,7 @@ import '../pb_generator.dart';
 import '../pb_widget_manager.dart';
 
 class PBPaddingGen extends PBGenerator {
-  final PBGenerationManager manager;
-  PBPaddingGen(this.manager) : super('PADDING');
+  PBPaddingGen() : super('PADDING');
 
   String relativePadding(BUILDER_TYPE type, bool isVertical, double value) {
     if (type != null) {

@@ -8,10 +8,8 @@ import '../pb_widget_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 
 class PBPositionedGenerator extends PBGenerator {
-  PBPositionedGenerator(this.manager) : super('POSITIONED');
+  PBPositionedGenerator() : super('POSITIONED');
   var log = Logger('Positioned Generator');
-
-  final PBGenerationManager manager;
 
   @override
   String generate(PBIntermediateNode source) {

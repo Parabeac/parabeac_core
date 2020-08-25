@@ -8,6 +8,8 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.d
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
+import 'pb_param.dart';
+
 /**
  * The caller of the method `generate()` is going to look at the configurations and decide if the page is
  * going to become `STATEFUL_WIDGET` or `STATELESS_WIDGET`.
@@ -27,7 +29,7 @@ abstract class PBGenerationManager {
   // PBContext context;
 
   ///* Keep track of the imports the current page may have
-  List<String> imports;
+  List<String> imports = [];
 
   ///* Keep track of the current page body
   StringBuffer body;
@@ -35,23 +37,22 @@ abstract class PBGenerationManager {
   ///* Keep track of the instance variable a class may have
   /// I think the following three may be only for Flutter (?)
 
-  List<PBParam> constructorVariables;
-  Map<String, String> dependencies;
+  List<PBParam> constructorVariables = [];
+  List<PBParam> instanceVariables = [];
+  Map<String, String> dependencies = {};
 
   PBGenerationManager(
     this.pageWriter,
   );
-  void addImport(String uuid, String absPath) {
-    PBGenCache().addToCache(uuid, absPath);
-  }
-
-  void addToConstructor(PBParam parameter);
+  void addImport(String value);
 
   String generate(PBIntermediateNode rootNode, {type});
 
-  String addDependencies(String packageName, String version);
+  void addDependencies(String packageName, String version);
 
   String getPath(String uuid) => PBGenCache().getPath(uuid);
 
   void addConstructorVariable(PBParam param);
+
+  void addInstanceVariable(PBParam variable);
 }
