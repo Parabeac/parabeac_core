@@ -49,7 +49,6 @@ void main(List<String> args) async {
 
   if (!MainInfo().outputPath.endsWith('/')) {
     MainInfo().outputPath += '/';
-    print('Forgot a slash bucko, ${MainInfo().outputPath}');
   }
 
   if (projectName.isEmpty) {
@@ -60,17 +59,15 @@ void main(List<String> args) async {
   var id = InputDesignService(path);
 
   if (designType == 'sketch') {
-    //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    // ignore: unawaited_futures
-    // await Process.run('sh', [
-    //   '${MainInfo().homepath}pb-scripts/sketchtool_proxy.sh ${pathToSketchFile} export slices --output=${MainInfo().homepath}pngs/ --overwriting YES --item name'
-    // ]).then((value) {
-    //   log.info(value.stdout);
-    //   log.error(value.stderr);
-    // });
-    await SketchController().convertSketchFile(pathToSketchFile,
-        MainInfo().outputPath + projectName, configurationPath);
+    Process.start('npm', ['run', 'dev'],
+            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter')
+        .then((value) async {
+      //Retrieving the Sketch PNGs from the design file
+      await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+      await SketchController().convertSketchFile(pathToSketchFile,
+          MainInfo().outputPath + projectName, configurationPath);
+      value.kill();
+    });
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
