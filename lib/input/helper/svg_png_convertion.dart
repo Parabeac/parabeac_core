@@ -50,7 +50,7 @@ Future<Uint8List> convertImageLocal(String uuid, num width, num height) async {
     }
     return response?.bodyBytes;
   } catch (e) {
-    log.error(e);
+    log.error(e.message);
   }
   return null;
 }

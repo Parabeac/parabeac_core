@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -59,15 +60,21 @@ void main(List<String> args) async {
   var id = InputDesignService(path);
 
   if (designType == 'sketch') {
-    Process.start('npm', ['run', 'dev'],
-            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter')
-        .then((value) async {
-      //Retrieving the Sketch PNGs from the design file
-      await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-      await SketchController().convertSketchFile(pathToSketchFile,
-          MainInfo().outputPath + projectName, configurationPath);
-      value.kill();
-    });
+    var process = await Process.start('npm', ['run', 'prod'],
+        workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+
+    await for (var event in process.stdout.transform(utf8.decoder)) {
+      if (event.toLowerCase().contains('server is listening on port')) {
+        log.fine('Successfully started Sketch Asset Converter');
+        break;
+      }
+    }
+
+    //Retrieving the Sketch PNGs from the design file
+    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+    await SketchController().convertSketchFile(pathToSketchFile,
+        MainInfo().outputPath + projectName, configurationPath);
+    process.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
