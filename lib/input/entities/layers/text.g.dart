@@ -38,7 +38,7 @@ Text _$TextFromJson(Map<String, dynamic> json) {
     lineSpacingBehaviour: json['lineSpacingBehaviour'],
     textBehaviour: json['textBehaviour'],
     glyphBounds: json['glyphBounds'],
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$TextToJson(Text instance) => <String, dynamic>{
@@ -65,6 +65,7 @@ Map<String, dynamic> _$TextToJson(Text instance) => <String, dynamic>{
       'userInfo': instance.userInfo,
       'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      '_class': instance.CLASS_NAME,
       'attributedString': instance.attributedString,
       'automaticallyDrawOnUnderlyingPath':
           instance.automaticallyDrawOnUnderlyingPath,

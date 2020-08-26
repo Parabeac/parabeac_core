@@ -22,6 +22,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
+    ..name = json['name'] as String
     ..UUID = json['UUID'] as String
     ..functionCallName = json['functionCallName'] as String
     ..foundMaster = json['foundMaster'] as bool
@@ -40,6 +41,7 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
+      'name': instance.name,
       'UUID': instance.UUID,
       'SYMBOL_ID': instance.SYMBOL_ID,
       'functionCallName': instance.functionCallName,

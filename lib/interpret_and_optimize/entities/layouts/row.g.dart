@@ -16,6 +16,7 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
+    ..name = json['name'] as String
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..widgetType = json['widgetType'] as String;
 }
@@ -28,6 +29,7 @@ Map<String, dynamic> _$PBIntermediateRowLayoutToJson(
       'color': instance.color,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
+      'name': instance.name,
       'UUID': instance.UUID,
       'alignment': instance.alignment,
       'widgetType': instance.widgetType,

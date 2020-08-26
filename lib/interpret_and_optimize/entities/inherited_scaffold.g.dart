@@ -17,10 +17,10 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
   )
     ..subsemantic = json['subsemantic'] as String
     ..widgetType = json['widgetType'] as String
+    ..child = json['child']
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
-    ..child = json['child']
     ..color = json['color'] as String
     ..navbar = json['navbar']
     ..tabbar = json['tabbar']
@@ -34,12 +34,12 @@ Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'widgetType': instance.widgetType,
+      'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
-      'child': instance.child,
       'color': instance.color,
       'originalRef': instance.originalRef,
       'name': instance.name,

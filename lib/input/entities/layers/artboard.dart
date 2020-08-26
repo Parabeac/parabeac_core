@@ -14,7 +14,7 @@ part 'artboard.g.dart';
 @JsonSerializable(nullable: false)
 class Artboard extends AbstractGroupLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'artboard';
   final bool includeInCloudUpload;
   final bool includeBackgroundColorInExport;

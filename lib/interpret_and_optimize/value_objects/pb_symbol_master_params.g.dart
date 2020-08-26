@@ -21,6 +21,7 @@ PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
   )
     ..subsemantic = json['subsemantic'] as String
     ..widgetType = json['widgetType'] as String
+    ..child = json['child']
     ..topLeftCorner =
         Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner =
@@ -28,7 +29,7 @@ PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
-    ..child = json['child']
+    ..name = json['name'] as String
     ..color = json['color'] as String;
 }
 
@@ -37,12 +38,13 @@ Map<String, dynamic> _$PBSymbolMasterParameterToJson(
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'widgetType': instance.widgetType,
+      'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
-      'child': instance.child,
+      'name': instance.name,
       'color': instance.color,
       'type': PBSymbolMasterParameter._typeToJson(instance.type),
       'parameterID': instance.parameterID,

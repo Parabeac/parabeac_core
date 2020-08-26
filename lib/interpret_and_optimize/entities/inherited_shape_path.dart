@@ -61,7 +61,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
     name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
-        name, '${MainInfo().outputPath}assets/images', image);
+        UUID, '${MainInfo().outputPath}assets/images', image);
 
     // Detect shape path as container if applicable
     _detectLineAsContainer();

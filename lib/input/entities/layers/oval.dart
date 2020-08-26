@@ -16,7 +16,7 @@ part 'oval.g.dart';
 @JsonSerializable(nullable: false)
 class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'oval';
 
   Oval(
@@ -84,7 +84,10 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(json.encode(toJson()));
+    var image = await convertImageLocal(do_objectID, frame.width, frame.height);
+    if (image == null) {
+      return null;
+    }
     return Future.value(
         InheritedOval(this, currentContext: currentContext, image: image));
   }

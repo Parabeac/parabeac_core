@@ -11,13 +11,13 @@ InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
     SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
+    ..child = json['child']
     ..topLeftCorner =
         Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner =
         Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
-    ..child = json['child']
     ..color = json['color'] as String
     ..name = json['name'] as String
     ..UUID = json['UUID'] as String
@@ -29,11 +29,11 @@ InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$InheritedOvalToJson(InheritedOval instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
+      'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
-      'child': instance.child,
       'color': instance.color,
       'originalRef': instance.originalRef,
       'name': instance.name,

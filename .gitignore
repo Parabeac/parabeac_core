@@ -3,7 +3,6 @@
 .packages
 # Remove the following pattern if you wish to check in your lock file
 pubspec.lock
-sketch-to-svg/node_modules/
 # Conventional directory for build outputs
 build/
 TestingSketch/
@@ -16,3 +15,4 @@ doc/api/
 out/
 temp/
 .DS_Store
+TestingSketch

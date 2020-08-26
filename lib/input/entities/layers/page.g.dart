@@ -37,6 +37,7 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
+    ..CLASS_NAME = json['_class'] as String
     ..includeInCloudUpload = json['includeInCloudUpload']
     ..horizontalRulerData = json['horizontalRulerData']
     ..verticalRulerData = json['verticalRulerData']
@@ -71,6 +72,7 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
+      '_class': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,
       'horizontalRulerData': instance.horizontalRulerData,
       'verticalRulerData': instance.verticalRulerData,

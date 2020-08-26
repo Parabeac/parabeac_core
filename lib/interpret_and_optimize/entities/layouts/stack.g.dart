@@ -16,6 +16,7 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
+    ..name = json['name'] as String
     ..topLeftCorner =
         Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner =
@@ -32,6 +33,7 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'color': instance.color,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
+      'name': instance.name,
       'UUID': instance.UUID,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,

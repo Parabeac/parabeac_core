@@ -17,7 +17,7 @@ part 'text.g.dart';
 @JsonSerializable(nullable: false)
 class Text extends SketchNode implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'text';
   final dynamic attributedString;
   final bool automaticallyDrawOnUnderlyingPath;

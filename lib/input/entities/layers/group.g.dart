@@ -36,7 +36,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
@@ -66,4 +66,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
+      '_class': instance.CLASS_NAME,
     };

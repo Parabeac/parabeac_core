@@ -38,7 +38,7 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     symbolID: json['symbolID'],
     verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
     horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
@@ -66,6 +66,7 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'userInfo': instance.userInfo,
       'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      '_class': instance.CLASS_NAME,
       'overrideValues': instance.overrideValues,
       'scale': instance.scale,
       'symbolID': instance.symbolID,

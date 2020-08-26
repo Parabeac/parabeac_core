@@ -15,7 +15,7 @@ part 'page.g.dart';
 @JsonSerializable(nullable: false)
 class Page extends AbstractGroupLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'page';
   dynamic includeInCloudUpload;
   dynamic horizontalRulerData;
