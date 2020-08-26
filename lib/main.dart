@@ -6,6 +6,7 @@ import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
+import 'package:uuid/uuid.dart';
 
 import 'controllers/main_info.dart';
 
@@ -14,6 +15,8 @@ String resultsDirectory = Platform.environment['SENTRY_DSN'] ?? '/temp';
 final SentryClient sentry = SentryClient(dsn: resultsDirectory);
 
 void main(List<String> args) async {
+  await checkConfigFile();
+
   MainInfo().sentry = SentryClient(dsn: resultsDirectory);
   var log = Logger('Main');
 
@@ -36,7 +39,6 @@ void main(List<String> args) async {
         break;
       case '-o':
         MainInfo().outputPath = args[i + 1];
-
         break;
       case '-n':
         projectName = args[i + 1];
@@ -80,6 +82,37 @@ void main(List<String> args) async {
   } else if (designType == 'figma') {
     assert(false, 'We don\'t support Figma.');
   }
+}
+
+/// Checks whether a configuration file is made already,
+/// and makes one if necessary
+Future<void> checkConfigFile() async {
+  var homepath = getHomePath();
+  var configFile = File('$homepath/.config/.parabeac/config.json');
+  if (!await configFile.exists()) {
+    createConfigFile(configFile);
+  } else {
+    var configMap = jsonDecode(configFile.readAsStringSync());
+    MainInfo().deviceId = configMap['device_id'];
+  }
+}
+
+/// Gets the homepath of the user according to their OS
+String getHomePath() {
+  var envvars = Platform.environment;
+
+  if (Platform.isWindows) {
+    return envvars['UserProfile'];
+  }
+  return envvars['HOME'];
+}
+
+/// Creates and populates parabeac config file
+void createConfigFile(File configFile) {
+  configFile.createSync(recursive: true);
+  var configMap = {'device_id': Uuid().v4()};
+  configFile.writeAsStringSync(jsonEncode(configMap));
+  MainInfo().deviceId = configMap['device_id'];
 }
 
 String getCleanPath(String path) {
