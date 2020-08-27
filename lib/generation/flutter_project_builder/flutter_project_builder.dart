@@ -40,9 +40,9 @@ class FlutterProjectBuilder {
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      log.info(Process.runSync('flutter', ['create', '$projectName'],
-              workingDirectory: MainInfo().outputPath)
-          .stdout);
+      Process.runSync('flutter', ['create', '$projectName'],
+              workingDirectory: MainInfo().outputPath);
+      log.fine('Your project has been generated at '+ MainInfo().outputPath);
     } catch (error, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: error,
