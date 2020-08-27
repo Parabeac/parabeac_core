@@ -14,7 +14,7 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
     <span> · </span>
   <a href="https://docs.parabeac.com/parabeac-developers/getting-started">Understanding the code export</a>
  <span> · </span>
-  <a href="https://github.com/Parabeac/open_source_prep/wiki">Contribute</a>
+  <a href="https://github.com/Parabeac/parabeac-core/wiki/Contributing">Contribute</a>
  <span> · </span>
   <a href="https://discord.gg/qUrghes">Community</a>
 </h3>
