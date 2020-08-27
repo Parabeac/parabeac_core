@@ -57,7 +57,7 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
-        name, '${MainInfo().outputPath}assets/images', image);
+        UUID, '${MainInfo().outputPath}assets/images', image);
   }
 
   @override

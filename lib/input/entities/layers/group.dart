@@ -14,7 +14,7 @@ part 'group.g.dart';
 @JsonSerializable(nullable: false)
 class Group extends AbstractGroupLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'group';
   Group(
       {bool hasClickThrough,

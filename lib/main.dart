@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -29,6 +30,7 @@ void main(List<String> args) async {
       case '-p':
         path = args[i + 1];
         pathToSketchFile = path;
+        MainInfo().sketchPath = pathToSketchFile;
         // If outputPath is empty, assume we are outputting to sketch path
         MainInfo().outputPath ??= getCleanPath(path);
         break;
@@ -48,7 +50,6 @@ void main(List<String> args) async {
 
   if (!MainInfo().outputPath.endsWith('/')) {
     MainInfo().outputPath += '/';
-    print('Forgot a slash bucko, ${MainInfo().outputPath}');
   }
 
   if (projectName.isEmpty) {
@@ -59,17 +60,21 @@ void main(List<String> args) async {
   var id = InputDesignService(path);
 
   if (designType == 'sketch') {
+    var process = await Process.start('npm', ['run', 'prod'],
+        workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+
+    await for (var event in process.stdout.transform(utf8.decoder)) {
+      if (event.toLowerCase().contains('server is listening on port')) {
+        log.fine('Successfully started Sketch Asset Converter');
+        break;
+      }
+    }
+
     //Retrieving the Sketch PNGs from the design file
     await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    // ignore: unawaited_futures
-    // await Process.run('sh', [
-    //   '${MainInfo().homepath}pb-scripts/sketchtool_proxy.sh ${pathToSketchFile} export slices --output=${MainInfo().homepath}pngs/ --overwriting YES --item name'
-    // ]).then((value) {
-    //   log.info(value.stdout);
-    //   log.error(value.stderr);
-    // });
     await SketchController().convertSketchFile(pathToSketchFile,
         MainInfo().outputPath + projectName, configurationPath);
+    process.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {

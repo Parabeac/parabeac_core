@@ -15,6 +15,7 @@ PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
     alignY: (json['alignY'] as num).toDouble(),
     color: json['color'] as String,
   )
+    ..name = json['name'] as String
     ..semanticName = json['semanticName'] as String
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -28,6 +29,7 @@ PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PluginContainerToJson(PluginContainer instance) =>
     <String, dynamic>{
+      'name': instance.name,
       'bottomRightCorner': instance.bottomRightCorner,
       'semanticName': instance.semanticName,
       'subsemantic': instance.subsemantic,

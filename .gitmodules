@@ -1,0 +1,4 @@
+[submodule "SketchAssetConverter"]
+	path = SketchAssetConverter
+	url = https://github.com/Parabeac/SketchAssetConverter.git
+	branch = master

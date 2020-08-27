@@ -15,10 +15,11 @@ Padding _$PaddingFromJson(Map<String, dynamic> json) {
     bottom: (json['bottom'] as num).toDouble(),
   )
     ..subsemantic = json['subsemantic'] as String
-    ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
+    ..name = json['name'] as String
+    ..color = json['color'] as String
     ..child = json['child']
     ..screenWidth = (json['screenWidth'] as num).toDouble()
     ..screenHeight = (json['screenHeight'] as num).toDouble()
@@ -28,10 +29,11 @@ Padding _$PaddingFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PaddingToJson(Padding instance) => <String, dynamic>{
       'subsemantic': instance.subsemantic,
-      'color': instance.color,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
+      'name': instance.name,
+      'color': instance.color,
       'child': instance.child,
       'left': instance.left,
       'right': instance.right,

@@ -18,7 +18,7 @@ part 'rectangle.g.dart';
 @JsonSerializable(nullable: false)
 class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'rectangle';
   final double fixedRadius;
   final bool hasConvertedToNewRoundCorners;

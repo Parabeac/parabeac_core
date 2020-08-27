@@ -17,9 +17,9 @@ part 'shape_group.g.dart';
 @JsonSerializable(nullable: false)
 class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: '_class')
   String CLASS_NAME = 'shapeGroup';
-  final dynamic widingRule;
+  final dynamic windingRule;
 
   ShapeGroup(
       {bool hasClickThrough,
@@ -48,7 +48,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
       userInfo,
       Style style,
       maintainScrollPosition,
-      this.widingRule})
+      this.windingRule})
       : super(
             hasClickThrough,
             groupLayout,
@@ -87,7 +87,10 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(json.encode(toJson()));
+    var image = await convertImageLocal(do_objectID, frame.width, frame.height);
+    if (image == null) {
+      return null;
+    }
     return InheritedShapeGroup(this,
         currentContext: currentContext, image: image);
   }

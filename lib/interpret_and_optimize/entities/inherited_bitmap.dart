@@ -23,6 +23,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @override
   String UUID;
 
+  @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
 
   String widgetType = 'Bitmap';

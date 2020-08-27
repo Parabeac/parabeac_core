@@ -55,7 +55,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
         .map((e) => OverridableProperty.fromJson(e as Map<String, dynamic>))
         .toList(),
     presetDictionary: json['presetDictionary'],
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
@@ -86,6 +86,7 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
+      '_class': instance.CLASS_NAME,
       'backgroundColor': instance.backgroundColor,
       'hasBackgroundColor': instance.hasBackgroundColor,
       'horizontalRulerData': instance.horizontalRulerData,

@@ -40,7 +40,7 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  );
+  )..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
@@ -71,6 +71,7 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'isClosed': instance.isClosed,
       'pointRadiusBehaviour': instance.pointRadiusBehaviour,
       'points': instance.points,
+      '_class': instance.CLASS_NAME,
       'fixedRadius': instance.fixedRadius,
       'hasConvertedToNewRoundCorners': instance.hasConvertedToNewRoundCorners,
       'needsConvertionToNewRoundCorners':

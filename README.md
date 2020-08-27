@@ -61,25 +61,40 @@ Parabeac currently supports conversions from [Sketch](https://www.sketch.com) bu
 
 ### Dependencies
 
- - Dart
- - Flutter
- - Docker (*We're working on removing this*)
+ - [Dart](https://dart.dev/get-dart)
+ - [Flutter](https://flutter.dev/docs/get-started/install)
+ - [node.js](https://nodejs.org/en/download/)
 
 To test out a Sketch file feel free to download [this Sketch file](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)!
 
-### Running the conversion
+## Cloning the Repo
+Because parabeac-core contains the Sketch-Asset-Converter submodule, it is easier to clone the repo using the following command:
+```
+git clone --recurse-submodules https://github.com/Parabeac/Parabeac-Core.git
+```
+
+If you have already cloned the repo without the submodule, simply run the following command which will add Sketch-Asset-Converter:
+```
+git submodule update --init
+```
+
+**_In order to pull new changes from the repository, run the following command to also update the submodule:_**
+
+```
+git pull --recurse-submodules
+```
+
+For more information about git submodules, click [here](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+
+## Running the conversion
 
 Follow these steps in order to run Parabeac Core on your local environment:
 1. Clone PBCore repo in order to get the code on your machine
-2. Make sure you have docker running
-3. Within your terminal navigate to the sketch-to-svg folder within the Parabeac Core root directory. From here run `docker build -t sketch .`
-4. Within the same sketch-to-svg directory run `docker run -p 5555:8081 -d sketch` 
-5. If you have any plugins make sure to put the plugins in the plugin folder
-6. In your terminal move to the root PBCore directory and run:
+2. If you have any plugins make sure to put the plugins in the plugin folder
+3. In your terminal change directory to the root PBCore directory and run:
 ``` bash
  $dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
- > :warning: **Note: Steps 3 and 4 create a docker container in the background, we know this is not ideal and are working to remove this currently. To remove the docker instance run `docker ps` to identify the container Id and then `docker kill <containerId>` to remove it. Please see the Docker docs for more details.**
 
 # Running the exported code
 ### Requirement(s)
@@ -103,6 +118,5 @@ To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins
 # Upcoming & Known Issues
 
  - Plugin Duplication in the Plugin Service
- - Remove Docker Dependency
  - Support for Figma
  - Egg Marketplace
