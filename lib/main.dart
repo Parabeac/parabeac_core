@@ -87,6 +87,14 @@ void main(List<String> args) async {
 /// Checks whether a configuration file is made already,
 /// and makes one if necessary
 Future<void> checkConfigFile() async {
+  var envvars = Platform.environment;
+
+  // Do not get metrics if user has envvar PB_METRICS set to false
+  if (envvars['PB_METRICS'] != null &&
+      envvars['PB_METRICS'].toLowerCase().contains('false')) {
+    return;
+  }
+
   var homepath = getHomePath();
   var configFile = File('$homepath/.config/.parabeac/config.json');
   if (!await configFile.exists()) {
