@@ -7,6 +7,7 @@ import 'package:parabeac_core/input/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import 'controllers/main_info.dart';
 
@@ -97,12 +98,14 @@ Future<void> checkConfigFile() async {
 
   var homepath = getHomePath();
   var configFile = File('$homepath/.config/.parabeac/config.json');
-  if (!await configFile.exists()) {
+  if (!(await configFile.exists())) {
     createConfigFile(configFile);
   } else {
     var configMap = jsonDecode(configFile.readAsStringSync());
     MainInfo().deviceId = configMap['device_id'];
   }
+
+  await addToAmplitude();
 }
 
 /// Gets the homepath of the user according to their OS
@@ -121,6 +124,20 @@ void createConfigFile(File configFile) {
   var configMap = {'device_id': Uuid().v4()};
   configFile.writeAsStringSync(jsonEncode(configMap));
   MainInfo().deviceId = configMap['device_id'];
+}
+
+/// Adds current run to amplitude metrics
+void addToAmplitude() async {
+  var lambdaEndpt =
+      'https://jsr2rwrw5m.execute-api.us-east-1.amazonaws.com/default/pb-lambda-microservice';
+
+  var body = json.encode({'id': MainInfo().deviceId});
+
+  await http.post(
+    lambdaEndpt,
+    headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    body: body,
+  );
 }
 
 String getCleanPath(String path) {
