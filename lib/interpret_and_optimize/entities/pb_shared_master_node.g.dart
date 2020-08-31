@@ -11,12 +11,8 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
     SymbolMaster.fromJson(json['originalRef'] as Map<String, dynamic>),
     json['SYMBOL_ID'] as String,
     json['name'] as String,
-    json['topLeftCorner'] == null
-        ? null
-        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    json['bottomRightCorner'] == null
-        ? null
-        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
