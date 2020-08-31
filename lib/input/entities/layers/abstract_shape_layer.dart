@@ -1,11 +1,11 @@
-
 // title: Abstract Shape Layer
 // description: Abstract base layer for all shape layers
+import 'package:parabeac_core/design_logic/design_shape.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/objects/frame.dart';
 import 'package:parabeac_core/input/entities/style/style.dart';
 
-abstract class AbstractShapeLayer extends SketchNode {
+abstract class AbstractShapeLayer extends SketchNode implements DesignShape {
   final bool edited;
   final bool isClosed;
   final dynamic pointRadiusBehaviour;

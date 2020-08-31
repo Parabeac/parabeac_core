@@ -37,6 +37,9 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..includeInCloudUpload = json['includeInCloudUpload']
     ..horizontalRulerData = json['horizontalRulerData']
@@ -46,6 +49,9 @@ Page _$PageFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,

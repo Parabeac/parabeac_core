@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/artboard.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
@@ -12,7 +14,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 part 'artboard.g.dart';
 
 @JsonSerializable(nullable: false)
-class Artboard extends AbstractGroupLayer implements SketchNodeFactory {
+class Artboard extends AbstractGroupLayer
+    implements SketchNodeFactory, PBArtboard {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'artboard';
@@ -41,7 +44,7 @@ class Artboard extends AbstractGroupLayer implements SketchNodeFactory {
       this.presetDictionary,
       hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      children,
       do_objectID,
       booleanOperation,
       exportOptions,
@@ -68,7 +71,7 @@ class Artboard extends AbstractGroupLayer implements SketchNodeFactory {
       : super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             do_objectID,
             booleanOperation,
             exportOptions,
@@ -106,4 +109,15 @@ class Artboard extends AbstractGroupLayer implements SketchNodeFactory {
     return Future.value(
         InheritedScaffold(this, currentContext: currentContext, name: name));
   }
+
+  @override
+  void set backgroundColor(_backgroundColor) {
+    // TODO: implement backgroundColor
+  }
+
+  @override
+  List<DesignNode> children;
+
+  @override
+  var designNode;
 }

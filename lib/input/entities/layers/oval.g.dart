@@ -35,10 +35,18 @@ Oval _$OvalFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String
+    ..designNode = json['designNode'];
 }
 
 Map<String, dynamic> _$OvalToJson(Oval instance) => <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
@@ -67,4 +75,5 @@ Map<String, dynamic> _$OvalToJson(Oval instance) => <String, dynamic>{
       'pointRadiusBehaviour': instance.pointRadiusBehaviour,
       'points': instance.points,
       '_class': instance.CLASS_NAME,
+      'designNode': instance.designNode,
     };

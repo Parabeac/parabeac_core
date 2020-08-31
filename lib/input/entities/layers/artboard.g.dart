@@ -23,9 +23,7 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     presetDictionary: json['presetDictionary'],
     hasClickThrough: json['hasClickThrough'],
     groupLayout: json['groupLayout'],
-    layers: (json['layers'] as List)
-        .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    children: json['children'],
     do_objectID: json['do_objectID'],
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
@@ -49,10 +47,18 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String
+    ..designNode = json['designNode'];
 }
 
 Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
@@ -78,7 +84,6 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'maintainScrollPosition': instance.maintainScrollPosition,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
       '_class': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,
       'includeBackgroundColorInExport': instance.includeBackgroundColorInExport,
@@ -91,4 +96,6 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'isFlowHome': instance.isFlowHome,
       'resizesContent': instance.resizesContent,
       'presetDictionary': instance.presetDictionary,
+      'children': instance.children,
+      'designNode': instance.designNode,
     };

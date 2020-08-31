@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/objects/frame.dart';
 import 'package:parabeac_core/input/entities/style/style.dart';
@@ -9,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 // title: Abstract Layer
 // description: Abstract base schema for all layers
 // type: object
-abstract class SketchNode {
+abstract class SketchNode extends DesignNode {
   final String do_objectID;
   final dynamic booleanOperation;
   final dynamic exportOptions;
@@ -59,7 +60,8 @@ abstract class SketchNode {
       this.clippingMaskMode,
       this.userInfo,
       this.style,
-      this.maintainScrollPosition);
+      this.maintainScrollPosition)
+      : super(do_objectID, name, isVisible, frame, '');
 
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>

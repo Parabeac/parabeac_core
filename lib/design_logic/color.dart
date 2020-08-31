@@ -18,6 +18,4 @@ class Color {
 
   factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
   Map<String, dynamic> toJson() => _$ColorToJson(this);
-// 命名构造函数
-  Color.empty();
 }

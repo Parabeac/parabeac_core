@@ -55,11 +55,18 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
         .map((e) => OverridableProperty.fromJson(e as Map<String, dynamic>))
         .toList(),
     presetDictionary: json['presetDictionary'],
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
     <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,

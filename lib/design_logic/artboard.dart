@@ -1,17 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_element.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/group_node.dart';
 
 part 'artboard.g.dart';
 
 @JsonSerializable(nullable: false)
-class Artboard {
+class PBArtboard extends DesignElement implements GroupNode {
   var backgroundColor;
-  var designElement;
-  var groupNode;
-  Artboard(this.backgroundColor, this.designElement);
+  PBArtboard(this.backgroundColor) : super(null);
 
-  factory Artboard.fromJson(Map<String, dynamic> json) =>
-      _$ArtboardFromJson(json);
-  Map<String, dynamic> toJson() => _$ArtboardToJson(this);
-// 命名构造函数
-  Artboard.empty();
+  factory PBArtboard.fromJson(Map<String, dynamic> json) =>
+      _$PBArtboardFromJson(json);
+  Map<String, dynamic> toJson() => _$PBArtboardToJson(this);
+
+  @override
+  List<DesignNode> children;
 }

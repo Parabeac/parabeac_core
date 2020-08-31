@@ -1,4 +1,3 @@
-
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/layers/artboard.dart';
 import 'package:parabeac_core/input/entities/layers/bitmap.dart';
@@ -13,8 +12,7 @@ import 'package:parabeac_core/input/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/input/entities/layers/text.dart';
 
 ///Abstract Factory for [SketchNode]
-class AbstractSketchNodeFactory{
-
+class AbstractSketchNodeFactory {
   ///the key that gives the class type in the `SketchFiles`.
   static final String SKETCH_CLASS_KEY = '_class';
 
@@ -34,11 +32,11 @@ class AbstractSketchNodeFactory{
 
   AbstractSketchNodeFactory();
 
-   static SketchNode getSketchNode(Map<String, dynamic> json) {
+  static SketchNode getSketchNode(Map<String, dynamic> json) {
     var className = json[SKETCH_CLASS_KEY];
-    if(className != null){
-      for(var sketchNode in _sketchNodes){
-        if(sketchNode.CLASS_NAME == className){
+    if (className != null) {
+      for (var sketchNode in _sketchNodes) {
+        if (sketchNode.CLASS_NAME == className) {
           return sketchNode.createSketchNode(json);
         }
       }
@@ -48,10 +46,10 @@ class AbstractSketchNodeFactory{
 }
 
 ///Created another method for the factory because I could not access the regular
-///factory constructor of each of the `SketchNode`s. Furthermore, the factory 
+///factory constructor of each of the `SketchNode`s. Furthermore, the factory
 ///constructor creates less of an overhead (according to online docs). Regular
 ///method is just going to call the factory method.
-abstract class SketchNodeFactory{
+abstract class SketchNodeFactory {
   String CLASS_NAME;
   SketchNode createSketchNode(Map<String, dynamic> json);
 }

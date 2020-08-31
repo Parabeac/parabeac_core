@@ -35,10 +35,17 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     userInfo: json['userInfo'],
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,

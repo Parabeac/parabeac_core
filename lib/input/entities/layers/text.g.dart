@@ -38,10 +38,17 @@ Text _$TextFromJson(Map<String, dynamic> json) {
     lineSpacingBehaviour: json['lineSpacingBehaviour'],
     textBehaviour: json['textBehaviour'],
     glyphBounds: json['glyphBounds'],
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$TextToJson(Text instance) => <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,

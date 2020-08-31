@@ -38,11 +38,18 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     symbolID: json['symbolID'],
     verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
     horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
-  )..CLASS_NAME = json['_class'] as String;
+  )
+    ..UUID = json['UUID'] as String
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..type = json['type'] as String
+    ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
     <String, dynamic>{
+      'UUID': instance.UUID,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,

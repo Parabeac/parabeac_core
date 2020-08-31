@@ -21,6 +21,4 @@ class DesignNode {
   factory DesignNode.fromJson(Map<String, dynamic> json) =>
       _$DesignNodeFromJson(json);
   Map<String, dynamic> toJson() => _$DesignNodeToJson(this);
-// 命名构造函数
-  DesignNode.empty();
 }

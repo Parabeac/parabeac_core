@@ -111,4 +111,7 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       },
     ));
   }
+
+  @override
+  var designNode;
 }
