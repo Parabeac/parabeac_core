@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/plugins/switch.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
@@ -51,14 +52,14 @@ class PBPluginListHelper {
 
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
-  PBEgg returnAllowListNodeIfExists(SketchNode node) {
+  PBEgg returnAllowListNodeIfExists(DesignNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
     for (String key in allowListNames.keys) {
       if (node.name.contains(key)) {
         return allowListNames[key].generatePluginNode(
-            Point(node.frame.x, node.frame.y),
-            Point(node.frame.x + node.frame.width,
-                node.frame.y + node.frame.height),
+            Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
+            Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
+                node.boundaryRectangle.y + node.boundaryRectangle.height),
             node);
       }
     }

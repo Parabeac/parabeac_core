@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/services/positional_cleansing_service.dart';
@@ -19,7 +20,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregat
 /// Output: PBIntermediateNodeTree
 class PBVisualGenerationService implements PBGenerationService {
   /// The originalRoot sketch node.
-  SketchNode originalRoot;
+  DesignNode originalRoot;
 
   PositionalCleansingService _positionalCleansingService;
 
@@ -58,7 +59,8 @@ class PBVisualGenerationService implements PBGenerationService {
               .returnAllowListNodeIfExists(currentNode.sketchNode);
           // Generate general intermediate node if still null.
           // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
-          original = await currentNode.sketchNode.interpretNode(currentContext);
+          original = await (currentNode.sketchNode as SketchNode)
+              .interpretNode(currentContext);
           if (result == null ||
               original is PBSharedInstanceIntermediateNode ||
               original is PBSharedMasterNode) {

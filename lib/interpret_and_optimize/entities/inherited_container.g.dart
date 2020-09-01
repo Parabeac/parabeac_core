@@ -8,7 +8,7 @@ part of 'inherited_container.dart';
 
 InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
   return InheritedContainer(
-    SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    DesignNode.fromJson(json['originalRef'] as Map<String, dynamic>),
     Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
     Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     borderInfo: json['borderInfo'] as Map<String, dynamic>,

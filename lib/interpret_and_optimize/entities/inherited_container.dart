@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
@@ -15,7 +16,7 @@ part 'inherited_container.g.dart';
 class InheritedContainer extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final SketchNode originalRef;
+  final DesignNode originalRef;
 
   @override
   final Point bottomRightCorner;
@@ -51,11 +52,11 @@ class InheritedContainer extends PBVisualIntermediateNode
     generator = PBContainerGenerator();
 
     borderInfo ??= {};
-    UUID = originalRef.do_objectID ?? '';
+    UUID = originalRef.UUID ?? '';
 
     size = {
-      'width': originalRef.frame.width,
-      'height': originalRef.frame.height,
+      'width': originalRef.boundaryRectangle.width,
+      'height': originalRef.boundaryRectangle.height,
     };
 
     if (originalRef.style.fills.isNotEmpty) {

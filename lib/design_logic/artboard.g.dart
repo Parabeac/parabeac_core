@@ -15,6 +15,7 @@ PBArtboard _$PBArtboardFromJson(Map<String, dynamic> json) {
     ..isVisible = json['isVisible'] as bool
     ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
+    ..style = json['style']
     ..designNode = json['designNode']
     ..children = (json['children'] as List)
         .map((e) => DesignNode.fromJson(e as Map<String, dynamic>))
@@ -28,6 +29,7 @@ Map<String, dynamic> _$PBArtboardToJson(PBArtboard instance) =>
       'isVisible': instance.isVisible,
       'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
+      'style': instance.style,
       'designNode': instance.designNode,
       'backgroundColor': instance.backgroundColor,
       'children': instance.children,

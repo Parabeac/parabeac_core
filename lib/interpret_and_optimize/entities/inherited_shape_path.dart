@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
@@ -22,7 +23,7 @@ part 'inherited_shape_path.g.dart';
 class InheritedShapePath extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  SketchNode originalRef;
+  DesignNode originalRef;
 
   @override
   String UUID;
@@ -45,17 +46,21 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   InheritedShapePath(this.originalRef, {this.image, this.currentContext})
       : super(
-            Point(originalRef.frame.x, originalRef.frame.y),
-            Point(originalRef.frame.x + originalRef.frame.width,
-                originalRef.frame.y + originalRef.frame.height),
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width,
+                originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height),
             currentContext) {
     generator = PBBitmapGenerator();
 
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
 
     size = {
-      'width': originalRef.frame.width,
-      'height': originalRef.frame.height
+      'width': originalRef.boundaryRectangle.width,
+      'height': originalRef.boundaryRectangle.height
     };
 
     name = originalRef.name;
@@ -87,9 +92,13 @@ class InheritedShapePath extends PBVisualIntermediateNode
       Point p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
 
       if (_isEdgeAdjacent(p1, p2)) {
-        Point tlc = Point(originalRef.frame.x, originalRef.frame.y);
-        Point brc = Point(originalRef.frame.x + originalRef.frame.width,
-            originalRef.frame.y + originalRef.frame.height);
+        Point tlc = Point(
+            originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
+        Point brc = Point(
+            originalRef.boundaryRectangle.x +
+                originalRef.boundaryRectangle.width,
+            originalRef.boundaryRectangle.y +
+                originalRef.boundaryRectangle.height);
 
         generator = PBContainerGenerator();
         color = originalRef.style.borders[0].color.toHex();

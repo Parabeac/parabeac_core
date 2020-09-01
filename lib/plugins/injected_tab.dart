@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
@@ -36,14 +37,16 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
+      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
     var tab = Tab(topLeftCorner, bottomRightCorner,
         currentContext: currentContext, UUID: Uuid().v4());
     if (originalRef is! AbstractGroupLayer) {
       var sketchNode = _convertWrapper(originalRef);
 
       ///Clean the node so that it doesn't get interpreted as a plugin again.
-      sketchNode.interpretNode(currentContext).then(tab.addChild);
+      (sketchNode as SketchNode)
+          .interpretNode(currentContext)
+          .then(tab.addChild);
     }
 
     return tab;
@@ -57,7 +60,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
     return layer;
   }
 
-  SketchNode _convertWrapper(SketchNode node) {
+  DesignNode _convertWrapper(DesignNode node) {
     /// This is for plugins
     var str = '${node.name}';
     node.name = str.replaceAll(RegExp(r'\.\*'), '');
@@ -74,7 +77,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(SketchNode incomingNode) {
+  void extractInformation(DesignNode incomingNode) {
     // TODO: implement extractInformation
   }
 }

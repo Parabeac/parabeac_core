@@ -10,6 +10,7 @@ class DesignNode {
     this.isVisible,
     this.boundaryRectangle,
     this.type,
+    this.style,
   );
 
   String UUID;
@@ -17,6 +18,7 @@ class DesignNode {
   bool isVisible;
   var boundaryRectangle;
   String type;
+  var style;
 
   factory DesignNode.fromJson(Map<String, dynamic> json) =>
       _$DesignNodeFromJson(json);

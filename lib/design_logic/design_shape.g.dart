@@ -13,6 +13,7 @@ DesignShape _$DesignShapeFromJson(Map<String, dynamic> json) {
     ..isVisible = json['isVisible'] as bool
     ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
+    ..style = json['style']
     ..designNode = json['designNode'];
 }
 
@@ -23,5 +24,6 @@ Map<String, dynamic> _$DesignShapeToJson(DesignShape instance) =>
       'isVisible': instance.isVisible,
       'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
+      'style': instance.style,
       'designNode': instance.designNode,
     };

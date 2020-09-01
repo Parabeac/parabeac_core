@@ -61,7 +61,7 @@ abstract class SketchNode extends DesignNode {
       this.userInfo,
       this.style,
       this.maintainScrollPosition)
-      : super(do_objectID, name, isVisible, frame, '');
+      : super(do_objectID, name, isVisible, frame, '', style);
 
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>

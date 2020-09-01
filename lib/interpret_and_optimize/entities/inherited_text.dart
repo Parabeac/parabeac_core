@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/layers/text.dart';
@@ -20,7 +21,7 @@ class InheritedText extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  SketchNode originalRef;
+  DesignNode originalRef;
 
   @JsonKey(ignore: true)
   num alignmenttype;
@@ -39,13 +40,17 @@ class InheritedText extends PBVisualIntermediateNode
 
   InheritedText(this.originalRef, {this.currentContext})
       : super(
-            Point(originalRef.frame.x, originalRef.frame.y),
-            Point(originalRef.frame.x + originalRef.frame.width,
-                originalRef.frame.y + originalRef.frame.height),
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width,
+                originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height),
             currentContext) {
     generator = PBTextGen();
 
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
     text = (originalRef as Text).attributedString['string'];
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
     color = originalRef.style.textStyle.color.toHex();

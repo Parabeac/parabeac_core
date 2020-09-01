@@ -14,7 +14,8 @@ DesignElement _$DesignElementFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..isVisible = json['isVisible'] as bool
     ..boundaryRectangle = json['boundaryRectangle']
-    ..type = json['type'] as String;
+    ..type = json['type'] as String
+    ..style = json['style'];
 }
 
 Map<String, dynamic> _$DesignElementToJson(DesignElement instance) =>
@@ -24,5 +25,6 @@ Map<String, dynamic> _$DesignElementToJson(DesignElement instance) =>
       'isVisible': instance.isVisible,
       'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
+      'style': instance.style,
       'designNode': instance.designNode,
     };

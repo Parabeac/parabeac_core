@@ -13,6 +13,7 @@ DesignNode _$DesignNodeFromJson(Map<String, dynamic> json) {
     json['isVisible'] as bool,
     json['boundaryRectangle'],
     json['type'] as String,
+    json['style'],
   );
 }
 
@@ -23,4 +24,5 @@ Map<String, dynamic> _$DesignNodeToJson(DesignNode instance) =>
       'isVisible': instance.isVisible,
       'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
+      'style': instance.style,
     };

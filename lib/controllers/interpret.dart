@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
@@ -192,7 +193,7 @@ class Interpret {
     return parentAlignIntermediateNode;
   }
 
-  Future<PBIntermediateNode> generateNonRootItem(SketchNode root) async {
+  Future<PBIntermediateNode> generateNonRootItem(DesignNode root) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
