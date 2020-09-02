@@ -5,7 +5,7 @@ import 'package:parabeac_core/input/entities/style/style.dart';
 abstract class AbstractGroupLayer extends SketchNode {
   final bool hasClickThrough;
   final dynamic groupLayout;
-  final List<SketchNode> layers;
+  final List layers;
 
   AbstractGroupLayer(
       this.hasClickThrough,

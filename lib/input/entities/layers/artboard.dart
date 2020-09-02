@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/artboard.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
@@ -16,6 +15,15 @@ part 'artboard.g.dart';
 @JsonSerializable(nullable: false)
 class Artboard extends AbstractGroupLayer
     implements SketchNodeFactory, PBArtboard {
+  @override
+  @JsonKey(name: 'layers')
+  List layers;
+
+  @override
+  set children(children) => layers = children;
+  @override
+  get children => layers;
+
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'artboard';
@@ -114,9 +122,6 @@ class Artboard extends AbstractGroupLayer
   void set backgroundColor(_backgroundColor) {
     // TODO: implement backgroundColor
   }
-
-  @override
-  List children;
 
   @override
   var designNode;

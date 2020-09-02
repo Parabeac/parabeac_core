@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/design_element.dart';
 
-import 'design_node.dart';
-
 part 'image.g.dart';
 
 @JsonSerializable()

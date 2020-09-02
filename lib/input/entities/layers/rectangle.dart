@@ -17,7 +17,7 @@ part 'rectangle.g.dart';
 // description:
 //   Rectangle layers are the result of adding a rectangle shape to the canvas
 @JsonSerializable(nullable: false)
-class Rectangle extends AbstractShapeLayer implements SketchNodeFactory, Rect {
+class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'rectangle';
@@ -83,10 +83,10 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory, Rect {
             userInfo,
             style,
             maintainScrollPosition);
-
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
       Rectangle.fromJson(json);
+
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
       _$RectangleFromJson(json);
   @override
@@ -102,8 +102,9 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory, Rect {
     }
     return Future.value(InheritedContainer(
       this,
-      Point(frame.x, frame.y),
-      Point(frame.x + frame.width, frame.y + frame.height),
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
       currentContext: currentContext,
       borderInfo: {
         'borderRadius':
@@ -115,16 +116,4 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory, Rect {
 
   @override
   var designNode;
-
-  @override
-  double height;
-
-  @override
-  double width;
-
-  @override
-  double x;
-
-  @override
-  double y;
 }
