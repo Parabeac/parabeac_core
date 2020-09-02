@@ -6,17 +6,6 @@ part of 'design_node.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DesignNode _$DesignNodeFromJson(Map<String, dynamic> json) {
-  return DesignNode(
-    json['UUID'] as String,
-    json['name'] as String,
-    json['isVisible'] as bool,
-    json['boundaryRectangle'],
-    json['type'] as String,
-    json['style'],
-  );
-}
-
 Map<String, dynamic> _$DesignNodeToJson(DesignNode instance) =>
     <String, dynamic>{
       'UUID': instance.UUID,

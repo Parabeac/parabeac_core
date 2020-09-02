@@ -103,7 +103,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   }
 
   @override
-  DesignNode designNode;
+  var designNode;
 
   @override
   String imageReference;

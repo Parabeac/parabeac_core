@@ -39,7 +39,9 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     ..UUID = json['UUID'] as String
     ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String;
+    ..CLASS_NAME = json['_class'] as String
+    ..designNode = json['designNode']
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
@@ -74,4 +76,6 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'fillReplacesImage': instance.fillReplacesImage,
       'intendedDPI': instance.intendedDPI,
       'clippingMask': instance.clippingMask,
+      'designNode': instance.designNode,
+      'imageReference': instance.imageReference,
     };

@@ -8,7 +8,7 @@ part of 'inherited_oval.dart';
 
 InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
   return InheritedOval(
-    DesignNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

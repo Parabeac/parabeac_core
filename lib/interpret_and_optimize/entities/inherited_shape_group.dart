@@ -19,7 +19,7 @@ part 'inherited_shape_group.g.dart';
 class InheritedShapeGroup extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  DesignNode originalRef;
+  var originalRef;
 
   ///Represents the location of the png file.
   @JsonKey(ignore: true)

@@ -17,7 +17,7 @@ part 'inherited_circle.g.dart';
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final DesignNode originalRef;
+  final originalRef;
 
   @override
   final Point bottomRightCorner;

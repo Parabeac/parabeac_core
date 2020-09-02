@@ -16,7 +16,7 @@ class PBArtboard extends DesignElement implements GroupNode {
   Map<String, dynamic> toJson() => _$PBArtboardToJson(this);
 
   @override
-  List<DesignNode> children;
+  List children;
 
   @override
   Future<PBIntermediateNode> interpretNode(currentContext) {

@@ -45,7 +45,11 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
-    ..designNode = json['designNode'];
+    ..designNode = json['designNode']
+    ..height = (json['height'] as num).toDouble()
+    ..width = (json['width'] as num).toDouble()
+    ..x = (json['x'] as num).toDouble()
+    ..y = (json['y'] as num).toDouble();
 }
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
@@ -85,4 +89,8 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'needsConvertionToNewRoundCorners':
           instance.needsConvertionToNewRoundCorners,
       'designNode': instance.designNode,
+      'height': instance.height,
+      'width': instance.width,
+      'x': instance.x,
+      'y': instance.y,
     };

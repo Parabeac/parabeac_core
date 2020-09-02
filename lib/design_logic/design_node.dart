@@ -22,8 +22,6 @@ abstract class DesignNode {
   String type;
   var style;
 
-  factory DesignNode.fromJson(Map<String, dynamic> json) =>
-      _$DesignNodeFromJson(json);
   Map<String, dynamic> toJson() => _$DesignNodeToJson(this);
   Future<PBIntermediateNode> interpretNode(PBContext currentContext);
 }

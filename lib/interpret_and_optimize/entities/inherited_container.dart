@@ -16,7 +16,7 @@ part 'inherited_container.g.dart';
 class InheritedContainer extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final DesignNode originalRef;
+  final originalRef;
 
   @override
   final Point bottomRightCorner;

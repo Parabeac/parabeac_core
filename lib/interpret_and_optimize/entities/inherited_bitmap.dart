@@ -19,7 +19,7 @@ part 'inherited_bitmap.g.dart';
 class InheritedBitmap extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final DesignNode originalRef;
+  final originalRef;
 
   @override
   String UUID;

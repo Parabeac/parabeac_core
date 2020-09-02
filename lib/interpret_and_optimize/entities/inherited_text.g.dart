@@ -8,7 +8,7 @@ part of 'inherited_text.dart';
 
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
-    DesignNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

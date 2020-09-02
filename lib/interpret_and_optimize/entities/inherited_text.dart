@@ -21,7 +21,7 @@ class InheritedText extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  DesignNode originalRef;
+  var originalRef;
 
   @JsonKey(ignore: true)
   num alignmenttype;

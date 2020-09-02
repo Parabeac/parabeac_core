@@ -8,7 +8,7 @@ part of 'inherited_bitmap.dart';
 
 InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
   return InheritedBitmap(
-    DesignNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

@@ -10,9 +10,7 @@ abstract class GroupNode {
     this.children,
   );
 
-  List<DesignNode> children;
+  List children;
 
-  // factory GroupNode.fromJson(Map<String, dynamic> json) =>
-  //     _$GroupNodeFromJson(json);
   Map<String, dynamic> toJson() => _$GroupNodeToJson(this);
 }

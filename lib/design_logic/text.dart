@@ -8,7 +8,7 @@ part 'text.g.dart';
 class Text extends DesignElement {
   Text(
     this.content,
-    DesignNode designNode,
+    var designNode,
   ) : super(designNode);
 
   String content;

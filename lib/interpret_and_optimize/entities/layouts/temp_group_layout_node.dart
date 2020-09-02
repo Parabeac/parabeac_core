@@ -9,7 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final DesignNode originalRef;
+  final originalRef;
 
   @override
   String get UUID => originalRef.UUID;

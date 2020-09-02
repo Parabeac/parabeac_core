@@ -24,7 +24,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
-  DesignNode originalRef;
+  var originalRef;
   String name;
   @JsonSerializable(nullable: true)
   var navbar;

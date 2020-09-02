@@ -17,9 +17,7 @@ PBArtboard _$PBArtboardFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String
     ..style = json['style']
     ..designNode = json['designNode']
-    ..children = (json['children'] as List)
-        .map((e) => DesignNode.fromJson(e as Map<String, dynamic>))
-        .toList();
+    ..children = json['children'] as List;
 }
 
 Map<String, dynamic> _$PBArtboardToJson(PBArtboard instance) =>

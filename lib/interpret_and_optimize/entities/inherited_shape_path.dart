@@ -23,7 +23,7 @@ part 'inherited_shape_path.g.dart';
 class InheritedShapePath extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  DesignNode originalRef;
+  var originalRef;
 
   @override
   String UUID;

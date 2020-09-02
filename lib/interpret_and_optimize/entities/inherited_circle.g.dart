@@ -8,7 +8,7 @@ part of 'inherited_circle.dart';
 
 InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
   return InheritedCircle(
-    DesignNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
     Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
   )

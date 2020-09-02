@@ -116,7 +116,7 @@ class Artboard extends AbstractGroupLayer
   }
 
   @override
-  List<DesignNode> children;
+  List children;
 
   @override
   var designNode;

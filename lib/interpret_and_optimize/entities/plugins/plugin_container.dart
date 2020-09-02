@@ -86,7 +86,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
+      Point topLeftCorner, Point bottomRightCorner, var originalRef) {
     return PluginContainer(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
   }

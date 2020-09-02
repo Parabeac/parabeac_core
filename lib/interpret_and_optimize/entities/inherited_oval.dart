@@ -19,7 +19,7 @@ part 'inherited_oval.g.dart';
 class InheritedOval extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  DesignNode originalRef;
+  var originalRef;
 
   ///Represents the location of the png file.
   @JsonKey(ignore: true)

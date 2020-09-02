@@ -106,5 +106,5 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   String content;
 
   @override
-  DesignNode designNode;
+  var designNode;
 }

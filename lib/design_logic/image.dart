@@ -9,7 +9,7 @@ part 'image.g.dart';
 class Image extends DesignElement {
   Image(
     this.imageReference,
-    DesignNode designNode,
+    var designNode,
   ) : super(designNode);
 
   String imageReference;
