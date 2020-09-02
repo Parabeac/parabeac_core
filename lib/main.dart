@@ -33,6 +33,11 @@ void main(List<String> args) async {
         MainInfo().sketchPath = pathToSketchFile;
         // If outputPath is empty, assume we are outputting to sketch path
         MainInfo().outputPath ??= getCleanPath(path);
+        if (pathToSketchFile.endsWith('.sketch')) {
+          designType = 'sketch';
+        } else if (pathToSketchFile.endsWith('.fig')) {
+          designType = 'figma';
+        }
         break;
       case '-o':
         MainInfo().outputPath = args[i + 1];
