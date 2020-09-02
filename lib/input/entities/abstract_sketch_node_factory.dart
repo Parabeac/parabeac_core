@@ -9,7 +9,7 @@ import 'package:parabeac_core/input/entities/layers/shape_group.dart';
 import 'package:parabeac_core/input/entities/layers/shape_path.dart';
 import 'package:parabeac_core/input/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/input/entities/layers/symbol_master.dart';
-import 'package:parabeac_core/input/entities/layers/text.dart';
+import 'package:parabeac_core/input/entities/layers/sketch_text.dart';
 
 ///Abstract Factory for [SketchNode]
 class AbstractSketchNodeFactory {
@@ -27,7 +27,7 @@ class AbstractSketchNodeFactory {
     ShapePath(),
     SymbolInstance(),
     SymbolMaster(),
-    Text()
+    SketchText()
   ];
 
   AbstractSketchNodeFactory();

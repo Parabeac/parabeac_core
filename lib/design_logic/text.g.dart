@@ -9,6 +9,7 @@ part of 'text.dart';
 Text _$TextFromJson(Map<String, dynamic> json) {
   return Text(
     json['content'] as String,
+    json['designNode'] as DesignNode,
   );
 }
 

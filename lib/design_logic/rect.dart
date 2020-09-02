@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 
 part 'rect.g.dart';
 
@@ -18,6 +19,4 @@ class Rect {
 
   factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
   Map<String, dynamic> toJson() => _$RectToJson(this);
-// 命名构造函数
-  Rect.empty();
 }

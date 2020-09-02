@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'text.dart';
+part of 'sketch_text.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Text _$TextFromJson(Map<String, dynamic> json) {
-  return Text(
+SketchText _$TextFromJson(Map<String, dynamic> json) {
+  return SketchText(
     do_objectID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
@@ -45,7 +45,7 @@ Text _$TextFromJson(Map<String, dynamic> json) {
     ..CLASS_NAME = json['_class'] as String;
 }
 
-Map<String, dynamic> _$TextToJson(Text instance) => <String, dynamic>{
+Map<String, dynamic> _$TextToJson(SketchText instance) => <String, dynamic>{
       'UUID': instance.UUID,
       'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,

@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/rect.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_shape_layer.dart';
@@ -16,7 +17,7 @@ part 'rectangle.g.dart';
 // description:
 //   Rectangle layers are the result of adding a rectangle shape to the canvas
 @JsonSerializable(nullable: false)
-class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
+class Rectangle extends AbstractShapeLayer implements SketchNodeFactory, Rect {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'rectangle';
@@ -114,4 +115,16 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   var designNode;
+
+  @override
+  double height;
+
+  @override
+  double width;
+
+  @override
+  double x;
+
+  @override
+  double y;
 }

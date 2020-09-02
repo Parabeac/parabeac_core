@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/objects/frame.dart';
@@ -16,7 +18,7 @@ part 'bitmap.g.dart';
 
 // title: Bitmap Layer
 // description: Bitmap layers house a single image
-class Bitmap extends SketchNode implements SketchNodeFactory {
+class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'bitmap';
@@ -99,4 +101,10 @@ class Bitmap extends SketchNode implements SketchNodeFactory {
     }
     return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }
+
+  @override
+  DesignNode designNode;
+
+  @override
+  String imageReference;
 }

@@ -1,3 +1,5 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/objects/frame.dart';
@@ -15,7 +17,7 @@ part 'text.g.dart';
 // title: Text Layer
 // description: A text layer represents a discrete block or line of text
 @JsonSerializable(nullable: false)
-class Text extends SketchNode implements SketchNodeFactory {
+class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'text';
@@ -26,7 +28,7 @@ class Text extends SketchNode implements SketchNodeFactory {
   final dynamic textBehaviour;
   final dynamic glyphBounds;
 
-  Text(
+  SketchText(
       {String do_objectID,
       booleanOperation,
       exportOptions,
@@ -82,8 +84,10 @@ class Text extends SketchNode implements SketchNodeFactory {
             maintainScrollPosition);
 
   @override
-  SketchNode createSketchNode(Map<String, dynamic> json) => Text.fromJson(json);
-  factory Text.fromJson(Map<String, dynamic> json) => _$TextFromJson(json);
+  SketchNode createSketchNode(Map<String, dynamic> json) =>
+      SketchText.fromJson(json);
+  factory SketchText.fromJson(Map<String, dynamic> json) =>
+      _$TextFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$TextToJson(this);
 
@@ -97,4 +101,10 @@ class Text extends SketchNode implements SketchNodeFactory {
       )..addChild(
           InheritedText(this, currentContext: currentContext),
         ));
+
+  @override
+  String content;
+
+  @override
+  DesignNode designNode;
 }

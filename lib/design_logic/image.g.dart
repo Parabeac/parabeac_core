@@ -9,7 +9,7 @@ part of 'image.dart';
 Image _$ImageFromJson(Map<String, dynamic> json) {
   return Image(
     json['imageReference'] as String,
-    json['name'] as String,
+    json['designNode'] as DesignNode,
   );
 }
 

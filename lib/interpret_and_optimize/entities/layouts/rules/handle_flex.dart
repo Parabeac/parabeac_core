@@ -1,4 +1,4 @@
-import 'package:parabeac_core/input/entities/layers/text.dart';
+import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/flexible.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/spacer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';

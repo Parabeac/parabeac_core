@@ -5,7 +5,7 @@ part 'design_element.g.dart';
 
 @JsonSerializable(nullable: false)
 class DesignElement extends DesignNode {
-  var designNode;
+  DesignNode designNode;
   DesignElement(this.designNode) : super('', '', false, null, '', null);
   factory DesignElement.fromJson(Map<String, dynamic> json) =>
       _$DesignElementFromJson(json);
