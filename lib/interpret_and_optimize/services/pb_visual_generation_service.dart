@@ -59,8 +59,7 @@ class PBVisualGenerationService implements PBGenerationService {
               .returnAllowListNodeIfExists(currentNode.sketchNode);
           // Generate general intermediate node if still null.
           // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
-          original = await (currentNode.sketchNode as SketchNode)
-              .interpretNode(currentContext);
+          original = await currentNode.sketchNode.interpretNode(currentContext);
           if (result == null ||
               original is PBSharedInstanceIntermediateNode ||
               original is PBSharedMasterNode) {

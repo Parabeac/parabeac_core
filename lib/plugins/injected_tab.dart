@@ -44,9 +44,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
       var sketchNode = _convertWrapper(originalRef);
 
       ///Clean the node so that it doesn't get interpreted as a plugin again.
-      (sketchNode as SketchNode)
-          .interpretNode(currentContext)
-          .then(tab.addChild);
+      sketchNode.interpretNode(currentContext).then(tab.addChild);
     }
 
     return tab;

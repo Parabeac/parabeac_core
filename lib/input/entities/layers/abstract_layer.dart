@@ -66,5 +66,6 @@ abstract class SketchNode extends DesignNode {
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>
       AbstractSketchNodeFactory.getSketchNode(json);
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext);
+  // @override
+  // Future<PBIntermediateNode> interpretNode(PBContext currentContext);
 }
