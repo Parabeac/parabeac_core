@@ -107,6 +107,5 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
 
   @override
   @JsonKey(name: '_ref')
-  //TODO: Discuss this with Eddie
   String imageReference;
 }
