@@ -26,6 +26,9 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   final bool needsConvertionToNewRoundCorners;
   @JsonKey(name: 'frame')
   var boundaryRectangle;
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
   Rectangle(
       {this.fixedRadius,
       this.hasConvertedToNewRoundCorners,
@@ -34,7 +37,7 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       bool isClosed,
       pointRadiusBehaviour,
       List points,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -62,7 +65,7 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
             isClosed,
             pointRadiusBehaviour,
             points,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

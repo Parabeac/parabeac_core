@@ -8,7 +8,7 @@ part of 'sketch_text.dart';
 
 SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
   return SketchText(
-    do_objectID: json['do_objectID'] as String,
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -39,7 +39,6 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     textBehaviour: json['textBehaviour'],
     glyphBounds: json['glyphBounds'],
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..content = json['content'] as String;
@@ -47,9 +46,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
     <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -80,5 +77,6 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'textBehaviour': instance.textBehaviour,
       'glyphBounds': instance.glyphBounds,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
       'content': instance.content,
     };

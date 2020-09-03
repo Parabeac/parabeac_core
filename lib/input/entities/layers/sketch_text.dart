@@ -32,8 +32,12 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   SketchText(
-      {String do_objectID,
+      {this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -63,7 +67,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       this.textBehaviour,
       this.glyphBounds})
       : super(
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

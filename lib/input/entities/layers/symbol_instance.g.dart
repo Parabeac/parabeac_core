@@ -8,7 +8,7 @@ part of 'symbol_instance.dart';
 
 SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
   return SymbolInstance(
-    do_objectID: json['do_objectID'] as String,
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -39,7 +39,6 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
     horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..parameters = json['parameters'] as List;
@@ -47,9 +46,7 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
     <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -78,5 +75,6 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'verticalSpacing': instance.verticalSpacing,
       'horizontalSpacing': instance.horizontalSpacing,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
       'parameters': instance.parameters,
     };

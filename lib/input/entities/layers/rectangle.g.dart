@@ -17,7 +17,7 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     isClosed: json['isClosed'] as bool,
     pointRadiusBehaviour: json['pointRadiusBehaviour'],
     points: json['points'] as List,
-    do_objectID: json['do_objectID'],
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -41,16 +41,13 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..designNode = json['designNode'];
 }
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -82,5 +79,6 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'needsConvertionToNewRoundCorners':
           instance.needsConvertionToNewRoundCorners,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
       'designNode': instance.designNode,
     };

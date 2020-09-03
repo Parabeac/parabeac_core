@@ -24,11 +24,15 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   ShapeGroup(
       {bool hasClickThrough,
       groupLayout,
       List<SketchNode> layers,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -56,7 +60,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
             hasClickThrough,
             groupLayout,
             layers,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,
@@ -91,7 +95,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var image = await convertImageLocal(
-        do_objectID, boundaryRectangle.width, boundaryRectangle.height);
+        UUID, boundaryRectangle.width, boundaryRectangle.height);
     if (image == null) {
       return null;
     }

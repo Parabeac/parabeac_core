@@ -36,6 +36,10 @@ class Artboard extends AbstractGroupLayer
   @override
   var backgroundColor;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   final bool hasBackgroundColor;
   final bool isFlowHome;
   final bool resizesContent;
@@ -55,7 +59,7 @@ class Artboard extends AbstractGroupLayer
       hasClickThrough,
       groupLayout,
       List<SketchNode> children,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -82,7 +86,7 @@ class Artboard extends AbstractGroupLayer
             hasClickThrough,
             groupLayout,
             (children as List<SketchNode>),
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle as Frame,

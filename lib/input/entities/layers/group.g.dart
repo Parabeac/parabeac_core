@@ -13,7 +13,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     layers: (json['layers'] as List)
         .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
         .toList(),
-    do_objectID: json['do_objectID'],
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -37,15 +37,12 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -72,4 +69,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'layers': instance.layers,
       '_class': instance.CLASS_NAME,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
     };

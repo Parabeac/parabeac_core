@@ -31,7 +31,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
       bool isClosed,
       pointRadiusBehaviour,
       List points,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -59,7 +59,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
             isClosed,
             pointRadiusBehaviour,
             points,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,
@@ -86,7 +86,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) {
     var oval = Oval.fromJson(json);
-    oval.UUID = oval.do_objectID;
+    // oval.UUID = oval.do_objectID;
     return oval;
   }
 
@@ -97,14 +97,11 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var image = await convertImageLocal(
-        do_objectID, boundaryRectangle.width, boundaryRectangle.height);
+        UUID, boundaryRectangle.width, boundaryRectangle.height);
     if (image == null) {
       return null;
     }
     return Future.value(
         InheritedOval(this, currentContext: currentContext, image: image));
   }
-
-  @override
-  var designNode;
 }

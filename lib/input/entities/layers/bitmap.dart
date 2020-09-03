@@ -31,12 +31,16 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   Bitmap(
       {this.image,
       this.fillReplacesImage,
       this.intendedDPI,
       this.clippingMask,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -60,7 +64,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
       Style style,
       maintainScrollPosition})
       : super(
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

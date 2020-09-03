@@ -42,11 +42,15 @@ class SymbolMaster extends AbstractGroupLayer
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   SymbolMaster(
       {bool hasClickThrough,
       groupLayout,
       List<SketchNode> layers,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -87,7 +91,7 @@ class SymbolMaster extends AbstractGroupLayer
             hasClickThrough,
             groupLayout,
             layers,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

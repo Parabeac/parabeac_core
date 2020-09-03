@@ -13,7 +13,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     layers: (json['layers'] as List)
         .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
         .toList(),
-    do_objectID: json['do_objectID'],
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -56,7 +56,6 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
         .toList(),
     presetDictionary: json['presetDictionary'],
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..parameters = json['parameters'] as List;
@@ -64,9 +63,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
     <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -108,5 +105,6 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'overrideProperties': instance.overrideProperties,
       'presetDictionary': instance.presetDictionary,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
       'parameters': instance.parameters,
     };

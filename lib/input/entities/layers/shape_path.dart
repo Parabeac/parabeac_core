@@ -22,12 +22,17 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: 'frame')
   var boundaryRectangle;
+
+  @JsonKey(name: 'do_objectID')
+  @override
+  var UUID;
+
   ShapePath(
       {bool edited,
       bool isClosed,
       pointRadiusBehaviour,
       List points,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -55,7 +60,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
             isClosed,
             pointRadiusBehaviour,
             points,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,
@@ -90,7 +95,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var image = await convertImageLocal(
-        do_objectID, boundaryRectangle.width, boundaryRectangle.height);
+        UUID, boundaryRectangle.width, boundaryRectangle.height);
     if (image == null) {
       return null;
     }

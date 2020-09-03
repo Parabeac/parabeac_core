@@ -12,7 +12,7 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     fillReplacesImage: json['fillReplacesImage'] as bool,
     intendedDPI: json['intendedDPI'] as int,
     clippingMask: json['clippingMask'],
-    do_objectID: json['do_objectID'],
+    UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
     boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
@@ -36,16 +36,13 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
-    ..UUID = json['UUID'] as String
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..imageReference = json['_ref'] as String;
 }
 
 Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
-      'UUID': instance.UUID,
       'type': instance.type,
-      'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -73,5 +70,6 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'intendedDPI': instance.intendedDPI,
       'clippingMask': instance.clippingMask,
       'frame': instance.boundaryRectangle,
+      'do_objectID': instance.UUID,
       '_ref': instance.imageReference,
     };

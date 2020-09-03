@@ -27,11 +27,15 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   Page(
       {bool hasClickThrough,
       groupLayout,
       List<SketchNode> layers,
-      do_objectID,
+      this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -58,7 +62,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
             hasClickThrough,
             groupLayout,
             layers,
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

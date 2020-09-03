@@ -31,8 +31,12 @@ class SymbolInstance extends SketchNode
   @JsonKey(name: 'frame')
   var boundaryRectangle;
 
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   SymbolInstance(
-      {String do_objectID,
+      {this.UUID,
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
@@ -61,7 +65,7 @@ class SymbolInstance extends SketchNode
       this.verticalSpacing,
       this.horizontalSpacing})
       : super(
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,
