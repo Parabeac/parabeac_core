@@ -35,7 +35,7 @@ class SymbolInstance extends SketchNode
       {String do_objectID,
       booleanOperation,
       exportOptions,
-      Frame boundaryRectangle,
+      Frame this.boundaryRectangle,
       flow,
       bool isFixedToViewport,
       bool isFlippedHorizontal,

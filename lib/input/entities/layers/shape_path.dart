@@ -30,7 +30,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame boundaryRectangle,
+      Frame this.boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,

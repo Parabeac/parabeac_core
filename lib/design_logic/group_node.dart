@@ -7,6 +7,4 @@ abstract class GroupNode {
   );
 
   List children;
-
-  // Map<String, dynamic> toJson() => _$GroupNodeToJson(this);
 }

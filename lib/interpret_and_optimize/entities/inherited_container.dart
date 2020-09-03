@@ -55,8 +55,8 @@ class InheritedContainer extends PBVisualIntermediateNode
     UUID = originalRef.UUID ?? '';
 
     size = {
-      'width': originalRef.frame.width,
-      'height': originalRef.frame.height,
+      'width': originalRef.boundaryRectangle.width,
+      'height': originalRef.boundaryRectangle.height,
     };
 
     if (originalRef.style.fills.isNotEmpty) {

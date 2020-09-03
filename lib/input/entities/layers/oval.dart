@@ -21,6 +21,11 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: 'frame')
   var boundaryRectangle;
+
+  @override
+  @JsonKey(name: 'do_objectID')
+  String UUID;
+
   Oval(
       {bool edited,
       bool isClosed,
@@ -29,7 +34,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame boundaryRectangle,
+      Frame this.boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -79,7 +84,12 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
             maintainScrollPosition);
 
   @override
-  SketchNode createSketchNode(Map<String, dynamic> json) => Oval.fromJson(json);
+  SketchNode createSketchNode(Map<String, dynamic> json) {
+    var oval = Oval.fromJson(json);
+    oval.UUID = oval.do_objectID;
+    return oval;
+  }
+
   factory Oval.fromJson(Map<String, dynamic> json) => _$OvalFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$OvalToJson(this);
