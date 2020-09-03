@@ -16,7 +16,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     do_objectID: json['do_objectID'],
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
@@ -38,19 +38,16 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -74,4 +71,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
       '_class': instance.CLASS_NAME,
+      'frame': instance.boundaryRectangle,
     };

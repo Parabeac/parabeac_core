@@ -1,10 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
-
-part 'rect.g.dart';
-
-@JsonSerializable(nullable: false)
-class Rect {
+abstract class Rect {
   Rect(
     this.x,
     this.y,
@@ -17,6 +11,6 @@ class Rect {
   double width;
   double height;
 
-  factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
-  Map<String, dynamic> toJson() => _$RectToJson(this);
+  // Rect.fromJson(Map<String, dynamic> json);
+  // Map<String, dynamic> toJson();
 }

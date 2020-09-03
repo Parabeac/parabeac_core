@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/pb_shared_instance_node.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/entities/objects/frame.dart';
@@ -8,9 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 part 'symbol_instance.g.dart';
 
 // title: Symbol Instance Layer
@@ -18,21 +16,26 @@ part 'symbol_instance.g.dart';
 @JsonSerializable(nullable: false)
 class SymbolInstance extends SketchNode
     with SymbolNodeMixin
-    implements SketchNodeFactory {
+    implements SketchNodeFactory, PBSharedInstanceNodeDesign {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'symbolInstance';
   final List<OverridableValue> overrideValues;
   final double scale;
-  final dynamic symbolID;
+  @override
+  String symbolID;
   final double verticalSpacing;
   final double horizontalSpacing;
+
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
 
   SymbolInstance(
       {String do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       bool isFixedToViewport,
       bool isFlippedHorizontal,
@@ -61,7 +64,7 @@ class SymbolInstance extends SketchNode
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -103,4 +106,7 @@ class SymbolInstance extends SketchNode
         currentContext: currentContext);
     return Future.value(sym);
   }
+
+  @override
+  List parameters;
 }

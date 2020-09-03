@@ -1,9 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'design_node.dart';
-
-part 'group_node.g.dart';
-
 @JsonSerializable(nullable: false)
 abstract class GroupNode {
   GroupNode(
@@ -12,5 +8,5 @@ abstract class GroupNode {
 
   List children;
 
-  Map<String, dynamic> toJson() => _$GroupNodeToJson(this);
+  // Map<String, dynamic> toJson() => _$GroupNodeToJson(this);
 }

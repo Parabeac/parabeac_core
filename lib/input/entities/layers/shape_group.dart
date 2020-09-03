@@ -20,6 +20,9 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @JsonKey(name: '_class')
   String CLASS_NAME = 'shapeGroup';
   final dynamic windingRule;
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
 
   ShapeGroup(
       {bool hasClickThrough,
@@ -28,7 +31,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -56,7 +59,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -87,7 +90,8 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImageLocal(do_objectID, frame.width, frame.height);
+    var image = await convertImageLocal(
+        do_objectID, boundaryRectangle.width, boundaryRectangle.height);
     if (image == null) {
       return null;
     }

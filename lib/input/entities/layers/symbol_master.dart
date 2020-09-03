@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/pb_shared_instance_node.dart';
 import 'package:parabeac_core/input/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
@@ -18,7 +19,7 @@ part 'symbol_master.g.dart';
 @JsonSerializable(nullable: false)
 class SymbolMaster extends AbstractGroupLayer
     with SymbolNodeMixin
-    implements SketchNodeFactory {
+    implements SketchNodeFactory, PBSharedInstanceNodeDesign {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'symbolMaster';
@@ -31,11 +32,15 @@ class SymbolMaster extends AbstractGroupLayer
   final bool resizesContent;
   final dynamic verticalRulerData;
   final bool includeBackgroundColorInInstance;
-  final dynamic symbolID;
+  @override
+  String symbolID;
   final int changeIdentifier;
-  final bool allowsOverridess;
+  final bool allowsOverrides;
   final List<OverridableProperty> overrideProperties;
   final dynamic presetDictionary;
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
 
   SymbolMaster(
       {bool hasClickThrough,
@@ -44,7 +49,7 @@ class SymbolMaster extends AbstractGroupLayer
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -75,7 +80,7 @@ class SymbolMaster extends AbstractGroupLayer
       this.includeBackgroundColorInInstance,
       this.symbolID,
       this.changeIdentifier,
-      this.allowsOverridess,
+      this.allowsOverrides,
       this.overrideProperties,
       this.presetDictionary})
       : super(
@@ -85,7 +90,7 @@ class SymbolMaster extends AbstractGroupLayer
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -111,6 +116,9 @@ class SymbolMaster extends AbstractGroupLayer
   }
 
   @override
+  List parameters;
+
+  @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
       SymbolMaster.fromJson(json);
   factory SymbolMaster.fromJson(Map<String, dynamic> json) =>
@@ -132,8 +140,9 @@ class SymbolMaster extends AbstractGroupLayer
       this,
       symbolID,
       name,
-      Point(frame.x, frame.y),
-      Point(frame.x + frame.width, frame.y + frame.height),
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
       overridableProperties: _extractParameters(),
       currentContext: currentContext,
     );

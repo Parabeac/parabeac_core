@@ -16,7 +16,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     do_objectID: json['do_objectID'],
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
@@ -48,29 +48,27 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     verticalRulerData: json['verticalRulerData'],
     includeBackgroundColorInInstance:
         json['includeBackgroundColorInInstance'] as bool,
-    symbolID: json['symbolID'],
+    symbolID: json['symbolID'] as String,
     changeIdentifier: json['changeIdentifier'] as int,
-    allowsOverridess: json['allowsOverridess'] as bool,
+    allowsOverrides: json['allowsOverrides'] as bool,
     overrideProperties: (json['overrideProperties'] as List)
         .map((e) => OverridableProperty.fromJson(e as Map<String, dynamic>))
         .toList(),
     presetDictionary: json['presetDictionary'],
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String;
+    ..CLASS_NAME = json['_class'] as String
+    ..parameters = json['parameters'] as List;
 }
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
     <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -106,7 +104,9 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
           instance.includeBackgroundColorInInstance,
       'symbolID': instance.symbolID,
       'changeIdentifier': instance.changeIdentifier,
-      'allowsOverridess': instance.allowsOverridess,
+      'allowsOverrides': instance.allowsOverrides,
       'overrideProperties': instance.overrideProperties,
       'presetDictionary': instance.presetDictionary,
+      'frame': instance.boundaryRectangle,
+      'parameters': instance.parameters,
     };

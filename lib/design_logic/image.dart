@@ -1,17 +1,12 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/design_element.dart';
 
-part 'image.g.dart';
-
-@JsonSerializable()
-class Image extends DesignElement {
+abstract class Image extends DesignElement {
   Image(
     this.imageReference,
-    var designNode,
-  ) : super(designNode);
+  ) : super();
 
   String imageReference;
 
-  factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
-  Map<String, dynamic> toJson() => _$ImageToJson(this);
+  // factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
+  // Map<String, dynamic> toJson() => _$ImageToJson(this);
 }

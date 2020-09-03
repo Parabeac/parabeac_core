@@ -19,6 +19,9 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @JsonKey(name: '_class')
   String CLASS_NAME = 'shapePath';
 
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
   ShapePath(
       {bool edited,
       bool isClosed,
@@ -27,7 +30,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -55,7 +58,7 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -86,7 +89,8 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImageLocal(do_objectID, frame.width, frame.height);
+    var image = await convertImageLocal(
+        do_objectID, boundaryRectangle.width, boundaryRectangle.height);
     if (image == null) {
       return null;
     }

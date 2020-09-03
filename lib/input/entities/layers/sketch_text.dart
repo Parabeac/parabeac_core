@@ -12,7 +12,7 @@ import '../../../interpret_and_optimize/entities/inherited_container.dart';
 import '../../../interpret_and_optimize/entities/inherited_text.dart';
 import '../../../interpret_and_optimize/value_objects/point.dart';
 
-part 'text.g.dart';
+part 'sketch_text.g.dart';
 
 // title: Text Layer
 // description: A text layer represents a discrete block or line of text
@@ -28,11 +28,15 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   final dynamic textBehaviour;
   final dynamic glyphBounds;
 
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
+
   SketchText(
       {String do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       bool isFixedToViewport,
       bool isFlippedHorizontal,
@@ -62,7 +66,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -87,16 +91,17 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   SketchNode createSketchNode(Map<String, dynamic> json) =>
       SketchText.fromJson(json);
   factory SketchText.fromJson(Map<String, dynamic> json) =>
-      _$TextFromJson(json);
+      _$SketchTextFromJson(json);
   @override
-  Map<String, dynamic> toJson() => _$TextToJson(this);
+  Map<String, dynamic> toJson() => _$SketchTextToJson(this);
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
       Future.value(InheritedContainer(
         this,
-        Point(frame.x, frame.y),
-        Point(frame.x + frame.width, frame.y + frame.height),
+        Point(boundaryRectangle.x, boundaryRectangle.y),
+        Point(boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
         currentContext: currentContext,
       )..addChild(
           InheritedText(this, currentContext: currentContext),
@@ -104,7 +109,4 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
 
   @override
   String content;
-
-  @override
-  var designNode;
 }

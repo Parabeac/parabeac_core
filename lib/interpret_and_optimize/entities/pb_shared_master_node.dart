@@ -66,10 +66,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     generator = PBMasterSymbolGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
-        originalRef.frame.x + originalRef.frame.width,
-        originalRef.frame.y + originalRef.frame.height);
+        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
+        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
     this.currentContext.screenTopLeftCorner =
-        Point(originalRef.frame.x, originalRef.frame.y);
+        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
     parametersDefinition = overridableProperties
         .map((p) => PBSymbolMasterParameter(

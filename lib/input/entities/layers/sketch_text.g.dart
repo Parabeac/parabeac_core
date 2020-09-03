@@ -6,12 +6,12 @@ part of 'sketch_text.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SketchText _$TextFromJson(Map<String, dynamic> json) {
+SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
   return SketchText(
     do_objectID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'] as bool,
     isFlippedHorizontal: json['isFlippedHorizontal'] as bool,
@@ -40,19 +40,18 @@ SketchText _$TextFromJson(Map<String, dynamic> json) {
     glyphBounds: json['glyphBounds'],
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String;
+    ..CLASS_NAME = json['_class'] as String
+    ..content = json['content'] as String;
 }
 
-Map<String, dynamic> _$TextToJson(SketchText instance) => <String, dynamic>{
+Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
+    <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -80,4 +79,6 @@ Map<String, dynamic> _$TextToJson(SketchText instance) => <String, dynamic>{
       'lineSpacingBehaviour': instance.lineSpacingBehaviour,
       'textBehaviour': instance.textBehaviour,
       'glyphBounds': instance.glyphBounds,
+      'frame': instance.boundaryRectangle,
+      'content': instance.content,
     };

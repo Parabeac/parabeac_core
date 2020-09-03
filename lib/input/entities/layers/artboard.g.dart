@@ -23,11 +23,13 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     presetDictionary: json['presetDictionary'],
     hasClickThrough: json['hasClickThrough'],
     groupLayout: json['groupLayout'],
-    children: json['children'],
+    children: (json['layers'] as List)
+        .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
+        .toList(),
     do_objectID: json['do_objectID'],
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
@@ -49,20 +51,16 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String
-    ..designNode = json['designNode'];
+    ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -84,6 +82,7 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'maintainScrollPosition': instance.maintainScrollPosition,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
+      'layers': instance.children,
       '_class': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,
       'includeBackgroundColorInExport': instance.includeBackgroundColorInExport,
@@ -91,11 +90,10 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'verticalRulerData': instance.verticalRulerData,
       'layout': instance.layout,
       'grid': instance.grid,
+      'frame': instance.boundaryRectangle,
       'backgroundColor': instance.backgroundColor,
       'hasBackgroundColor': instance.hasBackgroundColor,
       'isFlowHome': instance.isFlowHome,
       'resizesContent': instance.resizesContent,
       'presetDictionary': instance.presetDictionary,
-      'children': instance.children,
-      'designNode': instance.designNode,
     };

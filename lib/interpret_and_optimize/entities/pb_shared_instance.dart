@@ -48,9 +48,13 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
     Point bottomRightCorner,
     this.currentContext,
   }) : super(
-          Point(originalRef.frame.x, originalRef.frame.y),
-          Point((originalRef.frame.x + originalRef.frame.width),
-              (originalRef.frame.y + originalRef.frame.height)),
+          Point(
+              originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y),
+          Point(
+              (originalRef.boundaryRectangle.x +
+                  originalRef.boundaryRectangle.width),
+              (originalRef.boundaryRectangle.y +
+                  originalRef.boundaryRectangle.height)),
           originalRef.do_objectID,
           currentContext: currentContext,
         ) {

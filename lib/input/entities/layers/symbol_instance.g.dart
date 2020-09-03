@@ -11,7 +11,7 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     do_objectID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'] as bool,
     isFlippedHorizontal: json['isFlippedHorizontal'] as bool,
@@ -35,25 +35,23 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
         .map((e) => OverridableValue.fromJson(e as Map<String, dynamic>))
         .toList(),
     scale: (json['scale'] as num).toDouble(),
-    symbolID: json['symbolID'],
+    symbolID: json['symbolID'] as String,
     verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
     horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String;
+    ..CLASS_NAME = json['_class'] as String
+    ..parameters = json['parameters'] as List;
 }
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
     <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -79,4 +77,6 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'symbolID': instance.symbolID,
       'verticalSpacing': instance.verticalSpacing,
       'horizontalSpacing': instance.horizontalSpacing,
+      'frame': instance.boundaryRectangle,
+      'parameters': instance.parameters,
     };

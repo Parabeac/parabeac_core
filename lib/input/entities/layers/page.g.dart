@@ -16,7 +16,7 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     do_objectID: json['do_objectID'],
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    frame: Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
     flow: json['flow'],
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
@@ -38,7 +38,6 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..UUID = json['UUID'] as String
-    ..boundaryRectangle = json['boundaryRectangle']
     ..type = json['type'] as String
     ..CLASS_NAME = json['_class'] as String
     ..includeInCloudUpload = json['includeInCloudUpload']
@@ -50,12 +49,10 @@ Page _$PageFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'UUID': instance.UUID,
-      'boundaryRectangle': instance.boundaryRectangle,
       'type': instance.type,
       'do_objectID': instance.do_objectID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'frame': instance.frame,
       'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
@@ -84,4 +81,5 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'verticalRulerData': instance.verticalRulerData,
       'layout': instance.layout,
       'grid': instance.grid,
+      'frame': instance.boundaryRectangle,
     };

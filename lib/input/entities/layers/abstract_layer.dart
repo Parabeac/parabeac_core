@@ -15,8 +15,10 @@ abstract class SketchNode extends DesignNode {
   final dynamic booleanOperation;
   final dynamic exportOptions;
 
-  ///`frame` is not final because its going to change, just because some node contain an offset.
-  Frame frame;
+  ///`boundaryRectangle` is not final because its going to change, just because some node contain an offset.
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
   final dynamic flow;
   final bool isFixedToViewport;
   final bool isFlippedHorizontal;
@@ -41,7 +43,7 @@ abstract class SketchNode extends DesignNode {
       this.do_objectID,
       this.booleanOperation,
       this.exportOptions,
-      this.frame,
+      Frame this.boundaryRectangle,
       this.flow,
       this.isFixedToViewport,
       this.isFlippedHorizontal,
@@ -61,11 +63,11 @@ abstract class SketchNode extends DesignNode {
       this.userInfo,
       this.style,
       this.maintainScrollPosition)
-      : super(do_objectID, name, isVisible, frame, '', style);
+      : super(do_objectID, name, isVisible, boundaryRectangle, '', style);
 
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>
       AbstractSketchNodeFactory.getSketchNode(json);
-  // @override
-  // Future<PBIntermediateNode> interpretNode(PBContext currentContext);
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext);
 }

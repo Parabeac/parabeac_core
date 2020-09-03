@@ -16,6 +16,9 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: '_class')
   String CLASS_NAME = 'group';
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
   Group(
       {bool hasClickThrough,
       groupLayout,
@@ -23,7 +26,7 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -50,7 +53,7 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -79,7 +82,8 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
       Future.value(TempGroupLayoutNode(this, currentContext,
-          topLeftCorner: Point(frame.x, frame.y),
-          bottomRightCorner:
-              Point(frame.x + frame.width, frame.y + frame.height)));
+          topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
+          bottomRightCorner: Point(
+              boundaryRectangle.x + boundaryRectangle.width,
+              boundaryRectangle.y + boundaryRectangle.height)));
 }

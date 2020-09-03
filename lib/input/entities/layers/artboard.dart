@@ -17,12 +17,7 @@ class Artboard extends AbstractGroupLayer
     implements SketchNodeFactory, PBArtboard {
   @override
   @JsonKey(name: 'layers')
-  List layers;
-
-  @override
-  set children(children) => layers = children;
-  @override
-  get children => layers;
+  List children;
 
   @override
   @JsonKey(name: '_class')
@@ -33,7 +28,14 @@ class Artboard extends AbstractGroupLayer
   final dynamic verticalRulerData;
   final dynamic layout;
   final dynamic grid;
-  final Color backgroundColor;
+
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
+
+  @override
+  var backgroundColor;
+
   final bool hasBackgroundColor;
   final bool isFlowHome;
   final bool resizesContent;
@@ -45,18 +47,18 @@ class Artboard extends AbstractGroupLayer
       this.verticalRulerData,
       this.layout,
       this.grid,
-      this.backgroundColor,
+      Color this.backgroundColor,
       this.hasBackgroundColor,
       this.isFlowHome,
       this.resizesContent,
       this.presetDictionary,
       hasClickThrough,
       groupLayout,
-      children,
+      List<SketchNode> children,
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -79,11 +81,11 @@ class Artboard extends AbstractGroupLayer
       : super(
             hasClickThrough,
             groupLayout,
-            children,
+            (children as List<SketchNode>),
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle as Frame,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -117,12 +119,4 @@ class Artboard extends AbstractGroupLayer
     return Future.value(
         InheritedScaffold(this, currentContext: currentContext, name: name));
   }
-
-  @override
-  void set backgroundColor(_backgroundColor) {
-    // TODO: implement backgroundColor
-  }
-
-  @override
-  var designNode;
 }

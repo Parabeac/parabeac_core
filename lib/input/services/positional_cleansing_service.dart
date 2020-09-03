@@ -20,9 +20,11 @@ class PositionalCleansingService {
     return rootNode;
   }
 
-  void _eliminateOffsetChildren(List<SketchNode> children, SketchNode parent) =>
+  void _eliminateOffsetChildren(List children, SketchNode parent) =>
       children.forEach((child) {
-        child.frame.x = (parent.frame.x + child.frame.x);
-        child.frame.y = (parent.frame.y + child.frame.y);
+        child.boundaryRectangle.x =
+            (parent.boundaryRectangle.x + child.boundaryRectangle.x);
+        child.boundaryRectangle.y =
+            (parent.boundaryRectangle.y + child.boundaryRectangle.y);
       });
 }

@@ -27,6 +27,10 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   final int intendedDPI;
   final dynamic clippingMask;
 
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
+
   Bitmap(
       {this.image,
       this.fillReplacesImage,
@@ -35,7 +39,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -59,7 +63,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
@@ -101,9 +105,6 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
     }
     return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }
-
-  @override
-  var designNode;
 
   @override
   @JsonKey(name: '_ref')

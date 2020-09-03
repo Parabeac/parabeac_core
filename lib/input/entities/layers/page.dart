@@ -23,6 +23,10 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
   dynamic layout;
   dynamic grid;
 
+  @override
+  @JsonKey(name: 'frame')
+  var boundaryRectangle;
+
   Page(
       {bool hasClickThrough,
       groupLayout,
@@ -30,7 +34,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
       do_objectID,
       booleanOperation,
       exportOptions,
-      Frame frame,
+      Frame boundaryRectangle,
       flow,
       isFixedToViewport,
       isFlippedHorizontal,
@@ -57,7 +61,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
             do_objectID,
             booleanOperation,
             exportOptions,
-            frame,
+            boundaryRectangle,
             flow,
             isFixedToViewport,
             isFlippedHorizontal,
