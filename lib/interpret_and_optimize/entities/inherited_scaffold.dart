@@ -1,7 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/artboard.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';

@@ -1,5 +1,5 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';

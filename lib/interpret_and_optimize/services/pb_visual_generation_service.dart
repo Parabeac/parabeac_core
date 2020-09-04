@@ -1,8 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/services/positional_cleansing_service.dart';
-import 'package:parabeac_core/plugins/injected_tab.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
+import 'package:parabeac_core/input/sketch/services/positional_cleansing_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -11,9 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
 /// Takes a SketchNodeTree and begins generating PBNode interpretations. For each node, the node is going to pass through the PBSemanticInterpretationService which checks if the node should generate a specific PBIntermediateNode based on the semantics that it contains.
 /// Input: SketchNodeTree

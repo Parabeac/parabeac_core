@@ -1,12 +1,9 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/helper/sketch_node_tree.dart';
-import 'package:parabeac_core/input/helper/sketch_page.dart';
-import 'package:parabeac_core/input/helper/sketch_page_item.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';

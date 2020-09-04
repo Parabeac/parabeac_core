@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
-import 'package:parabeac_core/input/services/input_design.dart';
+import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 
