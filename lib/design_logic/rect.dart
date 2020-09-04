@@ -10,7 +10,4 @@ abstract class Rect {
   double y;
   double width;
   double height;
-
-  // Rect.fromJson(Map<String, dynamic> json);
-  // Map<String, dynamic> toJson();
 }

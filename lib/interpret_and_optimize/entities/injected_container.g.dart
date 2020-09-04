@@ -8,12 +8,8 @@ part of 'injected_container.dart';
 
 InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
   return InjectedContainer(
-    json['bottomRightCorner'] == null
-        ? null
-        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
-    json['topLeftCorner'] == null
-        ? null
-        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
     json['UUID'] as String,
     alignX: (json['alignX'] as num).toDouble(),
     alignY: (json['alignY'] as num).toDouble(),

@@ -12,12 +12,10 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
-    ..topLeftCorner = json['topLeftCorner'] == null
-        ? null
-        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
-    ..bottomRightCorner = json['bottomRightCorner'] == null
-        ? null
-        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
+    ..topLeftCorner =
+        Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
+    ..bottomRightCorner =
+        Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..color = json['color'] as String

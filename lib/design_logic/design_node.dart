@@ -20,7 +20,4 @@ abstract class DesignNode {
   var style;
 
   Future<PBIntermediateNode> interpretNode(PBContext currentContext);
-
-  // DesignNode.fromJson(Map<String, dynamic> json);
-  // Map<String, dynamic> toJson();
 }

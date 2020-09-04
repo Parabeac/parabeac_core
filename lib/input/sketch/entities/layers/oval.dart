@@ -86,7 +86,6 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) {
     var oval = Oval.fromJson(json);
-    // oval.UUID = oval.do_objectID;
     return oval;
   }
 
