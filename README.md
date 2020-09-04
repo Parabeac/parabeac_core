@@ -96,6 +96,9 @@ Follow these steps in order to run Parabeac Core on your local environment:
  $dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
 
+## Metrics
+Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+
 # Running the exported code
 ### Requirement(s)
 
