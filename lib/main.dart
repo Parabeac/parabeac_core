@@ -6,6 +6,8 @@ import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
+import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import 'controllers/main_info.dart';
 
@@ -14,6 +16,8 @@ String resultsDirectory = Platform.environment['SENTRY_DSN'] ?? '/temp';
 final SentryClient sentry = SentryClient(dsn: resultsDirectory);
 
 void main(List<String> args) async {
+  await checkConfigFile();
+
   MainInfo().sentry = SentryClient(dsn: resultsDirectory);
   var log = Logger('Main');
 
@@ -36,7 +40,6 @@ void main(List<String> args) async {
         break;
       case '-o':
         MainInfo().outputPath = args[i + 1];
-
         break;
       case '-n':
         projectName = args[i + 1];
@@ -80,6 +83,61 @@ void main(List<String> args) async {
   } else if (designType == 'figma') {
     assert(false, 'We don\'t support Figma.');
   }
+}
+
+/// Checks whether a configuration file is made already,
+/// and makes one if necessary
+Future<void> checkConfigFile() async {
+  var envvars = Platform.environment;
+
+  // Do not get metrics if user has envvar PB_METRICS set to false
+  if (envvars['PB_METRICS'] != null &&
+      envvars['PB_METRICS'].toLowerCase().contains('false')) {
+    return;
+  }
+
+  var homepath = getHomePath();
+  var configFile = File('$homepath/.config/.parabeac/config.json');
+  if (!(await configFile.exists())) {
+    createConfigFile(configFile);
+  } else {
+    var configMap = jsonDecode(configFile.readAsStringSync());
+    MainInfo().deviceId = configMap['device_id'];
+  }
+
+  await addToAmplitude();
+}
+
+/// Gets the homepath of the user according to their OS
+String getHomePath() {
+  var envvars = Platform.environment;
+
+  if (Platform.isWindows) {
+    return envvars['UserProfile'];
+  }
+  return envvars['HOME'];
+}
+
+/// Creates and populates parabeac config file
+void createConfigFile(File configFile) {
+  configFile.createSync(recursive: true);
+  var configMap = {'device_id': Uuid().v4()};
+  configFile.writeAsStringSync(jsonEncode(configMap));
+  MainInfo().deviceId = configMap['device_id'];
+}
+
+/// Adds current run to amplitude metrics
+void addToAmplitude() async {
+  var lambdaEndpt =
+      'https://jsr2rwrw5m.execute-api.us-east-1.amazonaws.com/default/pb-lambda-microservice';
+
+  var body = json.encode({'id': MainInfo().deviceId});
+
+  await http.post(
+    lambdaEndpt,
+    headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    body: body,
+  );
 }
 
 String getCleanPath(String path) {
