@@ -17,7 +17,6 @@ part 'sketch_text.g.dart';
 @JsonSerializable(nullable: false)
 class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'text';
   final dynamic attributedString;
   final bool automaticallyDrawOnUnderlyingPath;
@@ -33,6 +32,25 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   @JsonKey(name: 'do_objectID')
   String UUID;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
 
   SketchText(
       {this.UUID,
@@ -64,7 +82,9 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       this.lineSpacingBehaviour,
       this.textBehaviour,
       this.glyphBounds})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             UUID,
             booleanOperation,
             exportOptions,

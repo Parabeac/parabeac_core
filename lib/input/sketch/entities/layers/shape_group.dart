@@ -17,7 +17,6 @@ part 'shape_group.g.dart';
 @JsonSerializable(nullable: false)
 class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'shapeGroup';
   final dynamic windingRule;
   @override
@@ -27,6 +26,26 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: 'do_objectID')
   String UUID;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
 
   ShapeGroup(
       {bool hasClickThrough,
@@ -56,7 +75,9 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
       Style style,
       maintainScrollPosition,
       this.windingRule})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             hasClickThrough,
             groupLayout,
             layers,

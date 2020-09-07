@@ -20,7 +20,6 @@ part 'bitmap.g.dart';
 // description: Bitmap layers house a single image
 class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'bitmap';
   final ImageRef image;
   final bool fillReplacesImage;
@@ -63,7 +62,9 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
       userInfo,
       Style style,
       maintainScrollPosition})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             UUID,
             booleanOperation,
             exportOptions,
@@ -113,4 +114,24 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @override
   @JsonKey(name: '_ref')
   String imageReference;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
 }

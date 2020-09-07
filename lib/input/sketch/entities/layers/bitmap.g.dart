@@ -36,13 +36,12 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
-    ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String
-    ..imageReference = json['_ref'] as String;
+    ..CLASS_NAME = json['CLASS_NAME'] as String
+    ..imageReference = json['_ref'] as String
+    ..type = json['_class'] as String;
 }
 
 Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
-      'type': instance.type,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -50,7 +49,6 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
       'isLocked': instance.isLocked,
-      'isVisible': instance.isVisible,
       'layerListExpandedType': instance.layerListExpandedType,
       'name': instance.name,
       'nameIsFixed': instance.nameIsFixed,
@@ -62,9 +60,8 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'hasClippingMask': instance.hasClippingMask,
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
-      'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
-      '_class': instance.CLASS_NAME,
+      'CLASS_NAME': instance.CLASS_NAME,
       'image': instance.image,
       'fillReplacesImage': instance.fillReplacesImage,
       'intendedDPI': instance.intendedDPI,
@@ -72,4 +69,7 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
       '_ref': instance.imageReference,
+      '_class': instance.type,
+      'isVisible': instance.isVisible,
+      'style': instance.style,
     };

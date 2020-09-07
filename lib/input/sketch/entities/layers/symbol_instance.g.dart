@@ -39,14 +39,13 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
     horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
   )
-    ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String
+    ..CLASS_NAME = json['CLASS_NAME'] as String
+    ..type = json['_class'] as String
     ..parameters = json['parameters'] as List;
 }
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
     <String, dynamic>{
-      'type': instance.type,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -54,7 +53,6 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
       'isLocked': instance.isLocked,
-      'isVisible': instance.isVisible,
       'layerListExpandedType': instance.layerListExpandedType,
       'name': instance.name,
       'nameIsFixed': instance.nameIsFixed,
@@ -66,9 +64,8 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'hasClippingMask': instance.hasClippingMask,
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
-      'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
-      '_class': instance.CLASS_NAME,
+      'CLASS_NAME': instance.CLASS_NAME,
       'overrideValues': instance.overrideValues,
       'scale': instance.scale,
       'symbolID': instance.symbolID,
@@ -76,5 +73,8 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'horizontalSpacing': instance.horizontalSpacing,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
+      '_class': instance.type,
+      'isVisible': instance.isVisible,
+      'style': instance.style,
       'parameters': instance.parameters,
     };

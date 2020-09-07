@@ -20,8 +20,10 @@ class Artboard extends AbstractGroupLayer
   List children;
 
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'artboard';
+  @override
+  @JsonKey(name: '_class')
+  String type;
   final bool includeInCloudUpload;
   final bool includeBackgroundColorInExport;
   final dynamic horizontalRulerData;
@@ -44,6 +46,23 @@ class Artboard extends AbstractGroupLayer
   final bool isFlowHome;
   final bool resizesContent;
   final dynamic presetDictionary;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
+
   Artboard(
       {this.includeInCloudUpload,
       this.includeBackgroundColorInExport,
@@ -82,7 +101,9 @@ class Artboard extends AbstractGroupLayer
       userInfo,
       Style style,
       maintainScrollPosition})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             hasClickThrough,
             groupLayout,
             (children as List<SketchNode>),

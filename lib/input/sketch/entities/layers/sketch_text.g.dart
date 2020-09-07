@@ -39,14 +39,13 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     textBehaviour: json['textBehaviour'],
     glyphBounds: json['glyphBounds'],
   )
-    ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String
+    ..CLASS_NAME = json['CLASS_NAME'] as String
+    ..type = json['_class'] as String
     ..content = json['content'] as String;
 }
 
 Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
     <String, dynamic>{
-      'type': instance.type,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -54,7 +53,6 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
       'isLocked': instance.isLocked,
-      'isVisible': instance.isVisible,
       'layerListExpandedType': instance.layerListExpandedType,
       'name': instance.name,
       'nameIsFixed': instance.nameIsFixed,
@@ -66,9 +64,8 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'hasClippingMask': instance.hasClippingMask,
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
-      'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
-      '_class': instance.CLASS_NAME,
+      'CLASS_NAME': instance.CLASS_NAME,
       'attributedString': instance.attributedString,
       'automaticallyDrawOnUnderlyingPath':
           instance.automaticallyDrawOnUnderlyingPath,
@@ -78,5 +75,8 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'glyphBounds': instance.glyphBounds,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
+      '_class': instance.type,
+      'isVisible': instance.isVisible,
+      'style': instance.style,
       'content': instance.content,
     };

@@ -16,7 +16,6 @@ part 'shape_path.g.dart';
 @JsonSerializable(nullable: false)
 class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'shapePath';
 
   @override
@@ -26,6 +25,26 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
   @JsonKey(name: 'do_objectID')
   @override
   var UUID;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
 
   ShapePath(
       {bool edited,
@@ -55,7 +74,9 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
       userInfo,
       Style style,
       maintainScrollPosition})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             edited,
             isClosed,
             pointRadiusBehaviour,

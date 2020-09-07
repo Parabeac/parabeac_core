@@ -37,17 +37,16 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     style: Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
-    ..type = json['type'] as String
-    ..CLASS_NAME = json['_class'] as String
+    ..CLASS_NAME = json['CLASS_NAME'] as String
     ..includeInCloudUpload = json['includeInCloudUpload']
     ..horizontalRulerData = json['horizontalRulerData']
     ..verticalRulerData = json['verticalRulerData']
     ..layout = json['layout']
-    ..grid = json['grid'];
+    ..grid = json['grid']
+    ..type = json['_class'] as String;
 }
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
-      'type': instance.type,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,
@@ -55,7 +54,6 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
       'isLocked': instance.isLocked,
-      'isVisible': instance.isVisible,
       'layerListExpandedType': instance.layerListExpandedType,
       'name': instance.name,
       'nameIsFixed': instance.nameIsFixed,
@@ -67,12 +65,11 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'hasClippingMask': instance.hasClippingMask,
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
-      'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
-      '_class': instance.CLASS_NAME,
+      'CLASS_NAME': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,
       'horizontalRulerData': instance.horizontalRulerData,
       'verticalRulerData': instance.verticalRulerData,
@@ -80,4 +77,7 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'grid': instance.grid,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
+      '_class': instance.type,
+      'isVisible': instance.isVisible,
+      'style': instance.style,
     };
