@@ -122,6 +122,8 @@ class Interpret {
     stopwatch.stop();
     var stopwatch1 = Stopwatch()..start();
 
+    // TODO: implement prototype linker
+
     parentVisualIntermediateNode =
         await _pbSymbolLinkerService.linkSymbols(parentVisualIntermediateNode);
 
