@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -9,7 +10,7 @@ class PBPrototypeStorage {
   PBPrototypeStorage._internal();
 
   ///All the prototype Instances
-  final Map<String, PrototypeNode> _pbPrototypeInstanceNodes = {};
+  final Map<String, PBIntermediateNode> _pbPrototypeInstanceNodes = {};
 
   /// Mapp that will store the `PBIntermediateNode` page found
   final Map<String, PBIntermediateNode> _pbPages = {};
@@ -18,18 +19,19 @@ class PBPrototypeStorage {
 
   Iterable<String> get pagesIDs => _pbPages.keys;
 
-  Iterable<PrototypeNode> get prototypeIntanceNodes =>
+  Iterable<PBIntermediateNode> get prototypeIntanceNodes =>
       _pbPrototypeInstanceNodes.values;
 
   Iterable<String> get prototypeIDs => _pbPrototypeInstanceNodes.keys;
 
-  Future<bool> addPrototypeInstance(PrototypeNode prototypeNode) async {
-    if (_pbPrototypeInstanceNodes.containsKey(prototypeNode.destinationUUID)) {
+  Future<bool> addPrototypeInstance(PBIntermediateNode prototypeNode) async {
+    if (_pbPrototypeInstanceNodes.containsKey(prototypeNode.UUID)) {
       return false;
     }
     // await TODO:
-    _pbPrototypeInstanceNodes['${prototypeNode.destinationUUID}'] =
-        prototypeNode;
+    await PBPrototypeAggregationService()
+        .analyzeIntermediateNode(prototypeNode);
+    _pbPrototypeInstanceNodes['${prototypeNode.UUID}'] = prototypeNode;
     return true;
   }
 
@@ -42,15 +44,15 @@ class PBPrototypeStorage {
     return true;
   }
 
-  PrototypeNode getAllPrototypeByID(String id) {
+  PBIntermediateNode getAllPrototypeByID(String id) {
     var node = getPrototype(id);
     node ??= getPrototypeInstance(id);
     return node;
   }
 
-  PrototypeNode getPrototype(String id) {
+  PBIntermediateNode getPrototype(String id) {
     var node = getPrototypeNode(id);
-    node ??= getPageNode(id).prototypeNode;
+    node ??= getPageNode(id);
     return node;
   }
 
@@ -58,7 +60,7 @@ class PBPrototypeStorage {
     return (_pbPages.remove(id) != null);
   }
 
-  PrototypeNode getPrototypeInstance(String id) {
+  PBIntermediateNode getPrototypeInstance(String id) {
     return _pbPrototypeInstanceNodes[id];
   }
 
@@ -70,7 +72,8 @@ class PBPrototypeStorage {
         orElse: () => null,
       );
 
-  PrototypeNode getPrototypeNode(String id) => _pbPrototypeInstanceNodes['$id'];
+  PBIntermediateNode getPrototypeNode(String id) =>
+      _pbPrototypeInstanceNodes['$id'];
 
   String getNameOfPageWithID(String id) {
     return _pbPages.containsKey(id)
