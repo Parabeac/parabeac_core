@@ -42,6 +42,9 @@ class PBPrototypeLinkerService {
         await _prototypeStorage.addPrototypeInstance(currentNode);
         _aggregationService.gatherPrototypeNodes(currentNode.prototypeNode);
       }
+
+      rootIntermediateNode ?? currentNode;
     }
+    return rootIntermediateNode;
   }
 }
