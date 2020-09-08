@@ -64,7 +64,7 @@ class PBPrototypeStorage {
 
   PBIntermediateNode getPageNode(String id) => _pbPages['$id'];
 
-  PBIntermediateNode getPageNodeBySymbolID(String pageID) =>
+  PBIntermediateNode getPageNodeById(String pageID) =>
       _pbPages.values.firstWhere(
         (element) => element.UUID == pageID,
         orElse: () => null,

@@ -6,7 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 class PBIntermediateNodeSearcherService {
   ///Searching for a [PBIntermediateNode] by their unique identifier. If no [PBIntermediateNode] is found
   ///with that [uuid], then `null` should be returned to the caller.
-  PBIntermediateNode searchNodeByUUID(
+  static PBIntermediateNode searchNodeByUUID(
       PBIntermediateNode rootNode, String uuid) {
     if (rootNode == null) {
       return rootNode;
