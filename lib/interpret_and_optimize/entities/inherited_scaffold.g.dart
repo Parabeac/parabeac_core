@@ -8,7 +8,7 @@ part of 'inherited_scaffold.dart';
 
 InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
   return InheritedScaffold(
-    SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
     topLeftCorner:
         Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
     bottomRightCorner:

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
-import 'package:parabeac_core/input/services/input_design.dart';
+import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -37,6 +37,11 @@ void main(List<String> args) async {
         MainInfo().sketchPath = pathToSketchFile;
         // If outputPath is empty, assume we are outputting to sketch path
         MainInfo().outputPath ??= getCleanPath(path);
+        if (pathToSketchFile.endsWith('.sketch')) {
+          designType = 'sketch';
+        } else if (pathToSketchFile.endsWith('.fig')) {
+          designType = 'figma';
+        }
         break;
       case '-o':
         MainInfo().outputPath = args[i + 1];

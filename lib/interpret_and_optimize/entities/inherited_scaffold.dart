@@ -1,6 +1,7 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/artboard.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
@@ -23,7 +24,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
-  SketchNode originalRef;
+  var originalRef;
   String name;
   @JsonSerializable(nullable: true)
   var navbar;
@@ -47,9 +48,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.name,
     this.currentContext,
   }) : super(
-            Point(originalRef.frame.x, originalRef.frame.y),
-            Point(originalRef.frame.x + originalRef.frame.width,
-                originalRef.frame.y + originalRef.frame.height),
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width,
+                originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height),
             currentContext) {
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
@@ -58,13 +63,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
     generator = PBScaffoldGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
-        originalRef.frame.x + originalRef.frame.width,
-        originalRef.frame.y + originalRef.frame.height);
+        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
+        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
 
     this.currentContext.screenTopLeftCorner =
-        Point(originalRef.frame.x, originalRef.frame.y);
+        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
 
     backgroundColor = (originalRef as Artboard).backgroundColor?.toHex();
   }

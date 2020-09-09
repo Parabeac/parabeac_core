@@ -1,4 +1,5 @@
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -8,10 +9,10 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  final SketchNode originalRef;
+  final originalRef;
 
   @override
-  String get UUID => originalRef.do_objectID;
+  String get UUID => originalRef.UUID;
 
   TempGroupLayoutNode(this.originalRef, PBContext currentContext,
       {topLeftCorner, bottomRightCorner})

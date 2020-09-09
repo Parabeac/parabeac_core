@@ -8,7 +8,7 @@ part of 'inherited_shape_path.dart';
 
 InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
   return InheritedShapePath(
-    SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

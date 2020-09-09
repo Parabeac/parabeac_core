@@ -1,14 +1,14 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/objects/frame.dart';
-import 'package:parabeac_core/input/entities/style/border.dart';
-import 'package:parabeac_core/input/entities/style/color.dart';
-import 'package:parabeac_core/input/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/style/border.dart';
+import 'package:parabeac_core/input/sketch/entities/style/color.dart';
+import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_path.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/input/entities/layers/shape_path.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/shape_path.dart';
 import 'package:test/test.dart';
 
 class SketchNodeMock extends Mock implements SketchNode {}

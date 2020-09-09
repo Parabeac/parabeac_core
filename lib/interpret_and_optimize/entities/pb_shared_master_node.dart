@@ -1,5 +1,5 @@
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
-import 'package:parabeac_core/input/entities/layers/symbol_master.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -66,10 +66,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     generator = PBMasterSymbolGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
-        originalRef.frame.x + originalRef.frame.width,
-        originalRef.frame.y + originalRef.frame.height);
+        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
+        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
     this.currentContext.screenTopLeftCorner =
-        Point(originalRef.frame.x, originalRef.frame.y);
+        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
     parametersDefinition = overridableProperties
         .map((p) => PBSymbolMasterParameter(

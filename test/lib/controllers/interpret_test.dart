@@ -1,6 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
-import 'package:parabeac_core/input/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:test/test.dart';
 
 class MockSketchNodeTree extends Mock implements SketchNodeTree {}

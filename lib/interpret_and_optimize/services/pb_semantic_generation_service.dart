@@ -1,4 +1,5 @@
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
@@ -14,7 +15,7 @@ class PBSemanticGenerationService implements PBGenerationService {
   PBSemanticGenerationService({this.currentContext});
 
   /// Return DenyListNode if found in the deny List. Return null if there were no semantic node found. Return any other type of PBIntermediateNode if we can tell from direct or indirect semantics.
-  PBIntermediateNode checkForSemantics(SketchNode node) {
+  PBIntermediateNode checkForSemantics(DesignNode node) {
     PBIntermediateNode convertedNode;
     convertedNode = _checkDirectSemantics(node);
     if (convertedNode != null) {
@@ -23,7 +24,7 @@ class PBSemanticGenerationService implements PBGenerationService {
     return convertedNode;
   }
 
-  PBIntermediateNode _checkDirectSemantics(SketchNode node) {
+  PBIntermediateNode _checkDirectSemantics(DesignNode node) {
     PBIntermediateNode convertedNode;
 
     convertedNode = PBDenyListHelper().returnDenyListNodeIfExist(node);

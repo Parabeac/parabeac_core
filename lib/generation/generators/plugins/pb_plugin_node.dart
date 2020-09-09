@@ -1,4 +1,4 @@
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -20,9 +20,9 @@ abstract class PBEgg extends PBVisualIntermediateNode {
       layer;
 
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef);
+      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef);
 
-  void extractInformation(SketchNode incomingNode);
+  void extractInformation(DesignNode incomingNode);
 
   void addChild(PBIntermediateNode node);
 }

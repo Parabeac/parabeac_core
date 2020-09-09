@@ -1,8 +1,8 @@
 import 'package:archive/archive_io.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
-import 'package:parabeac_core/input/helper/sketch_node_tree.dart';
-import 'package:parabeac_core/input/services/input_design.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
 import 'dart:io';

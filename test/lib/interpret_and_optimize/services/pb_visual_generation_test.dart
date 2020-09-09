@@ -1,8 +1,8 @@
 import 'package:mockito/mockito.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/objects/frame.dart';
-import 'package:parabeac_core/input/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';

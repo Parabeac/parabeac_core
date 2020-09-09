@@ -1,14 +1,15 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_param.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-import '../input/entities/layers/abstract_layer.dart';
+import '../input/sketch/entities/layers/abstract_layer.dart';
 import '../interpret_and_optimize/helpers/pb_context.dart';
 
 class Switch extends PBEgg implements PBInjectedIntermediate {
@@ -33,11 +34,11 @@ class Switch extends PBEgg implements PBInjectedIntermediate {
   void alignChild() {}
 
   @override
-  void extractInformation(SketchNode incomingNode) {}
+  void extractInformation(DesignNode incomingNode) {}
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
+      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
     return Switch(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
     // throw UnimplementedError();

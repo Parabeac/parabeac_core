@@ -1,5 +1,5 @@
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
-import 'package:parabeac_core/input/entities/layers/symbol_instance.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -48,9 +48,13 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
     Point bottomRightCorner,
     this.currentContext,
   }) : super(
-          Point(originalRef.frame.x, originalRef.frame.y),
-          Point((originalRef.frame.x + originalRef.frame.width),
-              (originalRef.frame.y + originalRef.frame.height)),
+          Point(
+              originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y),
+          Point(
+              (originalRef.boundaryRectangle.x +
+                  originalRef.boundaryRectangle.width),
+              (originalRef.boundaryRectangle.y +
+                  originalRef.boundaryRectangle.height)),
           originalRef.do_objectID,
           currentContext: currentContext,
         ) {
