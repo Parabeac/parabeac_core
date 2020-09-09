@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 abstract class GroupNode {
   GroupNode(
     this.children,

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 part 'pb_symbol_instance_overridable_value.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBSymbolInstanceOverridableValue {
   @JsonKey(toJson: _typeToJson, fromJson: _typeFromJson)
   final Type type;

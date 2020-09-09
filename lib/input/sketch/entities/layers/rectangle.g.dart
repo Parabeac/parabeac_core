@@ -8,7 +8,7 @@ part of 'rectangle.dart';
 
 Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
   return Rectangle(
-    fixedRadius: (json['fixedRadius'] as num).toDouble(),
+    fixedRadius: (json['fixedRadius'] as num)?.toDouble(),
     hasConvertedToNewRoundCorners:
         json['hasConvertedToNewRoundCorners'] as bool,
     needsConvertionToNewRoundCorners:
@@ -20,8 +20,12 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -38,19 +42,22 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..type = json['type'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['_class'] as String
     ..designNode = json['designNode'];
 }
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'type': instance.type,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
@@ -79,6 +86,7 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'needsConvertionToNewRoundCorners':
           instance.needsConvertionToNewRoundCorners,
       'frame': instance.boundaryRectangle,
+      'flow': instance.flow,
       'do_objectID': instance.UUID,
       'designNode': instance.designNode,
     };

@@ -15,8 +15,8 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
     json['UUID'] as String,
-    alignX: (json['alignX'] as num).toDouble(),
-    alignY: (json['alignY'] as num).toDouble(),
+    alignX: (json['alignX'] as num)?.toDouble(),
+    alignY: (json['alignY'] as num)?.toDouble(),
     color: json['color'] as String,
   )
     ..subsemantic = json['subsemantic'] as String

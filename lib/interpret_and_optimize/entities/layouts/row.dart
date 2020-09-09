@@ -16,7 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'row.g.dart';
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   static final List<LayoutRule> ROW_RULES = [HorizontalNodesLayoutRule()];

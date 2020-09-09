@@ -15,7 +15,7 @@ import 'package:quick_log/quick_log.dart';
 
 part 'inherited_bitmap.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedBitmap extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

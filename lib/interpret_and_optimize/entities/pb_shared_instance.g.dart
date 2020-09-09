@@ -9,12 +9,16 @@ part of 'pb_shared_instance.dart';
 PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     Map<String, dynamic> json) {
   return PBSharedInstanceIntermediateNode(
-    SymbolInstance.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'] == null
+        ? null
+        : SymbolInstance.fromJson(json['originalRef'] as Map<String, dynamic>),
     json['SYMBOL_ID'] as String,
-    topLeftCorner:
-        Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner:
-        Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    topLeftCorner: json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    bottomRightCorner: json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

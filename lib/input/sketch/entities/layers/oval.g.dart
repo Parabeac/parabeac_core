@@ -15,8 +15,12 @@ Oval _$OvalFromJson(Map<String, dynamic> json) {
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -33,15 +37,19 @@ Oval _$OvalFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..type = json['type'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$OvalToJson(Oval instance) => <String, dynamic>{
       'type': instance.type,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,

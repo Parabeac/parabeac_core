@@ -13,7 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'stack.g.dart';
 
 ///Row contains nodes that are all `overlapping` to each other, without overlapping eachother
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   static final List<LayoutRule> STACK_RULES = [OverlappingNodesLayoutRule()];

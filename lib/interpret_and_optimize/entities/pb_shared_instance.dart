@@ -11,7 +11,7 @@ part 'pb_shared_instance.g.dart';
 
 /// As some nodes are shared throughout the project, shared instances are pointers to shared master nodes with overridable properties.
 /// Superclass: PBSharedIntermediateNode
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBSharedInstanceIntermediateNode extends PBIntermediateNode
     implements PBInheritedIntermediate {
   @override

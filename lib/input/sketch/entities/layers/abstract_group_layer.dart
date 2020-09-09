@@ -1,4 +1,5 @@
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 
@@ -7,6 +8,8 @@ abstract class AbstractGroupLayer extends SketchNode {
   final dynamic groupLayout;
   final List layers;
 
+  @override
+  Flow flow;
   AbstractGroupLayer(
       this.hasClickThrough,
       this.groupLayout,
@@ -15,7 +18,7 @@ abstract class AbstractGroupLayer extends SketchNode {
       booleanOperation,
       exportOptions,
       Frame boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

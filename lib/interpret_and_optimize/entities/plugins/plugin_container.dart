@@ -12,7 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'plugin_container.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   @override
   Point bottomRightCorner;

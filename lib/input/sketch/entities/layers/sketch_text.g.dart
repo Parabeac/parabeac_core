@@ -11,8 +11,12 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'] as bool,
     isFlippedHorizontal: json['isFlippedHorizontal'] as bool,
     isFlippedVertical: json['isFlippedVertical'] as bool,
@@ -29,7 +33,9 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'] as bool,
     clippingMaskMode: json['clippingMaskMode'] as int,
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'] as bool,
     attributedString: json['attributedString'],
     automaticallyDrawOnUnderlyingPath:
@@ -40,6 +46,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     glyphBounds: json['glyphBounds'],
   )
     ..type = json['type'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['_class'] as String
     ..content = json['content'] as String;
 }
@@ -47,6 +54,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
     <String, dynamic>{
       'type': instance.type,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,

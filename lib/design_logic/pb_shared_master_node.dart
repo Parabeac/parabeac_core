@@ -5,6 +5,7 @@ abstract class PBSharedMasterNodeDesign extends DesignNode {
   List overriadableProperties;
 
   PBSharedMasterNodeDesign(String UUID, String name, bool isVisible,
-      boundaryRectangle, String type, style)
-      : super(UUID, name, isVisible, boundaryRectangle, type, style);
+      boundaryRectangle, String type, style, prototypeNode)
+      : super(UUID, name, isVisible, boundaryRectangle, type, style,
+            prototypeNode);
 }

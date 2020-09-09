@@ -2,6 +2,7 @@ import 'package:parabeac_core/design_logic/pb_shared_instance_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
@@ -16,7 +17,7 @@ part 'symbol_master.g.dart';
 
 // title: Symbol Master Layer
 // description: A symbol master layer represents a reusable group of layers
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class SymbolMaster extends AbstractGroupLayer
     with SymbolNodeMixin
     implements SketchNodeFactory, PBSharedInstanceNodeDesign {
@@ -54,7 +55,7 @@ class SymbolMaster extends AbstractGroupLayer
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

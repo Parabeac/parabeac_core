@@ -13,7 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'pb_shared_master_node.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

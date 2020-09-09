@@ -11,7 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'injected_container.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InjectedContainer extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
   /// Used for setting the alignment of it's children

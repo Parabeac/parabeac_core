@@ -9,10 +9,10 @@ part of 'padding.dart';
 Padding _$PaddingFromJson(Map<String, dynamic> json) {
   return Padding(
     json['UUID'] as String,
-    left: (json['left'] as num).toDouble(),
-    right: (json['right'] as num).toDouble(),
-    top: (json['top'] as num).toDouble(),
-    bottom: (json['bottom'] as num).toDouble(),
+    left: (json['left'] as num)?.toDouble(),
+    right: (json['right'] as num)?.toDouble(),
+    top: (json['top'] as num)?.toDouble(),
+    bottom: (json['bottom'] as num)?.toDouble(),
   )
     ..subsemantic = json['subsemantic'] as String
     ..size = json['size'] as Map<String, dynamic>
@@ -21,8 +21,8 @@ Padding _$PaddingFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..color = json['color'] as String
     ..child = json['child']
-    ..screenWidth = (json['screenWidth'] as num).toDouble()
-    ..screenHeight = (json['screenHeight'] as num).toDouble()
+    ..screenWidth = (json['screenWidth'] as num)?.toDouble()
+    ..screenHeight = (json['screenHeight'] as num)?.toDouble()
     ..padding = json['padding'] as Map<String, dynamic>
     ..widgetType = json['widgetType'] as String;
 }

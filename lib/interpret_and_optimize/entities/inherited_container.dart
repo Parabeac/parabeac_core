@@ -12,7 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_container.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedContainer extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

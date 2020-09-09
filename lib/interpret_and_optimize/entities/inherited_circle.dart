@@ -13,7 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_circle.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

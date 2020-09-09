@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/image_ref.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
@@ -14,7 +15,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_help
 
 part 'bitmap.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 
 // title: Bitmap Layer
 // description: Bitmap layers house a single image
@@ -44,7 +45,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

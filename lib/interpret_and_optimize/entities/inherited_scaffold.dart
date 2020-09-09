@@ -19,7 +19,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_scaffold.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {

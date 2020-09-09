@@ -15,7 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_oval.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedOval extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

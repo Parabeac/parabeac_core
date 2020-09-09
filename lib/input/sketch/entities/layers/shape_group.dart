@@ -1,6 +1,7 @@
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
@@ -14,7 +15,7 @@ part 'shape_group.g.dart';
 
 // title: Shape Group Layer
 // description: Shape groups layers group together multiple shape layers
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: '_class')
@@ -36,7 +37,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

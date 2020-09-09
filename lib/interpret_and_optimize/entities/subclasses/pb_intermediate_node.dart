@@ -38,10 +38,11 @@ abstract class PBIntermediateNode {
 
   String name;
 
+  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   PBIntermediateNode(this.topLeftCorner, this.bottomRightCorner, this.UUID,
-      {this.currentContext, this.subsemantic}) {
+      {this.currentContext, this.subsemantic, this.prototypeNode}) {
     if (topLeftCorner != null && bottomRightCorner != null) {
       assert(topLeftCorner.x <= bottomRightCorner.x &&
           topLeftCorner.y <= bottomRightCorner.y);

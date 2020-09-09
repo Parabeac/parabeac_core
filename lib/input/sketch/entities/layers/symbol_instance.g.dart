@@ -11,8 +11,12 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'] as bool,
     isFlippedHorizontal: json['isFlippedHorizontal'] as bool,
     isFlippedVertical: json['isFlippedVertical'] as bool,
@@ -29,17 +33,22 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'] as bool,
     clippingMaskMode: json['clippingMaskMode'] as int,
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'] as bool,
     overrideValues: (json['overrideValues'] as List)
-        .map((e) => OverridableValue.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    scale: (json['scale'] as num).toDouble(),
+        ?.map((e) => e == null
+            ? null
+            : OverridableValue.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    scale: (json['scale'] as num)?.toDouble(),
     symbolID: json['symbolID'] as String,
-    verticalSpacing: (json['verticalSpacing'] as num).toDouble(),
-    horizontalSpacing: (json['horizontalSpacing'] as num).toDouble(),
+    verticalSpacing: (json['verticalSpacing'] as num)?.toDouble(),
+    horizontalSpacing: (json['horizontalSpacing'] as num)?.toDouble(),
   )
     ..type = json['type'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['_class'] as String
     ..parameters = json['parameters'] as List;
 }
@@ -47,6 +56,7 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
     <String, dynamic>{
       'type': instance.type,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'flow': instance.flow,

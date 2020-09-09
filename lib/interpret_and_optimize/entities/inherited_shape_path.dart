@@ -19,7 +19,7 @@ import 'injected_container.dart';
 
 part 'inherited_shape_path.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedShapePath extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

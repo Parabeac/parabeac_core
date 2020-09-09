@@ -15,8 +15,9 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     verticalRulerData: json['verticalRulerData'],
     layout: json['layout'],
     grid: json['grid'],
-    backgroundColor:
-        Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    backgroundColor: json['backgroundColor'] == null
+        ? null
+        : Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
     hasBackgroundColor: json['hasBackgroundColor'] as bool,
     isFlowHome: json['isFlowHome'] as bool,
     resizesContent: json['resizesContent'] as bool,
@@ -24,13 +25,18 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     hasClickThrough: json['hasClickThrough'],
     groupLayout: json['groupLayout'],
     children: (json['layers'] as List)
-        .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map((e) =>
+            e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -47,18 +53,21 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
     ..type = json['type'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['_class'] as String;
 }
 
 Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'type': instance.type,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
-      'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
@@ -79,6 +88,7 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'maintainScrollPosition': instance.maintainScrollPosition,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
+      'flow': instance.flow,
       'layers': instance.children,
       '_class': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,

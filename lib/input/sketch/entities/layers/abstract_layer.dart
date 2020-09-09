@@ -1,12 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 // title: Abstract Layer
 // description: Abstract base schema for all layers
 // type: object
@@ -19,7 +20,7 @@ abstract class SketchNode extends DesignNode {
   @override
   @JsonKey(name: 'frame')
   var boundaryRectangle;
-  final dynamic flow;
+  Flow flow;
   final bool isFixedToViewport;
   final bool isFlippedHorizontal;
   final bool isFlippedVertical;
@@ -44,7 +45,7 @@ abstract class SketchNode extends DesignNode {
       this.booleanOperation,
       this.exportOptions,
       Frame this.boundaryRectangle,
-      this.flow,
+      Flow flow,
       this.isFixedToViewport,
       this.isFlippedHorizontal,
       this.isFlippedVertical,
@@ -63,7 +64,15 @@ abstract class SketchNode extends DesignNode {
       this.userInfo,
       this.style,
       this.maintainScrollPosition)
-      : super(do_objectID, name, isVisible, boundaryRectangle, '', style);
+      : super(
+          do_objectID,
+          name,
+          isVisible,
+          boundaryRectangle,
+          '',
+          style,
+          flow != null ? flow.destinationArtboardID : null,
+        );
 
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>

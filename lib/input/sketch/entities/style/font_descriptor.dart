@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'font_descriptor.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class FontDescriptor {
   @JsonKey(name: 'attributes')
   Map<String, dynamic> rawAttributes;

@@ -15,7 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_shape_group.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedShapeGroup extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override

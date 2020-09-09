@@ -12,10 +12,12 @@ ForeignSymbol _$ForeignSymbolFromJson(Map<String, dynamic> json) {
     libraryID: json['libraryID'],
     sourceLibraryName: json['sourceLibraryName'] as String,
     symbolPrivate: json['symbolPrivate'] as bool,
-    originalMaster:
-        SymbolMaster.fromJson(json['originalMaster'] as Map<String, dynamic>),
-    symbolMaster:
-        SymbolMaster.fromJson(json['symbolMaster'] as Map<String, dynamic>),
+    originalMaster: json['originalMaster'] == null
+        ? null
+        : SymbolMaster.fromJson(json['originalMaster'] as Map<String, dynamic>),
+    symbolMaster: json['symbolMaster'] == null
+        ? null
+        : SymbolMaster.fromJson(json['symbolMaster'] as Map<String, dynamic>),
   );
 }
 

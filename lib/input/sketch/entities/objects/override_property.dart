@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'override_property.g.dart';
-@JsonSerializable(nullable: false)
+
+@JsonSerializable(nullable: true)
+
 /// title: Override Property
 /// description: Defines override properties on symbol masters
-class OverridableProperty{
+class OverridableProperty {
   static final String CLASS_NAME = 'MSImmutableOverrideProperty';
   final String overrideName;
   final bool canOverride;

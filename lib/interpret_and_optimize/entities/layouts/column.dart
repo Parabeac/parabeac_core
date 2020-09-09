@@ -16,7 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'column.g.dart';
 
 ///Colum contains nodes that are all `vertical` to each other, without overlapping eachother
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   static final List<LayoutRule> COLUMN_RULES = [

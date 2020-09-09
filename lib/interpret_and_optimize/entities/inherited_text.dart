@@ -11,7 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_text.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedText extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.

@@ -7,7 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 part 'pb_symbol_master_params.g.dart';
 
 ///TODO: Need another class for elements that generate but are not visuals.
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBSymbolMasterParameter extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
   @JsonKey(toJson: _typeToJson, fromJson: _typeFromJson)
