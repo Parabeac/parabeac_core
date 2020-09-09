@@ -66,23 +66,19 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
         ?.toList(),
     presetDictionary: json['presetDictionary'],
   )
-    ..type = json['type'] as String
-    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
-    ..CLASS_NAME = json['_class'] as String
+    ..CLASS_NAME = json['CLASS_NAME'] as String
+    ..type = json['_class'] as String
     ..parameters = json['parameters'] as List;
 }
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
     <String, dynamic>{
-      'type': instance.type,
-      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
       'isLocked': instance.isLocked,
-      'isVisible': instance.isVisible,
       'layerListExpandedType': instance.layerListExpandedType,
       'name': instance.name,
       'nameIsFixed': instance.nameIsFixed,
@@ -94,33 +90,11 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'hasClippingMask': instance.hasClippingMask,
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
-      'style': instance.style,
       'maintainScrollPosition': instance.maintainScrollPosition,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,
-      'flow': instance.flow,
-      'shouldBreakMaskChain': instance.shouldBreakMaskChain,
-      'hasClippingMask': instance.hasClippingMask,
-      'clippingMaskMode': instance.clippingMaskMode,
-      'userInfo': instance.userInfo,
-      'style': instance.style,
-      'maintainScrollPosition': instance.maintainScrollPosition,
-      'hasClickThrough': instance.hasClickThrough,
-      'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
-      'flow': instance.flow,
-      'shouldBreakMaskChain': instance.shouldBreakMaskChain,
-      'hasClippingMask': instance.hasClippingMask,
-      'clippingMaskMode': instance.clippingMaskMode,
-      'userInfo': instance.userInfo,
-      'style': instance.style,
-      'maintainScrollPosition': instance.maintainScrollPosition,
-      'hasClickThrough': instance.hasClickThrough,
-      'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
-      'flow': instance.flow,
-      '_class': instance.CLASS_NAME,
+      'CLASS_NAME': instance.CLASS_NAME,
       'backgroundColor': instance.backgroundColor,
       'hasBackgroundColor': instance.hasBackgroundColor,
       'horizontalRulerData': instance.horizontalRulerData,
@@ -138,5 +112,8 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'presetDictionary': instance.presetDictionary,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
+      '_class': instance.type,
+      'isVisible': instance.isVisible,
+      'style': instance.style,
       'parameters': instance.parameters,
     };

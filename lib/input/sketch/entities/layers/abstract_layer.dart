@@ -11,7 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 // title: Abstract Layer
 // description: Abstract base schema for all layers
 // type: object
-abstract class SketchNode extends DesignNode {
+abstract class SketchNode implements DesignNode {
   final String do_objectID;
   final dynamic booleanOperation;
   final dynamic exportOptions;
@@ -63,16 +63,7 @@ abstract class SketchNode extends DesignNode {
       this.clippingMaskMode,
       this.userInfo,
       this.style,
-      this.maintainScrollPosition)
-      : super(
-          do_objectID,
-          name,
-          isVisible,
-          boundaryRectangle,
-          '',
-          style,
-          flow != null ? flow.destinationArtboardID : null,
-        );
+      this.maintainScrollPosition);
 
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>

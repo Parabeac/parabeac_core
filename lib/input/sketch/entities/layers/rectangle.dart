@@ -20,7 +20,6 @@ part 'rectangle.g.dart';
 @JsonSerializable(nullable: true)
 class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'rectangle';
   final double fixedRadius;
   final bool hasConvertedToNewRoundCorners;
@@ -32,6 +31,27 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   @JsonKey(name: 'do_objectID')
   String UUID;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
+
   Rectangle(
       {this.fixedRadius,
       this.hasConvertedToNewRoundCorners,
@@ -63,7 +83,9 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       userInfo,
       Style style,
       maintainScrollPosition})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             edited,
             isClosed,
             pointRadiusBehaviour,

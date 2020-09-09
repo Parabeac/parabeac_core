@@ -141,9 +141,7 @@ class PBFlutterGenerator extends PBGenerationManager {
         default:
           return gen.generate(rootNode);
       }
-      //return gen.generate(rootNode);
     } else {
-      // print('[ERROR] Generator not registered for ${rootNode}');
       log.error('Generator not registered for ${rootNode}');
     }
     return null;

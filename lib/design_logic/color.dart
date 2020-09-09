@@ -10,7 +10,4 @@ abstract class Color {
   double red;
   double green;
   double blue;
-
-  // factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
-  // Map<String, dynamic> toJson() => _$ColorToJson(this);
 }

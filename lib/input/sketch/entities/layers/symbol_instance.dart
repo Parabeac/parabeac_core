@@ -19,7 +19,6 @@ class SymbolInstance extends SketchNode
     with SymbolNodeMixin
     implements SketchNodeFactory, PBSharedInstanceNodeDesign {
   @override
-  @JsonKey(name: '_class')
   String CLASS_NAME = 'symbolInstance';
   final List<OverridableValue> overrideValues;
   final double scale;
@@ -35,6 +34,26 @@ class SymbolInstance extends SketchNode
   @override
   @JsonKey(name: 'do_objectID')
   String UUID;
+
+  @override
+  @JsonKey(name: '_class')
+  String type;
+
+  bool _isVisible;
+
+  Style _style;
+
+  @override
+  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  void set style(_style) => this._style = _style;
+
+  @override
+  Style get style => _style;
 
   SymbolInstance(
       {this.UUID,
@@ -65,7 +84,9 @@ class SymbolInstance extends SketchNode
       this.symbolID,
       this.verticalSpacing,
       this.horizontalSpacing})
-      : super(
+      : _isVisible = isVisible,
+        _style = style,
+        super(
             UUID,
             booleanOperation,
             exportOptions,

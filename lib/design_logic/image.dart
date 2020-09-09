@@ -6,7 +6,4 @@ abstract class Image extends DesignElement {
   ) : super();
 
   String imageReference;
-
-  // factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
-  // Map<String, dynamic> toJson() => _$ImageToJson(this);
 }
