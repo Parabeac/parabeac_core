@@ -86,6 +86,7 @@ class PBVisualGenerationService implements PBGenerationService {
         }
       }
     }
+    // TODO: This should be replaced for something more optimal or done in some other class
     if (originalRoot.prototypeNodeUUID != null) {
       var prototypeNode = PrototypeNode(originalRoot.prototypeNodeUUID);
       var destHolder = PBDestHolder(

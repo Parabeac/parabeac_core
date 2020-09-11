@@ -42,6 +42,7 @@ class PBPrototypeLinkerService {
           stack.add(currentNode.navbar);
         }
       }
+      // TODO: This should be replaced for something more optimal
       if (currentNode is InjectedNavbar) {
         if (currentNode.leadingItem != null) {
           stack.add(currentNode.leadingItem);
