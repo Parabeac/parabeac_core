@@ -7,6 +7,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 
+import 'package:parabeac_core/debug/tree_utils.dart';
+import 'package:parabeac_core/plugins/injected_app_bar.dart';
+
 class PBPrototypeLinkerService {
   PBPrototypeStorage _prototypeStorage;
   PBPrototypeAggregationService _aggregationService;
@@ -34,7 +37,22 @@ class PBPrototypeLinkerService {
           currentNode.child != null) {
         stack.add(currentNode.child);
       }
-
+      if (currentNode is InheritedScaffold) {
+        if (currentNode.navbar != null) {
+          stack.add(currentNode.navbar);
+        }
+      }
+      if (currentNode is InjectedNavbar) {
+        if (currentNode.leadingItem != null) {
+          stack.add(currentNode.leadingItem);
+        }
+        if (currentNode.middleItem != null) {
+          stack.add(currentNode.middleItem);
+        }
+        if (currentNode.trailingItem != null) {
+          stack.add(currentNode.trailingItem);
+        }
+      }
       if (currentNode is InheritedScaffold) {
         await _prototypeStorage.addPageNode(currentNode);
       } else if (currentNode is PBInheritedIntermediate &&
@@ -46,13 +64,27 @@ class PBPrototypeLinkerService {
               .prototypeNode
               .destinationUUID
               .isNotEmpty) {
-        await _prototypeStorage.addPrototypeInstance(currentNode);
-        currentNode = _aggregationService.populatePrototypeNode(currentNode) ??
-            currentNode;
-        PBIntermediateNodeSearcherService.replaceNodeInTree(
-            rootNode, currentNode, currentNode.UUID);
+        await addAndPopulatePrototypeNode(currentNode, rootNode);
+      } else if (currentNode is PBLayoutIntermediateNode &&
+          (currentNode as PBLayoutIntermediateNode)
+                  .prototypeNode
+                  ?.destinationUUID !=
+              null &&
+          (currentNode as PBLayoutIntermediateNode)
+              .prototypeNode
+              .destinationUUID
+              .isNotEmpty) {
+        await addAndPopulatePrototypeNode(currentNode, rootNode);
       }
     }
     return rootNode;
+  }
+
+  void addAndPopulatePrototypeNode(var currentNode, var rootNode) async {
+    await _prototypeStorage.addPrototypeInstance(currentNode);
+    currentNode =
+        _aggregationService.populatePrototypeNode(currentNode) ?? currentNode;
+    PBIntermediateNodeSearcherService.replaceNodeInTree(
+        rootNode, currentNode, currentNode.UUID);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -57,7 +59,10 @@ class PBLayoutGenerationService implements PBGenerationService {
         rootNode.child = injectNodes(rootNode.child);
         return rootNode;
       } else if (rootNode is TempGroupLayoutNode) {
+        // TODO: Refactor prototype node declaration before and after
+        var prototypeNode = (rootNode as TempGroupLayoutNode).prototypeNode;
         rootNode = _replaceGroupByLayout(rootNode);
+        (rootNode as PBLayoutIntermediateNode).prototypeNode = prototypeNode;
       }
 
       if (rootNode is PBLayoutIntermediateNode) {

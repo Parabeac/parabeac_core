@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
@@ -30,10 +31,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   final String UUID;
 
+  PrototypeNode prototypeNode;
+
   ///
   PBLayoutIntermediateNode(
       this._layoutRules, this._exceptions, PBContext currentContext,
-      {topLeftCorner, bottomRightCorner, this.UUID})
+      {topLeftCorner, bottomRightCorner, this.UUID, this.prototypeNode})
       : super(topLeftCorner, bottomRightCorner, UUID,
             currentContext: currentContext);
 
