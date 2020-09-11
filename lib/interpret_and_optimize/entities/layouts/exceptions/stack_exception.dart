@@ -16,20 +16,22 @@ class ColumnOverlappingException extends LayoutException
             incomingNode.topLeftCorner,
             currentNode.bottomRightCorner) &&
         (currentNode is PBLayoutIntermediateNode &&
-            currentNode is! TempGroupLayoutNode && currentNode is! PBIntermediateStackLayout));
+            currentNode is! TempGroupLayoutNode &&
+            currentNode is! PBIntermediateStackLayout));
   }
 }
 
-class RowOverlappingException extends LayoutException with AxisComparisonRule{
+class RowOverlappingException extends LayoutException with AxisComparisonRule {
   @override
-  bool testException(PBIntermediateNode currentNode, PBIntermediateNode incomingNode) {
+  bool testException(
+      PBIntermediateNode currentNode, PBIntermediateNode incomingNode) {
     return (areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          incomingNode.topLeftCorner,
-          incomingNode.bottomRightCorner) &&
+            currentNode.topLeftCorner,
+            currentNode.bottomRightCorner,
+            incomingNode.topLeftCorner,
+            incomingNode.bottomRightCorner) &&
         (currentNode is PBLayoutIntermediateNode &&
-            currentNode is! TempGroupLayoutNode && currentNode is! PBIntermediateStackLayout));
+            currentNode is! TempGroupLayoutNode &&
+            currentNode is! PBIntermediateStackLayout));
   }
-
 }

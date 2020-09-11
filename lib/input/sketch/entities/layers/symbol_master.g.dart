@@ -66,6 +66,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
         ?.toList(),
     presetDictionary: json['presetDictionary'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
     ..parameters = json['parameters'] as List;
@@ -75,6 +76,7 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
     <String, dynamic>{
       'booleanOperation': instance.booleanOperation,
       'exportOptions': instance.exportOptions,
+      'flow': instance.flow,
       'isFixedToViewport': instance.isFixedToViewport,
       'isFlippedHorizontal': instance.isFlippedHorizontal,
       'isFlippedVertical': instance.isFlippedVertical,
@@ -91,6 +93,7 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,

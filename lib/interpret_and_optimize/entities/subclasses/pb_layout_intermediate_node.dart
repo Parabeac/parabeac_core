@@ -16,7 +16,6 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Getting the children
   List<PBIntermediateNode> get children => List.from(_children);
 
-
   ///The rules of the layout. MAKE SURE TO REGISTER THEIR CUSTOM RULES
   List<LayoutRule> _layoutRules = [];
 
@@ -46,6 +45,16 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       _children = children;
     }
     _resize();
+  }
+
+  /// Replace the child at `index` for `replacement`.
+  /// Returns true if the replacement wsa succesful, false otherwise.
+  bool replaceChildAt(int index, PBIntermediateNode replacement) {
+    if (_children != null && _children.length > index) {
+      _children[index] = replacement;
+      return true;
+    }
+    return false;
   }
 
   ///Add node to child

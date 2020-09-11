@@ -1,6 +1,5 @@
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -38,11 +37,13 @@ abstract class PBIntermediateNode {
 
   String name;
 
-  @JsonKey(ignore: true)
-  PrototypeNode prototypeNode;
-
-  PBIntermediateNode(this.topLeftCorner, this.bottomRightCorner, this.UUID,
-      {this.currentContext, this.subsemantic, this.prototypeNode}) {
+  PBIntermediateNode(
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    this.UUID, {
+    this.currentContext,
+    this.subsemantic,
+  }) {
     if (topLeftCorner != null && bottomRightCorner != null) {
       assert(topLeftCorner.x <= bottomRightCorner.x &&
           topLeftCorner.y <= bottomRightCorner.y);

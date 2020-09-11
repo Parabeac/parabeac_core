@@ -30,4 +30,39 @@ class PBIntermediateNodeSearcherService {
     }
     return null;
   }
+
+  ///Replacing the [PBIntermediateNode] that contains the [uuid] in the tree that starts at [rootNode] with the
+  ///[candidate] node. The function will return `false` if it could not successfully replace the node inside the tree,
+  ///make sure the node exists! Else the function is going to return `true` if was successful.
+  static bool replaceNodeInTree(
+      PBIntermediateNode rootNode, PBIntermediateNode candidate, String uuid) {
+    if (rootNode == null) {
+      return false;
+    }
+
+    var stack = <PBIntermediateNode>[];
+    stack.add(rootNode);
+
+    while (stack.isNotEmpty) {
+      var currentNode = stack.removeLast();
+      if (currentNode is PBLayoutIntermediateNode) {
+        for (var i = 0; i < currentNode.children.length; i++) {
+          var child = currentNode.children[i];
+          if (child.UUID == uuid) {
+            currentNode.replaceChildAt(i, candidate);
+            return true;
+          }
+          stack.add(child);
+        }
+      } else if (currentNode is PBVisualIntermediateNode &&
+          currentNode.child != null) {
+        if (currentNode.child.UUID == uuid) {
+          currentNode.child = candidate;
+          return true;
+        }
+        stack.add(currentNode.child);
+      }
+    }
+    return false;
+  }
 }

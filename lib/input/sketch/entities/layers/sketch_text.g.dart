@@ -45,6 +45,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     textBehaviour: json['textBehaviour'],
     glyphBounds: json['glyphBounds'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
     ..content = json['content'] as String;
@@ -71,6 +72,7 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'CLASS_NAME': instance.CLASS_NAME,
       'attributedString': instance.attributedString,
       'automaticallyDrawOnUnderlyingPath':

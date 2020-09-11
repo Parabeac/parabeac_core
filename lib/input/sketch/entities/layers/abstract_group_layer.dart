@@ -8,8 +8,6 @@ abstract class AbstractGroupLayer extends SketchNode {
   final dynamic groupLayout;
   final List layers;
 
-  @override
-  Flow flow;
   AbstractGroupLayer(
       this.hasClickThrough,
       this.groupLayout,

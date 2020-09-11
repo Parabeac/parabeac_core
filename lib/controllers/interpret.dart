@@ -1,6 +1,7 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
@@ -36,12 +37,14 @@ class Interpret {
   String projectName;
   PBIntermediateTree _pb_intermediate_tree;
   PBSymbolLinkerService _pbSymbolLinkerService;
+  PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBGenerationManager _generationManager;
 
   void init(String projectName) {
     log = Logger(runtimeType.toString());
     this.projectName = projectName;
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
+    _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
   Future<PBIntermediateTree> interpretAndOptimize(SketchNodeTree tree) async {
@@ -122,8 +125,6 @@ class Interpret {
     stopwatch.stop();
     var stopwatch1 = Stopwatch()..start();
 
-    // TODO: implement prototype linker
-
     parentVisualIntermediateNode =
         await _pbSymbolLinkerService.linkSymbols(parentVisualIntermediateNode);
 
@@ -165,6 +166,9 @@ class Interpret {
       log.error(e.toString());
       parentLayoutIntermediateNode = parentPreLayoutIntermediateNode;
     }
+
+    parentLayoutIntermediateNode = await _pbPrototypeLinkerService
+        .linkPrototypeNodes(parentLayoutIntermediateNode);
     var parentAlignIntermediateNode;
     // print(
     //     'Layout Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');

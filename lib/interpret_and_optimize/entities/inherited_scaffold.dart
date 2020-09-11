@@ -1,6 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
@@ -13,7 +13,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
-import '../../generation/generators/plugins/pb_plugin_node.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -25,6 +24,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
   var originalRef;
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
   String name;
   @JsonSerializable(nullable: true)
   var navbar;
@@ -56,6 +58,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');

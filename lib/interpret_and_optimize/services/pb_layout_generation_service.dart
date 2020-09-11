@@ -1,5 +1,3 @@
-import 'package:build/build.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -89,7 +87,7 @@ class PBLayoutGenerationService implements PBGenerationService {
       return rootNode;
     } catch (e, stackTrace) {
       // FIXME: Capturing this exception causes sentry to crash parabeac-core.
-      
+
       // MainInfo().sentry.captureException(
       //       exception: e,
       //       stackTrace: stackTrace,

@@ -1,5 +1,5 @@
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
-import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBPrototypeStorage {
@@ -76,8 +76,10 @@ class PBPrototypeStorage {
       _pbPrototypeInstanceNodes['$id'];
 
   String getNameOfPageWithID(String id) {
-    return _pbPages.containsKey(id)
-        ? _pbPages[id].prototypeNode.destinationName
+    return (_pbPages.containsKey(id) && _pbPages[id] is PBInheritedIntermediate)
+        ? (_pbPages[id] as PBInheritedIntermediate)
+            .prototypeNode
+            .destinationName
         : null;
   }
 }

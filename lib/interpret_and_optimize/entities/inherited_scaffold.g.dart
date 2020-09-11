@@ -9,10 +9,12 @@ part of 'inherited_scaffold.dart';
 InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
   return InheritedScaffold(
     json['originalRef'],
-    topLeftCorner:
-        Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner:
-        Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    topLeftCorner: json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    bottomRightCorner: json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String

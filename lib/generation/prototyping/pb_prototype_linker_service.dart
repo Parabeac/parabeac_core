@@ -1,9 +1,11 @@
-import 'package:parabeac_core/design_logic/artboard.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 
 class PBPrototypeLinkerService {
   PBPrototypeStorage _prototypeStorage;
@@ -14,7 +16,8 @@ class PBPrototypeLinkerService {
     _aggregationService = PBPrototypeAggregationService();
   }
 
-  Future<PBIntermediateNode> linkSymbols(PBIntermediateNode rootNode) async {
+  Future<PBIntermediateNode> linkPrototypeNodes(
+      PBIntermediateNode rootNode) async {
     if (rootNode == null) {
       return rootNode;
     }
@@ -32,19 +35,24 @@ class PBPrototypeLinkerService {
         stack.add(currentNode.child);
       }
 
-      if (currentNode is PBArtboard) {
+      if (currentNode is InheritedScaffold) {
         await _prototypeStorage.addPageNode(currentNode);
-        _aggregationService.gatherIntermediateNodes(
-            currentNode.prototypeNode, currentNode);
-      } else if (currentNode.prototypeNode != null &&
-          currentNode.prototypeNode.destinationUUID != null &&
-          currentNode.prototypeNode.destinationUUID.isNotEmpty) {
+      } else if (currentNode is PBInheritedIntermediate &&
+          (currentNode as PBInheritedIntermediate)
+                  .prototypeNode
+                  ?.destinationUUID !=
+              null &&
+          (currentNode as PBInheritedIntermediate)
+              .prototypeNode
+              .destinationUUID
+              .isNotEmpty) {
         await _prototypeStorage.addPrototypeInstance(currentNode);
-        _aggregationService.gatherPrototypeNodes(currentNode.prototypeNode);
+        currentNode = _aggregationService.populatePrototypeNode(currentNode) ??
+            currentNode;
+        PBIntermediateNodeSearcherService.replaceNodeInTree(
+            rootNode, currentNode, currentNode.UUID);
       }
-
-      rootIntermediateNode ?? currentNode;
     }
-    return rootIntermediateNode;
+    return rootNode;
   }
 }

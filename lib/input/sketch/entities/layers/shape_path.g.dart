@@ -42,6 +42,7 @@ ShapePath _$ShapePathFromJson(Map<String, dynamic> json) {
         : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
     ..designNode = json['designNode'];
@@ -67,6 +68,7 @@ Map<String, dynamic> _$ShapePathToJson(ShapePath instance) => <String, dynamic>{
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'edited': instance.edited,
       'isClosed': instance.isClosed,
       'pointRadiusBehaviour': instance.pointRadiusBehaviour,

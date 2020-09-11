@@ -40,12 +40,17 @@ abstract class SketchNode implements DesignNode {
   final Style style;
   final bool maintainScrollPosition;
 
+  @override
+  set prototypeNodeUUID(String id) => flow?.destinationArtboardID ??= id;
+  @override
+  String get prototypeNodeUUID => flow?.destinationArtboardID;
+
   SketchNode(
       this.do_objectID,
       this.booleanOperation,
       this.exportOptions,
       Frame this.boundaryRectangle,
-      Flow flow,
+      Flow this.flow,
       this.isFixedToViewport,
       this.isFlippedHorizontal,
       this.isFlippedVertical,

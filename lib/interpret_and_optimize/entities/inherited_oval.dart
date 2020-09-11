@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_path.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -21,7 +20,9 @@ class InheritedOval extends PBVisualIntermediateNode
   @override
   var originalRef;
 
-  ///Represents the location of the png file.
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
   @JsonKey(ignore: true)
   Uint8List image;
 
@@ -50,6 +51,9 @@ class InheritedOval extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBBitmapGenerator();
 
     size = {

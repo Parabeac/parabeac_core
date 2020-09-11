@@ -1,4 +1,6 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -34,6 +36,10 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
 
   @override
   @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
+
+  @override
+  @JsonKey(ignore: true)
   PBContext currentContext;
 
   String widgetType = 'SYMBOL_INSTANCE';
@@ -58,6 +64,9 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
           originalRef.do_objectID,
           currentContext: currentContext,
         ) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBSymbolInstanceGenerator();
 
     UUID = originalRef.do_objectID;

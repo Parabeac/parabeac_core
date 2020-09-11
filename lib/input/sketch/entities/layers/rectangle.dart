@@ -27,8 +27,6 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @JsonKey(name: 'frame')
   var boundaryRectangle;
   @override
-  Flow flow;
-  @override
   @JsonKey(name: 'do_objectID')
   String UUID;
 
@@ -143,7 +141,4 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       },
     ));
   }
-
-  @override
-  var designNode;
 }
