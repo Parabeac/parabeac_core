@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/plugins/pb_injected_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
@@ -35,6 +36,8 @@ class PBPrototypeLinkerService {
         currentNode.children.forEach(stack.add);
       } else if (currentNode is PBVisualIntermediateNode &&
           currentNode.child != null) {
+        stack.add(currentNode.child);
+      } else if (currentNode is PBInjectedNode && currentNode.child != null) {
         stack.add(currentNode.child);
       }
       if (currentNode is InheritedScaffold) {

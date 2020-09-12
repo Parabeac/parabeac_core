@@ -1,8 +1,11 @@
+import 'package:parabeac_core/generation/generators/plugins/pb_injected_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 
 /// This class keeps track of the [PrototypeNode]s that do not have necessary
 /// properties from their destination [PBIntermediateNode] and populates them
@@ -44,13 +47,27 @@ class PBPrototypeAggregationService {
 
   /// Provide the `pNode` with the necessary attributes it needs from the `iNode`
   PBIntermediateNode populatePrototypeNode(PBIntermediateNode iNode) {
-    if (iNode == null || iNode is! PBInheritedIntermediate) {
+    // TODO: refactor the structure
+    if (iNode == null) {
+      return iNode;
+    } else if (iNode is PBInheritedIntermediate) {
+      var destHolder = PBDestHolder(
+          iNode.topLeftCorner,
+          iNode.bottomRightCorner,
+          iNode.UUID,
+          (iNode as PBInheritedIntermediate).prototypeNode);
+      destHolder.addChild(iNode);
+      return destHolder;
+    } else if (iNode is PBLayoutIntermediateNode) {
+      var destHolder = PBDestHolder(
+          iNode.topLeftCorner,
+          iNode.bottomRightCorner,
+          iNode.UUID,
+          (iNode as PBLayoutIntermediateNode).prototypeNode);
+      destHolder.addChild(iNode);
+      return destHolder;
+    } else {
       return iNode;
     }
-
-    var destHolder = PBDestHolder(iNode.topLeftCorner, iNode.bottomRightCorner,
-        iNode.UUID, (iNode as PBInheritedIntermediate).prototypeNode);
-    destHolder.addChild(iNode);
-    return destHolder;
   }
 }
