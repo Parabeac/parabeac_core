@@ -1,8 +1,7 @@
-import 'package:parabeac_core/generation/generators/plugins/pb_injected_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -35,7 +34,6 @@ class PBPrototypeAggregationService {
     if (_unregNodes.isEmpty) {
       return;
     }
-    var pNode;
     for (var _pNode in _unregNodes) {
       if (_pNode.prototypeNode.destinationUUID == node.UUID) {
         _pNode.prototypeNode.destinationName = node.name;
@@ -59,11 +57,13 @@ class PBPrototypeAggregationService {
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is PBLayoutIntermediateNode) {
-      var destHolder = PBDestHolder(
-          iNode.topLeftCorner,
-          iNode.bottomRightCorner,
-          iNode.UUID,
-          (iNode as PBLayoutIntermediateNode).prototypeNode);
+      var destHolder = PBDestHolder(iNode.topLeftCorner,
+          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
+      destHolder.addChild(iNode);
+      return destHolder;
+    } else if (iNode is InjectedContainer) {
+      var destHolder = PBDestHolder(iNode.topLeftCorner,
+          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
       destHolder.addChild(iNode);
       return destHolder;
     } else {

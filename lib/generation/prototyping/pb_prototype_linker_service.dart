@@ -2,13 +2,13 @@ import 'package:parabeac_core/generation/generators/plugins/pb_injected_node.dar
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 
-import 'package:parabeac_core/debug/tree_utils.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
 
 class PBPrototypeLinkerService {
@@ -70,14 +70,12 @@ class PBPrototypeLinkerService {
               .isNotEmpty) {
         await addAndPopulatePrototypeNode(currentNode, rootNode);
       } else if (currentNode is PBLayoutIntermediateNode &&
-          (currentNode as PBLayoutIntermediateNode)
-                  .prototypeNode
-                  ?.destinationUUID !=
-              null &&
-          (currentNode as PBLayoutIntermediateNode)
-              .prototypeNode
-              .destinationUUID
-              .isNotEmpty) {
+          currentNode.prototypeNode?.destinationUUID != null &&
+          currentNode.prototypeNode.destinationUUID.isNotEmpty) {
+        await addAndPopulatePrototypeNode(currentNode, rootNode);
+      } else if (currentNode is InjectedContainer &&
+          currentNode.prototypeNode?.destinationUUID != null &&
+          currentNode.prototypeNode.destinationUUID.isNotEmpty) {
         await addAndPopulatePrototypeNode(currentNode, rootNode);
       }
     }

@@ -108,7 +108,9 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext) {
-    var col = PBIntermediateColumnLayout(currentContext: currentContext);
+    var col = PBIntermediateColumnLayout(
+        currentContext: currentContext, UUID: Uuid().v4());
+    col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));
     return col;
   }

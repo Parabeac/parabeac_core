@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -29,6 +30,9 @@ class InjectedContainer extends PBVisualIntermediateNode
   Map padding;
   Map borderInfo;
   Map alignment;
+
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   final String UUID;
 
