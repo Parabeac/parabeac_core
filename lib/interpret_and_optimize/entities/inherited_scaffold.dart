@@ -35,6 +35,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @JsonSerializable(nullable: true)
   String backgroundColor;
 
+  bool isHomeScreen = false;
+
   @override
   String UUID;
 
@@ -43,13 +45,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  InheritedScaffold(
-    this.originalRef, {
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    this.name,
-    this.currentContext,
-  }) : super(
+  InheritedScaffold(this.originalRef,
+      {Point topLeftCorner,
+      Point bottomRightCorner,
+      this.name,
+      this.currentContext,
+      this.isHomeScreen})
+      : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
             Point(

@@ -64,6 +64,8 @@ void main(List<String> args) async {
     projectName = 'temp';
   }
 
+  MainInfo().projectName = projectName;
+
   // Input
   var id = InputDesignService(path);
 

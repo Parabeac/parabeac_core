@@ -203,6 +203,15 @@ class FlutterProjectBuilder {
                   intermediateItem.node,
                   isSymbolsDir ? symbolFilePath : fileNamePath));
 
+          // Check if [InheritedScaffold] is the homescreen
+          if (intermediateItem.node is InheritedScaffold &&
+              (intermediateItem.node as InheritedScaffold).isHomeScreen) {
+            var relPath = PBGenCache().getRelativePath(
+                '${projectName}/lib/main.dart', intermediateItem.node.UUID);
+            pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
+                '${projectName}/lib/main.dart', relPath);
+          }
+
           var page = flutterGenerator.generate(intermediateItem.node);
 
           // If writing symbols, write to buffer, otherwise write a file

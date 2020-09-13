@@ -142,7 +142,11 @@ class Artboard extends AbstractGroupLayer
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    return Future.value(
-        InheritedScaffold(this, currentContext: currentContext, name: name));
+    return Future.value(InheritedScaffold(
+      this,
+      currentContext: currentContext,
+      name: name,
+      isHomeScreen: isFlowHome,
+    ));
   }
 }
