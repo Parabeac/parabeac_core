@@ -5,6 +5,7 @@ import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -126,8 +127,14 @@ class FlutterProjectBuilder {
     List<String> imports = [];
     if (node == null) return imports;
 
-    String id =
-        node is PBSharedInstanceIntermediateNode ? node.SYMBOL_ID : node.UUID;
+    String id;
+    if (node is PBSharedInstanceIntermediateNode) {
+      id = node.SYMBOL_ID;
+    } else if (node is PBDestHolder) {
+      id = node.pNode.destinationUUID;
+    } else {
+      id = node.UUID;
+    }
 
     String nodePath = PBGenCache().getPath(id);
     // Make sure nodePath exists and is not the same as path (importing yourself)
@@ -197,11 +204,10 @@ class FlutterProjectBuilder {
         // Check if there are any imports needed for this screen
         if (!isFirstTraversal) {
           isSymbolsDir
-              ? importSet.addAll(_findImports(intermediateItem.node,
-                  isSymbolsDir ? symbolFilePath : fileNamePath))
-              : flutterGenerator.imports.addAll(_findImports(
-                  intermediateItem.node,
-                  isSymbolsDir ? symbolFilePath : fileNamePath));
+              ? importSet
+                  .addAll(_findImports(intermediateItem.node, symbolFilePath))
+              : flutterGenerator.imports
+                  .addAll(_findImports(intermediateItem.node, fileNamePath));
 
           // Check if [InheritedScaffold] is the homescreen
           if (intermediateItem.node is InheritedScaffold &&
