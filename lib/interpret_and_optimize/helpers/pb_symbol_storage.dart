@@ -6,14 +6,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
 /// Singleton class that stores sketch node symbols for easy access
-class PBSymbolStorage extends StreamView {
-  static final PBSymbolStorage _singleInstance =
-      PBSymbolStorage._internal(StreamController());
+class PBSymbolStorage {
+  static final PBSymbolStorage _singleInstance = PBSymbolStorage._internal();
 
   factory PBSymbolStorage() => _singleInstance;
-  PBSymbolStorage._internal(this._controller) : super(_controller.stream);
-
-  final StreamController _controller;
+  PBSymbolStorage._internal();
 
   ///All the symbols Instances
   final Map<String, PBSharedInstanceIntermediateNode> _pbSharedInstanceNodes =
@@ -21,8 +18,6 @@ class PBSymbolStorage extends StreamView {
 
   /// Map that will store the `PBIntermediateNode` symbol masters found in the [Symbols] page
   final Map<String, PBSharedMasterNode> _pbSharedMasterNodes = {};
-
-  Future<void> close() => _controller.close();
 
   Iterable<PBSharedMasterNode> get sharedMasterNodes =>
       _pbSharedMasterNodes.values;

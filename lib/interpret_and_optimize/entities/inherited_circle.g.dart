@@ -9,8 +9,12 @@ part of 'inherited_circle.dart';
 InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
   return InheritedCircle(
     json['originalRef'],
-    Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
-    Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

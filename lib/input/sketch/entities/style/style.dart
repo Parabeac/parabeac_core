@@ -8,7 +8,7 @@ import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/blur.dart';
 part 'style.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Style {
   @JsonKey(name: '_class')
   final String classField;

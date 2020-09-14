@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -14,7 +15,7 @@ part 'sketch_text.g.dart';
 
 // title: Text Layer
 // description: A text layer represents a discrete block or line of text
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   String CLASS_NAME = 'text';
@@ -57,7 +58,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       bool isFixedToViewport,
       bool isFlippedHorizontal,
       bool isFlippedVertical,

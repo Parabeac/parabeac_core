@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'point.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 
 ///Geographical point on the canvas.
 class Point implements Comparable<Point> {
@@ -29,7 +29,7 @@ class Point implements Comparable<Point> {
     }
     return false;
   }
-  
+
   bool operator <(Object point) {
     if (point is Point) {
       return y == point.y ? x <= point.x : y <= point.y;

@@ -4,11 +4,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 
 class PBSharedInterAggregationService {
   PBSymbolStorage _symbolStorage;
-  PBIntermediateNodeSearcherService _intermediateNodeSearcherService;
 
   static final PBSharedInterAggregationService _singleInstance =
       PBSharedInterAggregationService._internal();
@@ -23,7 +21,6 @@ class PBSharedInterAggregationService {
 
   PBSharedInterAggregationService._internal() {
     _symbolStorage = PBSymbolStorage();
-    _intermediateNodeSearcherService = PBIntermediateNodeSearcherService();
     _unregSymQueue = <PBSharedInstanceIntermediateNode>[];
   }
 
@@ -46,7 +43,7 @@ class PBSharedInterAggregationService {
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
     for (var prop in sharedMasterNode.overridableProperties) {
-      prop.value = _intermediateNodeSearcherService.searchNodeByUUID(
+      prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
           rootChildNode, prop?.do_objectId);
       if (prop.type == PBSharedInstanceIntermediateNode) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters

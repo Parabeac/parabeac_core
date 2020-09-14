@@ -5,6 +5,7 @@ import 'package:parabeac_core/design_logic/rect.dart';
 abstract class PBArtboard extends DesignNode implements GroupNode {
   var backgroundColor;
   PBArtboard(this.backgroundColor, UUID, String name, bool isVisible,
-      Rect boundaryRectangle, String type, style)
-      : super(UUID, name, isVisible, boundaryRectangle, type, style);
+      Rect boundaryRectangle, String type, style, prototypeNode)
+      : super(UUID, name, isVisible, boundaryRectangle, type, style,
+            prototypeNode);
 }

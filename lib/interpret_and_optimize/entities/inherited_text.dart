@@ -1,6 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/sketch_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -11,7 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_text.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedText extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.
@@ -22,6 +22,10 @@ class InheritedText extends PBVisualIntermediateNode
 
   @override
   var originalRef;
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   @JsonKey(ignore: true)
   num alignmenttype;
@@ -48,6 +52,9 @@ class InheritedText extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBTextGen();
 
     UUID = originalRef.UUID;

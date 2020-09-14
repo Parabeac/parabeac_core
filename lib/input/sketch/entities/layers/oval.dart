@@ -1,6 +1,7 @@
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
@@ -13,7 +14,7 @@ part 'oval.g.dart';
 
 // title: Oval Layer
 // description: Oval layers are the result of adding an oval shape to the canvas
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   String CLASS_NAME = 'oval';
@@ -53,7 +54,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

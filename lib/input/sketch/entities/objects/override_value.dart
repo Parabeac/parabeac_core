@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'override_value.g.dart';
-@JsonSerializable(nullable: false)
+
+@JsonSerializable(nullable: true)
+
 /// title: Override Property
 /// description: Defines override properties on symbol masters
-class OverridableValue{
+class OverridableValue {
   static final String CLASS_NAME = 'overrideValue';
   final String overrideName;
   final String do_objectID;

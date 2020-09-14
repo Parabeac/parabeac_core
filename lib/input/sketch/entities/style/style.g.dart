@@ -8,29 +8,39 @@ part of 'style.dart';
 
 Style _$StyleFromJson(Map<String, dynamic> json) {
   return Style(
-    blur: Blur.fromJson(json['blur'] as Map<String, dynamic>),
-    borderOptions:
-        BorderOptions.fromJson(json['borderOptions'] as Map<String, dynamic>),
+    blur: json['blur'] == null
+        ? null
+        : Blur.fromJson(json['blur'] as Map<String, dynamic>),
+    borderOptions: json['borderOptions'] == null
+        ? null
+        : BorderOptions.fromJson(json['borderOptions'] as Map<String, dynamic>),
     borders: (json['borders'] as List)
-        .map((e) => Border.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map((e) =>
+            e == null ? null : Border.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     classField: json['_class'] as String,
-    colorControls:
-        ColorControls.fromJson(json['colorControls'] as Map<String, dynamic>),
-    contextSettings: ContextSettings.fromJson(
-        json['contextSettings'] as Map<String, dynamic>),
+    colorControls: json['colorControls'] == null
+        ? null
+        : ColorControls.fromJson(json['colorControls'] as Map<String, dynamic>),
+    contextSettings: json['contextSettings'] == null
+        ? null
+        : ContextSettings.fromJson(
+            json['contextSettings'] as Map<String, dynamic>),
     do_objectID: json['do_objectID'] as String,
     endMarkerType: json['endMarkerType'] as int,
     fills: (json['fills'] as List)
-        .map((e) => Fill.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map(
+            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     innerShadows: (json['innerShadows'] as List)
-        .map((e) => Fill.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map(
+            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     miterLimit: json['miterLimit'] as int,
     shadows: (json['shadows'] as List)
-        .map((e) => Fill.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map(
+            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     startMarkerType: json['startMarkerType'] as int,
     windingRule: json['windingRule'] as int,
     textStyle: json['textStyle'] == null

@@ -1,4 +1,5 @@
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 
@@ -15,7 +16,7 @@ abstract class AbstractGroupLayer extends SketchNode {
       booleanOperation,
       exportOptions,
       Frame boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

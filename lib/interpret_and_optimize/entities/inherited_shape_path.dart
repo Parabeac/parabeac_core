@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/shape_path.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -15,15 +14,16 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'injected_container.dart';
-
 part 'inherited_shape_path.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedShapePath extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   var originalRef;
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   @override
   String UUID;
@@ -54,6 +54,9 @@ class InheritedShapePath extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBBitmapGenerator();
 
     UUID = originalRef.UUID;

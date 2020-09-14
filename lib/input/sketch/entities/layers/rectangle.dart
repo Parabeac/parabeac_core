@@ -2,6 +2,7 @@ import 'package:parabeac_core/design_logic/rect.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/border.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
@@ -16,7 +17,7 @@ part 'rectangle.g.dart';
 // title: Rectangle Layer
 // description:
 //   Rectangle layers are the result of adding a rectangle shape to the canvas
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
   @override
   String CLASS_NAME = 'rectangle';
@@ -61,7 +62,7 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,
@@ -140,7 +141,4 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       },
     ));
   }
-
-  @override
-  var designNode;
 }

@@ -8,11 +8,17 @@ part of 'pb_shared_master_node.dart';
 
 PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
   return PBSharedMasterNode(
-    SymbolMaster.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'] == null
+        ? null
+        : SymbolMaster.fromJson(json['originalRef'] as Map<String, dynamic>),
     json['SYMBOL_ID'] as String,
     json['name'] as String,
-    Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -22,8 +28,10 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..parametersDefinition = (json['parametersDefinition'] as List)
-        .map((e) => PBSymbolMasterParameter.fromJson(e as Map<String, dynamic>))
-        .toList()
+        ?.map((e) => e == null
+            ? null
+            : PBSymbolMasterParameter.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..widgetType = json['widgetType'] as String;
 }
 

@@ -2,6 +2,7 @@
 // description: Abstract base layer for all shape layers
 import 'package:parabeac_core/design_logic/design_shape.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 
@@ -20,7 +21,7 @@ abstract class AbstractShapeLayer extends SketchNode implements DesignShape {
       booleanOperation,
       exportOptions,
       Frame boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

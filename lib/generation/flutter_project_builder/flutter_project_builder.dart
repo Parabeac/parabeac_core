@@ -5,12 +5,15 @@ import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/plugins/injected_app_bar.dart';
+import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
@@ -126,8 +129,14 @@ class FlutterProjectBuilder {
     List<String> imports = [];
     if (node == null) return imports;
 
-    String id =
-        node is PBSharedInstanceIntermediateNode ? node.SYMBOL_ID : node.UUID;
+    String id;
+    if (node is PBSharedInstanceIntermediateNode) {
+      id = node.SYMBOL_ID;
+    } else if (node is PBDestHolder) {
+      id = node.pNode.destinationUUID;
+    } else {
+      id = node.UUID;
+    }
 
     String nodePath = PBGenCache().getPath(id);
     // Make sure nodePath exists and is not the same as path (importing yourself)
@@ -139,6 +148,16 @@ class FlutterProjectBuilder {
     if (node is PBLayoutIntermediateNode) {
       node.children
           .forEach((child) => imports.addAll(_findImports(child, path)));
+    } else if (node is InheritedScaffold) {
+      imports.addAll(_findImports(node.navbar, path));
+      imports.addAll(_findImports(node.tabbar, path));
+      imports.addAll(_findImports(node.child, path));
+    } else if (node is InjectedNavbar) {
+      imports.addAll(_findImports(node.leadingItem, path));
+      imports.addAll(_findImports(node.middleItem, path));
+      imports.addAll(_findImports(node.trailingItem, path));
+    } else if (node is InjectedTabBar) {
+      node.tabs.forEach((tab) => _findImports(tab, path));
     } else {
       imports.addAll(_findImports(node.child, path));
     }
@@ -197,11 +216,19 @@ class FlutterProjectBuilder {
         // Check if there are any imports needed for this screen
         if (!isFirstTraversal) {
           isSymbolsDir
-              ? importSet.addAll(_findImports(intermediateItem.node,
-                  isSymbolsDir ? symbolFilePath : fileNamePath))
-              : flutterGenerator.imports.addAll(_findImports(
-                  intermediateItem.node,
-                  isSymbolsDir ? symbolFilePath : fileNamePath));
+              ? importSet
+                  .addAll(_findImports(intermediateItem.node, symbolFilePath))
+              : flutterGenerator.imports
+                  .addAll(_findImports(intermediateItem.node, fileNamePath));
+
+          // Check if [InheritedScaffold] is the homescreen
+          if (intermediateItem.node is InheritedScaffold &&
+              (intermediateItem.node as InheritedScaffold).isHomeScreen) {
+            var relPath = PBGenCache().getRelativePath(
+                '${projectName}/lib/main.dart', intermediateItem.node.UUID);
+            pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
+                '${projectName}/lib/main.dart', relPath);
+          }
 
           var page = flutterGenerator.generate(intermediateItem.node);
 

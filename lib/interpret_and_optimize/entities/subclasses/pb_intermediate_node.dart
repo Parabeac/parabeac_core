@@ -37,8 +37,13 @@ abstract class PBIntermediateNode {
 
   String name;
 
-  PBIntermediateNode(this.topLeftCorner, this.bottomRightCorner, this.UUID,
-      {this.currentContext, this.subsemantic}) {
+  PBIntermediateNode(
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    this.UUID, {
+    this.currentContext,
+    this.subsemantic,
+  }) {
     if (topLeftCorner != null && bottomRightCorner != null) {
       assert(topLeftCorner.x <= bottomRightCorner.x &&
           topLeftCorner.y <= bottomRightCorner.y);

@@ -1,8 +1,7 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -15,11 +14,15 @@ import 'package:quick_log/quick_log.dart';
 
 part 'inherited_bitmap.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedBitmap extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   final originalRef;
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   @override
   String UUID;
@@ -47,6 +50,9 @@ class InheritedBitmap extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBBitmapGenerator();
 
     if (originalRef.name == null || (originalRef as Bitmap).image == null) {

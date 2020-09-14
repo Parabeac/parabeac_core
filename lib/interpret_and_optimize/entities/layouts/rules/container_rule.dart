@@ -16,7 +16,7 @@ class ContainerPostRule extends PostConditionRule {
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
     var layout =
         currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
-    if(layout == null){
+    if (layout == null) {
       return false;
     }
     var children = (layout as PBLayoutIntermediateNode).children;

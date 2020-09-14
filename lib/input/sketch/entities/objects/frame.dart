@@ -3,7 +3,7 @@ import 'package:parabeac_core/design_logic/rect.dart';
 
 part 'frame.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Frame implements Rect {
   @JsonKey(name: '_class')
   final String classField;

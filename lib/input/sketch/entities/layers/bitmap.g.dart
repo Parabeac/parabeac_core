@@ -8,15 +8,21 @@ part of 'bitmap.dart';
 
 Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
   return Bitmap(
-    image: ImageRef.fromJson(json['image'] as Map<String, dynamic>),
+    image: json['image'] == null
+        ? null
+        : ImageRef.fromJson(json['image'] as Map<String, dynamic>),
     fillReplacesImage: json['fillReplacesImage'] as bool,
     intendedDPI: json['intendedDPI'] as int,
     clippingMask: json['clippingMask'],
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -33,9 +39,12 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..imageReference = json['_ref'] as String
     ..type = json['_class'] as String;
@@ -61,6 +70,7 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'CLASS_NAME': instance.CLASS_NAME,
       'image': instance.image,
       'fillReplacesImage': instance.fillReplacesImage,

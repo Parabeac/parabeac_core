@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/artboard.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
@@ -12,7 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 part 'artboard.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Artboard extends AbstractGroupLayer
     implements SketchNodeFactory, PBArtboard {
   @override
@@ -82,7 +83,7 @@ class Artboard extends AbstractGroupLayer
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,
@@ -141,7 +142,11 @@ class Artboard extends AbstractGroupLayer
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    return Future.value(
-        InheritedScaffold(this, currentContext: currentContext, name: name));
+    return Future.value(InheritedScaffold(
+      this,
+      currentContext: currentContext,
+      name: name,
+      isHomeScreen: isFlowHome,
+    ));
   }
 }

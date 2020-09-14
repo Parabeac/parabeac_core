@@ -4,7 +4,7 @@ import 'package:parabeac_core/input/sketch/entities/style/font_descriptor.dart';
 import 'package:parabeac_core/input/sketch/entities/style/paragraph_style.dart';
 part 'text_style.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class TextStyle {
   @JsonKey(name: 'encodedAttributes')
   Map<String, dynamic> rawEncodedAttributes;

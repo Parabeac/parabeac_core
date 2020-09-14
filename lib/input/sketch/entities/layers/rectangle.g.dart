@@ -8,7 +8,7 @@ part of 'rectangle.dart';
 
 Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
   return Rectangle(
-    fixedRadius: (json['fixedRadius'] as num).toDouble(),
+    fixedRadius: (json['fixedRadius'] as num)?.toDouble(),
     hasConvertedToNewRoundCorners:
         json['hasConvertedToNewRoundCorners'] as bool,
     needsConvertionToNewRoundCorners:
@@ -20,8 +20,12 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -38,12 +42,14 @@ Rectangle _$RectangleFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
-    ..type = json['_class'] as String
-    ..designNode = json['designNode'];
+    ..type = json['_class'] as String;
 }
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
@@ -66,6 +72,7 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'edited': instance.edited,
       'isClosed': instance.isClosed,
       'pointRadiusBehaviour': instance.pointRadiusBehaviour,
@@ -80,5 +87,4 @@ Map<String, dynamic> _$RectangleToJson(Rectangle instance) => <String, dynamic>{
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
-      'designNode': instance.designNode,
     };

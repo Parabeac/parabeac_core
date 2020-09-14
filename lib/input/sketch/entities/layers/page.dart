@@ -1,6 +1,7 @@
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -12,7 +13,7 @@ part 'page.g.dart';
 // title: Page Layer
 // description:
 //   Page layers are the top level organisational abstraction within a document
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Page extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   String CLASS_NAME = 'page';
@@ -58,7 +59,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
       booleanOperation,
       exportOptions,
       Frame this.boundaryRectangle,
-      flow,
+      Flow flow,
       isFixedToViewport,
       isFlippedHorizontal,
       isFlippedVertical,

@@ -10,6 +10,7 @@ abstract class DesignNode {
     this.boundaryRectangle,
     this.type,
     this.style,
+    this.prototypeNodeUUID,
   );
 
   String UUID;
@@ -18,6 +19,7 @@ abstract class DesignNode {
   var boundaryRectangle;
   String type;
   var style;
+  String prototypeNodeUUID;
 
   Future<PBIntermediateNode> interpretNode(PBContext currentContext);
 }

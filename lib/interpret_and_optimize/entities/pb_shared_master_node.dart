@@ -1,4 +1,6 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -13,7 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'pb_shared_master_node.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
@@ -21,6 +23,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   final SymbolMaster originalRef;
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   ///The unique symbol identifier of the [PBSharedMasterNode]
   final String SYMBOL_ID;
@@ -61,6 +67,9 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.overridableProperties,
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     UUID = originalRef.do_objectID;
 
     generator = PBMasterSymbolGenerator();

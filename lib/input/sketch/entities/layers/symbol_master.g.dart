@@ -11,13 +11,18 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     hasClickThrough: json['hasClickThrough'] as bool,
     groupLayout: json['groupLayout'],
     layers: (json['layers'] as List)
-        .map((e) => SketchNode.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map((e) =>
+            e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     UUID: json['do_objectID'] as String,
     booleanOperation: json['booleanOperation'],
     exportOptions: json['exportOptions'],
-    boundaryRectangle: Frame.fromJson(json['frame'] as Map<String, dynamic>),
-    flow: json['flow'],
+    boundaryRectangle: json['frame'] == null
+        ? null
+        : Frame.fromJson(json['frame'] as Map<String, dynamic>),
+    flow: json['flow'] == null
+        ? null
+        : Flow.fromJson(json['flow'] as Map<String, dynamic>),
     isFixedToViewport: json['isFixedToViewport'],
     isFlippedHorizontal: json['isFlippedHorizontal'],
     isFlippedVertical: json['isFlippedVertical'],
@@ -34,10 +39,13 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     hasClippingMask: json['hasClippingMask'],
     clippingMaskMode: json['clippingMaskMode'],
     userInfo: json['userInfo'],
-    style: Style.fromJson(json['style'] as Map<String, dynamic>),
+    style: json['style'] == null
+        ? null
+        : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
-    backgroundColor:
-        Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    backgroundColor: json['backgroundColor'] == null
+        ? null
+        : Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
     hasBackgroundColor: json['hasBackgroundColor'] as bool,
     horizontalRulerData: json['horizontalRulerData'],
     includeBackgroundColorInExport:
@@ -52,10 +60,13 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     changeIdentifier: json['changeIdentifier'] as int,
     allowsOverrides: json['allowsOverrides'] as bool,
     overrideProperties: (json['overrideProperties'] as List)
-        .map((e) => OverridableProperty.fromJson(e as Map<String, dynamic>))
-        .toList(),
+        ?.map((e) => e == null
+            ? null
+            : OverridableProperty.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     presetDictionary: json['presetDictionary'],
   )
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
     ..parameters = json['parameters'] as List;
@@ -82,6 +93,7 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'clippingMaskMode': instance.clippingMaskMode,
       'userInfo': instance.userInfo,
       'maintainScrollPosition': instance.maintainScrollPosition,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'layers': instance.layers,

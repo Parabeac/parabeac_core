@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
@@ -16,7 +17,6 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Getting the children
   List<PBIntermediateNode> get children => List.from(_children);
 
-
   ///The rules of the layout. MAKE SURE TO REGISTER THEIR CUSTOM RULES
   List<LayoutRule> _layoutRules = [];
 
@@ -31,10 +31,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   final String UUID;
 
+  PrototypeNode prototypeNode;
+
   ///
   PBLayoutIntermediateNode(
       this._layoutRules, this._exceptions, PBContext currentContext,
-      {topLeftCorner, bottomRightCorner, this.UUID})
+      {topLeftCorner, bottomRightCorner, this.UUID, this.prototypeNode})
       : super(topLeftCorner, bottomRightCorner, UUID,
             currentContext: currentContext);
 
@@ -46,6 +48,16 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       _children = children;
     }
     _resize();
+  }
+
+  /// Replace the child at `index` for `replacement`.
+  /// Returns true if the replacement wsa succesful, false otherwise.
+  bool replaceChildAt(int index, PBIntermediateNode replacement) {
+    if (_children != null && _children.length > index) {
+      _children[index] = replacement;
+      return true;
+    }
+    return false;
   }
 
   ///Add node to child

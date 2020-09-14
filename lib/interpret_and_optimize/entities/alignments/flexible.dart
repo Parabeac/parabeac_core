@@ -18,7 +18,7 @@ class Flexible extends PBVisualIntermediateNode {
   final String UUID;
 
   @override
-  @JsonKey(nullable: false, ignore: false)
+  @JsonKey(nullable: true, ignore: false)
   String widgetType = 'FLEXIBLE';
 
   //TODO: Find a way to make currentContext required
