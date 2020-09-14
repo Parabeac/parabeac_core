@@ -12,6 +12,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/plugins/injected_app_bar.dart';
+import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
@@ -146,6 +148,16 @@ class FlutterProjectBuilder {
     if (node is PBLayoutIntermediateNode) {
       node.children
           .forEach((child) => imports.addAll(_findImports(child, path)));
+    } else if (node is InheritedScaffold) {
+      imports.addAll(_findImports(node.navbar, path));
+      imports.addAll(_findImports(node.tabbar, path));
+      imports.addAll(_findImports(node.child, path));
+    } else if (node is InjectedNavbar) {
+      imports.addAll(_findImports(node.leadingItem, path));
+      imports.addAll(_findImports(node.middleItem, path));
+      imports.addAll(_findImports(node.trailingItem, path));
+    } else if (node is InjectedTabBar) {
+      node.tabs.forEach((tab) => _findImports(tab, path));
     } else {
       imports.addAll(_findImports(node.child, path));
     }
