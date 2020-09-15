@@ -1,6 +1,7 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/artboard.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
@@ -12,18 +13,20 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
-import '../../generation/generators/plugins/pb_plugin_node.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_scaffold.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
-  SketchNode originalRef;
+  var originalRef;
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
   String name;
   @JsonSerializable(nullable: true)
   var navbar;
@@ -31,6 +34,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
   var tabbar;
   @JsonSerializable(nullable: true)
   String backgroundColor;
+
+  bool isHomeScreen = false;
 
   @override
   String UUID;
@@ -40,17 +45,24 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  InheritedScaffold(
-    this.originalRef, {
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    this.name,
-    this.currentContext,
-  }) : super(
-            Point(originalRef.frame.x, originalRef.frame.y),
-            Point(originalRef.frame.x + originalRef.frame.width,
-                originalRef.frame.y + originalRef.frame.height),
+  InheritedScaffold(this.originalRef,
+      {Point topLeftCorner,
+      Point bottomRightCorner,
+      this.name,
+      this.currentContext,
+      this.isHomeScreen})
+      : super(
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width,
+                originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
@@ -58,13 +70,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
     generator = PBScaffoldGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
-        originalRef.frame.x + originalRef.frame.width,
-        originalRef.frame.y + originalRef.frame.height);
+        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
+        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
 
     this.currentContext.screenTopLeftCorner =
-        Point(originalRef.frame.x, originalRef.frame.y);
+        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
 
     backgroundColor = (originalRef as Artboard).backgroundColor?.toHex();
   }

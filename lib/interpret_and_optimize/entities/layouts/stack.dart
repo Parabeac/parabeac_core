@@ -13,7 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'stack.g.dart';
 
 ///Row contains nodes that are all `overlapping` to each other, without overlapping eachother
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   static final List<LayoutRule> STACK_RULES = [OverlappingNodesLayoutRule()];
@@ -84,7 +84,9 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
-    var stack = PBIntermediateStackLayout(UUID, currentContext: currentContext);
+    var stack =
+        PBIntermediateStackLayout(Uuid().v4(), currentContext: currentContext);
+    stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;
   }

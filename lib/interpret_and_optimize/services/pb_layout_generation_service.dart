@@ -1,5 +1,3 @@
-import 'package:build/build.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -53,13 +51,17 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
   PBIntermediateNode injectNodes(PBIntermediateNode rootNode) {
     try {
+      var prototypeNode;
       if (!(_containsChildren(rootNode))) {
         return rootNode;
       } else if (rootNode is PBVisualIntermediateNode) {
         rootNode.child = injectNodes(rootNode.child);
         return rootNode;
       } else if (rootNode is TempGroupLayoutNode) {
+        // TODO: Refactor prototype node declaration before and after
+        prototypeNode = (rootNode as TempGroupLayoutNode).prototypeNode;
         rootNode = _replaceGroupByLayout(rootNode);
+        (rootNode as PBLayoutIntermediateNode).prototypeNode = prototypeNode;
       }
 
       if (rootNode is PBLayoutIntermediateNode) {
@@ -77,11 +79,14 @@ class PBLayoutGenerationService implements PBGenerationService {
             'TempGroupLayout was not converted and has multiple children.');
         // If this node is an unecessary temp group, just return the child. Ex: Designer put a group with one child that was a group and that group contained the visual nodes.
         if (rootNode.children[0] is InjectedContainer) {
+          (rootNode.children[0] as InjectedContainer).prototypeNode =
+              prototypeNode;
           return rootNode.children[0];
         }
         var replacementNode = InjectedContainer(
             rootNode.bottomRightCorner, rootNode.topLeftCorner, Uuid().v4(),
             currentContext: currentContext);
+        replacementNode.prototypeNode = prototypeNode;
         replacementNode.addChild(rootNode.children.first);
         return replacementNode;
       }
@@ -89,7 +94,7 @@ class PBLayoutGenerationService implements PBGenerationService {
       return rootNode;
     } catch (e, stackTrace) {
       // FIXME: Capturing this exception causes sentry to crash parabeac-core.
-      
+
       // MainInfo().sentry.captureException(
       //       exception: e,
       //       stackTrace: stackTrace,

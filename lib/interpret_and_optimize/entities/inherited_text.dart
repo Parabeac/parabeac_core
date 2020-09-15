@@ -1,6 +1,7 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/text.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/sketch_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -10,7 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inherited_text.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class InheritedText extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.
@@ -20,7 +21,11 @@ class InheritedText extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  SketchNode originalRef;
+  var originalRef;
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   @JsonKey(ignore: true)
   num alignmenttype;
@@ -39,14 +44,21 @@ class InheritedText extends PBVisualIntermediateNode
 
   InheritedText(this.originalRef, {this.currentContext})
       : super(
-            Point(originalRef.frame.x, originalRef.frame.y),
-            Point(originalRef.frame.x + originalRef.frame.width,
-                originalRef.frame.y + originalRef.frame.height),
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width,
+                originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height),
             currentContext) {
+    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    }
     generator = PBTextGen();
 
-    UUID = originalRef.do_objectID;
-    text = (originalRef as Text).attributedString['string'];
+    UUID = originalRef.UUID;
+    text = (originalRef as SketchText).attributedString['string'];
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
     color = originalRef.style.textStyle.color.toHex();
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;

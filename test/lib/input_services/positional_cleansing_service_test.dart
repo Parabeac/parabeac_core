@@ -1,10 +1,10 @@
 import 'package:mockito/mockito.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/artboard.dart';
-import 'package:parabeac_core/input/entities/layers/group.dart';
-import 'package:parabeac_core/input/entities/layers/rectangle.dart';
-import 'package:parabeac_core/input/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/group.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/rectangle.dart';
+import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/services/positional_cleansing_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:test/test.dart';

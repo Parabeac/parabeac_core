@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'padding.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class Padding extends PBVisualIntermediateNode {
   var child;
   double left, right, top, bottom, screenWidth, screenHeight;

@@ -1,4 +1,5 @@
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -13,14 +14,14 @@ class PBDenyListHelper {
     '937FDFA9-BCF9-4577-AE5E-0CF7FDD47254': true,
   };
 
-  bool isInDenyListDirect(SketchNode node) {
-    if (denyList[node.do_objectID] != null) {
+  bool isInDenyListDirect(DesignNode node) {
+    if (denyList[node.UUID] != null) {
       return true;
     }
     return false;
   }
 
-  PBDenyListNode returnDenyListNodeIfExist(SketchNode node) {
+  PBDenyListNode returnDenyListNodeIfExist(DesignNode node) {
     if (isInDenyListDirect(node)) {
       return PBDenyListNode(Point(0, 0), Point(0, 0), null);
     } else {

@@ -1,10 +1,10 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_group_layer.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/entities/layers/symbol_instance.dart';
-import 'package:parabeac_core/input/entities/layers/symbol_master.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -17,11 +17,14 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 
   String widgetType = 'Tab';
 
+  PrototypeNode prototypeNode;
+
   Tab(
     Point topLeftCorner,
     Point bottomRightCorner, {
     UUID,
     this.currentContext,
+    this.prototypeNode,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
     generator = PBTabGenerator();
   }
@@ -36,9 +39,14 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
-    var tab = Tab(topLeftCorner, bottomRightCorner,
-        currentContext: currentContext, UUID: Uuid().v4());
+      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
+    var tab = Tab(
+      topLeftCorner,
+      bottomRightCorner,
+      currentContext: currentContext,
+      UUID: Uuid().v4(),
+      prototypeNode: PrototypeNode(originalRef?.prototypeNodeUUID),
+    );
     if (originalRef is! AbstractGroupLayer) {
       var sketchNode = _convertWrapper(originalRef);
 
@@ -57,7 +65,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
     return layer;
   }
 
-  SketchNode _convertWrapper(SketchNode node) {
+  DesignNode _convertWrapper(DesignNode node) {
     /// This is for plugins
     var str = '${node.name}';
     node.name = str.replaceAll(RegExp(r'\.\*'), '');
@@ -74,7 +82,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(SketchNode incomingNode) {
+  void extractInformation(DesignNode incomingNode) {
     // TODO: implement extractInformation
   }
 }

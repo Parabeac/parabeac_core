@@ -8,14 +8,16 @@ part of 'inherited_text.dart';
 
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
-    SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
-    ..topLeftCorner =
-        Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
-    ..bottomRightCorner =
-        Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
+    ..topLeftCorner = json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
+    ..bottomRightCorner = json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>

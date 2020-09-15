@@ -14,18 +14,20 @@ PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
     json['canOverride'] as bool,
     json['propertyName'] as String,
     json['parameterDefinition'],
-    (json['topLeftX'] as num).toDouble(),
-    (json['topLeftY'] as num).toDouble(),
-    (json['bottomRightX'] as num).toDouble(),
-    (json['bottomRightY'] as num).toDouble(),
+    (json['topLeftX'] as num)?.toDouble(),
+    (json['topLeftY'] as num)?.toDouble(),
+    (json['bottomRightX'] as num)?.toDouble(),
+    (json['bottomRightY'] as num)?.toDouble(),
   )
     ..subsemantic = json['subsemantic'] as String
     ..widgetType = json['widgetType'] as String
     ..child = json['child']
-    ..topLeftCorner =
-        Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
-    ..bottomRightCorner =
-        Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
+    ..topLeftCorner = json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
+    ..bottomRightCorner = json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>

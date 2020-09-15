@@ -16,6 +16,12 @@ class MainInfo {
   Directory cwd;
   Map configurations;
 
+  /// Unique ID for the device running parabeac-core
+  String deviceId;
+
+  /// Name of the project
+  String projectName;
+
   Map defaultConfigs = {
     'default': {
       'widgetStyle': 'Material',

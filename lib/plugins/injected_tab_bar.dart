@@ -1,8 +1,9 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/plugins/injected_tab.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
@@ -55,13 +56,13 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
+      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
     return InjectedTabBar(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
   }
 
   @override
-  void extractInformation(SketchNode incomingNode) {
+  void extractInformation(DesignNode incomingNode) {
     // TODO: implement extractInformation
   }
 }

@@ -1,11 +1,10 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/helper/sketch_node_tree.dart';
-import 'package:parabeac_core/input/helper/sketch_page.dart';
-import 'package:parabeac_core/input/helper/sketch_page_item.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -38,12 +37,14 @@ class Interpret {
   String projectName;
   PBIntermediateTree _pb_intermediate_tree;
   PBSymbolLinkerService _pbSymbolLinkerService;
+  PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBGenerationManager _generationManager;
 
   void init(String projectName) {
     log = Logger(runtimeType.toString());
     this.projectName = projectName;
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
+    _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
   Future<PBIntermediateTree> interpretAndOptimize(SketchNodeTree tree) async {
@@ -165,6 +166,9 @@ class Interpret {
       log.error(e.toString());
       parentLayoutIntermediateNode = parentPreLayoutIntermediateNode;
     }
+
+    parentLayoutIntermediateNode = await _pbPrototypeLinkerService
+        .linkPrototypeNodes(parentLayoutIntermediateNode);
     var parentAlignIntermediateNode;
     // print(
     //     'Layout Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
@@ -192,7 +196,7 @@ class Interpret {
     return parentAlignIntermediateNode;
   }
 
-  Future<PBIntermediateNode> generateNonRootItem(SketchNode root) async {
+  Future<PBIntermediateNode> generateNonRootItem(DesignNode root) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);

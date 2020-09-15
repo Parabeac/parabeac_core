@@ -8,7 +8,7 @@ part of 'inherited_shape_group.dart';
 
 InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
   return InheritedShapeGroup(
-    SketchNode.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

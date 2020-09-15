@@ -1,5 +1,6 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
-import 'package:parabeac_core/input/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -11,7 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'plugin_container.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: true)
 class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   @override
   Point bottomRightCorner;
@@ -85,7 +86,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
 
   @override
   PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, SketchNode originalRef) {
+      Point topLeftCorner, Point bottomRightCorner, var originalRef) {
     return PluginContainer(topLeftCorner, bottomRightCorner, UUID,
         currentContext: currentContext);
   }
@@ -114,7 +115,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   }
 
   @override
-  void extractInformation(SketchNode incomingNode) {
+  void extractInformation(DesignNode incomingNode) {
     // TODO: implement extractInformation
   }
 }

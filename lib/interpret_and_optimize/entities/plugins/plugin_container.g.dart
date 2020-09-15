@@ -8,11 +8,15 @@ part of 'plugin_container.dart';
 
 PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
   return PluginContainer(
-    Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
+    json['topLeftCorner'] == null
+        ? null
+        : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    json['bottomRightCorner'] == null
+        ? null
+        : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     json['UUID'] as String,
-    alignX: (json['alignX'] as num).toDouble(),
-    alignY: (json['alignY'] as num).toDouble(),
+    alignX: (json['alignX'] as num)?.toDouble(),
+    alignY: (json['alignY'] as num)?.toDouble(),
     color: json['color'] as String,
   )
     ..name = json['name'] as String
