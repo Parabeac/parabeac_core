@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_container
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/plugins/injected_tab.dart';
 
 /// This class keeps track of the [PrototypeNode]s that do not have necessary
 /// properties from their destination [PBIntermediateNode] and populates them
@@ -65,6 +66,11 @@ class PBPrototypeAggregationService {
       var destHolder = PBDestHolder(iNode.topLeftCorner,
           iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
       destHolder.addChild(iNode);
+      return destHolder;
+    } else if (iNode is Tab) {
+      var destHolder = PBDestHolder(iNode.topLeftCorner,
+          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
+      destHolder.addChild(iNode.child);
       return destHolder;
     } else {
       return iNode;

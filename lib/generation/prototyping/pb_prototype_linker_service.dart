@@ -10,6 +10,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
+import 'package:parabeac_core/plugins/injected_tab.dart';
+import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 
 class PBPrototypeLinkerService {
   PBPrototypeStorage _prototypeStorage;
@@ -44,6 +46,9 @@ class PBPrototypeLinkerService {
         if (currentNode.navbar != null) {
           stack.add(currentNode.navbar);
         }
+        if (currentNode.tabbar != null) {
+          stack.add(currentNode.tabbar);
+        }
       }
       // TODO: This should be replaced for something more optimal
       if (currentNode is InjectedNavbar) {
@@ -56,6 +61,8 @@ class PBPrototypeLinkerService {
         if (currentNode.trailingItem != null) {
           stack.add(currentNode.trailingItem);
         }
+      } else if (currentNode is InjectedTabBar) {
+        currentNode.tabs.forEach((tab) => stack.add(tab));
       }
       if (currentNode is InheritedScaffold) {
         await _prototypeStorage.addPageNode(currentNode);
@@ -74,6 +81,10 @@ class PBPrototypeLinkerService {
           currentNode.prototypeNode.destinationUUID.isNotEmpty) {
         await addAndPopulatePrototypeNode(currentNode, rootNode);
       } else if (currentNode is InjectedContainer &&
+          currentNode.prototypeNode?.destinationUUID != null &&
+          currentNode.prototypeNode.destinationUUID.isNotEmpty) {
+        await addAndPopulatePrototypeNode(currentNode, rootNode);
+      } else if (currentNode is Tab &&
           currentNode.prototypeNode?.destinationUUID != null &&
           currentNode.prototypeNode.destinationUUID.isNotEmpty) {
         await addAndPopulatePrototypeNode(currentNode, rootNode);
