@@ -101,7 +101,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 2. If you have any plugins make sure to put the plugins in the plugin folder
 3. In your terminal change directory to the root PBCore directory and run:
 ``` bash
- $dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
+ $ dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
 
 ## Metrics
