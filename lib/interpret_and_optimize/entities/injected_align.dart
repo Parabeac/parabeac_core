@@ -39,13 +39,21 @@ class InjectedAlign extends PBVisualIntermediateNode
         (child.bottomRightCorner.x - child.topLeftCorner.x).abs();
     var parentCenterX = (topLeftCorner.x + bottomRightCorner.x) / 2;
     var childCenterX = (child.topLeftCorner.x + child.bottomRightCorner.x) / 2;
-    var alignmentX = ((childCenterX - parentCenterX)) / maxX * 2;
+    var alignmentX = 0.0;
+
+    if (maxX != 0.0) {
+      alignmentX = ((childCenterX - parentCenterX) / maxX) * 2;
+    }
 
     var parentCenterY = (topLeftCorner.y + bottomRightCorner.y) / 2;
     var maxY = (topLeftCorner.y - bottomRightCorner.y).abs() -
         (child.bottomRightCorner.y - child.topLeftCorner.y).abs();
     var childCenterY = (child.topLeftCorner.y + child.bottomRightCorner.y) / 2;
     var alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
+
+    if (maxY != 0.0) {
+      alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
+    }
 
     if (alignmentX.isNaN) {
       alignmentX = 0;
