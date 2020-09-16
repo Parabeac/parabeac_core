@@ -19,53 +19,10 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
   <a href="https://discord.gg/qUrghes">Community</a>
 </h3>
 
-# How it works
-Parabeac-Core is essentially broken up into 3 pieces which you can see in the list or animation below. While most of the magic is in the interpretation engine, you can view more animations & information here.
 
- 1. Convert design file into Parabeac design protocol
- 2. [Interpretation Engine](https://github.com/Parabeac/parabeac-core/wiki/Parabeac-Interpretation-Engine-Overview)
- > Made up of the Visual, Layout, & Alignment generation services.
- 3. Generate Flutter code 
-  
-![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
+# Get Started
 
-## [Parabeac Design Protocol](https://docs.parabeac.com/)
-Parabeac Design Protocol is our way of helping define UI/UX elements within Design Files for cleaner and more succinct code conversion. By adding naming-semantics to elements, symbols, and layer names to the design file, Parabeac-Core is able to identify specific UI elements & override interpretation & generation with a specific implementation.
-
-## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
-These are mostly built by a one to one relationship from the Parabeac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
-
-![Parabeac Visual Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-visual-generation-service.gif)
-
-## [Layout Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Layout-Generation-Service)
-This service is a bit more interesting, as we break down each group of nodes to be laid out by the layout service. The service takes the first 2 nodes compares them & generates a layout, we grab the next node, compare it to the layout & then the leaves if needed to and continuously traverse the rest of the layer into the laid out tree that we construct.
-
-![Parabeac Layout Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-layout-generation-service.gif)
-
-
-## [Alignment Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Alignment-Generation-Service)
-In Flutter, there are only a couple ways to achieve alignment. We recognized the following as the most common:
-* Flex-based layouts
-* Padding/margin
-* Positioning (Stacks)
-* Alignment (Container/Single Child/Visual Node)
-
-Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
-
-![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
-
-# How to contribute
-Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/open_source_prep/wiki).
-
-
-# How to create & run Parabeac eggs
-Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
-
-You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
-
-To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
-
-
+Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
 
 ### Dependencies
 
@@ -108,16 +65,62 @@ Follow these steps in order to run Parabeac Core on your local environment:
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
 
 # Running the exported code
-### Requirement(s)
+### Requirements
+- Flutter
+- Dart
+### Steps
+1. Make sure you have flutter installed correctly. (You can run ```flutter doctor``` within your terminal to easily check) 
+2. Move to the Flutter Projects Root Directory 
+> **If your Project utilizes Sketch Prototyping Skip to Step 5**
+3. Within Main.dart import the main screen that you want the app to launch with from the screens folder
+4. Next change the home property of the MaterialApp that is being returned in the Build Method to the name of the Screen imported in Step 3
+5. Save Main.dart and Execute `flutter run` in your terminal
 
-- Download [Flutter](https://flutter.dev/docs/get-started/install)
-- Traverse to main.dart
-- Call the screen you want to view
-- Execute `flutter run`
+# How to create & run Parabeac eggs
+Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
 
-# Get Started
+You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
 
-Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
+To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
+
+# How it works
+Parabeac-Core is essentially broken up into 3 pieces which you can see in the list or animation below. While most of the magic is in the interpretation engine, you can view more animations & information here.
+
+ 1. Convert design file into Parabeac design protocol
+ 2. [Interpretation Engine](https://github.com/Parabeac/parabeac-core/wiki/Parabeac-Interpretation-Engine-Overview)
+ > Made up of the Visual, Layout, & Alignment generation services.
+ 3. Generate Flutter code 
+  
+![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
+
+## [Parabeac Design Protocol](https://docs.parabeac.com/)
+Parabeac Design Protocol is our way of helping define UI/UX elements within Design Files for cleaner and more succinct code conversion. By adding naming-semantics to elements, symbols, and layer names to the design file, Parabeac-Core is able to identify specific UI elements & override interpretation & generation with a specific implementation.
+
+## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
+These are mostly built by a one to one relationship from the Parabeac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
+
+![Parabeac Visual Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-visual-generation-service.gif)
+
+## [Layout Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Layout-Generation-Service)
+This service is a bit more interesting, as we break down each group of nodes to be laid out by the layout service. The service takes the first 2 nodes compares them & generates a layout, we grab the next node, compare it to the layout & then the leaves if needed to and continuously traverse the rest of the layer into the laid out tree that we construct.
+
+![Parabeac Layout Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-layout-generation-service.gif)
+
+
+## [Alignment Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Alignment-Generation-Service)
+In Flutter, there are only a couple ways to achieve alignment. We recognized the following as the most common:
+* Flex-based layouts
+* Padding/margin
+* Positioning (Stacks)
+* Alignment (Container/Single Child/Visual Node)
+
+Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
+
+![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
+
+
+# How to contribute
+Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/open_source_prep/wiki).
 
 # Upcoming & Known Issues
 
