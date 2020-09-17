@@ -22,6 +22,9 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 
 # Get Started
 
+If you have any trouble with getting Parabeac-Core running, check out this video! [![Parabeac-Core Getting Started](https://img.youtube.com/vi/e4CJgPMNCyo/0.jpg)](https://www.youtube.com/watch?v=e4CJgPMNCyo&feature=youtu.be)
+
+
 Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
 
 ### Dependencies
@@ -29,6 +32,7 @@ Parabeac currently supports conversions from [Sketch](https://www.sketch.com) bu
  - [Dart](https://dart.dev/get-dart)
  - [Flutter](https://flutter.dev/docs/get-started/install)
  - [node.js](https://nodejs.org/en/download/)
+ - MacOS + Xcode or Android Studio
 
 To test out a Sketch file feel free to download [this Sketch file](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)!
 
