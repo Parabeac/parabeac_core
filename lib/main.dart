@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
@@ -8,7 +8,6 @@ import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
-
 import 'controllers/main_info.dart';
 
 String pathToSketchFile;
@@ -53,6 +52,13 @@ void main(List<String> args) async {
         // handle configurations
         configurationPath = 'lib/configurations/configurations.json';
         break;
+      case '-fig':
+        designType = 'figma';
+        MainInfo().figmaProjectID = args[i + 1];
+        break;
+      case '-figKey':
+        MainInfo().figmaKey = args[i + 1];
+        break;
     }
   }
 
@@ -67,7 +73,9 @@ void main(List<String> args) async {
   MainInfo().projectName = projectName;
 
   // Input
-  var id = InputDesignService(path);
+  if (path != null && path.isNotEmpty) {
+    var id = InputDesignService(path);
+  }
 
   if (designType == 'sketch') {
     var process = await Process.start('npm', ['run', 'prod'],
@@ -88,7 +96,16 @@ void main(List<String> args) async {
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
-    assert(false, 'We don\'t support Figma.');
+    if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
+      assert(false, 'Please provided a Figma API key to proceed.');
+    }
+    if (MainInfo().figmaProjectID == null ||
+        MainInfo().figmaProjectID.isEmpty) {
+      assert(false, 'Please provided a Figma project ID to proceed.');
+    }
+    var figma = APICallService();
+    var jsonOfFigma = await figma
+        .makeAPICall([MainInfo().figmaProjectID, MainInfo().figmaKey]);
   }
 }
 
