@@ -107,6 +107,11 @@ do
                         '"${inline[newCounter]}"' :  '"${classSaved[newCounter]}"'(Point(0, 0), Point(0, 0), Uuid().v4(), currentContext: context),
                         ' pb_plugin_list_helper.dart
 
+                        sed -i.bak '
+                        /List<String> names = / a\
+                        '"${inline[newCounter]}"',
+                        ' pb_plugin_list_helper.dart
+
                         echo $tempLine | cat - pb_plugin_list_helper.dart > temp && mv temp pb_plugin_list_helper.dart
                         echo "[INFO]: Plugin set!"
                     else
