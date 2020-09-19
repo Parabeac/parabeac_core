@@ -21,5 +21,7 @@ abstract class DesignNode {
   var style;
   String prototypeNodeUUID;
 
+  toJson();
+
   Future<PBIntermediateNode> interpretNode(PBContext currentContext);
 }

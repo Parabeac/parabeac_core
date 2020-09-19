@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:parabeac_core/input/sketch/entities/documents/document.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/page.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/foreign_symbol.dart';
@@ -8,12 +9,16 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:quick_log/quick_log.dart';
 
-class SketchNodeTree {
+class SketchNodeTree implements NodeTree {
+  @override
   var log = Logger('SketchNodeTree');
   List<SketchPage> pages = [];
   List<SketchPage> miscPages = [];
   SketchPage rootScreen;
+
+  @override
   String projectName;
+  @override
   bool debug = false;
 
   final Archive _originalArchive;

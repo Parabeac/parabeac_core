@@ -70,6 +70,7 @@ abstract class SketchNode implements DesignNode {
       this.style,
       this.maintainScrollPosition);
 
+  @override
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>
       AbstractSketchNodeFactory.getSketchNode(json);
