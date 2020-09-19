@@ -26,9 +26,7 @@ class APICallService {
   dynamic _returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-        var responseJson = json.decode(response.body.toString());
-        print(responseJson);
-        return responseJson;
+        return response;
       case 400:
         throw BadRequestException(response.body.toString());
       case 401:
