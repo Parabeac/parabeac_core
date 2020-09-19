@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
@@ -90,7 +91,7 @@ void main(List<String> args) async {
 
     //Retrieving the Sketch PNGs from the design file
     await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(pathToSketchFile,
+    await SketchController().convertFile(pathToSketchFile,
         MainInfo().outputPath + projectName, configurationPath);
     process.kill();
   } else if (designType == 'xd') {
@@ -106,6 +107,9 @@ void main(List<String> args) async {
     var figma = APICallService();
     var jsonOfFigma = await figma
         .makeAPICall([MainInfo().figmaProjectID, MainInfo().figmaKey]);
+    // Starts Figma to Object
+    FigmaController().convertFile(
+        jsonOfFigma, MainInfo().outputPath + projectName, configurationPath);
   }
 }
 
