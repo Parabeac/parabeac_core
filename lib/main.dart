@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -138,7 +139,10 @@ void addToAmplitude() async {
   var lambdaEndpt =
       'https://jsr2rwrw5m.execute-api.us-east-1.amazonaws.com/default/pb-lambda-microservice';
 
-  var body = json.encode({'id': MainInfo().deviceId});
+  var body = json.encode({
+    'id': MainInfo().deviceId,
+    'eventProperties': {'eggs': PBPluginListHelper.names ?? {}}
+  });
 
   await http.post(
     lambdaEndpt,
