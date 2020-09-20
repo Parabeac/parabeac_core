@@ -54,10 +54,18 @@ Depending on the type of layout to add alignment to we have various services to 
 
 ![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
 
+# How to contribute
+Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/open_source_prep/wiki).
 
-# Get Started
 
-Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
+# How to create & run Parabeac eggs
+Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
+
+You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
+
+To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
+
+
 
 ### Dependencies
 
@@ -107,16 +115,9 @@ Parabeac-core keeps track of how many times it is run. Although we do not collec
 - Call the screen you want to view
 - Execute `flutter run`
 
-# How to contribute
-Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/open_source_prep/wiki).
+# Get Started
 
-
-# How to create & run Parabeac eggs
-Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
-
-You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
-
-To add a Parabeac egg, download the egg and add it to the `parabeac-core/plugins` folder.  When you run Parabeac-Core it will automatically grab & import the egg into the project.
+Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
 
 # Upcoming & Known Issues
 
