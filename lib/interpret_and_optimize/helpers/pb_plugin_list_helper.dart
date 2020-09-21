@@ -1,8 +1,7 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/plugins/switch.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/plugins/injected_tab.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -31,6 +30,15 @@ class PBPluginListHelper {
   PBPluginListHelper._internal();
 
   Map<String, PBEgg> allowListNames;
+
+  /// List of static plugin names used for Amplitude
+  static List<String> names = [
+    '.*switch',
+    '.*background',
+    '.*navbar',
+    '.*tabbar',
+    '.*tab',
+  ];
 
   List<String> baseNames = ['.*background', '.*navbar', '.*tabbar', '.*tab'];
 
