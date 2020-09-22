@@ -16,11 +16,16 @@ class APICallService {
           await http.get("https://api.figma.com/v1/files/${args[0]}", headers: {
         'X-Figma-Token': '${args[1]}',
       });
-      response = _returnResponse(tempResponse);
+      if (tempResponse.statusCode == 400) {
+        var qFix = File('tempJson.json');
+        response = qFix.readAsStringSync().toString();
+      } else {
+        response = _returnResponse(tempResponse);
+      }
     } on SocketException {
       print('No internet connection.');
     }
-    return json.decode(response.body);
+    return json.decode(response);
   }
 
   dynamic _returnResponse(http.Response response) {
