@@ -15,6 +15,8 @@ class FigmaController extends Controller {
 
     var figmaNodeTree = generateFigmaTree(jsonFigma, outputPath);
 
+    print('hi');
+
     ///TODO:
   }
 

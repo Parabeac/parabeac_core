@@ -28,7 +28,7 @@ class Canvas extends FigmaNode implements FigmaNodeFactory {
   @override
   String type;
 
-  dynamic children;
+  List children;
 
   dynamic backgroundColor;
 
