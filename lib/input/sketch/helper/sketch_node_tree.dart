@@ -9,11 +9,9 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:quick_log/quick_log.dart';
 
-class SketchNodeTree implements NodeTree {
+class SketchNodeTree extends NodeTree {
   @override
   var log = Logger('SketchNodeTree');
-  List<SketchPage> pages = [];
-  List<SketchPage> miscPages = [];
   SketchPage rootScreen;
 
   @override
@@ -71,17 +69,5 @@ class SketchNodeTree implements NodeTree {
       sketchPages.add(pg);
     }
     return sketchPages;
-  }
-
-  Map<String, Object> toJson() {
-    var result = <String, Object>{};
-    result['projectName'] = projectName;
-    for (var page in pages) {
-      result.addAll(page.toJson());
-    }
-    for (var page in miscPages) {
-      result.addAll(page.toJson());
-    }
-    return result;
   }
 }

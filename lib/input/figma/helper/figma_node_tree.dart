@@ -3,7 +3,9 @@ import 'package:parabeac_core/input/figma/helper/figma_page.dart';
 import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:quick_log/src/logger.dart';
 
-class FigmaNodeTree implements NodeTree {
+import 'figma_page_item.dart';
+
+class FigmaNodeTree extends NodeTree {
   @override
   bool debug;
 
@@ -15,13 +17,10 @@ class FigmaNodeTree implements NodeTree {
 
   var figmaJson;
 
-  List<FigmaPage> pages = [];
-
   FigmaPage rootScreen;
 
   FigmaNodeTree(this.projectName, this.figmaJson) {
-    // pages.addAll(_setConventionalPages(figmaJson['document']['children']));
-    _setConventionalPages(figmaJson['document']['children']);
+    pages.addAll(_setConventionalPages(figmaJson['document']['children']));
   }
 
   List<FigmaPage> _setConventionalPages(var canvasAndArtboards) {
@@ -31,6 +30,11 @@ class FigmaNodeTree implements NodeTree {
 
       var node = Canvas.fromJson(canvas);
       print('lole');
+
+      for (var layer in node.children) {
+        pg.addPageItem(FigmaPageItem(layer, pg));
+      }
+      figmaPages.add(pg);
     }
     return figmaPages;
   }
