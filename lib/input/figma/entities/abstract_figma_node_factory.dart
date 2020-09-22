@@ -15,7 +15,7 @@ import 'layers/figma_node.dart';
 import 'layers/vector.dart';
 
 class AbstractFigmaNodeFactory {
-  static final String FIGMA_CLASS_KEY = '_class';
+  static final String FIGMA_CLASS_KEY = 'type';
 
   static final List<FigmaNodeFactory> _figmaNodes = [
     BooleanOperation(),
