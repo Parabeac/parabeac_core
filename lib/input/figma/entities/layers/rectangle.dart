@@ -11,8 +11,9 @@ part 'rectangle.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'RECTANGLE';
   FigmaRectangle({
-    String id,
     String name,
     bool visible,
     String type,
@@ -31,7 +32,6 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
     this.cornerRadius,
     this.rectangleCornerRadii,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

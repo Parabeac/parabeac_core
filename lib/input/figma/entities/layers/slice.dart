@@ -10,7 +10,7 @@ part 'slice.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   @override
-  String UUID;
+  String type = 'SLICE';
 
   String layoutAlign;
 
@@ -27,7 +27,6 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   var size;
 
   FigmaSlice({
-    String id,
     String name,
     bool visible,
     String type,
@@ -38,7 +37,6 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
     Frame this.boundaryRectangle,
     this.size,
   }) : super(
-          id,
           name,
           visible,
           type,

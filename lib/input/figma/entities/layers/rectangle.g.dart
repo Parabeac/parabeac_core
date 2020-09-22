@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vector.dart';
+part of 'rectangle.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
-  return FigmaVector(
+FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
+  return FigmaRectangle(
     name: json['name'] as String,
     visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
     style: json['style'],
-    layoutAlign: json['layoutAlign'] as String,
+    layoutAlign: json['layoutAlign'],
     constraints: json['constraints'],
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
@@ -22,22 +22,26 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
     size: json['size'],
     fills: json['fills'],
     strokes: json['strokes'],
-    strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
-    strokeAlign: json['strokeAlign'] as String,
+    strokeWeight: json['strokeWeight'],
+    strokeAlign: json['strokeAlign'],
     styles: json['styles'],
+    cornerRadius: (json['cornerRadius'] as num)?.toDouble(),
+    rectangleCornerRadii: (json['rectangleCornerRadii'] as List)
+        ?.map((e) => (e as num)?.toDouble())
+        ?.toList(),
   )
-    ..UUID = json['id'] as String
+    ..UUID = json['UUID'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
-Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
+Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
     <String, dynamic>{
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'id': instance.UUID,
+      'UUID': instance.UUID,
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,
@@ -51,4 +55,6 @@ Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
       'type': instance.type,
+      'cornerRadius': instance.cornerRadius,
+      'rectangleCornerRadii': instance.rectangleCornerRadii,
     };

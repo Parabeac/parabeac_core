@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'group.dart';
+part of 'instance.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Group _$GroupFromJson(Map<String, dynamic> json) {
-  return Group(
+Instance _$InstanceFromJson(Map<String, dynamic> json) {
+  return Instance(
     name: json['name'],
     visible: json['visible'],
     type: json['type'],
@@ -28,6 +28,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     horizontalPadding: json['horizontalPadding'],
     verticalPadding: json['verticalPadding'],
     itemSpacing: json['itemSpacing'],
+    componentId: json['componentId'] as String,
   )
     ..UUID = json['UUID'] as String
     ..isVisible = json['isVisible'] as bool
@@ -38,7 +39,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
         ?.toList();
 }
 
-Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'UUID': instance.UUID,
@@ -61,4 +62,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'name': instance.name,
       'visible': instance.visible,
       'type': instance.type,
+      'componentId': instance.componentId,
     };

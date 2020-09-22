@@ -11,8 +11,9 @@ part 'ellipse.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'ELLIPSE';
   FigmaEllipse({
-    String id,
     String name,
     bool visible,
     String type,
@@ -29,7 +30,6 @@ class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
     strokeAlign,
     styles,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

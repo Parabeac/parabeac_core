@@ -8,10 +8,8 @@ part of 'boolean_operation.dart';
 
 BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
   return BooleanOperation()
-    ..id = json['id'] as String
     ..name = json['name'] as String
     ..visible = json['visible'] as bool
-    ..type = json['type'] as String
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
     ..UUID = json['UUID'] as String
@@ -26,15 +24,19 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..strokes = json['strokes']
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
     ..strokeAlign = json['strokeAlign'] as String
-    ..styles = json['styles'];
+    ..styles = json['styles']
+    ..children = (json['children'] as List)
+        ?.map((e) =>
+            e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..booleanOperation = json['booleanOperation'] as String
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'name': instance.name,
       'visible': instance.visible,
-      'type': instance.type,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'UUID': instance.UUID,
@@ -50,4 +52,7 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
+      'children': instance.children,
+      'booleanOperation': instance.booleanOperation,
+      'type': instance.type,
     };

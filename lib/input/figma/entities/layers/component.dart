@@ -12,8 +12,9 @@ part 'component.g.dart';
 
 @JsonSerializable(nullable: true)
 class Component extends FigmaFrame implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'COMPONENT';
   Component({
-    id,
     name,
     visible,
     type,
@@ -34,7 +35,6 @@ class Component extends FigmaFrame implements AbstractFigmaNodeFactory {
     itemSpacing,
     Flow flow,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

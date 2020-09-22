@@ -10,9 +10,6 @@ part 'vector.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   @override
-  String UUID;
-
-  @override
   bool isVisible;
 
   @override
@@ -41,9 +38,10 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   String strokeAlign;
 
   var styles;
+  @override
+  String type = 'VECTOR';
 
   FigmaVector({
-    String id,
     String name,
     bool visible,
     String type,
@@ -60,7 +58,6 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
     this.strokeAlign,
     this.styles,
   }) : super(
-          id,
           name,
           visible,
           type,

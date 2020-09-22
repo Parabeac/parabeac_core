@@ -12,6 +12,10 @@ part 'boolean_operation.g.dart';
 class BooleanOperation extends FigmaVector implements FigmaNodeFactory {
   List<FigmaNode> children;
   String booleanOperation;
+
+  @override
+  String type = 'BOOLEAN_OPERATION';
+
   BooleanOperation();
 
   @override

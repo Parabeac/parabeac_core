@@ -11,8 +11,9 @@ part 'star.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'STAR';
   FigmaStar({
-    String id,
     String name,
     bool visible,
     String type,
@@ -29,7 +30,6 @@ class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
     strokeAlign,
     styles,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

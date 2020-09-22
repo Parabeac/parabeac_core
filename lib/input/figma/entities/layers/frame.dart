@@ -12,9 +12,6 @@ part 'frame.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
   @override
-  String UUID;
-
-  @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
 
@@ -52,16 +49,15 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
 
   double itemSpacing;
 
-  String id;
   String name;
   bool visible;
-  String type;
+  @override
+  String type = 'FRAME';
 
   FigmaFrame({
-    this.id,
-    this.name,
-    this.visible,
-    this.type,
+    name,
+    visible,
+    type,
     pluginData,
     sharedPluginData,
     Frame this.boundaryRectangle,
@@ -79,7 +75,6 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
     this.itemSpacing,
     Flow flow,
   }) : super(
-          id,
           name,
           visible,
           type,

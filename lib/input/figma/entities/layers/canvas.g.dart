@@ -8,10 +8,12 @@ part of 'canvas.dart';
 
 Canvas _$CanvasFromJson(Map<String, dynamic> json) {
   return Canvas(
-    id: json['id'] as String,
     name: json['name'] as String,
     type: json['type'] as String,
-    children: json['children'],
+    children: (json['children'] as List)
+        ?.map((e) =>
+            e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     backgroundColor: json['backgroundColor'],
     prototypeStartNodeID: json['prototypeStartNodeID'],
     prototypeDevice: json['prototypeDevice'],
@@ -20,7 +22,7 @@ Canvas _$CanvasFromJson(Map<String, dynamic> json) {
     ..visible = json['visible'] as bool
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..boundaryRectangle = json['boundaryRectangle']
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
@@ -31,15 +33,14 @@ Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'id': instance.id,
-      'name': instance.name,
       'type': instance.type,
+      'name': instance.name,
       'children': instance.children,
       'backgroundColor': instance.backgroundColor,
       'prototypeStartNodeID': instance.prototypeStartNodeID,
       'prototypeDevice': instance.prototypeDevice,
       'exportSettings': instance.exportSettings,
-      'UUID': instance.UUID,
+      'id': instance.UUID,
       'boundaryRectangle': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'prototypeNodeUUID': instance.prototypeNodeUUID,

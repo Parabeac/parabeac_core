@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vector.dart';
+part of 'regular_polygon.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
-  return FigmaVector(
+FigmaRegularPolygon _$FigmaRegularPolygonFromJson(Map<String, dynamic> json) {
+  return FigmaRegularPolygon(
     name: json['name'] as String,
     visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
     style: json['style'],
-    layoutAlign: json['layoutAlign'] as String,
+    layoutAlign: json['layoutAlign'],
     constraints: json['constraints'],
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
@@ -22,22 +22,23 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
     size: json['size'],
     fills: json['fills'],
     strokes: json['strokes'],
-    strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
-    strokeAlign: json['strokeAlign'] as String,
+    strokeWeight: json['strokeWeight'],
+    strokeAlign: json['strokeAlign'],
     styles: json['styles'],
   )
-    ..UUID = json['id'] as String
+    ..UUID = json['UUID'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
-Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
+Map<String, dynamic> _$FigmaRegularPolygonToJson(
+        FigmaRegularPolygon instance) =>
     <String, dynamic>{
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'id': instance.UUID,
+      'UUID': instance.UUID,
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,

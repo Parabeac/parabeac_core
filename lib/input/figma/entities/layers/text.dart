@@ -11,8 +11,9 @@ part 'text.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'TEXT';
   FigmaText({
-    String id,
     String name,
     bool visible,
     String type,
@@ -32,7 +33,6 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
     this.characterStyleOverrides,
     this.styleOverrideTable,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

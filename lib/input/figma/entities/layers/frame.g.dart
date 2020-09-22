@@ -8,10 +8,9 @@ part of 'frame.dart';
 
 FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
   return FigmaFrame(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    visible: json['visible'] as bool,
-    type: json['type'] as String,
+    name: json['name'],
+    visible: json['visible'],
+    type: json['type'],
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
     boundaryRectangle: json['absoluteBoundingBox'] == null
@@ -30,7 +29,7 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     verticalPadding: (json['verticalPadding'] as num)?.toDouble(),
     itemSpacing: (json['itemSpacing'] as num)?.toDouble(),
   )
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..children = (json['children'] as List)
@@ -43,7 +42,7 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
     <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
+      'id': instance.UUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,
@@ -60,7 +59,6 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'id': instance.id,
       'name': instance.name,
       'visible': instance.visible,
       'type': instance.type,

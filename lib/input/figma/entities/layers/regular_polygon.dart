@@ -12,8 +12,9 @@ part 'regular_polygon.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaRegularPolygon extends FigmaVector
     implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'REGULAR_POLYGON';
   FigmaRegularPolygon({
-    String id,
     String name,
     bool visible,
     String type,
@@ -30,7 +31,6 @@ class FigmaRegularPolygon extends FigmaVector
     strokeAlign,
     styles,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

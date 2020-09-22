@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'group.dart';
+part of 'component.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Group _$GroupFromJson(Map<String, dynamic> json) {
-  return Group(
+Component _$ComponentFromJson(Map<String, dynamic> json) {
+  return Component(
     name: json['name'],
     visible: json['visible'],
     type: json['type'],
@@ -38,7 +38,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
         ?.toList();
 }
 
-Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'UUID': instance.UUID,

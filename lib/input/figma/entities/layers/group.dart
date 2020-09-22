@@ -13,8 +13,9 @@ part 'group.g.dart';
 
 @JsonSerializable(nullable: true)
 class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'GROUP';
   Group({
-    id,
     name,
     visible,
     type,
@@ -35,7 +36,6 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
     itemSpacing,
     Flow flow,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

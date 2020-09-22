@@ -7,7 +7,9 @@ import '../abstract_figma_node_factory.dart';
 
 @JsonSerializable(nullable: true)
 abstract class FigmaNode implements DesignNode {
-  String id;
+  @JsonKey(name: 'id')
+  @override
+  String UUID;
 
   @override
   String name;
@@ -22,7 +24,6 @@ abstract class FigmaNode implements DesignNode {
   var sharedPluginData;
 
   FigmaNode(
-    this.id,
     this.name,
     this.visible,
     this.type,

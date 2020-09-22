@@ -9,8 +9,9 @@ part 'canvas.g.dart';
 
 @JsonSerializable(nullable: true)
 class Canvas extends FigmaNode implements FigmaNodeFactory {
+  @override
+  String type = 'CANVAS';
   Canvas({
-    this.id,
     this.name,
     this.type,
     this.children,
@@ -18,17 +19,13 @@ class Canvas extends FigmaNode implements FigmaNodeFactory {
     this.prototypeStartNodeID,
     this.prototypeDevice,
     this.exportSettings,
-  }) : super(id, name, true, type, null, null);
+  }) : super(name, true, type, null, null);
   // Last two nulls are used for Figma plugins
 
   @override
-  String id;
-  @override
   String name;
-  @override
-  String type;
 
-  List children;
+  List<FigmaNode> children;
 
   dynamic backgroundColor;
 
@@ -45,9 +42,6 @@ class Canvas extends FigmaNode implements FigmaNodeFactory {
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) => Canvas.fromJson(json);
-
-  @override
-  String UUID;
 
   @override
   var boundaryRectangle;

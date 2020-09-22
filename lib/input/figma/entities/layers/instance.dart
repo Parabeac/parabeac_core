@@ -11,8 +11,9 @@ part 'instance.g.dart';
 
 @JsonSerializable(nullable: true)
 class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'INSTANCE';
   Instance({
-    id,
     name,
     visible,
     type,
@@ -34,7 +35,6 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
     Flow flow,
     this.componentId,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,

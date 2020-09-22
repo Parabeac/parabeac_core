@@ -11,8 +11,9 @@ part 'line.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
+  @override
+  String type = 'LINE';
   FigmaLine({
-    String id,
     String name,
     bool visible,
     String type,
@@ -29,7 +30,6 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
     strokeAlign,
     styles,
   }) : super(
-          id: id,
           name: name,
           visible: visible,
           type: type,
