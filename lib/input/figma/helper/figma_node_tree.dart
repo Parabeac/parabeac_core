@@ -29,7 +29,6 @@ class FigmaNodeTree extends NodeTree {
       var pg = FigmaPage(canvas['name']);
 
       var node = Canvas.fromJson(canvas);
-      print('lole');
 
       for (var layer in node.children) {
         pg.addPageItem(FigmaPageItem(layer, pg));
