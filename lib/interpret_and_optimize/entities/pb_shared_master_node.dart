@@ -22,7 +22,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  final SymbolMaster originalRef;
+  final originalRef;
 
   @override
   @JsonKey(ignore: true)
