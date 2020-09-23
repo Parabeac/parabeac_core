@@ -1,5 +1,4 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
