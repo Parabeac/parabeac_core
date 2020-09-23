@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_pa
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'dart:convert';
 part 'shape_path.g.dart';
 
 // title: Shape Path Layer
