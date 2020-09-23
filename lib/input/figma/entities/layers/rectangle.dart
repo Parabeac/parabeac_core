@@ -1,9 +1,12 @@
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/style/border.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'figma_node.dart';
 
@@ -31,6 +34,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
     styles,
     this.cornerRadius,
     this.rectangleCornerRadii,
+    this.points,
   }) : super(
           name: name,
           visible: visible,
@@ -49,6 +53,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
           styles: styles,
         );
 
+  List points;
   double cornerRadius;
 
   List<double> rectangleCornerRadii;
@@ -63,7 +68,23 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+    Border border;
+    for (var b in style.borders.reversed) {
+      if (b.isEnabled) {
+        border = b;
+      }
+    }
+    return Future.value(InheritedContainer(
+      this,
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      currentContext: currentContext,
+      borderInfo: {
+        'borderRadius':
+            style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
+        'borderColorHex': border != null ? border.color.toHex() : null
+      },
+    ));
   }
 }
