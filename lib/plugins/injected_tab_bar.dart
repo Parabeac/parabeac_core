@@ -2,17 +2,13 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/plugins/injected_tab.dart';
+import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
-import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-
-import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/plugins/injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   final String UUID;
