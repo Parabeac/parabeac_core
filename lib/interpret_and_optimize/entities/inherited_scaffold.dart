@@ -1,10 +1,10 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/eggs/injected_app_bar.dart';
+import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
-import 'package:parabeac_core/plugins/injected_app_bar.dart';
-import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
