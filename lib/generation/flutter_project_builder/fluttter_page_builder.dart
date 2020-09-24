@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'dart:io';
 
 class FlutterPageBuilder {
