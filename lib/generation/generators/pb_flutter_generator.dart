@@ -45,7 +45,7 @@ class _${widgetName} extends State<${widgetName}>{
 }''';
   }
 
-  String generateStatelessWidgets(String body, String name) {
+  String generateStatelessWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
     var constructorName = '_$name';
     return '''
@@ -145,7 +145,7 @@ class ${widgetName} extends StatelessWidget{
           return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidgets(
+          return generateStatelessWidget(
               gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.EMPTY_PAGE:
