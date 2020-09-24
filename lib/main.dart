@@ -106,12 +106,16 @@ void main(List<String> args) async {
     }
     var figma = APICallService();
     var jsonOfFigma = await figma.makeAPICall([
-      MainInfo().figmaProjectID,
-      'https://api.figma.com/v1/files/${MainInfo().figmaKey}'
+      'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+      MainInfo().figmaKey
     ]);
-    // Starts Figma to Object
-    FigmaController().convertFile(
-        jsonOfFigma, MainInfo().outputPath + projectName, configurationPath);
+    if (jsonOfFigma != null) {
+      // Starts Figma to Object
+      FigmaController().convertFile(
+          jsonOfFigma, MainInfo().outputPath + projectName, configurationPath);
+    } else {
+      log.error('File was not retrieve it from Figma.');
+    }
   }
 }
 
