@@ -105,8 +105,10 @@ void main(List<String> args) async {
       assert(false, 'Please provided a Figma project ID to proceed.');
     }
     var figma = APICallService();
-    var jsonOfFigma = await figma
-        .makeAPICall([MainInfo().figmaProjectID, MainInfo().figmaKey]);
+    var jsonOfFigma = await figma.makeAPICall([
+      MainInfo().figmaProjectID,
+      'https://api.figma.com/v1/files/${MainInfo().figmaKey}'
+    ]);
     // Starts Figma to Object
     FigmaController().convertFile(
         jsonOfFigma, MainInfo().outputPath + projectName, configurationPath);
