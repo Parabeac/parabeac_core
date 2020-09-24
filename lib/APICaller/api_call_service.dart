@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:http2/http2.dart';
 import 'package:quick_log/quick_log.dart';
 
+import 'api_exceptions.dart';
+
 class APICallService {
   APICallService();
   var log = Logger('API Call Service');
@@ -60,18 +62,22 @@ class APICallService {
   dynamic _returnResponse(int status) {
     switch (status) {
       case 200:
-        print('API call went successfully : ${status}');
+        log.fine('API call went successfully : ${status}');
         break;
       case 400:
         log.error('BadRequestException : ${status}');
+        throw BadRequestException();
         break;
       case 401:
       case 403:
         log.error('UnauthorisedException : ${status}');
+        throw UnauthorisedException();
         break;
       case 500:
       default:
         log.error(
+            'Error occured while Communication with Server with StatusCode : ${status}');
+        throw FetchDataException(
             'Error occured while Communication with Server with StatusCode : ${status}');
         break;
     }
