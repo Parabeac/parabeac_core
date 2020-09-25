@@ -31,14 +31,13 @@ class PBPaddingGen extends PBGenerator {
 
     final paddingPositions = ['left', 'right', 'bottom', 'top'];
     var reflectedPadding = reflect(padding);
-    paddingPositions.forEach((String position) {
+    for (var position in paddingPositions) {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;
       if (value != null) {
         buffer.write(
             '$position: ${relativePadding(BUILDER_TYPE.BODY, false, value)},');
       }
-    });
-
+    }
     buffer.write('),');
 
     if (source.child != null) {
