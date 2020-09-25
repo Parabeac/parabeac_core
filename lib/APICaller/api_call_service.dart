@@ -8,12 +8,15 @@ import 'api_exceptions.dart';
 
 class APICallService {
   APICallService();
-  var log = Logger('API Call Service');
+  static var log = Logger('API Call Service');
 
-  Future<dynamic> makeAPICall(List<String> args) async {
+  static Future<dynamic> makeAPICall(String url, String token) async {
     var response;
-    var uri = Uri.parse('${args[0]}');
+    var uri = Uri.parse(url);
 
+    /// The following request must be done using http2. The reason is
+    /// that the Figma API enforces http2, so using regular http will
+    /// not work.
     try {
       var transport = ClientTransportConnection.viaSocket(
         await SecureSocket.connect(
@@ -29,7 +32,7 @@ class APICallService {
           Header.ascii(':path', uri.path),
           Header.ascii(':scheme', uri.scheme),
           Header.ascii(':authority', uri.host),
-          Header.ascii('x-figma-token', args[1]),
+          Header.ascii('x-figma-token', token),
         ],
         endStream: true,
       );
@@ -59,7 +62,7 @@ class APICallService {
     }
   }
 
-  dynamic _returnResponse(int status) {
+  static dynamic _returnResponse(int status) {
     switch (status) {
       case 200:
         log.fine('API call went successfully : ${status}');
@@ -70,7 +73,7 @@ class APICallService {
         break;
       case 401:
       case 403:
-        log.error('UnauthorisedException : ${status}');
+        log.error('UnauthorizedException : ${status}');
         throw UnauthorisedException();
         break;
       case 500:

@@ -30,7 +30,7 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     itemSpacing: json['itemSpacing'],
     componentId: json['componentId'] as String,
   )
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..children = (json['children'] as List)
@@ -40,9 +40,9 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
+      'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,

@@ -8,9 +8,7 @@ part of 'pb_shared_master_node.dart';
 
 PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
   return PBSharedMasterNode(
-    json['originalRef'] == null
-        ? null
-        : SymbolMaster.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
     json['SYMBOL_ID'] as String,
     json['name'] as String,
     json['topLeftCorner'] == null

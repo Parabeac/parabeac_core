@@ -28,20 +28,20 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     horizontalPadding: json['horizontalPadding'],
     verticalPadding: json['verticalPadding'],
     itemSpacing: json['itemSpacing'],
-  )
-    ..UUID = json['UUID'] as String
-    ..isVisible = json['isVisible'] as bool
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = (json['children'] as List)
+    children: (json['children'] as List)
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList(),
+    UUID: json['id'] as String,
+  )
+    ..isVisible = json['isVisible'] as bool
+    ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+      'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,

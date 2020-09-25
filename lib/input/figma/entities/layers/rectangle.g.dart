@@ -29,19 +29,20 @@ FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
     rectangleCornerRadii: (json['rectangleCornerRadii'] as List)
         ?.map((e) => (e as num)?.toDouble())
         ?.toList(),
+    points: json['points'] as List,
   )
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,
@@ -55,6 +56,7 @@ Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
       'type': instance.type,
+      'points': instance.points,
       'cornerRadius': instance.cornerRadius,
       'rectangleCornerRadii': instance.rectangleCornerRadii,
     };

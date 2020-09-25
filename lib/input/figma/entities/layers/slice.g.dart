@@ -28,12 +28,12 @@ FigmaSlice _$FigmaSliceFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FigmaSliceToJson(FigmaSlice instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'type': instance.type,
-      'id': instance.UUID,
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,
       'transitionNodeID': instance.prototypeNodeUUID,

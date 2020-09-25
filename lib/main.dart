@@ -104,17 +104,16 @@ void main(List<String> args) async {
         MainInfo().figmaProjectID.isEmpty) {
       assert(false, 'Please provided a Figma project ID to proceed.');
     }
-    var figma = APICallService();
-    var jsonOfFigma = await figma.makeAPICall([
-      'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
-      MainInfo().figmaKey
-    ]);
+    var jsonOfFigma = await APICallService.makeAPICall(
+        'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+        MainInfo().figmaKey);
+
     if (jsonOfFigma != null) {
       // Starts Figma to Object
       FigmaController().convertFile(
           jsonOfFigma, MainInfo().outputPath + projectName, configurationPath);
     } else {
-      log.error('File was not retrieve it from Figma.');
+      log.error('File was not retrieved from Figma.');
     }
   }
 }

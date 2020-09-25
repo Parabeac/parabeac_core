@@ -28,8 +28,13 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     horizontalPadding: json['horizontalPadding'],
     verticalPadding: json['verticalPadding'],
     itemSpacing: json['itemSpacing'],
+    overrideProperties: (json['overrideProperties'] as List)
+        ?.map((e) => e == null
+            ? null
+            : OverridableProperty.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   )
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..children = (json['children'] as List)
@@ -39,9 +44,9 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
+      'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,
@@ -61,4 +66,5 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'name': instance.name,
       'visible': instance.visible,
       'type': instance.type,
+      'overrideProperties': instance.overrideProperties,
     };

@@ -54,32 +54,35 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
   @override
   String type = 'FRAME';
 
-  FigmaFrame({
-    name,
-    visible,
-    type,
-    pluginData,
-    sharedPluginData,
-    Frame this.boundaryRectangle,
-    this.style,
-    this.fills,
-    this.strokes,
-    this.strokeWeight,
-    this.strokeAlign,
-    this.cornerRadius,
-    this.constraints,
-    this.layoutAlign,
-    this.size,
-    this.horizontalPadding,
-    this.verticalPadding,
-    this.itemSpacing,
-    Flow flow,
-  }) : super(
+  FigmaFrame(
+      {name,
+      visible,
+      type,
+      pluginData,
+      sharedPluginData,
+      Frame this.boundaryRectangle,
+      this.style,
+      this.fills,
+      this.strokes,
+      this.strokeWeight,
+      this.strokeAlign,
+      this.cornerRadius,
+      this.constraints,
+      this.layoutAlign,
+      this.size,
+      this.horizontalPadding,
+      this.verticalPadding,
+      this.itemSpacing,
+      this.children,
+      Flow flow,
+      String UUID})
+      : super(
           name,
           visible,
           type,
           pluginData,
           sharedPluginData,
+          UUID: UUID,
         );
 
   @override

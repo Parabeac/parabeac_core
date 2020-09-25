@@ -28,21 +28,21 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     horizontalPadding: (json['horizontalPadding'] as num)?.toDouble(),
     verticalPadding: (json['verticalPadding'] as num)?.toDouble(),
     itemSpacing: (json['itemSpacing'] as num)?.toDouble(),
-  )
-    ..UUID = json['id'] as String
-    ..isVisible = json['isVisible'] as bool
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = (json['children'] as List)
+    children: (json['children'] as List)
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList(),
+    UUID: json['id'] as String,
+  )
+    ..isVisible = json['isVisible'] as bool
+    ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'id': instance.UUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,

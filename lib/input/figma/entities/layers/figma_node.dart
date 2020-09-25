@@ -28,8 +28,9 @@ abstract class FigmaNode implements DesignNode {
     this.visible,
     this.type,
     this.pluginData,
-    this.sharedPluginData,
-  );
+    this.sharedPluginData, {
+    this.UUID,
+  });
 
   @override
   Map<String, dynamic> toJson();

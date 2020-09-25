@@ -31,17 +31,17 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
         ?.toList(),
     styleOverrideTable: json['styleOverrideTable'] as Map<String, dynamic>,
   )
-    ..UUID = json['UUID'] as String
+    ..UUID = json['id'] as String
     ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'isVisible': instance.isVisible,
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,

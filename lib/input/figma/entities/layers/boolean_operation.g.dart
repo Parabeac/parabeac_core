@@ -8,11 +8,11 @@ part of 'boolean_operation.dart';
 
 BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
   return BooleanOperation()
+    ..UUID = json['id'] as String
     ..name = json['name'] as String
     ..visible = json['visible'] as bool
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
-    ..UUID = json['UUID'] as String
     ..isVisible = json['isVisible'] as bool
     ..style = json['style']
     ..layoutAlign = json['layoutAlign'] as String
@@ -35,11 +35,11 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'UUID': instance.UUID,
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,

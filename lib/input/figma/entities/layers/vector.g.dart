@@ -33,11 +33,11 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'id': instance.UUID,
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,
