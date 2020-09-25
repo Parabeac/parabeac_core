@@ -1,3 +1,5 @@
+import 'dart:mirrors';
+
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -19,36 +21,32 @@ class PBPaddingGen extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source) {
-    if (source is Padding) {
-      var buffer = StringBuffer();
-      buffer.write('Padding(');
-      buffer.write('padding: EdgeInsets.only(');
-      if (source.left != null) {
-        buffer.write(
-            'left: ${relativePadding(BUILDER_TYPE.BODY, false, source.left)},');
-      }
-      if (source.right != null) {
-        buffer.write(
-            'right: ${relativePadding(BUILDER_TYPE.BODY, false, source.right)},');
-      }
-      if (source.bottom != null) {
-        buffer.write(
-            'bottom: ${relativePadding(BUILDER_TYPE.BODY, true, source.bottom)},');
-      }
-      if (source.top != null) {
-        buffer.write(
-            'top: ${relativePadding(BUILDER_TYPE.BODY, true, source.top)},');
-      }
-      buffer.write('),');
-      if (source.child != null) {
-        var statement = source.child != null
-            ? 'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)}'
-            : '';
-        buffer.write(statement);
-      }
-      buffer.write(')');
-      return buffer.toString();
+    if (!(source is Padding)) {
+      return '';
     }
-    return '';
+    final padding = source as Padding;
+    var buffer = StringBuffer();
+    buffer.write('Padding(');
+    buffer.write('padding: EdgeInsets.only(');
+
+    final paddingPositions = ['left', 'right', 'bottom', 'top'];
+    var reflectedPadding = reflect(padding);
+    paddingPositions.forEach((String position) {
+      var value = reflectedPadding.getField(Symbol(position)).reflectee;
+      if (value != null) {
+        buffer.write(
+            '$position: ${relativePadding(BUILDER_TYPE.BODY, false, value)},');
+      }
+    });
+
+    buffer.write('),');
+
+    if (source.child != null) {
+      buffer.write(
+          'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)}');
+    }
+    buffer.write(')');
+
+    return buffer.toString();
   }
 }
