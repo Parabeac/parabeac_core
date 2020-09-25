@@ -1,10 +1,8 @@
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 import '../pb_flutter_generator.dart';
 import '../pb_generator.dart';
-import '../pb_widget_manager.dart';
 
 class PBPaddingGen extends PBGenerator {
   PBPaddingGen() : super('PADDING');

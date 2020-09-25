@@ -14,8 +14,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:quick_log/quick_log.dart';
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -121,6 +121,19 @@ class FlutterProjectBuilder {
         runInShell: true,
         environment: Platform.environment,
         workingDirectory: '${MainInfo().outputPath}');
+
+    log.info(
+      Process.runSync(
+              'dartfmt',
+              [
+                '-w',
+                '${pathToFlutterProject}bin',
+                '${pathToFlutterProject}lib',
+                '${pathToFlutterProject}test'
+              ],
+              workingDirectory: MainInfo().outputPath)
+          .stdout,
+    );
   }
 
   /// Traverse the [node] tree, check if any nodes need importing,
