@@ -8,14 +8,13 @@ class PBPaddingGen extends PBGenerator {
   PBPaddingGen() : super('PADDING');
 
   String relativePadding(BUILDER_TYPE type, bool isVertical, double value) {
+    var fixedValue = value.toStringAsFixed(2);
     if (type != null) {
-      if (isVertical) {
-        return 'MediaQuery.of(context).size.height * ${(value).toStringAsFixed(2)}';
-      } else {
-        return 'MediaQuery.of(context).size.width * ${(value).toStringAsFixed(2)}';
-      }
+      var property = isVertical ? 'height' : 'width';
+      return 'MediaQuery.of(context).size.$property * $fixedValue';
     }
-    return '${value.toStringAsFixed(2)}';
+
+    return '$fixedValue';
   }
 
   @override
