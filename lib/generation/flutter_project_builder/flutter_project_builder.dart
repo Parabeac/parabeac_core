@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
@@ -186,7 +187,7 @@ class FlutterProjectBuilder {
     var pageWriter = PBFlutterWriter();
 
     for (var directory in mainTree.groups) {
-      var directoryName = directory.name.toLowerCase().replaceAll(' ', '_');
+      var directoryName = directory.name.snakeCase;
       var flutterGenerator;
       var importSet = <String>[];
       var bodyBuffer, constructorBuffer;
@@ -209,9 +210,9 @@ class FlutterProjectBuilder {
 
         var name = isSymbolsDir ? SYMBOL_DIR_NAME : fileName;
         var symbolFilePath =
-            '${projectName}/lib/screens/${directoryName}/${name.toLowerCase()}.dart';
+            '${projectName}/lib/screens/${directoryName}/${name.snakeCase}.dart';
         var fileNamePath =
-            '${projectName}/lib/screens/${directoryName}/${fileName.toLowerCase()}.dart';
+            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         // TODO: Need FlutterGenerator for each page because otherwise
         // we'd add all imports to every single dart page. Discuss alternatives
         if (!isSymbolsDir) {
