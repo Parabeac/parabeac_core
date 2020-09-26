@@ -122,6 +122,19 @@ class FlutterProjectBuilder {
         runInShell: true,
         environment: Platform.environment,
         workingDirectory: '${MainInfo().outputPath}');
+
+    log.info(
+      Process.runSync(
+              'dartfmt',
+              [
+                '-w',
+                '${pathToFlutterProject}bin',
+                '${pathToFlutterProject}lib',
+                '${pathToFlutterProject}test'
+              ],
+              workingDirectory: MainInfo().outputPath)
+          .stdout,
+    );
   }
 
   /// Traverse the [node] tree, check if any nodes need importing,
