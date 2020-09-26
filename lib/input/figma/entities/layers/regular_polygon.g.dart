@@ -9,7 +9,6 @@ part of 'regular_polygon.dart';
 FigmaRegularPolygon _$FigmaRegularPolygonFromJson(Map<String, dynamic> json) {
   return FigmaRegularPolygon(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -36,7 +35,6 @@ Map<String, dynamic> _$FigmaRegularPolygonToJson(
     <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

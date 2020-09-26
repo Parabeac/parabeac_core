@@ -9,7 +9,6 @@ part of 'slice.dart';
 FigmaSlice _$FigmaSliceFromJson(Map<String, dynamic> json) {
   return FigmaSlice(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -22,7 +21,7 @@ FigmaSlice _$FigmaSliceFromJson(Map<String, dynamic> json) {
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..isVisible = json['isVisible'] as bool
+    ..isVisible = json['visible'] as bool ?? true
     ..style = json['style'];
 }
 
@@ -30,7 +29,6 @@ Map<String, dynamic> _$FigmaSliceToJson(FigmaSlice instance) =>
     <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'type': instance.type,
@@ -39,6 +37,6 @@ Map<String, dynamic> _$FigmaSliceToJson(FigmaSlice instance) =>
       'transitionNodeID': instance.prototypeNodeUUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
-      'isVisible': instance.isVisible,
+      'visible': instance.isVisible,
       'style': instance.style,
     };

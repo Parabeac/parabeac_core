@@ -9,7 +9,6 @@ part of 'ellipse.dart';
 FigmaEllipse _$FigmaEllipseFromJson(Map<String, dynamic> json) {
   return FigmaEllipse(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -35,7 +34,6 @@ Map<String, dynamic> _$FigmaEllipseToJson(FigmaEllipse instance) =>
     <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

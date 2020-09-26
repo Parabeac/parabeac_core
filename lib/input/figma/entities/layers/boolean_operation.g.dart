@@ -10,7 +10,6 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
   return BooleanOperation()
     ..UUID = json['id'] as String
     ..name = json['name'] as String
-    ..visible = json['visible'] as bool
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
     ..isVisible = json['isVisible'] as bool
@@ -37,7 +36,6 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
     <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

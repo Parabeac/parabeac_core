@@ -16,9 +16,6 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
   var boundaryRectangle;
 
   @override
-  bool isVisible;
-
-  @override
   @JsonKey(name: 'transitionNodeID')
   String prototypeNodeUUID;
 
@@ -49,14 +46,12 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
 
   double itemSpacing;
 
-  String name;
-  bool visible;
   @override
   String type = 'FRAME';
 
   FigmaFrame(
       {name,
-      visible,
+      isVisible,
       type,
       pluginData,
       sharedPluginData,
@@ -78,7 +73,7 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
       String UUID})
       : super(
           name,
-          visible,
+          isVisible,
           type,
           pluginData,
           sharedPluginData,

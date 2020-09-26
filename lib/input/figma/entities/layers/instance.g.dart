@@ -9,7 +9,7 @@ part of 'instance.dart';
 Instance _$InstanceFromJson(Map<String, dynamic> json) {
   return Instance(
     name: json['name'],
-    visible: json['visible'],
+    isVisible: json['visible'] ?? true,
     type: json['type'],
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -31,7 +31,6 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     componentId: json['componentId'] as String,
   )
     ..UUID = json['id'] as String
-    ..isVisible = json['isVisible'] as bool
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..children = (json['children'] as List)
         ?.map((e) =>
@@ -43,8 +42,8 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
+      'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
-      'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,
       'style': instance.style,
       'children': instance.children,
@@ -60,7 +59,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'name': instance.name,
-      'visible': instance.visible,
       'type': instance.type,
       'componentId': instance.componentId,
     };

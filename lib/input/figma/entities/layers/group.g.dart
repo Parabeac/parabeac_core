@@ -9,7 +9,7 @@ part of 'group.dart';
 Group _$GroupFromJson(Map<String, dynamic> json) {
   return Group(
     name: json['name'],
-    visible: json['visible'],
+    isVisible: json['visible'] ?? true,
     type: json['type'],
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -33,17 +33,15 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     UUID: json['id'] as String,
-  )
-    ..isVisible = json['isVisible'] as bool
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+  )..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'id': instance.UUID,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
+      'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
-      'isVisible': instance.isVisible,
       'transitionNodeID': instance.prototypeNodeUUID,
       'style': instance.style,
       'children': instance.children,
@@ -59,6 +57,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'name': instance.name,
-      'visible': instance.visible,
       'type': instance.type,
     };

@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
@@ -20,7 +22,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
   String type = 'GROUP';
   Group(
       {name,
-      visible,
+      isVisible,
       type,
       pluginData,
       sharedPluginData,
@@ -42,7 +44,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
       String UUID})
       : super(
           name: name,
-          visible: visible,
+          isVisible: isVisible,
           type: type,
           pluginData: pluginData,
           sharedPluginData: sharedPluginData,
@@ -62,7 +64,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
           flow: flow,
           children: children,
           UUID: UUID,
-        ) {}
+        );
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) => Group.fromJson(json);
@@ -73,9 +75,11 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     //TODO: make api call to get image here
-    if (children != null &&
-        children.every((element) =>
-            element is FigmaVector && element is! FigmaRectangle)) {
+    if (children != null && children.first is FigmaVector) {
+      var response = await APICallService.makeAPICall(
+          'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+          MainInfo().figmaKey);
+      print('');
       return Future.value(InheritedBitmap(this));
     }
     return Future.value(TempGroupLayoutNode(this, currentContext,

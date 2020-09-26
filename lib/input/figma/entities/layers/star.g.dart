@@ -9,7 +9,6 @@ part of 'star.dart';
 FigmaStar _$FigmaStarFromJson(Map<String, dynamic> json) {
   return FigmaStar(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -34,7 +33,6 @@ FigmaStar _$FigmaStarFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$FigmaStarToJson(FigmaStar instance) => <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

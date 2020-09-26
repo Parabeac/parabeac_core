@@ -9,7 +9,6 @@ part of 'rectangle.dart';
 FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
   return FigmaRectangle(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -40,7 +39,6 @@ Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
     <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

@@ -9,7 +9,6 @@ part of 'text.dart';
 FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
   return FigmaText(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -39,7 +38,6 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,

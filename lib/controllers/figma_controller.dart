@@ -1,6 +1,9 @@
 import 'package:parabeac_core/controllers/controller.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/input/figma/helper/figma_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
+
+import 'interpret.dart';
 
 class FigmaController extends Controller {
   ///SERVICE
@@ -15,9 +18,14 @@ class FigmaController extends Controller {
 
     var figmaNodeTree = generateFigmaTree(jsonFigma, outputPath);
 
-    print('hi');
+    Interpret().init(outputPath);
 
-    ///TODO:
+    var mainTree = await Interpret().interpretAndOptimize(figmaNodeTree);
+
+    var fpb =
+        FlutterProjectBuilder(projectName: outputPath, mainTree: mainTree);
+
+    fpb.convertToFlutterProject();
   }
 
   FigmaNodeTree generateFigmaTree(var jsonFigma, var projectname) {

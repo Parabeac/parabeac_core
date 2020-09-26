@@ -20,18 +20,16 @@ Canvas _$CanvasFromJson(Map<String, dynamic> json) {
     exportSettings: json['exportSettings'],
   )
     ..UUID = json['id'] as String
-    ..visible = json['visible'] as bool
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
     ..boundaryRectangle = json['boundaryRectangle']
-    ..isVisible = json['isVisible'] as bool
+    ..isVisible = json['visible'] as bool ?? true
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..style = json['style'];
 }
 
 Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'id': instance.UUID,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'type': instance.type,
@@ -42,7 +40,7 @@ Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'prototypeDevice': instance.prototypeDevice,
       'exportSettings': instance.exportSettings,
       'boundaryRectangle': instance.boundaryRectangle,
-      'isVisible': instance.isVisible,
+      'visible': instance.isVisible,
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'style': instance.style,
     };

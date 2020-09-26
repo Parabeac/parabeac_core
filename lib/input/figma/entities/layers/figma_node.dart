@@ -14,8 +14,6 @@ abstract class FigmaNode implements DesignNode {
   @override
   String name;
 
-  bool visible = true;
-
   @override
   String type;
 
@@ -23,15 +21,18 @@ abstract class FigmaNode implements DesignNode {
 
   var sharedPluginData;
 
+  @override
+  @JsonKey(name: 'visible', defaultValue: true)
+  bool isVisible;
+
   FigmaNode(
     this.name,
-    this.visible,
+    this.isVisible,
     this.type,
     this.pluginData,
     this.sharedPluginData, {
     this.UUID,
   });
-
   @override
   Map<String, dynamic> toJson();
   factory FigmaNode.fromJson(Map<String, dynamic> json) =>

@@ -15,7 +15,7 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
   String type = 'INSTANCE';
   Instance({
     name,
-    visible,
+    isVisible,
     type,
     pluginData,
     sharedPluginData,
@@ -36,7 +36,7 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
     this.componentId,
   }) : super(
           name: name,
-          visible: visible,
+          isVisible: isVisible,
           type: type,
           pluginData: pluginData,
           sharedPluginData: sharedPluginData,

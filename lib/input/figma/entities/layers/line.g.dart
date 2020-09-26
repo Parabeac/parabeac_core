@@ -9,7 +9,6 @@ part of 'line.dart';
 FigmaLine _$FigmaLineFromJson(Map<String, dynamic> json) {
   return FigmaLine(
     name: json['name'] as String,
-    visible: json['visible'] as bool,
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
@@ -34,7 +33,6 @@ FigmaLine _$FigmaLineFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$FigmaLineToJson(FigmaLine instance) => <String, dynamic>{
       'id': instance.UUID,
       'name': instance.name,
-      'visible': instance.visible,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'isVisible': instance.isVisible,
