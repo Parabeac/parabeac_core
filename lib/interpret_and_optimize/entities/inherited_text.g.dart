@@ -29,7 +29,6 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     ..widgetType = json['widgetType'] as String
     ..fontSize = json['fontSize'] as num
     ..fontName = json['fontName'] as String
-    ..weight = json['weight'] as String
     ..textAlignment = json['textAlignment'] as String;
 }
 
@@ -51,6 +50,5 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'widgetType': instance.widgetType,
       'fontSize': instance.fontSize,
       'fontName': instance.fontName,
-      'weight': instance.weight,
       'textAlignment': instance.textAlignment,
     };
