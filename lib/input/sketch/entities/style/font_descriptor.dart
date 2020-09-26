@@ -9,6 +9,10 @@ class FontDescriptor {
   String fontName;
   @JsonKey(ignore: true)
   num fontSize;
+  @JsonKey(ignore: true)
+  String fontWeight;
+  @JsonKey(ignore: true)
+  String fontStyle;
 
   FontDescriptor({this.rawAttributes}) {
     fontSize = rawAttributes['size'];
