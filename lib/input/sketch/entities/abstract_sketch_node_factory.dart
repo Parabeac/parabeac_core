@@ -4,12 +4,15 @@ import 'package:parabeac_core/input/sketch/entities/layers/bitmap.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/group.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/oval.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/page.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/polygon.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/rectangle.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/shape_group.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/shape_path.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/star.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/sketch_text.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/triangle.dart';
 
 ///Abstract Factory for [SketchNode]
 class AbstractSketchNodeFactory {
@@ -22,12 +25,15 @@ class AbstractSketchNodeFactory {
     Group(),
     Oval(),
     Page(),
+    Polygon(),
     Rectangle(),
     ShapeGroup(),
     ShapePath(),
     SymbolInstance(),
     SymbolMaster(),
-    SketchText()
+    SketchText(),
+    Star(),
+    Triangle()
   ];
 
   AbstractSketchNodeFactory();
