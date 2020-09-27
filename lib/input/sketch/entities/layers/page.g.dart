@@ -10,7 +10,7 @@ Page _$PageFromJson(Map<String, dynamic> json) {
   return Page(
     hasClickThrough: json['hasClickThrough'] as bool,
     groupLayout: json['groupLayout'],
-    layers: (json['layers'] as List)
+    children: (json['layers'] as List)
         ?.map((e) =>
             e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -77,7 +77,6 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
       'CLASS_NAME': instance.CLASS_NAME,
       'includeInCloudUpload': instance.includeInCloudUpload,
       'horizontalRulerData': instance.horizontalRulerData,
@@ -87,6 +86,7 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
       '_class': instance.type,
+      'layers': instance.children,
       'isVisible': instance.isVisible,
       'style': instance.style,
     };

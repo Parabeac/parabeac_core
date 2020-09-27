@@ -11,7 +11,7 @@ class Document extends AbstractDocument {
 
   Document(
       this.pages,
-      do_objectID,
+      UUID,
       assets,
       colorSpace,
       currentPageIndex,
@@ -25,7 +25,7 @@ class Document extends AbstractDocument {
       bool autoEmbedFonts,
       bool agreedToFontEmbedding)
       : super(
-            do_objectID,
+            UUID,
             assets,
             colorSpace,
             currentPageIndex,

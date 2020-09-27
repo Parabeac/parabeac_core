@@ -12,10 +12,10 @@ class PositionalCleansingService {
   DesignNode eliminateOffset(DesignNode rootNode) {
     if (rootNode is Group || rootNode is Artboard || rootNode is SymbolMaster) {
       _eliminateOffsetChildren(
-          (rootNode as AbstractGroupLayer).layers, rootNode);
+          (rootNode as AbstractGroupLayer).children, rootNode);
     }
     if (rootNode is AbstractGroupLayer) {
-      rootNode.layers.map((layerNode) => eliminateOffset(layerNode)).toList();
+      rootNode.children.map((layerNode) => eliminateOffset(layerNode)).toList();
     }
     return rootNode;
   }

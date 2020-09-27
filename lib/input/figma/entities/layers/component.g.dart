@@ -33,17 +33,18 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
             ? null
             : OverridableProperty.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-  )
-    ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = (json['children'] as List)
+    children: (json['children'] as List)
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList(),
+  )
+    ..UUID = json['id'] as String
+    ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'id': instance.UUID,
+      'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
@@ -62,7 +63,6 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'name': instance.name,
       'type': instance.type,
       'overrideProperties': instance.overrideProperties,
     };

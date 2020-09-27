@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
@@ -10,7 +11,7 @@ import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 part 'frame.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
+class FigmaFrame extends FigmaNode implements FigmaNodeFactory, GroupNode {
   @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
@@ -22,7 +23,8 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
   @override
   var style;
 
-  List<FigmaNode> children;
+  @override
+  List children;
 
   var fills;
 
@@ -68,7 +70,7 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory {
       this.horizontalPadding,
       this.verticalPadding,
       this.itemSpacing,
-      this.children,
+      List<FigmaNode> this.children,
       Flow flow,
       String UUID})
       : super(

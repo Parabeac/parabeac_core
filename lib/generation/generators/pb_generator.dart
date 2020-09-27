@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 abstract class PBGenerator {
   final String WIDGET_TYPE_IDENTIFIER = 'widgetType';
-  final String OBJECTID = 'do_objectID';
+  final String OBJECTID = 'UUID';
   final String widgetType;
   PBGenerationManager _manager;
   set manager (PBGenerationManager generationManager) => _manager = generationManager;

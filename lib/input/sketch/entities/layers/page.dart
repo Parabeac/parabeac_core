@@ -40,6 +40,10 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
   Style _style;
 
   @override
+  @JsonKey(name: 'layers')
+  List children;
+
+  @override
   void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
@@ -54,7 +58,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
   Page(
       {bool hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,
@@ -83,7 +87,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
         super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             UUID,
             booleanOperation,
             exportOptions,

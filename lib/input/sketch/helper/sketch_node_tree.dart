@@ -63,7 +63,7 @@ class SketchNodeTree extends NodeTree {
       var node = Page.fromJson(jsonData); // Actual Sketch Node
 
       // Turn layers into PBNodes
-      for (var layer in node.layers) {
+      for (var layer in node.children) {
         pg.addPageItem(SketchPageItem(layer, pg));
       }
       sketchPages.add(pg);

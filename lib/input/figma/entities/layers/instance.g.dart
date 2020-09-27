@@ -32,14 +32,12 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = (json['children'] as List)
-        ?.map((e) =>
-            e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+    ..children = json['children'] as List;
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'id': instance.UUID,
+      'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
@@ -58,7 +56,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'name': instance.name,
       'type': instance.type,
       'componentId': instance.componentId,
     };

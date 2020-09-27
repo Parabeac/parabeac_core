@@ -18,7 +18,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
   String type = 'RECTANGLE';
   FigmaRectangle({
     String name,
-    bool visible,
+    bool isVisible,
     String type,
     pluginData,
     sharedPluginData,
@@ -37,7 +37,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
     this.points,
   }) : super(
           name: name,
-          visible: visible,
+          visible: isVisible,
           type: type,
           pluginData: pluginData,
           sharedPluginData: sharedPluginData,
@@ -69,7 +69,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
     Border border;
-    for (var b in style.borders.reversed) {
+    for (var b in style?.borders?.reversed ?? []) {
       if (b.isEnabled) {
         border = b;
       }
@@ -81,8 +81,9 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
           boundaryRectangle.y + boundaryRectangle.height),
       currentContext: currentContext,
       borderInfo: {
-        'borderRadius':
-            style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
+        'borderRadius': (style != null && style.borderOptions.isEnabled)
+            ? points[0]['cornerRadius']
+            : null,
         'borderColorHex': border != null ? border.color.toHex() : null
       },
     ));

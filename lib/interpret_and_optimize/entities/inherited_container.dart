@@ -64,7 +64,7 @@ class InheritedContainer extends PBVisualIntermediateNode
       'height': originalRef.boundaryRectangle.height,
     };
 
-    if (originalRef.style.fills.isNotEmpty) {
+    if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
           color = fill.color.toHex();

@@ -12,7 +12,8 @@ part 'style.g.dart';
 class Style {
   @JsonKey(name: '_class')
   final String classField;
-  final String do_objectID;
+  @JsonKey(name: 'do_objectID')
+  final String UUID;
   final int endMarkerType, miterLimit, startMarkerType, windingRule;
   final Blur blur;
   final BorderOptions borderOptions;
@@ -30,7 +31,7 @@ class Style {
     this.classField,
     this.colorControls,
     this.contextSettings,
-    this.do_objectID,
+    this.UUID,
     this.endMarkerType,
     this.fills,
     this.innerShadows,

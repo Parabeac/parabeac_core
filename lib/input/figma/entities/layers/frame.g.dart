@@ -39,6 +39,7 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
     <String, dynamic>{
       'id': instance.UUID,
+      'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
@@ -57,6 +58,5 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'name': instance.name,
       'type': instance.type,
     };

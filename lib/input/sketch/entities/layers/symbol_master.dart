@@ -66,10 +66,14 @@ class SymbolMaster extends AbstractGroupLayer
   @override
   Style get style => _style;
 
+  @override
+  @JsonKey(name: 'layers')
+  List children;
+
   SymbolMaster(
       {bool hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,
@@ -112,7 +116,7 @@ class SymbolMaster extends AbstractGroupLayer
         super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             UUID,
             booleanOperation,
             exportOptions,

@@ -40,6 +40,7 @@ class Component extends FigmaFrame
     itemSpacing,
     Flow flow,
     this.overrideProperties,
+    List<FigmaNode> children,
   }) : super(
           name: name,
           isVisible: isVisible,
@@ -60,6 +61,7 @@ class Component extends FigmaFrame
           verticalPadding: verticalPadding,
           itemSpacing: itemSpacing,
           flow: flow,
+          children: children,
         );
 
   final List<OverridableProperty> overrideProperties;
@@ -88,7 +90,7 @@ class Component extends FigmaFrame
       Point(boundaryRectangle.x, boundaryRectangle.y),
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
-      overridableProperties: _extractParameters(),
+      overridableProperties: _extractParameters() ?? [],
       currentContext: currentContext,
     );
     return Future.value(sym_master);

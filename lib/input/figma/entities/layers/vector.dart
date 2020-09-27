@@ -10,9 +10,6 @@ part 'vector.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   @override
-  bool isVisible;
-
-  @override
   var style;
 
   String layoutAlign;

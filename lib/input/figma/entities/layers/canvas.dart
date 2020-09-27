@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -8,13 +9,13 @@ import '../abstract_figma_node_factory.dart';
 part 'canvas.g.dart';
 
 @JsonSerializable(nullable: true)
-class Canvas extends FigmaNode implements FigmaNodeFactory {
+class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
   @override
   String type = 'CANVAS';
   Canvas({
     this.name,
     this.type,
-    this.children,
+    List<FigmaNode> this.children,
     this.backgroundColor,
     this.prototypeStartNodeID,
     this.prototypeDevice,
@@ -25,7 +26,8 @@ class Canvas extends FigmaNode implements FigmaNodeFactory {
   @override
   String name;
 
-  List<FigmaNode> children;
+  @override
+  List children;
 
   dynamic backgroundColor;
 
@@ -45,9 +47,6 @@ class Canvas extends FigmaNode implements FigmaNodeFactory {
 
   @override
   var boundaryRectangle;
-
-  @override
-  bool isVisible;
 
   @override
   String prototypeNodeUUID;

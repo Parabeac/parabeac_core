@@ -10,7 +10,7 @@ ShapeGroup _$ShapeGroupFromJson(Map<String, dynamic> json) {
   return ShapeGroup(
     hasClickThrough: json['hasClickThrough'] as bool,
     groupLayout: json['groupLayout'],
-    layers: (json['layers'] as List)
+    children: (json['layers'] as List)
         ?.map((e) =>
             e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -74,7 +74,6 @@ Map<String, dynamic> _$ShapeGroupToJson(ShapeGroup instance) =>
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
       'CLASS_NAME': instance.CLASS_NAME,
       'windingRule': instance.windingRule,
       'frame': instance.boundaryRectangle,
@@ -82,4 +81,5 @@ Map<String, dynamic> _$ShapeGroupToJson(ShapeGroup instance) =>
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
+      'layers': instance.children,
     };

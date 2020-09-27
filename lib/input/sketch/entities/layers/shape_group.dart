@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_gr
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'dart:convert';
 
 part 'shape_group.g.dart';
 
@@ -48,10 +47,14 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Style get style => _style;
 
+  @override
+  @JsonKey(name: 'layers')
+  List children;
+
   ShapeGroup(
       {bool hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,
@@ -81,7 +84,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             UUID,
             booleanOperation,
             exportOptions,

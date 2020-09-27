@@ -6,10 +6,11 @@ part 'pb_symbol_instance_overridable_value.g.dart';
 class PBSymbolInstanceOverridableValue {
   @JsonKey(toJson: _typeToJson, fromJson: _typeFromJson)
   final Type type;
-  final String do_objectId;
+  @JsonKey(name: 'do_objectID')
+  final String UUID;
   final dynamic value;
 
-  PBSymbolInstanceOverridableValue(this.do_objectId, this.value, this.type);
+  PBSymbolInstanceOverridableValue(this.UUID, this.value, this.type);
 
   static String _typeToJson(type) {
     return {'Type': type.toString()}.toString();

@@ -61,7 +61,7 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
                   originalRef.boundaryRectangle.width),
               (originalRef.boundaryRectangle.y +
                   originalRef.boundaryRectangle.height)),
-          originalRef.do_objectID,
+          originalRef.UUID,
           currentContext: currentContext,
         ) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
@@ -69,11 +69,10 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
     }
     generator = PBSymbolInstanceGenerator();
 
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
 
     overrideValues = sharedParamValues
-        .map((v) =>
-            PBSymbolInstanceOverridableValue(v.do_objectId, v.value, v.type))
+        .map((v) => PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type))
         .toList()
           ..removeWhere((v) => v == null || v.value == null);
   }
@@ -95,8 +94,8 @@ class PBSharedParameterValue {
   final dynamic _value;
   dynamic get value => _value;
 
-  final String _do_objectId;
-  String get do_objectId => _do_objectId;
+  final String _UUID;
+  String get UUID => _UUID;
 
-  PBSharedParameterValue(this._type, this._value, this._do_objectId);
+  PBSharedParameterValue(this._type, this._value, this._UUID);
 }

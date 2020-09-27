@@ -1,7 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/services/positional_cleansing_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -72,12 +72,10 @@ class PBVisualGenerationService implements PBGenerationService {
 
           if (result != null) {
             // Add next depth to queue.
-            if (currentNode.designNode is AbstractGroupLayer &&
-                (currentNode.designNode as AbstractGroupLayer)
-                    .layers
-                    .isNotEmpty) {
+            if (currentNode.designNode is GroupNode &&
+                (currentNode.designNode as GroupNode).children.isNotEmpty) {
               for (var child
-                  in (currentNode.designNode as AbstractGroupLayer).layers) {
+                  in (currentNode.designNode as GroupNode).children) {
                 queue.add(NodeTuple(child, result));
               }
             }
