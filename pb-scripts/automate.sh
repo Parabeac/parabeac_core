@@ -5,7 +5,7 @@ service="$3"
 keyID="$4"
 url="$5"
 
-echo "[INFO]: Downloading plugins..."
+echo "[INFO]: Downloading eggs..."
 
 date="`TZ=''"$region"'' date +"%Y%m%dT%k%M%SZ"`"
 
