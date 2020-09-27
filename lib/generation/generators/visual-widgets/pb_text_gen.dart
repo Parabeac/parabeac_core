@@ -19,6 +19,9 @@ class PBTextGen extends PBGenerator {
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
       buffer.write('style: TextStyle(\n');
+      if (source.fontName != null) {
+        buffer.write('fontFamily: \'${source.fontName}\',\n');
+      }
       if (source.fontSize != null) {
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
       }
@@ -26,7 +29,7 @@ class PBTextGen extends PBGenerator {
         buffer.write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
       }
       if (source.fontStyle != null) {
-        buffer.write('fontStyle: FontStyle.${source.fontStyle.toString()},\n');
+        buffer.write('fontStyle: FontStyle.${source.fontStyle},\n');
       }
       if (source.color != null) {
         if (findDefaultColor(source.color) == null) {

@@ -136,7 +136,8 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       borderInfo: {
         'borderRadius':
             style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
-        'borderColorHex': border != null ? border.color.toHex() : null
+        'borderColorHex': border != null ? border.color.toHex() : null,
+        'borderThickness' : border != null ? border.thickness : null
       },
     ));
   }
