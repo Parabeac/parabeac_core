@@ -22,6 +22,12 @@ class PBTextGen extends PBGenerator {
       if (source.fontSize != null) {
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
       }
+      if (source.fontWeight != null) {
+        buffer.write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
+      }
+      if (source.fontStyle != null) {
+        buffer.write('fontStyle: FontStyle.${source.fontStyle.toString()},\n');
+      }
       if (source.color != null) {
         if (findDefaultColor(source.color) == null) {
           buffer.write('color: Color(${source.color}),');
