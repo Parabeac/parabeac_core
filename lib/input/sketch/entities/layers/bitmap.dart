@@ -1,11 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/input/sketch/entities/objects/image_ref.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -22,7 +20,6 @@ part 'bitmap.g.dart';
 class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @override
   String CLASS_NAME = 'bitmap';
-  final ImageRef image;
   final bool fillReplacesImage;
   final int intendedDPI;
   final dynamic clippingMask;
@@ -36,7 +33,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   String UUID;
 
   Bitmap(
-      {this.image,
+      {this.imageReference,
       this.fillReplacesImage,
       this.intendedDPI,
       this.clippingMask,

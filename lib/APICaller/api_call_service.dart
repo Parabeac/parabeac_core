@@ -10,6 +10,7 @@ class APICallService {
   APICallService();
   static var log = Logger('API Call Service');
 
+  /// Makes a GET call to figma using `url` and `token`
   static Future<dynamic> makeAPICall(String url, String token) async {
     var response;
     var uri = Uri.parse(url);
@@ -29,7 +30,8 @@ class APICallService {
       var stream = transport.makeRequest(
         [
           Header.ascii(':method', 'GET'),
-          Header.ascii(':path', uri.path),
+          Header.ascii(
+              ':path', uri.path + (uri.query.isEmpty ? '' : '?${uri.query}')),
           Header.ascii(':scheme', uri.scheme),
           Header.ascii(':authority', uri.host),
           Header.ascii('x-figma-token', token),

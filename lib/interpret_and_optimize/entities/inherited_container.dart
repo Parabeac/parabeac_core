@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -14,6 +15,7 @@ part 'inherited_container.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedContainer extends PBVisualIntermediateNode
+    with PBColorMixin
     implements PBInheritedIntermediate {
   @override
   final originalRef;
@@ -67,7 +69,7 @@ class InheritedContainer extends PBVisualIntermediateNode
     if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
-          color = fill.color.toHex();
+          color = toHex(fill.color);
         }
       }
     }

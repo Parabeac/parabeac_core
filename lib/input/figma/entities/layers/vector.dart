@@ -71,8 +71,9 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   Map<String, dynamic> toJson() => _$FigmaVectorToJson(this);
 
   @override
+  /// This method will return null for now, since we are only processing
+  /// Groups with vectors inside.
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+    return null;
   }
 }

@@ -78,6 +78,9 @@ void main(List<String> args) async {
     var id = InputDesignService(path);
   }
 
+  // Create pngs directory
+  await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+
   if (designType == 'sketch') {
     var process = await Process.start('npm', ['run', 'prod'],
         workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
@@ -90,7 +93,6 @@ void main(List<String> args) async {
     }
 
     //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
     await SketchController().convertFile(pathToSketchFile,
         MainInfo().outputPath + projectName, configurationPath);
     process.kill();

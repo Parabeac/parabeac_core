@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/APICaller/api_call_service.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
-import 'package:parabeac_core/input/figma/entities/layers/rectangle.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -13,13 +13,24 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:quick_log/quick_log.dart';
 
 part 'group.g.dart';
 
 @JsonSerializable(nullable: true)
-class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
+
+/// Class that represents a Figma Group.
+/// The reason this class implements Image is because Groups can hold multiple vectors
+/// which we need to convert into images.
+class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
+  @JsonKey(ignore: true)
+  Logger log;
   @override
   String type = 'GROUP';
+
+  @override
+  String imageReference;
+
   Group(
       {name,
       isVisible,
@@ -64,7 +75,9 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
           flow: flow,
           children: children,
           UUID: UUID,
-        );
+        ) {
+    log = Logger(runtimeType.toString());
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) => Group.fromJson(json);
@@ -74,12 +87,13 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    //TODO: make api call to get image here
     if (children != null && children.first is FigmaVector) {
-      var response = await APICallService.makeAPICall(
-          'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
-          MainInfo().figmaKey);
-      print('');
+      var operation = await image_helper.writeImage(UUID);
+      if (!operation) {
+        log.error('Image $UUID was unable to be processed.');
+      }
+      imageReference = UUID;
+
       return Future.value(InheritedBitmap(this));
     }
     return Future.value(TempGroupLayoutNode(this, currentContext,

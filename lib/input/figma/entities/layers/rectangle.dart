@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -13,7 +14,9 @@ import 'figma_node.dart';
 part 'rectangle.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
+class FigmaRectangle extends FigmaVector
+    with PBColorMixin
+    implements AbstractFigmaNodeFactory {
   @override
   String type = 'RECTANGLE';
   FigmaRectangle({
@@ -84,7 +87,7 @@ class FigmaRectangle extends FigmaVector implements AbstractFigmaNodeFactory {
         'borderRadius': (style != null && style.borderOptions.isEnabled)
             ? points[0]['cornerRadius']
             : null,
-        'borderColorHex': border != null ? border.color.toHex() : null
+        'borderColorHex': border != null ? toHex(border.color) : null
       },
     ));
   }

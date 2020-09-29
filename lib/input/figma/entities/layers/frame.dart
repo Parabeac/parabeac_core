@@ -1,8 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/artboard.dart';
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
+import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -11,7 +14,9 @@ import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 part 'frame.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaFrame extends FigmaNode implements FigmaNodeFactory, GroupNode {
+class FigmaFrame extends FigmaNode
+    with PBColorMixin
+    implements FigmaNodeFactory, GroupNode, PBArtboard {
   @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
@@ -47,6 +52,9 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory, GroupNode {
   double verticalPadding;
 
   double itemSpacing;
+
+  @override
+  var backgroundColor;
 
   @override
   String type = 'FRAME';
@@ -92,6 +100,13 @@ class FigmaFrame extends FigmaNode implements FigmaNodeFactory, GroupNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    Map color = fills?.first['color'];
+    backgroundColor = Color(
+      alpha: color['a'],
+      red: color['r'],
+      blue: color['b'],
+      green: color['g'],
+    );
     return Future.value(InheritedScaffold(
       this,
       currentContext: currentContext,

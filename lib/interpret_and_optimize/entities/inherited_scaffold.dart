@@ -1,7 +1,7 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
@@ -20,6 +20,8 @@ part 'inherited_scaffold.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
+    with
+        PBColorMixin
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
@@ -78,7 +80,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     UUID = originalRef.UUID;
 
-    backgroundColor = (originalRef as Artboard).backgroundColor?.toHex();
+    backgroundColor = toHex(originalRef.backgroundColor);
   }
 
   @override
