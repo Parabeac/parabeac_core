@@ -16,7 +16,6 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    style: json['style'],
     fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
@@ -32,7 +31,8 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = json['children'] as List;
+    ..children = json['children'] as List
+    ..backgroundColor = json['backgroundColor'];
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
@@ -43,7 +43,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'style': instance.style,
       'children': instance.children,
       'fills': instance.fills,
       'strokes': instance.strokes,
@@ -56,6 +55,7 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
+      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
       'componentId': instance.componentId,
     };

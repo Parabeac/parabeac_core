@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -56,7 +57,8 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
   String characters;
 
   @override
-  var style;
+  @JsonKey(ignore: true)
+  PBStyle style;
 
   List<double> characterStyleOverrides;
 

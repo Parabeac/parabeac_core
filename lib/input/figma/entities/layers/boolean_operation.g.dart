@@ -18,7 +18,6 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
     ..isVisible = json['visible'] as bool ?? true
-    ..style = json['style']
     ..layoutAlign = json['layoutAlign'] as String
     ..constraints = json['constraints']
     ..prototypeNodeUUID = json['transitionNodeID'] as String
@@ -40,7 +39,6 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'style': instance.style,
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,
       'transitionNodeID': instance.prototypeNodeUUID,

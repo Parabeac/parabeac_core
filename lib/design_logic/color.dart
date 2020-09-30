@@ -12,6 +12,8 @@ abstract class PBColor {
   double red;
   double green;
   double blue;
+
+  toJson();
 }
 
 mixin PBColorMixin {

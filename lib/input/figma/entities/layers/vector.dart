@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -10,7 +11,8 @@ part 'vector.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   @override
-  var style;
+  @JsonKey(ignore: true)
+  PBStyle style;
 
   String layoutAlign;
 
@@ -71,6 +73,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   Map<String, dynamic> toJson() => _$FigmaVectorToJson(this);
 
   @override
+
   /// This method will return null for now, since we are only processing
   /// Groups with vectors inside.
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {

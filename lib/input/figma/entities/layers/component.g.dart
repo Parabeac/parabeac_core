@@ -16,7 +16,6 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    style: json['style'],
     fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
@@ -39,7 +38,8 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
         ?.toList(),
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..backgroundColor = json['backgroundColor'];
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
@@ -50,7 +50,6 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'style': instance.style,
       'children': instance.children,
       'fills': instance.fills,
       'strokes': instance.strokes,
@@ -63,6 +62,7 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
+      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
       'overrideProperties': instance.overrideProperties,
     };

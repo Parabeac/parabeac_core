@@ -108,7 +108,9 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
             clippingMaskMode,
             userInfo,
             style,
-            maintainScrollPosition);
+            maintainScrollPosition) {
+    content = attributedString == null ? '' : attributedString['string'];
+  }
 
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>

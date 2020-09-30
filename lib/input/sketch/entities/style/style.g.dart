@@ -28,25 +28,18 @@ Style _$StyleFromJson(Map<String, dynamic> json) {
             json['contextSettings'] as Map<String, dynamic>),
     UUID: json['do_objectID'] as String,
     endMarkerType: json['endMarkerType'] as int,
-    fills: (json['fills'] as List)
-        ?.map(
-            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    innerShadows: (json['innerShadows'] as List)
-        ?.map(
-            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
     miterLimit: json['miterLimit'] as int,
-    shadows: (json['shadows'] as List)
-        ?.map(
-            (e) => e == null ? null : Fill.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
     startMarkerType: json['startMarkerType'] as int,
     windingRule: json['windingRule'] as int,
     textStyle: json['textStyle'] == null
         ? null
         : TextStyle.fromJson(json['textStyle'] as Map<String, dynamic>),
-  );
+  )
+    ..boundaryRectangle = json['boundaryRectangle']
+    ..isVisible = json['isVisible'] as bool
+    ..name = json['name'] as String
+    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$StyleToJson(Style instance) => <String, dynamic>{
@@ -61,8 +54,10 @@ Map<String, dynamic> _$StyleToJson(Style instance) => <String, dynamic>{
       'borders': instance.borders,
       'colorControls': instance.colorControls,
       'contextSettings': instance.contextSettings,
-      'fills': instance.fills,
-      'innerShadows': instance.innerShadows,
-      'shadows': instance.shadows,
       'textStyle': instance.textStyle,
+      'boundaryRectangle': instance.boundaryRectangle,
+      'isVisible': instance.isVisible,
+      'name': instance.name,
+      'prototypeNodeUUID': instance.prototypeNodeUUID,
+      'type': instance.type,
     };

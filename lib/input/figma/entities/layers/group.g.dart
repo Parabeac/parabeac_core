@@ -16,7 +16,6 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    style: json['style'],
     fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
@@ -33,7 +32,10 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     UUID: json['id'] as String,
-  )..prototypeNodeUUID = json['transitionNodeID'] as String;
+  )
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..backgroundColor = json['backgroundColor']
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
@@ -44,7 +46,6 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'style': instance.style,
       'children': instance.children,
       'fills': instance.fills,
       'strokes': instance.strokes,
@@ -57,5 +58,7 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
+      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
+      'imageReference': instance.imageReference,
     };

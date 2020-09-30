@@ -62,5 +62,6 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   bool isVisible;
 
   @override
+  @JsonKey(ignore: true)
   var style;
 }

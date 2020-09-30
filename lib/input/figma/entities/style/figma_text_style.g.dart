@@ -1,27 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'text_style.dart';
+part of 'figma_text_style.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TextStyle _$TextStyleFromJson(Map<String, dynamic> json) {
-  return TextStyle(
-    rawEncodedAttributes: json['encodedAttributes'] as Map<String, dynamic>,
+FigmaTextStyle _$FigmaTextStyleFromJson(Map<String, dynamic> json) {
+  return FigmaTextStyle(
+    fontColor: json['fontColor'] == null
+        ? null
+        : Color.fromJson(json['fontColor'] as Map<String, dynamic>),
   )
-    ..alignment = _$enumDecodeNullable(_$ALIGNMENTEnumMap, json['alignment'])
     ..fontFamily = json['fontFamily'] as String
     ..fontSize = json['fontSize'] as String
-    ..fontWeight = json['fontWeight'] as String;
+    ..fontWeight = json['fontWeight'] as String
+    ..alignment = _$enumDecodeNullable(_$ALIGNMENTEnumMap, json['alignment']);
 }
 
-Map<String, dynamic> _$TextStyleToJson(TextStyle instance) => <String, dynamic>{
-      'encodedAttributes': instance.rawEncodedAttributes,
-      'alignment': _$ALIGNMENTEnumMap[instance.alignment],
+Map<String, dynamic> _$FigmaTextStyleToJson(FigmaTextStyle instance) =>
+    <String, dynamic>{
+      'fontColor': instance.fontColor,
       'fontFamily': instance.fontFamily,
       'fontSize': instance.fontSize,
       'fontWeight': instance.fontWeight,
+      'alignment': _$ALIGNMENTEnumMap[instance.alignment],
     };
 
 T _$enumDecode<T>(

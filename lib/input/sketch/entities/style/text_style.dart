@@ -1,15 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/pb_text_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/font_descriptor.dart';
 import 'package:parabeac_core/input/sketch/entities/style/paragraph_style.dart';
 part 'text_style.g.dart';
 
 @JsonSerializable(nullable: true)
-class TextStyle {
+class TextStyle implements PBTextStyle {
   @JsonKey(name: 'encodedAttributes')
   Map<String, dynamic> rawEncodedAttributes;
-  @JsonKey(ignore: true)
-  Color color;
   @JsonKey(ignore: true)
   FontDescriptor fontDescriptor;
   @JsonKey(ignore: true)
@@ -30,7 +30,7 @@ class TextStyle {
   ];
 
   TextStyle({this.rawEncodedAttributes}) {
-    color = Color.fromJson(
+    fontColor = Color.fromJson(
         rawEncodedAttributes['MSAttributedStringColorAttribute']);
     fontDescriptor = FontDescriptor.fromJson(
         rawEncodedAttributes['MSAttributedStringFontAttribute']);
@@ -53,4 +53,20 @@ class TextStyle {
   factory TextStyle.fromJson(Map<String, dynamic> json) =>
       _$TextStyleFromJson(json);
   Map<String, dynamic> toJson() => _$TextStyleToJson(this);
+
+  @override
+  ALIGNMENT alignment;
+
+  @override
+  @JsonKey(ignore: true)
+  PBColor fontColor;
+
+  @override
+  String fontFamily;
+
+  @override
+  String fontSize;
+
+  @override
+  String fontWeight;
 }

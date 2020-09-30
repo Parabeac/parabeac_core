@@ -52,6 +52,7 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
   String prototypeNodeUUID;
 
   @override
+  @JsonKey(ignore: true)
   var style;
 
   @override

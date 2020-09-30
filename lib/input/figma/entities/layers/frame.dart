@@ -26,6 +26,7 @@ class FigmaFrame extends FigmaNode
   String prototypeNodeUUID;
 
   @override
+  @JsonKey(ignore: true)
   var style;
 
   @override

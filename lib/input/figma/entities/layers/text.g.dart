@@ -12,7 +12,6 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
     type: json['type'] as String,
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
-    style: json['style'],
     layoutAlign: json['layoutAlign'],
     constraints: json['constraints'],
     boundaryRectangle: json['absoluteBoundingBox'] == null
@@ -53,7 +52,6 @@ Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'styles': instance.styles,
       'type': instance.type,
       'characters': instance.characters,
-      'style': instance.style,
       'characterStyleOverrides': instance.characterStyleOverrides,
       'styleOverrideTable': instance.styleOverrideTable,
     };
