@@ -42,8 +42,6 @@ class PBLayoutGenerationService implements PBGenerationService {
       'stack': PBIntermediateStackLayout(currentContext: currentContext, UUID: Uuid().v4()),
     };
 
-    var mainInfo = MainInfo();
-
     for (var layoutType in currentContext.configuration.layoutPrecedence ?? ['column']) {
       layoutType = layoutType.toLowerCase();
       if (layoutHandlers.containsKey(layoutType)) {
