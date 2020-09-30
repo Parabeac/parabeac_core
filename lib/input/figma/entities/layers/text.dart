@@ -1,6 +1,8 @@
 import 'package:parabeac_core/design_logic/pb_style.dart';
+import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
@@ -14,7 +16,7 @@ import 'figma_node.dart';
 part 'text.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
+class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
   @override
   String type = 'TEXT';
   FigmaText({
@@ -23,7 +25,7 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
     String type,
     pluginData,
     sharedPluginData,
-    this.style,
+    FigmaStyle this.style,
     layoutAlign,
     constraints,
     Frame boundaryRectangle,
@@ -33,7 +35,7 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
     strokeWeight,
     strokeAlign,
     styles,
-    this.characters,
+    this.content,
     this.characterStyleOverrides,
     this.styleOverrideTable,
   }) : super(
@@ -54,10 +56,10 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory {
           styles: styles,
         );
 
-  String characters;
+  @override
+  String content;
 
   @override
-  @JsonKey(ignore: true)
   PBStyle style;
 
   List<double> characterStyleOverrides;

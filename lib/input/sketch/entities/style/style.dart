@@ -8,6 +8,7 @@ import 'package:parabeac_core/input/sketch/entities/style/border.dart';
 import 'package:parabeac_core/input/sketch/entities/style/border_options.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color_controls.dart';
 import 'package:parabeac_core/input/sketch/entities/style/context_settings.dart';
+import 'package:parabeac_core/input/sketch/entities/style/fill.dart';
 import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/blur.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -27,7 +28,6 @@ class Style implements PBStyle {
   final List<Border> borders;
   final ColorControls colorControls;
   final ContextSettings contextSettings;
-  @JsonKey(ignore: true)
   List<PBFill> fills, innerShadows, shadows;
   @JsonKey(nullable: true)
   PBTextStyle textStyle;
@@ -41,10 +41,10 @@ class Style implements PBStyle {
     this.contextSettings,
     this.UUID,
     this.endMarkerType,
-    this.fills,
-    this.innerShadows,
+    List<Fill> this.fills,
+    List<Fill> this.innerShadows,
     this.miterLimit,
-    this.shadows,
+    List<Fill> this.shadows,
     this.startMarkerType,
     this.windingRule,
     TextStyle this.textStyle,

@@ -87,7 +87,8 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    if (children != null && children.first is FigmaVector) {
+    //TODO: Check if this correctly handles images
+    if (children != null && children.any((element) => element is FigmaVector)) {
       var operation = await image_helper.writeImage(UUID);
       if (!operation) {
         log.error('Image $UUID was unable to be processed.');

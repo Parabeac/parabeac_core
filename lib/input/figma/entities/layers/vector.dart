@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -11,7 +12,6 @@ part 'vector.g.dart';
 @JsonSerializable(nullable: true)
 class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   @override
-  @JsonKey(ignore: true)
   PBStyle style;
 
   String layoutAlign;
@@ -46,7 +46,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
     String type,
     pluginData,
     sharedPluginData,
-    this.style,
+    FigmaStyle this.style,
     this.layoutAlign,
     this.constraints,
     Frame this.boundaryRectangle,
