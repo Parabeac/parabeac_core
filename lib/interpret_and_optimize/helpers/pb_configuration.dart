@@ -1,8 +1,11 @@
+import 'package:parabeac_core/controllers/main_info.dart';
+
 class PBConfiguration {
   PBConfiguration(Map defaultConfig, this.specificConfig) {
     widgetStyle = defaultConfig['widgetStyle'];
     widgetType = defaultConfig['widgetStyle'];
     widgetSpacing = defaultConfig['widgetStyle'];
+    layoutPrecedence = defaultConfig['layoutPrecedence'] ?? ['column', 'row', 'stack'];
   }
 
   String widgetStyle;
@@ -11,12 +14,11 @@ class PBConfiguration {
 
   String widgetSpacing;
 
+  List<dynamic> layoutPrecedence;
+
   Map specificConfig;
 
-  void setConfigurations(Map configurations) {
-    // Setting default configurations
-    widgetStyle = configurations['default']['widgetSpacing'];
-    widgetType = configurations['default']['widgetType'];
-    widgetSpacing = configurations['default']['widgetSpacing'];
-  }
+  // not sure why setConfigurations(), so replaced with this class variable
+  Map configurations;
+
 }
