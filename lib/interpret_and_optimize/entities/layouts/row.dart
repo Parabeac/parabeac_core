@@ -44,7 +44,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   String widgetType = 'ROW';
 
-  PBIntermediateRowLayout(this.UUID, {this.currentContext})
+  PBIntermediateRowLayout({this.UUID, this.currentContext})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext) {
     generator = PBRowGenerator();
     checkCrossAxisAlignment();
@@ -101,7 +101,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext) {
     var row =
-        PBIntermediateRowLayout(Uuid().v4(), currentContext: currentContext);
+        PBIntermediateRowLayout(UUID: Uuid().v4(), currentContext: currentContext);
     row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;
