@@ -3,8 +3,8 @@ import 'package:parabeac_core/controllers/main_info.dart';
 class PBConfiguration {
   PBConfiguration(Map defaultConfig, this.specificConfig) {
     widgetStyle = defaultConfig['widgetStyle'];
-    widgetType = defaultConfig['widgetStyle'];
-    widgetSpacing = defaultConfig['widgetStyle'];
+    widgetType = defaultConfig['widgetType'];
+    widgetSpacing = defaultConfig['widgetSpacing'];
     layoutPrecedence = defaultConfig['layoutPrecedence'] ?? ['column', 'row', 'stack'];
   }
 
