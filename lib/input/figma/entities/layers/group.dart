@@ -87,18 +87,29 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    if (children != null) {
+    if (areAllVectors(children)) {
       var operation = await image_helper.writeImage(UUID);
       if (!operation) {
         log.error('Image $UUID was unable to be processed.');
       }
       imageReference = UUID;
 
+      /// TODO: check if this actually removes the children from the Tree
+      this.children = null;
       return Future.value(InheritedBitmap(this));
     }
     return Future.value(TempGroupLayoutNode(this, currentContext,
         topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
         bottomRightCorner: Point(boundaryRectangle.x + boundaryRectangle.width,
             boundaryRectangle.y + boundaryRectangle.height)));
+  }
+
+  bool areAllVectors(var children) {
+    for (var child in children) {
+      if (child is! FigmaVector) {
+        return false;
+      }
+    }
+    return true;
   }
 }
