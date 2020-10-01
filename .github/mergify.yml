@@ -22,4 +22,4 @@ pull_request_rules:
       - "base=stable"
     actions:
       close:
-        message: "Thank you for your contribution @{{author}}! However, please double-check if this PR goes into stable and not master."
+        message: "Thank you for your contribution @{{author}}🎉! However, please double check if this PR goes into dev and not stable. 🤔"
