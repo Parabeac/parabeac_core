@@ -32,8 +32,10 @@ class StyleExtractor {
 
       var borderOptions;
 
+      var visible = strokes.isNotEmpty ? strokes[0]['visible'] : false;
+
       var figmaBorder = FigmaBorder(
-        isEnabled: strokes.isNotEmpty ? strokes[0]['visible'] : false,
+        isEnabled: visible ?? false,
         fillType: strokes.isNotEmpty ? strokes[0]['opacity'] : 1.0,
         color: strokes.isNotEmpty
             ? _getColor(strokes[0]['color'])
@@ -41,9 +43,11 @@ class StyleExtractor {
         thickness: json['strokeWeight'],
       );
 
+      var tempVisible = strokes.isNotEmpty ? strokes[0]['visible'] : false;
+
       borderOptions = FigmaBorderOptions(
         json['strokeDashes'],
-        strokes.isNotEmpty ? strokes[0]['visible'] : false,
+        tempVisible ?? false,
         json['strokeCap'],
         json['strokeJoin'],
       );

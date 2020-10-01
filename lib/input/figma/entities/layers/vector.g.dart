@@ -25,10 +25,11 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
     strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
     strokeAlign: json['strokeAlign'] as String,
     styles: json['styles'],
+    UUID: json['id'] as String,
   )
-    ..UUID = json['id'] as String
     ..isVisible = json['visible'] as bool ?? true
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
@@ -49,4 +50,5 @@ Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
       'type': instance.type,
+      'imageReference': instance.imageReference,
     };

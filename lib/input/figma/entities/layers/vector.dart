@@ -1,18 +1,23 @@
+import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
+import 'package:quick_log/quick_log.dart';
 
 part 'vector.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaVector extends FigmaNode implements FigmaNodeFactory {
+class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
+  @JsonKey(ignore: true)
+  Logger log;
   @override
   PBStyle style;
 
@@ -40,6 +45,9 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   @override
   String type = 'VECTOR';
 
+  @override
+  String UUID;
+
   FigmaVector({
     String name,
     bool visible,
@@ -55,13 +63,16 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
     this.strokeWeight,
     this.strokeAlign,
     this.styles,
+    this.UUID,
   }) : super(
           name,
           visible,
           type,
           pluginData,
           sharedPluginData,
-        );
+        ) {
+    log = Logger(runtimeType.toString());
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
@@ -72,10 +83,16 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory {
   Map<String, dynamic> toJson() => _$FigmaVectorToJson(this);
 
   @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    var operation = await image_helper.writeImage(UUID);
+    if (!operation) {
+      log.error('Image $UUID was unable to be processed.');
+    }
+    imageReference = UUID;
 
-  /// This method will return null for now, since we are only processing
-  /// Groups with vectors inside.
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    return null;
+    return Future.value(InheritedBitmap(this));
   }
+
+  @override
+  String imageReference;
 }

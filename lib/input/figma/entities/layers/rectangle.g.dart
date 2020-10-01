@@ -31,7 +31,8 @@ FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
     points: json['points'] as List,
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
@@ -51,6 +52,7 @@ Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
+      'imageReference': instance.imageReference,
       'type': instance.type,
       'points': instance.points,
       'cornerRadius': instance.cornerRadius,

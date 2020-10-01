@@ -17,6 +17,9 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     style: json['style'] == null
         ? null
         : FigmaStyle.fromJson(json['style'] as Map<String, dynamic>),
+    boundaryRectangle: json['absoluteBoundingBox'] == null
+        ? null
+        : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
   )
     ..UUID = json['id'] as String
     ..name = json['name'] as String
@@ -26,12 +29,12 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..layoutAlign = json['layoutAlign'] as String
     ..constraints = json['constraints']
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..boundaryRectangle = json['absoluteBoundingBox']
     ..size = json['size']
     ..strokes = json['strokes']
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
     ..strokeAlign = json['strokeAlign'] as String
-    ..styles = json['styles'];
+    ..styles = json['styles']
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
@@ -45,7 +48,6 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
@@ -54,4 +56,6 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'children': instance.children,
       'booleanOperation': instance.booleanOperation,
       'type': instance.type,
+      'absoluteBoundingBox': instance.boundaryRectangle,
+      'imageReference': instance.imageReference,
     };

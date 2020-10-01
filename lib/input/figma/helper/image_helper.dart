@@ -16,8 +16,12 @@ Future<bool> writeImage(String UUID) async {
   // Download image and write it to `pngs` folder
   if (response != null &&
       response.containsKey('images') &&
+      response['images'] != null &&
       response['images'].values.isNotEmpty) {
-    var imageRes = await http.get(response['images'].values.first);
+    var imageRes;
+    if (response['images'].values.first != null) {
+      imageRes = await http.get(response['images'].values.first);
+    }
 
     // Check if the request was successful
     if (imageRes == null || imageRes.statusCode != 200) {

@@ -1,16 +1,26 @@
+import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:quick_log/quick_log.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
 import 'figma_node.dart';
 
 part 'ellipse.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
+class FigmaEllipse extends FigmaVector
+    implements AbstractFigmaNodeFactory, Image {
+  @override
+  String imageReference;
+  @JsonKey(ignore: true)
+  Logger log;
+
   @override
   String type = 'ELLIPSE';
   FigmaEllipse({
@@ -44,7 +54,9 @@ class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    log = Logger(runtimeType.toString());
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
@@ -55,8 +67,13 @@ class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
   Map<String, dynamic> toJson() => _$FigmaEllipseToJson(this);
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    var operation = await image_helper.writeImage(UUID);
+    if (!operation) {
+      log.error('Image $UUID was unable to be processed.');
+    }
+    imageReference = UUID;
+
+    return Future.value(InheritedBitmap(this));
   }
 }

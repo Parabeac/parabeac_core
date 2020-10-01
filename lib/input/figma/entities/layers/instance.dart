@@ -1,18 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/pb_instance.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 part 'instance.g.dart';
 
 @JsonSerializable(nullable: true)
-class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
+class Instance extends FigmaFrame
+    implements AbstractFigmaNodeFactory, PBInstance {
   @override
   String type = 'INSTANCE';
+
+  @override
+  List children;
   Instance({
     name,
     isVisible,
@@ -34,6 +40,7 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
     itemSpacing,
     Flow flow,
     this.componentId,
+    List<FigmaNode> this.children,
   }) : super(
           name: name,
           isVisible: isVisible,
@@ -54,6 +61,7 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
           verticalPadding: verticalPadding,
           itemSpacing: itemSpacing,
           flow: flow,
+          children: children,
         );
 
   String componentId;
@@ -68,6 +76,13 @@ class Instance extends FigmaFrame implements AbstractFigmaNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    /// TODO: implement method
+    /// TODO: Check if `sharedParamValues` exits and pass to it, default to emptu for now
+    var sym = PBSharedInstanceIntermediateNode(
+      this,
+      UUID,
+      sharedParamValues: [],
+      currentContext: currentContext,
+    );
+    return Future.value(sym);
   }
 }

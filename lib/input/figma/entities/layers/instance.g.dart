@@ -28,10 +28,13 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     verticalPadding: json['verticalPadding'],
     itemSpacing: json['itemSpacing'],
     componentId: json['componentId'] as String,
+    children: (json['children'] as List)
+        ?.map((e) =>
+            e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..children = json['children'] as List
     ..backgroundColor = json['backgroundColor'];
 }
 
@@ -43,7 +46,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'children': instance.children,
       'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
@@ -57,5 +59,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
       'type': instance.type,
+      'children': instance.children,
       'componentId': instance.componentId,
     };
