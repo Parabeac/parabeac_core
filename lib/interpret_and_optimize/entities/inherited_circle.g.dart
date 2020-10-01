@@ -23,7 +23,6 @@ InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String
     ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
@@ -39,6 +38,5 @@ Map<String, dynamic> _$InheritedCircleToJson(InheritedCircle instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
-      'widgetType': instance.widgetType,
       'alignment': instance.alignment,
     };

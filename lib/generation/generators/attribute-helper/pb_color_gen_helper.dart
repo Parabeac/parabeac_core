@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBColorGenHelper extends PBAttributesHelper {
-  PBColorGenHelper() : super('color');
+  PBColorGenHelper() : super();
 
   @override
   String generate(PBIntermediateNode source) {

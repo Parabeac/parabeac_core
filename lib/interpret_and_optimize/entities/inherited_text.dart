@@ -34,8 +34,6 @@ class InheritedText extends PBVisualIntermediateNode
 
   String text;
 
-  String widgetType = 'TEXT';
-
   num fontSize;
 
   String fontName;

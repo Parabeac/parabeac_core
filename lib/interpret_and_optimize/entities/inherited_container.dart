@@ -29,8 +29,6 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'CONTAINER';
-
   @override
   String UUID; //TODO find the root cause of why certain node have a null UUID
 

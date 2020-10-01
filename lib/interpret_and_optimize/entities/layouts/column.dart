@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_column_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/stack_exception.dart';
@@ -44,7 +45,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  String widgetType = 'COLUMN';
+  
 
   PBIntermediateColumnLayout({
     this.currentContext,

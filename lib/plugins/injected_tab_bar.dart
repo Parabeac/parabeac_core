@@ -16,8 +16,6 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   String semanticName = '.*tabbar';
   List<Tab> tabs = [];
 
-  String widgetType = 'APPBAR';
-
   InjectedTabBar(
     Point topLeftCorner,
     Point bottomRightCorner,
@@ -64,7 +62,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 }
 
 class PBTabBarGenerator extends PBGenerator {
-  PBTabBarGenerator() : super('TABBAR');
+  PBTabBarGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

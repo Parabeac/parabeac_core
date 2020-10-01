@@ -6,7 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.d
 class PBBitmapGenerator extends PBGenerator {
   var _sizehelper;
 
-  PBBitmapGenerator() : super('Bitmap') {
+  PBBitmapGenerator() : super() {
     _sizehelper = PBSizeHelper();
   }
 

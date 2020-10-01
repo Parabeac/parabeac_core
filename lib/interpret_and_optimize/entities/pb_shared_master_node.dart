@@ -40,7 +40,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   List<PBSymbolMasterParameter> parametersDefinition;
 
-  String widgetType = 'PBSymbolMaster';
+  
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.

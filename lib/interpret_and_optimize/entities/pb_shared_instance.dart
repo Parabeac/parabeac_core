@@ -42,8 +42,6 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'SYMBOL_INSTANCE';
-
   List overrideValues;
 
   PBSharedInstanceIntermediateNode(

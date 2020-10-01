@@ -39,8 +39,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
 
   String referenceImage;
 
-  String widgetType = 'Bitmap';
-
   InheritedPolygon(this.originalRef, {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
