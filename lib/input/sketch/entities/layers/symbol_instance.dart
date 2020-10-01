@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/pb_instance.dart';
 import 'package:parabeac_core/design_logic/pb_shared_instance_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -17,7 +18,7 @@ part 'symbol_instance.g.dart';
 @JsonSerializable(nullable: true)
 class SymbolInstance extends SketchNode
     with SymbolNodeMixin
-    implements SketchNodeFactory, PBSharedInstanceNodeDesign {
+    implements SketchNodeFactory, PBSharedInstanceNodeDesign, PBInstance {
   @override
   String CLASS_NAME = 'symbolInstance';
   final List<OverridableValue> overrideValues;

@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/pb_instance.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
@@ -32,7 +33,7 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
   bool foundMaster = false;
 
   @override
-  SymbolInstance originalRef;
+  PBInstance originalRef;
 
   @override
   @JsonKey(ignore: true)
