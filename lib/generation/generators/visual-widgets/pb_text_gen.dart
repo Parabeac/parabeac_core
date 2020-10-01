@@ -31,6 +31,9 @@ class PBTextGen extends PBGenerator {
       if (source.fontStyle != null) {
         buffer.write('fontStyle: FontStyle.${source.fontStyle},\n');
       }
+      if (source.letterSpacing != null) {
+        buffer.write('letterSpacing: ${source.letterSpacing},\n');
+      }
       if (source.color != null) {
         if (findDefaultColor(source.color) == null) {
           buffer.write('color: Color(${source.color}),');

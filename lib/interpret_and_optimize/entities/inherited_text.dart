@@ -42,6 +42,7 @@ class InheritedText extends PBVisualIntermediateNode
   String fontWeight;  // one of the w100-w900 weights
   String fontStyle;    // normal, or italic
   String textAlignment;
+  num letterSpacing;
 
   InheritedText(this.originalRef, {this.currentContext})
       : super(
@@ -65,6 +66,7 @@ class InheritedText extends PBVisualIntermediateNode
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
     fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
     fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;
+    letterSpacing = originalRef.style.textStyle.fontDescriptor.letterSpacing;
 
     alignmenttype = originalRef.style.textStyle.paragraphStyle.alignment;
     if (alignmenttype == 0) {

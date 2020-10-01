@@ -84,6 +84,7 @@ class TextStyle {
         // this is really fontFamily with removal of -XXX font type name suffix
         fontDescriptor.fontName =
             fontDescriptor.fontName.replaceFirst('-$s', '');
+        fontDescriptor.letterSpacing = rawEncodedAttributes['kerning'] ?? 0.0;
         break;
       }
     }
