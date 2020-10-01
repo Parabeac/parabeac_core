@@ -1,0 +1,25 @@
+pull_request_rules:
+  - name: Hotfix merge
+    conditions:
+      - "#approved-reviews-by>=1"
+      - "head~=^hotfix"
+    actions:
+      backport:
+        branches:
+          - stable
+          - dev
+
+  - name: Automatic merge on approval
+    conditions:
+      - "#approved-reviews-by>=2"
+      - "-head~=^hotfix"
+    actions:
+      merge:
+        method: squash
+  - name: Automatic merge on approval
+    conditions:
+      - "-head~=^hotfix"
+      - "base=stable"
+    actions:
+      close:
+        message: "Thank you for your contribution @{{author}}! However, please double-check if this PR goes into stable and not master."
