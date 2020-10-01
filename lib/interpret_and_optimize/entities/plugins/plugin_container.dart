@@ -46,7 +46,6 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   Map borderInfo;
   Map alignment;
 
-  String widgetType = 'CONTAINER';
 
   PluginContainer(
     Point topLeftCorner,

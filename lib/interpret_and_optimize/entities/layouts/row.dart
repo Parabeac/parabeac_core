@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_row_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/stack_exception.dart';
@@ -42,9 +43,13 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   Point bottomRightCorner;
 
+<<<<<<< HEAD
   String widgetType = 'ROW';
 
   PBIntermediateRowLayout({this.UUID, this.currentContext})
+=======
+  PBIntermediateRowLayout(this.UUID, {this.currentContext})
+>>>>>>> 362be30... Removed the attribute  as mentioned in issue #31. Fixed compiler issues left from PR #55.
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext) {
     generator = PBRowGenerator();
     checkCrossAxisAlignment();

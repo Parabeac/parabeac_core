@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBTextGen extends PBGenerator {
-  PBTextGen() : super('TEXT');
+  PBTextGen() : super();
 
   @override
   String generate(PBIntermediateNode source) {

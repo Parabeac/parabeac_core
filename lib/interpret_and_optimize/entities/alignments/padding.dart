@@ -19,7 +19,7 @@ class Padding extends PBVisualIntermediateNode {
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'PADDING';
+  
 
   @JsonKey(ignore: true)
   Point topLeftCorner;

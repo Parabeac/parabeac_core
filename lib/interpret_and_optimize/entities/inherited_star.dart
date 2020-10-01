@@ -39,8 +39,6 @@ class InheritedStar extends PBVisualIntermediateNode
 
   String referenceImage;
 
-  String widgetType = 'Bitmap';
-
   InheritedStar(this.originalRef, {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,

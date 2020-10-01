@@ -20,7 +20,6 @@ PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
     (json['bottomRightY'] as num)?.toDouble(),
   )
     ..subsemantic = json['subsemantic'] as String
-    ..widgetType = json['widgetType'] as String
     ..child = json['child']
     ..topLeftCorner = json['topLeftCorner'] == null
         ? null
@@ -39,7 +38,6 @@ Map<String, dynamic> _$PBSymbolMasterParameterToJson(
         PBSymbolMasterParameter instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
-      'widgetType': instance.widgetType,
       'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
