@@ -5,20 +5,21 @@ part 'border_options.g.dart';
 @JsonSerializable(nullable: true)
 class BorderOptions implements PBBorderOptions {
   @JsonKey(name: '_class')
-  final String classField;
+  String classField;
   @override
-  final bool isEnabled;
+  bool isEnabled;
   @override
-  final List dashPattern;
+  List dashPattern;
   @override
-  final int lineCapStyle, lineJoinStyle;
+  int lineCapStyle, lineJoinStyle;
 
   BorderOptions(
-      {this.classField,
-      this.dashPattern,
-      this.isEnabled,
-      this.lineCapStyle,
-      this.lineJoinStyle});
+    this.classField,
+    this.dashPattern,
+    this.isEnabled,
+    this.lineCapStyle,
+    this.lineJoinStyle,
+  );
 
   factory BorderOptions.fromJson(Map json) => _$BorderOptionsFromJson(json);
   Map toJson() => _$BorderOptionsToJson(this);

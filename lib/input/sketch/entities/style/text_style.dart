@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/pb_font_descriptor.dart';
+import 'package:parabeac_core/design_logic/pb_paragraph_style.dart';
 import 'package:parabeac_core/design_logic/pb_text_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/font_descriptor.dart';
@@ -10,10 +12,11 @@ part 'text_style.g.dart';
 class TextStyle implements PBTextStyle {
   @JsonKey(name: 'encodedAttributes')
   Map<String, dynamic> rawEncodedAttributes;
+  @override
   @JsonKey(ignore: true)
-  FontDescriptor fontDescriptor;
+  PBFontDescriptor fontDescriptor;
   @JsonKey(ignore: true)
-  ParagraphStyle paragraphStyle;
+  PBParagraphStyle paragraphStyle;
   @JsonKey(ignore: true)
   num verticalAlignment;
   @JsonKey(ignore: true)
@@ -53,9 +56,6 @@ class TextStyle implements PBTextStyle {
   factory TextStyle.fromJson(Map<String, dynamic> json) =>
       _$TextStyleFromJson(json);
   Map<String, dynamic> toJson() => _$TextStyleToJson(this);
-
-  @override
-  ALIGNMENT alignment;
 
   @override
   @JsonKey(ignore: true)
