@@ -18,7 +18,7 @@ class InjectedPositioned extends PBIntermediateNode
 
   final String UUID;
 
-  String widgetType = 'POSITIONED';
+  
 
   double horizontalAlignValue, verticalAlignValue;
   String horizontalAlignType, verticalAlignType;

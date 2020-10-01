@@ -13,16 +13,13 @@ class Switch extends PBEgg implements PBInjectedIntermediate {
   Switch(Point topLeftCorner, Point bottomRightCorner, this.UUID,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
-    generator = SwitchGenerator(widgetType);
+    generator = SwitchGenerator();
   }
 
   PBContext currentContext;
 
   final String UUID;
 
-  String widgetType = 'Switch';
-
-  String semanticName = '.*switch';
 
   @override
   void addChild(PBIntermediateNode node) {}
@@ -43,7 +40,7 @@ class Switch extends PBEgg implements PBInjectedIntermediate {
 }
 
 class SwitchGenerator extends PBGenerator {
-  SwitchGenerator(String widgetType) : super(widgetType);
+  SwitchGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

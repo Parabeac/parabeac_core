@@ -22,7 +22,7 @@ void main() {
       helper.initPlugins(context);
       sketchNode = SketchNodeMock();
       when(sketchNode.name).thenReturn('element.*navbar');
-      when(sketchNode.frame)
+      when(sketchNode.boundaryRectangle)
           .thenReturn(Frame(x: 0, y: 0, width: 300, height: 20));
     });
 

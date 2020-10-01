@@ -30,8 +30,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
 
-  String widgetType = 'Bitmap';
-
   @override
   @JsonKey(ignore: true)
   PBContext currentContext;

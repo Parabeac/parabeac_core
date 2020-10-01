@@ -10,7 +10,7 @@ part 'spacer.g.dart';
 class Spacer extends PBVisualIntermediateNode {
   int flex;
   final String UUID;
-  String widgetType = 'SPACER';
+  
 
   @override
   @JsonKey(ignore: true)
