@@ -12,8 +12,8 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    booleanOperation: json['booleanOperation'] as String,
-    type: json['type'] as String,
+    booleanOperation: json['booleanOperation'],
+    type: json['type'],
     style: json['style'] == null
         ? null
         : FigmaStyle.fromJson(json['style'] as Map<String, dynamic>),
@@ -28,7 +28,6 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..boundaryRectangle = json['absoluteBoundingBox']
     ..size = json['size']
-    ..fills = json['fills']
     ..strokes = json['strokes']
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
     ..strokeAlign = json['strokeAlign'] as String
@@ -48,7 +47,6 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'transitionNodeID': instance.prototypeNodeUUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,

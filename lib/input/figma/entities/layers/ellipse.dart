@@ -40,7 +40,6 @@ class FigmaEllipse extends FigmaVector implements AbstractFigmaNodeFactory {
           constraints: constraints,
           boundaryRectangle: boundaryRectangle,
           size: size,
-          fills: fills,
           strokes: strokes,
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,

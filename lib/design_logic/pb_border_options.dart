@@ -1,7 +1,7 @@
 abstract class PBBorderOptions {
-  final bool isEnabled;
-  final List dashPattern;
-  final int lineCapStyle, lineJoinStyle;
+  bool isEnabled;
+  List dashPattern;
+  int lineCapStyle, lineJoinStyle;
 
   PBBorderOptions({
     this.isEnabled,

@@ -21,7 +21,6 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
     size: json['size'],
-    fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
     strokeAlign: json['strokeAlign'] as String,
@@ -45,7 +44,6 @@ Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
       'transitionNodeID': instance.prototypeNodeUUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,

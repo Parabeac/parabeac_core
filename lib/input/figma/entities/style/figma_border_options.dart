@@ -8,22 +8,23 @@ part 'figma_border_options.g.dart';
 @JsonSerializable()
 class FigmaBorderOptions implements PBBorderOptions {
   @override
-  // TODO: implement dashPattern
-  List get dashPattern => throw UnimplementedError();
+  List dashPattern;
 
   @override
-  // TODO: implement isEnabled
-  bool get isEnabled => throw UnimplementedError();
+  bool isEnabled;
 
   @override
-  // TODO: implement lineCapStyle
-  int get lineCapStyle => throw UnimplementedError();
+  int lineCapStyle;
 
   @override
-  // TODO: implement lineJoinStyle
-  int get lineJoinStyle => throw UnimplementedError();
+  int lineJoinStyle;
 
-  FigmaBorderOptions();
+  FigmaBorderOptions(
+    this.dashPattern,
+    this.isEnabled,
+    this.lineCapStyle,
+    this.lineJoinStyle,
+  );
 
   Map<String, dynamic> toJson() => _$FigmaBorderOptionsToJson(this);
 

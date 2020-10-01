@@ -10,7 +10,7 @@ FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
   return FigmaRectangle(
     name: json['name'] as String,
     isVisible: json['visible'] as bool ?? true,
-    type: json['type'] as String,
+    type: json['type'],
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
     style: json['style'],
@@ -20,7 +20,6 @@ FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
     size: json['size'],
-    fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
@@ -48,7 +47,6 @@ Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
       'transitionNodeID': instance.prototypeNodeUUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,

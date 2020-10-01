@@ -12,7 +12,7 @@ FigmaBorder _$FigmaBorderFromJson(Map<String, dynamic> json) {
     fillType: (json['fillType'] as num)?.toDouble(),
     color: json['color'] == null
         ? null
-        : Color.fromJson(json['color'] as Map<String, dynamic>),
+        : FigmaColor.fromJson(json['color'] as Map<String, dynamic>),
     thickness: (json['thickness'] as num)?.toDouble(),
   );
 }

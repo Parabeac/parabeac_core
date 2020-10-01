@@ -1,6 +1,10 @@
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/pb_border.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
+import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/border.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -22,7 +26,7 @@ class FigmaRectangle extends FigmaVector
   FigmaRectangle({
     String name,
     bool isVisible,
-    String type,
+    type,
     pluginData,
     sharedPluginData,
     style,
@@ -49,7 +53,6 @@ class FigmaRectangle extends FigmaVector
           constraints: constraints,
           boundaryRectangle: boundaryRectangle,
           size: size,
-          fills: fills,
           strokes: strokes,
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
@@ -62,8 +65,12 @@ class FigmaRectangle extends FigmaVector
   List<double> rectangleCornerRadii;
 
   @override
-  FigmaNode createFigmaNode(Map<String, dynamic> json) =>
-      FigmaRectangle.fromJson(json);
+  FigmaNode createFigmaNode(Map<String, dynamic> json) {
+    var node = FigmaRectangle.fromJson(json);
+    node.style = StyleExtractor().getStyle(json);
+    return node;
+  }
+
   factory FigmaRectangle.fromJson(Map<String, dynamic> json) =>
       _$FigmaRectangleFromJson(json);
   @override
@@ -71,7 +78,7 @@ class FigmaRectangle extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    Border border;
+    PBBorder border;
     for (var b in style?.borders?.reversed ?? []) {
       if (b.isEnabled) {
         border = b;

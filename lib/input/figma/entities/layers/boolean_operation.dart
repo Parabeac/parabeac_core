@@ -5,7 +5,6 @@ import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-
 import 'figma_node.dart';
 
 part 'boolean_operation.g.dart';
@@ -22,8 +21,8 @@ class BooleanOperation extends FigmaVector
 
   BooleanOperation({
     List<FigmaNode> this.children,
-    this.booleanOperation,
-    this.type,
+    booleanOperation,
+    type,
     FigmaStyle style,
   }) : super(style: style);
 

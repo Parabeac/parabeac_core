@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
+import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
@@ -49,7 +50,6 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
           constraints: constraints,
           boundaryRectangle: boundaryRectangle,
           size: size,
-          fills: fills,
           strokes: strokes,
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
@@ -67,8 +67,12 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
   Map styleOverrideTable;
 
   @override
-  FigmaNode createFigmaNode(Map<String, dynamic> json) =>
-      FigmaText.fromJson(json);
+  FigmaNode createFigmaNode(Map<String, dynamic> json) {
+    var node = FigmaText.fromJson(json);
+    node.style = StyleExtractor().getStyle(json);
+    return node;
+  }
+
   factory FigmaText.fromJson(Map<String, dynamic> json) =>
       _$FigmaTextFromJson(json);
   @override

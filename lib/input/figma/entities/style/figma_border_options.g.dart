@@ -7,8 +7,18 @@ part of 'figma_border_options.dart';
 // **************************************************************************
 
 FigmaBorderOptions _$FigmaBorderOptionsFromJson(Map<String, dynamic> json) {
-  return FigmaBorderOptions();
+  return FigmaBorderOptions(
+    json['dashPattern'] as List,
+    json['isEnabled'] as bool,
+    json['lineCapStyle'] as int,
+    json['lineJoinStyle'] as int,
+  );
 }
 
 Map<String, dynamic> _$FigmaBorderOptionsToJson(FigmaBorderOptions instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'dashPattern': instance.dashPattern,
+      'isEnabled': instance.isEnabled,
+      'lineCapStyle': instance.lineCapStyle,
+      'lineJoinStyle': instance.lineJoinStyle,
+    };

@@ -18,7 +18,7 @@ class FigmaStyle implements PBStyle {
   @override
   PBColor backgroundColor;
   @override
-  List<PBFill> fills;
+  List<PBFill> fills = [];
   @override
   List<PBBorder> borders;
   @override
@@ -30,7 +30,11 @@ class FigmaStyle implements PBStyle {
     List<FigmaFill> this.fills,
     FigmaTextStyle this.textStyle,
     FigmaBorderOptions this.borderOptions,
-  });
+  }) {
+    if (this.fills == null) {
+      this.fills = [];
+    }
+  }
 
   @override
   PBBorderOptions borderOptions;
