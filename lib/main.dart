@@ -25,6 +25,14 @@ void main(List<String> args) async {
   log.info(args.toString());
 
   MainInfo().cwd = Directory.current;
+  //check for the platform
+  if (Platform.isWindows) {
+    MainInfo().platform = 'WIN';
+  } else if (Platform.isMacOS || Platform.isLinux) {
+    MainInfo().platform = 'UIX';
+  } else {
+    MainInfo().platform = 'OTH';
+  }
 
   var path = '';
   var projectName = '';

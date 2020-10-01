@@ -14,6 +14,8 @@ class MainInfo {
 
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
+  //Which platform is it running
+  String platform;
   Map configurations;
 
   /// Unique ID for the device running parabeac-core

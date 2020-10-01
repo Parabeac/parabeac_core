@@ -1,7 +1,24 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
+import 'dart:io' as io;
 
 main(List<String> args) async {
+  String _os;
+  String _basePath;
+
+  //check for the platform
+  if (io.Platform.isWindows) {
+    _os = 'WIN';
+  }else if(io.Platform.isMacOS ||| io.Platform.isLinux){
+    _os = 'UIX';
+  }else{
+    _os = 'OTH';
+  }
+  //set the basepath
+  _basePath = io.Directory.current.path;
+
+
   List<String> arguments = ['lib/main.dart'];
   var url = '';
   var key = '';
