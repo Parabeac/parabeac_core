@@ -3,9 +3,15 @@ import 'dart:io';
 
 main(List<String> args) async {
   List<String> arguments = ['lib/main.dart'];
+  final helpText = "Usage Options: \n" + "-url \n" + "-key \n" + "-Skey";
   var url = '';
   var key = '';
   var sKey = '';
+  //If arguments is empty or only has -h
+  if (args.length == 0 || args[0] == '-h') {
+    print(helpText);
+    return;
+  }
   for (var i = 0; i < args.length; i += 2) {
     switch (args[i]) {
       case '-url':
