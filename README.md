@@ -8,7 +8,7 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 
 ![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md)
 
-<h2>
+<h3>
 <span> · </span>
   <a href="https://docs.parabeac.com/parabeac-designers/getting-started">Designer Protocol</a>
     <span> · </span>
@@ -19,7 +19,7 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
   <a href="https://discord.gg/qUrghes">Community</a>
   <span> · </span>
   <a href="https://dev.to/parabeac">Dev.to</a>
-</h2>
+</h3>
 
 # What is Parabeac-Core?
 Parabeac-Core is an open-source repository that converts design files into Flutter code. The biggest challenge in code conversion is achieving quality code, but in a tool like this, there’s so much variability in what quality code should look like. So Parabeac-Core is built in a way not to promise quality code, but to be driven by the community so that you can configure & tweak to you or your teams liking. See our [Manifesto](https://github.com/Parabeac/Parabeac-Core/blob/stable/MANIFESTO.md). We welcome contributors to improve Parabeac-Core, create [Parabeac Eggs](https://github.com/Parabeac/parabeac-egg-template), & to join our [Discord](https://discord.com/invite/qUrghes) community!
