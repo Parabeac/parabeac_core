@@ -1,7 +1,9 @@
 # Contributing to Parbeac Core
 First and foremost, thanks for considering contribution here at Parabeac Core! 
 
-Below you'll find a set of guidelines around how to contribute here at Parabeac. These aren't rules set in stone, feel free to use your best guidance, and if you have any ideas feel to make a Pull Request and suggest changes. 
+Below you'll find a set of guidelines around how to contribute here at Parabeac. These aren't rules set in stone, feel free to use your best guidance, and if you have any ideas feel to make a Pull Request and suggest changes. We've also created an updated [Getting started with Contribution Guide](https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide) on our wiki which we recommend for a brief overview and introduction to contributing here on Parabeac-Core.
+
+> :partying_face: **Special Shout out if you're here for #HacktoberFest! Double your swag by contributing to Parabeac as one of our first 100 contributors!**
 
 **Table Of Contents** 
 
@@ -88,35 +90,26 @@ When filing an issue with Parabeac Core please follow these steps so we can reso
 While we're dedicated to our community we are always looking at ways to improve our tool and tech. Feel free to leave suggestions that you would like to see in the future, we're constantly working to improve our process and make things easier going forward. 
 
 ### Contributing Overview
-#### How to get started
-We're very happy to have any help we can get on our tool as those with the best feedback and input are usually the people using the tool. If you're looking to contribute there are a number of ways you can help:
-* Feature Development 
-* Triage
-* Helping others
 
-**Feature Development**
-There are a number of new features and objectives we're hoping to reach and as a contributor, your work can help take us there. Please feel free to look over the Issues section of our GitHub and find any issues with the "Feature Work" Label. These issues are things we're looking to add going forward and are depending on the community to assist with. Feel free to join our [discord](https://discord.com/invite/qUrghes) and chat with us to determine the best course of action and to help with guidance. 
-**Triage**
-As more people use and more features get implemented on Parabeac Core more issues are created. One of the best, and most straight forward, ways to help is by helping us solve bugs. Within the Issues section of our GitHub, you'll find a number of issues that have tags denoting an issue area of relevance. It may be defined by the service or more specifically the node/widget that's being affected. By stepping in and solving these issues you'll be able to speed up our development of features going forward. 
-**Helping Others**
-One of the best ways to help is by not only by helping out in the code but also by helping out others that are having issues. Being a resource for support and guidance to developers that are having problems is the best way to keep the platform healthy and strong moving forward. You can do this by finding issues that have the "Help Wanted" label. Parabeac Advocates keep us going and allow us to drive the best changes we can.
-#### Process
-**Feature Development**
-The following process should be kept in mind when doing feature development for Parabeac Core:
-1. Be Kind and Courteous to Others 
-2. When Branching and determining which feature to work on make sure to join #ParabeacHackers channel on our [discord](https://discord.com/invite/qUrghes), you'll need to request the contributor role, to ensure there isn't duplicated work. 
-3. Make sure your Parabeac Core Developer Environment is configured to the correct version for the feature at hand.
-4. Once you've finished working on the task, make a PR and reach out to one of the Discord Members that have the "Team" Role.
-5. When performing a code review make sure all edge cases and test cases have been accounted for and that a Parabeac Team member is invited. If a Parabeac Team Member is not present during the code review, the PR will be automatically declined.
-6. Keep talking and keep an open mind, the more teamwork the better.
+#### Working on Issues
 
-**Triage**
-1. Be Kind and Courteous to Others 
-2. When picking which issues to work on make sure to join the #ParabeacHackers channel and the #ParabeacTriage channel on our [discord](https://discord.com/invite/qUrghes), you'll need to request the contributor role, to stay up to date on the latest progress and to ensure no duplicated work. 
-3. Make sure your development environment is up to date with the correct version in the Issue and make sure to read the corresponding page associated with the task at hand. 
-4. Once you've finished working on the task, make a PR and reach out to one of the Discord Members that have the "Team" Role.
-5. When performing a code review make sure all edge cases and test cases have been accounted for and that a Parabeac Team member is invited. If a Parabeac Team Member is not present during the code review, the PR will be automatically declined.
-6. Keep talking and keep an open mind, the more teamwork the better.
+When looking to contribute there are a few simple steps you can follow to make sure the work you do is prioritized and beneficial to Parabeac-Core. The following Process is how we manage the contribution flow here at Parabeac:
+
+1. Fork the Repository on Github.
+2. Check the issues section on Github to see if an issue has already been made for the work to be completed:
+* If it has, reach out to whoever was assigned said issue or, if that issue is not assigned to anyone contact us in the #dev_questions or #parabeac_hackers channels on our [Discord](https://discord.com/invite/qUrghes) to discuss taking the issue.
+* If it has not, verify that the work is non-trivial and then create an issue on our Github issues section, make sure to reach out to the Team on [Discord](https://discord.com/invite/qUrghes) if this issue is pressing. You can put the tag proposal on the work you’re trying to do to help us identify and help with prioritization.
+3. Create a branch off of the dev branch (if the issue is non-breaking) or the stable branch (if the issue is breaking) within your fork of the repo and implement your changes. Make sure to reach out to someone with the “Team” Role on our [Discord](https://discord.com/invite/qUrghes) to discuss your changes or ideas if you have any questions.
+4. Submit this branch to the repo as a Pull Request.
+5. Undergo code review. These reviews usually take the form of comments either on the PR on GitHub or within the Parabeac Core [Discord](https://discord.com/invite/qUrghes). More often than not a Parabeac Team Member or Committer will respond or comment to your PR within about 48 hours. If you haven’t heard from anyone by that time feel free to poke anyone on the Parabeac Team on our [Discord](https://discord.com/invite/qUrghes) (But especially our CEO @SiliconIvan).
+
+Once you have the appropriate sign offs, your final reviewer should merge your code but if they haven’t feel free to merge it in.  
+
+While following these steps should you have any issues don’t hesitate to reach out to anyone on Team Parabeac on our [Discord](https://discord.com/invite/qUrghes)
+
+#### Pull Requests
+
+Pull Requests are how you bring the work you’ve done back into the Parabeac-Core codebase. By submitting a Pull Request (or PR) you’re able to merge the changes you've made on your own branch into either dev or stable(Depending on the work done). All PR’s must be reviewed before they can be merged into the codebase in order to ensure that the work being done follows our guidelines and does what it says it will. Code review is usually done within Github itself but in special cases with complex work we do recommend talking with the team directly in our [Discord](https://discord.com/invite/qUrghes). For Additional insight, check out or [Tree Hygiene](https://github.com/Parabeac/Parabeac-Core/wiki/Tree-Hygiene) Page on our Wiki!
 
 Contribution is the best way to make sure Parabeac Core keeps driving forward to its fullest potential and your contributions are the best way to get us there. 
 
