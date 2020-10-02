@@ -10,22 +10,22 @@ main(List<String> args) async {
   //If arguments is empty or only has -h
   if (args.length == 0 || args[0] == '-h') {
     print(helpText);
-    return;
-  }
-  for (var i = 0; i < args.length; i += 2) {
-    switch (args[i]) {
-      case '-url':
-        url = args[i + 1];
-        break;
-      case '-key':
-        key = args[i + 1];
-        break;
-      case '-Skey':
-        sKey = args[i + 1];
-        break;
-      default:
-        arguments.addAll([args[i], args[i + 1]]);
-        break;
+  } else {
+    for (var i = 0; i < args.length; i += 2) {
+      switch (args[i]) {
+        case '-url':
+          url = args[i + 1];
+          break;
+        case '-key':
+          key = args[i + 1];
+          break;
+        case '-Skey':
+          sKey = args[i + 1];
+          break;
+        default:
+          arguments.addAll([args[i], args[i + 1]]);
+          break;
+      }
     }
   }
 
