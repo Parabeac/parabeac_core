@@ -73,6 +73,7 @@ class PBVisualGenerationService implements PBGenerationService {
           if (result != null) {
             // Add next depth to queue.
             if (currentNode.designNode is GroupNode &&
+                (currentNode.designNode as GroupNode).children != null &&
                 (currentNode.designNode as GroupNode).children.isNotEmpty) {
               for (var child
                   in (currentNode.designNode as GroupNode).children) {
