@@ -30,6 +30,19 @@ void main(List<String> args) async {
   var projectName = '';
   var designType = 'sketch';
   var configurationPath;
+  final _helpText = "Usage Options: \n" +
+      "-p \t Path to the sketch File \n" +
+      "-o \t Output Path\n" +
+      "-n \t Name of the project\n" +
+      "-c \t Path of the configuration file\n";
+
+  //Check if no args passed or only -h passed
+  //If arguments is empty or only has -h
+  if (args.length == 0 || args[0] == '-h') {
+    print(_helpText);
+    return;
+  }
+
   for (var i = 0; i < args.length; i += 2) {
     switch (args[i]) {
       case '-p':
