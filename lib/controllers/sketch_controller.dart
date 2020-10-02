@@ -18,8 +18,8 @@ class SketchController {
 
   ///Converting the [fileAbsPath] sketch file to flutter
   void convertSketchFile(
-      var fileAbsPath, var projectPath, var configurationPath) async {
-    configure(configurationPath);
+      var fileAbsPath, var projectPath, var configurationPath, var configType) async {
+    configure(configurationPath, configType);
 
     ///INTAKE
     var ids = InputDesignService(fileAbsPath);
@@ -38,11 +38,12 @@ class SketchController {
     fpb.convertToFlutterProject();
   }
 
-  void configure(var configurationPath) async {
+  void configure(var configurationPath, var configType) async {
     Map configurations;
     try {
       if (configurationPath == null || configurationPath.isEmpty) {
         configurations = MainInfo().defaultConfigs;
+
       } else {
         configurations =
             json.decode(File(configurationPath).readAsStringSync());
@@ -56,8 +57,9 @@ class SketchController {
     }
 
     ///SET CONFIGURATION
-    // Setting configurations globaly
+    // Setting configurations globally
     MainInfo().configurations = configurations;
+    MainInfo().configurationType = configType;
   }
 
   SketchNodeTree generateSketchNodeTree(

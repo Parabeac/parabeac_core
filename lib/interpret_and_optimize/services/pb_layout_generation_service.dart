@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -20,7 +21,7 @@ import 'package:uuid/uuid.dart';
 /// Output:PBIntermediateNode Tree
 class PBLayoutGenerationService implements PBGenerationService {
   ///The available Layouts that could be injected.
-  List<PBLayoutIntermediateNode> _availableLayouts;
+  List<PBLayoutIntermediateNode> _availableLayouts = [];
 
   var log = Logger('Layout Generation Service');
 
@@ -34,15 +35,23 @@ class PBLayoutGenerationService implements PBGenerationService {
   PBContext currentContext;
 
   PBLayoutGenerationService({this.currentContext}) {
-    _availableLayouts = [
-      PBIntermediateColumnLayout(
+    Map<String, PBLayoutIntermediateNode> layoutHandlers = {
+      'column': PBIntermediateColumnLayout(
           currentContext: currentContext, UUID: Uuid().v4()),
-      PBIntermediateRowLayout(Uuid().v4(), currentContext: currentContext),
-      PBIntermediateStackLayout(Uuid().v4(), currentContext: currentContext)
-    ];
+      'row': PBIntermediateRowLayout(currentContext: currentContext, UUID: Uuid().v4()),
+      'stack': PBIntermediateStackLayout(currentContext: currentContext, UUID: Uuid().v4()),
+    };
 
-    defaultLayout = PBIntermediateColumnLayout(
-        currentContext: currentContext, UUID: Uuid().v4());
+    var mainInfo = MainInfo();
+
+    for (var layoutType in currentContext.configuration.layoutPrecedence ?? ['column']) {
+      layoutType = layoutType.toLowerCase();
+      if (layoutHandlers.containsKey(layoutType)) {
+        _availableLayouts.add(layoutHandlers[layoutType]);
+      }
+    }
+
+    defaultLayout = _availableLayouts[0];
   }
 
   ///The default [PBLayoutIntermediateNode]

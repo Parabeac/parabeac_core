@@ -42,7 +42,8 @@ void main(List<String> args) async {
     print(_helpText);
     return;
   }
-
+  var configurationPath = 'lib/configurations/configurations.json';
+  var configurationType = 'default';
   for (var i = 0; i < args.length; i += 2) {
     switch (args[i]) {
       case '-p':
@@ -63,9 +64,16 @@ void main(List<String> args) async {
       case '-n':
         projectName = args[i + 1];
         break;
+      //  usage -c "default:lib/configurations/configurations.json
       case '-c':
-        // handle configurations
-        configurationPath = 'lib/configurations/configurations.json';
+        var configSet = args[i + 1].split(':');
+        if (configSet.isNotEmpty) {
+          configurationType = configSet[0];
+        }
+        if (configSet.length >= 2) {
+          // handle configurations
+          configurationPath = configSet[1];
+        }
         break;
     }
   }
@@ -96,8 +104,11 @@ void main(List<String> args) async {
 
     //Retrieving the Sketch PNGs from the design file
     await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(pathToSketchFile,
-        MainInfo().outputPath + projectName, configurationPath);
+    await SketchController().convertSketchFile(
+        pathToSketchFile,
+        MainInfo().outputPath + projectName,
+        configurationPath,
+        configurationType);
     process.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');

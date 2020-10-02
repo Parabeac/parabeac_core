@@ -23,34 +23,51 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   String generateStatefulWidget(String body, String name) {
-    name = PBInputFormatter.formatLabel(name,
-        isTitle: true, space_to_underscore: false);
-    var widgetName = name;
+    var widgetName = _generateWidgetName(name);
     var constructorName = '_$name';
-    var buffer = StringBuffer();
-    buffer.write('class ${widgetName} extends StatefulWidget{\n'
-        '\tconst ${widgetName}() : super();\n'
-        '@override\n_${widgetName} createState() => _${widgetName}();\n}\n\n'
-        'class _${widgetName} extends State<${widgetName}>{\n'
-        '${generateInstanceVariables()}\n'
-        '${generateConstructor(constructorName)}\n'
-        '@override\nWidget build(BuildContext context){\n'
-        'return ${body};\n}\n}');
-    return generateImports() + buffer.toString();
+    return '''
+${generateImports()}
+
+class ${widgetName} extends StatefulWidget{
+  const ${widgetName}() : super();
+  @override
+  _${widgetName} createState() => _${widgetName}();
+}
+
+class _${widgetName} extends State<${widgetName}>{
+  ${generateInstanceVariables()}
+  ${generateConstructor(constructorName)}
+
+  @override
+  Widget build(BuildContext context){
+    return ${body};
+  }
+}''';
   }
 
-  String generateStatelessWidgets(String body, String name) {
-    name = PBInputFormatter.formatLabel(name,
-        isTitle: true, space_to_underscore: false);
-    var buffer = StringBuffer();
+  String generateStatelessWidget(String body, String name) {
+    var widgetName = _generateWidgetName(name);
     var constructorName = '_$name';
-    buffer.write('class ${name} extends StatelessWidget{\n'
-        '\tconst ${name}({Key key}) : super(key : key);\n'
-        '${generateInstanceVariables()}\n'
-        '${generateConstructor(constructorName)}\n'
-        '\t@override\n\tWidget build(BuildContext context){\n\t return ${body};}}');
-    return generateImports() + buffer.toString();
+    return '''
+${generateImports()}
+
+class ${widgetName} extends StatelessWidget{
+  const ${widgetName}({Key key}) : super(key : key);
+  ${generateInstanceVariables()}
+  ${generateConstructor(constructorName)}
+
+  @override
+  Widget build(BuildContext context){
+    return ${body};
   }
+}''';
+  }
+
+  String _generateWidgetName(name) => PBInputFormatter.formatLabel(
+        name,
+        isTitle: true,
+        space_to_underscore: false,
+      );
 
   String generateConstructor(name) {
     if (constructorVariables == null || constructorVariables.isEmpty) {
@@ -128,7 +145,7 @@ class PBFlutterGenerator extends PBGenerationManager {
           return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidgets(
+          return generateStatelessWidget(
               gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.EMPTY_PAGE:

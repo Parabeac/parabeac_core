@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -12,7 +13,7 @@ class PBContext {
     copyConfig.remove('default');
 
     configuration =
-        PBConfiguration(jsonConfigurations['default'], jsonConfigurations);
-    configuration.setConfigurations(jsonConfigurations);
+        PBConfiguration(jsonConfigurations[MainInfo().configurationType], jsonConfigurations);
+    configuration.configurations = jsonConfigurations;
   }
 }
