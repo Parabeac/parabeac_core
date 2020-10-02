@@ -4,7 +4,7 @@ pull_request_rules:
       - conflict
     actions:
         comment:
-          message: "This PR has conflicts. @{{@author}}, is it possible for you to fix them? We can sync to discuss the problem should there be one"
+          message: "This PR has conflicts. @{{author}}, is it possible for you to fix them? We can sync to discuss the problem should there be one"
   - name: Hotfix merge
     conditions:
       - "#approved-reviews-by>=2"
