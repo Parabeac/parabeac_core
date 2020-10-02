@@ -29,7 +29,6 @@ void main(List<String> args) async {
   var path = '';
   var projectName = '';
   var designType = 'sketch';
-  var configurationPath;
   final _helpText = "Usage Options: \n" +
       "-p \t Path to the sketch File \n" +
       "-o \t Output Path\n" +
