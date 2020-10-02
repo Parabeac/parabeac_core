@@ -32,7 +32,12 @@ class PBPluginListHelper {
 
   Map<String, PBEgg> allowListNames;
 
-  List<String> baseNames = ['.*background', '.*navbar', '.*tabbar', '.*tab'];
+  List<String> baseNames = [
+    '.*background',
+    '.*navbar',
+    '.*tabbar',
+    '.*tab',
+  ];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist

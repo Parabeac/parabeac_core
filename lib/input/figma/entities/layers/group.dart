@@ -94,7 +94,6 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
       }
       imageReference = UUID;
 
-      /// TODO: check if this actually removes the children from the Tree
       this.children = null;
       return Future.value(InheritedBitmap(this));
     }

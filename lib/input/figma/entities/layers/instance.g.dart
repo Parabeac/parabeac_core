@@ -34,8 +34,7 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
         ?.toList(),
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..backgroundColor = json['backgroundColor'];
+    ..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
@@ -57,7 +56,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
       'children': instance.children,
       'componentId': instance.componentId,

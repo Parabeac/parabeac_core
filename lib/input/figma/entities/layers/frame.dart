@@ -4,6 +4,8 @@ import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
@@ -54,35 +56,36 @@ class FigmaFrame extends FigmaNode
 
   double itemSpacing;
 
-  @override
-  var backgroundColor;
+  // @override
+  // PBColor backgroundColor;
 
   @override
   String type = 'FRAME';
 
-  FigmaFrame(
-      {name,
-      isVisible,
-      type,
-      pluginData,
-      sharedPluginData,
-      Frame this.boundaryRectangle,
-      this.style,
-      this.fills,
-      this.strokes,
-      this.strokeWeight,
-      this.strokeAlign,
-      this.cornerRadius,
-      this.constraints,
-      this.layoutAlign,
-      this.size,
-      this.horizontalPadding,
-      this.verticalPadding,
-      this.itemSpacing,
-      List<FigmaNode> this.children,
-      Flow flow,
-      String UUID})
-      : super(
+  FigmaFrame({
+    name,
+    isVisible,
+    type,
+    pluginData,
+    sharedPluginData,
+    Frame this.boundaryRectangle,
+    this.style,
+    this.fills,
+    this.strokes,
+    this.strokeWeight,
+    this.strokeAlign,
+    this.cornerRadius,
+    this.constraints,
+    this.layoutAlign,
+    this.size,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.itemSpacing,
+    List<FigmaNode> this.children,
+    Flow flow,
+    String UUID,
+    FigmaColor backgroundColor,
+  }) : super(
           name,
           isVisible,
           type,
@@ -92,8 +95,13 @@ class FigmaFrame extends FigmaNode
         );
 
   @override
-  FigmaNode createFigmaNode(Map<String, dynamic> json) =>
-      FigmaFrame.fromJson(json);
+  FigmaNode createFigmaNode(Map<String, dynamic> json) {
+    var node = FigmaFrame.fromJson(json);
+    node.style = StyleExtractor().getStyle(json);
+    this.backgroundColor = node.style.backgroundColor;
+    return node;
+  }
+
   factory FigmaFrame.fromJson(Map<String, dynamic> json) =>
       _$FigmaFrameFromJson(json);
   @override
@@ -101,18 +109,15 @@ class FigmaFrame extends FigmaNode
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    Map color = fills?.first['color'];
-    backgroundColor = Color(
-      alpha: color['a'],
-      red: color['r'],
-      blue: color['b'],
-      green: color['g'],
-    );
+    /// TODO: change `isHomeScreen` to its actual value
     return Future.value(InheritedScaffold(
       this,
       currentContext: currentContext,
       name: name,
-      isHomeScreen: null,
+      isHomeScreen: false,
     ));
   }
+
+  @override
+  PBColor backgroundColor;
 }

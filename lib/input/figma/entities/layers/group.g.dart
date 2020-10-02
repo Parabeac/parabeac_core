@@ -34,7 +34,6 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     UUID: json['id'] as String,
   )
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..backgroundColor = json['backgroundColor']
     ..imageReference = json['imageReference'] as String;
 }
 
@@ -58,7 +57,6 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
-      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
       'imageReference': instance.imageReference,
     };

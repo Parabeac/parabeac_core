@@ -21,7 +21,6 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
   )
-    ..UUID = json['id'] as String
     ..name = json['name'] as String
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
@@ -34,12 +33,12 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
     ..strokeAlign = json['strokeAlign'] as String
     ..styles = json['styles']
+    ..UUID = json['UUID'] as String
     ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
     <String, dynamic>{
-      'id': instance.UUID,
       'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
@@ -53,6 +52,7 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
+      'UUID': instance.UUID,
       'children': instance.children,
       'booleanOperation': instance.booleanOperation,
       'type': instance.type,

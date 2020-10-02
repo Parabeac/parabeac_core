@@ -17,8 +17,10 @@ class StyleExtractor {
   PBStyle getStyle(Map<String, dynamic> json) {
     if (json != null) {
       var bgColor;
-      if (json['background'] != null) {
+      if (json['background'] != null && json['background'].isNotEmpty) {
         bgColor = _getColor(json['background'][0]['color']);
+      } else {
+        bgColor = _getColor(null);
       }
 
       var textStyle;
@@ -113,7 +115,7 @@ class StyleExtractor {
   }
 
   FigmaColor _getColor(Map<String, dynamic> json) {
-    if (json != null) {
+    if (json != null && json.isNotEmpty) {
       return FigmaColor(
         alpha: json['a'],
         blue: json['b'],
@@ -123,7 +125,7 @@ class StyleExtractor {
     } else {
       // Set color default to Black if fill is null
       return FigmaColor(
-        alpha: 1.0,
+        alpha: 0.0,
         blue: 0.0,
         green: 0.0,
         red: 0.0,

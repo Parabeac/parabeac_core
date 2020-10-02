@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
@@ -95,4 +96,7 @@ class Component extends FigmaFrame
     );
     return Future.value(sym_master);
   }
+
+  @override
+  PBColor backgroundColor;
 }
