@@ -33,7 +33,7 @@ Future<Uint8List> convertImageLocal(String uuid, num width, num height) async {
   try {
     var body = {
       'uuid': uuid,
-      'path': MainInfo().sketchPath,
+      'path': MainInfo().designPath,
       'width': width,
       'height': height
     };

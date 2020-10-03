@@ -9,8 +9,8 @@ class MainInfo {
   /// Path representing where the output of parabeac-core will be produced
   String outputPath;
 
-  /// Path to the user's sketch file
-  String sketchPath;
+  /// Path to the user's design file
+  String designPath;
 
   /// Current working directory; contains the path from where the script was called
   Directory cwd;

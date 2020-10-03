@@ -9,87 +9,113 @@ import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:args/args.dart';
 
 import 'controllers/main_info.dart';
 
-String pathToSketchFile;
 String resultsDirectory = Platform.environment['SENTRY_DSN'] ?? '/temp';
 final SentryClient sentry = SentryClient(dsn: resultsDirectory);
+ArgResults argResults;
 
 void main(List<String> args) async {
   await checkConfigFile();
 
+  //Sentry logging initialization
   MainInfo().sentry = SentryClient(dsn: resultsDirectory);
   var log = Logger('Main');
-
   log.info(args.toString());
 
   MainInfo().cwd = Directory.current;
 
-  var path = '';
-  var projectName = '';
+  ///sets up parser
+  final parser = ArgParser()
+    ..addOption('path', help: 'The input path', valueHelp: 'path', abbr: 'p')
+    ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
+    ..addOption(
+      'project-name',
+      help: 'Project name',
+      abbr: 'n',
+      defaultsTo: 'temp',
+    )
+    ..addOption(
+      'config-path',
+      help: 'The configuration path',
+      abbr: 'c',
+      defaultsTo: 'lib/configurations/configurations.json',
+    )
+    ..addFlag(
+      'help',
+      help: 'Displays this help information.',
+      abbr: 'h',
+      negatable: false,
+    );
+  ;
+
+  void handleError(String msg) {
+    stderr.writeln(msg);
+    exitCode = 2;
+  }
+
+  argResults = parser.parse(args);
+
+  if (argResults['help']) {
+    print('''
+  ** HELP **
+${parser.usage}
+    ''');
+    exit(0);
+  }
+
+  String path = argResults['path'];
   var designType = 'sketch';
-  var configurationPath;
-  for (var i = 0; i < args.length; i += 2) {
-    switch (args[i]) {
-      case '-p':
-        path = args[i + 1];
-        pathToSketchFile = path;
-        MainInfo().sketchPath = pathToSketchFile;
-        // If outputPath is empty, assume we are outputting to sketch path
-        MainInfo().outputPath ??= getCleanPath(path);
-        if (pathToSketchFile.endsWith('.sketch')) {
-          designType = 'sketch';
-        } else if (pathToSketchFile.endsWith('.fig')) {
-          designType = 'figma';
+  var configurationPath = argResults['config-path'];
+  String projectName = argResults['project-name'];
+
+  if (path == null) {
+    handleError('Missing required argument: path');
+  } else {
+    if (path.endsWith('.sketch')) {
+      designType = 'sketch';
+    } else if (path.endsWith('.fig')) {
+      designType = 'figma';
+    }
+
+    // Populate `MainInfo()`
+    MainInfo().outputPath = argResults['out'];
+    // If outputPath is empty, assume we are outputting to design file path path
+    MainInfo().outputPath ??= getCleanPath(path);
+    if (!MainInfo().outputPath.endsWith('/')) {
+      MainInfo().outputPath += '/';
+    }
+    MainInfo().designPath = path;
+    MainInfo().projectName = projectName;
+
+    // Input
+    var id = InputDesignService(path);
+
+    if (designType == 'sketch') {
+      var process = await Process.start('npm', ['run', 'prod'],
+          workingDirectory: MainInfo().cwd.path.replaceAll(RegExp(r'\\'), '/') +
+              '/SketchAssetConverter');
+
+      await for (var event in process.stdout.transform(utf8.decoder)) {
+        if (event.toLowerCase().contains('server is listening on port')) {
+          log.fine('Successfully started Sketch Asset Converter');
+          break;
         }
-        break;
-      case '-o':
-        MainInfo().outputPath = args[i + 1];
-        break;
-      case '-n':
-        projectName = args[i + 1];
-        break;
-      case '-c':
-        // handle configurations
-        configurationPath = 'lib/configurations/configurations.json';
-        break;
-    }
-  }
-
-  if (!MainInfo().outputPath.endsWith('/')) {
-    MainInfo().outputPath += '/';
-  }
-
-  if (projectName.isEmpty) {
-    projectName = 'temp';
-  }
-
-  MainInfo().projectName = projectName;
-
-  // Input
-  var id = InputDesignService(path);
-
-  if (designType == 'sketch') {
-    var process = await Process.start('npm', ['run', 'prod'],
-        workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
-
-    await for (var event in process.stdout.transform(utf8.decoder)) {
-      if (event.toLowerCase().contains('server is listening on port')) {
-        log.fine('Successfully started Sketch Asset Converter');
-        break;
       }
-    }
 
-    //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(pathToSketchFile,
-        MainInfo().outputPath + projectName, configurationPath);
-    process.kill();
-  } else if (designType == 'xd') {
-    assert(false, 'We don\'t support Adobe XD.');
-  } else if (designType == 'figma') {
-    assert(false, 'We don\'t support Figma.');
+      //Retrieving the Sketch PNGs from the design file
+      await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+      await SketchController().convertSketchFile(
+          path, MainInfo().outputPath + projectName, configurationPath);
+      process.kill();
+    } else if (designType == 'xd') {
+      assert(false, 'We don\'t support Adobe XD.');
+    } else if (designType == 'figma') {
+      assert(false, 'We don\'t support Figma.');
+    }
+    exitCode = 0;
   }
 }
 
@@ -104,7 +130,7 @@ Future<void> checkConfigFile() async {
     return;
   }
 
-  var homepath = getHomePath();
+  var homepath = getHomePath().replaceAll(RegExp(r'\\'), '/');
   var configFile = File('$homepath/.config/.parabeac/config.json');
   if (!(await configFile.exists())) {
     createConfigFile(configFile);
@@ -154,7 +180,7 @@ void addToAmplitude() async {
 String getCleanPath(String path) {
   var list = path.split('/');
   var result = '';
-  for (int i = 0; i < list.length - 1; i++) {
+  for (var i = 0; i < list.length - 1; i++) {
     result += list[i] + '/';
   }
   return result;
