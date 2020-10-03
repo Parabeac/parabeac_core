@@ -52,6 +52,7 @@ void main(List<String> args) async {
     );
   ;
 
+//error handler using logger package
   void handleError(String msg) {
     log.error(msg);
     exitCode = 2;
@@ -60,7 +61,8 @@ void main(List<String> args) async {
 
   argResults = parser.parse(args);
 
-  if (argResults['help']) {
+  //Check if no args passed or only -h/--help passed
+  if (argResults['help'] || argResults.arguments.isEmpty) {
     print('''
   ** PARABEAC HELP **
 ${parser.usage}
