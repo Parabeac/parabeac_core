@@ -3,23 +3,29 @@ import 'dart:io';
 
 main(List<String> args) async {
   List<String> arguments = ['lib/main.dart'];
+  final helpText = "Usage Options: \n" + "-url \n" + "-key \n" + "-Skey";
   var url = '';
   var key = '';
   var sKey = '';
-  for (var i = 0; i < args.length; i += 2) {
-    switch (args[i]) {
-      case '-url':
-        url = args[i + 1];
-        break;
-      case '-key':
-        key = args[i + 1];
-        break;
-      case '-Skey':
-        sKey = args[i + 1];
-        break;
-      default:
-        arguments.addAll([args[i], args[i + 1]]);
-        break;
+  //If arguments is empty or only has -h
+  if (args.length == 0 || args[0] == '-h') {
+    print(helpText);
+  } else {
+    for (var i = 0; i < args.length; i += 2) {
+      switch (args[i]) {
+        case '-url':
+          url = args[i + 1];
+          break;
+        case '-key':
+          key = args[i + 1];
+          break;
+        case '-Skey':
+          sKey = args[i + 1];
+          break;
+        default:
+          arguments.addAll([args[i], args[i + 1]]);
+          break;
+      }
     }
   }
 
