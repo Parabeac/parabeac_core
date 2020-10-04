@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/pb_param.dart';
+import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -56,8 +56,8 @@ class PBFlutterGenerator extends PBGenerationManager {
     if (constructorVariables == null || constructorVariables.isEmpty) {
       return '';
     }
-    List<PBParam> variables = [];
-    List<PBParam> optionalVariables = [];
+    List<PBVariable> variables = [];
+    List<PBVariable> optionalVariables = [];
     constructorVariables.forEach((param) {
       // Only accept constructor variable if they are
       // part of the variable instances
@@ -152,10 +152,10 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   @override
-  void addInstanceVariable(PBParam param) => instanceVariables.add(param);
+  void addInstanceVariable(PBVariable param) => instanceVariables.add(param);
 
   @override
-  void addConstructorVariable(PBParam param) => constructorVariables.add(param);
+  void addConstructorVariable(PBVariable param) => constructorVariables.add(param);
 
   @override
   void addImport(String value) => imports.add(value);

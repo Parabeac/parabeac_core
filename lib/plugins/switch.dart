@@ -1,6 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_param.dart';
+import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -45,7 +45,7 @@ class SwitchGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source) {
     if (source is Switch) {
-      var value = PBParam('switchValue', 'bool', false);
+      var value = PBVariable('switchValue', 'bool', false);
       manager.addInstanceVariable(value);
       manager.addConstructorVariable(value);
       manager.addDependencies('list_tile_switch', '^0.0.2');
