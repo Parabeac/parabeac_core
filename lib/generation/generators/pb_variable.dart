@@ -1,9 +1,9 @@
-class PBParam {
+class PBVariable {
   String variableName;
   String type;
   bool isRequired;
 
-  PBParam(
+  PBVariable(
     this.variableName,
     this.type,
     this.isRequired,
@@ -11,6 +11,6 @@ class PBParam {
 
   @override
   bool operator ==(Object other) =>
-      (other as PBParam).variableName == variableName &&
-      (other as PBParam).type == type;
+      (other as PBVariable).variableName == variableName &&
+      (other as PBVariable).type == type;
 }
