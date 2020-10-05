@@ -16,6 +16,9 @@ class MainInfo {
   Directory cwd;
   Map configurations;
 
+  // the type of configuration you want to set, 'default' is default type.
+  String configurationType;
+
   /// Unique ID for the device running parabeac-core
   String deviceId;
 
@@ -27,6 +30,7 @@ class MainInfo {
       'widgetStyle': 'Material',
       'widgetType': 'Stateless',
       'widgetSpacing': 'Expanded',
+      'layoutPrecedence': ['columns', 'rows', 'stack']
     }
   };
 

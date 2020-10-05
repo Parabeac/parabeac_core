@@ -29,7 +29,20 @@ void main(List<String> args) async {
   var path = '';
   var projectName = '';
   var designType = 'sketch';
-  var configurationPath;
+  final _helpText = "Usage Options: \n" +
+      "-p \t Path to the sketch File \n" +
+      "-o \t Output Path\n" +
+      "-n \t Name of the project\n" +
+      "-c \t Path of the configuration file\n";
+
+  //Check if no args passed or only -h passed
+  //If arguments is empty or only has -h
+  if (args.length == 0 || args[0] == '-h') {
+    print(_helpText);
+    return;
+  }
+  var configurationPath = 'lib/configurations/configurations.json';
+  var configurationType = 'default';
   for (var i = 0; i < args.length; i += 2) {
     switch (args[i]) {
       case '-p':
@@ -50,9 +63,16 @@ void main(List<String> args) async {
       case '-n':
         projectName = args[i + 1];
         break;
+      //  usage -c "default:lib/configurations/configurations.json
       case '-c':
-        // handle configurations
-        configurationPath = 'lib/configurations/configurations.json';
+        var configSet = args[i + 1].split(':');
+        if (configSet.isNotEmpty) {
+          configurationType = configSet[0];
+        }
+        if (configSet.length >= 2) {
+          // handle configurations
+          configurationPath = configSet[1];
+        }
         break;
     }
   }
@@ -83,8 +103,11 @@ void main(List<String> args) async {
 
     //Retrieving the Sketch PNGs from the design file
     await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(pathToSketchFile,
-        MainInfo().outputPath + projectName, configurationPath);
+    await SketchController().convertSketchFile(
+        pathToSketchFile,
+        MainInfo().outputPath + projectName,
+        configurationPath,
+        configurationType);
     process.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
