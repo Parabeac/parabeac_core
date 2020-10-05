@@ -38,11 +38,14 @@ class PBLayoutGenerationService implements PBGenerationService {
     Map<String, PBLayoutIntermediateNode> layoutHandlers = {
       'column': PBIntermediateColumnLayout(
           currentContext: currentContext, UUID: Uuid().v4()),
-      'row': PBIntermediateRowLayout(currentContext: currentContext, UUID: Uuid().v4()),
-      'stack': PBIntermediateStackLayout(currentContext: currentContext, UUID: Uuid().v4()),
+      'row':
+          PBIntermediateRowLayout(Uuid().v4(), currentContext: currentContext),
+      'stack': PBIntermediateStackLayout(Uuid().v4(),
+          currentContext: currentContext),
     };
 
-    for (var layoutType in currentContext.configuration.layoutPrecedence ?? ['column']) {
+    for (var layoutType
+        in currentContext.configuration.layoutPrecedence ?? ['column']) {
       layoutType = layoutType.toLowerCase();
       if (layoutHandlers.containsKey(layoutType)) {
         _availableLayouts.add(layoutHandlers[layoutType]);
