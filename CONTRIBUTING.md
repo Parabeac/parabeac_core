@@ -21,7 +21,7 @@ Below you'll find a set of guidelines around how to contribute here at Parabeac.
 [Parabeac Eggs](#parabeac-eggs)
 
 ## Code of Conduct 
-Everthing and everyone within this project is governed by the [Parabeac Code Of Conduct](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md). By participating in this project you are expected to follow this code. If there are any questions or you see any unnacceptable behavior please contact support@parabeac.com.
+Everything and everyone within this project is governed by the [Parabeac Code Of Conduct](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md). By participating in this project you are expected to follow this code. If there are any questions or you see any unacceptable behavior please contact support@parabeac.com.
 ## Getting Started
 
 ### What is Parabeac Core
