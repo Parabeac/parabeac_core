@@ -30,19 +30,20 @@ main(List<String> args) async {
   }
 
   /// To install parabeac core
-  var install = await Process.start(
+  var install = Process.start(
     'bash',
     [
       '${Directory.current.path}/pb-scripts/install.sh',
     ],
-  );
-
-  await for (var event in install.stdout.transform(utf8.decoder)) {
-    print(event);
-  }
-  await for (var event in install.stderr.transform(utf8.decoder)) {
-    print(event);
-  }
+  ).then((process){
+    stdout.addStream(process.stdout);
+    process.exitCode.then((exitCode) {
+      if(exitCode!=0) {
+        print('exit code: $exitCode');
+      }
+    });
+  });
+  await install;
 
   /// To Download and merge the plugins on the codebase
   var result = await Process.start(
