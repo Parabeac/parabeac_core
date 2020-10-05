@@ -7,7 +7,7 @@ import 'package:quick_log/quick_log.dart';
 import '../pb_flutter_generator.dart';
 
 class PBPositionedGenerator extends PBGenerator {
-  PBPositionedGenerator() : super('POSITIONED');
+  PBPositionedGenerator() : super();
   var log = Logger('Positioned Generator');
 
   @override

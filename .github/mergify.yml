@@ -1,0 +1,30 @@
+pull_request_rules:
+  - name: ask to resolve conflict
+    conditions:
+      - conflict
+    actions:
+        comment:
+          message: "This PR has conflicts. @{{author}}, is it possible for you to fix them? We can sync to discuss the problem should there be one"
+  - name: Hotfix merge
+    conditions:
+      - "#approved-reviews-by>=2"
+      - "head~=^hotfix"
+      - "base=stable"
+    actions:
+      backport:
+        branches:
+          - dev
+  - name: Automatic merge on approval
+    conditions:
+      - "#approved-reviews-by>=2"
+      - "-head~=^hotfix"
+    actions:
+      merge:
+        method: squash
+  - name: Wrong branch
+    conditions:
+      - "-head~=^hotfix"
+      - "base=stable"
+    actions:
+      close:
+        message: "Thank you for your contribution @{{author}}🎉! However, please double check if this PR goes into dev and not stable 🤔. The PR is going to be closed, please make another PR for dev!"

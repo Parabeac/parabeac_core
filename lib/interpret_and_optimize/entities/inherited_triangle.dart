@@ -27,7 +27,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
   Uint8List image;
 
   ///Name of the png file
-  String name;
+  var name;
 
   @override
   String UUID;
@@ -37,9 +37,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   Map size;
 
-  String referenceImage;
-
-  String widgetType = 'Bitmap';
+  var referenceImage;
 
   InheritedTriangle(this.originalRef, {this.image, this.currentContext})
       : super(

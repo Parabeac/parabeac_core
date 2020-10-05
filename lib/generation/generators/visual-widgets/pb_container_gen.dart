@@ -10,7 +10,7 @@ import '../pb_flutter_generator.dart';
 class PBContainerGenerator extends PBGenerator {
   String color;
 
-  PBContainerGenerator() : super('CONTAINER');
+  PBContainerGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

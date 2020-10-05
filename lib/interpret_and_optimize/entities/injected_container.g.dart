@@ -26,8 +26,7 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
     ..margins = json['margins'] as Map<String, dynamic>
     ..padding = json['padding'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
@@ -46,5 +45,4 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
       'UUID': instance.UUID,
-      'widgetType': instance.widgetType,
     };

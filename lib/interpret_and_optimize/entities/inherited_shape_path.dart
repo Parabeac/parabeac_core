@@ -42,7 +42,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   Map size;
 
-  String widgetType = 'Bitmap';
 
   InheritedShapePath(this.originalRef, {this.image, this.currentContext})
       : super(

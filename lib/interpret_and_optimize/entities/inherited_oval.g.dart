@@ -24,8 +24,7 @@ InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
-    ..referenceImage = json['referenceImage'] as String
-    ..widgetType = json['widgetType'] as String;
+    ..referenceImage = json['referenceImage'] as String;
 }
 
 Map<String, dynamic> _$InheritedOvalToJson(InheritedOval instance) =>
@@ -42,5 +41,4 @@ Map<String, dynamic> _$InheritedOvalToJson(InheritedOval instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'referenceImage': instance.referenceImage,
-      'widgetType': instance.widgetType,
     };

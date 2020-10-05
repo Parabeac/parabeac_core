@@ -41,8 +41,6 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   Map size;
 
-  String widgetType = 'ShapeGroup';
-
   InheritedShapeGroup(this.originalRef, {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,

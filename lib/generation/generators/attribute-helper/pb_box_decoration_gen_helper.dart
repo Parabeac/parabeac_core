@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 
 class PBBoxDecorationHelper extends PBAttributesHelper {
-  PBBoxDecorationHelper() : super('borderInfo');
+  PBBoxDecorationHelper() : super();
 
   @override 
   String generate(PBIntermediateNode source) {

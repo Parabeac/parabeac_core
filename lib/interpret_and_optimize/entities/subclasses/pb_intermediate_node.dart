@@ -16,8 +16,6 @@ abstract class PBIntermediateNode {
   @JsonKey(ignore: true)
   BUILDER_TYPE builder_type;
 
-  String widgetType;
-
   @JsonKey(ignore: true)
   PBGenerator generator;
 

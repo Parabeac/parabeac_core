@@ -52,11 +52,11 @@ void main() {
       context.screenTopLeftCorner = Point(0, 0);
       context.screenBottomRightCorner = Point(414, 896);
       var gm = Group();
-      gm.frame = Frame(x: 0, y: 46, width: 414, height: 850);
+      gm.boundaryRectangle = Frame(x: 0, y: 46, width: 414, height: 850);
       root = await gm.interpretNode(context);
 
       var gm2 = Group();
-      gm2.frame = Frame(x: 0, y: 86, width: 414, height: 100);
+      gm2.boundaryRectangle = Frame(x: 0, y: 86, width: 414, height: 100);
       var row = await gm2.interpretNode(context);
       root.addChild(row);
 

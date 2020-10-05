@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
@@ -31,9 +32,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  String widgetType = 'Stack';
-
-  PBIntermediateStackLayout({this.UUID, this.currentContext})
+  PBIntermediateStackLayout(this.UUID, {this.currentContext})
       : super(STACK_RULES, [], currentContext) {
     generator = PBStackGenerator();
   }

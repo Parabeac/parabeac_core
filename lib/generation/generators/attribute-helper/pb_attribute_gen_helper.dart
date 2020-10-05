@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 ///For example, generating the size of Container or any other widget.
 abstract class PBAttributesHelper extends PBGenerator {
-  PBAttributesHelper(String widgetType) : super(widgetType);
+  PBAttributesHelper() : super();
   @override
   String generate(PBIntermediateNode source);
 }
