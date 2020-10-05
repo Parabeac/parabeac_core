@@ -32,25 +32,14 @@ void main(List<String> args) async {
     ..addOption('path',
         help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
     ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
-    ..addOption(
-      'project-name',
-      help: 'The name of the project',
-      abbr: 'n',
-      defaultsTo: 'temp',
-    )
-    ..addOption(
-      'config-path',
-      help: 'Path of the configuration file',
-      abbr: 'c',
-      defaultsTo: 'lib/configurations/configurations.json',
-    )
-    ..addFlag(
-      'help',
-      help: 'Displays this help information.',
-      abbr: 'h',
-      negatable: false,
-    );
-  ;
+    ..addOption('project-name',
+        help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')
+    ..addOption('config-path',
+        help: 'Path of the configuration file',
+        abbr: 'c',
+        defaultsTo: 'lib/configurations/configurations.json')
+    ..addFlag('help',
+        help: 'Displays this help information.', abbr: 'h', negatable: false);
 
 //error handler using logger package
   void handleError(String msg) {
@@ -78,66 +67,66 @@ ${parser.usage}
 
   if (path == null) {
     handleError('Missing required argument: path');
-  } else {
-    if (!await FileSystemEntity.isFile(path)) {
-      handleError('$path is not a file');
-    }
-
-    if (path.endsWith('.sketch')) {
-      designType = 'sketch';
-    } else if (path.endsWith('.fig')) {
-      designType = 'figma';
-    }
-
-    //  usage -c "default:lib/configurations/configurations.json
-    var configSet = configurationPath.split(':');
-    if (configSet.isNotEmpty) {
-      configurationType = configSet[0];
-    }
-    if (configSet.length >= 2) {
-      // handle configurations
-      configurationPath = configSet[1];
-    }
-
-    // Populate `MainInfo()`
-    MainInfo().outputPath = argResults['out'];
-    // If outputPath is empty, assume we are outputting to design file path path
-    MainInfo().outputPath ??= getCleanPath(path);
-    if (!MainInfo().outputPath.endsWith('/')) {
-      MainInfo().outputPath += '/';
-    }
-    MainInfo().sketchPath = path;
-    MainInfo().projectName = projectName;
-
-    // Input
-    var id = InputDesignService(path);
-
-    if (designType == 'sketch') {
-      var process = await Process.start('npm', ['run', 'prod'],
-          workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
-
-      await for (var event in process.stdout.transform(utf8.decoder)) {
-        if (event.toLowerCase().contains('server is listening on port')) {
-          log.fine('Successfully started Sketch Asset Converter');
-          break;
-        }
-      }
-
-      //Retrieving the Sketch PNGs from the design file
-      await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-      await SketchController().convertSketchFile(
-          path,
-          MainInfo().outputPath + projectName,
-          configurationPath,
-          configurationType);
-      process.kill();
-    } else if (designType == 'xd') {
-      assert(false, 'We don\'t support Adobe XD.');
-    } else if (designType == 'figma') {
-      assert(false, 'We don\'t support Figma.');
-    }
-    exitCode = 0;
   }
+
+  if (!await FileSystemEntity.isFile(path)) {
+    handleError('$path is not a file');
+  }
+
+  if (path.endsWith('.sketch')) {
+    designType = 'sketch';
+  } else if (path.endsWith('.fig')) {
+    designType = 'figma';
+  }
+
+  //  usage -c "default:lib/configurations/configurations.json
+  var configSet = configurationPath.split(':');
+  if (configSet.isNotEmpty) {
+    configurationType = configSet[0];
+  }
+  if (configSet.length >= 2) {
+    // handle configurations
+    configurationPath = configSet[1];
+  }
+
+  // Populate `MainInfo()`
+  MainInfo().outputPath = argResults['out'];
+  // If outputPath is empty, assume we are outputting to design file path path
+  MainInfo().outputPath ??= getCleanPath(path);
+  if (!MainInfo().outputPath.endsWith('/')) {
+    MainInfo().outputPath += '/';
+  }
+  MainInfo().sketchPath = path;
+  MainInfo().projectName = projectName;
+
+  // Input
+  var id = InputDesignService(path);
+
+  if (designType == 'sketch') {
+    var process = await Process.start('npm', ['run', 'prod'],
+        workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+
+    await for (var event in process.stdout.transform(utf8.decoder)) {
+      if (event.toLowerCase().contains('server is listening on port')) {
+        log.fine('Successfully started Sketch Asset Converter');
+        break;
+      }
+    }
+
+    //Retrieving the Sketch PNGs from the design file
+    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+    await SketchController().convertSketchFile(
+        path,
+        MainInfo().outputPath + projectName,
+        configurationPath,
+        configurationType);
+    process.kill();
+  } else if (designType == 'xd') {
+    assert(false, 'We don\'t support Adobe XD.');
+  } else if (designType == 'figma') {
+    assert(false, 'We don\'t support Figma.');
+  }
+  exitCode = 0;
 }
 
 /// Checks whether a configuration file is made already,
@@ -201,7 +190,7 @@ void addToAmplitude() async {
 String getCleanPath(String path) {
   var list = path.split('/');
   var result = '';
-  for (int i = 0; i < list.length - 1; i++) {
+  for (var i = 0; i < list.length - 1; i++) {
     result += list[i] + '/';
   }
   return result;
