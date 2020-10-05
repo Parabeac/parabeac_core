@@ -30,7 +30,7 @@ void main() {
     PBIntermediateStackLayout stack;
     setUp(() {
       stack =
-          PBIntermediateStackLayout(Uuid().v4(), currentContext: MockContext());
+          PBIntermediateStackLayout(UUID: Uuid().v4(), currentContext: MockContext());
     });
 
     test('Testing the stack alignment algorithm', () {

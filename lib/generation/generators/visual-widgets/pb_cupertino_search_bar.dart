@@ -1,5 +1,5 @@
+import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/plugins/injected_app_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBCupertinoSearchBar extends PBGenerator {

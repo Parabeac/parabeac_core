@@ -6,10 +6,10 @@ project=parabeac_core
 
 cat pb-scripts/parabird.txt
 
-cd lib/plugins
+cd lib/eggs
 
 # ==========================================
-# Donload plugins if link is provided
+# Download eggs if link is provided
 # ==========================================
 if [ -z "${1}" ]
 then
@@ -31,12 +31,12 @@ fi
 counter=0
 
 # ==========================================
-# To collect plugins information
+# To collect eggs information
 # ==========================================
 for f in *.dart 
 do
     # -> To get import of file
-    saved[counter]="import@'package:$project/plugins/$f';"
+    saved[counter]="import@'package:$project/eggs/$f';"
     # echo ${saved[counter]} # Uncomment to debug
 
     # -> To get file semantics
@@ -61,7 +61,7 @@ cd ../interpret_and_optimize/helpers/
 newCounter=0;
 
 
-echo "[INFO]: Processing plugins..."
+echo "[INFO]: Processing eggs..."
 
 # ==========================================
 # To put plugin information on plugin helper
@@ -97,7 +97,7 @@ do
                     echo "[ERROR]: No path found"
                 else
                     ####################################################
-                    # This logic allows us to skip repeting plugins
+                    # This logic allows us to skip repeting eggs
                     ####################################################
                     onFile="`grep -n "$tempLine" pb_plugin_list_helper.dart `"
                     if [ -z "${onFile}" ]

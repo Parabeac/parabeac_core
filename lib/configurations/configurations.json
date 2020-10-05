@@ -2,7 +2,14 @@
     "default": {
         "widgetStyle": "Material",
         "widgetType": "Stateless",
-        "widgetSpacing": "Expanded"
+        "widgetSpacing": "Expanded",
+        "layoutPrecedence" : ["column", "row", "stack"]
+    },
+    "stack": {
+        "widgetStyle": "Material",
+        "widgetType": "Stateless",
+        "widgetSpacing": "Expanded",
+        "layoutPrecedence" : ["stack"]
     },
     "This will be replaced by a Object ID to determine specific configurations for each page": {
         "widgetStyle": "Material",

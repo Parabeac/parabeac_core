@@ -17,17 +17,53 @@ class TextStyle {
   @JsonKey(ignore: true)
   num verticalAlignment;
   @JsonKey(ignore: true)
-  String weight;
-  @JsonKey(ignore: true)
+  String style;
 
-  /// List of possible text weights
-  final List<String> WEIGHTS = [
-    'BoldOblique',
-    'LightOblique',
-    'Bold',
+  /// List of possible text weights, sorted by longest string first for .contains
+  final List<String> STYLES = [
+    'ExtraLightItalic',
+    'ExtraBoldItalic',
+    'SemiBoldItalic',
+    'MediumItalic',
+    'LightItalic',
+    'BlackItalic',
+    'ThinItalic',
+    'ExtraLight',
+    'BoldItalic',
+    'ExtraBold',
+    'SemiBold',
+    'Regular',
+    'Italic',
+    'Medium',
     'Light',
-    'Oblique'
+    'Black',
+    'Bold',
+    'Thin',
+//    'BoldOblique',
+//    'LightOblique',
+//    'Oblique',
   ];
+
+  final Map<String, Map<String, String> > fontInfo = {
+    'Thin': { 'fontWeight': 'w100', 'fontStyle': 'normal'},
+    'ThinItalic': { 'fontWeight': 'w100', 'fontStyle': 'italic'},
+    'ExtraLight': { 'fontWeight': 'w200', 'fontStyle': 'normal'},
+    'ExtraLightItalic': { 'fontWeight': 'w200', 'fontStyle': 'italic'},
+    'Light': { 'fontWeight': 'w300', 'fontStyle': 'normal'},
+    'LightItalic': { 'fontWeight': 'w300', 'fontStyle': 'italic'},
+    'Regular': { 'fontWeight': 'w400', 'fontStyle': 'normal'},
+    'Italic': { 'fontWeight': 'w400', 'fontStyle': 'italic'},
+    'Medium': { 'fontWeight': 'w500', 'fontStyle': 'normal'},
+    'MediumItalic': { 'fontWeight': 'w500', 'fontStyle': 'italic'},
+    'SemiBold': { 'fontWeight': 'w600', 'fontStyle': 'normal'},
+    'SemiBoldItalic': { 'fontWeight': 'w600', 'fontStyle': 'italic'},
+    'Bold': { 'fontWeight': 'w700', 'fontStyle': 'normal'},
+    'BoldItalic': { 'fontWeight': 'w700', 'fontStyle': 'italic'},
+    'ExtraBold': { 'fontWeight': 'w800', 'fontStyle': 'normal'},
+    'ExtraBoldItalic': { 'fontWeight': 'w800', 'fontStyle': 'italic'},
+    'Black': { 'fontWeight': 'w900', 'fontStyle': 'normal'},
+    'BlackItalic': { 'fontWeight': 'w900', 'fontStyle': 'italic'},
+  };
 
   TextStyle({this.rawEncodedAttributes}) {
     color = Color.fromJson(
@@ -39,12 +75,16 @@ class TextStyle {
     verticalAlignment = rawEncodedAttributes['textStyleVerticalAlignment'];
 
     //Find if text has special weight
-    for (var w in WEIGHTS) {
-      if (fontDescriptor.fontName.contains(w)) {
-        weight = w;
-
+    for (var s in STYLES) {
+      if (fontDescriptor.fontName.contains(s)) {
+        // this is really a mapping of style to weight
+        fontDescriptor.fontWeight = fontInfo[s]['fontWeight'];
+        // this is only normal, italic style
+        fontDescriptor.fontStyle = fontInfo[s]['fontStyle'];
+        // this is really fontFamily with removal of -XXX font type name suffix
         fontDescriptor.fontName =
-            fontDescriptor.fontName.replaceFirst('-$w', '');
+            fontDescriptor.fontName.replaceFirst('-$s', '');
+        fontDescriptor.letterSpacing = rawEncodedAttributes['kerning'] ?? 0.0;
         break;
       }
     }
