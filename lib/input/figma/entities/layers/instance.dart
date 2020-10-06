@@ -79,7 +79,7 @@ class Instance extends FigmaFrame
     /// TODO: Check if `sharedParamValues` exits and pass to it, default to emptu for now
     var sym = PBSharedInstanceIntermediateNode(
       this,
-      UUID,
+      componentId,
       sharedParamValues: [],
       currentContext: currentContext,
     );
