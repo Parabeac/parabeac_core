@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_row_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/stack_exception.dart';
@@ -43,6 +44,10 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   Point bottomRightCorner;
 
   String widgetType = 'ROW';
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   PBIntermediateRowLayout({this.UUID, this.currentContext})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext) {
@@ -100,8 +105,8 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext) {
-    var row =
-        PBIntermediateRowLayout(UUID: Uuid().v4(), currentContext: currentContext);
+    var row = PBIntermediateRowLayout(
+        UUID: Uuid().v4(), currentContext: currentContext);
     row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;

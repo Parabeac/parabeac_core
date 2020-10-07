@@ -9,7 +9,7 @@ part of 'stack.dart';
 PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateStackLayout(
-    json['UUID'] as String,
+    UUID: json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

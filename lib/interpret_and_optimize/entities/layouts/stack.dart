@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
@@ -32,6 +33,10 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   Map alignment = {};
 
   String widgetType = 'Stack';
+
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
 
   PBIntermediateStackLayout({this.UUID, this.currentContext})
       : super(STACK_RULES, [], currentContext) {
@@ -84,8 +89,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
-    var stack =
-        PBIntermediateStackLayout(Uuid().v4(), currentContext: currentContext);
+    var stack = PBIntermediateStackLayout(
+        UUID: Uuid().v4(), currentContext: currentContext);
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;

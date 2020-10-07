@@ -16,6 +16,7 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
         ? null
         : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
+    isHomeScreen: json['isHomeScreen'] as bool,
   )
     ..subsemantic = json['subsemantic'] as String
     ..widgetType = json['widgetType'] as String
@@ -48,6 +49,7 @@ Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
       'navbar': instance.navbar,
       'tabbar': instance.tabbar,
       'backgroundColor': instance.backgroundColor,
+      'isHomeScreen': instance.isHomeScreen,
       'UUID': instance.UUID,
       'body': instance.body,
       'semanticName': instance.semanticName,
