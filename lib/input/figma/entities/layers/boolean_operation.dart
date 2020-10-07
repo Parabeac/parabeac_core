@@ -36,7 +36,11 @@ class BooleanOperation extends FigmaVector
     type,
     FigmaStyle style,
     Frame this.boundaryRectangle,
-  }) : super(style: style) {
+    String UUID,
+  }) : super(
+          style: style,
+          UUID: UUID,
+        ) {
     log = Logger(runtimeType.toString());
   }
 
@@ -50,10 +54,7 @@ class BooleanOperation extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var operation = await image_helper.writeImage(UUID);
-    if (!operation) {
-      log.error('Image $UUID was unable to be processed.');
-    }
+    image_helper.uuidQueue.add(UUID);
     imageReference = UUID;
 
     return Future.value(InheritedBitmap(this));

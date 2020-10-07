@@ -4,6 +4,7 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
     as image_helper;
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
@@ -31,29 +32,30 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
   @override
   String imageReference;
 
-  Group(
-      {name,
-      isVisible,
-      type,
-      pluginData,
-      sharedPluginData,
-      Frame boundaryRectangle,
-      style,
-      fills,
-      strokes,
-      strokeWeight,
-      strokeAlign,
-      cornerRadius,
-      constraints,
-      layoutAlign,
-      size,
-      horizontalPadding,
-      verticalPadding,
-      itemSpacing,
-      Flow flow,
-      List<FigmaNode> children,
-      String UUID})
-      : super(
+  Group({
+    name,
+    isVisible,
+    type,
+    pluginData,
+    sharedPluginData,
+    Frame boundaryRectangle,
+    style,
+    fills,
+    strokes,
+    strokeWeight,
+    strokeAlign,
+    cornerRadius,
+    constraints,
+    layoutAlign,
+    size,
+    horizontalPadding,
+    verticalPadding,
+    itemSpacing,
+    Flow flow,
+    List<FigmaNode> children,
+    String UUID,
+    FigmaColor backgroundColor,
+  }) : super(
           name: name,
           isVisible: isVisible,
           type: type,
@@ -75,6 +77,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
           flow: flow,
           children: children,
           UUID: UUID,
+          backgroundColor: backgroundColor,
         ) {
     log = Logger(runtimeType.toString());
   }
@@ -88,13 +91,10 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     if (areAllVectors(children)) {
-      var operation = await image_helper.writeImage(UUID);
-      if (!operation) {
-        log.error('Image $UUID was unable to be processed.');
-      }
+      image_helper.uuidQueue.add(UUID);
+
       imageReference = UUID;
 
-      this.children = null;
       return Future.value(InheritedBitmap(this));
     }
     return Future.value(TempGroupLayoutNode(this, currentContext,

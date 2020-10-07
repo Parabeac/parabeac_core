@@ -48,6 +48,7 @@ class APICallService {
             // print('Header: $name: $value');
             if (name == ':status') {
               _returnResponse(int.parse(value));
+              break;
             }
           }
         } else if (message is DataStreamMessage) {

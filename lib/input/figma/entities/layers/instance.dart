@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/design_logic/pb_instance.dart';
+import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -13,9 +14,15 @@ part 'instance.g.dart';
 
 @JsonSerializable(nullable: true)
 class Instance extends FigmaFrame
-    implements AbstractFigmaNodeFactory, PBInstance {
+    implements AbstractFigmaNodeFactory, PBSharedInstanceDesignNode {
   @override
   String type = 'INSTANCE';
+
+  @override
+  List parameters;
+
+  @override
+  String symbolID;
 
   @override
   List children;
@@ -41,6 +48,9 @@ class Instance extends FigmaFrame
     Flow flow,
     this.componentId,
     List<FigmaNode> this.children,
+    this.parameters,
+    this.symbolID,
+    FigmaColor backgroundColor,
   }) : super(
           name: name,
           isVisible: isVisible,
@@ -62,6 +72,7 @@ class Instance extends FigmaFrame
           itemSpacing: itemSpacing,
           flow: flow,
           children: children,
+          backgroundColor: backgroundColor,
         );
 
   String componentId;

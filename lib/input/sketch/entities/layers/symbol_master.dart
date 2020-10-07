@@ -1,4 +1,4 @@
-import 'package:parabeac_core/design_logic/pb_shared_instance_node.dart';
+import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -20,7 +20,7 @@ part 'symbol_master.g.dart';
 @JsonSerializable(nullable: true)
 class SymbolMaster extends AbstractGroupLayer
     with SymbolNodeMixin
-    implements SketchNodeFactory, PBSharedInstanceNodeDesign {
+    implements SketchNodeFactory, PBSharedInstanceDesignNode {
   @override
   String CLASS_NAME = 'symbolMaster';
   final Color backgroundColor;

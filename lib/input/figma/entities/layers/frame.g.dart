@@ -32,6 +32,9 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     UUID: json['id'] as String,
+    backgroundColor: json['backgroundColor'] == null
+        ? null
+        : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
   )..prototypeNodeUUID = json['transitionNodeID'] as String;
 }
 
@@ -56,5 +59,6 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
+      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
     };

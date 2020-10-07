@@ -32,6 +32,11 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    parameters: json['parameters'] as List,
+    symbolID: json['symbolID'] as String,
+    backgroundColor: json['backgroundColor'] == null
+        ? null
+        : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
@@ -56,7 +61,10 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'horizontalPadding': instance.horizontalPadding,
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
+      'backgroundColor': instance.backgroundColor,
       'type': instance.type,
+      'parameters': instance.parameters,
+      'symbolID': instance.symbolID,
       'children': instance.children,
       'componentId': instance.componentId,
     };

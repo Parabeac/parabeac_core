@@ -13,10 +13,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/plugins/injected_app_bar.dart';
-import 'package:parabeac_core/plugins/injected_tab.dart';
 import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -73,6 +74,22 @@ class FlutterProjectBuilder {
       // print(e);
       log.error(e.toString());
     });
+
+    log.info('Processing remaining images...');
+    // Split uuids into 6 lists to create separate API requests to figma
+    List<List<String>> uuidLists = List.generate(8, (_) => []);
+    for (var i = 0; i < image_helper.uuidQueue.length; i++) {
+      uuidLists[i % 8].add(image_helper.uuidQueue[i]);
+    }
+
+    // Process images in separate queues
+    List<Future> futures = [];
+    for (var uuidList in uuidLists) {
+      futures.add(image_helper.processImages(uuidList));
+    }
+
+    // Wait for the images to complete writing process
+    await Future.wait(futures, eagerError: true);
 
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',

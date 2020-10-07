@@ -24,14 +24,15 @@ FigmaEllipse _$FigmaEllipseFromJson(Map<String, dynamic> json) {
     strokeAlign: json['strokeAlign'],
     styles: json['styles'],
   )
+    ..UUID = json['id'] as String
     ..isVisible = json['visible'] as bool ?? true
     ..prototypeNodeUUID = json['transitionNodeID'] as String
-    ..UUID = json['UUID'] as String
     ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$FigmaEllipseToJson(FigmaEllipse instance) =>
     <String, dynamic>{
+      'id': instance.UUID,
       'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
@@ -46,7 +47,6 @@ Map<String, dynamic> _$FigmaEllipseToJson(FigmaEllipse instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
-      'UUID': instance.UUID,
       'imageReference': instance.imageReference,
       'type': instance.type,
     };

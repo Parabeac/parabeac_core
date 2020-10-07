@@ -56,8 +56,8 @@ class FigmaFrame extends FigmaNode
 
   double itemSpacing;
 
-  // @override
-  // PBColor backgroundColor;
+  @override
+  PBColor backgroundColor;
 
   @override
   String type = 'FRAME';
@@ -84,7 +84,7 @@ class FigmaFrame extends FigmaNode
     List<FigmaNode> this.children,
     Flow flow,
     String UUID,
-    FigmaColor backgroundColor,
+    FigmaColor this.backgroundColor,
   }) : super(
           name,
           isVisible,
@@ -117,7 +117,4 @@ class FigmaFrame extends FigmaNode
       isHomeScreen: false,
     ));
   }
-
-  @override
-  PBColor backgroundColor;
 }

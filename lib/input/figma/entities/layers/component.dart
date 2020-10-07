@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/pb_shared_master_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
@@ -17,7 +18,7 @@ part 'component.g.dart';
 @JsonSerializable(nullable: true)
 class Component extends FigmaFrame
     with SymbolNodeMixin
-    implements AbstractFigmaNodeFactory {
+    implements AbstractFigmaNodeFactory, PBSharedMasterDesignNode {
   @override
   String type = 'COMPONENT';
   Component({
@@ -42,6 +43,9 @@ class Component extends FigmaFrame
     Flow flow,
     this.overrideProperties,
     List<FigmaNode> children,
+    FigmaColor backgroundColor,
+    this.symbolID,
+    this.overriadableProperties,
   }) : super(
           name: name,
           isVisible: isVisible,
@@ -63,6 +67,7 @@ class Component extends FigmaFrame
           itemSpacing: itemSpacing,
           flow: flow,
           children: children,
+          backgroundColor: backgroundColor,
         );
 
   final List<OverridableProperty> overrideProperties;
@@ -98,5 +103,8 @@ class Component extends FigmaFrame
   }
 
   @override
-  PBColor backgroundColor;
+  List overriadableProperties;
+
+  @override
+  String symbolID;
 }

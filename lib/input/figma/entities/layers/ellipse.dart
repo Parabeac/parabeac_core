@@ -68,10 +68,7 @@ class FigmaEllipse extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var operation = await image_helper.writeImage(UUID);
-    if (!operation) {
-      log.error('Image $UUID was unable to be processed.');
-    }
+    image_helper.uuidQueue.add(UUID);
     imageReference = UUID;
 
     return Future.value(InheritedBitmap(this));

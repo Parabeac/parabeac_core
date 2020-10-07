@@ -45,9 +45,6 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
   @override
   String type = 'VECTOR';
 
-  @override
-  String UUID;
-
   FigmaVector({
     String name,
     bool visible,
@@ -63,13 +60,14 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
     this.strokeWeight,
     this.strokeAlign,
     this.styles,
-    this.UUID,
+    String UUID,
   }) : super(
           name,
           visible,
           type,
           pluginData,
           sharedPluginData,
+          UUID: UUID,
         ) {
     log = Logger(runtimeType.toString());
   }
@@ -84,10 +82,8 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var operation = await image_helper.writeImage(UUID);
-    if (!operation) {
-      log.error('Image $UUID was unable to be processed.');
-    }
+    image_helper.uuidQueue.add(UUID);
+
     imageReference = UUID;
 
     return Future.value(InheritedBitmap(this));
