@@ -9,7 +9,7 @@ part of 'row.dart';
 PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateRowLayout(
-    UUID: json['UUID'] as String,
+    json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']

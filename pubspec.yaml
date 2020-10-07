@@ -8,7 +8,11 @@ environment:
 
 dependencies:
   archive: ^2.0.11
+<<<<<<< HEAD
   json_serializable: ^3.3.0
+=======
+  json_serializable: ^3.5.0
+>>>>>>> cc8e01f... Fixed UUID generation and json serialization (#95)
   build_runner: ^1.10.0
   mockito: ^4.1.1
   hex: ^0.1.2
