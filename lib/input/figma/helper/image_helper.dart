@@ -24,8 +24,7 @@ Future<dynamic> processImages(List<String> uuids) async {
     if (response != null &&
         response.containsKey('images') &&
         response['images'] != null &&
-        response['images'].values.isNotEmpty &&
-        response['images'].values.first != null) {
+        response['images'].values.isNotEmpty) {
       Map images = response['images'];
       // Download the images
       for (var entry in images.entries) {
