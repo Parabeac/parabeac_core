@@ -84,7 +84,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     image_helper.uuidQueue.add(UUID);
 
-    imageReference = 'images/' + UUID + '.png';
+    imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
     return Future.value(InheritedBitmap(this));
   }

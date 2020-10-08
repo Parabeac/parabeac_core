@@ -1,17 +1,17 @@
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/pb_border.dart';
-import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
-import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/input/sketch/entities/style/border.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
 
 import 'figma_node.dart';
 
@@ -42,6 +42,7 @@ class FigmaRectangle extends FigmaVector
     this.cornerRadius,
     this.rectangleCornerRadii,
     this.points,
+    this.fillsList,
   }) : super(
           name: name,
           visible: isVisible,
@@ -64,6 +65,9 @@ class FigmaRectangle extends FigmaVector
 
   List<double> rectangleCornerRadii;
 
+  @JsonKey(name: 'fills')
+  List fillsList;
+
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) {
     var node = FigmaRectangle.fromJson(json);
@@ -78,6 +82,14 @@ class FigmaRectangle extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    var fillsMap =
+        (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
+    if (fillsMap != null && fillsMap['type'] == 'IMAGE') {
+      image_helper.uuidQueue.add(UUID);
+      imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
+
+      return Future.value(InheritedBitmap(this));
+    }
     PBBorder border;
     for (var b in style?.borders?.reversed ?? []) {
       if (b.isEnabled) {

@@ -93,7 +93,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
     if (areAllVectors(children)) {
       image_helper.uuidQueue.add(UUID);
 
-      imageReference = 'images/' + UUID + '.png';
+      imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
       return Future.value(InheritedBitmap(this));
     }

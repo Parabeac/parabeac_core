@@ -69,7 +69,7 @@ class FigmaEllipse extends FigmaVector
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     image_helper.uuidQueue.add(UUID);
-    imageReference = 'images/' + UUID + '.png';
+    imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
     return Future.value(InheritedBitmap(this));
   }
