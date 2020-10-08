@@ -22,6 +22,9 @@ Below you'll find a set of guidelines around how to contribute here at Parabeac.
 
 ## Code of Conduct 
 Everything and everyone within this project is governed by the [Parabeac Code Of Conduct](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md). By participating in this project you are expected to follow this code. If there are any questions or you see any unacceptable behavior please contact support@parabeac.com.
+## A Quick Comment for Cleanliness 
+We're happy to have you here and excited that you're thinking about contributing. But a quick comment before you continue, we value keeping the tree clean more than anything else, on that note please check out the tree hygiene guidelines [here](https://github.com/Parabeac/Parabeac-Core/wiki/Tree-Hygiene) and make sure to keep these in mind while working on Parabeac-Core. Beyond that feel free to hop in and get going with the codebase. 
+
 ## Getting Started
 
 ### What is Parabeac Core
