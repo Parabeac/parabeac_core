@@ -25,7 +25,7 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
     styles: json['styles'],
-    content: json['content'] as String,
+    content: json['characters'] as String,
     characterStyleOverrides: (json['characterStyleOverrides'] as List)
         ?.map((e) => (e as num)?.toDouble())
         ?.toList(),
@@ -54,7 +54,7 @@ Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'styles': instance.styles,
       'imageReference': instance.imageReference,
       'type': instance.type,
-      'content': instance.content,
+      'characters': instance.content,
       'style': instance.style,
       'characterStyleOverrides': instance.characterStyleOverrides,
       'styleOverrideTable': instance.styleOverrideTable,

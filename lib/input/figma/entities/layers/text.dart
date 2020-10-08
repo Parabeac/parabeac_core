@@ -57,6 +57,7 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
         );
 
   @override
+  @JsonKey(name: 'characters')
   String content;
 
   @override

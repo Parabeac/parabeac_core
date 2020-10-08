@@ -39,6 +39,8 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    symbolID: json['symbolID'] as String,
+    overriadableProperties: json['overriadableProperties'] as List,
   )
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String;
@@ -67,4 +69,6 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'backgroundColor': instance.backgroundColor,
       'type': instance.type,
       'overrideProperties': instance.overrideProperties,
+      'overriadableProperties': instance.overriadableProperties,
+      'symbolID': instance.symbolID,
     };
