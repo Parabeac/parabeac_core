@@ -6,7 +6,7 @@ ArgResults argResults;
 
 // ignore: always_declare_return_types
 main(List<String> args) async {
-  var arguments = <String>['package:parabeac_core/main.dart'];
+  var arguments = <String>['lib/main.dart'];
 
   //sets up parser
   //wil set the hide option for help flag to true to
