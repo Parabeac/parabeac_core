@@ -34,9 +34,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   Map size;
 
-  String referenceImage;
-
-  String widgetType = 'Bitmap';
+  var referenceImage;
 
   InheritedTriangle(this.originalRef, String name,
       {this.image, this.currentContext})

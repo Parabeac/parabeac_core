@@ -24,8 +24,7 @@ InheritedTriangle _$InheritedTriangleFromJson(Map<String, dynamic> json) {
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
-    ..referenceImage = json['referenceImage'] as String
-    ..widgetType = json['widgetType'] as String;
+    ..referenceImage = json['referenceImage'];
 }
 
 Map<String, dynamic> _$InheritedTriangleToJson(InheritedTriangle instance) =>
@@ -42,5 +41,4 @@ Map<String, dynamic> _$InheritedTriangleToJson(InheritedTriangle instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'referenceImage': instance.referenceImage,
-      'widgetType': instance.widgetType,
     };

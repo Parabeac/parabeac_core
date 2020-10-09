@@ -43,8 +43,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   Point bottomRightCorner;
 
-  String widgetType = 'ROW';
-
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;

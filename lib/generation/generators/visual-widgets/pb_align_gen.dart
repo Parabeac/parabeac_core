@@ -8,7 +8,7 @@ import '../pb_flutter_generator.dart';
 
 class PBAlignGenerator extends PBGenerator {
   var log = Logger('Align Generator');
-  PBAlignGenerator() : super('ALIGN');
+  PBAlignGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

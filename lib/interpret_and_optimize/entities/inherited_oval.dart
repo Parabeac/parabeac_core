@@ -36,8 +36,6 @@ class InheritedOval extends PBVisualIntermediateNode
 
   String referenceImage;
 
-  String widgetType = 'Bitmap';
-
   InheritedOval(this.originalRef, String name,
       {this.image, this.currentContext})
       : super(

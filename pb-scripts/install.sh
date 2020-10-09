@@ -31,7 +31,7 @@ stop_spin(){
 }
 
 
-start_spin "Installing Para-beac core and its dependencies"
+start_spin "Installing Parabeac-core and its dependencies"
 tput civis # stop mouse pointer from blinking
 cd ../SketchAssetConverter && npm i
 pub get

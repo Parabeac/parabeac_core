@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import '../pb_flutter_generator.dart';
 
 class PBRowGenerator extends PBLayoutGenerator {
-  PBRowGenerator() : super('ROW');
+  PBRowGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

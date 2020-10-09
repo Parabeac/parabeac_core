@@ -8,7 +8,7 @@ import '../pb_flutter_generator.dart';
 
 class PBFlexibleGenerator extends PBGenerator {
   var log = Logger('Flexible Generator');
-  PBFlexibleGenerator() : super('FLEXIBLE');
+  PBFlexibleGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

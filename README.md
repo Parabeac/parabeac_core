@@ -21,17 +21,10 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
   <a href="https://dev.to/parabeac">Dev.to</a>
 </h3>
 
-# What is Parabeac-Core?
-Parabeac-Core is an open-source repository that converts design files into Flutter code. The biggest challenge in code conversion is achieving quality code, but in a tool like this, there’s so much variability in what quality code should look like. So Parabeac-Core is built in a way not to promise quality code, but to be driven by the community so that you can configure & tweak to you or your teams liking. See our [Manifesto](https://github.com/Parabeac/Parabeac-Core/blob/stable/MANIFESTO.md). We welcome contributors to improve Parabeac-Core, create [Parabeac Eggs](https://github.com/Parabeac/parabeac-egg-template), & to join our [Discord](https://discord.com/invite/qUrghes) community!
-
-
 > :partying_face: **Special Shout out if you're here for #HacktoberFest! Double your swag by contributing to Parabeac as one of our first 100 contributors!**
 
 # What is Parabeac-Core?
 Parabeac-Core is an open-source repository that converts design files into Flutter code. The biggest challenge in code conversion is achieving quality code, but in a tool like this, there’s so much variability in what quality code should look like. So Parabeac-Core is built in a way not to promise quality code, but to be driven by the community so that you can configure & tweak to you or your teams liking. See our [Manifesto](https://github.com/Parabeac/Parabeac-Core/blob/stable/MANIFESTO.md). We welcome contributors to improve Parabeac-Core, create [Parabeac Eggs](https://github.com/Parabeac/parabeac-egg-template), & to join our [Discord](https://discord.com/invite/qUrghes) community!
-
-
-
 
 # Get Started
 

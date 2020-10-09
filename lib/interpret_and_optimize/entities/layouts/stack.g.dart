@@ -17,14 +17,17 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
+    ..name = json['name'] as String
+    ..prototypeNode = json['prototypeNode'] == null
+        ? null
+        : PrototypeNode.fromJson(json['prototypeNode'] as Map<String, dynamic>)
     ..topLeftCorner = json['topLeftCorner'] == null
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = json['bottomRightCorner'] == null
         ? null
         : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
@@ -36,9 +39,9 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
+      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'alignment': instance.alignment,
-      'widgetType': instance.widgetType,
     };

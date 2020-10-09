@@ -24,8 +24,7 @@ InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..referenceImage = json['referenceImage'] as String
-    ..size = json['size'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..size = json['size'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$InheritedShapeGroupToJson(
@@ -43,5 +42,4 @@ Map<String, dynamic> _$InheritedShapeGroupToJson(
       'UUID': instance.UUID,
       'referenceImage': instance.referenceImage,
       'size': instance.size,
-      'widgetType': instance.widgetType,
     };

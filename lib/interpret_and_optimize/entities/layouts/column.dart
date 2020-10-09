@@ -45,7 +45,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  String widgetType = 'COLUMN';
+  
 
   @override
   @JsonKey(ignore: true)

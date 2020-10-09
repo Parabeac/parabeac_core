@@ -19,7 +19,7 @@ class Flexible extends PBVisualIntermediateNode {
 
   @override
   @JsonKey(nullable: true, ignore: false)
-  String widgetType = 'FLEXIBLE';
+  
 
   //TODO: Find a way to make currentContext required
   //without breaking the json serializable

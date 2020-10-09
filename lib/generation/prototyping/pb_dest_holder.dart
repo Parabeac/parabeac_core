@@ -4,8 +4,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class PBDestHolder extends PBIntermediateNode {
-  @override
-  String widgetType = 'PROTOTYPE';
 
   PrototypeNode pNode;
 
