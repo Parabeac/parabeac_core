@@ -22,7 +22,7 @@ class PBDenyListHelper {
 
   PBDenyListNode returnDenyListNodeIfExist(DesignNode node) {
     if (isInDenyListDirect(node)) {
-      return PBDenyListNode(Point(0, 0), Point(0, 0), null);
+      return PBDenyListNode(Point(0, 0), Point(0, 0), null, '');
     } else {
       return null;
     }

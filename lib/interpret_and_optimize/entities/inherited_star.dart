@@ -26,9 +26,6 @@ class InheritedStar extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Uint8List image;
 
-  ///Name of the png file
-  String name;
-
   @override
   String UUID;
 
@@ -41,7 +38,8 @@ class InheritedStar extends PBVisualIntermediateNode
 
   String widgetType = 'Bitmap';
 
-  InheritedStar(this.originalRef, {this.image, this.currentContext})
+  InheritedStar(this.originalRef, String name,
+      {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -50,7 +48,8 @@ class InheritedStar extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

@@ -31,9 +31,6 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   @override
   String UUID;
 
-  ///Name of the png file
-  String name;
-
   @JsonKey(ignore: true)
   PBContext currentContext;
 
@@ -43,7 +40,8 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   String widgetType = 'ShapeGroup';
 
-  InheritedShapeGroup(this.originalRef, {this.image, this.currentContext})
+  InheritedShapeGroup(this.originalRef, String name,
+      {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -52,7 +50,8 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

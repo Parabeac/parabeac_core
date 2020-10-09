@@ -11,9 +11,9 @@ class InjectedAlign extends PBVisualIntermediateNode
   double alignX;
   double alignY;
 
-  InjectedAlign(
-      Point topLeftCorner, Point bottomRightCorner, PBContext currentContext)
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+  InjectedAlign(Point topLeftCorner, Point bottomRightCorner,
+      PBContext currentContext, String name)
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAlignGenerator();
   }
 

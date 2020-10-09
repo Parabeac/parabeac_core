@@ -27,7 +27,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  String name;
   @JsonSerializable(nullable: true)
   var navbar;
   @JsonSerializable(nullable: true)
@@ -48,7 +47,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   InheritedScaffold(this.originalRef,
       {Point topLeftCorner,
       Point bottomRightCorner,
-      this.name,
+      String name,
       this.currentContext,
       this.isHomeScreen})
       : super(
@@ -59,7 +58,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -128,7 +128,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

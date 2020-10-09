@@ -108,7 +108,8 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
     if (intermediateNode != null) {
       return intermediateNode;
     }
-    return Future.value(InheritedBitmap(this, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 
   @override

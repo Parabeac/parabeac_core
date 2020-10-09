@@ -9,10 +9,9 @@ abstract class PBVisualIntermediateNode extends PBIntermediateNode {
 
   final String UUID;
 
-  PBVisualIntermediateNode(
-      Point topLeftCorner, Point bottomRightCorner, PBContext currentContext,
-      {this.UUID})
-      : super(topLeftCorner, bottomRightCorner, UUID,
+  PBVisualIntermediateNode(Point topLeftCorner, Point bottomRightCorner,
+      PBContext currentContext, String name, {this.UUID})
+      : super(topLeftCorner, bottomRightCorner, UUID, name,
             currentContext: currentContext);
 
   void alignChild();

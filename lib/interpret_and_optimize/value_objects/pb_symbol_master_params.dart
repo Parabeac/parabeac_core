@@ -32,7 +32,7 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
       this.bottomRightX,
       this.bottomRightY,
       {this.context})
-      : super(Point(0, 0), Point(0, 0), context);
+      : super(Point(0, 0), Point(0, 0), context, propertyName);
 
   static String _typeToJson(type) {
     return type.toString();

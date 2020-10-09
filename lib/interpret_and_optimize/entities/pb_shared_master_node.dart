@@ -66,7 +66,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     Point bottomRightCorner, {
     this.overridableProperties,
     this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

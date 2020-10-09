@@ -21,11 +21,13 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 
   Tab(
     Point topLeftCorner,
-    Point bottomRightCorner, {
+    Point bottomRightCorner,
+    String name, {
     UUID,
     this.currentContext,
     this.prototypeNode,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID) {
     generator = PBTabGenerator();
   }
 
@@ -43,6 +45,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
     var tab = Tab(
       topLeftCorner,
       bottomRightCorner,
+      originalRef.name,
       currentContext: currentContext,
       UUID: Uuid().v4(),
       prototypeNode: PrototypeNode(originalRef?.prototypeNodeUUID),

@@ -110,7 +110,8 @@ class Polygon extends AbstractShapeLayer implements SketchNodeFactory {
     return polygon;
   }
 
-  factory Polygon.fromJson(Map<String, dynamic> json) => _$PolygonFromJson(json);
+  factory Polygon.fromJson(Map<String, dynamic> json) =>
+      _$PolygonFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$PolygonToJson(this);
 
@@ -121,7 +122,7 @@ class Polygon extends AbstractShapeLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return Future.value(
-        InheritedPolygon(this, currentContext: currentContext, image: image));
+    return Future.value(InheritedPolygon(this, name,
+        currentContext: currentContext, image: image));
   }
 }
