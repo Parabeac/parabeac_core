@@ -33,16 +33,17 @@ class PBSizeHelper extends PBAttributesHelper {
             .abs();
       }
 
-      height = (height != null && screenHeight != null && screenHeight != 0.0)
+      height = (height != null && screenHeight != null && screenHeight > 0.0)
           ? height / screenHeight
           : height;
-      width = (width != null && screenHeight != null && screenWidth != 0.0)
+      width = (width != null && screenWidth != null && screenWidth > 0.0)
           ? width / screenWidth
           : width;
 
       if (width != null) {
         if (source.topLeftCorner.x != null &&
-            source.bottomRightCorner.x != null) {
+            source.bottomRightCorner.x != null &&
+            screenWidth != null) {
           buffer.write(
               'width : MediaQuery.of(context).size.width * ${width.toStringAsFixed(3)},');
         } else {
@@ -51,7 +52,8 @@ class PBSizeHelper extends PBAttributesHelper {
       }
       if (height != null) {
         if (source.topLeftCorner.y != null &&
-            source.bottomRightCorner.y != null) {
+            source.bottomRightCorner.y != null &&
+            screenHeight != null) {
           buffer.write(
               ' height : MediaQuery.of(context).size.height * ${height.toStringAsFixed(3)},');
         } else {
