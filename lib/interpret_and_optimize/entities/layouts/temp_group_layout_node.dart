@@ -15,9 +15,9 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   String get UUID => originalRef.UUID;
 
-  TempGroupLayoutNode(this.originalRef, PBContext currentContext,
+  TempGroupLayoutNode(this.originalRef, PBContext currentContext, String name,
       {topLeftCorner, bottomRightCorner})
-      : super([], [], currentContext, originalRef['name']) {
+      : super([], [], currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
