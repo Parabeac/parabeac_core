@@ -35,6 +35,7 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
+      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,

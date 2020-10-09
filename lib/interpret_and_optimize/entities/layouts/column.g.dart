@@ -29,6 +29,7 @@ Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
+      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'alignment': instance.alignment,
     };
