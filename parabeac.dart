@@ -20,7 +20,7 @@ main(List<String> args) async {
     ..addOption('config-path',
         help: 'Path of the configuration file',
         abbr: 'c',
-        defaultsTo: 'lib/configurations/configurations.json')
+        defaultsTo: 'default:lib/configurations/configurations.json')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addOption('url',
@@ -57,10 +57,10 @@ ${parser.usage}
     [
       '${Directory.current.path}/pb-scripts/install.sh',
     ],
-  ).then((process){
+  ).then((process) {
     stdout.addStream(process.stdout);
     process.exitCode.then((exitCode) {
-      if(exitCode!=0) {
+      if (exitCode != 0) {
         print('exit code: $exitCode');
       }
     });
