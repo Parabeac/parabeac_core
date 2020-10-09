@@ -95,7 +95,8 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
       imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
-      return Future.value(InheritedBitmap(this));
+      return Future.value(
+          InheritedBitmap(this, currentContext: currentContext));
     }
     return Future.value(TempGroupLayoutNode(this, currentContext,
         topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),

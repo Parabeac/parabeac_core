@@ -86,7 +86,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
 
     imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
-    return Future.value(InheritedBitmap(this));
+    return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }
 
   @override

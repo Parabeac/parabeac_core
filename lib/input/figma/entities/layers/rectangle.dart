@@ -88,7 +88,8 @@ class FigmaRectangle extends FigmaVector
       image_helper.uuidQueue.add(UUID);
       imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
 
-      return Future.value(InheritedBitmap(this));
+      return Future.value(
+          InheritedBitmap(this, currentContext: currentContext));
     }
     PBBorder border;
     for (var b in style?.borders?.reversed ?? []) {
