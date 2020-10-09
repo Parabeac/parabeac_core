@@ -9,6 +9,7 @@ part of 'inherited_star.dart';
 InheritedStar _$InheritedStarFromJson(Map<String, dynamic> json) {
   return InheritedStar(
     json['originalRef'],
+    json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -21,7 +22,6 @@ InheritedStar _$InheritedStarFromJson(Map<String, dynamic> json) {
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..color = json['color'] as String
-    ..name = json['name'] as String
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..referenceImage = json['referenceImage'] as String
@@ -36,9 +36,9 @@ Map<String, dynamic> _$InheritedStarToJson(InheritedStar instance) =>
       'bottomRightCorner': instance.bottomRightCorner,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
+      'name': instance.name,
       'color': instance.color,
       'originalRef': instance.originalRef,
-      'name': instance.name,
       'UUID': instance.UUID,
       'size': instance.size,
       'referenceImage': instance.referenceImage,

@@ -132,12 +132,13 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       Point(boundaryRectangle.x, boundaryRectangle.y),
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
+      name,
       currentContext: currentContext,
       borderInfo: {
         'borderRadius':
             style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
         'borderColorHex': border != null ? border.color.toHex() : null,
-        'borderThickness' : border != null ? border.thickness : null
+        'borderThickness': border != null ? border.thickness : null
       },
     ));
   }

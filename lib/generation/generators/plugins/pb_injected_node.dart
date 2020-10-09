@@ -6,11 +6,7 @@ class PBInjectedNode extends PBIntermediateNode {
     Point topLeftCorner,
     Point bottomRightCorner,
     String UUID,
-  ) : super(
-          topLeftCorner,
-          bottomRightCorner,
-          UUID,
-        );
+  ) : super(topLeftCorner, bottomRightCorner, UUID, '');
   @override
   void addChild(PBIntermediateNode node) {
     // TODO: implement addChild

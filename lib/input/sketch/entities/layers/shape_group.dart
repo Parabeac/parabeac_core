@@ -120,7 +120,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return InheritedShapeGroup(this,
+    return InheritedShapeGroup(this, name,
         currentContext: currentContext, image: image);
   }
 }

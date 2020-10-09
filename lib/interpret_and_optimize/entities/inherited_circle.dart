@@ -48,9 +48,10 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   Map alignment;
 
-  InheritedCircle(this.originalRef, this.bottomRightCorner, this.topLeftCorner,
+  InheritedCircle(
+      this.originalRef, this.bottomRightCorner, this.topLeftCorner, String name,
       {this.currentContext, this.alignX, this.alignY})
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -79,7 +80,7 @@ class InheritedCircle extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
@@ -92,7 +93,8 @@ class InheritedCircle extends PBVisualIntermediateNode
   /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

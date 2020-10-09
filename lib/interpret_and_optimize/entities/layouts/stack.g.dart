@@ -9,6 +9,7 @@ part of 'stack.dart';
 PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateStackLayout(
+    json['name'] as String,
     UUID: json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
@@ -16,7 +17,6 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..name = json['name'] as String
     ..topLeftCorner = json['topLeftCorner'] == null
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)

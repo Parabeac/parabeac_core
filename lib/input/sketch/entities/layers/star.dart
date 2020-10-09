@@ -121,7 +121,7 @@ class Star extends AbstractShapeLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return Future.value(
-        InheritedStar(this, currentContext: currentContext, image: image));
+    return Future.value(InheritedStar(this, name,
+        currentContext: currentContext, image: image));
   }
 }

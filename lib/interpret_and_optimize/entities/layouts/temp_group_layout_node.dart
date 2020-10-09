@@ -15,9 +15,9 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   String get UUID => originalRef.UUID;
 
-  TempGroupLayoutNode(this.originalRef, PBContext currentContext,
+  TempGroupLayoutNode(this.originalRef, PBContext currentContext, String name,
       {topLeftCorner, bottomRightCorner})
-      : super([], [], currentContext) {
+      : super([], [], currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -37,17 +37,17 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext) {
-    assert(
-        false, 'Attempted to generateLayout for class type [${runtimeType}]');
+  bool satisfyRules(
+      PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
+    assert(false, 'Attempted to satisfyRules for class type [${runtimeType}]');
     return null;
   }
 
   @override
-  bool satisfyRules(
-      PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
-    assert(false, 'Attempted to satisfyRules for class type [${runtimeType}]');
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
+    assert(
+        false, 'Attempted to generateLayout for class type [${runtimeType}]');
     return null;
   }
 }

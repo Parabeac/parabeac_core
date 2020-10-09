@@ -37,12 +37,18 @@ class PBLayoutGenerationService implements PBGenerationService {
   PBLayoutGenerationService({this.currentContext}) {
     Map<String, PBLayoutIntermediateNode> layoutHandlers = {
       'column': PBIntermediateColumnLayout(
-          currentContext: currentContext, UUID: Uuid().v4()),
-      'row': PBIntermediateRowLayout(currentContext: currentContext, UUID: Uuid().v4()),
-      'stack': PBIntermediateStackLayout(currentContext: currentContext, UUID: Uuid().v4()),
+        '',
+        currentContext: currentContext,
+        UUID: Uuid().v4(),
+      ),
+      'row': PBIntermediateRowLayout('',
+          UUID: Uuid().v4(), currentContext: currentContext),
+      'stack': PBIntermediateStackLayout('',
+          UUID: Uuid().v4(), currentContext: currentContext),
     };
 
-    for (var layoutType in currentContext.configuration.layoutPrecedence ?? ['column']) {
+    for (var layoutType
+        in currentContext.configuration.layoutPrecedence ?? ['column']) {
       layoutType = layoutType.toLowerCase();
       if (layoutHandlers.containsKey(layoutType)) {
         _availableLayouts.add(layoutHandlers[layoutType]);
@@ -91,8 +97,12 @@ class PBLayoutGenerationService implements PBGenerationService {
           return rootNode.children[0];
         }
         var replacementNode = InjectedContainer(
-            rootNode.bottomRightCorner, rootNode.topLeftCorner, Uuid().v4(),
-            currentContext: currentContext);
+          rootNode.bottomRightCorner,
+          rootNode.topLeftCorner,
+          Uuid().v4(),
+          '',
+          currentContext: currentContext,
+        );
         replacementNode.prototypeNode = prototypeNode;
         replacementNode.addChild(rootNode.children.first);
         return replacementNode;
@@ -132,7 +142,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     children = _arrangeChildren(group);
     rootLayout = children.length == 1
         ? children[0]
-        : defaultLayout.generateLayout(children, currentContext);
+        : defaultLayout.generateLayout(children, currentContext, group.name);
     return rootLayout;
   }
 
@@ -162,8 +172,10 @@ class PBLayoutGenerationService implements PBGenerationService {
                 .replaceChildren(_arrangeChildren(nextNode));
             generatedLayout = nextNode;
           }
-          generatedLayout ??=
-              layout.generateLayout([currentNode, nextNode], currentContext);
+
+          /// Generated / Injected Layouts can have no names because they don't derive from a group, which means they would also not end up being a misc. node.
+          generatedLayout ??= layout
+              .generateLayout([currentNode, nextNode], currentContext, '');
           children
               .replaceRange(childPointer, childPointer + 2, [generatedLayout]);
           childPointer = 0;

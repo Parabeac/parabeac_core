@@ -11,9 +11,9 @@ class InjectedAlign extends PBVisualIntermediateNode
   double alignX;
   double alignY;
 
-  InjectedAlign(
-      Point topLeftCorner, Point bottomRightCorner, PBContext currentContext)
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+  InjectedAlign(Point topLeftCorner, Point bottomRightCorner,
+      PBContext currentContext, String name)
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAlignGenerator();
   }
 
@@ -25,7 +25,7 @@ class InjectedAlign extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
