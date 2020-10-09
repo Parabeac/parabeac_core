@@ -14,13 +14,13 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
     json['topLeftCorner'] == null
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    json['name'] as String,
     json['UUID'] as String,
     alignX: (json['alignX'] as num)?.toDouble(),
     alignY: (json['alignY'] as num)?.toDouble(),
     color: json['color'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
-    ..name = json['name'] as String
     ..child = json['child']
     ..size = json['size'] as Map<String, dynamic>
     ..margins = json['margins'] as Map<String, dynamic>

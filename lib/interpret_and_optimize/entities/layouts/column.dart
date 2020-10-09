@@ -51,10 +51,11 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  PBIntermediateColumnLayout({
+  PBIntermediateColumnLayout(
+    String name, {
     this.currentContext,
     this.UUID,
-  }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext) {
+  }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
     generator = PBColumnGenerator();
     checkCrossAxisAlignment();
   }
@@ -111,9 +112,9 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext) {
-    var col = PBIntermediateColumnLayout(
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
+    var col = PBIntermediateColumnLayout(name,
         currentContext: currentContext, UUID: Uuid().v4());
     col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));

@@ -111,7 +111,7 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   Map<String, dynamic> toJson() => _$GroupToJson(this);
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
-      Future.value(TempGroupLayoutNode(this, currentContext,
+      Future.value(TempGroupLayoutNode(this, currentContext, name,
           topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
           bottomRightCorner: Point(
               boundaryRectangle.x + boundaryRectangle.width,

@@ -34,7 +34,8 @@ class Padding extends PBVisualIntermediateNode {
       this.topLeftCorner,
       this.bottomRightCorner,
       this.currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, '',
+            UUID: UUID) {
     generator = PBPaddingGen();
   }
 

@@ -125,9 +125,10 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         Point(boundaryRectangle.x, boundaryRectangle.y),
         Point(boundaryRectangle.x + boundaryRectangle.width,
             boundaryRectangle.y + boundaryRectangle.height),
+        name,
         currentContext: currentContext,
       )..addChild(
-          InheritedText(this, currentContext: currentContext),
+          InheritedText(this, name, currentContext: currentContext),
         ));
 
   @override

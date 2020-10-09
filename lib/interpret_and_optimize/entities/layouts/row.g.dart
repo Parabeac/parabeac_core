@@ -9,6 +9,7 @@ part of 'row.dart';
 PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateRowLayout(
+    json['name'] as String,
     UUID: json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
@@ -16,7 +17,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..name = json['name'] as String
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..widgetType = json['widgetType'] as String;
 }

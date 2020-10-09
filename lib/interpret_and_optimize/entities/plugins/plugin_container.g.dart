@@ -18,8 +18,8 @@ PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
     alignX: (json['alignX'] as num)?.toDouble(),
     alignY: (json['alignY'] as num)?.toDouble(),
     color: json['color'] as String,
+    name: json['name'] as String,
   )
-    ..name = json['name'] as String
     ..semanticName = json['semanticName'] as String
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
