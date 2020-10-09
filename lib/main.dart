@@ -37,7 +37,7 @@ void main(List<String> args) async {
     ..addOption('config-path',
         help: 'Path of the configuration file',
         abbr: 'c',
-        defaultsTo: 'lib/configurations/configurations.json')
+        defaultsTo: 'default:lib/configurations/configurations.json')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false);
 
@@ -68,8 +68,10 @@ ${parser.usage}
   if (path == null) {
     handleError('Missing required argument: path');
   }
+  var file = await FileSystemEntity.isFile(path);
+  var exists = await File(path).exists();
 
-  if (!await FileSystemEntity.isFile(path)) {
+  if (!file || !exists) {
     handleError('$path is not a file');
   }
 

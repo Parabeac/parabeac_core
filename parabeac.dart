@@ -46,7 +46,8 @@ ${parser.usage}
   var key = argResults['key'];
   var sKey = argResults['secret-key'];
 
-  if (argResults.arguments.contains('path')) {
+  if (argResults.arguments.contains('-p') ||
+      argResults.arguments.contains('--path')) {
     arguments.addAll(argResults.arguments);
   }
 
