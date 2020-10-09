@@ -6,6 +6,7 @@ import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -81,10 +82,11 @@ class Interpret {
       } else {
         itemType = 'MISC';
       }
-      log.fine(
-          'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
 
       if (item != null) {
+        log.fine(
+            'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
+
         var newItem = PBIntermediateItem(item, itemType);
 
         ///Searching for the root item.
@@ -274,6 +276,12 @@ class Interpret {
   Future<PBIntermediateNode> _alignGenerationService(
       PBIntermediateNode parentnode, var context, var stopwatch3) async {
     PBIntermediateNode node;
+
+    /// This covers a case where the designer created an empty group. This would cause an issue as there is nothing to align.
+    if (parentnode is TempGroupLayoutNode) {
+      return null;
+    }
+
     try {
       node = PBAlignGenerationService(parentnode, currentContext: context)
           .addAlignmentToLayouts();
