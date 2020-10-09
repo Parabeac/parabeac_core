@@ -24,8 +24,6 @@ InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
-    ..name = json['name'] as String
-    ..size = json['size'] as Map<String, dynamic>
     ..referenceImage = json['referenceImage'] as String;
 }
 
