@@ -24,8 +24,7 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
-    ..referenceImage = json['referenceImage'] as String
-    ..widgetType = json['widgetType'] as String;
+    ..referenceImage = json['referenceImage'] as String;
 }
 
 Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
@@ -42,5 +41,4 @@ Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'referenceImage': instance.referenceImage,
-      'widgetType': instance.widgetType,
     };

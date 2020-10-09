@@ -17,8 +17,7 @@ PBIntermediateColumnLayout _$PBIntermediateColumnLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
@@ -30,7 +29,7 @@ Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
+      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'alignment': instance.alignment,
-      'widgetType': instance.widgetType,
     };

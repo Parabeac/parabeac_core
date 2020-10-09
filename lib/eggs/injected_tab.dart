@@ -15,7 +15,6 @@ import 'package:uuid/uuid.dart';
 class Tab extends PBEgg implements PBInjectedIntermediate {
   PBContext currentContext;
 
-  String widgetType = 'Tab';
 
   PrototypeNode prototypeNode;
 
@@ -91,7 +90,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 }
 
 class PBTabGenerator extends PBGenerator {
-  PBTabGenerator() : super('Tab');
+  PBTabGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

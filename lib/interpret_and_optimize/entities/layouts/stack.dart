@@ -32,8 +32,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  String widgetType = 'Stack';
-
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;

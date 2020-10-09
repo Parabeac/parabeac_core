@@ -3,7 +3,7 @@ import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBSymbolMasterParamGen extends PBGenerator {
-  PBSymbolMasterParamGen() : super('PBSymbolMasterParam');
+  PBSymbolMasterParamGen() : super();
 
   @override
   String generate(PBIntermediateNode source) {

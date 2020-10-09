@@ -31,7 +31,7 @@ void main() {
   setUpAll(() {
     when(mockRootSketchNode.isVisible).thenReturn(true);
     when(mockRootSketchNode.name).thenReturn('testing Name');
-    when(mockOriginalRef.frame)
+    when(mockOriginalRef.boundaryRectangle)
         .thenReturn(Frame(width: 50, height: 50, x: 0, y: 0));
     when(mockOriginalRef.style).thenReturn(Style(fills: []));
     when(mockRootSketchNode.interpretNode(context)).thenAnswer((_) =>

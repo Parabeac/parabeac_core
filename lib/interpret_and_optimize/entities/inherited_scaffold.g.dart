@@ -19,7 +19,6 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
     isHomeScreen: json['isHomeScreen'] as bool,
   )
     ..subsemantic = json['subsemantic'] as String
-    ..widgetType = json['widgetType'] as String
     ..child = json['child']
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
@@ -36,7 +35,6 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
-      'widgetType': instance.widgetType,
       'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,

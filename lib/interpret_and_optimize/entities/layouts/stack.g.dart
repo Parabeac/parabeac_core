@@ -23,8 +23,7 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     ..bottomRightCorner = json['bottomRightCorner'] == null
         ? null
         : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
@@ -36,9 +35,9 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
+      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'alignment': instance.alignment,
-      'widgetType': instance.widgetType,
     };

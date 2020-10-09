@@ -19,8 +19,7 @@ Spacer _$SpacerFromJson(Map<String, dynamic> json) {
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..name = json['name'] as String
-    ..color = json['color'] as String
-    ..widgetType = json['widgetType'] as String;
+    ..color = json['color'] as String;
 }
 
 Map<String, dynamic> _$SpacerToJson(Spacer instance) => <String, dynamic>{
@@ -35,5 +34,4 @@ Map<String, dynamic> _$SpacerToJson(Spacer instance) => <String, dynamic>{
       'color': instance.color,
       'flex': instance.flex,
       'UUID': instance.UUID,
-      'widgetType': instance.widgetType,
     };

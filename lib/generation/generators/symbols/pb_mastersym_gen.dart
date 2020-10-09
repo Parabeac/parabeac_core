@@ -16,7 +16,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
   };
   List<PBSymbolMasterParameter> _parameterDefinition = [];
 
-  PBMasterSymbolGenerator() : super('PBSymbolMaster');
+  PBMasterSymbolGenerator() : super();
 
   ///Generating the parameters of the symbol master, keeping [definitions] so
   ///we can replace the generic names of the paramters by that of the real overridable node's name.

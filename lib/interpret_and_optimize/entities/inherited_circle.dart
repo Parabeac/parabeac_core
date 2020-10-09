@@ -44,8 +44,6 @@ class InheritedCircle extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'CONTAINER';
-
   Map alignment;
 
   InheritedCircle(

@@ -36,8 +36,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
 
   String referenceImage;
 
-  String widgetType = 'Bitmap';
-
   InheritedPolygon(this.originalRef, String name,
       {this.image, this.currentContext})
       : super(

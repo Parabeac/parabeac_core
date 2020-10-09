@@ -8,7 +8,7 @@ class PBPrototypeGenerator extends PBGenerator {
   PrototypeNode prototypeNode;
   PBPrototypeStorage _storage;
 
-  PBPrototypeGenerator(this.prototypeNode) : super('PROTOTYPE') {
+  PBPrototypeGenerator(this.prototypeNode) : super() {
     _storage = PBPrototypeStorage();
   }
 

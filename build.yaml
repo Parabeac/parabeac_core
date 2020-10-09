@@ -3,7 +3,10 @@ targets:
     builders:
       parabeac_core|json_serializable:
         generate_for:
-          - lib/**
+          include:
+            - lib/**
+          exclude:
+            - test/lib/**
         options:
           any_map: false
           checked: false
@@ -11,6 +14,6 @@ targets:
           create_to_json: true
           disallow_unrecognized_keys: false
           explicit_to_json: false
-          ignore_unannotated: false
+          ignore_unannotated: true
           include_if_null: true
           nullable: true

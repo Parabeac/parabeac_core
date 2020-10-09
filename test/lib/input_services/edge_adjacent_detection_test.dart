@@ -36,7 +36,7 @@ void main() {
         },
       ]);
 
-      when(sketchNode.frame)
+      when(sketchNode.boundaryRectangle)
           .thenReturn(Frame(x: 0, y: 0, width: 2, height: 50));
 
       when(sketchNode.style).thenReturn(Style(
@@ -79,7 +79,7 @@ void main() {
         },
       ]);
 
-      when(sketchNode.frame)
+      when(sketchNode.boundaryRectangle)
           .thenReturn(Frame(x: 0, y: 0, width: 50, height: 2));
 
       when(sketchNode.style).thenReturn(Style(
@@ -122,7 +122,7 @@ void main() {
         },
       ]);
 
-      when(sketchNode.frame)
+      when(sketchNode.boundaryRectangle)
           .thenReturn(Frame(x: 0, y: 0, width: 50, height: 50));
 
       when(sketchNode.do_objectID).thenReturn('');

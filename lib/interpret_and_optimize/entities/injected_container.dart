@@ -36,8 +36,6 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   final String UUID;
 
-  String widgetType = 'CONTAINER';
-
   InjectedContainer(
     Point bottomRightCorner,
     Point topLeftCorner,

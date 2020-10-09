@@ -17,8 +17,7 @@ Flexible _$FlexibleFromJson(Map<String, dynamic> json) {
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..name = json['name'] as String
-    ..color = json['color'] as String
-    ..widgetType = json['widgetType'] as String;
+    ..color = json['color'] as String;
 }
 
 Map<String, dynamic> _$FlexibleToJson(Flexible instance) => <String, dynamic>{
@@ -31,5 +30,4 @@ Map<String, dynamic> _$FlexibleToJson(Flexible instance) => <String, dynamic>{
       'flex': instance.flex,
       'child': instance.child,
       'UUID': instance.UUID,
-      'widgetType': instance.widgetType,
     };
