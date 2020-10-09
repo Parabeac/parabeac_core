@@ -38,8 +38,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  PBIntermediateStackLayout({this.UUID, this.currentContext})
-      : super(STACK_RULES, [], currentContext) {
+  PBIntermediateStackLayout(String name, {this.UUID, this.currentContext})
+      : super(STACK_RULES, [], currentContext, name) {
     generator = PBStackGenerator();
   }
 
@@ -86,11 +86,14 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext) {
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
     var stack = PBIntermediateStackLayout(
-        UUID: Uuid().v4(), currentContext: currentContext);
+      name,
+      UUID: Uuid().v4(),
+      currentContext: currentContext,
+    );
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;

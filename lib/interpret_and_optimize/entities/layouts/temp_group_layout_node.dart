@@ -17,7 +17,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   TempGroupLayoutNode(this.originalRef, PBContext currentContext,
       {topLeftCorner, bottomRightCorner})
-      : super([], [], currentContext) {
+      : super([], [], currentContext, originalRef['name']) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
