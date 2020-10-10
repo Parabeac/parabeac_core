@@ -58,6 +58,14 @@ ${parser.usage}
     ''');
     exit(0);
   }
+  
+  if(Platform.isMacOS || Platform.isLinux) {
+    MainInfo().platform = 'UIX';
+  } else if(Platform.isWindows) {
+    MainInfo().platform = 'WIN';
+  } else {
+    MainInfo().platform = 'OTH';
+  }
 
   String path = argResults['path'];
   var designType = 'sketch';

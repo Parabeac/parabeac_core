@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as io;
 import 'package:args/args.dart';
 
 ArgResults argResults;
@@ -50,6 +51,18 @@ ${parser.usage}
       argResults.arguments.contains('--path')) {
     arguments.addAll(argResults.arguments);
   }
+  String _basePath;
+  String _os;
+
+  if(io.Platform.isMacOS || io.Platform.isLinux) {
+    _os = 'UIX';
+  } else if(io.Platform.isWindows) {
+    _os = 'WIN';
+  } else {
+    _os = 'OTH';
+  }
+
+  _basePath = io.Directory.current.path;
 
   /// To install parabeac core
   var install = Process.start(
