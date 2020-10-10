@@ -26,6 +26,16 @@ void main(List<String> args) async {
 
   MainInfo().cwd = Directory.current;
 
+  if(Platform.isMacOS || Platform.isLinux){
+    MainInfo().platform = 'UIX';
+  }
+  else if(Platform.isWindows){
+    MainInfo().platform = 'WIN';
+  }
+  else{
+    MainInfo().platform = 'OTH';
+  }
+
   var path = '';
   var projectName = '';
   var designType = 'sketch';

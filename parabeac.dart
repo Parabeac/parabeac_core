@@ -1,7 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as io;
 
 main(List<String> args) async {
+  String _basePath;
+  String _os;
+
+  if(io.Platform.isMacOS || io.Platform.isLinux){
+    _os = 'UIX';
+  }
+  else if(io.Platform.isWindows){
+    _os = 'WIN';
+  }
+  else{
+    _os = 'OTH';
+  }
+
+  _basePath = io.Directory.current.path;
+
   List<String> arguments = ['lib/main.dart'];
   final helpText = "Usage Options: \n" + "-url \n" + "-key \n" + "-Skey";
   var url = '';

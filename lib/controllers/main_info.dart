@@ -12,6 +12,8 @@ class MainInfo {
   /// Path to the user's sketch file
   String sketchPath;
 
+  String platform;
+
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
   Map configurations;
