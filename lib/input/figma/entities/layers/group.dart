@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/entities/layers/text.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
@@ -90,7 +91,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    if (areAllVectors(children)) {
+    if (areAllVectors()) {
       image_helper.uuidQueue.add(UUID);
 
       imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
@@ -104,9 +105,12 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
             boundaryRectangle.y + boundaryRectangle.height)));
   }
 
-  bool areAllVectors(var children) {
+  bool areAllVectors() {
     for (var child in children) {
       if (child is! FigmaVector) {
+        return false;
+      }
+      if (child is FigmaText) {
         return false;
       }
     }
