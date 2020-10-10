@@ -26,9 +26,17 @@ class PBColorGenHelper extends PBAttributesHelper {
     if (source.color == null) {
       statement = '';
     } else {
-      statement = findDefaultColor(source.color) != null
-          ? 'color: ${findDefaultColor(source.color)},'
-          : 'color: Color(${source.color}),\n';
+      if (source is! InheritedContainer) {
+        statement = findDefaultColor(source.color) != null
+            ? 'color: ${findDefaultColor(source.color)},'
+            : 'color: Color(${source.color}),\n';
+      } else if ((source as InheritedContainer).isBackgroundVisible) {
+        statement = findDefaultColor(source.color) != null
+            ? 'color: ${findDefaultColor(source.color)},'
+            : 'color: Color(${source.color}),\n';
+      } else {
+        statement = '';
+      }
     }
     return statement;
   }
