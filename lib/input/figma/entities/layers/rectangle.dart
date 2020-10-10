@@ -103,6 +103,7 @@ class FigmaRectangle extends FigmaVector
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
       currentContext: currentContext,
+      isBackgroundVisible: style.backgroundColor != null,
       borderInfo: {
         'borderRadius': (style != null && style.borderOptions.isEnabled)
             ? points[0]['cornerRadius']

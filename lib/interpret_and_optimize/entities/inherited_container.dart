@@ -49,9 +49,16 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(nullable: true)
   Map borderInfo;
 
+  @JsonKey(nullable: true)
+  bool isBackgroundVisible = false;
+
   InheritedContainer(
       this.originalRef, this.topLeftCorner, this.bottomRightCorner,
-      {this.alignX, this.alignY, this.currentContext, this.borderInfo})
+      {this.alignX,
+      this.alignY,
+      this.currentContext,
+      this.borderInfo,
+      this.isBackgroundVisible})
       : super(topLeftCorner, bottomRightCorner, currentContext) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);

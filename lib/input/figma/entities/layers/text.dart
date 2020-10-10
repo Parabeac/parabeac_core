@@ -87,6 +87,7 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
       currentContext: currentContext,
+      isBackgroundVisible: style.backgroundColor != null,
     )..addChild(
         InheritedText(this, currentContext: currentContext),
       ));

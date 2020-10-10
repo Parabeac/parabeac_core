@@ -18,14 +18,19 @@ class StyleExtractor {
     if (json != null) {
       var bgColor;
       if (json['background'] != null && json['background'].isNotEmpty) {
-        bgColor = _getColor(json['background'][0]['color']);
+        if (json['background'][0]['visible'] != null &&
+            !json['background'][0]['visible']) {
+          bgColor = _getColor(null);
+        } else {
+          bgColor = _getColor(json['background'][0]['color']);
+        }
       } else {
         bgColor = _getColor(null);
       }
 
       var textStyle;
       if (json['style'] != null) {
-        textStyle = _getTextStyle(json['style']);
+        textStyle = _getTextStyle(json);
       }
 
       List<FigmaBorder> borders = [];
@@ -78,13 +83,13 @@ class StyleExtractor {
     var fontColor = json['fills'] != null
         ? _getColor(json['fills'][0]['color'])
         : _getColor(null);
-    var fontDescriptor = _getFontDescriptor(json);
-    var alignment = _getAlignment(json['textAlignHorizontal']);
+    var fontDescriptor = _getFontDescriptor(json['style']);
+    var alignment = _getAlignment(json['style']['textAlignHorizontal']);
 
     return FigmaTextStyle(
       fontColor: fontColor,
       fontDescriptor: fontDescriptor,
-      weight: '${json['fontWeight']}',
+      weight: '${json['style']['fontWeight']}',
       paragraphStyle: FigmaParagraphStyle(alignment: alignment.index),
     );
   }
@@ -123,13 +128,14 @@ class StyleExtractor {
         red: json['r'],
       );
     } else {
-      // Set color default to Black if fill is null
-      return FigmaColor(
-        alpha: 0.0,
-        blue: 0.0,
-        green: 0.0,
-        red: 0.0,
-      );
+      // Set color default to transparent if fill is null
+      return null;
+      // return FigmaColor(
+      //   alpha: 0.0,
+      //   blue: 0.0,
+      //   green: 0.0,
+      //   red: 0.0,
+      // );
     }
   }
 }
