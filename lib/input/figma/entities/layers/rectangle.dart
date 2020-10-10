@@ -19,7 +19,7 @@ part 'rectangle.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaRectangle extends FigmaVector
-    with PBColorMixin
+    with PBColorMixin, image_helper.PBImageHelperMixin
     implements AbstractFigmaNodeFactory {
   @override
   String type = 'RECTANGLE';
@@ -85,8 +85,7 @@ class FigmaRectangle extends FigmaVector
     var fillsMap =
         (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
     if (fillsMap != null && fillsMap['type'] == 'IMAGE') {
-      image_helper.uuidQueue.add(UUID);
-      imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
+      imageReference = addToImageQueue(UUID);
 
       return Future.value(
           InheritedBitmap(this, currentContext: currentContext));

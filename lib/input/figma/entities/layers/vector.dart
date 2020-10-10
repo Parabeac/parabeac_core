@@ -15,7 +15,9 @@ import 'package:quick_log/quick_log.dart';
 part 'vector.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
+class FigmaVector extends FigmaNode
+    with image_helper.PBImageHelperMixin
+    implements FigmaNodeFactory, Image {
   @JsonKey(ignore: true)
   Logger log;
   @override
@@ -82,9 +84,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    image_helper.uuidQueue.add(UUID);
-
-    imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
+    imageReference = addToImageQueue(UUID);
 
     return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }

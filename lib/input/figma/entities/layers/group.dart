@@ -24,7 +24,9 @@ part 'group.g.dart';
 /// Class that represents a Figma Group.
 /// The reason this class implements Image is because Groups can hold multiple vectors
 /// which we need to convert into images.
-class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
+class Group extends FigmaFrame
+    with image_helper.PBImageHelperMixin
+    implements AbstractFigmaNodeFactory, Image {
   @JsonKey(ignore: true)
   Logger log;
   @override
@@ -92,9 +94,9 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     if (areAllVectors()) {
-      image_helper.uuidQueue.add(UUID);
+      imageReference = addToImageQueue(UUID);
 
-      imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
+      children.clear();
 
       return Future.value(
           InheritedBitmap(this, currentContext: currentContext));

@@ -17,6 +17,7 @@ part 'boolean_operation.g.dart';
 
 @JsonSerializable(nullable: true)
 class BooleanOperation extends FigmaVector
+    with image_helper.PBImageHelperMixin
     implements FigmaNodeFactory, GroupNode, Image {
   @JsonKey(ignore: true)
   Logger log;
@@ -54,8 +55,7 @@ class BooleanOperation extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    image_helper.uuidQueue.add(UUID);
-    imageReference = ('images/' + UUID + '.png').replaceAll(':', '_');
+    imageReference = addToImageQueue(UUID);
 
     return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }

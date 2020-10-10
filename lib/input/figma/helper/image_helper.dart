@@ -7,7 +7,7 @@ import 'package:quick_log/quick_log.dart';
 
 List<String> uuidQueue = [];
 
-Logger log = Logger('Image helper');
+Logger log = Logger('Figma Image helper');
 
 /// Downloads the image with the given `UUID`
 /// and writes it to the `pngs` folder in the `outputPath`.
@@ -46,4 +46,13 @@ Future<dynamic> processImages(List<String> uuids) async {
     }
   });
   // TODO: Investigate API call for when values.first == null
+}
+
+mixin PBImageHelperMixin {
+  /// Adds [uuid] to queue to be processed as an image.
+  /// Returns the formatted name of the image reference.
+  String addToImageQueue(String uuid) {
+    uuidQueue.add(uuid);
+    return ('images/' + uuid + '.png').replaceAll(':', '_');
+  }
 }
