@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/layouts/pb_column_gen.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/stack_exception.dart';
@@ -44,12 +45,17 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  String widgetType = 'COLUMN';
+  
 
-  PBIntermediateColumnLayout({
+  @override
+  @JsonKey(ignore: true)
+  PrototypeNode prototypeNode;
+
+  PBIntermediateColumnLayout(
+    String name, {
     this.currentContext,
     this.UUID,
-  }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext) {
+  }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
     generator = PBColumnGenerator();
     checkCrossAxisAlignment();
   }
@@ -106,9 +112,9 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext) {
-    var col = PBIntermediateColumnLayout(
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
+    var col = PBIntermediateColumnLayout(name,
         currentContext: currentContext, UUID: Uuid().v4());
     col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));

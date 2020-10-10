@@ -32,9 +32,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Uint8List image;
 
-  ///Name of the png file
-  String name;
-
   @JsonKey(ignore: true)
   PBContext currentContext;
 
@@ -42,9 +39,9 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   Map size;
 
-  String widgetType = 'Bitmap';
 
-  InheritedShapePath(this.originalRef, {this.image, this.currentContext})
+  InheritedShapePath(this.originalRef, String name,
+      {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -53,7 +50,8 @@ class InheritedShapePath extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

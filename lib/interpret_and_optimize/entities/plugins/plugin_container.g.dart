@@ -18,8 +18,8 @@ PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
     alignX: (json['alignX'] as num)?.toDouble(),
     alignY: (json['alignY'] as num)?.toDouble(),
     color: json['color'] as String,
+    name: json['name'] as String,
   )
-    ..name = json['name'] as String
     ..semanticName = json['semanticName'] as String
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -27,8 +27,7 @@ PluginContainer _$PluginContainerFromJson(Map<String, dynamic> json) {
     ..margins = json['margins'] as Map<String, dynamic>
     ..padding = json['padding'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PluginContainerToJson(PluginContainer instance) =>
@@ -48,5 +47,4 @@ Map<String, dynamic> _$PluginContainerToJson(PluginContainer instance) =>
       'padding': instance.padding,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
-      'widgetType': instance.widgetType,
     };

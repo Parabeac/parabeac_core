@@ -15,15 +15,14 @@ InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
     json['topLeftCorner'] == null
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>),
+    json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
-    ..name = json['name'] as String
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String
     ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
@@ -39,6 +38,5 @@ Map<String, dynamic> _$InheritedCircleToJson(InheritedCircle instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
-      'widgetType': instance.widgetType,
       'alignment': instance.alignment,
     };

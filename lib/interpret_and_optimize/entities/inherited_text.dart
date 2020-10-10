@@ -34,17 +34,15 @@ class InheritedText extends PBVisualIntermediateNode
 
   String text;
 
-  String widgetType = 'TEXT';
-
   num fontSize;
 
   String fontName;
-  String fontWeight;  // one of the w100-w900 weights
-  String fontStyle;    // normal, or italic
+  String fontWeight; // one of the w100-w900 weights
+  String fontStyle; // normal, or italic
   String textAlignment;
   num letterSpacing;
 
-  InheritedText(this.originalRef, {this.currentContext})
+  InheritedText(this.originalRef, String name, {this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -53,7 +51,8 @@ class InheritedText extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

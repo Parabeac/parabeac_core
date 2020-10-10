@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import '../pb_flutter_generator.dart';
 
 class PBColumnGenerator extends PBLayoutGenerator {
-  PBColumnGenerator() : super('COLUMN');
+  PBColumnGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

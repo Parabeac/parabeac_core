@@ -13,11 +13,11 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(),
+      '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(),
+      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*tab': Tab(Point(0, 0), Point(0, 0),
+      '.*tab': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),
     };
   }

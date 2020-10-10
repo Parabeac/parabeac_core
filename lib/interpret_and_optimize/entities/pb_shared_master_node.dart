@@ -40,16 +40,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   List<PBSymbolMasterParameter> parametersDefinition;
 
-  String widgetType = 'PBSymbolMaster';
+  
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
   set children(List<PBIntermediateNode> children) {
-    child ??= TempGroupLayoutNode(originalRef, currentContext);
+    child ??= TempGroupLayoutNode(originalRef, currentContext, name);
     if (child is PBLayoutIntermediateNode) {
       children.forEach((element) => child.addChild(element));
     } else {
-      child = TempGroupLayoutNode(originalRef, currentContext)
+      child = TempGroupLayoutNode(originalRef, currentContext, name)
         ..replaceChildren([child, ...children]);
     }
   }
@@ -66,7 +66,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     Point bottomRightCorner, {
     this.overridableProperties,
     this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

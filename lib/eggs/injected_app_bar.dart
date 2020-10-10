@@ -19,11 +19,12 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 
   String UUID;
 
-  String widgetType = 'AppBar';
+  
 
-  InjectedNavbar(Point topLeftCorner, Point bottomRightCorner, this.UUID,
+  InjectedNavbar(
+      Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
       {this.currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
   }
 
@@ -66,7 +67,8 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedNavbar(topLeftCorner, bottomRightCorner, UUID,
+    return InjectedNavbar(
+        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
 
@@ -80,7 +82,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 }
 
 class PBAppBarGenerator extends PBGenerator {
-  PBAppBarGenerator() : super('AppBar');
+  PBAppBarGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

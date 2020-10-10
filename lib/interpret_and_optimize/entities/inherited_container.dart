@@ -29,8 +29,6 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'CONTAINER';
-
   @override
   String UUID; //TODO find the root cause of why certain node have a null UUID
 
@@ -48,9 +46,9 @@ class InheritedContainer extends PBVisualIntermediateNode
   Map borderInfo;
 
   InheritedContainer(
-      this.originalRef, this.topLeftCorner, this.bottomRightCorner,
+      this.originalRef, this.topLeftCorner, this.bottomRightCorner, String name,
       {this.alignX, this.alignY, this.currentContext, this.borderInfo})
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -87,7 +85,7 @@ class InheritedContainer extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
@@ -100,7 +98,8 @@ class InheritedContainer extends PBVisualIntermediateNode
   /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

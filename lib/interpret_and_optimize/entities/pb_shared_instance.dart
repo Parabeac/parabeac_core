@@ -42,8 +42,6 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String widgetType = 'SYMBOL_INSTANCE';
-
   List overrideValues;
 
   PBSharedInstanceIntermediateNode(
@@ -62,6 +60,7 @@ class PBSharedInstanceIntermediateNode extends PBIntermediateNode
               (originalRef.boundaryRectangle.y +
                   originalRef.boundaryRectangle.height)),
           originalRef.do_objectID,
+          originalRef.name,
           currentContext: currentContext,
         ) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {

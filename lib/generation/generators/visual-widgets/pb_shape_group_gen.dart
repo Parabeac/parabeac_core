@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 class PBShapeGroupGen extends PBGenerator {
   var _sizehelper;
-  PBShapeGroupGen() : super('ShapeGroup') {
+  PBShapeGroupGen() : super() {
     _sizehelper = PBSizeHelper();
   }
 

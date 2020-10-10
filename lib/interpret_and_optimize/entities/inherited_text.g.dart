@@ -9,6 +9,7 @@ part of 'inherited_text.dart';
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
     json['originalRef'],
+    json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -21,12 +22,10 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
-    ..name = json['name'] as String
     ..color = json['color'] as String
     ..isTextParameter = json['isTextParameter'] as bool
     ..UUID = json['UUID'] as String
     ..text = json['text'] as String
-    ..widgetType = json['widgetType'] as String
     ..fontSize = json['fontSize'] as num
     ..fontName = json['fontName'] as String
     ..fontWeight = json['fontWeight'] as String
@@ -50,7 +49,6 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'UUID': instance.UUID,
       'originalRef': instance.originalRef,
       'text': instance.text,
-      'widgetType': instance.widgetType,
       'fontSize': instance.fontSize,
       'fontName': instance.fontName,
       'fontWeight': instance.fontWeight,

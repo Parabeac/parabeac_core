@@ -110,7 +110,8 @@ class Triangle extends AbstractShapeLayer implements SketchNodeFactory {
     return triangle;
   }
 
-  factory Triangle.fromJson(Map<String, dynamic> json) => _$TriangleFromJson(json);
+  factory Triangle.fromJson(Map<String, dynamic> json) =>
+      _$TriangleFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$TriangleToJson(this);
 
@@ -121,7 +122,7 @@ class Triangle extends AbstractShapeLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return Future.value(
-        InheritedTriangle(this, currentContext: currentContext, image: image));
+    return Future.value(InheritedTriangle(this, name,
+        currentContext: currentContext, image: image));
   }
 }

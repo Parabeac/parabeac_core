@@ -30,7 +30,6 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     ..UUID = json['UUID'] as String
     ..functionCallName = json['functionCallName'] as String
     ..foundMaster = json['foundMaster'] as bool
-    ..widgetType = json['widgetType'] as String
     ..overrideValues = json['overrideValues'] as List;
 }
 
@@ -51,6 +50,5 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'functionCallName': instance.functionCallName,
       'foundMaster': instance.foundMaster,
       'originalRef': instance.originalRef,
-      'widgetType': instance.widgetType,
       'overrideValues': instance.overrideValues,
     };
