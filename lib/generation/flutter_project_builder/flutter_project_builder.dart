@@ -242,7 +242,7 @@ class FlutterProjectBuilder {
               (intermediateItem.node as InheritedScaffold).isHomeScreen) {
             var relPath = PBGenCache().getRelativePath(
                 '${projectName}/lib/main.dart', intermediateItem.node.UUID);
-            pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
+            await pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
                 '${projectName}/lib/main.dart', relPath);
           }
 
