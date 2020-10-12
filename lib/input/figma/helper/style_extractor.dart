@@ -1,6 +1,5 @@
 import 'package:parabeac_core/design_logic/pb_paragraph_style.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
-import 'package:parabeac_core/design_logic/pb_text_style.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_font_descriptor.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_paragraph_style.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_border.dart';
@@ -17,9 +16,11 @@ class StyleExtractor {
   PBStyle getStyle(Map<String, dynamic> json) {
     if (json != null) {
       var bgColor;
-      if (json['background'] != null && json['background'].isNotEmpty) {
-        if (json['background'][0]['visible'] != null &&
-            !json['background'][0]['visible']) {
+      // Check if color exists in fills
+      if (json['fills'] != null && json['fills'].isNotEmpty) {
+        // Check if color should be visible
+        if (!json['fills'][0].containsKey('visible') ||
+            !json['fills'][0]['visible']) {
           bgColor = _getColor(null);
         } else {
           bgColor = _getColor(json['background'][0]['color']);

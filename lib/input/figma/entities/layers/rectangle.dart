@@ -34,7 +34,6 @@ class FigmaRectangle extends FigmaVector
     constraints,
     Frame boundaryRectangle,
     size,
-    fills,
     strokes,
     strokeWeight,
     strokeAlign,
@@ -42,7 +41,7 @@ class FigmaRectangle extends FigmaVector
     this.cornerRadius,
     this.rectangleCornerRadii,
     this.points,
-    this.fillsList,
+    List fillsList,
   }) : super(
           name: name,
           visible: isVisible,
@@ -58,15 +57,13 @@ class FigmaRectangle extends FigmaVector
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
+          fillsList: fillsList,
         );
 
   List points;
   double cornerRadius;
 
   List<double> rectangleCornerRadii;
-
-  @JsonKey(name: 'fills')
-  List fillsList;
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) {
@@ -102,7 +99,8 @@ class FigmaRectangle extends FigmaVector
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
       currentContext: currentContext,
-      isBackgroundVisible: style.backgroundColor != null,
+      isBackgroundVisible:
+          !fillsMap.containsKey('visible') || fillsMap['visible'],
       borderInfo: {
         'borderRadius': (style != null && style.borderOptions.isEnabled)
             ? points[0]['cornerRadius']

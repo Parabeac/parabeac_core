@@ -34,7 +34,7 @@ class InheritedContainer extends PBVisualIntermediateNode
   String widgetType = 'CONTAINER';
 
   @override
-  String UUID; //TODO find the root cause of why certain node have a null UUID
+  String UUID;
 
   /// Used for setting the alignment of it's children
   @JsonKey(ignore: true)
@@ -50,7 +50,7 @@ class InheritedContainer extends PBVisualIntermediateNode
   Map borderInfo;
 
   @JsonKey(nullable: true)
-  bool isBackgroundVisible = false;
+  bool isBackgroundVisible = true;
 
   InheritedContainer(
       this.originalRef, this.topLeftCorner, this.bottomRightCorner,

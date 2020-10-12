@@ -47,6 +47,9 @@ class FigmaVector extends FigmaNode
   @override
   String type = 'VECTOR';
 
+  @JsonKey(name: 'fills')
+  List fillsList;
+
   FigmaVector({
     String name,
     bool visible,
@@ -62,6 +65,7 @@ class FigmaVector extends FigmaNode
     this.strokeWeight,
     this.strokeAlign,
     this.styles,
+    this.fillsList,
     String UUID,
   }) : super(
           name,
