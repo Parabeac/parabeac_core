@@ -16,7 +16,6 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
@@ -39,7 +38,9 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..fillsList = json['fills'] as List
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
@@ -50,7 +51,6 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'visible': instance.isVisible,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
@@ -62,6 +62,8 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
+      'fills': instance.fillsList,
+      'imageReference': instance.imageReference,
       'type': instance.type,
       'parameters': instance.parameters,
       'symbolID': instance.symbolID,

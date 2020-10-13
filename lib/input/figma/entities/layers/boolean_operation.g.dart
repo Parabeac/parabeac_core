@@ -34,6 +34,7 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
     ..strokeAlign = json['strokeAlign'] as String
     ..styles = json['styles']
+    ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String;
 }
 
@@ -53,6 +54,7 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
+      'fills': instance.fillsList,
       'children': instance.children,
       'booleanOperation': instance.booleanOperation,
       'type': instance.type,

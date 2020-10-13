@@ -16,7 +16,6 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
@@ -43,7 +42,9 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     overriadableProperties: json['overriadableProperties'] as List,
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String;
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..fillsList = json['fills'] as List
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
@@ -55,7 +56,6 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
       'children': instance.children,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
@@ -67,6 +67,8 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
+      'fills': instance.fillsList,
+      'imageReference': instance.imageReference,
       'type': instance.type,
       'overrideProperties': instance.overrideProperties,
       'overriadableProperties': instance.overriadableProperties,

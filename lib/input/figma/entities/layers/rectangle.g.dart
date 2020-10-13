@@ -53,10 +53,10 @@ Map<String, dynamic> _$FigmaRectangleToJson(FigmaRectangle instance) =>
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
+      'fills': instance.fillsList,
       'imageReference': instance.imageReference,
       'type': instance.type,
       'points': instance.points,
       'cornerRadius': instance.cornerRadius,
       'rectangleCornerRadii': instance.rectangleCornerRadii,
-      'fills': instance.fillsList,
     };

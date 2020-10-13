@@ -42,6 +42,7 @@ class FigmaFrame extends FigmaNode
   @override
   List children;
 
+  @JsonKey(ignore: true)
   var fills;
 
   var strokes;

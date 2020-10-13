@@ -16,6 +16,7 @@ InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
         ? null
         : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>),
     borderInfo: json['borderInfo'] as Map<String, dynamic>,
+    isBackgroundVisible: json['isBackgroundVisible'] as bool,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -41,4 +42,5 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
       'size': instance.size,
       'alignment': instance.alignment,
       'borderInfo': instance.borderInfo,
+      'isBackgroundVisible': instance.isBackgroundVisible,
     };

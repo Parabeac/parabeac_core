@@ -16,7 +16,6 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
-    fills: json['fills'],
     strokes: json['strokes'],
     strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
     strokeAlign: json['strokeAlign'] as String,
@@ -35,7 +34,10 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
-  )..prototypeNodeUUID = json['transitionNodeID'] as String;
+  )
+    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..fillsList = json['fills'] as List
+    ..imageReference = json['imageReference'] as String;
 }
 
 Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
@@ -48,7 +50,6 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
       'children': instance.children,
-      'fills': instance.fills,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
@@ -61,4 +62,6 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
       'type': instance.type,
+      'fills': instance.fillsList,
+      'imageReference': instance.imageReference,
     };
