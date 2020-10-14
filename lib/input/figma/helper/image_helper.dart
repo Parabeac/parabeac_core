@@ -13,8 +13,7 @@ Logger log = Logger('Figma Image helper');
 /// and writes it to the `pngs` folder in the `outputPath`.
 /// Returns true if the operation was successful. Returns false
 /// otherwise.
-/// //TODO: figure out return type
-Future<dynamic> processImages(List<String> uuids) async {
+Future<dynamic> _processImages(List<String> uuids) async {
   // Call Figma API to get Image link
   return Future(() async {
     var response = await APICallService.makeAPICall(
@@ -46,6 +45,23 @@ Future<dynamic> processImages(List<String> uuids) async {
     }
   });
   // TODO: Investigate API call for when values.first == null
+}
+
+Future<void> processImageQueue() async {
+  // Split uuids into 6 lists to create separate API requests to figma
+  List<List<String>> uuidLists = List.generate(8, (_) => []);
+  for (var i = 0; i < uuidQueue.length; i++) {
+    uuidLists[i % 8].add(uuidQueue[i]);
+  }
+
+  // Process images in separate queues
+  List<Future> futures = [];
+  for (var uuidList in uuidLists) {
+    futures.add(_processImages(uuidList));
+  }
+
+  // Wait for the images to complete writing process
+  await Future.wait(futures, eagerError: true);
 }
 
 mixin PBImageHelperMixin {

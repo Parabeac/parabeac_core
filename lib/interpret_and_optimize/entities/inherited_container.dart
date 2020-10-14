@@ -53,13 +53,15 @@ class InheritedContainer extends PBVisualIntermediateNode
   bool isBackgroundVisible = true;
 
   InheritedContainer(
-      this.originalRef, this.topLeftCorner, this.bottomRightCorner,
-      {this.alignX,
-      this.alignY,
-      this.currentContext,
-      this.borderInfo,
-      this.isBackgroundVisible})
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+    this.originalRef,
+    this.topLeftCorner,
+    this.bottomRightCorner, {
+    this.alignX,
+    this.alignY,
+    this.currentContext,
+    this.borderInfo,
+    this.isBackgroundVisible = true,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

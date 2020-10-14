@@ -32,35 +32,36 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @JsonKey(name: 'do_objectID')
   String UUID;
 
-  Bitmap(
-      {this.imageReference,
-      this.fillReplacesImage,
-      this.intendedDPI,
-      this.clippingMask,
-      this.UUID,
-      booleanOperation,
-      exportOptions,
-      Frame this.boundaryRectangle,
-      Flow flow,
-      isFixedToViewport,
-      isFlippedHorizontal,
-      isFlippedVertical,
-      isLocked,
-      isVisible,
-      layerListExpandedType,
-      name,
-      nameIsFixed,
-      resizingConstraint,
-      resizingType,
-      rotation,
-      sharedStyleID,
-      shouldBreakMaskChain,
-      hasClippingMask,
-      clippingMaskMode,
-      userInfo,
-      Style style,
-      maintainScrollPosition})
-      : _isVisible = isVisible,
+  Bitmap({
+    this.imageReference,
+    this.fillReplacesImage,
+    this.intendedDPI,
+    this.clippingMask,
+    this.UUID,
+    booleanOperation,
+    exportOptions,
+    Frame this.boundaryRectangle,
+    Flow flow,
+    isFixedToViewport,
+    isFlippedHorizontal,
+    isFlippedVertical,
+    isLocked,
+    isVisible,
+    layerListExpandedType,
+    name,
+    nameIsFixed,
+    resizingConstraint,
+    resizingType,
+    rotation,
+    sharedStyleID,
+    shouldBreakMaskChain,
+    hasClippingMask,
+    clippingMaskMode,
+    userInfo,
+    Style style,
+    maintainScrollPosition,
+    this.imageReferenceMap = const {},
+  })  : _isVisible = isVisible,
         _style = style,
         super(
             UUID,
@@ -85,7 +86,9 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
             clippingMaskMode,
             userInfo,
             style,
-            maintainScrollPosition);
+            maintainScrollPosition) {
+    imageReference ??= imageReferenceMap['_ref'];
+  }
 
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
@@ -109,8 +112,11 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
     return Future.value(InheritedBitmap(this, currentContext: currentContext));
   }
 
+  @JsonKey(name: 'image')
+  Map imageReferenceMap;
+
   @override
-  @JsonKey(name: '_ref')
+  @JsonKey(ignore: true)
   String imageReference;
 
   @override

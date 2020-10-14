@@ -45,9 +45,13 @@ class FlutterProjectBuilder {
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      log.info(Process.runSync('flutter', ['create', '$projectName'],
-              workingDirectory: MainInfo().outputPath)
-          .stdout);
+      var createResult = Process.runSync('flutter', ['create', '$projectName'],
+          workingDirectory: MainInfo().outputPath);
+      if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
+        log.error(createResult.stderr);
+      } else {
+        log.info(createResult.stdout);
+      }
     } catch (error, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: error,
@@ -75,21 +79,11 @@ class FlutterProjectBuilder {
       log.error(e.toString());
     });
 
-    log.info('Processing remaining images...');
-    // Split uuids into 6 lists to create separate API requests to figma
-    List<List<String>> uuidLists = List.generate(8, (_) => []);
-    for (var i = 0; i < image_helper.uuidQueue.length; i++) {
-      uuidLists[i % 8].add(image_helper.uuidQueue[i]);
+    if (MainInfo().figmaProjectID != null &&
+        MainInfo().figmaProjectID.isNotEmpty) {
+      log.info('Processing remaining images...');
+      image_helper.processImageQueue();
     }
-
-    // Process images in separate queues
-    List<Future> futures = [];
-    for (var uuidList in uuidLists) {
-      futures.add(image_helper.processImages(uuidList));
-    }
-
-    // Wait for the images to complete writing process
-    await Future.wait(futures, eagerError: true);
 
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',

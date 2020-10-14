@@ -8,7 +8,6 @@ part of 'bitmap.dart';
 
 Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
   return Bitmap(
-    imageReference: json['_ref'] as String,
     fillReplacesImage: json['fillReplacesImage'] as bool,
     intendedDPI: json['intendedDPI'] as int,
     clippingMask: json['clippingMask'],
@@ -41,6 +40,7 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
         ? null
         : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'],
+    imageReferenceMap: json['image'] as Map<String, dynamic>,
   )
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
@@ -74,7 +74,7 @@ Map<String, dynamic> _$BitmapToJson(Bitmap instance) => <String, dynamic>{
       'clippingMask': instance.clippingMask,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
-      '_ref': instance.imageReference,
+      'image': instance.imageReferenceMap,
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
