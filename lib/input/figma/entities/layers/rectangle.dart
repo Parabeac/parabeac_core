@@ -102,10 +102,12 @@ class FigmaRectangle extends FigmaVector
       isBackgroundVisible:
           !fillsMap.containsKey('visible') || fillsMap['visible'],
       borderInfo: {
-        'borderRadius': (style != null && style.borderOptions.isEnabled)
-            ? points[0]['cornerRadius']
+        'borderRadius': (style != null && style.borderOptions != null)
+            ? cornerRadius
             : null,
-        'borderColorHex': border != null ? toHex(border.color) : null
+        'borderColorHex': style.borders != null && style.borders.isNotEmpty
+            ? toHex(style.borders[0].color)
+            : null
       },
     ));
   }
