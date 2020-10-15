@@ -14,7 +14,8 @@ class FigmaController extends Controller {
   FigmaController();
 
   @override
-  void convertFile(var jsonFigma, var outputPath, var configurationPath, var configType) async {
+  void convertFile(var jsonFigma, var outputPath, var configurationPath,
+      var configType) async {
     configure(configurationPath, configType);
 
     var figmaNodeTree = await generateFigmaTree(jsonFigma, outputPath);
@@ -40,6 +41,8 @@ class FigmaController extends Controller {
     }
   }
 
+  /// This method was required for Figma, so we could
+  /// detect which `FigmaFrame` were Scaffolds or Containers
   FigmaNodeTree declareScaffolds(FigmaNodeTree tree) {
     for (var page in tree.pages) {
       for (var item in page.getPageItems()) {
