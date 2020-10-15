@@ -46,12 +46,7 @@ Style _$StyleFromJson(Map<String, dynamic> json) {
     textStyle: json['textStyle'] == null
         ? null
         : TextStyle.fromJson(json['textStyle'] as Map<String, dynamic>),
-  )
-    ..boundaryRectangle = json['boundaryRectangle']
-    ..isVisible = json['isVisible'] as bool
-    ..name = json['name'] as String
-    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
-    ..type = json['type'] as String;
+  );
 }
 
 Map<String, dynamic> _$StyleToJson(Style instance) => <String, dynamic>{
@@ -70,9 +65,4 @@ Map<String, dynamic> _$StyleToJson(Style instance) => <String, dynamic>{
       'innerShadows': instance.innerShadows,
       'shadows': instance.shadows,
       'textStyle': instance.textStyle,
-      'boundaryRectangle': instance.boundaryRectangle,
-      'isVisible': instance.isVisible,
-      'name': instance.name,
-      'prototypeNodeUUID': instance.prototypeNodeUUID,
-      'type': instance.type,
     };

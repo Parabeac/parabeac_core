@@ -3,16 +3,12 @@ import 'package:parabeac_core/design_logic/artboard.dart';
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
-import 'package:parabeac_core/design_logic/pb_border.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/group.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
-import 'package:parabeac_core/input/sketch/entities/style/color.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -160,25 +156,6 @@ class FigmaFrame extends FigmaNode
       );
 
       return Future.value(tempGroup.interpretNode(currentContext));
-      // PBBorder border;
-      // for (var b in style?.borders?.reversed ?? []) {
-      //   if (b.isEnabled) {
-      //     border = b;
-      //   }
-      // }
-      // return Future.value(InheritedContainer(
-      //   this,
-      //   Point(boundaryRectangle.x, boundaryRectangle.y),
-      //   Point(boundaryRectangle.x + boundaryRectangle.width,
-      //       boundaryRectangle.y + boundaryRectangle.height),
-      //   currentContext: currentContext,
-      //   borderInfo: {
-      //     'borderRadius': (style != null && style.borderOptions.isEnabled)
-      //         ? points[0]['cornerRadius']
-      //         : null,
-      //     'borderColorHex': border != null ? toHex(border.color) : null
-      //   },
-      // ));
     }
   }
 

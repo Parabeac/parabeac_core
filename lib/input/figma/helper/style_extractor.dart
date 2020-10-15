@@ -77,6 +77,8 @@ class StyleExtractor {
         borderOptions: borderOptions,
         fills: fills,
       );
+    } else {
+      return null;
     }
   }
 
@@ -132,14 +134,7 @@ class StyleExtractor {
         red: json['r'],
       );
     } else {
-      // Set color default to transparent if fill is null
       return null;
-      // return FigmaColor(
-      //   alpha: 0.0,
-      //   blue: 0.0,
-      //   green: 0.0,
-      //   red: 0.0,
-      // );
     }
   }
 }
