@@ -46,6 +46,7 @@ class PBVisualGenerationService implements PBGenerationService {
     queue.add(NodeTuple(originalRoot, null));
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
+
       if (currentNode.designNode.isVisible) {
         PBIntermediateNode result;
         // Check semantics
@@ -55,15 +56,22 @@ class PBVisualGenerationService implements PBGenerationService {
         } else {
           result = PBPluginListHelper()
               .returnAllowListNodeIfExists(currentNode.designNode);
+
           // Generate general intermediate node if still null.
           // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
+
           if (result == null ||
               currentNode.designNode is PBSharedInstanceDesignNode ||
               currentNode.designNode is PBSharedMasterDesignNode) {
             result = await currentNode.designNode.interpretNode(currentContext);
           }
-          if (currentNode.convertedParent != null) {
-            _addToParent(currentNode.convertedParent, result);
+
+          try {
+            if (currentNode.convertedParent != null) {
+              _addToParent(currentNode.convertedParent, result);
+            }
+          } catch (e) {
+            print(e);
           }
 
           // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.
