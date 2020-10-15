@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/pb_border.dart';
 import 'package:parabeac_core/design_logic/pb_border_options.dart';
 import 'package:parabeac_core/design_logic/pb_fill.dart';
 import 'package:parabeac_core/design_logic/color.dart';
@@ -24,7 +25,9 @@ class Style implements PBStyle {
   String UUID;
   final int endMarkerType, miterLimit, startMarkerType, windingRule;
   final Blur blur;
+  @override
   final BorderOptions borderOptions;
+  @override
   final List<Border> borders;
   final ColorControls colorControls;
   final ContextSettings contextSettings;
@@ -58,33 +61,8 @@ class Style implements PBStyle {
   PBColor backgroundColor;
 
   @override
-  var boundaryRectangle;
+  set borderOptions(PBBorderOptions _borderOptions) {}
 
   @override
-  bool isVisible;
-
-  @override
-  String name;
-
-  @override
-  String prototypeNodeUUID;
-
-  @override
-  String type;
-
-  @override
-  void set borders(List _borders) {
-    // TODO: implement borders
-  }
-
-  @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
-  }
-
-  @override
-  void set borderOptions(PBBorderOptions _borderOptions) {
-    // TODO: implement borderOptions
-  }
+  set borders(List<PBBorder> _borders) {}
 }
