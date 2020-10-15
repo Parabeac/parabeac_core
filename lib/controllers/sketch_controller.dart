@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
@@ -13,15 +15,11 @@ class SketchController extends Controller {
   @override
   var log = Logger('SketchController');
 
-  void initialize() {
-    ///Initialize services HERE
-  }
-
   ///Converting the [fileAbsPath] sketch file to flutter
   @override
-  void convertFile(
-      var fileAbsPath, var projectPath, var configurationPath) async {
-    configure(configurationPath);
+  void convertFile(var fileAbsPath, var projectPath, var configurationPath,
+      var configType) async {
+    configure(configurationPath, configType);
 
     ///INTAKE
     var ids = InputDesignService(fileAbsPath);

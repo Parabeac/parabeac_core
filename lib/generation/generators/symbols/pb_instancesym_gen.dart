@@ -1,12 +1,11 @@
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
-  PBSymbolInstanceGenerator() : super('SYMBOL_INSTANCE');
+  PBSymbolInstanceGenerator() : super();
 
   var log = Logger('Symbol Instance Generator');
 

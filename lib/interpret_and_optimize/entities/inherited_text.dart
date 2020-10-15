@@ -36,15 +36,15 @@ class InheritedText extends PBVisualIntermediateNode
 
   String text;
 
-  String widgetType = 'TEXT';
-
   num fontSize;
 
   String fontName;
-  String weight;
+  String fontWeight; // one of the w100-w900 weights
+  String fontStyle; // normal, or italic
   String textAlignment;
+  num letterSpacing;
 
-  InheritedText(this.originalRef, {this.currentContext})
+  InheritedText(this.originalRef, String name, {this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -53,7 +53,8 @@ class InheritedText extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -64,7 +65,10 @@ class InheritedText extends PBVisualIntermediateNode
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
     color = toHex(originalRef.style.textStyle.fontColor);
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
-    weight = originalRef.style.textStyle.weight;
+    fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
+    fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;
+    letterSpacing = originalRef.style.textStyle.fontDescriptor.letterSpacing;
+
     alignmenttype = originalRef.style.textStyle.paragraphStyle.alignment;
     if (alignmenttype == 0) {
       textAlignment = 'left';

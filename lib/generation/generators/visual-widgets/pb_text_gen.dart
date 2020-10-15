@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBTextGen extends PBGenerator {
-  PBTextGen() : super('TEXT');
+  PBTextGen() : super();
 
   @override
   String generate(PBIntermediateNode source) {
@@ -19,8 +19,20 @@ class PBTextGen extends PBGenerator {
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
       buffer.write('style: TextStyle(\n');
+      if (source.fontName != null) {
+        buffer.write('fontFamily: \'${source.fontName}\',\n');
+      }
       if (source.fontSize != null) {
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
+      }
+      if (source.fontWeight != null) {
+        buffer.write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
+      }
+      if (source.fontStyle != null) {
+        buffer.write('fontStyle: FontStyle.${source.fontStyle},\n');
+      }
+      if (source.letterSpacing != null) {
+        buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
       if (source.color != null) {
         if (findDefaultColor(source.color) == null) {

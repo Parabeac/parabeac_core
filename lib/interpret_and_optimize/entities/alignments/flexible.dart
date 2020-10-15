@@ -19,7 +19,7 @@ class Flexible extends PBVisualIntermediateNode {
 
   @override
   @JsonKey(nullable: true, ignore: false)
-  String widgetType = 'FLEXIBLE';
+  
 
   //TODO: Find a way to make currentContext required
   //without breaking the json serializable
@@ -30,7 +30,13 @@ class Flexible extends PBVisualIntermediateNode {
     this.flex,
     this.topLeftCorner,
     this.bottomRightCorner,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          '',
+          UUID: UUID,
+        ) {
     generator = PBFlexibleGenerator();
   }
 

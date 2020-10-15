@@ -12,9 +12,14 @@ class MainInfo {
   /// Path to the user's sketch file
   String sketchPath;
 
+  String platform;
+
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
   Map configurations;
+
+  // the type of configuration you want to set, 'default' is default type.
+  String configurationType;
 
   /// Unique ID for the device running parabeac-core
   String deviceId;
@@ -33,6 +38,7 @@ class MainInfo {
       'widgetStyle': 'Material',
       'widgetType': 'Stateless',
       'widgetSpacing': 'Expanded',
+      'layoutPrecedence': ['columns', 'rows', 'stack']
     }
   };
 

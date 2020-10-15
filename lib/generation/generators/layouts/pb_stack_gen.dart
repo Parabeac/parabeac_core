@@ -1,11 +1,11 @@
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+
 import '../pb_flutter_generator.dart';
 
 class PBStackGenerator extends PBGenerator {
-  PBStackGenerator() : super('Stack');
+  PBStackGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

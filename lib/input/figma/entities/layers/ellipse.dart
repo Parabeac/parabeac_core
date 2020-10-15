@@ -82,6 +82,7 @@ class FigmaEllipse extends FigmaVector
     //   return null;
     // }
 
-    return Future.value(InheritedBitmap(this, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 }

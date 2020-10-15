@@ -23,8 +23,7 @@ Padding _$PaddingFromJson(Map<String, dynamic> json) {
     ..child = json['child']
     ..screenWidth = (json['screenWidth'] as num)?.toDouble()
     ..screenHeight = (json['screenHeight'] as num)?.toDouble()
-    ..padding = json['padding'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..padding = json['padding'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PaddingToJson(Padding instance) => <String, dynamic>{
@@ -43,5 +42,4 @@ Map<String, dynamic> _$PaddingToJson(Padding instance) => <String, dynamic>{
       'screenHeight': instance.screenHeight,
       'UUID': instance.UUID,
       'padding': instance.padding,
-      'widgetType': instance.widgetType,
     };

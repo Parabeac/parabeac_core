@@ -1,13 +1,12 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 import '../pb_flutter_generator.dart';
 
 class PBScaffoldGenerator extends PBGenerator {
-  PBScaffoldGenerator() : super('Scaffold');
+  PBScaffoldGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

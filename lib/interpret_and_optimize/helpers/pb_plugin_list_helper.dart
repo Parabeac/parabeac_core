@@ -1,10 +1,8 @@
+import 'package:parabeac_core/eggs/injected_app_bar.dart';
+import 'package:parabeac_core/eggs/injected_tab.dart';
+import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/plugins/switch.dart';
-import 'package:parabeac_core/plugins/injected_tab_bar.dart';
-import 'package:parabeac_core/plugins/injected_app_bar.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
-import 'package:parabeac_core/plugins/injected_tab.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -15,13 +13,11 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '.*switch': Switch(Point(0, 0), Point(0, 0), Uuid().v4(),
+      '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(),
+      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(),
-          currentContext: context),
-      '.*tab': Tab(Point(0, 0), Point(0, 0),
+      '.*tab': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),
     };
   }
@@ -32,12 +28,15 @@ class PBPluginListHelper {
 
   Map<String, PBEgg> allowListNames;
 
-  List<String> baseNames = [
+  /// List of static plugin names used for Amplitude
+  static List<String> names = [
     '.*background',
     '.*navbar',
     '.*tabbar',
     '.*tab',
   ];
+
+  List<String> baseNames = ['.*background', '.*navbar', '.*tabbar', '.*tab'];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist

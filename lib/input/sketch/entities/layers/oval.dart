@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.dart';
@@ -7,9 +8,8 @@ import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'dart:convert';
+
 part 'oval.g.dart';
 
 // title: Oval Layer
@@ -121,7 +121,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return Future.value(
-        InheritedOval(this, currentContext: currentContext, image: image));
+    return Future.value(InheritedOval(this, name,
+        currentContext: currentContext, image: image));
   }
 }

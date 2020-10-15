@@ -90,7 +90,7 @@ class FigmaVector extends FigmaNode
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     imageReference = addToImageQueue(UUID);
 
-    return Future.value(InheritedBitmap(this, currentContext: currentContext));
+    return Future.value(InheritedBitmap(this, name, currentContext: currentContext));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -7,7 +8,6 @@ import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 part 'shape_group.g.dart';
@@ -124,7 +124,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return InheritedShapeGroup(this,
+    return InheritedShapeGroup(this, name,
         currentContext: currentContext, image: image);
   }
 }

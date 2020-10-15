@@ -99,9 +99,9 @@ class Group extends FigmaFrame
       children.clear();
 
       return Future.value(
-          InheritedBitmap(this, currentContext: currentContext));
+          InheritedBitmap(this, name, currentContext: currentContext));
     }
-    return Future.value(TempGroupLayoutNode(this, currentContext,
+    return Future.value(TempGroupLayoutNode(this, currentContext, name,
         topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
         bottomRightCorner: Point(boundaryRectangle.x + boundaryRectangle.width,
             boundaryRectangle.y + boundaryRectangle.height)));

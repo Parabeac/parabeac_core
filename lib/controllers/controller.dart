@@ -3,15 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'main_info.dart';
 
-class Controller {
+abstract class Controller {
   ///SERVICE
   var log = Logger('Controller');
 
   Controller();
 
-  void convertFile(var fileAbsPath, var projectPath, var configurationPath) {}
+  void convertFile(
+      var fileAbsPath, var projectPath, var configurationPath, var configType);
 
-  void configure(var configurationPath) async {
+  void configure(var configurationPath, var configType) async {
     Map configurations;
     try {
       if (configurationPath == null || configurationPath.isEmpty) {
@@ -29,7 +30,8 @@ class Controller {
     }
 
     ///SET CONFIGURATION
-    // Setting configurations globaly
+    // Setting configurations globally
     MainInfo().configurations = configurations;
+    MainInfo().configurationType = configType;
   }
 }

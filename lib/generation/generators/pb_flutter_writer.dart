@@ -19,34 +19,34 @@ class PBFlutterWriter implements PBPageWriter {
 
   /// Creates a new `main.dart` file that starts the Flutter application at
   /// `homeName` and adds the import from `main.dart` to `relativeImportPath`.
-  void writeMainScreenWithHome(
-      String homeName, String pathToMain, String relativeImportPath) {
+  Future<void> writeMainScreenWithHome(
+      String homeName, String pathToMain, String relativeImportPath) async {
     var mainFile = File(pathToMain).openWrite(mode: FileMode.writeOnly);
     mainFile.write('''
-      import 'package:flutter/material.dart';
-      import '$relativeImportPath';
+import 'package:flutter/material.dart';
+import '$relativeImportPath';
 
-      void main() {
-        runApp(MyApp());
-      }
+void main() {
+    runApp(MyApp());
+}
 
-      class MyApp extends StatelessWidget {
-        // This widget is the root of your application.
-        @override
-        Widget build(BuildContext context) {
-          return MaterialApp(
-            title: '${MainInfo().projectName ?? 'Parabeac-Core Generated Project'}',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: ${homeName}(),
-          );
-        }
-      }
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '${MainInfo().projectName ?? 'Parabeac-Core Generated Project'}',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: ${homeName}(),
+    );
+  }
+}''');
 
-      ''');
-    mainFile.close();
+    await mainFile.flush();
+    await mainFile.close();
   }
 
   void submitDependencies(String yamlAbsPath) async {

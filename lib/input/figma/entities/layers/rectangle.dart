@@ -85,7 +85,7 @@ class FigmaRectangle extends FigmaVector
       imageReference = addToImageQueue(UUID);
 
       return Future.value(
-          InheritedBitmap(this, currentContext: currentContext));
+          InheritedBitmap(this, name, currentContext: currentContext));
     }
     PBBorder border;
     for (var b in style?.borders?.reversed ?? []) {
@@ -98,6 +98,7 @@ class FigmaRectangle extends FigmaVector
       Point(boundaryRectangle.x, boundaryRectangle.y),
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
+      name,
       currentContext: currentContext,
       isBackgroundVisible:
           !fillsMap.containsKey('visible') || fillsMap['visible'],

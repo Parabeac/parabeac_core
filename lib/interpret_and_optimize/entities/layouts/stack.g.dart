@@ -9,6 +9,7 @@ part of 'stack.dart';
 PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateStackLayout(
+    json['name'] as String,
     json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
@@ -16,15 +17,13 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
-    ..name = json['name'] as String
     ..topLeftCorner = json['topLeftCorner'] == null
         ? null
         : Point.fromJson(json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = json['bottomRightCorner'] == null
         ? null
         : Point.fromJson(json['bottomRightCorner'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
-    ..widgetType = json['widgetType'] as String;
+    ..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
@@ -40,5 +39,4 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
       'alignment': instance.alignment,
-      'widgetType': instance.widgetType,
     };

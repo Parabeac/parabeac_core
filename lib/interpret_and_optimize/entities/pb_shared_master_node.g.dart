@@ -29,8 +29,7 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
         ?.map((e) => e == null
             ? null
             : PBSymbolMasterParameter.fromJson(e as Map<String, dynamic>))
-        ?.toList()
-    ..widgetType = json['widgetType'] as String;
+        ?.toList();
 }
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
@@ -48,5 +47,4 @@ Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
       'SYMBOL_ID': instance.SYMBOL_ID,
       'name': instance.name,
       'parametersDefinition': instance.parametersDefinition,
-      'widgetType': instance.widgetType,
     };

@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.dart';
@@ -6,9 +7,8 @@ import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/border.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -135,11 +135,13 @@ class Rectangle extends AbstractShapeLayer
       Point(boundaryRectangle.x, boundaryRectangle.y),
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
+      name,
       currentContext: currentContext,
       borderInfo: {
         'borderRadius':
             style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
-        'borderColorHex': border != null ? toHex(border.color) : null
+        'borderColorHex': border != null ? toHex(border.color) : null,
+        'borderThickness': border != null ? border.thickness : null
       },
     ));
   }

@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -20,7 +21,7 @@ import 'package:uuid/uuid.dart';
 /// Output:PBIntermediateNode Tree
 class PBLayoutGenerationService implements PBGenerationService {
   ///The available Layouts that could be injected.
-  List<PBLayoutIntermediateNode> _availableLayouts;
+  List<PBLayoutIntermediateNode> _availableLayouts = [];
 
   var log = Logger('Layout Generation Service');
 
@@ -34,15 +35,27 @@ class PBLayoutGenerationService implements PBGenerationService {
   PBContext currentContext;
 
   PBLayoutGenerationService({this.currentContext}) {
-    _availableLayouts = [
-      PBIntermediateColumnLayout(
-          currentContext: currentContext, UUID: Uuid().v4()),
-      PBIntermediateRowLayout(Uuid().v4(), currentContext: currentContext),
-      PBIntermediateStackLayout(Uuid().v4(), currentContext: currentContext)
-    ];
+    Map<String, PBLayoutIntermediateNode> layoutHandlers = {
+      'column': PBIntermediateColumnLayout(
+        '',
+        currentContext: currentContext,
+        UUID: Uuid().v4(),
+      ),
+      'row': PBIntermediateRowLayout('', Uuid().v4(),
+          currentContext: currentContext),
+      'stack': PBIntermediateStackLayout('', Uuid().v4(),
+          currentContext: currentContext),
+    };
 
-    defaultLayout = PBIntermediateColumnLayout(
-        currentContext: currentContext, UUID: Uuid().v4());
+    for (var layoutType
+        in currentContext.configuration.layoutPrecedence ?? ['column']) {
+      layoutType = layoutType.toLowerCase();
+      if (layoutHandlers.containsKey(layoutType)) {
+        _availableLayouts.add(layoutHandlers[layoutType]);
+      }
+    }
+
+    defaultLayout = _availableLayouts[0];
   }
 
   ///The default [PBLayoutIntermediateNode]
@@ -84,8 +97,12 @@ class PBLayoutGenerationService implements PBGenerationService {
           return rootNode.children[0];
         }
         var replacementNode = InjectedContainer(
-            rootNode.bottomRightCorner, rootNode.topLeftCorner, Uuid().v4(),
-            currentContext: currentContext);
+          rootNode.bottomRightCorner,
+          rootNode.topLeftCorner,
+          Uuid().v4(),
+          '',
+          currentContext: currentContext,
+        );
         replacementNode.prototypeNode = prototypeNode;
         replacementNode.addChild(rootNode.children.first);
         return replacementNode;
@@ -125,7 +142,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     children = _arrangeChildren(group);
     rootLayout = children.length == 1
         ? children[0]
-        : defaultLayout.generateLayout(children, currentContext);
+        : defaultLayout.generateLayout(children, currentContext, group.name);
     return rootLayout;
   }
 
@@ -155,8 +172,10 @@ class PBLayoutGenerationService implements PBGenerationService {
                 .replaceChildren(_arrangeChildren(nextNode));
             generatedLayout = nextNode;
           }
-          generatedLayout ??=
-              layout.generateLayout([currentNode, nextNode], currentContext);
+
+          /// Generated / Injected Layouts can have no names because they don't derive from a group, which means they would also not end up being a misc. node.
+          generatedLayout ??= layout
+              .generateLayout([currentNode, nextNode], currentContext, '');
           children
               .replaceRange(childPointer, childPointer + 2, [generatedLayout]);
           childPointer = 0;

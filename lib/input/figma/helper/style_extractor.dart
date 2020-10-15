@@ -117,6 +117,9 @@ class StyleExtractor {
       json['fontFamily'],
       json['fontSize'],
       json,
+      'w' + (json['fontWeight'].toString() ?? '100'),
+      json.containsKey('italic') && json['italic'] ? 'italic' : 'normal',
+      json['letterSpacing'],
     );
   }
 

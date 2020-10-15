@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/eggs/injected_app_bar.dart';
+import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
@@ -12,8 +15,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:parabeac_core/plugins/injected_app_bar.dart';
-import 'package:parabeac_core/plugins/injected_tab_bar.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
@@ -82,7 +83,7 @@ class FlutterProjectBuilder {
     if (MainInfo().figmaProjectID != null &&
         MainInfo().figmaProjectID.isNotEmpty) {
       log.info('Processing remaining images...');
-      image_helper.processImageQueue();
+      await image_helper.processImageQueue();
     }
 
     Process.runSync(
@@ -133,6 +134,19 @@ class FlutterProjectBuilder {
         runInShell: true,
         environment: Platform.environment,
         workingDirectory: '${MainInfo().outputPath}');
+
+    log.info(
+      Process.runSync(
+              'dartfmt',
+              [
+                '-w',
+                '${pathToFlutterProject}bin',
+                '${pathToFlutterProject}lib',
+                '${pathToFlutterProject}test'
+              ],
+              workingDirectory: MainInfo().outputPath)
+          .stdout,
+    );
   }
 
   /// Traverse the [node] tree, check if any nodes need importing,
@@ -185,7 +199,7 @@ class FlutterProjectBuilder {
     var pageWriter = PBFlutterWriter();
 
     for (var directory in mainTree.groups) {
-      var directoryName = directory.name.toLowerCase().replaceAll(' ', '_');
+      var directoryName = directory.name.snakeCase;
       var flutterGenerator;
       var importSet = <String>[];
       var bodyBuffer, constructorBuffer;
@@ -208,9 +222,9 @@ class FlutterProjectBuilder {
 
         var name = isSymbolsDir ? SYMBOL_DIR_NAME : fileName;
         var symbolFilePath =
-            '${projectName}/lib/screens/${directoryName}/${name.toLowerCase()}.dart';
+            '${projectName}/lib/screens/${directoryName}/${name.snakeCase}.dart';
         var fileNamePath =
-            '${projectName}/lib/screens/${directoryName}/${fileName.toLowerCase()}.dart';
+            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         // TODO: Need FlutterGenerator for each page because otherwise
         // we'd add all imports to every single dart page. Discuss alternatives
         if (!isSymbolsDir) {
@@ -240,7 +254,7 @@ class FlutterProjectBuilder {
               (intermediateItem.node as InheritedScaffold).isHomeScreen) {
             var relPath = PBGenCache().getRelativePath(
                 '${projectName}/lib/main.dart', intermediateItem.node.UUID);
-            pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
+            await pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
                 '${projectName}/lib/main.dart', relPath);
           }
 

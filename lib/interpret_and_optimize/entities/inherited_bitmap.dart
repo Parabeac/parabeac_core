@@ -30,18 +30,18 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
 
-  String widgetType = 'Bitmap';
-
   @override
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String name;
-  Map size;
   String referenceImage;
 
-  InheritedBitmap(this.originalRef, {this.currentContext})
-      : super(
+  InheritedBitmap(
+    this.originalRef,
+    String name, {
+    this.currentContext,
+    this.referenceImage,
+  }) : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
             Point(
@@ -49,7 +49,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -65,7 +66,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height
     };
-    referenceImage = (originalRef as Image).imageReference;
+    this.referenceImage = (originalRef as Image).imageReference;
     ImageReferenceStorage().addReference(
         originalRef.UUID, '${MainInfo().outputPath}assets/images');
   }

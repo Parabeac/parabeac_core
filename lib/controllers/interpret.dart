@@ -6,6 +6,7 @@ import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:parabeac_core/input/helper/page.dart';
 import 'package:parabeac_core/input/helper/page_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -81,10 +82,11 @@ class Interpret {
       } else {
         itemType = 'MISC';
       }
-      log.fine(
-          'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
 
       if (item != null) {
+        log.fine(
+            'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
+
         var newItem = PBIntermediateItem(item, itemType);
 
         ///Searching for the root item.
@@ -103,95 +105,33 @@ class Interpret {
             MainInfo().configurations ?? MainInfo().defaultConfigs);
 
     var parentComponent = item.root;
-    PBIntermediateNode parentVisualIntermediateNode;
 
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    try {
-      parentVisualIntermediateNode = await PBVisualGenerationService(
-              parentComponent,
-              currentContext: currentContext)
-          .getIntermediateTree();
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-    }
-    // print(
-    //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch.stop();
-    var stopwatch1 = Stopwatch()..start();
-
-    parentVisualIntermediateNode =
-        await _pbSymbolLinkerService.linkSymbols(parentVisualIntermediateNode);
+    var parentVisualIntermediateNode = await _visualGenerationService(
+        parentComponent, currentContext, stopwatch);
 
     ///
     /// pre-layout generation service for plugin nodes.
     /// NOTE Disabled Plugin Control Service for right now
     ///
-    PBIntermediateNode parentPreLayoutIntermediateNode;
-    try {
-      parentPreLayoutIntermediateNode = PBPluginControlService(
-              parentVisualIntermediateNode,
-              currentContext: currentContext)
-          .convertAndModifyPluginNodeTree();
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-      parentPreLayoutIntermediateNode = parentVisualIntermediateNode;
-    }
-    // print(
-    //     'Pre-Layout Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch1.stop();
+    var stopwatch1 = Stopwatch()..start();
+    var parentPreLayoutIntermediateNode = await _pluginService(
+        parentVisualIntermediateNode, currentContext, stopwatch1);
+
     var stopwatch2 = Stopwatch()..start();
 
-    PBIntermediateNode parentLayoutIntermediateNode;
-
     /// LayoutGenerationService
-    try {
-      parentLayoutIntermediateNode =
-          PBLayoutGenerationService(currentContext: currentContext)
-              .injectNodes(parentPreLayoutIntermediateNode);
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-      parentLayoutIntermediateNode = parentPreLayoutIntermediateNode;
-    }
 
-    parentLayoutIntermediateNode = await _pbPrototypeLinkerService
-        .linkPrototypeNodes(parentLayoutIntermediateNode);
-    var parentAlignIntermediateNode;
-    // print(
-    //     'Layout Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch2.stop();
+    var parentLayoutIntermediateNode = await _layoutGenerationService(
+        parentPreLayoutIntermediateNode, currentContext, stopwatch2);
+
     var stopwatch3 = Stopwatch()..start();
 
     /// AlignGenerationService
-    try {
-      parentAlignIntermediateNode = PBAlignGenerationService(
-              parentLayoutIntermediateNode,
-              currentContext: currentContext)
-          .addAlignmentToLayouts();
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-      parentAlignIntermediateNode = parentLayoutIntermediateNode;
-    }
-    // print(
-    //     'Align Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch3.stop();
+    var parentAlignIntermediateNode = await _alignGenerationService(
+        parentLayoutIntermediateNode, currentContext, stopwatch3);
 
     return parentAlignIntermediateNode;
   }
@@ -268,5 +208,94 @@ class Interpret {
     }
 
     return parentAlignIntermediateNode;
+  }
+
+  Future<PBIntermediateNode> _visualGenerationService(
+      var component, var context, var stopwatch) async {
+    /// VisualGenerationService
+    PBIntermediateNode node;
+    try {
+      node = await PBVisualGenerationService(component, currentContext: context)
+          .getIntermediateTree();
+    } catch (e, stackTrace) {
+      // await MainInfo().sentry.captureException(
+      //       exception: e,
+      //       stackTrace: stackTrace,
+      //     );
+      log.error(e.toString());
+    }
+    // print(
+    //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
+    stopwatch.stop();
+    node = await _pbSymbolLinkerService.linkSymbols(node);
+    return node;
+  }
+
+  Future<PBIntermediateNode> _pluginService(
+      PBIntermediateNode parentnode, var context, var stopwatch1) async {
+    PBIntermediateNode node;
+    try {
+      node = PBPluginControlService(parentnode, currentContext: context)
+          .convertAndModifyPluginNodeTree();
+    } catch (e, stackTrace) {
+      // await MainInfo().sentry.captureException(
+      //       exception: e,
+      //       stackTrace: stackTrace,
+      //     );
+      log.error(e.toString());
+      node = parentnode;
+    }
+    // print(
+    //     'Pre-Layout Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
+    stopwatch1.stop();
+    return node;
+  }
+
+  Future<PBIntermediateNode> _layoutGenerationService(
+      PBIntermediateNode parentNode, var context, var stopwatch2) async {
+    PBIntermediateNode node;
+    try {
+      node = PBLayoutGenerationService(currentContext: context)
+          .injectNodes(parentNode);
+    } catch (e, stackTrace) {
+      // await MainInfo().sentry.captureException(
+      //       exception: e,
+      //       stackTrace: stackTrace,
+      //     );
+      log.error(e.toString());
+      node = parentNode;
+    }
+
+    node = await _pbPrototypeLinkerService.linkPrototypeNodes(node);
+    // print(
+    //     'Layout Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
+    stopwatch2.stop();
+    return node;
+  }
+
+  Future<PBIntermediateNode> _alignGenerationService(
+      PBIntermediateNode parentnode, var context, var stopwatch3) async {
+    PBIntermediateNode node;
+
+    /// This covers a case where the designer created an empty group. This would cause an issue as there is nothing to align.
+    if (parentnode is TempGroupLayoutNode) {
+      return null;
+    }
+
+    try {
+      node = PBAlignGenerationService(parentnode, currentContext: context)
+          .addAlignmentToLayouts();
+    } catch (e, stackTrace) {
+      // await MainInfo().sentry.captureException(
+      //       exception: e,
+      //       stackTrace: stackTrace,
+      //     );
+      log.error(e.toString());
+      node = parentnode;
+    }
+    // print(
+    //     'Align Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
+    stopwatch3.stop();
+    return node;
   }
 }

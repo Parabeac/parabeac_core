@@ -16,8 +16,6 @@ abstract class PBIntermediateNode {
   @JsonKey(ignore: true)
   BUILDER_TYPE builder_type;
 
-  String widgetType;
-
   @JsonKey(ignore: true)
   PBGenerator generator;
 
@@ -38,12 +36,8 @@ abstract class PBIntermediateNode {
   String name;
 
   PBIntermediateNode(
-    this.topLeftCorner,
-    this.bottomRightCorner,
-    this.UUID, {
-    this.currentContext,
-    this.subsemantic,
-  }) {
+      this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
+      {this.currentContext, this.subsemantic}) {
     if (topLeftCorner != null && bottomRightCorner != null) {
       assert(topLeftCorner.x <= bottomRightCorner.x &&
           topLeftCorner.y <= bottomRightCorner.y);

@@ -66,12 +66,8 @@ class PBVisualGenerationService implements PBGenerationService {
             result = await currentNode.designNode.interpretNode(currentContext);
           }
 
-          try {
-            if (currentNode.convertedParent != null) {
-              _addToParent(currentNode.convertedParent, result);
-            }
-          } catch (e) {
-            print(e);
+          if (currentNode.convertedParent != null) {
+            _addToParent(currentNode.convertedParent, result);
           }
 
           // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.

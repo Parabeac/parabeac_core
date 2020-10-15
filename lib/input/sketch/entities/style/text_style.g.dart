@@ -12,7 +12,8 @@ TextStyle _$TextStyleFromJson(Map<String, dynamic> json) {
   )
     ..fontFamily = json['fontFamily'] as String
     ..fontSize = json['fontSize'] as String
-    ..fontWeight = json['fontWeight'] as String;
+    ..fontWeight = json['fontWeight'] as String
+    ..weight = json['weight'] as String;
 }
 
 Map<String, dynamic> _$TextStyleToJson(TextStyle instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$TextStyleToJson(TextStyle instance) => <String, dynamic>{
       'fontFamily': instance.fontFamily,
       'fontSize': instance.fontSize,
       'fontWeight': instance.fontWeight,
+      'weight': instance.weight,
     };

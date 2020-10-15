@@ -18,13 +18,14 @@ class InjectedPositioned extends PBIntermediateNode
 
   final String UUID;
 
-  String widgetType = 'POSITIONED';
+  
 
   double horizontalAlignValue, verticalAlignValue;
   String horizontalAlignType, verticalAlignType;
 
   InjectedPositioned(this.UUID, {this.positionedHolder, this.currentContext})
-      : super(Point(0, 0), Point(0, 0), UUID, currentContext: currentContext) {
+      : super(Point(0, 0), Point(0, 0), UUID, '',
+            currentContext: currentContext) {
     horizontalAlignType = positionedHolder.h_type.toString()?.split('.')[1];
     verticalAlignType = positionedHolder.v_type.toString()?.split('.')[1];
     horizontalAlignValue = positionedHolder.h_value;

@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 
 class PBBoxDecorationHelper extends PBAttributesHelper {
-  PBBoxDecorationHelper() : super('borderInfo');
+  PBBoxDecorationHelper() : super();
 
   @override 
   String generate(PBIntermediateNode source) {
@@ -21,9 +21,17 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         } else if (borderInfo['borderRadius'] != null) {
           buffer.write(
               'borderRadius: BorderRadius.all(Radius.circular(${borderInfo['borderRadius']})),');
-          if (borderInfo['borderColorHex'] != null) {
-            buffer.write(
-                'border: Border.all(color: Color(${borderInfo['borderColorHex']}),),');
+          if ((borderInfo['borderColorHex'] != null) || (borderInfo['borderThickness'] != null)) {
+            buffer.write('border: Border.all(');
+            if (borderInfo['borderColorHex'] != null) {
+              buffer.write(
+                  'color: Color(${borderInfo['borderColorHex']}),');
+            }
+            if (borderInfo['borderThickness'] != null) {
+              buffer.write(
+                  'width: ${borderInfo['borderThickness']},');
+            }
+            buffer.write('),'); // end of Border.all(
           }
         }
       }

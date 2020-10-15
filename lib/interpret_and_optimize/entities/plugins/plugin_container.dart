@@ -1,14 +1,13 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'plugin_container.g.dart';
 
@@ -47,7 +46,6 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   Map borderInfo;
   Map alignment;
 
-  String widgetType = 'CONTAINER';
 
   PluginContainer(
     Point topLeftCorner,
@@ -57,7 +55,8 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
     this.alignY,
     this.color,
     this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+    String name,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBContainerGenerator();
     size = {
       'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
@@ -76,7 +75,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
@@ -99,7 +98,8 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
 
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

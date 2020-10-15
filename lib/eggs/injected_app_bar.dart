@@ -2,11 +2,9 @@ import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
-import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -21,11 +19,12 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 
   String UUID;
 
-  String widgetType = 'AppBar';
+  
 
-  InjectedNavbar(Point topLeftCorner, Point bottomRightCorner, this.UUID,
+  InjectedNavbar(
+      Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
       {this.currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
   }
 
@@ -68,7 +67,8 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedNavbar(topLeftCorner, bottomRightCorner, UUID,
+    return InjectedNavbar(
+        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
 
@@ -82,7 +82,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 }
 
 class PBAppBarGenerator extends PBGenerator {
-  PBAppBarGenerator() : super('AppBar');
+  PBAppBarGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {

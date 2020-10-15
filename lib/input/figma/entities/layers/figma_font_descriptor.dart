@@ -7,6 +7,12 @@ class FigmaFontDescriptor implements PBFontDescriptor {
   @override
   num fontSize;
 
+  String fontWeight;
+
+  String fontStyle;
+
+  num letterSpacing;
+
   @override
   Map<String, dynamic> rawAttributes;
 
@@ -14,5 +20,8 @@ class FigmaFontDescriptor implements PBFontDescriptor {
     this.fontName,
     this.fontSize,
     this.rawAttributes,
+    this.fontWeight,
+    this.fontStyle,
+    this.letterSpacing,
   );
 }

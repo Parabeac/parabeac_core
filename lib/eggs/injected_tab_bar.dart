@@ -2,17 +2,14 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/plugins/injected_tab.dart';
+import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
-import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
+import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   final String UUID;
@@ -20,14 +17,13 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   String semanticName = '.*tabbar';
   List<Tab> tabs = [];
 
-  String widgetType = 'APPBAR';
-
   InjectedTabBar(
     Point topLeftCorner,
     Point bottomRightCorner,
+    String name,
     this.UUID, {
     this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBTabBarGenerator();
   }
 
@@ -57,7 +53,8 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
-    return InjectedTabBar(topLeftCorner, bottomRightCorner, UUID,
+    return InjectedTabBar(
+        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
 
@@ -68,7 +65,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 }
 
 class PBTabBarGenerator extends PBGenerator {
-  PBTabBarGenerator() : super('TABBAR');
+  PBTabBarGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source) {
