@@ -90,18 +90,7 @@ ${parser.usage}
       (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  }
-
-  if (path != null) {
-    var file = await FileSystemEntity.isFile(path);
-    var exists = await File(path).exists();
-
-    if (!file || !exists) {
-      handleError('$path is not a file');
-    }
-    MainInfo().sketchPath = path;
-    InputDesignService(path);
-  } else {
+  } else if (path == null) {
     designType = 'figma';
   }
 
@@ -129,6 +118,15 @@ ${parser.usage}
   await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
 
   if (designType == 'sketch') {
+    var file = await FileSystemEntity.isFile(path);
+    var exists = await File(path).exists();
+
+    if (!file || !exists) {
+      handleError('$path is not a file');
+    }
+    MainInfo().sketchPath = path;
+    InputDesignService(path);
+
     var process = await Process.start('npm', ['run', 'prod'],
         workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
@@ -139,8 +137,6 @@ ${parser.usage}
       }
     }
 
-    //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
     await SketchController().convertFile(
         path,
         MainInfo().outputPath + projectName,
