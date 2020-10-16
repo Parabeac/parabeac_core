@@ -20,10 +20,10 @@ class PBFlexibleGenerator extends PBGenerator {
         buffer.write(
             'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)},');
       } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
+        // MainInfo().sentry.captureException(
+        //       exception: e,
+        //       stackTrace: stackTrace,
+        //     );
         log.error(e.toString());
       }
       buffer.write(')');
