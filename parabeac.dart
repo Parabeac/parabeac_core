@@ -26,7 +26,9 @@ main(List<String> args) async {
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addOption('url',
         help: 'S3 bucket link to download and install Parabeac Eggs', abbr: 'u')
-    ..addOption('key', help: 'key for S3 bucket account', abbr: 'k')
+    ..addOption('key', help: 'key for S3 bucket account', abbr: 'e')
+    ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
+    ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
     ..addOption('secret-key', help: 'S3 secret key', abbr: 's');
 
   argResults = parser.parse(args);
@@ -46,17 +48,22 @@ ${parser.usage}
   var url = argResults['url'];
   var key = argResults['key'];
   var sKey = argResults['secret-key'];
-
-  if (argResults.arguments.contains('-p') ||
-      argResults.arguments.contains('--path')) {
+  var isSketchInput = satisfiesParams(argResults.arguments, [
+    ['-p', '--path']
+  ]);
+  var isFigmaInput = satisfiesParams(argResults.arguments, [
+    ['-k', '--figKey'],
+    ['-f', '--fig']
+  ]);
+  if (isSketchInput || isFigmaInput) {
     arguments.addAll(argResults.arguments);
   }
   String _basePath;
   String _os;
 
-  if(io.Platform.isMacOS || io.Platform.isLinux) {
+  if (io.Platform.isMacOS || io.Platform.isLinux) {
     _os = 'UIX';
-  } else if(io.Platform.isWindows) {
+  } else if (io.Platform.isWindows) {
     _os = 'WIN';
   } else {
     _os = 'OTH';
@@ -109,4 +116,9 @@ ${parser.usage}
   await for (var event in parabeaccore.stderr.transform(utf8.decoder)) {
     print(event);
   }
+}
+
+/// Checks if `args` satisfies the required arguments, `reqArgs`.
+bool satisfiesParams(List<String> args, List<List> reqArgs) {
+  return reqArgs.every((reqArgList) => reqArgList.any(args.contains));
 }
