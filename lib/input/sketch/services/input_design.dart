@@ -38,7 +38,7 @@ class InputDesignService {
 
   ///Getting the images in the sketch file and adding them to the png folder.
   void setImageDir() {
-    ///Creating the pngs folder, if its already not there.
+    ///Creating the pngs folder, if it's already not there.
     Directory('${MainInfo().outputPath}pngs').createSync(recursive: true);
     for (final file in archive) {
       final fileName = file.name;

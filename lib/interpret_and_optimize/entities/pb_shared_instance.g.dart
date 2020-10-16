@@ -9,9 +9,7 @@ part of 'pb_shared_instance.dart';
 PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     Map<String, dynamic> json) {
   return PBSharedInstanceIntermediateNode(
-    json['originalRef'] == null
-        ? null
-        : SymbolInstance.fromJson(json['originalRef'] as Map<String, dynamic>),
+    json['originalRef'],
     json['SYMBOL_ID'] as String,
     topLeftCorner: json['topLeftCorner'] == null
         ? null

@@ -1,18 +1,20 @@
+import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 
-abstract class AbstractGroupLayer extends SketchNode {
+abstract class AbstractGroupLayer extends SketchNode implements GroupNode {
   final bool hasClickThrough;
   final dynamic groupLayout;
-  final List layers;
+  @override
+  final List children;
 
   AbstractGroupLayer(
       this.hasClickThrough,
       this.groupLayout,
-      this.layers,
-      do_objectID,
+      this.children,
+      UUID,
       booleanOperation,
       exportOptions,
       Frame boundaryRectangle,
@@ -36,7 +38,7 @@ abstract class AbstractGroupLayer extends SketchNode {
       Style style,
       maintainScrollPosition)
       : super(
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

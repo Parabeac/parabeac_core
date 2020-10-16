@@ -78,7 +78,7 @@ class Artboard extends AbstractGroupLayer
       this.presetDictionary,
       hasClickThrough,
       groupLayout,
-      List<SketchNode> children,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,

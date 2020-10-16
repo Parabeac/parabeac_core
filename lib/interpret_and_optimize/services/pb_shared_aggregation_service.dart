@@ -44,7 +44,7 @@ class PBSharedInterAggregationService {
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
     for (var prop in sharedMasterNode.overridableProperties) {
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, prop?.do_objectId);
+          rootChildNode, prop?.UUID);
       if (prop.type == PBSharedInstanceIntermediateNode) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
@@ -84,9 +84,9 @@ class PBSharedInterAggregationService {
       instanceIntermediateNode.sharedParamValues =
           instanceIntermediateNode.sharedParamValues.map((v) {
         for (var symParam in masterNode.overridableProperties) {
-          if (symParam.do_objectId == v.do_objectId) {
+          if (symParam.UUID == v.UUID) {
             return PBSharedParameterValue(
-                symParam.type, v.value, symParam.do_objectId);
+                symParam.type, v.value, symParam.UUID);
           }
         }
         return null;

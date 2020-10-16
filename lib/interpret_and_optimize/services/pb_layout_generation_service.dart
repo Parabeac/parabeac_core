@@ -41,10 +41,10 @@ class PBLayoutGenerationService implements PBGenerationService {
         currentContext: currentContext,
         UUID: Uuid().v4(),
       ),
-      'row': PBIntermediateRowLayout('',
-          UUID: Uuid().v4(), currentContext: currentContext),
-      'stack': PBIntermediateStackLayout('',
-          UUID: Uuid().v4(), currentContext: currentContext),
+      'row': PBIntermediateRowLayout('', Uuid().v4(),
+          currentContext: currentContext),
+      'stack': PBIntermediateStackLayout('', Uuid().v4(),
+          currentContext: currentContext),
     };
 
     for (var layoutType

@@ -27,6 +27,12 @@ class MainInfo {
   /// Name of the project
   String projectName;
 
+  /// API needed to do API callls
+  String figmaKey;
+
+  /// Project ID on Figma
+  String figmaProjectID;
+
   Map defaultConfigs = {
     'default': {
       'widgetStyle': 'Material',

@@ -17,7 +17,7 @@ abstract class AbstractShapeLayer extends SketchNode implements DesignShape {
       this.isClosed,
       this.pointRadiusBehaviour,
       this.points,
-      do_objectID,
+      UUID,
       booleanOperation,
       exportOptions,
       Frame boundaryRectangle,
@@ -41,7 +41,7 @@ abstract class AbstractShapeLayer extends SketchNode implements DesignShape {
       Style style,
       maintainScrollPosition)
       : super(
-            do_objectID,
+            UUID,
             booleanOperation,
             exportOptions,
             boundaryRectangle,

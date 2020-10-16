@@ -45,8 +45,6 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  
-
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;

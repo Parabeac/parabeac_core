@@ -2,9 +2,9 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
+import 'package:parabeac_core/input/helper/node_tree.dart';
+import 'package:parabeac_core/input/helper/page.dart';
+import 'package:parabeac_core/input/helper/page_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -48,7 +48,7 @@ class Interpret {
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBIntermediateTree> interpretAndOptimize(SketchNodeTree tree) async {
+  Future<PBIntermediateTree> interpretAndOptimize(NodeTree tree) async {
     _pb_intermediate_tree = PBIntermediateTree(projectName);
 
     ///3rd Party Symbols
@@ -59,7 +59,7 @@ class Interpret {
       }
     }
 
-    /// Main Sketch Pages
+    /// Main Pages
     if (tree.pages != null) {
       for (var i = 0; i < tree.pages?.length; i++) {
         _pb_intermediate_tree.groups.add((await _generateGroup(tree.pages[i])));
@@ -69,7 +69,7 @@ class Interpret {
     return _pb_intermediate_tree;
   }
 
-  Future<PBIntermediateGroup> _generateGroup(SketchPage group) async {
+  Future<PBIntermediateGroup> _generateGroup(Page group) async {
     var intermediateGroup = PBIntermediateGroup(group.name.toLowerCase());
     var pageItems = group.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
@@ -99,7 +99,7 @@ class Interpret {
     return intermediateGroup;
   }
 
-  Future<PBIntermediateNode> _generateScreen(SketchPageItem item) async {
+  Future<PBIntermediateNode> _generateScreen(PageItem item) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);

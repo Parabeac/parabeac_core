@@ -19,7 +19,8 @@ part 'sketch_text.g.dart';
 class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   String CLASS_NAME = 'text';
-  final dynamic attributedString;
+
+  Map attributedString;
   final bool automaticallyDrawOnUnderlyingPath;
   final bool dontSynchroniseWithSymbol;
   final dynamic lineSpacingBehaviour;
@@ -108,7 +109,9 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
             clippingMaskMode,
             userInfo,
             style,
-            maintainScrollPosition);
+            maintainScrollPosition) {
+    content = attributedString == null ? '' : attributedString['string'];
+  }
 
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
@@ -132,5 +135,6 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         ));
 
   @override
+  @JsonKey(ignore: true)
   String content;
 }

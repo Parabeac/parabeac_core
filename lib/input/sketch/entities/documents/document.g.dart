@@ -9,7 +9,7 @@ part of 'document.dart';
 Document _$DocumentFromJson(Map<String, dynamic> json) {
   return Document(
     json['pages'] as List,
-    json['do_objectID'],
+    json['UUID'],
     json['assets'],
     json['colorSpace'],
     json['currentPageIndex'],
@@ -30,7 +30,7 @@ Document _$DocumentFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$DocumentToJson(Document instance) => <String, dynamic>{
-      'do_objectID': instance.do_objectID,
+      'UUID': instance.UUID,
       'assets': instance.assets,
       'colorSpace': instance.colorSpace,
       'currentPageIndex': instance.currentPageIndex,

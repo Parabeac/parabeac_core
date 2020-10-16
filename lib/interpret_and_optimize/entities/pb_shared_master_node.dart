@@ -1,7 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -22,7 +21,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  final SymbolMaster originalRef;
+  final originalRef;
 
   @override
   @JsonKey(ignore: true)
@@ -70,7 +69,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
-    UUID = originalRef.do_objectID;
+    UUID = originalRef.UUID;
 
     generator = PBMasterSymbolGenerator();
 
@@ -83,7 +82,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     parametersDefinition = overridableProperties
         .map((p) => PBSymbolMasterParameter(
             p.type,
-            p.do_objectId,
+            p.UUID,
             p.canOverride,
             p.propertyName,
             p.value?.toJson(),
@@ -121,9 +120,9 @@ class PBSharedParameterProp {
   final String _propertyName;
   String get propertyName => _propertyName;
 
-  final String _do_objectId;
-  String get do_objectId => _do_objectId;
+  final String _UUID;
+  String get UUID => _UUID;
 
   PBSharedParameterProp(this._type, this.value, this._canOverride,
-      this._propertyName, this._do_objectId);
+      this._propertyName, this._UUID);
 }

@@ -15,8 +15,10 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart'
+    as image_helper;
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -44,9 +46,13 @@ class FlutterProjectBuilder {
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      log.info(Process.runSync('flutter', ['create', '$projectName'],
-              workingDirectory: MainInfo().outputPath)
-          .stdout);
+      var createResult = Process.runSync('flutter', ['create', '$projectName'],
+          workingDirectory: MainInfo().outputPath);
+      if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
+        log.error(createResult.stderr);
+      } else {
+        log.info(createResult.stdout);
+      }
     } catch (error, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: error,
@@ -73,6 +79,12 @@ class FlutterProjectBuilder {
       // print(e);
       log.error(e.toString());
     });
+
+    if (MainInfo().figmaProjectID != null &&
+        MainInfo().figmaProjectID.isNotEmpty) {
+      log.info('Processing remaining images...');
+      await image_helper.processImageQueue();
+    }
 
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',

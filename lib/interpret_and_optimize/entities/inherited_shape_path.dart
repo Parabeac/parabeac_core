@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
@@ -18,6 +19,7 @@ part 'inherited_shape_path.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedShapePath extends PBVisualIntermediateNode
+    with PBColorMixin
     implements PBInheritedIntermediate {
   @override
   var originalRef;
@@ -102,7 +104,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.height);
 
         generator = PBContainerGenerator();
-        color = originalRef.style.borders[0].color.toHex();
+        color = toHex(originalRef.style.borders[0].color);
       }
     }
   }

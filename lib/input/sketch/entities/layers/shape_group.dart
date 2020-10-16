@@ -47,10 +47,14 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Style get style => _style;
 
+  @override
+  @JsonKey(name: 'layers')
+  List children;
+
   ShapeGroup(
       {bool hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,
@@ -80,7 +84,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             UUID,
             booleanOperation,
             exportOptions,

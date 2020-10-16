@@ -1,7 +1,8 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/sketch_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -13,6 +14,7 @@ part 'inherited_text.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedText extends PBVisualIntermediateNode
+    with PBColorMixin
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.
   bool isTextParameter = false;
@@ -59,9 +61,9 @@ class InheritedText extends PBVisualIntermediateNode
     generator = PBTextGen();
 
     UUID = originalRef.UUID;
-    text = (originalRef as SketchText).attributedString['string'];
+    text = (originalRef as Text).content;
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
-    color = originalRef.style.textStyle.color.toHex();
+    color = toHex(originalRef.style.textStyle.fontColor);
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
     fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
     fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;

@@ -17,6 +17,6 @@ OverridableValue _$OverridableValueFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$OverridableValueToJson(OverridableValue instance) =>
     <String, dynamic>{
       'overrideName': instance.overrideName,
-      'do_objectID': instance.do_objectID,
+      'do_objectID': instance.UUID,
       'value': instance.value,
     };

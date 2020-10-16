@@ -10,7 +10,7 @@ PBIntermediateStackLayout _$PBIntermediateStackLayoutFromJson(
     Map<String, dynamic> json) {
   return PBIntermediateStackLayout(
     json['name'] as String,
-    UUID: json['UUID'] as String,
+    json['UUID'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -35,7 +35,6 @@ Map<String, dynamic> _$PBIntermediateStackLayoutToJson(
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'name': instance.name,
-      'prototypeNode': instance.prototypeNode,
       'UUID': instance.UUID,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,

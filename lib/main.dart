@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
@@ -38,6 +39,8 @@ void main(List<String> args) async {
         help: 'Path of the configuration file',
         abbr: 'c',
         defaultsTo: 'default:lib/configurations/configurations.json')
+    ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
+    ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false);
 
@@ -58,34 +61,36 @@ ${parser.usage}
     ''');
     exit(0);
   }
-  
-  if(Platform.isMacOS || Platform.isLinux) {
+
+  if (Platform.isMacOS || Platform.isLinux) {
     MainInfo().platform = 'UIX';
-  } else if(Platform.isWindows) {
+  } else if (Platform.isWindows) {
     MainInfo().platform = 'WIN';
   } else {
     MainInfo().platform = 'OTH';
   }
 
   String path = argResults['path'];
+
+  MainInfo().figmaKey = argResults['figKey'];
+  MainInfo().figmaProjectID = argResults['fig'];
+
   var designType = 'sketch';
+
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';
   String projectName = argResults['project-name'];
 
-  if (path == null) {
-    handleError('Missing required argument: path');
-  }
-  var file = await FileSystemEntity.isFile(path);
-  var exists = await File(path).exists();
-
-  if (!file || !exists) {
-    handleError('$path is not a file');
-  }
-
-  if (path.endsWith('.sketch')) {
-    designType = 'sketch';
-  } else if (path.endsWith('.fig')) {
+  // Handle input errors
+  if (path == null &&
+      (MainInfo().figmaKey == null || MainInfo().figmaProjectID == null)) {
+    handleError(
+        'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
+  } else if (path != null &&
+      (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
+    handleError(
+        'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
+  } else if (path == null) {
     designType = 'figma';
   }
 
@@ -106,13 +111,22 @@ ${parser.usage}
   if (!MainInfo().outputPath.endsWith('/')) {
     MainInfo().outputPath += '/';
   }
-  MainInfo().sketchPath = path;
+
   MainInfo().projectName = projectName;
 
-  // Input
-  var id = InputDesignService(path);
+  // Create pngs directory
+  await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
 
   if (designType == 'sketch') {
+    var file = await FileSystemEntity.isFile(path);
+    var exists = await File(path).exists();
+
+    if (!file || !exists) {
+      handleError('$path is not a file');
+    }
+    MainInfo().sketchPath = path;
+    InputDesignService(path);
+
     var process = await Process.start('npm', ['run', 'prod'],
         workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
@@ -123,9 +137,7 @@ ${parser.usage}
       }
     }
 
-    //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(
+    await SketchController().convertFile(
         path,
         MainInfo().outputPath + projectName,
         configurationPath,
@@ -134,7 +146,27 @@ ${parser.usage}
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
-    assert(false, 'We don\'t support Figma.');
+    if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
+      assert(false, 'Please provided a Figma API key to proceed.');
+    }
+    if (MainInfo().figmaProjectID == null ||
+        MainInfo().figmaProjectID.isEmpty) {
+      assert(false, 'Please provided a Figma project ID to proceed.');
+    }
+    var jsonOfFigma = await APICallService.makeAPICall(
+        'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+        MainInfo().figmaKey);
+
+    if (jsonOfFigma != null) {
+      // Starts Figma to Object
+      FigmaController().convertFile(
+          jsonOfFigma,
+          MainInfo().outputPath + projectName,
+          configurationPath,
+          configurationType);
+    } else {
+      log.error('File was not retrieved from Figma.');
+    }
   }
   exitCode = 0;
 }

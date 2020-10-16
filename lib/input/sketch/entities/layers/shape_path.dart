@@ -123,7 +123,4 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
     return Future.value(InheritedShapePath(this, name,
         currentContext: currentContext, image: image));
   }
-
-  @override
-  var designNode;
 }

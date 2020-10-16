@@ -30,7 +30,6 @@ class PBPluginListHelper {
 
   /// List of static plugin names used for Amplitude
   static List<String> names = [
-    '.*switch',
     '.*background',
     '.*navbar',
     '.*tabbar',

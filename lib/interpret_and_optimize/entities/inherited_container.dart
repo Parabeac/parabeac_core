@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -14,6 +15,7 @@ part 'inherited_container.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedContainer extends PBVisualIntermediateNode
+    with PBColorMixin
     implements PBInheritedIntermediate {
   @override
   final originalRef;
@@ -30,7 +32,7 @@ class InheritedContainer extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
-  String UUID; //TODO find the root cause of why certain node have a null UUID
+  String UUID;
 
   /// Used for setting the alignment of it's children
   @JsonKey(ignore: true)
@@ -45,10 +47,20 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(nullable: true)
   Map borderInfo;
 
+  @JsonKey(nullable: true)
+  bool isBackgroundVisible = true;
+
   InheritedContainer(
-      this.originalRef, this.topLeftCorner, this.bottomRightCorner, String name,
-      {this.alignX, this.alignY, this.currentContext, this.borderInfo})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+    this.originalRef,
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    String name, {
+    this.alignX,
+    this.alignY,
+    this.currentContext,
+    this.borderInfo,
+    this.isBackgroundVisible = true,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -62,10 +74,10 @@ class InheritedContainer extends PBVisualIntermediateNode
       'height': originalRef.boundaryRectangle.height,
     };
 
-    if (originalRef.style.fills.isNotEmpty) {
+    if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
-          color = fill.color.toHex();
+          color = toHex(fill.color);
         }
       }
     }
