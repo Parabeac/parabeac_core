@@ -40,6 +40,8 @@ Parabeac currently supports conversions from [Sketch](https://www.sketch.com) bu
  - [node.js](https://nodejs.org/en/download/)
  - MacOS + Xcode or Android Studio
 
+Development on Windows is possible, too. However, [this requires some setup](WINDOWS_SETUP.md).
+
 To test out a Sketch file feel free to download [this Sketch file](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)!
 
 ## Cloning the Repo
