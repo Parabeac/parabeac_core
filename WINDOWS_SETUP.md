@@ -1,5 +1,5 @@
 # Parabeac-Core setup for Windows
-To get starting with using or developing the source code on Windows some configuration is required. This document is ment to help users with that.
+To get starting with using or developing the source code on Windows some configuration is required. This document is meant to help users with that.
 
 ## Setup using WSL 2
 One of the ways we can get starting with Parabeac-Core on Windows is by utilizing the Windows Subset for Linux version 2. This allows Windows 10 users to utilize the most of linux and to combine this with the Windows workflow. This prevents overhead that comes with solutions like a VM or dualboot. To learn more about WSL 2 you can visit [this page](https://docs.microsoft.com/en-us/windows/wsl/about).
@@ -15,14 +15,14 @@ One of the ways we can get starting with Parabeac-Core on Windows is by utilizin
 - [(Optional) Android emulation](#(Optional)-Android-emulation)
 
 ### Requirements
-Altough WSL is supported on most Windows installations, there are still some requirements that need to be met before we can continue:
+Although WSL is supported on most Windows installations, there are still some requirements that need to be met before we can continue:
 -   For x64:
     - At least Windows version 1903 with at least build 18362
 
-Altough WSL 2 is supported on ARM64 we'll only focus on x64.
+Although WSL 2 is supported on ARM64 we'll only focus on x64.
 
 ### Installing WSL 2
-To summerize the first step, we first need to activate WSL 1 and then update it to version 2. Follow these steps:
+To summarize the first step, we first need to activate WSL 1 and then update it to version 2. Follow these steps:
 1.  First we need to enable WSL. Open up an elevated PowerShell instance and execute the following command: `dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart`
 
 2.  Next we need to enable the virtual machine platform. Execute this PowerShell command: `dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart`
@@ -142,9 +142,9 @@ When you run parabeac to generate a project it tries to restore NPM packages. Ho
 
 3. Select the "Path" variable under user variables.
 
-4. Check if there's a reference to node or npm. Try temporarly removing this.
+4. Check if there's a reference to node or npm. Try temporarily removing this.
 
-5. Repeat from step 3, buth then under system variables.
+5. Repeat from step 3, but then under system variables.
 
 6. Restart the Ubuntu distro
 
