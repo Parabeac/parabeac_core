@@ -37,8 +37,9 @@ Future<dynamic> _processImages(List<String> uuids) async {
             var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
                 .replaceAll(':', '_'));
             file.writeAsBytesSync(imageRes.bodyBytes);
-            log.fine('File written to following path ${file.path}');
-          }).catchError(print);
+            // TODO: Only print out when verbose flag is active
+            // log.debug('File written to following path ${file.path}');
+          }).catchError(log.error);
         }
       }
       return response;
