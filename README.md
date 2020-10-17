@@ -30,8 +30,9 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 
 If you have any trouble with getting Parabeac-Core running, check out this video! [![Parabeac-Core Getting Started](https://img.youtube.com/vi/e4CJgPMNCyo/0.jpg)](https://www.youtube.com/watch?v=e4CJgPMNCyo&feature=youtu.be)
 
+Development on Windows is possible, too. However, [this requires some setup](WINDOWS_SETUP.md).
 
-Parabeac currently supports conversions from [Sketch](https://www.sketch.com) but is designed to support more platforms in the future.
+Parabeac-Core now supports both [Figma](https://www.figma.com/) and [Sketch](https://www.sketch.com)! We have plans to expand in the future as Parabeac-Core is built to support more platforms by design. 
 
 ### Dependencies
 
@@ -40,9 +41,9 @@ Parabeac currently supports conversions from [Sketch](https://www.sketch.com) bu
  - [node.js](https://nodejs.org/en/download/)
  - MacOS + Xcode or Android Studio
 
-Development on Windows is possible, too. However, [this requires some setup](WINDOWS_SETUP.md).
-
-To test out a Sketch file feel free to download [this Sketch file](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)!
+Need a file to test with? Feel free to download one of our sample design files below (Make sure to duplicate the Design to your account if you're using Figma):
+* [Sketch](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)
+* [Figma](https://www.figma.com/file/zXXWPWb5wJXd0ImGUjEU1X/parabeac_demo_alt?node-id=0%3A156) 
 
 ## Cloning the Repo
 Because parabeac-core contains the Sketch-Asset-Converter submodule, it is easier to clone the repo using the following command:
@@ -65,6 +66,9 @@ For more information about git submodules, click [here](https://git-scm.com/book
 
 ## Running the conversion
 
+We currently support both Sketch and Figma. See below for running the conversion for both Sketch and Figma.
+
+### Sketch
 Follow these steps in order to run Parabeac Core on your local environment:
 1. Clone PBCore repo in order to get the code on your machine
 2. If you have any plugins make sure to put the plugins in the plugin folder
@@ -74,6 +78,28 @@ Follow these steps in order to run Parabeac Core on your local environment:
  $ pub install
  $ dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
+### Figma
+1. Clone PBCore repo in order to get the code on your machine
+2. If you have any plugins make sure to put the plugins in the plugin folder
+3. In your terminal change directory to the root PBCore directory and run:
+
+``` bash
+ $ pub install
+ $ dart parabeac.dart -f <Figma File ID> -k <Figma API Key> -o <Absolute Path To Output Directory> 
+```
+If you're wondering about where to find your Figma File ID or Figma API Key Please Read Below:
+#### Figma File ID and API Key
+Since Figma operates from a cloud native approach we use the Figma File ID and a Figma User API Key in order to pull down your figma designs and run the conversion. Your Figma File ID is a unique ID used to identify your specific Figma File amoungst all other Figma Design Files. Your Figma API Key is a custom key assigned to your figma account that you generate in order to give Parabeac Core the ability to pull down your Figma File.
+**In order to find your Figma File ID do the following:**
+1. Go to your Figma Homepage at www.Figma.com
+2. Select your Design File
+3. Within your design File's URL is your Figma File ID. Simply take the value after Figma.com/file/<FigmaFileID>. So in the URL ```https://www.figma.com/file/zXXWPWb5wJXd0ImGUjEU1X/parabeac_demo_alt?node-id=0%3A156``` the Figma File ID is ```zXXWPWb5wJXd0ImGUjEU1X```
+
+**In order to create a Figma API Token do the following:**
+1. Go to your Figma Homepage at www.Figma.com
+2. Navigate to your user Profile
+3. Scroll Down to the "Create a new Personal Access Token"
+4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
 
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
