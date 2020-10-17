@@ -9,7 +9,7 @@ class PBDestHolder extends PBIntermediateNode {
 
   PBDestHolder(
       Point topLeftCorner, Point bottomRightCorner, String UUID, this.pNode)
-      : super(topLeftCorner, bottomRightCorner, UUID) {
+      : super(topLeftCorner, bottomRightCorner, UUID, '') {
     generator = PBPrototypeGenerator(pNode);
   }
 

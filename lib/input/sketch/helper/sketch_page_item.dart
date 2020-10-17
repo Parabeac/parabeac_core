@@ -1,10 +1,7 @@
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/helper/page.dart';
+import 'package:parabeac_core/input/helper/page_item.dart';
 
-class SketchPageItem {
-  SketchNode root;
-  SketchPage parentPage;
-  SketchPageItem(this.root, this.parentPage);
-
-  Map<String, Object> toJson() => root.toJson();
+class SketchPageItem extends PageItem {
+  SketchPageItem(DesignNode root, Page parentPage) : super(root, parentPage);
 }

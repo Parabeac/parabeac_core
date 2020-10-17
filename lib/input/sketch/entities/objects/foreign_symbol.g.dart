@@ -8,7 +8,7 @@ part of 'foreign_symbol.dart';
 
 ForeignSymbol _$ForeignSymbolFromJson(Map<String, dynamic> json) {
   return ForeignSymbol(
-    do_objectID: json['do_objectID'],
+    UUID: json['UUID'],
     libraryID: json['libraryID'],
     sourceLibraryName: json['sourceLibraryName'] as String,
     symbolPrivate: json['symbolPrivate'] as bool,
@@ -23,7 +23,7 @@ ForeignSymbol _$ForeignSymbolFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ForeignSymbolToJson(ForeignSymbol instance) =>
     <String, dynamic>{
-      'do_objectID': instance.do_objectID,
+      'UUID': instance.UUID,
       'libraryID': instance.libraryID,
       'sourceLibraryName': instance.sourceLibraryName,
       'symbolPrivate': instance.symbolPrivate,

@@ -1,11 +1,11 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/group_node.dart';
+import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
+import 'package:parabeac_core/design_logic/pb_shared_master_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/services/positional_cleansing_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -46,23 +46,26 @@ class PBVisualGenerationService implements PBGenerationService {
     queue.add(NodeTuple(originalRoot, null));
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
-      if (currentNode.sketchNode.isVisible) {
-        PBIntermediateNode result, original;
+
+      if (currentNode.designNode.isVisible) {
+        PBIntermediateNode result;
         // Check semantics
         result = PBDenyListHelper()
-            .returnDenyListNodeIfExist(currentNode.sketchNode);
+            .returnDenyListNodeIfExist(currentNode.designNode);
         if (result is PBDenyListNode) {
         } else {
           result = PBPluginListHelper()
-              .returnAllowListNodeIfExists(currentNode.sketchNode);
+              .returnAllowListNodeIfExists(currentNode.designNode);
+
           // Generate general intermediate node if still null.
           // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
-          original = await currentNode.sketchNode.interpretNode(currentContext);
+
           if (result == null ||
-              original is PBSharedInstanceIntermediateNode ||
-              original is PBSharedMasterNode) {
-            result = original;
+              currentNode.designNode is PBSharedInstanceDesignNode ||
+              currentNode.designNode is PBSharedMasterDesignNode) {
+            result = await currentNode.designNode.interpretNode(currentContext);
           }
+
           if (currentNode.convertedParent != null) {
             _addToParent(currentNode.convertedParent, result);
           }
@@ -72,12 +75,11 @@ class PBVisualGenerationService implements PBGenerationService {
 
           if (result != null) {
             // Add next depth to queue.
-            if (currentNode.sketchNode is AbstractGroupLayer &&
-                (currentNode.sketchNode as AbstractGroupLayer)
-                    .layers
-                    .isNotEmpty) {
+            if (currentNode.designNode is GroupNode &&
+                (currentNode.designNode as GroupNode).children != null &&
+                (currentNode.designNode as GroupNode).children.isNotEmpty) {
               for (var child
-                  in (currentNode.sketchNode as AbstractGroupLayer).layers) {
+                  in (currentNode.designNode as GroupNode).children) {
                 queue.add(NodeTuple(child, result));
               }
             }

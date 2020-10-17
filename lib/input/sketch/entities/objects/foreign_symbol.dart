@@ -8,7 +8,7 @@ part 'foreign_symbol.g.dart';
 // description: The document entry in a Sketch file.
 class ForeignSymbol {
   static final String CLASS_NAME = 'MSImmutableForeignSymbol';
-  final dynamic do_objectID;
+  final dynamic UUID;
   final dynamic libraryID;
   final String sourceLibraryName;
   final bool symbolPrivate;
@@ -16,7 +16,7 @@ class ForeignSymbol {
   final SymbolMaster symbolMaster;
 
   ForeignSymbol(
-      {this.do_objectID,
+      {this.UUID,
       this.libraryID,
       this.sourceLibraryName,
       this.symbolPrivate,

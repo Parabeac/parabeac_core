@@ -10,7 +10,7 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
   return Group(
     hasClickThrough: json['hasClickThrough'] as bool,
     groupLayout: json['groupLayout'],
-    layers: (json['layers'] as List)
+    children: (json['layers'] as List)
         ?.map((e) =>
             e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -73,7 +73,6 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
       'CLASS_NAME': instance.CLASS_NAME,
       'frame': instance.boundaryRectangle,
       'do_objectID': instance.UUID,
@@ -81,4 +80,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
+      'layers': instance.children,
     };

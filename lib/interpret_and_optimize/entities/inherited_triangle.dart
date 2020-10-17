@@ -26,9 +26,6 @@ class InheritedTriangle extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Uint8List image;
 
-  ///Name of the png file
-  var name;
-
   @override
   String UUID;
 
@@ -39,7 +36,8 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   var referenceImage;
 
-  InheritedTriangle(this.originalRef, {this.image, this.currentContext})
+  InheritedTriangle(this.originalRef, String name,
+      {this.image, this.currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -48,7 +46,8 @@ class InheritedTriangle extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

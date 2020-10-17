@@ -18,7 +18,8 @@ class Spacer extends PBVisualIntermediateNode {
 
   Spacer(topLeftCorner, bottomRightCorner, this.UUID,
       {this.flex, this.currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+      : super(topLeftCorner, bottomRightCorner, currentContext, '',
+            UUID: UUID) {
     generator = PBSpacerGenerator();
   }
 

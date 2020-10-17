@@ -12,7 +12,9 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 // description: Abstract base schema for all layers
 // type: object
 abstract class SketchNode implements DesignNode {
-  final String do_objectID;
+  @override
+  @JsonKey(name: 'do_objectID')
+  final String UUID;
   final dynamic booleanOperation;
   final dynamic exportOptions;
 
@@ -46,7 +48,7 @@ abstract class SketchNode implements DesignNode {
   String get prototypeNodeUUID => flow?.destinationArtboardID;
 
   SketchNode(
-      this.do_objectID,
+      this.UUID,
       this.booleanOperation,
       this.exportOptions,
       Frame this.boundaryRectangle,
@@ -70,6 +72,7 @@ abstract class SketchNode implements DesignNode {
       this.style,
       this.maintainScrollPosition);
 
+  @override
   Map<String, dynamic> toJson();
   factory SketchNode.fromJson(Map<String, dynamic> json) =>
       AbstractSketchNodeFactory.getSketchNode(json);

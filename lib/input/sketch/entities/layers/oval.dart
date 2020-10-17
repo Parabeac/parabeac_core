@@ -121,7 +121,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
     if (image == null) {
       return null;
     }
-    return Future.value(
-        InheritedOval(this, currentContext: currentContext, image: image));
+    return Future.value(InheritedOval(this, name,
+        currentContext: currentContext, image: image));
   }
 }

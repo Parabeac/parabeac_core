@@ -34,10 +34,10 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   PrototypeNode prototypeNode;
 
   ///
-  PBLayoutIntermediateNode(
-      this._layoutRules, this._exceptions, PBContext currentContext,
+  PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
+      PBContext currentContext, String name,
       {topLeftCorner, bottomRightCorner, this.UUID, this.prototypeNode})
-      : super(topLeftCorner, bottomRightCorner, UUID,
+      : super(topLeftCorner, bottomRightCorner, UUID, name,
             currentContext: currentContext);
 
   void alignChildren();
@@ -118,5 +118,5 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   ///NOTE: make sure that the children that are going to be added satisfy the reles of the [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext);
+      List<PBIntermediateNode> children, PBContext currentContext, String name);
 }

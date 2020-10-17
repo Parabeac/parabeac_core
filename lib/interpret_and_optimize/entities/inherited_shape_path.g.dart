@@ -9,6 +9,7 @@ part of 'inherited_shape_path.dart';
 InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
   return InheritedShapePath(
     json['originalRef'],
+    json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
@@ -22,7 +23,6 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..color = json['color'] as String
     ..UUID = json['UUID'] as String
-    ..name = json['name'] as String
     ..referenceImage = json['referenceImage'] as String
     ..size = json['size'] as Map<String, dynamic>;
 }
@@ -35,10 +35,10 @@ Map<String, dynamic> _$InheritedShapePathToJson(InheritedShapePath instance) =>
       'bottomRightCorner': instance.bottomRightCorner,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
+      'name': instance.name,
       'color': instance.color,
       'originalRef': instance.originalRef,
       'UUID': instance.UUID,
-      'name': instance.name,
       'referenceImage': instance.referenceImage,
       'size': instance.size,
     };

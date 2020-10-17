@@ -8,11 +8,11 @@ part of 'border_options.dart';
 
 BorderOptions _$BorderOptionsFromJson(Map<String, dynamic> json) {
   return BorderOptions(
-    classField: json['_class'] as String,
-    dashPattern: json['dashPattern'] as List,
-    isEnabled: json['isEnabled'] as bool,
-    lineCapStyle: json['lineCapStyle'] as int,
-    lineJoinStyle: json['lineJoinStyle'] as int,
+    json['_class'] as String,
+    json['dashPattern'] as List,
+    json['isEnabled'] as bool,
+    json['lineCapStyle'] as int,
+    json['lineJoinStyle'] as int,
   );
 }
 

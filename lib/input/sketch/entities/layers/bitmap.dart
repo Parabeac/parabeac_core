@@ -4,7 +4,6 @@ import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/input/sketch/entities/objects/image_ref.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -21,7 +20,6 @@ part 'bitmap.g.dart';
 class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @override
   String CLASS_NAME = 'bitmap';
-  final ImageRef image;
   final bool fillReplacesImage;
   final int intendedDPI;
   final dynamic clippingMask;
@@ -34,35 +32,36 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   @JsonKey(name: 'do_objectID')
   String UUID;
 
-  Bitmap(
-      {this.image,
-      this.fillReplacesImage,
-      this.intendedDPI,
-      this.clippingMask,
-      this.UUID,
-      booleanOperation,
-      exportOptions,
-      Frame this.boundaryRectangle,
-      Flow flow,
-      isFixedToViewport,
-      isFlippedHorizontal,
-      isFlippedVertical,
-      isLocked,
-      isVisible,
-      layerListExpandedType,
-      name,
-      nameIsFixed,
-      resizingConstraint,
-      resizingType,
-      rotation,
-      sharedStyleID,
-      shouldBreakMaskChain,
-      hasClippingMask,
-      clippingMaskMode,
-      userInfo,
-      Style style,
-      maintainScrollPosition})
-      : _isVisible = isVisible,
+  Bitmap({
+    this.imageReference,
+    this.fillReplacesImage,
+    this.intendedDPI,
+    this.clippingMask,
+    this.UUID,
+    booleanOperation,
+    exportOptions,
+    Frame this.boundaryRectangle,
+    Flow flow,
+    isFixedToViewport,
+    isFlippedHorizontal,
+    isFlippedVertical,
+    isLocked,
+    isVisible,
+    layerListExpandedType,
+    name,
+    nameIsFixed,
+    resizingConstraint,
+    resizingType,
+    rotation,
+    sharedStyleID,
+    shouldBreakMaskChain,
+    hasClippingMask,
+    clippingMaskMode,
+    userInfo,
+    Style style,
+    maintainScrollPosition,
+    this.imageReferenceMap = const {},
+  })  : _isVisible = isVisible,
         _style = style,
         super(
             UUID,
@@ -87,7 +86,9 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
             clippingMaskMode,
             userInfo,
             style,
-            maintainScrollPosition);
+            maintainScrollPosition) {
+    imageReference ??= imageReferenceMap['_ref'];
+  }
 
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
@@ -108,11 +109,15 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
     if (intermediateNode != null) {
       return intermediateNode;
     }
-    return Future.value(InheritedBitmap(this, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 
+  @JsonKey(name: 'image')
+  Map imageReferenceMap;
+
   @override
-  @JsonKey(name: '_ref')
+  @JsonKey(ignore: true)
   String imageReference;
 
   @override

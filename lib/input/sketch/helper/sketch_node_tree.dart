@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:parabeac_core/input/sketch/entities/documents/document.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/page.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/foreign_symbol.dart';
@@ -8,12 +9,14 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:quick_log/quick_log.dart';
 
-class SketchNodeTree {
+class SketchNodeTree extends NodeTree {
+  @override
   var log = Logger('SketchNodeTree');
-  List<SketchPage> pages = [];
-  List<SketchPage> miscPages = [];
   SketchPage rootScreen;
+
+  @override
   String projectName;
+  @override
   bool debug = false;
 
   final Archive _originalArchive;
@@ -60,23 +63,11 @@ class SketchNodeTree {
       var node = Page.fromJson(jsonData); // Actual Sketch Node
 
       // Turn layers into PBNodes
-      for (var layer in node.layers) {
+      for (var layer in node.children) {
         pg.addPageItem(SketchPageItem(layer, pg));
       }
       sketchPages.add(pg);
     }
     return sketchPages;
-  }
-
-  Map<String, Object> toJson() {
-    var result = <String, Object>{};
-    result['projectName'] = projectName;
-    for (var page in pages) {
-      result.addAll(page.toJson());
-    }
-    for (var page in miscPages) {
-      result.addAll(page.toJson());
-    }
-    return result;
   }
 }

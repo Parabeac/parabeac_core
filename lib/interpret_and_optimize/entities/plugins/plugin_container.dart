@@ -55,7 +55,8 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
     this.alignY,
     this.color,
     this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext) {
+    String name,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBContainerGenerator();
     size = {
       'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
@@ -74,7 +75,7 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
@@ -97,7 +98,8 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
 
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

@@ -20,11 +20,13 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
 
   Tab(
     Point topLeftCorner,
-    Point bottomRightCorner, {
+    Point bottomRightCorner,
+    String name, {
     UUID,
     this.currentContext,
     this.prototypeNode,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID) {
     generator = PBTabGenerator();
   }
 
@@ -42,15 +44,20 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
     var tab = Tab(
       topLeftCorner,
       bottomRightCorner,
+      originalRef.name,
       currentContext: currentContext,
-      UUID: Uuid().v4(),
+      UUID: originalRef != null &&
+              originalRef.UUID != null &&
+              originalRef.UUID.isNotEmpty
+          ? originalRef.UUID
+          : Uuid().v4(),
       prototypeNode: PrototypeNode(originalRef?.prototypeNodeUUID),
     );
     if (originalRef is! AbstractGroupLayer) {
-      var sketchNode = _convertWrapper(originalRef);
+      var designNode = _convertWrapper(originalRef);
 
       ///Clean the node so that it doesn't get interpreted as a plugin again.
-      sketchNode.interpretNode(currentContext).then(tab.addChild);
+      designNode.interpretNode(currentContext).then(tab.addChild);
     }
 
     return tab;

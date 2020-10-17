@@ -8,10 +8,11 @@ part 'override_value.g.dart';
 class OverridableValue {
   static final String CLASS_NAME = 'overrideValue';
   final String overrideName;
-  final String do_objectID;
+  @JsonKey(name: 'do_objectID')
+  final String UUID;
   final dynamic value;
 
-  OverridableValue(this.overrideName, this.do_objectID, this.value);
+  OverridableValue(this.overrideName, this.UUID, this.value);
 
   factory OverridableValue.fromJson(Map<String, dynamic> json) =>
       _$OverridableValueFromJson(json);

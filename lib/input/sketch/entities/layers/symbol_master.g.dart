@@ -10,7 +10,7 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
   return SymbolMaster(
     hasClickThrough: json['hasClickThrough'] as bool,
     groupLayout: json['groupLayout'],
-    layers: (json['layers'] as List)
+    children: (json['layers'] as List)
         ?.map((e) =>
             e == null ? null : SketchNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -96,7 +96,6 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
-      'layers': instance.layers,
       'CLASS_NAME': instance.CLASS_NAME,
       'backgroundColor': instance.backgroundColor,
       'hasBackgroundColor': instance.hasBackgroundColor,
@@ -118,5 +117,6 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
+      'layers': instance.children,
       'parameters': instance.parameters,
     };

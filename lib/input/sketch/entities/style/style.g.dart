@@ -26,7 +26,7 @@ Style _$StyleFromJson(Map<String, dynamic> json) {
         ? null
         : ContextSettings.fromJson(
             json['contextSettings'] as Map<String, dynamic>),
-    do_objectID: json['do_objectID'] as String,
+    UUID: json['do_objectID'] as String,
     endMarkerType: json['endMarkerType'] as int,
     fills: (json['fills'] as List)
         ?.map(
@@ -51,7 +51,7 @@ Style _$StyleFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$StyleToJson(Style instance) => <String, dynamic>{
       '_class': instance.classField,
-      'do_objectID': instance.do_objectID,
+      'do_objectID': instance.UUID,
       'endMarkerType': instance.endMarkerType,
       'miterLimit': instance.miterLimit,
       'startMarkerType': instance.startMarkerType,

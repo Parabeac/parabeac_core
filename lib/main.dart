@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
@@ -9,88 +10,123 @@ import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:args/args.dart';
 
 import 'controllers/main_info.dart';
 
-String pathToSketchFile;
 String resultsDirectory = Platform.environment['SENTRY_DSN'] ?? '/temp';
 final SentryClient sentry = SentryClient(dsn: resultsDirectory);
+ArgResults argResults;
 
 void main(List<String> args) async {
   await checkConfigFile();
 
+  //Sentry logging initialization
   MainInfo().sentry = SentryClient(dsn: resultsDirectory);
   var log = Logger('Main');
-
   log.info(args.toString());
 
   MainInfo().cwd = Directory.current;
 
-  var path = '';
-  var projectName = '';
+  ///sets up parser
+  final parser = ArgParser()
+    ..addOption('path',
+        help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
+    ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
+    ..addOption('project-name',
+        help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')
+    ..addOption('config-path',
+        help: 'Path of the configuration file',
+        abbr: 'c',
+        defaultsTo: 'default:lib/configurations/configurations.json')
+    ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
+    ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
+    ..addFlag('help',
+        help: 'Displays this help information.', abbr: 'h', negatable: false);
+
+//error handler using logger package
+  void handleError(String msg) {
+    log.error(msg);
+    exitCode = 2;
+    exit(2);
+  }
+
+  argResults = parser.parse(args);
+
+  //Check if no args passed or only -h/--help passed
+  if (argResults['help'] || argResults.arguments.isEmpty) {
+    print('''
+  ** PARABEAC HELP **
+${parser.usage}
+    ''');
+    exit(0);
+  }
+
+  if (Platform.isMacOS || Platform.isLinux) {
+    MainInfo().platform = 'UIX';
+  } else if (Platform.isWindows) {
+    MainInfo().platform = 'WIN';
+  } else {
+    MainInfo().platform = 'OTH';
+  }
+
+  String path = argResults['path'];
+
+  MainInfo().figmaKey = argResults['figKey'];
+  MainInfo().figmaProjectID = argResults['fig'];
+
   var designType = 'sketch';
-  final _helpText = "Usage Options: \n" +
-      "-p \t Path to the sketch File \n" +
-      "-o \t Output Path\n" +
-      "-n \t Name of the project\n" +
-      "-c \t Path of the configuration file\n";
 
-  //Check if no args passed or only -h passed
-  //If arguments is empty or only has -h
-  if (args.length == 0 || args[0] == '-h') {
-    print(_helpText);
-    return;
-  }
-  var configurationPath = 'lib/configurations/configurations.json';
+  var configurationPath = argResults['config-path'];
   var configurationType = 'default';
-  for (var i = 0; i < args.length; i += 2) {
-    switch (args[i]) {
-      case '-p':
-        path = args[i + 1];
-        pathToSketchFile = path;
-        MainInfo().sketchPath = pathToSketchFile;
-        // If outputPath is empty, assume we are outputting to sketch path
-        MainInfo().outputPath ??= getCleanPath(path);
-        if (pathToSketchFile.endsWith('.sketch')) {
-          designType = 'sketch';
-        } else if (pathToSketchFile.endsWith('.fig')) {
-          designType = 'figma';
-        }
-        break;
-      case '-o':
-        MainInfo().outputPath = args[i + 1];
-        break;
-      case '-n':
-        projectName = args[i + 1];
-        break;
-      //  usage -c "default:lib/configurations/configurations.json
-      case '-c':
-        var configSet = args[i + 1].split(':');
-        if (configSet.isNotEmpty) {
-          configurationType = configSet[0];
-        }
-        if (configSet.length >= 2) {
-          // handle configurations
-          configurationPath = configSet[1];
-        }
-        break;
-    }
+  String projectName = argResults['project-name'];
+
+  // Handle input errors
+  if (path == null &&
+      (MainInfo().figmaKey == null || MainInfo().figmaProjectID == null)) {
+    handleError(
+        'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
+  } else if (path != null &&
+      (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
+    handleError(
+        'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
+  } else if (path == null) {
+    designType = 'figma';
   }
 
+  //  usage -c "default:lib/configurations/configurations.json
+  var configSet = configurationPath.split(':');
+  if (configSet.isNotEmpty) {
+    configurationType = configSet[0];
+  }
+  if (configSet.length >= 2) {
+    // handle configurations
+    configurationPath = configSet[1];
+  }
+
+  // Populate `MainInfo()`
+  MainInfo().outputPath = argResults['out'];
+  // If outputPath is empty, assume we are outputting to design file path
+  MainInfo().outputPath ??= await getCleanPath(path ?? Directory.current.path);
   if (!MainInfo().outputPath.endsWith('/')) {
     MainInfo().outputPath += '/';
   }
 
-  if (projectName.isEmpty) {
-    projectName = 'temp';
-  }
-
   MainInfo().projectName = projectName;
 
-  // Input
-  var id = InputDesignService(path);
+  // Create pngs directory
+  await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
 
   if (designType == 'sketch') {
+    var file = await FileSystemEntity.isFile(path);
+    var exists = await File(path).exists();
+
+    if (!file || !exists) {
+      handleError('$path is not a file');
+    }
+    MainInfo().sketchPath = path;
+    InputDesignService(path);
+
     var process = await Process.start('npm', ['run', 'prod'],
         workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
@@ -101,10 +137,8 @@ void main(List<String> args) async {
       }
     }
 
-    //Retrieving the Sketch PNGs from the design file
-    await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
-    await SketchController().convertSketchFile(
-        pathToSketchFile,
+    await SketchController().convertFile(
+        path,
         MainInfo().outputPath + projectName,
         configurationPath,
         configurationType);
@@ -112,8 +146,29 @@ void main(List<String> args) async {
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
-    assert(false, 'We don\'t support Figma.');
+    if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
+      assert(false, 'Please provided a Figma API key to proceed.');
+    }
+    if (MainInfo().figmaProjectID == null ||
+        MainInfo().figmaProjectID.isEmpty) {
+      assert(false, 'Please provided a Figma project ID to proceed.');
+    }
+    var jsonOfFigma = await APICallService.makeAPICall(
+        'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+        MainInfo().figmaKey);
+
+    if (jsonOfFigma != null) {
+      // Starts Figma to Object
+      FigmaController().convertFile(
+          jsonOfFigma,
+          MainInfo().outputPath + projectName,
+          configurationPath,
+          configurationType);
+    } else {
+      log.error('File was not retrieved from Figma.');
+    }
   }
+  exitCode = 0;
 }
 
 /// Checks whether a configuration file is made already,
@@ -174,11 +229,17 @@ void addToAmplitude() async {
   );
 }
 
-String getCleanPath(String path) {
+Future<String> getCleanPath(String path) async {
+  if (path == null || path.isEmpty) {
+    return '';
+  }
   var list = path.split('/');
+  if (!await Directory(path).exists()) {
+    list.removeLast();
+  }
   var result = '';
-  for (int i = 0; i < list.length - 1; i++) {
-    result += list[i] + '/';
+  for (var dir in list) {
+    result += dir + '/';
   }
   return result;
 }

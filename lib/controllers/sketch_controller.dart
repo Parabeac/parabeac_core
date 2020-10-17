@@ -1,24 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
-import 'dart:convert';
-import 'dart:io';
 
 import 'main_info.dart';
 
-class SketchController {
+class SketchController extends Controller {
   ///SERVICE
+  @override
   var log = Logger('SketchController');
-  void initialize() {
-    ///Initialize services HERE
-  }
 
   ///Converting the [fileAbsPath] sketch file to flutter
-  void convertSketchFile(
-      var fileAbsPath, var projectPath, var configurationPath, var configType) async {
+  @override
+  void convertFile(var fileAbsPath, var projectPath, var configurationPath,
+      var configType) async {
     configure(configurationPath, configType);
 
     ///INTAKE
@@ -36,30 +36,6 @@ class SketchController {
     var fpb =
         FlutterProjectBuilder(projectName: projectPath, mainTree: mainTree);
     fpb.convertToFlutterProject();
-  }
-
-  void configure(var configurationPath, var configType) async {
-    Map configurations;
-    try {
-      if (configurationPath == null || configurationPath.isEmpty) {
-        configurations = MainInfo().defaultConfigs;
-
-      } else {
-        configurations =
-            json.decode(File(configurationPath).readAsStringSync());
-      }
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-    }
-
-    ///SET CONFIGURATION
-    // Setting configurations globally
-    MainInfo().configurations = configurations;
-    MainInfo().configurationType = configType;
   }
 
   SketchNodeTree generateSketchNodeTree(

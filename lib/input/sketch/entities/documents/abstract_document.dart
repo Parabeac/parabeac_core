@@ -2,7 +2,7 @@ import 'package:parabeac_core/input/sketch/entities/objects/foreign_symbol.dart'
 
 abstract class AbstractDocument {
   final String CLASS_NAME = 'document';
-  final dynamic do_objectID;
+  final dynamic UUID;
   final dynamic assets;
   final dynamic colorSpace;
   final dynamic currentPageIndex;
@@ -17,7 +17,7 @@ abstract class AbstractDocument {
   final bool agreedToFontEmbedding;
 
   AbstractDocument(
-      this.do_objectID,
+      this.UUID,
       this.assets,
       this.colorSpace,
       this.currentPageIndex,

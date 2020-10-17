@@ -1,16 +1,26 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/pb_border_options.dart';
 part 'border_options.g.dart';
 
 @JsonSerializable(nullable: true)
-class BorderOptions{
+class BorderOptions implements PBBorderOptions {
   @JsonKey(name: '_class')
-  final String classField;
-  final bool isEnabled;
-  final List dashPattern;
-  final int lineCapStyle, lineJoinStyle;
+  String classField;
+  @override
+  bool isEnabled;
+  @override
+  List dashPattern;
+  @override
+  int lineCapStyle, lineJoinStyle;
 
-  BorderOptions({this.classField, this.dashPattern, this.isEnabled, this.lineCapStyle, this.lineJoinStyle});
+  BorderOptions(
+    this.classField,
+    this.dashPattern,
+    this.isEnabled,
+    this.lineCapStyle,
+    this.lineJoinStyle,
+  );
 
-  factory BorderOptions.fromJson(Map json) =>_$BorderOptionsFromJson(json);
+  factory BorderOptions.fromJson(Map json) => _$BorderOptionsFromJson(json);
   Map toJson() => _$BorderOptionsToJson(this);
 }

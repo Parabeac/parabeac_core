@@ -1,9 +1,9 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -20,6 +20,8 @@ part 'inherited_scaffold.g.dart';
 
 @JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
+    with
+        PBColorMixin
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
@@ -27,7 +29,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  String name;
   @JsonSerializable(nullable: true)
   var navbar;
   @JsonSerializable(nullable: true)
@@ -48,7 +49,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   InheritedScaffold(this.originalRef,
       {Point topLeftCorner,
       Point bottomRightCorner,
-      this.name,
+      String name,
       this.currentContext,
       this.isHomeScreen})
       : super(
@@ -59,7 +60,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.width,
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
-            currentContext) {
+            currentContext,
+            name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -78,7 +80,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     UUID = originalRef.UUID;
 
-    backgroundColor = (originalRef as Artboard).backgroundColor?.toHex();
+    backgroundColor = toHex(originalRef.backgroundColor);
   }
 
   @override
@@ -117,7 +119,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext);
+      var temp = TempGroupLayoutNode(null, currentContext, node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;
@@ -128,7 +130,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    var align = InjectedAlign(topLeftCorner, bottomRightCorner, currentContext);
+    var align =
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;

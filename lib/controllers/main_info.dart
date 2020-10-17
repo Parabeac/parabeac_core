@@ -12,6 +12,8 @@ class MainInfo {
   /// Path to the user's sketch file
   String sketchPath;
 
+  String platform;
+
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
   Map configurations;
@@ -24,6 +26,12 @@ class MainInfo {
 
   /// Name of the project
   String projectName;
+
+  /// API needed to do API callls
+  String figmaKey;
+
+  /// Project ID on Figma
+  String figmaProjectID;
 
   Map defaultConfigs = {
     'default': {

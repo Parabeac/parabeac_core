@@ -47,10 +47,14 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Style get style => _style;
 
+  @override
+  @JsonKey(name: 'layers')
+  List children;
+
   Group(
       {bool hasClickThrough,
       groupLayout,
-      List<SketchNode> layers,
+      List<SketchNode> this.children,
       this.UUID,
       booleanOperation,
       exportOptions,
@@ -79,7 +83,7 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
         super(
             hasClickThrough,
             groupLayout,
-            layers,
+            children,
             UUID,
             booleanOperation,
             exportOptions,
@@ -111,7 +115,7 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   Map<String, dynamic> toJson() => _$GroupToJson(this);
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
-      Future.value(TempGroupLayoutNode(this, currentContext,
+      Future.value(TempGroupLayoutNode(this, currentContext, name,
           topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
           bottomRightCorner: Point(
               boundaryRectangle.x + boundaryRectangle.width,

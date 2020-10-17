@@ -30,7 +30,13 @@ class Flexible extends PBVisualIntermediateNode {
     this.flex,
     this.topLeftCorner,
     this.bottomRightCorner,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, UUID: UUID) {
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          '',
+          UUID: UUID,
+        ) {
     generator = PBFlexibleGenerator();
   }
 

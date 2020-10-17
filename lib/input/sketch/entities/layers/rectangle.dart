@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -17,7 +18,9 @@ part 'rectangle.g.dart';
 // description:
 //   Rectangle layers are the result of adding a rectangle shape to the canvas
 @JsonSerializable(nullable: true)
-class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
+class Rectangle extends AbstractShapeLayer
+    with PBColorMixin
+    implements SketchNodeFactory {
   @override
   String CLASS_NAME = 'rectangle';
   final double fixedRadius;
@@ -132,12 +135,13 @@ class Rectangle extends AbstractShapeLayer implements SketchNodeFactory {
       Point(boundaryRectangle.x, boundaryRectangle.y),
       Point(boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
+      name,
       currentContext: currentContext,
       borderInfo: {
         'borderRadius':
             style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
-        'borderColorHex': border != null ? border.color.toHex() : null,
-        'borderThickness' : border != null ? border.thickness : null
+        'borderColorHex': border != null ? toHex(border.color) : null,
+        'borderThickness': border != null ? border.thickness : null
       },
     ));
   }

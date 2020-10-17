@@ -1,16 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/pb_fill.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/context_settings.dart';
 import 'package:parabeac_core/input/sketch/entities/style/gradient.dart';
 part 'fill.g.dart';
 
 @JsonSerializable(nullable: true)
-class Fill {
+class Fill implements PBFill {
   @JsonKey(name: '_class')
   final String classField;
-  final bool isEnabled;
+  @override
+  bool isEnabled;
   final int fillType;
-  final Color color;
+  @override
+  PBColor color;
   final ContextSettings contextSettings;
   final Gradient gradient;
   final int noiseIndex;
@@ -20,7 +24,7 @@ class Fill {
 
   Fill(
       {this.classField,
-      this.color,
+      Color this.color,
       this.contextSettings,
       this.fillType,
       this.gradient,
