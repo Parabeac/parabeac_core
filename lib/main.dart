@@ -106,8 +106,8 @@ ${parser.usage}
 
   // Populate `MainInfo()`
   MainInfo().outputPath = argResults['out'];
-  // If outputPath is empty, assume we are outputting to design file path path
-  MainInfo().outputPath ??= getCleanPath(path);
+  // If outputPath is empty, assume we are outputting to design file path
+  MainInfo().outputPath ??= await getCleanPath(path ?? Directory.current.path);
   if (!MainInfo().outputPath.endsWith('/')) {
     MainInfo().outputPath += '/';
   }
@@ -229,11 +229,17 @@ void addToAmplitude() async {
   );
 }
 
-String getCleanPath(String path) {
+Future<String> getCleanPath(String path) async {
+  if (path == null || path.isEmpty) {
+    return '';
+  }
   var list = path.split('/');
+  if (!await Directory(path).exists()) {
+    list.removeLast();
+  }
   var result = '';
-  for (var i = 0; i < list.length - 1; i++) {
-    result += list[i] + '/';
+  for (var dir in list) {
+    result += dir + '/';
   }
   return result;
 }

@@ -68,7 +68,8 @@ class APICallService {
   static dynamic _returnResponse(int status) {
     switch (status) {
       case 200:
-        log.fine('API call went successfully : ${status}');
+        // TODO: Only print when verbose flag is active
+        // log.debug('API call went successfully : ${status}');
         break;
       case 400:
         log.error('BadRequestException : ${status}');
