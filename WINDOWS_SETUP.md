@@ -36,7 +36,7 @@ To summarize the first step, we first need to activate WSL 1 and then update it 
 6. WSL 2 is now enabled. Next we need a linux distro. You could choose some of your choice from the Windows Store, but for this guide we'll use the Ubuntu, [download this distro](https://www.microsoft.com/nl-nl/p/ubuntu/9nblggh4msv6).
 
 
-### Ubunutu setup
+### Ubuntu setup
 Next, ubunutu requires some setup.
 1. Boot up Ubuntu. It will install some things, let it finish
 2. Next choose an username, password and reconfirm your password.
