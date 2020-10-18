@@ -31,15 +31,25 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('Padding(');
     buffer.write('padding: EdgeInsets.only(');
 
-    final paddingPositions = ['left', 'right', 'bottom', 'top'];
+    final paddingPositionsW = ['left', 'right'];
+    final paddingPositionsH =['bottom', 'top'];
     var reflectedPadding = reflect(padding);
-    for (var position in paddingPositions) {
+    for (var position in paddingPositionsW) {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;
       if (value != null) {
         buffer.write(
             '$position: ${relativePadding(source.builder_type ?? BUILDER_TYPE.BODY, false, value)},');
       }
     }
+
+    for (var position in paddingPositionsH) {
+      var value = reflectedPadding.getField(Symbol(position)).reflectee;
+      if (value != null) {
+        buffer.write(
+            '$position: ${relativePadding(source.builder_type ?? BUILDER_TYPE.BODY, true, value)},');
+      }
+    }
+
     buffer.write('),');
 
     if (source.child != null) {
