@@ -75,7 +75,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 3. In your terminal change directory to the root PBCore directory and run:
 
 ``` bash
- $ pub install
+ $ pub get
  $ dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
 ### Figma
@@ -84,7 +84,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 3. In your terminal change directory to the root PBCore directory and run:
 
 ``` bash
- $ pub install
+ $ pub get
  $ dart parabeac.dart -f <Figma File ID> -k <Figma API Key> -o <Absolute Path To Output Directory> 
 ```
 If you're wondering about where to find your Figma File ID or Figma API Key Please Read Below:
