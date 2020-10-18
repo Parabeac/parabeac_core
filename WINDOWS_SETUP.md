@@ -43,7 +43,7 @@ Next, ubunutu requires some setup.
 3. Lastly let's update our distro. Execute the following commands: `sudo apt-get upgrade` and `sudo apt-get update`
 
 ### Flutter install
-Parabeac-core is built in Dart and generates Flutter apps, which make use of Dart and the Android SDK. The Android SDK itself requires the Java JDK. Let's install all of this.
+Parabeac-core is built in Dart and generates Flutter apps, which make use of Dart and the Android SDK. The Android SDK itself requires the Java Development Kit (JDK). Let's install all of this.
 1. First let's make a download folder: `mkdir downloads` and move into it: `cd downloads`. 
 
 2. Then download the OpenJDK 8. Recommended is visiting [AdoptOpenJDK.net](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot) and copying the download url by right clicking the **JDK** `.tar.gz` download button and then copy. Then type `sudo wget [url]`. You can past the url you copied by right clicking in the console and execute it.
@@ -54,7 +54,7 @@ Parabeac-core is built in Dart and generates Flutter apps, which make use of Dar
 
 5. Next up: the Android SDK. Google provides a command line tool to download android development software, so we'll make use of that. The download url can be found on the [Android Developers site](https://developer.android.com/studio). Scroll to the bottom to "Command line tools only", click the link of Linux, read and accept the terms and copy the url by right clicking the download button and copy. Then back in Ubuntu execute the following: `sudo wget [downloadUrl]`.
 
-6. We got another zip, but this time a `.zip` file. For this, we need a new package: `sudo apt-get install unzip`.
+6. We got another archive, but this time a `.zip` file. For this, we need a new package: `sudo apt-get install unzip`.
 
 7. Then extract the download: `sudo unzip [downloadedFile.zip]`
 
@@ -64,8 +64,8 @@ Parabeac-core is built in Dart and generates Flutter apps, which make use of Dar
 
 10. Add the following lines to the file:
 ```bashrc
-export DART=/home/roel/snap/flutter/common/flutter/bin
-export ANDROID_SDK_ROOT=/home/[your selected ubuntu username]/Android/Sdk
+export DART=/home/<your ubuntu username>/snap/flutter/common/flutter/bin
+export ANDROID_SDK_ROOT=/home/<your ubuntu username>/Android/Sdk
 export JAVA_HOME=/opt/openJDK
 export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
@@ -76,7 +76,7 @@ export PATH=$PATH:$DART
 
 Exit out of nano with `CTRL-x & CTRL-y`.
 
-11. At this point we'd be required to restart our Ubuntu machine. But since we're use WSL 2 we can just restart our distro instance. Close the app, and re-open it.
+11. At this point we'd be required to restart our Ubuntu machine. But since we use WSL 2 we can just restart our distro instance. Close the app, and re-open it.
 
 If everything went correctly we now can use the command line tools.
 Next, we need the build tools. The choice we make here will determine the Android version the Parabeac-core Flutter app will target. If you choose to debug using the emulator we'll install later on, you can follow the following instructions. But if you want to do this on your own device you'll need to select an API level that supports your device. You can do that on [this page](https://developer.android.com/studio/releases/platforms). You'll need to replace the API version numbers we'll use in the following commands with the one your device supports. You can look up the versions with `sdkmanager --list`
@@ -95,11 +95,11 @@ Now, time for Flutter. Flutter uses the snap package manager, sadly this doesn't
 
 18. Run the script: `sudo bash ubuntu-wsl2-systemd-script.sh`
 
-19. Lastly, run these scripts `cmd.exe /C setx WSLENV BASH_ENV/u` and `cmd.exe /C setx BASH_ENV /etc/bash.bashrc`
+19. Then run these scripts `cmd.exe /C setx WSLENV BASH_ENV/u` and `cmd.exe /C setx BASH_ENV /etc/bash.bashrc`
 
 20. Now we need to restart Ubuntu by closing and re-opening the app.
 
-21. Finally, test if snap works: `snap --version` This should return the version numbers of the snap components. If it hangs it means snap isn't yet working correctly.
+21. Test if snap works: `snap --version` This should return the version numbers of the snap components. If it hangs it means snap isn't yet working correctly.
 
 22. Now, install Flutter: `sudo snap install flutter --classic` This could take some time!
 
@@ -134,7 +134,7 @@ And there we have it! Congratulations, we've installed:
 And now have a Parabeac-core repo ready for usage/development!
 
 ### (Optional) Fix NPM
-When you run parabeac to generate a project it tries to restore NPM packages. However, an error could occur. This probably because you have Node installed both on Windows and WSL 2. A solution: remove the ocation of the Windows installation from your Windows path.
+When you run parabeac to generate a project it tries to restore NPM packages. However, an error could occur. This probably because you have Node installed both on Windows and WSL 2. A solution: remove the location of the Windows installation from your Windows path.
 
 1. Open Windows search and open "Edit the system environment variables"
 
