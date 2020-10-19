@@ -21,8 +21,8 @@ class PBColorGenHelper extends PBAttributesHelper {
             ? 'backgroundColor: ${findDefaultColor(scaffold.backgroundColor)},'
             : 'backgroundColor: Color(${scaffold.backgroundColor}),\n';
       }
-    }
-    if (source.color == null) {
+
+    } else if (source.color == null) {
       statement = '';
     } else {
       if (source is! InheritedContainer) {
