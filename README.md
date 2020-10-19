@@ -165,5 +165,4 @@ Welcome! The best way to contribute to Parabeac is through pull requests, filing
 # Upcoming & Known Issues
 
  - Plugin Duplication in the Plugin Service
- - Support for Figma
  - Egg Marketplace
