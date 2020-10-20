@@ -1,6 +1,6 @@
 # <center>Parabeac-Core
 
-![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/Parabeac_Open-Source_README_Logo.png)
+![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/1*_cqBeo8Gw2eAxdJOZ7TmmA.png)
 
 Parabeac-Core is an open-source repository that converts design files into Flutter code.
 
