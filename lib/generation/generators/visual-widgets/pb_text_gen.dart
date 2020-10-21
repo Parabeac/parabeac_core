@@ -1,4 +1,6 @@
+import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -15,6 +17,12 @@ class PBTextGen extends PBGenerator {
         var text = source.text;
         buffer.write('$text, \n');
       } else {
+        if (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER) {
+          var ovrName = SN_UUIDtoVarName[source.UUID];
+          if (ovrName != null) {
+            buffer.write('${ovrName} ?? ');
+          }
+        }
         buffer
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }

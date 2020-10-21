@@ -9,13 +9,16 @@ class PBSizeHelper extends PBAttributesHelper {
   @override
   String generate(PBIntermediateNode source) {
     final buffer = StringBuffer();
-
+    bool isSymbolMaster = (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER);
+    bool isScaffoldBody = (source.builder_type == BUILDER_TYPE.SCAFFOLD_BODY);
     Map body = source.size ?? {};
     double height = body['height'];
     double width = body['width'];
+    var wString = 'width: ';
+    var hString = 'height: ';
+
     //Add relative sizing if the widget has context
-    if (source.builder_type != null &&
-        source.builder_type == BUILDER_TYPE.SCAFFOLD_BODY) {
+    if ((source.builder_type != null) && (isSymbolMaster || isScaffoldBody)) {
       var screenWidth;
       var screenHeight;
       if (source.currentContext?.screenTopLeftCorner?.y != null &&
@@ -24,6 +27,11 @@ class PBSizeHelper extends PBAttributesHelper {
             ((source.currentContext.screenTopLeftCorner.y as double) -
                     (source.currentContext.screenBottomRightCorner.y as double))
                 .abs();
+        if (isSymbolMaster) {
+          hString = 'height: constraints.maxHeight * ';
+        } else {
+          hString = 'height: MediaQuery.of(context).size.height * ';
+        }
       }
       if (source.currentContext?.screenTopLeftCorner?.x != null &&
           source.currentContext?.screenBottomRightCorner?.x != null) {
@@ -31,6 +39,11 @@ class PBSizeHelper extends PBAttributesHelper {
                     as double) -
                 (source.currentContext?.screenBottomRightCorner?.x as double))
             .abs();
+        if (isSymbolMaster) {
+          wString = 'width: constraints.maxWidth * ';
+        } else {
+          wString = 'width: MediaQuery.of(context).size.width * ';
+        }
       }
 
       height = (height != null && screenHeight != null && screenHeight > 0.0)
@@ -39,35 +52,17 @@ class PBSizeHelper extends PBAttributesHelper {
       width = (width != null && screenWidth != null && screenWidth > 0.0)
           ? width / screenWidth
           : width;
-
-      if (width != null) {
-        if (source.topLeftCorner.x != null &&
-            source.bottomRightCorner.x != null &&
-            screenWidth != null) {
-          buffer.write(
-              'width : MediaQuery.of(context).size.width * ${width.toStringAsFixed(3)},');
-        } else {
-          buffer.write('width :${width.toStringAsFixed(2)},');
-        }
-      }
-      if (height != null) {
-        if (source.topLeftCorner.y != null &&
-            source.bottomRightCorner.y != null &&
-            screenHeight != null) {
-          buffer.write(
-              ' height : MediaQuery.of(context).size.height * ${height.toStringAsFixed(3)},');
-        } else {
-          buffer.write('height : ${height.toStringAsFixed(2)},');
-        }
-      }
-    } else {
-      if (width != null) {
-        buffer.write('width :${width.toStringAsFixed(2)},');
-      }
-      if (height != null) {
-        buffer.write('height : ${height.toStringAsFixed(2)},');
-      }
     }
+
+    if (width != null) {
+      buffer.write(
+          ' ${wString}${width.toStringAsFixed(3)},');
+    }
+    if (height != null) {
+      buffer.write(
+          '${hString}${height.toStringAsFixed(3)},');
+    }
+
     return buffer.toString();
   }
 }

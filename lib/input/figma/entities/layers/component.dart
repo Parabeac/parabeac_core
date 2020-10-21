@@ -84,7 +84,7 @@ class Component extends FigmaFrame
       overrideProperties?.map((prop) {
         var properties = extractParameter(prop.overrideName);
         return PBSharedParameterProp(
-            properties[0], null, prop.canOverride, name, properties[1]);
+            properties['type'], null, prop.canOverride, name, properties['uuid'], properties['default_value']);
       })?.toList();
 
   @override

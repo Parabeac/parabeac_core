@@ -67,8 +67,13 @@ class PBAlignGenerationService implements PBGenerationService {
               currentIntermediateNode));
         } else if (currentIntermediateNode
             is PBSharedInstanceIntermediateNode) {
+          if (currentIntermediateNode.child == null) {
+            continue;
+          }
+          queue.add(LayerTuple(
+              [currentIntermediateNode.child], currentIntermediateNode));
           // Do not align Instance Nodes
-          continue;
+//          continue;
         } else {
           log.warning(
               'We don\'t support class type ${currentIntermediateNode.runtimeType} for adding to the queue.');

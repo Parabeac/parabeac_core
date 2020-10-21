@@ -122,7 +122,7 @@ class SymbolInstance extends SketchNode
   ///Converting the [OverridableValue] into [PBSharedParameterValue] to be processed in intermediate phase.
   List<PBSharedParameterValue> _extractParameters() => overrideValues?.map((e) {
         var properties = extractParameter(e.overrideName);
-        return PBSharedParameterValue(properties[0], e.value, properties[1]);
+        return PBSharedParameterValue(properties['type'], e.value, properties['uuid']);
       })?.toList();
 
   @override
