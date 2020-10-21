@@ -52,7 +52,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       // end of builder: (context, constraints) {
       buffer.write('}\n');
       // end of LayoutBuilder()
-      buffer.write('),');
+      buffer.write(')');
       return buffer.toString();
     }
   }
