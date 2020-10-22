@@ -159,9 +159,10 @@ class SymbolMaster extends AbstractGroupLayer
   ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
   List<PBSharedParameterProp> _extractParameters() =>
       overrideProperties?.map((prop) {
-        var properties = extractParameter(prop.overrideName);
+        // add ourselves to the list so symbol instances can find our parameter names
+        var properties = AddMasterSymbolName(prop.overrideName, children);
         return PBSharedParameterProp(
-            properties[0], null, prop.canOverride, name, properties[1]);
+            properties['type'], null, prop.canOverride, properties['name'], properties['uuid'], properties['default_value']);
       })?.toList();
 
   @override

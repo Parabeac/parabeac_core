@@ -19,14 +19,16 @@ class PBMasterSymbolGenerator extends PBGenerator {
   PBMasterSymbolGenerator() : super();
 
   ///Generating the parameters of the symbol master, keeping [definitions] so
-  ///we can replace the generic names of the paramters by that of the real overridable node's name.
+  ///we can replace the generic names of the parameters by that of the real overridable node's name.
   ///However, they need to be established in all the nodes.
   String _generateParameters(List<PBSharedParameterProp> signatures,
       List<PBSymbolMasterParameter> definitions) {
-    if (signatures == null || definitions.isEmpty) {
+    if ((signatures == null) || (signatures.isEmpty)) {
       return '';
     }
     var buffer = StringBuffer();
+    // optional parameters
+    buffer.write('{ ');
     for (var i = 0; i < signatures.length; i++) {
       var signature = signatures[i];
       var overridableType =
@@ -36,18 +38,15 @@ class PBMasterSymbolGenerator extends PBGenerator {
           : 'var';
 
       if (signature.canOverride) {
-        var name = definitions[i] != null ? definitions[i].propertyName : null;
+        var name = signature.propertyName;
         if (name == null) {
           continue;
         }
-        var objectId =
-            definitions[i] != null ? definitions[i].parameterID : name;
-        var defenition =
-            definitions[i] != null ? definitions[i].parameterDefinition : null;
 
         buffer.write(('$type $name,'));
       }
     }
+    buffer.write(' }');
     return buffer.toString();
   }
 
@@ -86,7 +85,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
             );
         log.error(e.toString());
       }
-      buffer.write('Widget ${name}(BuildContext context,');
+      buffer.write('Widget ${name}(BuildContext context, BoxConstraints constraints, ');
       var parameters = _generateParameters((source.overridableProperties ?? []),
           (source.parametersDefinition ?? []));
       buffer.write(parameters);

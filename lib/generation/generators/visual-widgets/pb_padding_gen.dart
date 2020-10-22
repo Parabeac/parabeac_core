@@ -13,11 +13,12 @@ class PBPaddingGen extends PBGenerator {
 
   String relativePadding(BUILDER_TYPE type, bool isVertical, double value) {
     var fixedValue = value.toStringAsFixed(2);
-    if ((type != null) && (type != BUILDER_TYPE.SYMBOL_MASTER)) {
-      var property = isVertical ? 'height' : 'width';
-      return 'MediaQuery.of(context).size.$property * $fixedValue';
+    if (type != null)  {
+      if (type == BUILDER_TYPE.SYMBOL_MASTER) {
+        return 'constraints.max' + (isVertical ? 'Height' : 'Width') + ' * $fixedValue';
+      }
+      return 'MediaQuery.of(context).size.' + (isVertical ? 'height' : 'width') + ' * $fixedValue';
     }
-
     return '$fixedValue';
   }
 

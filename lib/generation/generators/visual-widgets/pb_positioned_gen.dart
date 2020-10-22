@@ -16,13 +16,41 @@ class PBPositionedGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Positioned(');
 
+      double hAlignValue = source.horizontalAlignValue;
+      double vAlignValue = source.verticalAlignValue;
+      var multStringH = '';
+      var multStringV = '';
+
+      // TODO: this should be for all widgets once LayoutBuilder and constraints are used
+      if (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER) {
+        if (source.currentContext?.screenTopLeftCorner?.x != null &&
+            source.currentContext?.screenBottomRightCorner?.x != null) {
+          double screenWidth = ((source.currentContext?.screenTopLeftCorner?.x
+          as double) -
+              (source.currentContext?.screenBottomRightCorner?.x as double))
+              .abs();
+          multStringH = 'constraints.maxWidth * ';
+          hAlignValue = hAlignValue / screenWidth;
+        }
+
+        if (source.currentContext?.screenTopLeftCorner?.y != null &&
+            source.currentContext?.screenBottomRightCorner?.y != null) {
+          double screenHeight =
+              ((source.currentContext.screenTopLeftCorner.y as double) -
+                  (source.currentContext.screenBottomRightCorner.y as double))
+                  .abs();
+          multStringV = 'constraints.maxHeight * ';
+          vAlignValue = vAlignValue / screenHeight;
+        }
+      }
+
       if (source.horizontalAlignValue != null) {
         buffer.write(
-            '${source.horizontalAlignType} :${source.horizontalAlignValue},');
+            '${source.horizontalAlignType}: ${multStringH}${hAlignValue},');
       }
       if (source.verticalAlignValue != null) {
         buffer.write(
-            '${source.verticalAlignType} :${source.verticalAlignValue},');
+            '${source.verticalAlignType} :${multStringV}${vAlignValue},');
       }
 
       try {

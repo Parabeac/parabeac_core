@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -123,6 +124,9 @@ class PBSharedParameterProp {
   final String _UUID;
   String get UUID => _UUID;
 
+  final dynamic _initialValue;
+  dynamic get initialValue => _initialValue;
+
   PBSharedParameterProp(this._type, this.value, this._canOverride,
-      this._propertyName, this._UUID);
+      this._propertyName, this._UUID, this._initialValue);
 }

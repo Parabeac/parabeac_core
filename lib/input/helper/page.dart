@@ -18,7 +18,7 @@ class Page {
   }
 
   List<PageItem> getPageItems() {
-    log.info('We encountered a page that has 0 page items.');
+    log.info('We encountered a page that has ${_pageItems.length} page items.');
     return _pageItems;
   }
 
