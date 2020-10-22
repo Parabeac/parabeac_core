@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -19,6 +20,9 @@ mixin SymbolNodeMixin {
     for (var child in children) {
       if (child.UUID == uuid) {
         return child.name ?? 'var';
+      }
+      else if (child is AbstractGroupLayer){
+        return FindName(uuid, child.children);
       }
     }
     // this should never happen.
