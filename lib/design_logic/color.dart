@@ -29,4 +29,17 @@ mixin PBColorMixin {
       return '0x' + HEX.encode([0, 0, 0, 0]);
     }
   }
+
+  String findDefaultColor(String hex) {
+    switch (hex) {
+      case '0xffffffff':
+        return 'Colors.white';
+        break;
+      case '0xff000000':
+        return 'Colors.black';
+        break;
+    }
+    return null;
+  }
+
 }

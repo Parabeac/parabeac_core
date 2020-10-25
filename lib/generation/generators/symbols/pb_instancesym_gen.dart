@@ -1,10 +1,12 @@
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
+import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
+import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
   PBSymbolInstanceGenerator() : super();
@@ -35,11 +37,18 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedParameterValue:
+            //PBSharedParameterValue pbspv = param;
+            //switch (pbpsv.)
             // TODO, maybe this points to static instances? Like Styles.g.dart that will be eventually generated,
             // but what about prototype links?
             break;
           case InheritedBitmap:
             buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
+            break;
+          case TextStyle:
+            // hack to include import
+            source.generator.manager.addImport('package:${MainInfo().projectName}/document/shared_props.g.dart');
+            buffer.write('${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
             break;
           default:
             buffer.write('${param.name}: \"${param.value}\",');

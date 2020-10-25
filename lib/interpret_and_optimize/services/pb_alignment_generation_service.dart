@@ -28,8 +28,10 @@ class PBAlignGenerationService implements PBGenerationService {
 
   /// Should find all layout nodes
   PBIntermediateNode addAlignmentToLayouts() {
-    assert(originalRoot != null,
-        '[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+    if (originalRoot == null) {
+      log.warning('[VisualGenerationService] generate() attempted to generate a non-existing tree');
+      return null;
+    }
 
     var queue = <LayerTuple>[];
     queue.add(LayerTuple([originalRoot], null));

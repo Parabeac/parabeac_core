@@ -157,26 +157,34 @@ class SymbolMaster extends AbstractGroupLayer
   Map<String, dynamic> toJson() => _$SymbolMasterToJson(this);
 
   ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
-  List<PBSharedParameterProp> _extractParameters() =>
-      overrideProperties?.map((prop) {
-        // add ourselves to the list so symbol instances can find our parameter names
+  List<PBSharedParameterProp> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterProp> sharedParameters = [];
+    for (var prop in overrideProperties) {
+      if (!ovrNames.contains(prop.overrideName)) {
         var properties = AddMasterSymbolName(prop.overrideName, children);
-        return PBSharedParameterProp(
-            properties['type'], null, prop.canOverride, properties['name'], properties['uuid'], properties['default_value']);
-      })?.toList();
-
-  @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    var sym_master = PBSharedMasterNode(
-      this,
-      symbolID,
-      name,
-      Point(boundaryRectangle.x, boundaryRectangle.y),
-      Point(boundaryRectangle.x + boundaryRectangle.width,
-          boundaryRectangle.y + boundaryRectangle.height),
-      overridableProperties: _extractParameters(),
-      currentContext: currentContext,
-    );
-    return Future.value(sym_master);
+        sharedParameters.add(PBSharedParameterProp(properties['name'],
+            properties['type'], null, prop.canOverride, prop.overrideName,
+            properties['uuid'], properties['default_value']));
+        ovrNames.add(prop.overrideName);
+      }
+    }
+    return sharedParameters;
   }
-}
+
+    @override
+    Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+      var sym_master = PBSharedMasterNode(
+        this,
+        symbolID,
+        name,
+        Point(boundaryRectangle.x, boundaryRectangle.y),
+        Point(boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
+        overridableProperties: _extractParameters(),
+        currentContext: currentContext,
+      );
+      return Future.value(sym_master);
+    }
+  }
+
