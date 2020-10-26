@@ -88,7 +88,7 @@ Next, we need the build tools. The choice we make here will determine the Androi
 
 15. And for debugging, later on, we need the platform-tools: `sdkmanager "platform-tools"`
 
-Now, time for Flutter. Flutter uses the snap package manager, sadly this doesn't work in WSL 2 out of the box because of an issue with system at the time of writing. So, let's fix it first!
+Now, time for Flutter. Flutter uses the snap package manager, sadly this doesn't work in WSL 2 out of the box because of an issue with systemd at the time of writing. So, let's fix it first!
 
 16. Move back to your home: `cd ~/` and make a repos folder `mkdir repos`
 
