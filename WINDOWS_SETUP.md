@@ -2,7 +2,7 @@
 To get starting with using or developing the source code on Windows some configuration is required. This document is meant to help users with that.
 
 ## Setup using WSL 2
-One of the ways we can get starting with Parabeac-Core on Windows is by utilizing the Windows Subset for Linux version 2. This allows Windows 10 users to utilize the most of linux and to combine this with the Windows workflow. This prevents overhead that comes with solutions like a VM or dualboot. To learn more about WSL 2 you can visit [this page](https://docs.microsoft.com/en-us/windows/wsl/about).
+One of the ways we can get starting with Parabeac-Core on Windows is by utilizing the Windows Subset for Linux version 2. This allows Windows 10 users to utilize the most of Linux and to combine this with the Windows workflow. This prevents overhead that comes with solutions like a VM or dual boot. To learn more about WSL 2 you can visit [this page](https://docs.microsoft.com/en-us/windows/wsl/about).
 
 ## Index
 - [Requirements](#Requirements)
@@ -29,30 +29,30 @@ To summarize the first step, we first need to activate WSL 1 and then update it 
 
 3. **Now, restart your device!** This is required to finish the installation of WSL.
 
-4. After restarting, download and install the [WSL2 linux kernel update](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi).
+4. After restarting, download and install the [WSL2 Linux kernel update](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi).
 
 5. Execute this PowerShell command: `wsl --set-default-version 2` This makes WSL 2 the default version for further usage. This may take some minutes.
 
-6. WSL 2 is now enabled. Next we need a linux distro. You could choose some of your choice from the Windows Store, but for this guide we'll use the Ubuntu, [download this distro](https://www.microsoft.com/nl-nl/p/ubuntu/9nblggh4msv6).
+6. WSL 2 is now enabled. Next, we need a Linux distro. You could choose some of your choices from the Windows Store, but for this guide, we'll use Ubuntu, [download this distro](https://www.microsoft.com/nl-nl/p/ubuntu/9nblggh4msv6).
 
 
 ### Ubuntu setup
-Next, ubunutu requires some setup.
+Next, ubuntu requires some setup.
 1. Boot up Ubuntu. It will install some things, let it finish
-2. Next choose an username, password and reconfirm your password.
+2. Next choose a username, password and reconfirm your password.
 3. Lastly let's update our distro. Execute the following commands: `sudo apt-get upgrade` and `sudo apt-get update`
 
 ### Flutter install
 Parabeac-core is built in Dart and generates Flutter apps, which make use of Dart and the Android SDK. The Android SDK itself requires the Java JDK. Let's install all of this.
 1. First let's make a download folder: `mkdir downloads` and move into it: `cd downloads`. 
 
-2. Then download the OpenJDK 8. Recommended is visiting [AdoptOpenJDK.net](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot) and copying the download url by right clicking the **JDK** `.tar.gz` download button and then copy. Then type `sudo wget [url]`. You can past the url you copied by right clicking in the console and execute it.
+2. Then download the OpenJDK 8. Recommended is visiting [AdoptOpenJDK.net](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot) and copying the download url by right-clicking the **JDK** `.tar.gz` download button and then copy. Then type `sudo wget [url]`. You can past the url you copied by right-clicking in the console and execute it.
 
 3. Extract the JDK: `sudo tar -xvzf [downloadedJdk.tar.gz]` By typing `O` and then pressing tab you can autocomplete the name of the downloaded file.
 
 4. Next, lets move the JDK to a more permanent place: `sudo mv [extractionName] /opt/openJDK`. extractionName is the folder name to where the downloaded file is extracted. You can find this with the `ls` command.
 
-5. Next up: the Android SDK. Google provides a command line tool to download android development software, so we'll make use of that. The download url can be found on the [Android Developers site](https://developer.android.com/studio). Scroll to the bottom to "Command line tools only", click the link of Linux, read and accept the terms and copy the url by right clicking the download button and copy. Then back in Ubuntu execute the following: `sudo wget [downloadUrl]`.
+5. Next up: the Android SDK. Google provides a command line tool to download android development software, so we'll make use of that. The download url can be found on the [Android Developers site](https://developer.android.com/studio). Scroll to the bottom to "Command line tools only", click the link of Linux, read and accept the terms and copy the url by right-clicking the download button and copy. Then back in Ubuntu execute the following: `sudo wget [downloadUrl]`.
 
 6. We got another zip, but this time a `.zip` file. For this, we need a new package: `sudo apt-get install unzip`.
 
@@ -85,7 +85,7 @@ Next, we need the build tools. The choice we make here will determine the Androi
 
 14. Now install the SDK and build-tools: `sdkmanager "platforms;android-30" "build-tools;30.0.2"` Optionally replace the version number with your API level.
 
-15. And for debugging later on, we need the platform tools: `sdkmanager "platform-tools"`
+15. And for debugging, later on, we need the platform-tools: `sdkmanager "platform-tools"`
 
 Now, time for Flutter. Flutter uses the snap package manager, sadly this doesn't work in WSL 2 out of the box because of an issue with systemd at time of writing. So, let's fix it first!
 
@@ -156,7 +156,7 @@ A recommended code editor is Visual Studio Code. This program provides an extens
 
 2. Next, download and install the [Remote - WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) extension.
 
-3. After this is done, go back to Ubuntu. Move into your repo `cd ~/repos/Parabeac-core` and open VSCode by executing: `code .` This opens VSCode in Windows, with a link to WSL 2. You can now program in Windows, and commit in WSL.
+3. After this is done, go back to Ubuntu. Move into your repo `cd ~/repos/Parabeac-core` and open VSCode by executing: `code .` This opens VSCode in Windows, with a link to WSL 2. You can now program in Windows and commit in WSL.
 
 ### (Optional) Android emulation
 Parabeac generates a Flutter project for Android. Now, we could build this project to an APK and push it to a device. Or we could emulate it.
@@ -164,9 +164,9 @@ By installing Android Studio with the emulator component and some ADB tricks we 
 
 1. Let's first download and install [Android Studio](https://developer.android.com/studio) for Windows. Make sure you select the emulator component during installation!
 
-2. Start Android studio, but stop at the project selection screen. Here we go into `Configure -> AVD Manager`.
+2. Start Android studio but stop at the project selection screen. Here we go into `Configure -> AVD Manager`.
 
-3. There should be a default emulator already present, named `Pixel_3a_API_30_x86`. This could differ slightly in device name and API level. Start this emulator.
+3. There should be a default emulator already present, named `Pixel_3a_API_30_x86`. This could differ slightly in the device name and API level. Start this emulator.
 
 4. Move with a Windows command line into the Android platform-tools folder which was installed by Android Studio: `cd %LocalAppData%/Android/Sdk/platform-tools`
 
