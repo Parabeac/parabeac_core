@@ -9,6 +9,7 @@ part of 'pb_symbol_master_params.dart';
 PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
     Map<String, dynamic> json) {
   return PBSymbolMasterParameter(
+    json['name'] as String,
     PBSymbolMasterParameter._typeFromJson(json['type']),
     json['parameterID'] as String,
     json['canOverride'] as bool,
@@ -30,7 +31,6 @@ PBSymbolMasterParameter _$PBSymbolMasterParameterFromJson(
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
-    ..name = json['name'] as String
     ..color = json['color'] as String;
 }
 

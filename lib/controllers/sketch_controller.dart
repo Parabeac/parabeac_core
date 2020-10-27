@@ -24,7 +24,7 @@ class SketchController extends Controller {
     ///INTAKE
     var ids = InputDesignService(fileAbsPath);
     var sketchNodeTree = generateSketchNodeTree(
-        ids.archive, ids.metaFileJson['pagesAndArtboards'], projectPath);
+        ids, ids.metaFileJson['pagesAndArtboards'], projectPath);
 
     ///INTERPRETATION
     Interpret().init(projectPath);
@@ -39,9 +39,9 @@ class SketchController extends Controller {
   }
 
   SketchNodeTree generateSketchNodeTree(
-      Archive archive, Map pagesAndArtboards, projectName) {
+      InputDesignService ids, Map pagesAndArtboards, projectName) {
     try {
-      return SketchNodeTree(archive, pagesAndArtboards, projectName);
+      return SketchNodeTree(ids, pagesAndArtboards, projectName);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,

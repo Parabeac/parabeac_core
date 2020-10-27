@@ -82,6 +82,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
     parametersDefinition = overridableProperties
         .map((p) => PBSymbolMasterParameter(
+            p._friendlyName,
             p.type,
             p.UUID,
             p.canOverride,
@@ -127,6 +128,9 @@ class PBSharedParameterProp {
   final dynamic _initialValue;
   dynamic get initialValue => _initialValue;
 
-  PBSharedParameterProp(this._type, this.value, this._canOverride,
+  final String _friendlyName;
+  String get friendlyName => _friendlyName;
+
+  PBSharedParameterProp(this._friendlyName, this._type, this.value, this._canOverride,
       this._propertyName, this._UUID, this._initialValue);
 }

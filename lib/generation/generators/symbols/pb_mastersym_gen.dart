@@ -9,10 +9,12 @@ import '../pb_flutter_generator.dart';
 
 class PBMasterSymbolGenerator extends PBGenerator {
   final _parametersType = {
-    'image': 'var',
-    'stringValue': 'var',
-    'symbolID': 'var',
-    'layerStyle': 'var'
+    'image': 'String',
+    'stringValue': 'String',
+    'String': 'String',
+    'symbolID': 'String',
+    'layerStyle': 'var',
+    'TextStyle': 'TextStyle'
   };
   List<PBSymbolMasterParameter> _parameterDefinition = [];
 
@@ -38,7 +40,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
           : 'var';
 
       if (signature.canOverride) {
-        var name = signature.propertyName;
+        var name = signature.friendlyName;
         if (name == null) {
           continue;
         }
@@ -56,7 +58,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
       var body = manager.generate(param,
           type: source.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY);
       if (body != null && body.isNotEmpty) {
-        buffer.writeln('${param.propertyName} ??= $body;');
+        buffer.writeln('${param.name} ??= $body;');
       }
     });
     return buffer.toString();

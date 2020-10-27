@@ -108,7 +108,10 @@ class PBSharedParameterValue {
   final String _UUID;
   String get UUID => _UUID;
 
-  String get name =>  SN_UUIDtoVarName[_UUID];
+  final String _overrideName;
+  String get overrideName => _overrideName;
 
-  PBSharedParameterValue(this._type, this._value, this._UUID,);
+  String get name =>  SN_UUIDtoVarName[_overrideName];
+
+  PBSharedParameterValue(this._type, this._value, this._UUID, this._overrideName,);
 }

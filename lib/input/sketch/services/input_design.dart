@@ -33,7 +33,9 @@ class InputDesignService {
 
   Map get documentFile {
     final doc_page = archive.findFile('document.json').content;
-    return json.decode(utf8.decode(doc_page));
+    assert(doc_page != null, "Document page from Sketch doesn't exist.");
+    final doc_map = json.decode(utf8.decode(doc_page));
+    return doc_map;
   }
 
   ///Getting the images in the sketch file and adding them to the png folder.

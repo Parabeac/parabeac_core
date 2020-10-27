@@ -20,11 +20,11 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child']
-    ..color = json['color'] as String
     ..size = json['size'] as Map<String, dynamic>
     ..borderInfo = json['borderInfo'] as Map<String, dynamic>
     ..alignment = json['alignment'] as Map<String, dynamic>
     ..name = json['name'] as String
+    ..color = json['color'] as String
     ..UUID = json['UUID'] as String
     ..functionCallName = json['functionCallName'] as String
     ..foundMaster = json['foundMaster'] as bool
@@ -38,11 +38,11 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'child': instance.child,
       'topLeftCorner': instance.topLeftCorner,
       'bottomRightCorner': instance.bottomRightCorner,
-      'color': instance.color,
       'size': instance.size,
       'borderInfo': instance.borderInfo,
       'alignment': instance.alignment,
       'name': instance.name,
+      'color': instance.color,
       'UUID': instance.UUID,
       'SYMBOL_ID': instance.SYMBOL_ID,
       'functionCallName': instance.functionCallName,

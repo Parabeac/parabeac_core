@@ -1,4 +1,4 @@
-import 'package:SymbolTest/screens/symboltest/symbol_test_with_item.dart';
+import 'package:SymbolTest/screens/symboltest/symbol_test.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SafeArea(child: SymbolTestWithItem()),
+      home: SafeArea(child: SymbolTest()),
     );
   }
 }

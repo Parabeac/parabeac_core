@@ -49,7 +49,7 @@ class Interpret {
   }
 
   Future<PBIntermediateTree> interpretAndOptimize(NodeTree tree) async {
-    _pb_intermediate_tree = PBIntermediateTree(projectName);
+    _pb_intermediate_tree = PBIntermediateTree(projectName, tree.sharedStyles);
 
     ///3rd Party Symbols
     if (tree.miscPages != null) {
@@ -242,7 +242,7 @@ class Interpret {
       //       exception: e,
       //       stackTrace: stackTrace,
       //     );
-      log.error(e.toString());
+      log.error(e.toString() + '\n' + stackTrace.toString());
       node = parentnode;
     }
     // print(

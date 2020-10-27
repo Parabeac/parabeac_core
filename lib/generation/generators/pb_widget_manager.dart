@@ -29,7 +29,7 @@ abstract class PBGenerationManager {
   // PBContext context;
 
   ///* Keep track of the imports the current page may have
-  List<String> imports = [];
+  Set<String> imports = {};
 
   ///* Keep track of the current page body
   StringBuffer body;
