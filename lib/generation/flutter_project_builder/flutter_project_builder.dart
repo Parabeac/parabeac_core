@@ -4,21 +4,17 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/eggs/injected_app_bar.dart';
-import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
-import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
     as image_helper;
+
+import 'import_helper.dart';
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -149,50 +145,6 @@ class FlutterProjectBuilder {
     );
   }
 
-  /// Traverse the [node] tree, check if any nodes need importing,
-  /// and add the relative import from [path] to the [node]
-  List<String> _findImports(PBIntermediateNode node, String path) {
-    List<String> imports = [];
-    if (node == null) return imports;
-
-    String id;
-    if (node is PBSharedInstanceIntermediateNode) {
-      id = node.SYMBOL_ID;
-    } else if (node is PBDestHolder) {
-      id = node.pNode.destinationUUID;
-    } else {
-      id = node.UUID;
-    }
-
-    String nodePath = PBGenCache().getPath(id);
-    // Make sure nodePath exists and is not the same as path (importing yourself)
-    if (nodePath != null && nodePath.isNotEmpty && path != nodePath) {
-      imports.add(PBGenCache().getRelativePath(path, id));
-    }
-
-    // Recurse through child/children and add to imports
-    if (node is PBLayoutIntermediateNode) {
-      node.children
-          .forEach((child) => imports.addAll(_findImports(child, path)));
-    } else if (node is InheritedScaffold) {
-      imports.addAll(_findImports(node.navbar, path));
-      imports.addAll(_findImports(node.tabbar, path));
-      imports.addAll(_findImports(node.child, path));
-    } else if (node is InjectedNavbar) {
-      imports.addAll(_findImports(node.leadingItem, path));
-      imports.addAll(_findImports(node.middleItem, path));
-      imports.addAll(_findImports(node.trailingItem, path));
-    } else if (node is InjectedTabBar) {
-      for (var tab in node.tabs) {
-        imports.addAll(_findImports(tab, path));
-      }
-    } else {
-      imports.addAll(_findImports(node.child, path));
-    }
-
-    return imports.toSet().toList(); // Prevent repeated entries
-  }
-
   /// Method that traverses the tree to add imports on the first traversal,
   /// and retrieve imports and write the file the second time
   void _traverseTree(bool isFirstTraversal) async {
@@ -244,10 +196,10 @@ class FlutterProjectBuilder {
         // Check if there are any imports needed for this screen
         if (!isFirstTraversal) {
           isSymbolsDir
-              ? importSet
-                  .addAll(_findImports(intermediateItem.node, symbolFilePath))
-              : flutterGenerator.imports
-                  .addAll(_findImports(intermediateItem.node, fileNamePath));
+              ? importSet.addAll(ImportHelper.findImports(
+                  intermediateItem.node, symbolFilePath))
+              : flutterGenerator.imports.addAll(ImportHelper.findImports(
+                  intermediateItem.node, fileNamePath));
 
           // Check if [InheritedScaffold] is the homescreen
           if (intermediateItem.node is InheritedScaffold &&
