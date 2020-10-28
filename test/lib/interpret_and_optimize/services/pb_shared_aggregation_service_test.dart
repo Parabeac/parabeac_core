@@ -51,7 +51,8 @@ void main() {
             parameterAlternator ? null : instanceNode0,
             true,
             parameterAlternator ? 'test0' : 'test1',
-            parameterAlternator ? 'uuid0' : INSTANCE0_UUID);
+            parameterAlternator ? 'uuid0' : INSTANCE0_UUID,
+            null);
         var instaceParameter = PBSharedParameterValue(
             parameterAlternator ? String : PBSharedInstanceIntermediateNode,
             parameterAlternator ? 'test' : instanceNode0,
