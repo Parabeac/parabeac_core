@@ -35,7 +35,7 @@ void main() {
         .thenReturn(Frame(width: 50, height: 50, x: 0, y: 0));
     when(mockOriginalRef.style).thenReturn(Style(fills: []));
     when(mockRootSketchNode.interpretNode(context)).thenAnswer((_) =>
-        Future.value(InheritedContainer(mockOriginalRef, null, null,
+        Future.value(InheritedContainer(mockOriginalRef, null, null, 'testName',
             currentContext: context)));
   });
   test('Should generate IntermediateTree', () async {
@@ -64,8 +64,8 @@ void main() {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
       if (currentNode.node is AbstractGroupLayer &&
-          (currentNode.node as AbstractGroupLayer).layers.isNotEmpty) {
-        for (var child in (currentNode.node as AbstractGroupLayer).layers) {
+          (currentNode.node as AbstractGroupLayer).children.isNotEmpty) {
+        for (var child in (currentNode.node as AbstractGroupLayer).children) {
           if (currentNode.depth + 1 > sketchNodeDepth) {
             sketchNodeDepth = currentNode.depth + 1;
           }
