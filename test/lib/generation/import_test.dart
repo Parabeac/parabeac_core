@@ -1,9 +1,8 @@
 import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:test/test.dart';
-
-import '../../../lib/generation/flutter_project_builder/import_helper.dart';
-import '../../../lib/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import '../../../lib/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class NodeMock extends Mock implements PBIntermediateNode {}
 
@@ -35,7 +34,7 @@ void main() {
       when(importee2.child).thenReturn(importee3);
     });
 
-    test('Testing import generation', () {
+    test('Testing import generation when imports are generated', () {
       //Add symbol in the same folder as importer
       genCache.addToCache(importee1.UUID, '/path/to/page/importee1.dart');
       //Add symbol located a directory above importer
@@ -43,13 +42,19 @@ void main() {
       //Add symbol located a directory below importer
       genCache.addToCache(importee3.UUID, '/path/to/page/sub/importee3.dart');
 
-      // Find the imports of importer
+      // Find the imports of importer.dart
       var imports = ImportHelper.findImports(
           iNodeWithImports, '/path/to/page/importer.dart');
-      var noImports = ImportHelper.findImports(
-          iNodeWithoutImports, '/path/to/page/not_importer.dart');
 
       expect(imports.length, 3);
+      expect(imports[0], './importee1.dart');
+      expect(imports[1], '../importee2.dart');
+      expect(imports[2], './sub/importee3.dart');
+    });
+
+    test('Testing import generation when no imports are generated', () {
+      var noImports = ImportHelper.findImports(
+          iNodeWithoutImports, '/path/to/page/not_importer.dart');
       expect(noImports.length, 0);
     });
   });

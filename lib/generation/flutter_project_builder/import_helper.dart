@@ -1,11 +1,11 @@
-import '../../eggs/injected_app_bar.dart';
-import '../../eggs/injected_tab_bar.dart';
-import '../../interpret_and_optimize/entities/inherited_scaffold.dart';
-import '../../interpret_and_optimize/entities/pb_shared_instance.dart';
-import '../../interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import '../../interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import '../../interpret_and_optimize/helpers/pb_gen_cache.dart';
-import '../prototyping/pb_dest_holder.dart';
+import 'package:parabeac_core/eggs/injected_app_bar.dart';
+import 'package:parabeac_core/eggs/injected_tab_bar.dart';
+import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 
 class ImportHelper {
   /// Traverse the [node] tree, check if any nodes need importing,
@@ -23,7 +23,7 @@ class ImportHelper {
       id = node.UUID;
     }
 
-    String nodePath = PBGenCache().getPath(id);
+    var nodePath = PBGenCache().getPath(id);
     // Make sure nodePath exists and is not the same as path (importing yourself)
     if (nodePath != null && nodePath.isNotEmpty && path != nodePath) {
       imports.add(PBGenCache().getRelativePath(path, id));
