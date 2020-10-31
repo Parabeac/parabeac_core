@@ -89,7 +89,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 ```
 If you're wondering about where to find your Figma File ID or Figma API Key Please Read Below:
 #### Figma File ID and API Key
-Since Figma operates from a cloud native approach we use the Figma File ID and a Figma User API Key in order to pull down your figma designs and run the conversion. Your Figma File ID is a unique ID used to identify your specific Figma File amoungst all other Figma Design Files. Your Figma API Key is a custom key assigned to your figma account that you generate in order to give Parabeac Core the ability to pull down your Figma File.
+Since Figma operates from a cloud native approach we use the Figma File ID and a Figma User API Key in order to pull down your figma designs and run the conversion. Your Figma File ID is a unique ID used to identify your specific Figma File amongst all other Figma Design Files. Your Figma API Key is a custom key assigned to your figma account that you generate in order to give Parabeac Core the ability to pull down your Figma File.
 **In order to find your Figma File ID do the following:**
 1. Go to your Figma Homepage at www.Figma.com
 2. Select your Design File
@@ -99,7 +99,7 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 1. Go to your Figma Homepage at www.Figma.com
 2. Navigate to your user Profile
 3. Scroll Down to the "Create a new Personal Access Token"
-4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
+4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you won't be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
 
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
@@ -117,7 +117,7 @@ Parabeac-core keeps track of how many times it is run. Although we do not collec
 5. Save Main.dart and Execute `flutter run` in your terminal
 
 # How to create & run Parabeac eggs
-Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this are 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
+Parabeac eggs are essentially plugins that change the way a set of design elements are interpreted. A very simple example of this is 2 eggs that we created called NavBar & TabBar. Eggs are loaded into the project before the runtime of Parabeac-Core because unfortunately dart doesn't support [dynamic module loading](https://github.com/dart-lang/sdk/issues/10530).
 
 You can also create your own eggs! By using our [Parabeac Egg Template](https://github.com/Parabeac/parabeac-egg-template) you can quickly define your own semantics and corresponding code generation which allows for the most flexible and robust export customization possible. You can also upload your eggs to our **_git-based marketplace for templates_** to help support the community going forward.
 
