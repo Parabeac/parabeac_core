@@ -89,7 +89,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 ```
 If you're wondering about where to find your Figma File ID or Figma API Key Please Read Below:
 #### Figma File ID and API Key
-Since Figma operates from a cloud native approach we use the Figma File ID and a Figma User API Key in order to pull down your figma designs and run the conversion. Your Figma File ID is a unique ID used to identify your specific Figma File amoungst all other Figma Design Files. Your Figma API Key is a custom key assigned to your figma account that you generate in order to give Parabeac Core the ability to pull down your Figma File.
+Since Figma operates from a cloud native approach we use the Figma File ID and a Figma User API Key in order to pull down your figma designs and run the conversion. Your Figma File ID is a unique ID used to identify your specific Figma File amongst all other Figma Design Files. Your Figma API Key is a custom key assigned to your figma account that you generate in order to give Parabeac Core the ability to pull down your Figma File.
 **In order to find your Figma File ID do the following:**
 1. Go to your Figma Homepage at www.Figma.com
 2. Select your Design File
