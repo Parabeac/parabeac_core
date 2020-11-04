@@ -67,8 +67,6 @@ void main() {
             reason: 'should be of type InjectedPositioned');
 
         i % 2 == 0 ? isYPositive = !isYPositive : isXPositive = !isXPositive;
-
-        //TODO: test the relative position
       }
     });
   });
