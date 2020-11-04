@@ -25,8 +25,7 @@ void main() {
   group('Project Builder Test', () {
     var projectBuilder;
 
-    var outputPath =
-        '/Volumes/Storage/Projects/Parabeac-Core/test/lib/output_services/temp2';
+    var outputPath = '${Directory.current.path}/test/lib/output_services/temp2';
 
     MockIntermediateTree intermediateTree;
 

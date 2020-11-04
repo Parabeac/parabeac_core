@@ -8,8 +8,7 @@ void main() {
   group('Dependency writer test', () {
     var writer;
     // TODO: look for a yaml to modify that will not afect anything
-    var yamlAbsPath =
-        '/Volumes/Storage/Projects/Parabeac-Core/temp/pubspec.yaml';
+    var yamlAbsPath = '${Directory.current.path}/temp/pubspec.yaml';
     setUp(() {
       writer = PBFlutterWriter();
       writer.addDependency('http_parser', '^3.1.4');

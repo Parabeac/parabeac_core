@@ -6,7 +6,7 @@ void main() {
   group('Flutter writer test', () {
     var writer;
     var testingPath =
-        '/Volumes/Storage/Projects/Parabeac-Core/test/lib/output_services/test_file.dart';
+        '${Directory.current.path}/test/lib/output_services/test_file.dart';
     setUp(() {
       writer = PBFlutterWriter();
     });
@@ -15,7 +15,9 @@ void main() {
       writer.write('Code to be written!', testingPath);
 
       expect(await File(testingPath).exists(), true);
+    });
 
+    tearDownAll(() async {
       // To delete the testing file once the test is done
       await File(testingPath).delete();
     });
