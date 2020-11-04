@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/figma/helper/figma_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/figma_page.dart';
@@ -17,14 +20,15 @@ void main() {
     var outputPath;
     var ids;
     setUp(() async {
-      outputPath = 'Volumes/Storage/Projects/Parabeac-Core/temp';
+      outputPath = '${Directory.current.path}/temp/';
+      MainInfo().outputPath = outputPath;
 
       /// For Figma input
       result = await APICallService.makeAPICall(figmaFileID, figmaAPIKey);
 
       /// For Sketch Input
       ids = InputDesignService(
-          '/Volumes/Storage/Projects/Parabeac-Core/TestingSketch/parabeac_demo_alt.sketch');
+          '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch');
     });
     test('Figma Test', () async {
       var figmaNodeTree =
@@ -43,6 +47,11 @@ void main() {
       expect(sketchNodeTree is SketchNodeTree, true);
       expect(sketchNodeTree.pages.isNotEmpty, true);
       expect(sketchNodeTree.pages[0] is SketchPage, true);
+    });
+    tearDownAll(() {
+      Process.runSync(
+          '${Directory.current.path}/lib/generation/helperScripts/shell-proxy.sh',
+          ['rm -rf ${outputPath}']);
     });
   });
 }
