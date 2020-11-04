@@ -1,0 +1,24 @@
+name: Dart CI
+
+on:
+  push:
+    branches: [ stable, dev ]
+  pull_request:
+    branches: [ stable, dev ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image:  google/dart:latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: pub get
+    - name: Run tests
+      run: pub run test
+      env:
+        FIG_API_KEY: 140054-e0f5ad25-cd7f-4eca-b0b4-3b73d9cda1d8
