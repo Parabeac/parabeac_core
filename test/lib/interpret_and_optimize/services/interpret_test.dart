@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
@@ -71,7 +73,7 @@ void main() {
   group('Interpret test', () {
     setUp(() {
       Interpret().init(
-          '/Volumes/Storage/Projects/Parabeac-Core/test/lib/interpret_and_optimize/services');
+          '${Directory.current.path}/test/lib/interpret_and_optimize/services');
       MainInfo().configurations = MainInfo().defaultConfigs;
       MainInfo().configurationType = 'default';
 
