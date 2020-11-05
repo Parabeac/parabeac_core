@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -10,11 +9,10 @@ import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
 
 void main() {
   var figmaFileID = 'https://api.figma.com/v1/files/zXXWPWb5wJXd0ImGUjEU1X';
-  var figmaAPIKey = '64522-f0e5502a-d2ce-4708-880b-c294e9cb20ed';
+  var figmaAPIKey = Platform.environment['FIG_API_KEY'];
   group('Input to PBDL test', () {
     var result;
     var outputPath;
