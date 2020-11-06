@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
 import 'package:test/test.dart';
+import 'package:parabeac_core/input/figma/helper/image_helper.dart';
 
 void main() async {
   var process;
@@ -41,4 +42,36 @@ void main() async {
       process.kill();
     });
   });
+
+  group('Figma PNG Testing', () {
+    var apiKey;
+    var uuids;
+    setUpAll(() {
+      MainInfo().figmaKey = Platform.environment['FIG_API_KEY'];
+      MainInfo().figmaProjectID = 'zXXWPWb5wJXd0ImGUjEU1X';
+      MainInfo().outputPath = '${Directory.current.path}/test/tmp/';
+      uuidQueue.addAll([
+        '0:12', // Boolean operation
+        '0:15', // Group
+        '0:31', // Ellipse
+        '0:57', // Rectangle
+      ]);
+    });
+
+    test('Testing Image Conversion', () async {
+      await processImageQueue();
+      for (var uuid in uuidQueue) {
+        expect(
+            File('${MainInfo().outputPath}pngs/$uuid.png'.replaceAll(':', '_'))
+                .existsSync(),
+            true);
+      }
+    });
+
+    tearDownAll(() {
+      Process.runSync('rm', ['-rf', '${Directory.current.path}/test/tmp/']);
+    });
+  },
+      skip: !Platform.environment.containsKey('FIG_API_KEY'),
+      timeout: Timeout(Duration(minutes: 1)));
 }
