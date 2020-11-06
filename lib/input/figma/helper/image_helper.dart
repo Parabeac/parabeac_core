@@ -35,7 +35,8 @@ Future<dynamic> _processImages(List<String> uuids) async {
             }
 
             var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
-                .replaceAll(':', '_'));
+                .replaceAll(':', '_'))
+              ..createSync(recursive: true);
             file.writeAsBytesSync(imageRes.bodyBytes);
             // TODO: Only print out when verbose flag is active
             // log.debug('File written to following path ${file.path}');
@@ -48,11 +49,18 @@ Future<dynamic> _processImages(List<String> uuids) async {
   // TODO: Investigate API call for when values.first == null
 }
 
+/// Creates separate API requests from `uuidQueue` to speed up
+/// the image downloading process.
 Future<void> processImageQueue() async {
-  // Split uuids into 6 lists to create separate API requests to figma
-  List<List<String>> uuidLists = List.generate(8, (_) => []);
-  for (var i = 0; i < uuidQueue.length; i++) {
-    uuidLists[i % 8].add(uuidQueue[i]);
+  List<List<String>> uuidLists;
+  if (uuidQueue.length >= 8) {
+    // Split uuids into 8 lists to create separate API requests to figma
+    uuidLists = List.generate(8, (_) => []);
+    for (var i = 0; i < uuidQueue.length; i++) {
+      uuidLists[i % 8].add(uuidQueue[i]);
+    }
+  } else {
+    uuidLists = [uuidQueue];
   }
 
   // Process images in separate queues
