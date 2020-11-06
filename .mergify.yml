@@ -44,6 +44,7 @@ pull_request_rules:
     conditions:
       - author=mergify
       - base=dev
+      - -conflict
     actions:
       merge:
         method: merge
