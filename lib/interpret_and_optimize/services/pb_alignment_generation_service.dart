@@ -46,8 +46,7 @@ class PBAlignGenerationService implements PBGenerationService {
         }
 
         /// Add next depth layer to queue.
-        if (currentIntermediateNode is InjectedAlign ||
-            currentIntermediateNode is InjectedPositioned ||
+        if (currentIntermediateNode is InjectedPositioned ||
             currentIntermediateNode is PBDestHolder) {
           if (currentIntermediateNode.child.child == null) {
             continue;
