@@ -15,7 +15,6 @@ void main() {
   group('Testing the correct generation of the children in the layout service',
       () {
     PBIntermediateNodeMock leftItem;
-    PBIntermediateNodeMock middleItem;
     PBIntermediateNodeMock rightItem;
 
     TempGroupMock tempGroup;
@@ -44,7 +43,6 @@ void main() {
 
     setUp(() {
       leftItem = PBIntermediateNodeMock();
-      // middleItem = PBIntermediateNodeMock();
       rightItem = PBIntermediateNodeMock();
 
       tempGroup = TempGroupMock();
@@ -53,11 +51,6 @@ void main() {
       when(leftItem.bottomRightCorner).thenReturn(Point(100, 100));
       when(leftItem.UUID).thenReturn('UUIDleftItem');
       when(leftItem.name).thenReturn('leftItem');
-
-      // when(middleItem.topLeftCorner).thenReturn(Point(150, 0));
-      // when(middleItem.bottomRightCorner).thenReturn(Point(250, 200));
-      // when(middleItem.UUID).thenReturn('UUIDmiddleItem');
-      // when(middleItem.name).thenReturn('');
 
       when(rightItem.topLeftCorner).thenReturn(Point(0, 150));
       when(rightItem.bottomRightCorner).thenReturn(Point(200, 250));
@@ -69,7 +62,6 @@ void main() {
       when(tempGroup.originalRef).thenReturn({});
       when(tempGroup.children).thenReturn([
         leftItem,
-        // middleItem,
         rightItem,
       ]);
     });
