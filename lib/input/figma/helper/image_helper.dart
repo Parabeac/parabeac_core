@@ -40,7 +40,7 @@ Future<dynamic> _processImages(List<String> uuids) async {
             file.writeAsBytesSync(imageRes.bodyBytes);
             // TODO: Only print out when verbose flag is active
             // log.debug('File written to following path ${file.path}');
-          }).catchError(log.error);
+          }).catchError((e) => log.error(e.toString()));
         }
       }
       return response;
