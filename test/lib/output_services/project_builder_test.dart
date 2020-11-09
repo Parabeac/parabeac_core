@@ -43,7 +43,8 @@ void main() {
 
     setUp(() async {
       MainInfo().cwd = Directory.current;
-      MainInfo().outputPath = outputPath;
+      MainInfo().outputPath =
+          '${Directory.current.path}/test/lib/output_services/';
 
       intermediateTree = MockIntermediateTree();
       intermediateGroup = MockIntermediateGroup();
