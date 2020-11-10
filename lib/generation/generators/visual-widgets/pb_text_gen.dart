@@ -1,14 +1,17 @@
+import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-class PBTextGen extends PBGenerator {
+class PBTextGen extends PBGenerator
+  with PBColorMixin {
   PBTextGen() : super();
 
   @override
   String generate(PBIntermediateNode source) {
+    var isSymbolMaster = (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER);
     if (source is InheritedText) {
       var buffer = StringBuffer();
       buffer.write('Text(\n');
@@ -17,8 +20,8 @@ class PBTextGen extends PBGenerator {
         var text = source.text;
         buffer.write('$text, \n');
       } else {
-        if (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER) {
-          var ovrName = SN_UUIDtoVarName[source.UUID];
+        if (isSymbolMaster) {
+          var ovrName = SN_UUIDtoVarName[source.UUID + '_stringValue'];
           if (ovrName != null) {
             buffer.write('${ovrName} ?? ');
           }
@@ -26,7 +29,15 @@ class PBTextGen extends PBGenerator {
         buffer
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
-      buffer.write('style: TextStyle(\n');
+      buffer.write('style: ');
+      if (isSymbolMaster) {
+        var ovrName = SN_UUIDtoVarName[source.UUID + '_textStyle'];
+        if (ovrName != null) {
+          buffer.write('${ovrName} ?? ');
+        }
+      }
+
+      buffer.write('TextStyle(\n');
       if (source.fontName != null) {
         buffer.write('fontFamily: \'${source.fontName}\',\n');
       }
@@ -59,17 +70,5 @@ class PBTextGen extends PBGenerator {
       return buffer.toString();
     }
     return '';
-  }
-
-  String findDefaultColor(String hex) {
-    switch (hex) {
-      case '0xffffffff':
-        return 'Colors.white';
-        break;
-      case '0xff000000':
-        return 'Colors.black';
-        break;
-    }
-    return null;
   }
 }

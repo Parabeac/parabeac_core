@@ -23,8 +23,10 @@ class PBPluginControlService implements PBGenerationService {
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
   PBIntermediateNode convertAndModifyPluginNodeTree() {
-    assert(originalRoot != null,
-        '[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+    if (originalRoot == null) {
+      log.warning('[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+      return null;
+    }
 
     var queue = <LayerTuple>[];
     PBIntermediateNode rootIntermediateNode;

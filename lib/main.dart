@@ -14,15 +14,15 @@ import 'package:args/args.dart';
 
 import 'controllers/main_info.dart';
 
-String resultsDirectory = Platform.environment['SENTRY_DSN'] ?? '/temp';
-final SentryClient sentry = SentryClient(dsn: resultsDirectory);
 ArgResults argResults;
 
 void main(List<String> args) async {
   await checkConfigFile();
 
   //Sentry logging initialization
-  MainInfo().sentry = SentryClient(dsn: resultsDirectory);
+  MainInfo().sentry = SentryClient(
+      dsn:
+          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747');
   var log = Logger('Main');
   log.info(args.toString());
 

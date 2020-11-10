@@ -18,7 +18,7 @@ class PBBitmapGenerator extends PBGenerator {
     buffer.write('Image.asset(');
     if (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER) {
       // see if source is overridden
-      String ovrName = SN_UUIDtoVarName[source.UUID];
+      String ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
       if (ovrName != null) {
         buffer.write("${ovrName} ?? ");
       }

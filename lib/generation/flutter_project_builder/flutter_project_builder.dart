@@ -56,6 +56,8 @@ class FlutterProjectBuilder {
           );
       log.error(error.toString());
     }
+
+
     // Add Pubspec Assets Lines.
     var list = File('${pathToFlutterProject}pubspec.yaml').readAsLinesSync();
     list.replaceRange(42, 44, ['  assets:', '    - assets/images/']);
@@ -100,6 +102,23 @@ class FlutterProjectBuilder {
           f.writeAsBytesSync(image.content);
         }
       }
+    }
+
+    // generate shared Styles if any found
+    if (mainTree.sharedStyles.isNotEmpty) {
+      await Directory('${pathToFlutterProject}lib/document/').create(recursive: true).then((value) {
+          var s = File('${pathToFlutterProject}lib/document/shared_props.g.dart').openWrite(mode: FileMode.write, encoding: utf8);
+          s.write('''import 'dart:ui';
+              import 'package:flutter/material.dart';
+              
+              ''');
+          for (var sharedStyle in mainTree.sharedStyles) {
+            s.write(sharedStyle.generate() + '\n');
+          }
+          s.close();
+      }).catchError((e) {
+        log.error(e.toString());
+      });
     }
 
     ///First traversal here (Add imports)

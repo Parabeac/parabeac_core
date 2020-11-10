@@ -49,7 +49,7 @@ class Interpret {
   }
 
   Future<PBIntermediateTree> interpretAndOptimize(NodeTree tree) async {
-    _pb_intermediate_tree = PBIntermediateTree(projectName);
+    _pb_intermediate_tree = PBIntermediateTree(projectName, tree.sharedStyles);
 
     ///3rd Party Symbols
     if (tree.miscPages != null) {
@@ -149,10 +149,10 @@ class Interpret {
           await PBVisualGenerationService(root, currentContext: currentContext)
               .getIntermediateTree();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
 
@@ -166,10 +166,10 @@ class Interpret {
               currentContext: currentContext)
           .convertAndModifyPluginNodeTree();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       parentPreLayoutIntermediateNode =
           parentVisualIntermediateNode; //parentVisualIntermediateNode;
@@ -183,10 +183,10 @@ class Interpret {
           PBLayoutGenerationService(currentContext: currentContext)
               .injectNodes(parentPreLayoutIntermediateNode);
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       parentLayoutIntermediateNode = parentPreLayoutIntermediateNode;
     }
@@ -199,10 +199,10 @@ class Interpret {
               currentContext: currentContext)
           .addAlignmentToLayouts();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       parentAlignIntermediateNode = parentLayoutIntermediateNode;
     }
@@ -218,10 +218,10 @@ class Interpret {
       node = await PBVisualGenerationService(component, currentContext: context)
           .getIntermediateTree();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
     // print(
@@ -238,10 +238,10 @@ class Interpret {
       node = PBPluginControlService(parentnode, currentContext: context)
           .convertAndModifyPluginNodeTree();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       node = parentnode;
     }
@@ -258,10 +258,10 @@ class Interpret {
       node = PBLayoutGenerationService(currentContext: context)
           .injectNodes(parentNode);
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       node = parentNode;
     }
@@ -286,10 +286,10 @@ class Interpret {
       node = PBAlignGenerationService(parentnode, currentContext: context)
           .addAlignmentToLayouts();
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
       node = parentnode;
     }
