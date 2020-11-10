@@ -78,5 +78,8 @@ void main() {
       /// Stafefulwidget with a Scaffold and a Container
       await projectBuilder.convertToFlutterProject();
     });
+    tearDownAll(() {
+      Process.runSync('rm', ['-rf', '$outputPath']);
+    });
   });
 }
