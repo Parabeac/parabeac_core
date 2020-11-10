@@ -71,7 +71,7 @@ class Component extends FigmaFrame
         );
 
   // make sure only store unique UUID overrides with Map
-  final List<OverridableProperty> overrideProperties;
+  List<OverridableProperty> overrideProperties;
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
@@ -84,11 +84,18 @@ class Component extends FigmaFrame
   List<PBSharedParameterProp> _extractParameters() {
     Set<String> ovrNames = {};
     List<PBSharedParameterProp> sharedParameters = [];
+    overrideProperties ??= [];
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {
         var properties = extractParameter(prop.overrideName);
-        sharedParameters.add(PBSharedParameterProp(name,
-        properties['type'], null, prop.canOverride, prop.overrideName, properties['uuid'], properties['default_value']));
+        sharedParameters.add(PBSharedParameterProp(
+            name,
+            properties['type'],
+            null,
+            prop.canOverride,
+            prop.overrideName,
+            properties['uuid'],
+            properties['default_value']));
         ovrNames.add(prop.overrideName);
       }
     }

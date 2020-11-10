@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -110,15 +111,10 @@ class PBLayoutGenerationService implements PBGenerationService {
       rootNode = _postConditionRules(rootNode);
       return rootNode;
     } catch (e, stackTrace) {
-      // FIXME: Capturing this exception causes sentry to crash parabeac-core.
-
-      // MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-
-      /// Put breakpoint here to see when the stack overflow occurs TODO: PC-170
-      // print(e);
+      MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
   }
