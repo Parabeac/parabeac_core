@@ -22,10 +22,10 @@ abstract class Controller {
             json.decode(File(configurationPath).readAsStringSync());
       }
     } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
 
