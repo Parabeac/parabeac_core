@@ -70,7 +70,8 @@ class Component extends FigmaFrame
           backgroundColor: backgroundColor,
         );
 
-  final List<OverridableProperty> overrideProperties;
+  // make sure only store unique UUID overrides with Map
+  List<OverridableProperty> overrideProperties;
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
