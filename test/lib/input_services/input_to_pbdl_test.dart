@@ -39,7 +39,7 @@ void main() {
     });
     test('Sketch Test', () {
       var sketchNodeTree = SketchController().generateSketchNodeTree(
-          ids.archive, ids.metaFileJson['pagesAndArtboards'], outputPath);
+          ids, ids.metaFileJson['pagesAndArtboards'], outputPath);
 
       expect(sketchNodeTree != null, true);
       expect(sketchNodeTree is SketchNodeTree, true);
