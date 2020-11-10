@@ -18,10 +18,13 @@ class Point implements Comparable<Point> {
 
   Point clone(Point point) => Point(point.x, point.y);
 
+  // TODO: This is a temporal fix
+  // (y.abs() - anotherPoint.y.abs()).abs() < 3
   @override
-  int compareTo(Point anotherPoint) => y == anotherPoint.y
-      ? x.compareTo(anotherPoint.x)
-      : y.compareTo(anotherPoint.y);
+  int compareTo(Point anotherPoint) =>
+      y == anotherPoint.y || (y.abs() - anotherPoint.y.abs()).abs() < 3
+          ? x.compareTo(anotherPoint.x)
+          : y.compareTo(anotherPoint.y);
   @override
   bool operator ==(Object point) {
     if (point is Point) {
