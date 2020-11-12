@@ -15,7 +15,6 @@ import 'package:uuid/uuid.dart';
 class Tab extends PBEgg implements PBInjectedIntermediate {
   PBContext currentContext;
 
-
   PrototypeNode prototypeNode;
 
   Tab(
@@ -74,7 +73,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
   DesignNode _convertWrapper(DesignNode node) {
     /// This is for plugins
     var str = '${node.name}';
-    node.name = str.replaceAll(RegExp(r'\.\*'), '');
+    node.name = str.replaceAll(RegExp(r'\<.*?\>'), '');
 
     ///This is for symbol master
     if (node is SymbolMaster) {
