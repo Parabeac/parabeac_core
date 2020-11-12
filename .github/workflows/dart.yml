@@ -21,4 +21,4 @@ jobs:
     - name: Run tests
       run: pub run test
       env:
-        FIG_API_KEY: 140054-e0f5ad25-cd7f-4eca-b0b4-3b73d9cda1d8
+        FIG_API_KEY: ${{ secrets.FIG_API_KEY }}
