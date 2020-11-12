@@ -1,4 +1,5 @@
 import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -32,7 +33,8 @@ void main() {
     'default': {
       'widgetStyle': 'Material',
       'widgetType': 'Stateless',
-      'widgetSpacing': 'Expanded'
+      'widgetSpacing': 'Expanded',
+      'layoutPrecedence': ['column', 'row', 'stack']
     },
     'This will be replaced by a Object ID to determine specific configurations for each page':
         {
@@ -47,8 +49,10 @@ void main() {
   /// Test-driven development.
   group('Test that children of layouts create the proper sizing.', () {
     ///Test for inside of a artboard.
+
+    MainInfo().configurationType = 'default';
+    var context = PBContext(jsonConfigurations: jsonConfigurations);
     setUp(() async {
-      var context = PBContext(jsonConfigurations: jsonConfigurations);
       context.screenTopLeftCorner = Point(0, 0);
       context.screenBottomRightCorner = Point(414, 896);
       var gm = Group();
@@ -60,15 +64,19 @@ void main() {
       var row = await gm2.interpretNode(context);
       root.addChild(row);
 
-      row.addChild(InjectedContainer(Point(100, 186), Point(0, 86), Uuid().v4(),
+      row.addChild(InjectedContainer(
+          Point(100, 186), Point(0, 86), 'testingContainer0', Uuid().v4(),
           currentContext: context));
       row.addChild(InjectedContainer(
-          Point(250, 186), Point(150, 86), Uuid().v4(),
+          Point(250, 186), Point(150, 86), 'testingContainer1', Uuid().v4(),
           currentContext: context));
 
-      root.addChild(InjectedContainer(Point(50, 50), Point(0, 0), Uuid().v4(),
+      root.addChild(InjectedContainer(
+          Point(50, 50), Point(0, 0), 'testingContainer2', Uuid().v4(),
           currentContext: context));
+    });
 
+    test('', () {
       var result =
           PBLayoutGenerationService(currentContext: context).injectNodes(root);
       expect(result.child.runtimeType, PBIntermediateColumnLayout);

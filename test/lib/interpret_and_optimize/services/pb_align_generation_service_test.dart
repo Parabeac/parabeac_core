@@ -29,8 +29,8 @@ void main() {
   group('Testing the Positions generated for stacks', () {
     PBIntermediateStackLayout stack;
     setUp(() {
-      stack =
-          PBIntermediateStackLayout(UUID: Uuid().v4(), currentContext: MockContext());
+      stack = PBIntermediateStackLayout('Testing Stack', Uuid().v4(),
+          currentContext: MockContext());
     });
 
     test('Testing the stack alignment algorithm', () {
@@ -67,8 +67,6 @@ void main() {
             reason: 'should be of type InjectedPositioned');
 
         i % 2 == 0 ? isYPositive = !isYPositive : isXPositive = !isXPositive;
-
-        //TODO: test the relative position
       }
     });
   });

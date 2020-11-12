@@ -32,29 +32,29 @@ void main() {
       childFrame = Frame(x: 0, y: 0, width: 100, height: 100);
 
       rec = RectangleMock();
-      when(rec.frame).thenReturn(childFrame);
+      when(rec.boundaryRectangle).thenReturn(childFrame);
       var children = <SketchNode>[rec];
 
       groupSketchNode = GroupMock();
-      when(groupSketchNode.layers).thenReturn(children);
-      when(groupSketchNode.frame).thenReturn(parentFrame);
+      when(groupSketchNode.children).thenReturn(children);
+      when(groupSketchNode.boundaryRectangle).thenReturn(parentFrame);
 
       artboard = ArtboardMock();
-      when(artboard.layers).thenReturn(children);
-      when(artboard.frame).thenReturn(parentFrame);
+      when(artboard.children).thenReturn(children);
+      when(artboard.boundaryRectangle).thenReturn(parentFrame);
     });
     test('Eliminating Artboard Offset Test', () {
       var artboardResult = service.eliminateOffset(artboard);
-      var recResult = (artboardResult as AbstractGroupLayer).layers[0];
-      var frameR = recResult.frame;
+      var recResult = (artboardResult as AbstractGroupLayer).children[0];
+      var frameR = recResult.boundaryRectangle;
       expect(frameR.x, 100);
       expect(frameR.y, 100);
     });
 
     test('Eliminating Group Offset Test', () {
       var groupResult = service.eliminateOffset(groupSketchNode);
-      var recResult = (groupResult as AbstractGroupLayer).layers[0];
-      var frameR = recResult.frame;
+      var recResult = (groupResult as AbstractGroupLayer).children[0];
+      var frameR = recResult.boundaryRectangle;
       expect(frameR.x, 100);
       expect(frameR.y, 100);
     });

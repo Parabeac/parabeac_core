@@ -1,9 +1,11 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -13,7 +15,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -27,6 +28,7 @@ class PBLayoutGenerationService implements PBGenerationService {
 
   ///[LayoutRule] that check post conditions.
   final List<PostConditionRule> _postLayoutRules = [
+    StackReductionVisualRule(),
     ContainerPostRule(),
     ContainerConstraintRule()
   ];
@@ -110,15 +112,10 @@ class PBLayoutGenerationService implements PBGenerationService {
       rootNode = _postConditionRules(rootNode);
       return rootNode;
     } catch (e, stackTrace) {
-      // FIXME: Capturing this exception causes sentry to crash parabeac-core.
-
-      // MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-
-      /// Put breakpoint here to see when the stack overflow occurs TODO: PC-170
-      // print(e);
+      MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
   }
@@ -194,7 +191,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     if (node == null) {
       return node;
     }
-    for (var postConditionRule in _postLayoutRules.reversed) {
+    for (var postConditionRule in _postLayoutRules) {
       if (postConditionRule.testRule(node, null)) {
         var result = postConditionRule.executeAction(node, null);
         if (result != null) {
