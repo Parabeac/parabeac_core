@@ -4,12 +4,18 @@ on:
   push:
     branches: [ stable, dev ]
   pull_request:
-    branches: [ stable, dev ]
+    branches: [ stable, dev ]    
 
 jobs:
+    
   build:
 
     runs-on: ubuntu-latest
+    services:
+      sketch_asset_converter:
+        image: sac
+        ports: 
+          - 4000:4000
 
     steps:
     - uses: actions/checkout@v2
