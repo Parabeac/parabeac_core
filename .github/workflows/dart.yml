@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1.4.0
+    - uses: actions/setup-node@v2.1.2
     - name: Install dependencies
       run: pub get
     - name: Run tests
