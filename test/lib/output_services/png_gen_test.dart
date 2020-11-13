@@ -9,6 +9,7 @@ import 'package:parabeac_core/input/figma/helper/image_helper.dart';
 void main() async {
   var process;
   var uuids;
+
   group('Sketch PNG Testing', () {
     setUpAll(() async {
       MainInfo().sketchPath =
@@ -19,11 +20,16 @@ void main() async {
       ];
 
       /// Need to ensure Sketch Asset Converter is installed and running
-      await Process.start('bash', [
+      var install = await Process.start('bash', [
         '${Directory.current.path}/pb-scripts/install.sh',
       ]);
+      var exitCode = await install.exitCode;
+      if (exitCode != 0) {
+        throw 'install.sh finished with exit code $exitCode';
+      }
       process = await Process.start('npm', ['run', 'prod'],
           workingDirectory: '${Directory.current.path}/SketchAssetConverter');
+
       await for (var event in process.stdout.transform(utf8.decoder)) {
         if (event.toLowerCase().contains('server is listening on port')) {
           break;
@@ -44,8 +50,6 @@ void main() async {
   });
 
   group('Figma PNG Testing', () {
-    var apiKey;
-    var uuids;
     setUpAll(() {
       MainInfo().figmaKey = Platform.environment['FIG_API_KEY'];
       MainInfo().figmaProjectID = 'zXXWPWb5wJXd0ImGUjEU1X';
