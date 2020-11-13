@@ -18,23 +18,6 @@ void main() async {
         '85D93FCD-5A69-4DAF-AE90-351CD9B64554', // Shape Group
         'B12B62C2-D7E3-452E-963E-A24216DD0942', // Shape Path
       ];
-
-      /// Need to ensure Sketch Asset Converter is installed and running
-      var install = await Process.start('bash', [
-        '${Directory.current.path}/pb-scripts/install.sh',
-      ]);
-      var exitCode = await install.exitCode;
-      if (exitCode != 0) {
-        throw 'install.sh finished with exit code $exitCode';
-      }
-      process = await Process.start('npm', ['run', 'prod'],
-          workingDirectory: '${Directory.current.path}/SketchAssetConverter');
-
-      await for (var event in process.stdout.transform(utf8.decoder)) {
-        if (event.toLowerCase().contains('server is listening on port')) {
-          break;
-        }
-      }
     });
 
     test('Testing Image Conversion', () async {
@@ -42,10 +25,6 @@ void main() async {
         var image = await convertImageLocal(uuid, 23, 21);
         expect(image, isNot(null));
       }
-    });
-
-    tearDownAll(() {
-      process.kill();
     });
   });
 
