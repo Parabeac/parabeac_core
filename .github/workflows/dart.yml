@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       sketch_asset_converter:
-        image: sac
+        image: parabeac/sac
         ports: 
           - 4000:4000
 
