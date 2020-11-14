@@ -42,7 +42,7 @@ pull_request_rules:
   
   - name: Automatically merge copied PRs
     conditions:
-      - author=mergify
+      - author~=^mergify\[bot\]$
       - base=dev
       - -conflict
     actions:
