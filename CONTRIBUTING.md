@@ -3,8 +3,6 @@ First and foremost, thanks for considering contribution here at Parabeac Core!
 
 Below you'll find a set of guidelines around how to contribute here at Parabeac. These aren't rules set in stone, feel free to use your best guidance, and if you have any ideas feel to make a Pull Request and suggest changes. We've also created an updated [Getting started with Contribution Guide](https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide) on our wiki which we recommend for a brief overview and introduction to contributing here on Parabeac-Core.
 
-> :partying_face: **Special Shout out if you're here for #HacktoberFest! Double your swag by contributing to Parabeac as one of our first 100 contributors!**
-
 **Table Of Contents** 
 
 [Code of Conduct](#code-of-conduct)
