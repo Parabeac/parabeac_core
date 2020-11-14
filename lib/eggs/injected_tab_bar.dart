@@ -14,7 +14,7 @@ import 'injected_tab.dart';
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   final String UUID;
   PBContext currentContext;
-  String semanticName = '.*tabbar';
+  String semanticName = '<tabbar>';
   List<Tab> tabs = [];
 
   InjectedTabBar(
@@ -33,7 +33,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
-          .contains('.*tab')) {
+          .contains('<tab>')) {
         assert(node is! Tab, 'I wrote something wrong here: IvanH');
         tabs.add(node);
       }

@@ -14,7 +14,7 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
   final String UUID;
 
   @override
-  String semanticName = '.*back-arrow';
+  String semanticName = '<back-arrow>';
 
   InjectedBackArrow(
       Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
