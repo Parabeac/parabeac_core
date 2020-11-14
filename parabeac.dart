@@ -76,6 +76,7 @@ ${parser.usage}
   ]);
 
   await stdout.addStream(install.stdout);
+  await stderr.addStream(install.stderr);
   var exitCode = await install.exitCode;
   if (exitCode != 0) {
     print('install.sh finished with exit code $exitCode');
