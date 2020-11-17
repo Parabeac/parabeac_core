@@ -98,12 +98,22 @@ When looking to contribute there are a few simple steps you can follow to make s
 * If it has, reach out to whoever was assigned said issue or, if that issue is not assigned to anyone contact us in the #dev_questions or #parabeac_hackers channels on our [Discord](https://discord.com/invite/qUrghes) to discuss taking the issue.
 * If it has not, verify that the work is non-trivial and then create an issue on our Github issues section, make sure to reach out to the Team on [Discord](https://discord.com/invite/qUrghes) if this issue is pressing. You can put the tag proposal on the work you’re trying to do to help us identify and help with prioritization.
 3. Create a branch off of the dev branch (if the issue is non-breaking) or the stable branch (if the issue is breaking) within your fork of the repo and implement your changes. Make sure to reach out to someone with the “Team” Role on our [Discord](https://discord.com/invite/qUrghes) to discuss your changes or ideas if you have any questions.
-4. Submit this branch to the repo as a Pull Request.
-5. Undergo code review. These reviews usually take the form of comments either on the PR on GitHub or within the Parabeac Core [Discord](https://discord.com/invite/qUrghes). More often than not a Parabeac Team Member or Committer will respond or comment to your PR within about 48 hours. If you haven’t heard from anyone by that time feel free to poke anyone on the Parabeac Team on our [Discord](https://discord.com/invite/qUrghes) (But especially our CEO @SiliconIvan).
+4. Make sure the tests pass. We have a set of both integration and unit tests created to insure that changes made to the Parabeac Core Repository are stable and consistent with the rest of the project. With this in mind if you're adding new code or changing things you'll likely need to add a new test to accomodate your changes. When your asking yourself "Do I need to write a test for this" the answer will almost always be a yes.
+5. Submit this branch to the repo as a Pull Request. For Details on how to run our testing suite please see below. 
+6. Undergo code review. These reviews usually take the form of comments either on the PR on GitHub or within the Parabeac Core [Discord](https://discord.com/invite/qUrghes). More often than not a Parabeac Team Member or Committer will respond or comment to your PR within about 48 hours. If you haven’t heard from anyone by that time feel free to poke anyone on the Parabeac Team on our [Discord](https://discord.com/invite/qUrghes) (But especially our CEO @SiliconIvan).
 
 Once you have the appropriate sign offs, your final reviewer should merge your code but if they haven’t feel free to merge it in.  
 
 While following these steps should you have any issues don’t hesitate to reach out to anyone on Team Parabeac on our [Discord](https://discord.com/invite/qUrghes)
+
+
+#### Testing 
+We prioritize keeping the tree clean and keeping releases stable above all else. Pushing out new features is great, but pushing out new features that also don't break existing features is even better. 
+
+We have two separate forms of tests within our test suite: Unit Tests and Integration Tests. If you are writing in new functions and expanding on existing feature-sets you'll need to write the appropriate unit tests for your changes to ensure they aren't broken by later changes. If you're adding in new modules or adding entire feature-sets you'll need to not only write the unit tests for these features but also write integration tests between your module and and any modules it interacts with. For any help or further information please check out the #dev_questions channel on our [Discord](https://discord.com/invite/qUrghes).
+
+**_Running the Test Suite:_**
+To run the test suite for parabeac core you just need to run ```pub run test``` in the root directory of Parabeac core. However, if you also plan to test for Figma Files as well as sketch files you'll also need to add an environment variable called ```FIG_API_KEY``` to your environment with your API Key. Running the command ```export FIG_API_KEY = <key_here>``` in your terminal or adding that command to your .zshrc/.bashrc files will allow the testing harness to run all tests including those for Figma files as well. 
 
 #### Pull Requests
 
