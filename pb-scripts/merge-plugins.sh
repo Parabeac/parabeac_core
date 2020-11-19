@@ -104,7 +104,7 @@ do
                     then
                         sed -i.bak '
                         /allowListNames = {/ a\
-                        '"${inline[newCounter]}"' :  '"${classSaved[newCounter]}"'(Point(0, 0), Point(0, 0), Uuid().v4(), currentContext: context),
+                        '"${inline[newCounter]}"' :  '"${classSaved[newCounter]}"'(Point(0, 0), Point(0, 0), Uuid().v4(), '\'\'', currentContext: context),
                         ' pb_plugin_list_helper.dart
 
                         sed -i.bak '

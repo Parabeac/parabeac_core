@@ -71,21 +71,16 @@ ${parser.usage}
 
   _basePath = io.Directory.current.path;
 
-  /// To install parabeac core
-  var install = Process.start(
-    'bash',
-    [
-      '${Directory.current.path}/pb-scripts/install.sh',
-    ],
-  ).then((process) {
-    stdout.addStream(process.stdout);
-    process.exitCode.then((exitCode) {
-      if (exitCode != 0) {
-        print('exit code: $exitCode');
-      }
-    });
-  });
-  await install;
+  var install = await Process.start('bash', [
+    '${Directory.current.path}/pb-scripts/install.sh',
+  ]);
+
+  await stdout.addStream(install.stdout);
+  await stderr.addStream(install.stderr);
+  var exitCode = await install.exitCode;
+  if (exitCode != 0) {
+    print('install.sh finished with exit code $exitCode');
+  }
 
   /// To Download and merge the plugins on the codebase
   var result = await Process.start(

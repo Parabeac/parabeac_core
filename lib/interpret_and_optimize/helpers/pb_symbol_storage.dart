@@ -42,7 +42,7 @@ class PBSymbolStorage {
     return true;
   }
 
-  ///Add [PBSharedMasterNode] tointo the storage, return `true` of added else
+  ///Add [PBSharedMasterNode] tointo the storage, return `true` if added else
   ///`false` if it exists.
   Future<bool> addSharedMasterNode(PBSharedMasterNode masterNode) async {
     if (_pbSharedMasterNodes.containsKey(masterNode.UUID)) {

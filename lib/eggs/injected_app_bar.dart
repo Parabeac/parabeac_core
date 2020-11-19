@@ -15,11 +15,10 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   var trailingItem;
   PBContext currentContext;
 
-  String semanticName = '.*navbar';
+  @override
+  String semanticName = '<navbar>';
 
   String UUID;
-
-  
 
   InjectedNavbar(
       Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
@@ -34,7 +33,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
-          .contains('.*leading')) {
+          .contains('<leading>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
             .then((value) => leadingItem = value);
@@ -43,7 +42,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
-          .contains('.*trailing')) {
+          .contains('<trailing>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
             .then((value) => trailingItem = value);
@@ -51,7 +50,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
-          .contains('.*middle')) {
+          .contains('<middle>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
             .then((value) => middleItem = value);

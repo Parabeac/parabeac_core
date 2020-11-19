@@ -1,3 +1,4 @@
+import 'package:parabeac_core/eggs/injected_back_arrow.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
@@ -13,11 +14,14 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '.*tabbar': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
+      '<back-arrow>': InjectedBackArrow(
+          Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*navbar': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
+      '<tabbar>': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '.*tab': Tab(Point(0, 0), Point(0, 0), '',
+      '<navbar>': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
+          currentContext: context),
+      '<tab>': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),
     };
   }
@@ -30,13 +34,14 @@ class PBPluginListHelper {
 
   /// List of static plugin names used for Amplitude
   static List<String> names = [
-    '.*background',
-    '.*navbar',
-    '.*tabbar',
-    '.*tab',
+    '<back-arrow>',
+    '<background>',
+    '<navbar>',
+    '<tabbar>',
+    '<tab>',
   ];
 
-  List<String> baseNames = ['.*background', '.*navbar', '.*tabbar', '.*tab'];
+  List<String> baseNames = ['<background>', '<navbar>', '<tabbar>', '<tab>'];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist

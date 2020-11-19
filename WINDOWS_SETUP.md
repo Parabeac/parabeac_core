@@ -65,8 +65,8 @@ Parabeac-Core is built in Dart and generates Flutter apps, which make use of Dar
 
 10. Add the following lines to the file:
 ```bashrc
-export DART=/home/roel/snap/flutter/common/flutter/bin
-export ANDROID_SDK_ROOT=/home/[your selected ubuntu username]/Android/Sdk
+export DART=/home/<your ubuntu username>/snap/flutter/common/flutter/bin
+export ANDROID_SDK_ROOT=/home/<your ubuntu username>/Android/Sdk
 export JAVA_HOME=/opt/openJDK
 export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools

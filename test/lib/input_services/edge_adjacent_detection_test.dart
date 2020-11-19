@@ -52,8 +52,9 @@ void main() {
         ],
       ));
 
-      when(sketchNode.do_objectID).thenReturn('');
-      shapePath = InheritedShapePath(sketchNode, currentContext: context);
+      when(sketchNode.UUID).thenReturn('');
+      shapePath =
+          InheritedShapePath(sketchNode, 'testName', currentContext: context);
     });
 
     test('Detecting line', () {
@@ -95,8 +96,9 @@ void main() {
         ],
       ));
 
-      when(sketchNode.do_objectID).thenReturn('');
-      shapePath = InheritedShapePath(sketchNode, currentContext: context);
+      when(sketchNode.UUID).thenReturn('');
+      shapePath =
+          InheritedShapePath(sketchNode, 'testName', currentContext: context);
     });
 
     test('Detecting line', () {
@@ -125,8 +127,9 @@ void main() {
       when(sketchNode.boundaryRectangle)
           .thenReturn(Frame(x: 0, y: 0, width: 50, height: 50));
 
-      when(sketchNode.do_objectID).thenReturn('');
-      shapePath = InheritedShapePath(sketchNode, currentContext: context);
+      when(sketchNode.UUID).thenReturn('');
+      shapePath =
+          InheritedShapePath(sketchNode, 'testName', currentContext: context);
     });
 
     test('Detecting Shape', () {
