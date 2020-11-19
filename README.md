@@ -1,6 +1,6 @@
 # <center>Parabeac-Core
 
-![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/Parabeac_Open-Source_README_Logo.png)
+![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/1*_cqBeo8Gw2eAxdJOZ7TmmA.png)
 
 Parabeac-Core is an open-source repository that converts design files into Flutter code.
 
@@ -73,7 +73,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 3. In your terminal change directory to the root PBCore directory and run:
 
 ``` bash
- $ pub install
+ $ pub get
  $ dart parabeac.dart -p <Absolute Path To Design File> -n <ProjectName> 
 ```
 ### Figma
@@ -82,7 +82,7 @@ Follow these steps in order to run Parabeac Core on your local environment:
 3. In your terminal change directory to the root PBCore directory and run:
 
 ``` bash
- $ pub install
+ $ pub get
  $ dart parabeac.dart -f <Figma File ID> -k <Figma API Key> -o <Absolute Path To Output Directory> 
 ```
 If you're wondering about where to find your Figma File ID or Figma API Key Please Read Below:
@@ -163,5 +163,4 @@ Welcome! The best way to contribute to Parabeac is through pull requests, filing
 # Upcoming & Known Issues
 
  - Plugin Duplication in the Plugin Service
- - Support for Figma
  - Egg Marketplace

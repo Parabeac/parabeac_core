@@ -1,0 +1,58 @@
+pull_request_rules:
+
+  - name: Close PR if it's going to stable but it's not a hotfix or a release
+    conditions:
+      - base=stable      # Merging into stable
+      - -head~=^hotfix # Name of branch does not start with hotfix
+      - -head~=^release # Name of branch does not start with release
+    actions:
+      close:
+        message: "Please ensure that you are merging any non-hotfix branches
+        into `dev`. If this branch is a hotfix, please use the prefix `hotfix/` 
+        as title to your branch. If you have any questions check out our Tree Hygiene docs
+        in the Wiki. Thank you!"
+        
+  - name: Comment on PR if conflicts are present
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: "Thank you for your contribution @{{author}}, however this 
+        pull request contains conflicts. Could you please fix them? Feel free
+        to contact us on Discord for help. Thank you!"
+        
+      
+  - name: Hotfix to stable - Create copy to dev
+    conditions:
+      - head~=^hotfix
+      - base=stable
+      - "#approved-reviews-by>=2" #Two approvals needed
+    actions:
+      backport:
+        branches: ["dev"]
+
+  - name: Merge pull request on two approvals
+    conditions:
+      - "#approved-reviews-by>=2" # Two approvals needed
+      - -closed
+      - label!=review-required # Only merge PRs that are NOT labeled review-required.
+    actions:
+      merge:
+        method: merge
+        
+  
+  - name: Automatically merge copied PRs
+    conditions:
+      - author~=^mergify\[bot\]$
+      - base=dev
+      - -conflict
+    actions:
+      merge:
+        method: merge
+        
+  - name: Delete merged branch
+    conditions:
+      - merged
+    actions:
+      delete_head_branch: {}
+        
