@@ -28,3 +28,4 @@ jobs:
       run: pub run test
       env:
         FIG_API_KEY: ${{ secrets.FIG_API_KEY }}
+        PB_IS_GITHUB_TEST: true
