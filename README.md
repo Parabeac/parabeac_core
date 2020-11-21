@@ -41,7 +41,7 @@ Parabeac-Core now supports both [Figma](https://www.figma.com/) and [Sketch](htt
 
 Need a file to test with? Feel free to download one of our sample design files below (Make sure to duplicate the Design to your account if you're using Figma):
 * [Sketch](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)
-* [Figma](https://www.figma.com/file/zXXWPWb5wJXd0ImGUjEU1X/parabeac_demo_alt?node-id=0%3A156) 
+* [Figma](https://www.figma.com/file/cmaAGe2hwCp7A5pmEQ2C80/parabeac_demo_fig) 
 
 ## Cloning the Repo
 Because parabeac-core contains the Sketch-Asset-Converter submodule, it is easier to clone the repo using the following command:
