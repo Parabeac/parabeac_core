@@ -3,12 +3,12 @@ pull_request_rules:
   - name: Close PR if it's going to stable but it's not a hotfix or a release
     conditions:
       - base=stable      # Merging into stable
-      - -head~=^hotfix # Name of branch does not start with hotfix
+      - -head~=(?i)^hotfix # Name of branch does not start with hotfix
       - -head~=^release # Name of branch does not start with release
     actions:
       close:
         message: "Please ensure that you are merging any non-hotfix branches
-        into `dev`. If this branch is a hotfix, please use the prefix `hotfix/` 
+        into `dev`. If this branch is a hotfix, please use the prefix `hotfix` 
         as title to your branch. If you have any questions check out our Tree Hygiene docs
         in the Wiki. Thank you!"
         
@@ -24,7 +24,7 @@ pull_request_rules:
       
   - name: Hotfix to stable - Create copy to dev
     conditions:
-      - head~=^hotfix
+      - head~=(?i)^hotfix
       - base=stable
       - "#approved-reviews-by>=2" #Two approvals needed
     actions:
