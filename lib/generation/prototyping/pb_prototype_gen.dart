@@ -23,10 +23,11 @@ class PBPrototypeGenerator extends PBGenerator {
           MaterialPageRoute(builder: (context) => ${name}()),
         );
       },
-      child: ${manager.generate(source.child, type: BUILDER_TYPE.BODY)},
+      child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)},
       )''';
     } else {
-      return manager.generate(source.child);
+      return manager.generate(source.child,
+          type: source.builder_type ?? BUILDER_TYPE.BODY);
     }
   }
 }
