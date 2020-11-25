@@ -94,7 +94,8 @@ class PBVisualGenerationService implements PBGenerationService {
           rootIntermediateNode.topLeftCorner,
           rootIntermediateNode.bottomRightCorner,
           rootIntermediateNode.UUID,
-          prototypeNode);
+          prototypeNode,
+          rootIntermediateNode.currentContext);
       destHolder.addChild(rootIntermediateNode);
       return destHolder;
     }
