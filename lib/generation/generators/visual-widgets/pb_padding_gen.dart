@@ -37,9 +37,13 @@ class PBPaddingGen extends PBGenerator {
     var reflectedPadding = reflect(padding);
     for (var position in paddingPositionsW) {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;
+      var isVertical = false;
+      if (position == 'top' || position == 'bottom') {
+        isVertical = true;
+      }
       if (value != null) {
         buffer.write(
-            '$position: ${relativePadding(source.builder_type ?? BUILDER_TYPE.BODY, false, value)},');
+            '$position: ${relativePadding(source.builder_type ?? BUILDER_TYPE.BODY, isVertical, value)},');
       }
     }
 
