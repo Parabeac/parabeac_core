@@ -54,22 +54,35 @@ class PBPrototypeAggregationService {
           iNode.topLeftCorner,
           iNode.bottomRightCorner,
           iNode.UUID,
-          (iNode as PBInheritedIntermediate).prototypeNode);
+          (iNode as PBInheritedIntermediate).prototypeNode,
+          iNode.currentContext);
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is PBLayoutIntermediateNode) {
-      var destHolder = PBDestHolder(iNode.topLeftCorner,
-          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
+      var destHolder = PBDestHolder(
+          iNode.topLeftCorner,
+          iNode.bottomRightCorner,
+          iNode.UUID,
+          iNode.prototypeNode,
+          iNode.currentContext);
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is InjectedContainer) {
-      var destHolder = PBDestHolder(iNode.topLeftCorner,
-          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
+      var destHolder = PBDestHolder(
+          iNode.topLeftCorner,
+          iNode.bottomRightCorner,
+          iNode.UUID,
+          iNode.prototypeNode,
+          iNode.currentContext);
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is Tab) {
-      var destHolder = PBDestHolder(iNode.topLeftCorner,
-          iNode.bottomRightCorner, iNode.UUID, iNode.prototypeNode);
+      var destHolder = PBDestHolder(
+          iNode.topLeftCorner,
+          iNode.bottomRightCorner,
+          iNode.UUID,
+          iNode.prototypeNode,
+          iNode.currentContext);
       destHolder.addChild(iNode.child);
       return destHolder;
     } else {
