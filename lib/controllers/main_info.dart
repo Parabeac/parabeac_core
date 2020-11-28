@@ -38,7 +38,8 @@ class MainInfo {
       'widgetStyle': 'Material',
       'widgetType': 'Stateless',
       'widgetSpacing': 'Expanded',
-      'layoutPrecedence': ['columns', 'rows', 'stack']
+      'layoutPrecedence': ['columns', 'rows', 'stack'],
+      'state-management': 'None'
     }
   };
 
