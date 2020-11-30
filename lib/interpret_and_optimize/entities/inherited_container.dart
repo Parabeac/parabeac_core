@@ -24,9 +24,6 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  String UUID;
-
   @JsonKey(nullable: true)
   bool isBackgroundVisible = true;
 
@@ -40,14 +37,14 @@ class InheritedContainer extends PBVisualIntermediateNode
     PBContext currentContext,
     Map borderInfo,
     this.isBackgroundVisible = true,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBContainerGenerator();
 
     borderInfo ??= {};
-    UUID = originalRef.UUID ?? '';
 
     size = {
       'width': originalRef.boundaryRectangle.width,
@@ -57,7 +54,7 @@ class InheritedContainer extends PBVisualIntermediateNode
     if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
-          color = toHex(fill.color);
+          auxillaryData.color = toHex(fill.color);
         }
       }
     }
