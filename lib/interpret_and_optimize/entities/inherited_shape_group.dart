@@ -24,22 +24,8 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  ///Represents the location of the png file.
-  @JsonKey(ignore: true)
-  Uint8List image;
-
-  @override
-  String UUID;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  String referenceImage;
-
-  Map size;
-
   InheritedShapeGroup(this.originalRef, String name,
-      {this.image, this.currentContext})
+      {Uint8List image, PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -49,13 +35,12 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBBitmapGenerator();
-
-    UUID = originalRef.UUID;
 
     size = {
       'width': originalRef.boundaryRectangle.width,
@@ -73,7 +58,7 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    // Images don't have children.
   }
 
   factory InheritedShapeGroup.fromJson(Map<String, Object> json) =>
