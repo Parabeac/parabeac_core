@@ -27,23 +27,8 @@ class InheritedShapePath extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  String UUID;
-
-  ///Represents the location of the png file.
-  @JsonKey(ignore: true)
-  Uint8List image;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  String referenceImage;
-
-  Map size;
-
-
   InheritedShapePath(this.originalRef, String name,
-      {this.image, this.currentContext})
+      {Uint8List image, PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -53,13 +38,12 @@ class InheritedShapePath extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBBitmapGenerator();
-
-    UUID = originalRef.UUID;
 
     size = {
       'width': originalRef.boundaryRectangle.width,
@@ -80,31 +64,31 @@ class InheritedShapePath extends PBVisualIntermediateNode
     // Possible vertical or horizontal point
     if (path.points.length == 2) {
       //Parse the points
-      List<String> p1Str = path.points[0]['point']
+      var p1Str = path.points[0]['point']
           .toString()
           .replaceAll('{', '')
           .replaceAll('}', '')
           .split(',');
-      List<String> p2Str = path.points[1]['point']
+      var p2Str = path.points[1]['point']
           .toString()
           .replaceAll('{', '')
           .replaceAll('}', '')
           .split(',');
 
-      Point p1 = Point(double.parse(p1Str[0]), double.parse(p1Str[1]));
-      Point p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
+      var p1 = Point(double.parse(p1Str[0]), double.parse(p1Str[1]));
+      var p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
 
       if (_isEdgeAdjacent(p1, p2)) {
-        Point tlc = Point(
-            originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
-        Point brc = Point(
-            originalRef.boundaryRectangle.x +
-                originalRef.boundaryRectangle.width,
-            originalRef.boundaryRectangle.y +
-                originalRef.boundaryRectangle.height);
+        // var tlc = Point(
+        //     originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
+        // var brc = Point(
+        //     originalRef.boundaryRectangle.x +
+        //         originalRef.boundaryRectangle.width,
+        //     originalRef.boundaryRectangle.y +
+        //         originalRef.boundaryRectangle.height);
 
         generator = PBContainerGenerator();
-        color = toHex(originalRef.style.borders[0].color);
+        auxillaryData.color = toHex(originalRef.style.borders[0].color);
       }
     }
   }
@@ -115,8 +99,8 @@ class InheritedShapePath extends PBVisualIntermediateNode
     num deltaX = (p1.x - p2.x).abs();
     num deltaY = (p1.y - p2.y).abs();
 
-    bool isVertical = deltaX < 0.01 && deltaY > 0;
-    bool isHorizontal = deltaY < 0.01 && deltaX > 0;
+    var isVertical = deltaX < 0.01 && deltaY > 0;
+    var isHorizontal = deltaY < 0.01 && deltaX > 0;
 
     return isVertical || isHorizontal;
   }
@@ -127,9 +111,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
   }
 
   @override
-  void alignChild() {
-    // TODO: implement alignChild
-  }
+  void alignChild() {}
 
   factory InheritedShapePath.fromJson(Map<String, Object> json) =>
       _$InheritedShapePathFromJson(json);
