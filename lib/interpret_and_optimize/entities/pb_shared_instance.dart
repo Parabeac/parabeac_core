@@ -10,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 
-import 'injected_align.dart';
+import 'alignments/injected_align.dart';
 
 part 'pb_shared_instance.g.dart';
 
@@ -19,9 +19,6 @@ part 'pb_shared_instance.g.dart';
 @JsonSerializable(nullable: true)
 class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
-  @override
-  String UUID;
-
   final String SYMBOL_ID;
 
   ///The parameters that are going to be overriden in the [PBSharedMasterNode].
@@ -41,10 +38,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
   List overrideValues;
 
   PBSharedInstanceIntermediateNode(
@@ -53,25 +46,22 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.sharedParamValues,
     Point topLeftCorner,
     Point bottomRightCorner,
-    this.currentContext,
+    PBContext currentContext,
   }) : super(
-          Point(
-              originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y),
-          Point(
-              (originalRef.boundaryRectangle.x +
-                  originalRef.boundaryRectangle.width),
-              (originalRef.boundaryRectangle.y +
-                  originalRef.boundaryRectangle.height)),
-          currentContext,
-          originalRef.name,
-          UUID: originalRef.UUID
-  ) {
+            Point(originalRef.boundaryRectangle.x,
+                originalRef.boundaryRectangle.y),
+            Point(
+                (originalRef.boundaryRectangle.x +
+                    originalRef.boundaryRectangle.width),
+                (originalRef.boundaryRectangle.y +
+                    originalRef.boundaryRectangle.height)),
+            currentContext,
+            originalRef.name,
+            UUID: originalRef.UUID) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBSymbolInstanceGenerator();
-
-    UUID = originalRef.UUID;
 
     overrideValues = sharedParamValues
         .map((v) => PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type))
@@ -85,7 +75,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @override
   void alignChild() {
     var align =
-    InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
+        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
     align.addChild(child);
     align.alignChild();
     child = align;
@@ -111,7 +101,12 @@ class PBSharedParameterValue {
   final String _overrideName;
   String get overrideName => _overrideName;
 
-  String get name =>  SN_UUIDtoVarName[_overrideName];
+  String get name => SN_UUIDtoVarName[_overrideName];
 
-  PBSharedParameterValue(this._type, this._value, this._UUID, this._overrideName,);
+  PBSharedParameterValue(
+    this._type,
+    this._value,
+    this._UUID,
+    this._overrideName,
+  );
 }
