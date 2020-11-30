@@ -22,50 +22,24 @@ class InheritedCircle extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  final Point bottomRightCorner;
-
-  @override
-  final Point topLeftCorner;
-
-  @override
-  String UUID;
-
-  Map size;
-
-  /// Used for setting the alignment of it's children
-  @JsonKey(ignore: true)
-  double alignX;
-  @JsonKey(ignore: true)
-  double alignY;
-
-  Map borderInfo;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  Map alignment;
-
-  InheritedCircle(
-      this.originalRef, this.bottomRightCorner, this.topLeftCorner, String name,
-      {this.currentContext, this.alignX, this.alignY})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  InheritedCircle(this.originalRef, Point bottomRightCorner,
+      Point topLeftCorner, String name,
+      {PBContext currentContext, Point alignX, Point alignY})
+      : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBBitmapGenerator();
-
-    UUID = originalRef.UUID;
 
     size = {
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height,
     };
 
-    borderInfo = {};
-    borderInfo['shape'] = 'circle';
-
-    alignment = alignX != null && alignY != null
+    auxillaryData.borderInfo = {};
+    auxillaryData.borderInfo['shape'] = 'circle';
+    auxillaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
   }
