@@ -23,21 +23,9 @@ class InheritedTriangle extends PBVisualIntermediateNode
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  @JsonKey(ignore: true)
-  Uint8List image;
-
-  @override
-  String UUID;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  Map size;
-
-  var referenceImage;
 
   InheritedTriangle(this.originalRef, String name,
-      {this.image, this.currentContext})
+      {Uint8List image, PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -47,7 +35,8 @@ class InheritedTriangle extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -57,7 +46,6 @@ class InheritedTriangle extends PBVisualIntermediateNode
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height
     };
-    UUID = originalRef.UUID;
 
     name = originalRef.name;
 
@@ -78,7 +66,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    // Images don't have children.
   }
 
   factory InheritedTriangle.fromJson(Map<String, Object> json) =>
