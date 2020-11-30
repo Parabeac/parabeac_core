@@ -24,22 +24,15 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  String UUID;
-
   @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   String referenceImage;
 
   InheritedBitmap(
     this.originalRef,
     String name, {
-    this.currentContext,
+    PBContext currentContext,
     this.referenceImage,
   }) : super(
             Point(originalRef.boundaryRectangle.x,
@@ -50,7 +43,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -60,7 +54,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
         (originalRef as Image).imageReference == null) {
       log.debug('NULL BITMAP');
     }
-    UUID = originalRef.UUID;
     name = (originalRef as Image).imageReference;
     size = {
       'width': originalRef.boundaryRectangle.width,
