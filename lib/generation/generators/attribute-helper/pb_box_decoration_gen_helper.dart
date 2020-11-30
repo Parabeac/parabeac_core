@@ -6,13 +6,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_containe
 class PBBoxDecorationHelper extends PBAttributesHelper {
   PBBoxDecorationHelper() : super();
 
-  @override 
+  @override
   String generate(PBIntermediateNode source) {
     if (source is InheritedContainer) {
       final buffer = StringBuffer();
       buffer.write('decoration: BoxDecoration(');
-      var borderInfo = source.borderInfo;
-      if (source.color != null) {
+      var borderInfo = source.auxillaryData.borderInfo;
+      if (source.auxillaryData.color != null) {
         buffer.write(PBColorGenHelper().generate(source));
       }
       if (borderInfo != null) {
@@ -21,15 +21,14 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         } else if (borderInfo['borderRadius'] != null) {
           buffer.write(
               'borderRadius: BorderRadius.all(Radius.circular(${borderInfo['borderRadius']})),');
-          if ((borderInfo['borderColorHex'] != null) || (borderInfo['borderThickness'] != null)) {
+          if ((borderInfo['borderColorHex'] != null) ||
+              (borderInfo['borderThickness'] != null)) {
             buffer.write('border: Border.all(');
             if (borderInfo['borderColorHex'] != null) {
-              buffer.write(
-                  'color: Color(${borderInfo['borderColorHex']}),');
+              buffer.write('color: Color(${borderInfo['borderColorHex']}),');
             }
             if (borderInfo['borderThickness'] != null) {
-              buffer.write(
-                  'width: ${borderInfo['borderThickness']},');
+              buffer.write('width: ${borderInfo['borderThickness']},');
             }
             buffer.write('),'); // end of Border.all(
           }

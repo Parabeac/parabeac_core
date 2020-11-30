@@ -19,15 +19,16 @@ class PBContainerGenerator extends PBGenerator {
 
     buffer.write(PBSizeHelper().generate(source));
 
-    if (source.borderInfo != null && source.borderInfo.isNotEmpty) {
+    if (source.auxillaryData.borderInfo != null &&
+        source.auxillaryData.borderInfo.isNotEmpty) {
       buffer.write(PBBoxDecorationHelper().generate(source));
     } else {
       buffer.write(PBColorGenHelper().generate(source));
     }
 
-    if (source.alignment != null) {
+    if (source.auxillaryData.alignment != null) {
       buffer.write(
-          'alignment: Alignment(${(source.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.alignment['alignY'] as double).toStringAsFixed(2)}),');
+          'alignment: Alignment(${(source.auxillaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxillaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
     }
 
     if (source.child != null) {
