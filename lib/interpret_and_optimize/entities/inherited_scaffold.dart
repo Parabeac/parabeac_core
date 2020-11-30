@@ -33,24 +33,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
   var navbar;
   @JsonSerializable(nullable: true)
   var tabbar;
-  @JsonSerializable(nullable: true)
-  String backgroundColor;
 
   bool isHomeScreen = false;
 
-  @override
-  String UUID;
-
   var body;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   InheritedScaffold(this.originalRef,
       {Point topLeftCorner,
       Point bottomRightCorner,
       String name,
-      this.currentContext,
+      PBContext currentContext,
       this.isHomeScreen})
       : super(
             Point(originalRef.boundaryRectangle.x,
@@ -61,7 +53,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -78,18 +71,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.currentContext.screenTopLeftCorner =
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    UUID = originalRef.UUID;
-
-    backgroundColor = toHex(originalRef.backgroundColor);
+    auxillaryData.color = toHex(originalRef.backgroundColor);
   }
 
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
-
-  @override
-  String semanticName;
 
   @override
   void addChild(PBIntermediateNode node) {
