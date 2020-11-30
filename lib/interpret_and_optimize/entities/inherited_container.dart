@@ -2,18 +2,14 @@ import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'inherited_container.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedContainer extends PBVisualIntermediateNode
     with PBColorMixin
     implements PBInheritedIntermediate {
@@ -21,10 +17,8 @@ class InheritedContainer extends PBVisualIntermediateNode
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @JsonKey(nullable: true)
   bool isBackgroundVisible = true;
 
   InheritedContainer(
@@ -95,8 +89,4 @@ class InheritedContainer extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  factory InheritedContainer.fromJson(Map<String, Object> json) =>
-      _$InheritedContainerFromJson(json);
-  Map<String, Object> toJson() => _$InheritedContainerToJson(this);
 }

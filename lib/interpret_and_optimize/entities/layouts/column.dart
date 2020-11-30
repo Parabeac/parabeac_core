@@ -12,19 +12,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/hand
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'column.g.dart';
-
 ///Colum contains nodes that are all `vertical` to each other, without overlapping eachother
-@JsonSerializable(nullable: true)
+
 class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
-  @JsonKey(ignore: true)
   static final List<LayoutRule> COLUMN_RULES = [
     VerticalNodesLayoutRule(),
   ];
 
-  @JsonKey(ignore: true)
   static final List<LayoutException> COLUMN_EXCEPTIONS = [
     ColumnOverlappingException(),
   ];
@@ -36,17 +30,14 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   PBContext currentContext;
 
   @override
-  @JsonKey(ignore: true)
   Point topLeftCorner;
 
   @override
-  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   Map alignment = {};
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   PBIntermediateColumnLayout(
@@ -121,8 +112,4 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   @override
   void addChild(PBIntermediateNode node) => addChildToLayout(node);
-
-  factory PBIntermediateColumnLayout.fromJson(Map<String, Object> json) =>
-      _$PBIntermediateColumnLayoutFromJson(json);
-  Map<String, Object> toJson() => _$PBIntermediateColumnLayoutToJson(this);
 }

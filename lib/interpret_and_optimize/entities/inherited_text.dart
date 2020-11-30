@@ -8,11 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'inherited_text.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedText extends PBVisualIntermediateNode
     with PBColorMixin
     implements PBInheritedIntermediate {
@@ -23,10 +19,8 @@ class InheritedText extends PBVisualIntermediateNode
   var originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @JsonKey(ignore: true)
   num alignmenttype;
 
   String text;
@@ -84,8 +78,4 @@ class InheritedText extends PBVisualIntermediateNode
   void alignChild() {
     // Text don't have children.
   }
-
-  factory InheritedText.fromJson(Map<String, Object> json) =>
-      _$InheritedTextFromJson(json);
-  Map<String, Object> toJson() => _$InheritedTextToJson(this);
 }

@@ -4,7 +4,7 @@ import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -14,11 +14,6 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'inherited_scaffold.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
     with
         PBColorMixin
@@ -27,11 +22,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   var originalRef;
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  @JsonSerializable(nullable: true)
+
   var navbar;
-  @JsonSerializable(nullable: true)
+
   var tabbar;
 
   bool isHomeScreen = false;
@@ -124,8 +118,4 @@ class InheritedScaffold extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  Map<String, Object> toJson() => _$InheritedScaffoldToJson(this);
-  factory InheritedScaffold.fromJson(Map<String, Object> json) =>
-      _$InheritedScaffoldFromJson(json);
 }

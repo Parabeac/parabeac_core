@@ -1,25 +1,20 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'inherited_circle.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   InheritedCircle(this.originalRef, Point bottomRightCorner,
@@ -71,9 +66,4 @@ class InheritedCircle extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  Map<String, Object> toJson() => _$InheritedCircleToJson(this);
-
-  factory InheritedCircle.fromJson(Map<String, Object> json) =>
-      _$InheritedCircleFromJson(json);
 }

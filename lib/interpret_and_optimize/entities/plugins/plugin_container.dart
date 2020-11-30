@@ -1,17 +1,13 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-part 'plugin_container.g.dart';
-
-@JsonSerializable(nullable: true)
 class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   @override
   Point bottomRightCorner;
@@ -36,7 +32,6 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   final String UUID;
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
   var child;
@@ -45,7 +40,6 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
   Map padding;
   Map borderInfo;
   Map alignment;
-
 
   PluginContainer(
     Point topLeftCorner,
@@ -105,13 +99,13 @@ class PluginContainer extends PBVisualIntermediateNode implements PBEgg {
     child = align;
   }
 
-  factory PluginContainer.fromJson(Map<String, Object> json) =>
-      _$PluginContainerFromJson(json);
-  Map<String, Object> toJson() {
+
+
+
     alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
-    return _$PluginContainerToJson(this);
+
   }
 
   @override

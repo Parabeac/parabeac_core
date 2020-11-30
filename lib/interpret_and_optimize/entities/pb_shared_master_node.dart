@@ -11,18 +11,12 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'pb_shared_master_node.g.dart';
-
-@JsonSerializable(nullable: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   ///The unique symbol identifier of the [PBSharedMasterNode]
@@ -43,7 +37,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
-  @JsonKey(ignore: true)
+
   List<PBSharedParameterProp> overridableProperties;
 
   PBSharedMasterNode(
@@ -74,7 +68,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             p.UUID,
             p.canOverride,
             p.propertyName,
-            p.value?.toJson(),
+            /* Removed Parameter Defintion as it was accepting JSON?*/
             currentContext.screenTopLeftCorner.x,
             currentContext.screenTopLeftCorner.y,
             currentContext.screenBottomRightCorner.x,
@@ -90,10 +84,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   void alignChild() {}
-
-  factory PBSharedMasterNode.fromJson(Map<String, Object> json) =>
-      _$PBSharedMasterNodeFromJson(json);
-  Map<String, Object> toJson() => _$PBSharedMasterNodeToJson(this);
 }
 
 class PBSharedParameterProp {

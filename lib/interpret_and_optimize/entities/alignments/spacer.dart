@@ -2,18 +2,12 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_spacer_gen
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'spacer.g.dart';
-
-@JsonSerializable(nullable: true)
 class Spacer extends PBVisualIntermediateNode {
   int flex;
   final String UUID;
-  
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
   Spacer(topLeftCorner, bottomRightCorner, this.UUID,
@@ -27,9 +21,6 @@ class Spacer extends PBVisualIntermediateNode {
   void addChild(PBIntermediateNode node) {
     assert(false, 'Spacer cannot accept any children.');
   }
-
-  factory Spacer.fromJson(Map<String, Object> json) => _$SpacerFromJson(json);
-  Map<String, Object> toJson() => _$SpacerToJson(this);
 
   @override
   void alignChild() {}

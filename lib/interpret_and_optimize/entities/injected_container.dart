@@ -8,14 +8,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'injected_container.g.dart';
-
-@JsonSerializable(nullable: true)
 class InjectedContainer extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   InjectedContainer(
@@ -74,8 +68,4 @@ class InjectedContainer extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  factory InjectedContainer.fromJson(Map<String, Object> json) =>
-      _$InjectedContainerFromJson(json);
-  Map<String, Object> toJson() => _$InjectedContainerToJson(this);
 }

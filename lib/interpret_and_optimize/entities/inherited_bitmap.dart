@@ -9,22 +9,16 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:quick_log/quick_log.dart';
 
-part 'inherited_bitmap.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedBitmap extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
 
   String referenceImage;
@@ -74,8 +68,4 @@ class InheritedBitmap extends PBVisualIntermediateNode
   void alignChild() {
     return;
   }
-
-  factory InheritedBitmap.fromJson(Map<String, Object> json) =>
-      _$InheritedBitmapFromJson(json);
-  Map<String, Object> toJson() => _$InheritedBitmapToJson(this);
 }

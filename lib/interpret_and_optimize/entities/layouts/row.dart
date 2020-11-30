@@ -12,17 +12,11 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'row.g.dart';
-
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
-@JsonSerializable(nullable: true)
+
 class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
-  @JsonKey(ignore: true)
   static final List<LayoutRule> ROW_RULES = [HorizontalNodesLayoutRule()];
 
-  @JsonKey(ignore: true)
   static final List<LayoutException> ROW_EXCEPTIONS = [
     RowOverlappingException()
   ];
@@ -34,17 +28,13 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   Map alignment = {};
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
-  @JsonKey(ignore: true)
   Point topLeftCorner;
 
-  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   PBIntermediateRowLayout(String name, this.UUID, {this.currentContext})
@@ -110,11 +100,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     children.forEach((child) => row.addChild(child));
     return row;
   }
-
-  factory PBIntermediateRowLayout.fromJson(Map<String, Object> json) =>
-      _$PBIntermediateRowLayoutFromJson(json);
-
-  Map<String, Object> toJson() => _$PBIntermediateRowLayoutToJson(this);
 
   checkCrossAxisAlignment() {
     // TODO: this is the default for now
