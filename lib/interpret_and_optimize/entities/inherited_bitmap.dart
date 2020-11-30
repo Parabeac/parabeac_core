@@ -66,7 +66,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height
     };
-    this.referenceImage = (originalRef as Image).imageReference;
+    referenceImage = (originalRef as Image).imageReference;
     ImageReferenceStorage().addReference(
         originalRef.UUID, '${MainInfo().outputPath}assets/images');
   }
