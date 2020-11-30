@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -28,11 +29,13 @@ abstract class PBIntermediateNode {
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  String color;
+  /// Size of the element.
   Map size;
-  Map borderInfo;
-  Map alignment;
 
+  /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
+  IntermediateAuxillaryData auxillaryData = IntermediateAuxillaryData();
+
+  /// Name of the element if available.
   String name;
 
   PBIntermediateNode(
