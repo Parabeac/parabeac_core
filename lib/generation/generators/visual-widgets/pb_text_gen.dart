@@ -5,8 +5,7 @@ import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-class PBTextGen extends PBGenerator
-  with PBColorMixin {
+class PBTextGen extends PBGenerator with PBColorMixin {
   PBTextGen() : super();
 
   @override
@@ -45,7 +44,8 @@ class PBTextGen extends PBGenerator
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
       }
       if (source.fontWeight != null) {
-        buffer.write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
+        buffer
+            .write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
       }
       if (source.fontStyle != null) {
         buffer.write('fontStyle: FontStyle.${source.fontStyle},\n');
@@ -53,11 +53,12 @@ class PBTextGen extends PBGenerator
       if (source.letterSpacing != null) {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
-      if (source.color != null) {
-        if (findDefaultColor(source.color) == null) {
-          buffer.write('color: Color(${source.color}),');
+      if (source.auxillaryData.color != null) {
+        if (findDefaultColor(source.auxillaryData.color) == null) {
+          buffer.write('color: Color(${source.auxillaryData.color}),');
         } else {
-          buffer.write('color: ${findDefaultColor(source.color)},');
+          buffer
+              .write('color: ${findDefaultColor(source.auxillaryData.color)},');
         }
       }
 

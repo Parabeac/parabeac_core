@@ -20,9 +20,6 @@ class InheritedText extends PBVisualIntermediateNode
   bool isTextParameter = false;
 
   @override
-  String UUID;
-
-  @override
   var originalRef;
 
   @override
@@ -31,20 +28,16 @@ class InheritedText extends PBVisualIntermediateNode
 
   @JsonKey(ignore: true)
   num alignmenttype;
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   String text;
-
   num fontSize;
-
   String fontName;
   String fontWeight; // one of the w100-w900 weights
   String fontStyle; // normal, or italic
   String textAlignment;
   num letterSpacing;
 
-  InheritedText(this.originalRef, String name, {this.currentContext})
+  InheritedText(this.originalRef, String name, {PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -54,16 +47,16 @@ class InheritedText extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBTextGen();
 
-    UUID = originalRef.UUID;
     text = (originalRef as Text).content;
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
-    color = toHex(originalRef.style.textStyle.fontColor);
+    auxillaryData.color = toHex(originalRef.style.textStyle.fontColor);
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
     fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
     fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;
@@ -89,7 +82,7 @@ class InheritedText extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    // Text don't have children.
   }
 
   factory InheritedText.fromJson(Map<String, Object> json) =>
