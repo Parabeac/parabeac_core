@@ -19,9 +19,6 @@ part 'pb_shared_master_node.g.dart';
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
-  String UUID;
-
-  @override
   final originalRef;
 
   @override
@@ -31,16 +28,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The unique symbol identifier of the [PBSharedMasterNode]
   final String SYMBOL_ID;
 
-  ///The name of the [PBSharedMasterNode]
-  final String name;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
   List<PBSymbolMasterParameter> parametersDefinition;
-
-  
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
@@ -61,17 +49,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   PBSharedMasterNode(
     this.originalRef,
     this.SYMBOL_ID,
-    this.name,
+    String name,
     Point topLeftCorner,
     Point bottomRightCorner, {
     this.overridableProperties,
-    this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+    PBContext currentContext,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
-    UUID = originalRef.UUID;
-
     generator = PBMasterSymbolGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
@@ -131,6 +118,6 @@ class PBSharedParameterProp {
   final String _friendlyName;
   String get friendlyName => _friendlyName;
 
-  PBSharedParameterProp(this._friendlyName, this._type, this.value, this._canOverride,
-      this._propertyName, this._UUID, this._initialValue);
+  PBSharedParameterProp(this._friendlyName, this._type, this.value,
+      this._canOverride, this._propertyName, this._UUID, this._initialValue);
 }
