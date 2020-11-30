@@ -23,42 +23,22 @@ class InheritedContainer extends PBVisualIntermediateNode
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  final Point bottomRightCorner;
-
-  @override
-  final Point topLeftCorner;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   @override
   String UUID;
-
-  /// Used for setting the alignment of it's children
-  @JsonKey(ignore: true)
-  double alignX;
-  @JsonKey(ignore: true)
-  double alignY;
-
-  Map size;
-
-  Map alignment;
-
-  @JsonKey(nullable: true)
-  Map borderInfo;
 
   @JsonKey(nullable: true)
   bool isBackgroundVisible = true;
 
   InheritedContainer(
     this.originalRef,
-    this.topLeftCorner,
-    this.bottomRightCorner,
+    Point topLeftCorner,
+    Point bottomRightCorner,
     String name, {
-    this.alignX,
-    this.alignY,
-    this.currentContext,
-    this.borderInfo,
+    double alignX,
+    double alignY,
+    PBContext currentContext,
+    Map borderInfo,
     this.isBackgroundVisible = true,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
@@ -81,9 +61,11 @@ class InheritedContainer extends PBVisualIntermediateNode
         }
       }
     }
-    alignment = alignX != null && alignY != null
+    auxillaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
+
+    auxillaryData.borderInfo = borderInfo;
 
     assert(originalRef != null,
         'A null original reference was sent to an PBInheritedIntermediate Node');
