@@ -4,10 +4,9 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 /// A node that should not be converted to intermediate.
 class PBDenyListNode extends PBIntermediateNode {
-  final String UUID;
   PBDenyListNode(Point topLeftCorner, Point bottomRightCorner,
       PBContext currentContext, String name,
-      {this.UUID})
+      {String UUID})
       : super(
           topLeftCorner,
           bottomRightCorner,
