@@ -60,7 +60,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
   }
 
   void _detectLineAsContainer() {
-    ShapePath path = (originalRef as ShapePath);
+    var path = (originalRef as ShapePath);
     // Possible vertical or horizontal point
     if (path.points.length == 2) {
       //Parse the points
@@ -79,14 +79,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
       var p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
 
       if (_isEdgeAdjacent(p1, p2)) {
-        // var tlc = Point(
-        //     originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
-        // var brc = Point(
-        //     originalRef.boundaryRectangle.x +
-        //         originalRef.boundaryRectangle.width,
-        //     originalRef.boundaryRectangle.y +
-        //         originalRef.boundaryRectangle.height);
-
         generator = PBContainerGenerator();
         auxillaryData.color = toHex(originalRef.style.borders[0].color);
       }
