@@ -7,7 +7,7 @@ class IntermediateAuxillaryData {
   Map borderInfo = {};
 
   /// Info relating to the alignment of an element, currently just in a map format.
-  Map alignment = {};
+  Map alignment;
 
   /// The background color of the element.
   String color = '';
