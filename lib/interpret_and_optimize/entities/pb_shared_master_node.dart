@@ -69,6 +69,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             p.canOverride,
             p.propertyName,
             /* Removed Parameter Defintion as it was accepting JSON?*/
+            null, // TODO: @Eddie
             currentContext.screenTopLeftCorner.x,
             currentContext.screenTopLeftCorner.y,
             currentContext.screenBottomRightCorner.x,
