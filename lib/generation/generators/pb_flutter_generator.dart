@@ -1,5 +1,5 @@
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -145,8 +145,7 @@ class ${widgetName} extends StatelessWidget{
           return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidget(
-              gen.generate(rootNode), rootNode.name);
+          return generateStatelessWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.EMPTY_PAGE:
           return generateImports() + body.toString();
@@ -172,7 +171,8 @@ class ${widgetName} extends StatelessWidget{
   void addInstanceVariable(PBVariable param) => instanceVariables.add(param);
 
   @override
-  void addConstructorVariable(PBVariable param) => constructorVariables.add(param);
+  void addConstructorVariable(PBVariable param) =>
+      constructorVariables.add(param);
 
   @override
   void addImport(String value) => imports.add(value);

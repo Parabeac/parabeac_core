@@ -1,6 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:parabeac_core/input/helper/page.dart';
