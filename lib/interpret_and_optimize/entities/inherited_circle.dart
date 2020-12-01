@@ -32,9 +32,9 @@ class InheritedCircle extends PBVisualIntermediateNode
       'height': originalRef.boundaryRectangle.height,
     };
 
-    auxillaryData.borderInfo = {};
-    auxillaryData.borderInfo['shape'] = 'circle';
-    auxillaryData.alignment = alignX != null && alignY != null
+    auxiliaryData.borderInfo = {};
+    auxiliaryData.borderInfo['shape'] = 'circle';
+    auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
   }

@@ -27,7 +27,7 @@ abstract class PBIntermediateNode {
   Map size;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
-  IntermediateAuxillaryData auxillaryData = IntermediateAuxillaryData();
+  IntermediateAuxiliaryData auxiliaryData = IntermediateAuxiliaryData();
 
   /// Name of the element if available.
   String name;

@@ -14,24 +14,24 @@ class PBColorGenHelper extends PBAttributesHelper {
     }
     if (source is InheritedScaffold) {
       var scaffold = source;
-      if (scaffold.auxillaryData.color == null) {
+      if (scaffold.auxiliaryData.color == null) {
         statement = '';
       } else {
-        statement = findDefaultColor(scaffold.auxillaryData.color) != null
-            ? 'backgroundColor: ${findDefaultColor(scaffold.auxillaryData.color)},'
-            : 'backgroundColor: Color(${scaffold.auxillaryData.color}),\n';
+        statement = findDefaultColor(scaffold.auxiliaryData.color) != null
+            ? 'backgroundColor: ${findDefaultColor(scaffold.auxiliaryData.color)},'
+            : 'backgroundColor: Color(${scaffold.auxiliaryData.color}),\n';
       }
-    } else if (source.auxillaryData.color == null) {
+    } else if (source.auxiliaryData.color == null) {
       statement = '';
     } else {
       if (source is! InheritedContainer) {
-        statement = findDefaultColor(source.auxillaryData.color) != null
-            ? 'color: ${findDefaultColor(source.auxillaryData.color)},'
-            : 'color: Color(${source.auxillaryData.color}),\n';
+        statement = findDefaultColor(source.auxiliaryData.color) != null
+            ? 'color: ${findDefaultColor(source.auxiliaryData.color)},'
+            : 'color: Color(${source.auxiliaryData.color}),\n';
       } else if ((source as InheritedContainer).isBackgroundVisible) {
-        statement = findDefaultColor(source.auxillaryData.color) != null
-            ? 'color: ${findDefaultColor(source.auxillaryData.color)},'
-            : 'color: Color(${source.auxillaryData.color}),\n';
+        statement = findDefaultColor(source.auxiliaryData.color) != null
+            ? 'color: ${findDefaultColor(source.auxiliaryData.color)},'
+            : 'color: Color(${source.auxiliaryData.color}),\n';
       } else {
         statement = '';
       }

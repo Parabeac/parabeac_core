@@ -50,7 +50,7 @@ class InheritedText extends PBVisualIntermediateNode
 
     text = (originalRef as Text).content;
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
-    auxillaryData.color = toHex(originalRef.style.textStyle.fontColor);
+    auxiliaryData.color = toHex(originalRef.style.textStyle.fontColor);
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
     fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
     fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;

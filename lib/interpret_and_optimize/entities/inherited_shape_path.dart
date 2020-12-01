@@ -75,7 +75,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
       if (_isEdgeAdjacent(p1, p2)) {
         generator = PBContainerGenerator();
-        auxillaryData.color = toHex(originalRef.style.borders[0].color);
+        auxiliaryData.color = toHex(originalRef.style.borders[0].color);
       }
     }
   }

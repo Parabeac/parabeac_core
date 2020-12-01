@@ -36,7 +36,7 @@ class InjectedContainer extends PBVisualIntermediateNode
       'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
     };
 
-    auxillaryData.alignment = alignX != null && alignY != null
+    auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
   }
