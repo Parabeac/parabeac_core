@@ -27,7 +27,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     nameIsFixed: json['nameIsFixed'] as bool,
     resizingConstraint: json['resizingConstraint'],
     resizingType: json['resizingType'],
-    rotation: json['rotation'] as int,
+    rotation: (json['rotation'] as num)?.toDouble(),
     sharedStyleID: json['sharedStyleID'],
     shouldBreakMaskChain: json['shouldBreakMaskChain'] as bool,
     hasClippingMask: json['hasClippingMask'] as bool,
