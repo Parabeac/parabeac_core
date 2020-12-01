@@ -30,7 +30,7 @@ Bitmap _$BitmapFromJson(Map<String, dynamic> json) {
     nameIsFixed: json['nameIsFixed'],
     resizingConstraint: json['resizingConstraint'],
     resizingType: json['resizingType'],
-    rotation: json['rotation'],
+    rotation: json['rotation'] as num,
     sharedStyleID: json['sharedStyleID'],
     shouldBreakMaskChain: json['shouldBreakMaskChain'],
     hasClippingMask: json['hasClippingMask'],
