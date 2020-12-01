@@ -4,11 +4,11 @@ class IntermediateAuxillaryData {
   DirectedStateGraph stateGraph;
 
   /// Info relating to a elements borders, currently just in a map format.
-  Map borderInfo = {};
+  Map borderInfo;
 
   /// Info relating to the alignment of an element, currently just in a map format.
   Map alignment;
 
   /// The background color of the element.
-  String color = '';
+  String color;
 }
