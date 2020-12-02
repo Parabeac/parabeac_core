@@ -2,4 +2,8 @@ import 'package:parabeac_core/interpret_and_optimize/state_management/intermedia
 
 class DirectedStateGraph {
   List<IntermediateState> states = [];
+
+  void addState(IntermediateState state) => states.add(state);
+  void removeState(String variationUuid) =>
+      states.removeWhere((element) => element.variation.UUID == variationUuid);
 }

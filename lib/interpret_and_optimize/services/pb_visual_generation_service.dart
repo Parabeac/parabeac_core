@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 /// Takes a SketchNodeTree and begins generating PBNode interpretations. For each node, the node is going to pass through the PBSemanticInterpretationService which checks if the node should generate a specific PBIntermediateNode based on the semantics that it contains.
@@ -25,11 +26,14 @@ class PBVisualGenerationService implements PBGenerationService {
   @override
   PBContext currentContext;
 
+  PBStateManagementHelper smHelper;
+
   /// Constructor for PBVisualGenerationService, must include the root SketchNode
   PBVisualGenerationService(originalRoot, {this.currentContext}) {
     _positionalCleansingService = PositionalCleansingService();
     this.originalRoot =
         _positionalCleansingService.eliminateOffset(originalRoot);
+    smHelper = PBStateManagementHelper();
   }
 
   /// Builds and returns intermediate tree by breadth depth first.
@@ -47,6 +51,13 @@ class PBVisualGenerationService implements PBGenerationService {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
 
+      // TODO: Refactor for phase 2
+      var currentINode =
+          await currentNode.designNode.interpretNode(currentContext);
+      if (smHelper.isDefaultNode(currentINode)) {
+        smHelper.interpretStateManagementNode(currentINode);
+      }
+
       if (currentNode.designNode.isVisible) {
         PBIntermediateNode result;
         // Check semantics
@@ -63,7 +74,7 @@ class PBVisualGenerationService implements PBGenerationService {
           if (result == null ||
               currentNode.designNode is PBSharedInstanceDesignNode ||
               currentNode.designNode is PBSharedMasterDesignNode) {
-            result = await currentNode.designNode.interpretNode(currentContext);
+            result = currentINode;
           }
 
           if (currentNode.convertedParent != null) {
