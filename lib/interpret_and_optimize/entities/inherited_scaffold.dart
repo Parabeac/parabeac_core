@@ -65,7 +65,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.currentContext.screenTopLeftCorner =
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    auxillaryData.color = toHex(originalRef.backgroundColor);
+    auxiliaryData.color = toHex(originalRef.backgroundColor);
   }
 
   @override

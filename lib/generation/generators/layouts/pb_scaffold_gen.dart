@@ -14,7 +14,7 @@ class PBScaffoldGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Scaffold(\n');
 
-      if (source.auxillaryData.color != null) {
+      if (source.auxiliaryData.color != null) {
         var str = PBColorGenHelper().generate(source);
         buffer.write(str);
       }

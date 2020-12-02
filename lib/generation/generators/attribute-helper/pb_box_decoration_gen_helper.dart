@@ -11,8 +11,8 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
     if (source is InheritedContainer) {
       final buffer = StringBuffer();
       buffer.write('decoration: BoxDecoration(');
-      var borderInfo = source.auxillaryData.borderInfo;
-      if (source.auxillaryData.color != null) {
+      var borderInfo = source.auxiliaryData.borderInfo;
+      if (source.auxiliaryData.color != null) {
         buffer.write(PBColorGenHelper().generate(source));
       }
       if (borderInfo != null) {

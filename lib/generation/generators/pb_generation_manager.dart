@@ -15,18 +15,15 @@ import 'pb_variable.dart';
  * going to become `STATEFUL_WIDGET` or `STATELESS_WIDGET`.
  */
 abstract class PBGenerationManager {
-  // final bool debug;
   List<PBGenerator> _registeredGenerators = [
     PBTextGen(),
     PBBitmapGenerator(),
     PBSpacerGenerator(),
     PBShapeGroupGen(),
   ];
-  // final PBSymbolModel _symbolModel = PBSymbolModel();
 
   ///* In charge of who will write the output of the file
   PBPageWriter pageWriter;
-  // PBContext context;
 
   ///* Keep track of the imports the current page may have
   Set<String> imports = {};

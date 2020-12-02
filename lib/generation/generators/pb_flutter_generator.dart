@@ -1,5 +1,9 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
+import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
+import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -19,8 +23,16 @@ enum BUILDER_TYPE {
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   PBFlutterGenerator(pageWriter) : super(pageWriter) {
+    stateManagementConfig =
+        configurations[MainInfo().configurations['state-management']];
     body = StringBuffer();
   }
+
+  StateManagementConfig stateManagementConfig;
+  Map<String, StateManagementConfig> configurations = {
+    'Provider': ProviderManagement(),
+    'None': StatefulManagement(),
+  };
 
   String generateStatefulWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
@@ -73,8 +85,8 @@ class ${widgetName} extends StatelessWidget{
     if (constructorVariables == null || constructorVariables.isEmpty) {
       return '';
     }
-    List<PBVariable> variables = [];
-    List<PBVariable> optionalVariables = [];
+    var variables = <PBVariable>[];
+    var optionalVariables = <PBVariable>[];
     constructorVariables.forEach((param) {
       // Only accept constructor variable if they are
       // part of the variable instances
@@ -111,10 +123,10 @@ class ${widgetName} extends StatelessWidget{
 
   /// Formats and returns imports in the list
   String generateImports() {
-    StringBuffer buffer = StringBuffer();
+    var buffer = StringBuffer();
     buffer.write('import \'package:flutter/material.dart\';\n');
 
-    for (String import in imports) {
+    for (var import in imports) {
       buffer.write('import \'$import\';\n');
     }
     return buffer.toString();
@@ -145,8 +157,7 @@ class ${widgetName} extends StatelessWidget{
           return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidget(
-              gen.generate(rootNode), rootNode.name);
+          return generateStatelessWidget(gen.generate(rootNode), rootNode.name);
           break;
         case BUILDER_TYPE.EMPTY_PAGE:
           return generateImports() + body.toString();
@@ -155,6 +166,11 @@ class ${widgetName} extends StatelessWidget{
         case BUILDER_TYPE.SYMBOL_INSTANCE:
         case BUILDER_TYPE.BODY:
         default:
+          if (rootNode.auxiliaryData.stateGraph.states.isNotEmpty) {
+            if (stateManagementConfig != null) {
+              return stateManagementConfig.setStatefulNode(rootNode, this);
+            }
+          }
           return gen.generate(rootNode);
       }
     } else {
@@ -172,7 +188,8 @@ class ${widgetName} extends StatelessWidget{
   void addInstanceVariable(PBVariable param) => instanceVariables.add(param);
 
   @override
-  void addConstructorVariable(PBVariable param) => constructorVariables.add(param);
+  void addConstructorVariable(PBVariable param) =>
+      constructorVariables.add(param);
 
   @override
   void addImport(String value) => imports.add(value);

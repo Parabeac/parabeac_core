@@ -53,12 +53,12 @@ class PBTextGen extends PBGenerator with PBColorMixin {
       if (source.letterSpacing != null) {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
-      if (source.auxillaryData.color != null) {
-        if (findDefaultColor(source.auxillaryData.color) == null) {
-          buffer.write('color: Color(${source.auxillaryData.color}),');
+      if (source.auxiliaryData.color != null) {
+        if (findDefaultColor(source.auxiliaryData.color) == null) {
+          buffer.write('color: Color(${source.auxiliaryData.color}),');
         } else {
           buffer
-              .write('color: ${findDefaultColor(source.auxillaryData.color)},');
+              .write('color: ${findDefaultColor(source.auxiliaryData.color)},');
         }
       }
 

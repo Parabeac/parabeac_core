@@ -48,15 +48,15 @@ class InheritedContainer extends PBVisualIntermediateNode
     if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
-          auxillaryData.color = toHex(fill.color);
+          auxiliaryData.color = toHex(fill.color);
         }
       }
     }
-    auxillaryData.alignment = alignX != null && alignY != null
+    auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
 
-    auxillaryData.borderInfo = borderInfo;
+    auxiliaryData.borderInfo = borderInfo;
 
     assert(originalRef != null,
         'A null original reference was sent to an PBInheritedIntermediate Node');

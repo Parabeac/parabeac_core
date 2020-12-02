@@ -70,7 +70,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       bool nameIsFixed,
       resizingConstraint,
       resizingType,
-      int rotation,
+      double rotation,
       sharedStyleID,
       bool shouldBreakMaskChain,
       bool hasClippingMask,
