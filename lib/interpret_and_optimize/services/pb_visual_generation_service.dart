@@ -54,8 +54,9 @@ class PBVisualGenerationService implements PBGenerationService {
       // TODO: Refactor for phase 2
       var currentINode =
           await currentNode.designNode.interpretNode(currentContext);
-      if (smHelper.isDefaultNode(currentINode)) {
-        smHelper.interpretStateManagementNode(currentINode);
+      smHelper.interpretStateManagementNode(currentINode);
+      if (!smHelper.isDefaultNode(currentINode)) {
+        continue;
       }
 
       if (currentNode.designNode.isVisible) {
