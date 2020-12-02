@@ -1,5 +1,7 @@
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -49,6 +51,25 @@ abstract class PBIntermediateNode {
 
   Map<String, dynamic> toJson() {
     return {};
+  }
+
+  void traverse(bool Function(PBIntermediateNode node) match,
+      Future<PBIntermediateNode> Function(PBIntermediateNode node, Function addToStack) modification) async{
+    var stack = <PBIntermediateNode>[];
+    stack.add(this);
+    while (stack.isNotEmpty) {
+      var currentNode = stack.removeLast();
+      if (currentNode is PBLayoutIntermediateNode) {
+        currentNode.children.forEach(stack.add);
+      } else if (currentNode is PBVisualIntermediateNode &&
+          currentNode.child != null) {
+        stack.add(currentNode.child);
+      }
+
+      if (match(currentNode)) {
+        currentNode = await modification(currentNode, stack.add);
+      }
+    }
   }
 }
 

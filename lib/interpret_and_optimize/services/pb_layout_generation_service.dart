@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
 /// PBLayoutGenerationService:
@@ -22,7 +23,7 @@ import 'package:uuid/uuid.dart';
 /// Output:PBIntermediateNode Tree
 class PBLayoutGenerationService implements PBGenerationService {
   ///The available Layouts that could be injected.
-  List<PBLayoutIntermediateNode> _availableLayouts = [];
+  final List<PBLayoutIntermediateNode> _availableLayouts = [];
 
   var log = Logger('Layout Generation Service');
 
@@ -37,7 +38,7 @@ class PBLayoutGenerationService implements PBGenerationService {
   PBContext currentContext;
 
   PBLayoutGenerationService({this.currentContext}) {
-    Map<String, PBLayoutIntermediateNode> layoutHandlers = {
+    var layoutHandlers = <String, PBLayoutIntermediateNode>{
       'column': PBIntermediateColumnLayout(
         '',
         currentContext: currentContext,
@@ -60,64 +61,111 @@ class PBLayoutGenerationService implements PBGenerationService {
     defaultLayout = _availableLayouts[0];
   }
 
+  ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
+
   ///The default [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode defaultLayout;
 
-  ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
-  PBIntermediateNode injectNodes(PBIntermediateNode rootNode) {
+  PBIntermediateNode extractLayouts(
+    PBIntermediateNode rootNode,
+  ) {
     try {
       var prototypeNode;
-      if (!(_containsChildren(rootNode))) {
-        return rootNode;
-      } else if (rootNode is PBVisualIntermediateNode) {
-        rootNode.child = injectNodes(rootNode.child);
-        return rootNode;
-      } else if (rootNode is TempGroupLayoutNode) {
-        // TODO: Refactor prototype node declaration before and after
-        prototypeNode = (rootNode as TempGroupLayoutNode).prototypeNode;
-        rootNode = _replaceGroupByLayout(rootNode);
-        (rootNode as PBLayoutIntermediateNode).prototypeNode = prototypeNode;
-      }
 
-      if (rootNode is PBLayoutIntermediateNode) {
-        var children = rootNode.children;
-        children = children.map((child) => injectNodes(child)).toList();
-        rootNode.replaceChildren(children);
-      }
+      ///The stack is going to saving the current layer of tree along with the parent of
+      ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
+      ///of nodes for the current layer in the second layer.
+      var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
+      stack.add(Tuple2(null, [rootNode]));
 
-      assert(
-          rootNode != null, 'Layout Generation Service produced a null node.');
+      while (stack.isNotEmpty) {
+        var currentTuple = stack.removeLast();
+        currentTuple = currentTuple.withItem2(currentTuple.item2
+            .map((currentNode) {
+              ///Replacing the `TempGroupLayoutNode`s in the tree by the proper
+              ///`PBLayoutIntermediateNode`(`Row`, `Stack`, `Column`).
+              if (currentNode is TempGroupLayoutNode) {
+                prototypeNode =
+                    (currentNode as TempGroupLayoutNode).prototypeNode;
+                currentNode = _replaceGroupByLayout(currentNode);
+                (currentNode as PBLayoutIntermediateNode).prototypeNode =
+                    prototypeNode;
+              }
 
-      // If we still have a temp group, this probably means this should be a container.
-      if (rootNode is TempGroupLayoutNode) {
-        assert(rootNode.children.length < 2,
-            'TempGroupLayout was not converted and has multiple children.');
-        // If this node is an unecessary temp group, just return the child. Ex: Designer put a group with one child that was a group and that group contained the visual nodes.
-        if (rootNode.children[0] is InjectedContainer) {
-          (rootNode.children[0] as InjectedContainer).prototypeNode =
-              prototypeNode;
-          return rootNode.children[0];
+              ///Traversing the rest of the `PBIntermediateNode`Tree by adding the
+              ///rest of the nodes into the stack.
+              if (_containsChildren(currentNode)) {
+                currentNode is PBLayoutIntermediateNode
+                    ? stack.add(Tuple2(currentNode, (currentNode).children))
+                    : stack.add(Tuple2(currentNode, [currentNode.child]));
+              }
+
+              return currentNode;
+            })
+
+            ///Remove the `TempGroupLayout` nodes that only contain one node
+            .map(_removingUnecessaryGroup)
+
+            ///apply the post condition rules to all the nodes in the
+            // .map(_applyPostConditionRules)
+            .map(_replaceGroupByContainer)
+            .toList());
+
+        var node = currentTuple.item1;
+        if (node != null) {
+          node is PBLayoutIntermediateNode
+              ? node.replaceChildren(currentTuple.item2 ?? [])
+              : node.child = (currentTuple.item2.isNotEmpty
+                  ? currentTuple.item2[0]
+                  : null);
         }
-        var replacementNode = InjectedContainer(
-          rootNode.bottomRightCorner,
-          rootNode.topLeftCorner,
-          Uuid().v4(),
-          '',
-          currentContext: currentContext,
-        );
-        replacementNode.prototypeNode = prototypeNode;
-        replacementNode.addChild(rootNode.children.first);
-        return replacementNode;
       }
-      rootNode = _postConditionRules(rootNode);
-      return rootNode;
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+    } finally {
+      return rootNode;
     }
+  }
+
+  /// If this node is an unecessary temp group, just return the child.
+  /// Ex: Designer put a group with one child that was a group
+  /// and that group contained the visual nodes.
+  PBIntermediateNode _removingUnecessaryGroup(PBIntermediateNode tempGroup) {
+    if (tempGroup is TempGroupLayoutNode &&
+        tempGroup.children[0] is InjectedContainer) {
+      // (tempGroup.children[0] as InjectedContainer).prototypeNode =
+      // prototypeNode;
+      return tempGroup.children[0];
+    }
+    return tempGroup;
+  }
+
+  PBIntermediateNode _replaceGroupByContainer(PBIntermediateNode tempGroup) {
+    if (tempGroup == null) {
+      return tempGroup;
+    }
+
+    // If we still have a temp group, this probably means this should be a container.
+    if (tempGroup is TempGroupLayoutNode) {
+      assert(tempGroup.children.length < 2,
+          'TempGroupLayout was not converted and has multiple children.');
+
+      var replacementNode = InjectedContainer(
+        tempGroup.bottomRightCorner,
+        tempGroup.topLeftCorner,
+        Uuid().v4(),
+        '',
+        currentContext: currentContext,
+      );
+      // replacementNode.prototypeNode = prototypeNode;
+      replacementNode.addChild(tempGroup.children.first);
+      return replacementNode;
+    }
+    return tempGroup;
   }
 
   bool _containsChildren(PBIntermediateNode node) =>
@@ -134,12 +182,14 @@ class PBLayoutGenerationService implements PBGenerationService {
 
     if (children.length < 2) {
       ///the last step is going to replace these layout that contain one child into containers
-      return group;
+      return _removingUnecessaryGroup(group);
     }
     children = _arrangeChildren(group);
     rootLayout = children.length == 1
         ? children[0]
         : defaultLayout.generateLayout(children, currentContext, group.name);
+    //Applying the `PostConditionRule`s to the generated layout
+    _applyPostConditionRules(rootLayout);
     return rootLayout;
   }
 
@@ -187,10 +237,11 @@ class PBLayoutGenerationService implements PBGenerationService {
   }
 
   ///Applying [PostConditionRule]s at the end of the [PBLayoutIntermediateNode]
-  PBIntermediateNode _postConditionRules(PBIntermediateNode node) {
+  PBIntermediateNode _applyPostConditionRules(PBIntermediateNode node) {
     if (node == null) {
       return node;
     }
+
     for (var postConditionRule in _postLayoutRules) {
       if (postConditionRule.testRule(node, null)) {
         var result = postConditionRule.executeAction(node, null);
@@ -200,13 +251,12 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
     }
 
-    if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
-      node.replaceChildren(node.children
-          .map((node) => _postConditionRules(node as PBIntermediateNode))
-          .toList());
-    } else if (node is PBVisualIntermediateNode) {
-      node.child = _postConditionRules(node.child);
-    }
+    // if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
+    //   node.replaceChildren(
+    //       node.children.map((node) => _applyPostConditionRules(node)).toList());
+    // } else if (node is PBVisualIntermediateNode) {
+    //   node.child = _applyPostConditionRules(node.child);
+    // }
     return node;
   }
 }

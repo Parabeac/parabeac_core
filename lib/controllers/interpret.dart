@@ -181,7 +181,7 @@ class Interpret {
     try {
       parentLayoutIntermediateNode =
           PBLayoutGenerationService(currentContext: currentContext)
-              .injectNodes(parentPreLayoutIntermediateNode);
+              .extractLayouts(parentPreLayoutIntermediateNode);
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,
@@ -256,7 +256,7 @@ class Interpret {
     PBIntermediateNode node;
     try {
       node = PBLayoutGenerationService(currentContext: context)
-          .injectNodes(parentNode);
+          .extractLayouts(parentNode);
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,
