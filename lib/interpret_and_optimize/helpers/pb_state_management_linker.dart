@@ -27,7 +27,7 @@ class PBStateManagementLinker {
       var intermediateState =
           IntermediateState(variation: IntermediateVariation(node));
       _statemap[variationName]
-          .auxillaryData
+          .auxiliaryData
           .stateGraph
           .addState(intermediateState);
     }
