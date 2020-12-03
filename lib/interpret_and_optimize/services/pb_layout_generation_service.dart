@@ -70,56 +70,25 @@ class PBLayoutGenerationService implements PBGenerationService {
     PBIntermediateNode rootNode,
   ) {
     try {
-      var prototypeNode;
-
-      ///The stack is going to saving the current layer of tree along with the parent of
-      ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
-      ///of nodes for the current layer in the second layer.
-      var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
-      stack.add(Tuple2(null, [rootNode]));
-
-      while (stack.isNotEmpty) {
-        var currentTuple = stack.removeLast();
-        currentTuple = currentTuple.withItem2(currentTuple.item2
-            .map((currentNode) {
-              ///Replacing the `TempGroupLayoutNode`s in the tree by the proper
-              ///`PBLayoutIntermediateNode`(`Row`, `Stack`, `Column`).
-              if (currentNode is TempGroupLayoutNode) {
-                prototypeNode =
-                    (currentNode as TempGroupLayoutNode).prototypeNode;
-                currentNode = _replaceGroupByLayout(currentNode);
-                (currentNode as PBLayoutIntermediateNode).prototypeNode =
-                    prototypeNode;
-              }
-
-              ///Traversing the rest of the `PBIntermediateNode`Tree by adding the
-              ///rest of the nodes into the stack.
-              if (_containsChildren(currentNode)) {
-                currentNode is PBLayoutIntermediateNode
-                    ? stack.add(Tuple2(currentNode, (currentNode).children))
-                    : stack.add(Tuple2(currentNode, [currentNode.child]));
-              }
-
-              return currentNode;
-            })
+      var layoutsMapped = _traverseLayers(rootNode, (layer) {
+        return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
             .map(_removingUnecessaryGroup)
+            .map(_replaceGroupByLayout)
 
             ///apply the post condition rules to all the nodes in the
             // .map(_applyPostConditionRules)
             .map(_replaceGroupByContainer)
-            .toList());
+            .toList();
+      });
 
-        var node = currentTuple.item1;
-        if (node != null) {
-          node is PBLayoutIntermediateNode
-              ? node.replaceChildren(currentTuple.item2 ?? [])
-              : node.child = (currentTuple.item2.isNotEmpty
-                  ? currentTuple.item2[0]
-                  : null);
-        }
-      }
+      ///After all the layouts are generated, the [PostConditionRules] are going
+      ///to be applyed to the layerss
+      ///TODO: Apply Rules
+      // return _traverseLayers(layoutsMapped,
+      //     (layer) => layer.map(_applyPostConditionRules).toList());
+      return layoutsMapped;
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -131,16 +100,73 @@ class PBLayoutGenerationService implements PBGenerationService {
     }
   }
 
-  /// If this node is an unecessary temp group, just return the child.
+  PBIntermediateNode _traverseLayers(
+      PBIntermediateNode rootNode,
+      List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
+          transformation) {
+    // var prototypeNode;
+
+    ///The stack is going to saving the current layer of tree along with the parent of
+    ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
+    ///of nodes for the current layer in the second layer.
+    var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
+    stack.add(Tuple2(null, [rootNode]));
+
+    while (stack.isNotEmpty) {
+      var currentTuple = stack.removeLast();
+      currentTuple = currentTuple.withItem2(transformation(currentTuple.item2));
+      currentTuple.item2.forEach((currentNode) {
+        if (_containsChildren(currentNode)) {
+          currentNode is PBLayoutIntermediateNode
+              ? stack.add(Tuple2(currentNode, (currentNode).children))
+              : stack.add(Tuple2(currentNode, [currentNode.child]));
+        }
+      });
+
+      var node = currentTuple.item1;
+      if (node != null) {
+        node is PBLayoutIntermediateNode
+            ? node.replaceChildren(currentTuple.item2 ?? [])
+            : node.child =
+                (currentTuple.item2.isNotEmpty ? currentTuple.item2[0] : null);
+      }
+      // currentTuple =
+      //     currentTuple.withItem2(currentTuple.item2.map((currentNode) {
+      //   ///Replacing the `TempGroupLayoutNode`s in the tree by the proper
+      //   ///`PBLayoutIntermediateNode`(`Row`, `Stack`, `Column`).
+      //   // if (currentNode is TempGroupLayoutNode) {
+      //   //   prototypeNode =
+      //   //       (currentNode as TempGroupLayoutNode).prototypeNode;
+      //   //   currentNode = _replaceGroupByLayout(currentNode);
+      //   //   (currentNode as PBLayoutIntermediateNode).prototypeNode =
+      //   //       prototypeNode;
+      //   // }
+
+      //   ///Traversing the rest of the `PBIntermediateNode`Tree by adding the
+      //   ///rest of the nodes into the stack.
+      //   if (_containsChildren(currentNode)) {
+      //     currentNode is PBLayoutIntermediateNode
+      //         ? stack.add(Tuple2(currentNode, (currentNode).children))
+      //         : stack.add(Tuple2(currentNode, [currentNode.child]));
+      //   }
+
+      //   return currentNode;
+      // });
+
+    }
+    return rootNode;
+  }
+
+  /// If this node is an unecessary [TempGroupLayoutNode], just return the child.
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
   PBIntermediateNode _removingUnecessaryGroup(PBIntermediateNode tempGroup) {
-    if (tempGroup is TempGroupLayoutNode &&
-        tempGroup.children[0] is InjectedContainer) {
-      // (tempGroup.children[0] as InjectedContainer).prototypeNode =
-      // prototypeNode;
-      return tempGroup.children[0];
+    while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
+      tempGroup = (tempGroup as TempGroupLayoutNode).children[0];
     }
+    // (tempGroup.children[0] as InjectedContainer).prototypeNode =
+    // prototypeNode;
+
     return tempGroup;
   }
 
@@ -176,21 +202,24 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///nodes should be considered into subsections. For example, if child 0 and child 1 statisfy the
   ///rule of a [Row] but not child 3, then child 0 and child 1 should be placed inside of a [Row]. Therefore,
   ///there could be many[IntermediateLayoutNodes] derived in the children level of the `group`.
-  PBLayoutIntermediateNode _replaceGroupByLayout(TempGroupLayoutNode group) {
-    var children = group.children;
-    PBLayoutIntermediateNode rootLayout;
+  PBIntermediateNode _replaceGroupByLayout(PBIntermediateNode group) {
+    if (group is TempGroupLayoutNode) {
+      var children = group.children;
+      PBIntermediateNode node;
 
-    if (children.length < 2) {
-      ///the last step is going to replace these layout that contain one child into containers
-      return _removingUnecessaryGroup(group);
+      // if (children.length < 2) {
+      //   ///the last step is going to replace these layout that contain one child into containers
+      //   return _removingUnecessaryGroup(group);
+      // }
+      children = _arrangeChildren(group);
+      node = children.length == 1
+          ? children[0]
+          : defaultLayout.generateLayout(children, currentContext, group.name);
+      //Applying the `PostConditionRule`s to the generated layout
+      // _applyPostConditionRules(rootLayout);
+      return node;
     }
-    children = _arrangeChildren(group);
-    rootLayout = children.length == 1
-        ? children[0]
-        : defaultLayout.generateLayout(children, currentContext, group.name);
-    //Applying the `PostConditionRule`s to the generated layout
-    _applyPostConditionRules(rootLayout);
-    return rootLayout;
+    return group;
   }
 
   List<PBIntermediateNode> _arrangeChildren(PBLayoutIntermediateNode parent) {
@@ -259,4 +288,8 @@ class PBLayoutGenerationService implements PBGenerationService {
     // }
     return node;
   }
+}
+
+extension LayerTraversal on PBIntermediateNode {
+  void tran() {}
 }

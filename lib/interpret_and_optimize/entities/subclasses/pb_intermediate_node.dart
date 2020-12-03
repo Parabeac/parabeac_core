@@ -53,24 +53,6 @@ abstract class PBIntermediateNode {
     return {};
   }
 
-  void traverse(bool Function(PBIntermediateNode node) match,
-      Future<PBIntermediateNode> Function(PBIntermediateNode node, Function addToStack) modification) async{
-    var stack = <PBIntermediateNode>[];
-    stack.add(this);
-    while (stack.isNotEmpty) {
-      var currentNode = stack.removeLast();
-      if (currentNode is PBLayoutIntermediateNode) {
-        currentNode.children.forEach(stack.add);
-      } else if (currentNode is PBVisualIntermediateNode &&
-          currentNode.child != null) {
-        stack.add(currentNode.child);
-      }
-
-      if (match(currentNode)) {
-        currentNode = await modification(currentNode, stack.add);
-      }
-    }
-  }
 }
 
 abstract class ChildrenListener {
