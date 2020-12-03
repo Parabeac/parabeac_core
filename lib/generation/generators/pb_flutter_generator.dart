@@ -23,16 +23,8 @@ enum BUILDER_TYPE {
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   PBFlutterGenerator(pageWriter) : super(pageWriter) {
-    stateManagementConfig =
-        configurations[MainInfo().configurations['state-management']];
     body = StringBuffer();
   }
-
-  StateManagementConfig stateManagementConfig;
-  Map<String, StateManagementConfig> configurations = {
-    'Provider': ProviderManagement(),
-    'None': StatefulManagement(),
-  };
 
   String generateStatefulWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
@@ -166,11 +158,6 @@ class ${widgetName} extends StatelessWidget{
         case BUILDER_TYPE.SYMBOL_INSTANCE:
         case BUILDER_TYPE.BODY:
         default:
-          if (rootNode.auxiliaryData.stateGraph.states.isNotEmpty) {
-            if (stateManagementConfig != null) {
-              return stateManagementConfig.setStatefulNode(rootNode, this);
-            }
-          }
           return gen.generate(rootNode);
       }
     } else {

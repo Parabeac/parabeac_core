@@ -4,7 +4,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 class ProviderManagement extends StateManagementConfig {
   @override
-  String setStatefulNode(PBIntermediateNode node, PBGenerationManager manager) {
+  String setStatefulNode(
+    PBIntermediateNode node,
+    PBGenerationManager manager,
+    String path,
+  ) {
     // TODO: implement setStatefulNode
     throw UnimplementedError();
   }
