@@ -11,4 +11,12 @@ class IntermediateAuxiliaryData {
 
   /// The background color of the element.
   String color;
+
+  IntermediateAuxiliaryData({
+    this.stateGraph,
+    this.alignment,
+    this.color,
+  }) {
+    stateGraph ??= DirectedStateGraph();
+  }
 }

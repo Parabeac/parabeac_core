@@ -5,4 +5,10 @@ class IntermediateState {
   IntermediateVariation variation;
   List<IntermediateVertex> vertexes;
   bool isAppState;
+
+  IntermediateState({
+    this.variation,
+    this.vertexes,
+    this.isAppState,
+  });
 }
