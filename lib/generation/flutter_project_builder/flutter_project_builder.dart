@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
+import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
+import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
@@ -30,6 +33,13 @@ class FlutterProjectBuilder {
 
   final String SYMBOL_DIR_NAME = 'symbols';
 
+  Map<String, StateManagementConfig> configurations = {
+    'Provider': ProviderManagement(),
+    'None': StatefulManagement(),
+  };
+
+  StateManagementConfig stateManagementConfig;
+
   FlutterProjectBuilder(
       {this.projectName, this.pathToIntermiateFile, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
@@ -38,6 +48,8 @@ class FlutterProjectBuilder {
           'Flutter Project Builder must have a JSON file in intermediate format passed to `pathToIntermediateFile`');
       return;
     }
+    stateManagementConfig =
+        configurations[MainInfo().configurations['state-management']];
   }
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
@@ -231,8 +243,17 @@ class FlutterProjectBuilder {
                 '${projectName}/lib/main.dart', relPath);
           }
 
-          var page = flutterGenerator.generate(intermediateItem.node);
-
+          var page;
+          if (intermediateItem
+                  .node.auxiliaryData.stateGraph.states.isNotEmpty &&
+              stateManagementConfig != null) {
+            page = stateManagementConfig.setStatefulNode(
+                intermediateItem.node,
+                flutterGenerator,
+                '${projectName}/lib/screens/${directoryName}');
+          } else {
+            page = flutterGenerator.generate(intermediateItem.node);
+          }
           // If writing symbols, write to buffer, otherwise write a file
           isSymbolsDir
               ? bodyBuffer.write(page)
