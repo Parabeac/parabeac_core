@@ -107,7 +107,8 @@ class ${widgetName} extends StatelessWidget{
     }
     var stringBuffer = StringBuffer();
     instanceVariables.forEach((param) {
-      stringBuffer.write(param.type + ' ' + param.variableName + ';\n');
+      stringBuffer.write(
+          param.type + ' ' + param.variableName + param.defaultValue + ';\n');
     });
 
     return stringBuffer.toString();

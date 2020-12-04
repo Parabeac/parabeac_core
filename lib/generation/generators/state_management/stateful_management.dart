@@ -30,10 +30,10 @@ class StatefulManagement extends StateManagementConfig {
     manager.addImport(defaultNodePath);
 
     var variable = PBVariable(
-      '${nameOfDefaultNode}',
+      '${nameOfDefaultNode}Widget',
       'Widget',
       true,
-      /* Should be able to set default value to the default state. */
+      '${nameOfDefaultNode.pascalCase}()',
     );
 
     manager.addInstanceVariable(variable);

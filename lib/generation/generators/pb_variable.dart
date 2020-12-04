@@ -2,11 +2,13 @@ class PBVariable {
   String variableName;
   String type;
   bool isRequired;
+  String defaultValue;
 
   PBVariable(
     this.variableName,
     this.type,
     this.isRequired,
+    this.defaultValue,
   );
 
   @override
