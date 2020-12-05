@@ -27,7 +27,7 @@ class PBStateManagementHelper {
   /// Returns `true` if `node` is or would be the default node,
   /// `false` otherwise
   bool isDefaultNode(PBIntermediateNode node) =>
-      _hasValidName(node.name) && !linker.containsElement(node.name);
+      !linker.containsElement(node.name);
 
   /// Returns true if `name` is a valid state management name
   bool _hasValidName(String name) =>

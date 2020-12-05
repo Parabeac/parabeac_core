@@ -51,19 +51,12 @@ class PBVisualGenerationService implements PBGenerationService {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
 
-      // TODO: Refactor for phase 2
-      var currentINode =
-          await currentNode.designNode.interpretNode(currentContext);
-      smHelper.interpretStateManagementNode(currentINode);
-      if (!smHelper.isDefaultNode(currentINode)) {
-        continue;
-      }
-
       if (currentNode.designNode.isVisible) {
         PBIntermediateNode result;
         // Check semantics
         result = PBDenyListHelper()
             .returnDenyListNodeIfExist(currentNode.designNode);
+
         if (result is PBDenyListNode) {
         } else {
           result = PBPluginListHelper()
@@ -75,7 +68,13 @@ class PBVisualGenerationService implements PBGenerationService {
           if (result == null ||
               currentNode.designNode is PBSharedInstanceDesignNode ||
               currentNode.designNode is PBSharedMasterDesignNode) {
-            result = currentINode;
+            result = await currentNode.designNode.interpretNode(currentContext);
+          }
+
+          // TODO: Refactor for phase 2
+          smHelper.interpretStateManagementNode(result);
+          if (!smHelper.isDefaultNode(result)) {
+            continue;
           }
 
           if (currentNode.convertedParent != null) {
