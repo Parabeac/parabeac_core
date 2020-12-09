@@ -152,8 +152,9 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///nodes should be considered into subsections. For example, if child 0 and child 1 statisfy the
   ///rule of a [Row] but not child 3, then child 0 and child 1 should be placed inside of a [Row]. Therefore,
   ///there could be many[IntermediateLayoutNodes] derived in the children level of the `group`.
-  PBIntermediateNode _layoutConditionalReplacement(PBIntermediateNode parent) {
-    if (parent is PBLayoutIntermediateNode) {
+  PBIntermediateNode _layoutConditionalReplacement(PBIntermediateNode parent,
+      {depth = 1}) {
+    if (parent is PBLayoutIntermediateNode && depth >= 0) {
       parent.sortChildren();
       var children = parent.children;
       var childPointer = 0;
@@ -172,9 +173,13 @@ class PBLayoutGenerationService implements PBGenerationService {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               currentNode.addChild(nextNode);
+              currentNode =
+                  _layoutConditionalReplacement(currentNode, depth: depth - 1);
               generatedLayout = currentNode;
             } else if (layout.runtimeType == nextNode.runtimeType) {
               nextNode.addChild(currentNode);
+              nextNode =
+                  _layoutConditionalReplacement(nextNode, depth: depth - 1);
               generatedLayout = nextNode;
             }
 
@@ -190,61 +195,24 @@ class PBLayoutGenerationService implements PBGenerationService {
                 [generatedLayout]);
             childPointer = 0;
             reCheck = true;
+            break;
           }
         }
         childPointer = reCheck ? 0 : childPointer + 1;
         reCheck = false;
       }
       parent.replaceChildren(children);
-      return children.length == 1
-          ? children[0]
-          : defaultLayout.generateLayout(children, currentContext, parent.name);
+      if (children.length == 1) {
+        return children[0];
+      } else {
+        return parent is! TempGroupLayoutNode
+            ? parent
+            : defaultLayout.generateLayout(
+                children, currentContext, parent.name);
+      }
     }
     return parent;
   }
-
-  // List<PBIntermediateNode> _arrangeChildren(PBLayoutIntermediateNode parent) {
-  //   parent.sortChildren();
-  //   var children = parent.children;
-  //   var childPointer = 0;
-  //   var reCheck = false;
-
-  //   while (childPointer < children.length - 1) {
-  //     var currentNode = children[childPointer];
-  //     var nextNode = children[childPointer + 1];
-
-  //     for (var layout in _availableLayouts) {
-  //       if (layout.satisfyRules(currentNode, nextNode) &&
-  //           layout.runtimeType != parent.runtimeType) {
-  //         var generatedLayout;
-
-  //         if (layout.runtimeType == currentNode.runtimeType) {
-  //           currentNode.addChild(nextNode);
-  //           (currentNode as PBLayoutIntermediateNode)
-  //               .replaceChildren(_arrangeChildren(currentNode));
-  //           generatedLayout = currentNode;
-  //         } else if (layout.runtimeType == nextNode.runtimeType) {
-  //           nextNode.addChild(currentNode);
-  //           (nextNode as PBLayoutIntermediateNode)
-  //               .replaceChildren(_arrangeChildren(nextNode));
-  //           generatedLayout = nextNode;
-  //         }
-
-  //         /// Generated / Injected Layouts can have no names because they don't derive from a group, which means they would also not end up being a misc. node.
-  //         generatedLayout ??= layout
-  //             .generateLayout([currentNode, nextNode], currentContext, '');
-  //         children
-  //             .replaceRange(childPointer, childPointer + 2, [generatedLayout]);
-  //         childPointer = 0;
-  //         reCheck = true;
-  //         break;
-  //       }
-  //     }
-  //     childPointer = reCheck ? 0 : childPointer + 1;
-  //     reCheck = false;
-  //   }
-  //   return children?.cast<PBIntermediateNode>();
-  // }
 
   ///Applying [PostConditionRule]s at the end of the [PBLayoutIntermediateNode]
   PBIntermediateNode _applyPostConditionRules(PBIntermediateNode node) {
@@ -260,17 +228,6 @@ class PBLayoutGenerationService implements PBGenerationService {
         }
       }
     }
-
-    // if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
-    //   node.replaceChildren(
-    //       node.children.map((node) => _applyPostConditionRules(node)).toList());
-    // } else if (node is PBVisualIntermediateNode) {
-    //   node.child = _applyPostConditionRules(node.child);
-    // }
     return node;
   }
-}
-
-extension LayerTraversal on PBIntermediateNode {
-  void tran() {}
 }
