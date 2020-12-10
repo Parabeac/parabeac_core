@@ -16,7 +16,7 @@ class PBStackGenerator extends PBGenerator {
         buffer.write('\nchildren: [');
         for (var index = 0; index < source.children.length; index++) {
           var element = manager.generate(source.children[index],
-              type: source.builder_type ?? BUILDER_TYPE.BODY);
+              type: source.children[index].builder_type ?? BUILDER_TYPE.BODY);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

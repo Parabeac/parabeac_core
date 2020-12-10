@@ -13,11 +13,15 @@ class PBPaddingGen extends PBGenerator {
 
   String relativePadding(BUILDER_TYPE type, bool isVertical, double value) {
     var fixedValue = value.toStringAsFixed(2);
-    if (type != null)  {
+    if (type != null) {
       if (type == BUILDER_TYPE.SYMBOL_MASTER) {
-        return 'constraints.max' + (isVertical ? 'Height' : 'Width') + ' * $fixedValue';
+        return 'constraints.max' +
+            (isVertical ? 'Height' : 'Width') +
+            ' * $fixedValue';
       }
-      return 'MediaQuery.of(context).size.' + (isVertical ? 'height' : 'width') + ' * $fixedValue';
+      return 'MediaQuery.of(context).size.' +
+          (isVertical ? 'height' : 'width') +
+          ' * $fixedValue';
     }
     return '$fixedValue';
   }
@@ -33,7 +37,7 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('padding: EdgeInsets.only(');
 
     final paddingPositionsW = ['left', 'right'];
-    final paddingPositionsH =['bottom', 'top'];
+    final paddingPositionsH = ['bottom', 'top'];
     var reflectedPadding = reflect(padding);
     for (var position in paddingPositionsW) {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;
@@ -59,7 +63,7 @@ class PBPaddingGen extends PBGenerator {
 
     if (source.child != null) {
       buffer.write(
-          'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)}');
+          'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)}');
     }
     buffer.write(')');
 

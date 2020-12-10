@@ -37,7 +37,7 @@ class PBContainerGenerator extends PBGenerator {
       source.child.bottomRightCorner =
           Point(source.bottomRightCorner.x, source.bottomRightCorner.y);
       var statement = source.child != null
-          ? 'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)}'
+          ? 'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)}'
           : '';
       buffer.write(statement);
     }

@@ -56,7 +56,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
     var buffer = StringBuffer();
     _parameterDefinition.forEach((param) {
       var body = manager.generate(param,
-          type: source.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY);
+          type: param.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY);
       if (body != null && body.isNotEmpty) {
         buffer.writeln('${param.name} ??= $body;');
       }
@@ -87,7 +87,8 @@ class PBMasterSymbolGenerator extends PBGenerator {
             );
         log.error(e.toString());
       }
-      buffer.write('Widget ${name}(BuildContext context, BoxConstraints constraints, ');
+      buffer.write(
+          'Widget ${name}(BuildContext context, BoxConstraints constraints, ');
       var parameters = _generateParameters((source.overridableProperties ?? []),
           (source.parametersDefinition ?? []));
       buffer.write(parameters);
@@ -97,7 +98,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
       buffer.write('Widget widget = ');
 
       var generatedWidget = manager.generate(source.child,
-          type: source.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY);
+          type: source.child.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY);
       if (generatedWidget == null || generatedWidget.isEmpty) return '';
       buffer.write(generatedWidget);
       buffer.write(';\nreturn widget;\n}');

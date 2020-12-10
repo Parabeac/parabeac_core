@@ -26,8 +26,8 @@ class PBPositionedGenerator extends PBGenerator {
         if (source.currentContext?.screenTopLeftCorner?.x != null &&
             source.currentContext?.screenBottomRightCorner?.x != null) {
           double screenWidth = ((source.currentContext?.screenTopLeftCorner?.x
-          as double) -
-              (source.currentContext?.screenBottomRightCorner?.x as double))
+                      as double) -
+                  (source.currentContext?.screenBottomRightCorner?.x as double))
               .abs();
           multStringH = 'constraints.maxWidth * ';
           hAlignValue = hAlignValue / screenWidth;
@@ -35,10 +35,10 @@ class PBPositionedGenerator extends PBGenerator {
 
         if (source.currentContext?.screenTopLeftCorner?.y != null &&
             source.currentContext?.screenBottomRightCorner?.y != null) {
-          double screenHeight =
-              ((source.currentContext.screenTopLeftCorner.y as double) -
+          double screenHeight = ((source.currentContext.screenTopLeftCorner.y
+                      as double) -
                   (source.currentContext.screenBottomRightCorner.y as double))
-                  .abs();
+              .abs();
           multStringV = 'constraints.maxHeight * ';
           vAlignValue = vAlignValue / screenHeight;
         }
@@ -55,7 +55,7 @@ class PBPositionedGenerator extends PBGenerator {
 
       try {
         buffer.write(
-            'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)},');
+            'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)},');
       } catch (e, stackTrace) {
         MainInfo().sentry.captureException(
               exception: e,
