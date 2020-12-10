@@ -5,6 +5,9 @@ import 'package:parabeac_core/generation/generators/state_management/provider_ma
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
 import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -28,7 +31,7 @@ class PBFlutterGenerator extends PBGenerationManager {
 
   String generateStatefulWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
+    var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
 
@@ -51,7 +54,7 @@ class _${widgetName} extends State<${widgetName}>{
 
   String generateStatelessWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
+    var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
 
@@ -126,8 +129,7 @@ class ${widgetName} extends StatelessWidget{
   }
 
   @override
-  String generate(PBIntermediateNode rootNode,
-      {type = BUILDER_TYPE.STATEFUL_WIDGET}) {
+  String generate(PBIntermediateNode rootNode, {type}) {
     if (rootNode == null) {
       return null;
     }
@@ -137,6 +139,12 @@ class ${widgetName} extends StatelessWidget{
       type = BUILDER_TYPE.SYMBOL_MASTER;
     } else if (rootNode is PBSharedInstanceIntermediateNode) {
       type = BUILDER_TYPE.SYMBOL_INSTANCE;
+    } else if (rootNode is InheritedScaffold) {
+      type = BUILDER_TYPE.STATEFUL_WIDGET;
+    } else if ((rootNode is InheritedContainer ||
+            rootNode is InjectedContainer) &&
+        type == null) {
+      type = BUILDER_TYPE.STATEFUL_WIDGET;
     }
     rootNode.builder_type = type;
 
