@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:recase/recase.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
   PBSymbolInstanceGenerator() : super();
@@ -23,16 +24,13 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       }
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
+      method_signature = method_signature.pascalCase;
       var buffer = StringBuffer();
-
-      method_signature = method_signature[0].toLowerCase() +
-          method_signature.substring(1, method_signature.length);
-
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
       buffer.write(method_signature);
-      buffer.write('(context, constraints,');
+      buffer.write('(');
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedParameterValue:

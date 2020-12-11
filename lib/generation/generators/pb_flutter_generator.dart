@@ -56,7 +56,7 @@ class _${widgetName} extends State<${widgetName}>{
 ${generateImports()}
 
 class ${widgetName.pascalCase} extends StatelessWidget{
-  const ${widgetName}({Key key}) : super(key : key);
+  const ${widgetName.pascalCase}({Key key}) : super(key : key);
   ${generateInstanceVariables()}
   ${generateConstructor(constructorName)}
 
