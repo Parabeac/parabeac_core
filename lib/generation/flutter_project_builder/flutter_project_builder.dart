@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
@@ -27,9 +26,6 @@ class FlutterProjectBuilder {
   PBIntermediateTree mainTree;
 
   var log = Logger('Project Builder');
-
-  ///For right now we are placing all [PBSharedMasterNode]s in a single page
-  final bool _symbolsSinglePage = true;
 
   final String SYMBOL_DIR_NAME = 'symbols';
 
@@ -135,11 +131,9 @@ class FlutterProjectBuilder {
       });
     }
 
-    ///First traversal here (Add imports)
-    await _traverseTree(true);
+    await _initializeProject();
 
-    ///Second traversal here (Find imports)
-    await _traverseTree(false);
+    await _populateProject();
 
     var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
     var s = File('${pathToFlutterProject}lib/main.dart')
@@ -178,105 +172,81 @@ class FlutterProjectBuilder {
     );
   }
 
-  /// Method that traverses the tree to add imports on the first traversal,
-  /// and retrieve imports and write the file the second time
-  void _traverseTree(bool isFirstTraversal) async {
-    var pageWriter = PBFlutterWriter();
-
+  void _initializeProject() async {
     for (var directory in mainTree.groups) {
       var directoryName = directory.name.snakeCase;
-      var flutterGenerator;
-      var importSet = <String>[];
-      var bodyBuffer, constructorBuffer;
-      var isSymbolsDir =
-          directory.name == SYMBOL_DIR_NAME && _symbolsSinglePage;
+      var screenDirectoryName = '${projectName}/lib/screens/${directoryName}';
+      var viewDirectoryName = '${projectName}/lib/views/${directoryName}';
 
-      if (!isFirstTraversal) {
-        await Directory('${projectName}/lib/screens/${directoryName}')
-            .create(recursive: true);
-      }
-
-      // Create single FlutterGenerator for all symbols
-      if (isSymbolsDir) {
-        flutterGenerator = PBFlutterGenerator(pageWriter);
-        bodyBuffer = StringBuffer();
-      }
-
-      for (var intermediateItem in directory.items) {
-        var fileName = intermediateItem.node.name ?? 'defaultName';
-
-        var name = isSymbolsDir ? SYMBOL_DIR_NAME : fileName;
-        var symbolFilePath =
-            '${projectName}/lib/screens/${directoryName}/${name.snakeCase}.dart';
-        var fileNamePath =
-            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
-        // TODO: Need FlutterGenerator for each page because otherwise
-        // we'd add all imports to every single dart page. Discuss alternatives
-        if (!isSymbolsDir) {
-          flutterGenerator = PBFlutterGenerator(pageWriter);
+      /// Establish Directories where needed.
+      if (directory.items.isNotEmpty) {
+        for (var i = 0; i < directory.items.length; i++) {
+          var containsScreens = false;
+          var containsViews = false;
+          if (directory.items[i].node is InheritedScaffold &&
+              !containsScreens) {
+            containsScreens = true;
+            await Directory(screenDirectoryName).create(recursive: true);
+          }
+          if (directory.items[i].node is PBSharedMasterNode && !containsViews) {
+            containsViews = true;
+            await Directory(viewDirectoryName).create(recursive: true);
+          }
+          if (containsScreens && containsViews) {
+            continue;
+          }
         }
+      }
 
+      /// Add import Info.
+      for (var intermediateItem in directory.items) {
         // Add to cache if node is scaffold or symbol master
-        if (intermediateItem.node is InheritedScaffold && isFirstTraversal) {
-          PBGenCache().addToCache(intermediateItem.node.UUID, symbolFilePath);
-        } else if (intermediateItem.node is PBSharedMasterNode &&
-            isFirstTraversal) {
+        if (intermediateItem.node is InheritedScaffold) {
+          PBGenCache().addToCache(intermediateItem.node.UUID,
+              '${screenDirectoryName}/${intermediateItem.node.name}.dart');
+        } else {
+          // } else if (intermediateItem.node is PBSharedMasterNode) {
           PBGenCache().addToCache(
               (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
-              symbolFilePath);
-        }
-
-        // Check if there are any imports needed for this screen
-        if (!isFirstTraversal) {
-          isSymbolsDir
-              ? importSet.addAll(ImportHelper.findImports(
-                  intermediateItem.node, symbolFilePath))
-              : flutterGenerator.imports.addAll(ImportHelper.findImports(
-                  intermediateItem.node, fileNamePath));
-
-          // Check if [InheritedScaffold] is the homescreen
-          if (intermediateItem.node is InheritedScaffold &&
-              (intermediateItem.node as InheritedScaffold).isHomeScreen) {
-            var relPath = PBGenCache().getRelativePath(
-                '${projectName}/lib/main.dart', intermediateItem.node.UUID);
-            await pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
-                '${projectName}/lib/main.dart', relPath);
-          }
-
-          var page;
-          if (intermediateItem
-                  .node.auxiliaryData.stateGraph.states.isNotEmpty &&
-              stateManagementConfig != null) {
-            page = stateManagementConfig.setStatefulNode(
-                intermediateItem.node,
-                flutterGenerator,
-                '${projectName}/lib/screens/${directoryName}');
-          } else {
-            page = flutterGenerator.generate(intermediateItem.node);
-          }
-          // If writing symbols, write to buffer, otherwise write a file
-          isSymbolsDir
-              ? bodyBuffer.write(page)
-              : pageWriter.write(page, fileNamePath);
+              '${viewDirectoryName}/${intermediateItem.node.name}.dart');
         }
       }
-      if (!isFirstTraversal) {
-        if (isSymbolsDir) {
-          var symbolPath =
-              '${projectName}/lib/screens/${directoryName}/symbols.dart';
-          importSet.add(flutterGenerator.generateImports());
+    }
+  }
 
-          var importBuffer = StringBuffer();
-          importSet.toSet().toList().forEach(importBuffer.write);
+  void _populateProject() {
+    var pageWriter = PBFlutterWriter();
+    for (var directory in mainTree.groups) {
+      var directoryName = directory.name.snakeCase;
 
-          pageWriter.write(
-              (importBuffer?.toString() ?? '') +
-                  (constructorBuffer?.toString() ?? '') +
-                  bodyBuffer.toString(),
-              symbolPath);
+      for (var intermediateItem in directory.items) {
+        var flutterGenerator = PBFlutterGenerator(pageWriter);
+        var fileName = intermediateItem.node.name;
+        var screenFilePath =
+            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
+        var viewFilePath =
+            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.dart';
+        flutterGenerator.imports.addAll(ImportHelper.findImports(
+            intermediateItem.node,
+            intermediateItem.node is InheritedScaffold
+                ? screenFilePath
+                : viewFilePath));
+        var page;
+        if (intermediateItem.node.auxiliaryData.stateGraph.states.isNotEmpty &&
+            stateManagementConfig != null) {
+          page = stateManagementConfig.setStatefulNode(intermediateItem.node,
+              flutterGenerator, '${projectName}/lib/screens/${directoryName}');
+        } else {
+          page = flutterGenerator.generate(intermediateItem.node);
         }
-        pageWriter.submitDependencies(projectName + '/pubspec.yaml');
+        pageWriter.write(
+            page,
+            intermediateItem.node is InheritedScaffold
+                ? screenFilePath
+                : viewFilePath);
       }
+
+      pageWriter.submitDependencies(projectName + '/pubspec.yaml');
     }
   }
 }
