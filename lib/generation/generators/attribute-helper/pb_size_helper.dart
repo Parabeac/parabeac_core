@@ -9,7 +9,7 @@ class PBSizeHelper extends PBAttributesHelper {
   @override
   String generate(PBIntermediateNode source) {
     final buffer = StringBuffer();
-    bool isSymbolMaster = (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER);
+    bool isSymbolMaster = (source.builder_type == BUILDER_TYPE.SHARED_MASTER);
     bool isScaffoldBody = (source.builder_type == BUILDER_TYPE.SCAFFOLD_BODY);
     Map body = source.size ?? {};
     double height = body['height'];
@@ -55,12 +55,10 @@ class PBSizeHelper extends PBAttributesHelper {
     }
 
     if (width != null) {
-      buffer.write(
-          ' ${wString}${width.toStringAsFixed(3)},');
+      buffer.write(' ${wString}${width.toStringAsFixed(3)},');
     }
     if (height != null) {
-      buffer.write(
-          '${hString}${height.toStringAsFixed(3)},');
+      buffer.write('${hString}${height.toStringAsFixed(3)},');
     }
 
     return buffer.toString();

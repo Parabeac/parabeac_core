@@ -13,11 +13,15 @@ class PBPaddingGen extends PBGenerator {
 
   String relativePadding(BUILDER_TYPE type, bool isVertical, double value) {
     var fixedValue = value.toStringAsFixed(2);
-    if (type != null)  {
-      if (type == BUILDER_TYPE.SYMBOL_MASTER) {
-        return 'constraints.max' + (isVertical ? 'Height' : 'Width') + ' * $fixedValue';
+    if (type != null) {
+      if (type == BUILDER_TYPE.SHARED_MASTER) {
+        return 'constraints.max' +
+            (isVertical ? 'Height' : 'Width') +
+            ' * $fixedValue';
       }
-      return 'MediaQuery.of(context).size.' + (isVertical ? 'height' : 'width') + ' * $fixedValue';
+      return 'MediaQuery.of(context).size.' +
+          (isVertical ? 'height' : 'width') +
+          ' * $fixedValue';
     }
     return '$fixedValue';
   }
@@ -33,7 +37,7 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('padding: EdgeInsets.only(');
 
     final paddingPositionsW = ['left', 'right'];
-    final paddingPositionsH =['bottom', 'top'];
+    final paddingPositionsH = ['bottom', 'top'];
     var reflectedPadding = reflect(padding);
     for (var position in paddingPositionsW) {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;

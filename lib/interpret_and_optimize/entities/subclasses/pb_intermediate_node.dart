@@ -44,9 +44,3 @@ abstract class PBIntermediateNode {
   /// Adds child to node.
   void addChild(PBIntermediateNode node);
 }
-
-abstract class ChildrenListener {
-  ///the [convertedChildren] are updated. Used for subclasses that need their convertedChildren information
-  ///in order to assign some of their attributes. Left
-  void childrenUpdated();
-}

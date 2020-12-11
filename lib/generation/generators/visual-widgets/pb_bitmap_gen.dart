@@ -16,14 +16,15 @@ class PBBitmapGenerator extends PBGenerator {
   String generate(PBIntermediateNode source) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
-    if (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER) {
+    if (source.builder_type == BUILDER_TYPE.SHARED_MASTER) {
       // see if source is overridden
       String ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
       if (ovrName != null) {
         buffer.write("${ovrName} ?? ");
       }
     }
-    buffer.write('\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source)})');
+    buffer.write(
+        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source)})');
     return buffer.toString();
   }
 }

@@ -5,15 +5,17 @@ import 'package:parabeac_core/generation/generators/state_management/provider_ma
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
 import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:recase/recase.dart';
 
 enum BUILDER_TYPE {
   STATEFUL_WIDGET,
-  SYMBOL_MASTER,
-  SYMBOL_INSTANCE,
+  SHARED_MASTER,
+  SHARED_INSTANCE,
   STATELESS_WIDGET,
   BODY,
   SCAFFOLD_BODY,
@@ -55,7 +57,7 @@ class _${widgetName} extends State<${widgetName}>{
     return '''
 ${generateImports()}
 
-class ${widgetName} extends StatelessWidget{
+class ${widgetName.pascalCase} extends StatelessWidget{
   const ${widgetName}({Key key}) : super(key : key);
   ${generateInstanceVariables()}
   ${generateConstructor(constructorName)}
@@ -127,16 +129,18 @@ class ${widgetName} extends StatelessWidget{
 
   @override
   String generate(PBIntermediateNode rootNode,
-      {type = BUILDER_TYPE.STATEFUL_WIDGET}) {
+      {type = BUILDER_TYPE.STATELESS_WIDGET}) {
     if (rootNode == null) {
       return null;
     }
 
     ///Automatically assign type for symbols
     if (rootNode is PBSharedMasterNode) {
-      type = BUILDER_TYPE.SYMBOL_MASTER;
+      type = BUILDER_TYPE.SHARED_MASTER;
     } else if (rootNode is PBSharedInstanceIntermediateNode) {
-      type = BUILDER_TYPE.SYMBOL_INSTANCE;
+      type = BUILDER_TYPE.SHARED_INSTANCE;
+    } else if (rootNode is InheritedScaffold) {
+      type = BUILDER_TYPE.STATEFUL_WIDGET;
     }
     rootNode.builder_type = type;
 
@@ -155,8 +159,9 @@ class ${widgetName} extends StatelessWidget{
         case BUILDER_TYPE.EMPTY_PAGE:
           return generateImports() + body.toString();
           break;
-        case BUILDER_TYPE.SYMBOL_MASTER:
-        case BUILDER_TYPE.SYMBOL_INSTANCE:
+        case BUILDER_TYPE.SHARED_MASTER:
+          return generateStatelessWidget(gen.generate(rootNode), rootNode.name);
+        case BUILDER_TYPE.SHARED_INSTANCE:
         case BUILDER_TYPE.BODY:
         default:
           return gen.generate(rootNode);

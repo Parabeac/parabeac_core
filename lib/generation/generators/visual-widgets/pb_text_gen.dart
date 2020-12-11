@@ -10,7 +10,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
 
   @override
   String generate(PBIntermediateNode source) {
-    var isSymbolMaster = (source.builder_type == BUILDER_TYPE.SYMBOL_MASTER);
+    var isSymbolMaster = (source.builder_type == BUILDER_TYPE.SHARED_MASTER);
     if (source is InheritedText) {
       var buffer = StringBuffer();
       buffer.write('Text(\n');

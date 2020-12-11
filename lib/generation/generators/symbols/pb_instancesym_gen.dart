@@ -16,15 +16,14 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source) {
     if (source is PBSharedInstanceIntermediateNode) {
-      String method_signature = source.functionCallName;
+      var method_signature = source.functionCallName;
       if (method_signature == null) {
-          log.error(' Could not find master name on: $source');
-          return 'Container(/** This Symbol was not found **/)';
+        log.error(' Could not find master name on: $source');
+        return 'Container(/** This Symbol was not found **/)';
       }
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
       var buffer = StringBuffer();
-
 
       method_signature = method_signature[0].toLowerCase() +
           method_signature.substring(1, method_signature.length);
@@ -47,13 +46,14 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             // hack to include import
-            source.generator.manager.addImport('package:${MainInfo().projectName}/document/shared_props.g.dart');
-            buffer.write('${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
+            source.generator.manager.addImport(
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            buffer.write(
+                '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
             break;
           default:
             buffer.write('${param.name}: \"${param.value}\",');
             break;
-
         }
       }
       // end of return function();
