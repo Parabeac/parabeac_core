@@ -1,11 +1,9 @@
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
-import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
-import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -30,7 +28,7 @@ class PBFlutterGenerator extends PBGenerationManager {
 
   String generateStatefulWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
+    var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
 
@@ -53,7 +51,7 @@ class _${widgetName} extends State<${widgetName}>{
 
   String generateStatelessWidget(String body, String name) {
     var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
+    var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
 

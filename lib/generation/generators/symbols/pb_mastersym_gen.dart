@@ -2,7 +2,6 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:quick_log/quick_log.dart';
 
 import '../pb_flutter_generator.dart';

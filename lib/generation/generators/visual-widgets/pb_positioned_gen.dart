@@ -55,7 +55,7 @@ class PBPositionedGenerator extends PBGenerator {
 
       try {
         buffer.write(
-            'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)},');
+            'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)},');
       } catch (e, stackTrace) {
         MainInfo().sentry.captureException(
               exception: e,

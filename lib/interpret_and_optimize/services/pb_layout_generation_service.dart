@@ -101,8 +101,8 @@ class PBLayoutGenerationService implements PBGenerationService {
         var replacementNode = InjectedContainer(
           rootNode.bottomRightCorner,
           rootNode.topLeftCorner,
+          rootNode.name,
           Uuid().v4(),
-          '',
           currentContext: currentContext,
         );
         replacementNode.prototypeNode = prototypeNode;

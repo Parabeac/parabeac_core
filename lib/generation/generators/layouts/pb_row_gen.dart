@@ -16,7 +16,7 @@ class PBRowGenerator extends PBLayoutGenerator {
 
       for (PBIntermediateNode child in children) {
         buffer.write(manager.generate(child,
-            type: source.builder_type ?? BUILDER_TYPE.BODY));
+            type: child.builder_type ?? BUILDER_TYPE.BODY));
         var trailing_comma = (counter + 1) == children.length ? '' : ',';
         buffer.write(trailing_comma);
         counter++;

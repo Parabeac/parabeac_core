@@ -63,7 +63,7 @@ class PBPaddingGen extends PBGenerator {
 
     if (source.child != null) {
       buffer.write(
-          'child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)}');
+          'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)}');
     }
     buffer.write(')');
 
