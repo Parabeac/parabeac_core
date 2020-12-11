@@ -203,12 +203,11 @@ class FlutterProjectBuilder {
         // Add to cache if node is scaffold or symbol master
         if (intermediateItem.node is InheritedScaffold) {
           PBGenCache().addToCache(intermediateItem.node.UUID,
-              '${screenDirectoryName}/${intermediateItem.node.name}.dart');
+              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
         } else {
-          // } else if (intermediateItem.node is PBSharedMasterNode) {
           PBGenCache().addToCache(
               (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
-              '${viewDirectoryName}/${intermediateItem.node.name}.dart');
+              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
         }
       }
     }
