@@ -17,10 +17,10 @@ class PBStateManagementHelper {
   void interpretStateManagementNode(PBIntermediateNode node) {
     if (_hasValidName(node.name)) {
       var nameAndStates = node.name.split('/');
-      var variation = nameAndStates[1];
+      var stateName = nameAndStates[0];
       // TODO: these states will be used for phase 2 of state management
-      var states = nameAndStates[1].split(',');
-      PBStateManagementLinker().processVariation(node, variation);
+      var variations = nameAndStates[1].split(',');
+      PBStateManagementLinker().processVariation(node, stateName);
     }
   }
 
