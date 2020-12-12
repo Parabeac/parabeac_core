@@ -12,7 +12,7 @@ class PBFlutterWriter implements PBPageWriter {
   ///[fileAbsPath] should be the absolute path of the file
   @override
   void write(String code, String fileAbsPath) {
-    File(fileAbsPath).createSync();
+    File(fileAbsPath).createSync(recursive: true);
     var writer = File(fileAbsPath);
     writer.writeAsStringSync(code);
   }
