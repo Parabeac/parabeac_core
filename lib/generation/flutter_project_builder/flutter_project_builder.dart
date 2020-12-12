@@ -204,10 +204,13 @@ class FlutterProjectBuilder {
         if (intermediateItem.node is InheritedScaffold) {
           PBGenCache().addToCache(intermediateItem.node.UUID,
               '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
-        } else {
+        } else if (intermediateItem.node is PBSharedMasterNode) {
           PBGenCache().addToCache(
               (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
               '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
+        } else {
+          PBGenCache().addToCache(intermediateItem.node.UUID,
+              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
         }
       }
     }
