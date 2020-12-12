@@ -69,24 +69,18 @@ class PBLayoutGenerationService implements PBGenerationService {
     PBIntermediateNode rootNode,
   ) {
     try {
-      var layoutsMapped = _traverseLayers(rootNode, (layer) {
+      rootNode = _traverseLayers(rootNode, (layer) {
         return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
             .map(_removingMeaninglessGroup)
             .map(_layoutConditionalReplacement)
-
-            ///apply the post condition rules to all the nodes in the
-            // .map(_applyPostConditionRules)
             .toList();
       });
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
-      ///TODO: Apply Rules
-      // return _traverseLayers(layoutsMapped,
-      //     (layer) => layer.map(_applyPostConditionRules).toList());
-      return layoutsMapped;
+      return _applyPostConditionRules(rootNode);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -127,6 +121,10 @@ class PBLayoutGenerationService implements PBGenerationService {
             ? node.replaceChildren(currentTuple.item2 ?? [])
             : node.child =
                 (currentTuple.item2.isNotEmpty ? currentTuple.item2[0] : null);
+      } else {
+        ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
+        ///new `rootNode`.
+        rootNode = currentTuple.item2.first;
       }
     }
     return rootNode;
@@ -227,6 +225,12 @@ class PBLayoutGenerationService implements PBGenerationService {
           return result;
         }
       }
+    }
+    if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
+      node.replaceChildren(
+          node.children.map((node) => _applyPostConditionRules(node)).toList());
+    } else if (node is PBVisualIntermediateNode) {
+      node.child = _applyPostConditionRules(node.child);
     }
     return node;
   }
