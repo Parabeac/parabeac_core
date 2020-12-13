@@ -26,7 +26,8 @@ class StatefulManagement extends StateManagementConfig {
     var nameOfDefaultNode = _getNameOfNode(node);
     var defaultNodePath = '${pathToViews}/${node.name.snakeCase}';
     var generator = PBFlutterGenerator(manager.pageWriter);
-    manager.pageWriter.write(generator.generate(node), defaultNodePath);
+    manager.pageWriter
+        .write(generator.generate(node), '${defaultNodePath}.dart');
     manager.addImport(defaultNodePath);
 
     var variable = PBVariable(
