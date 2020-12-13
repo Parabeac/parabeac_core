@@ -22,7 +22,6 @@ String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
 class FlutterProjectBuilder {
   String projectName;
-  String pathToIntermiateFile;
   PBIntermediateTree mainTree;
 
   var log = Logger('Project Builder');
@@ -36,14 +35,8 @@ class FlutterProjectBuilder {
 
   StateManagementConfig stateManagementConfig;
 
-  FlutterProjectBuilder(
-      {this.projectName, this.pathToIntermiateFile, this.mainTree}) {
+  FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
-    if (pathToIntermiateFile == null) {
-      log.info(
-          'Flutter Project Builder must have a JSON file in intermediate format passed to `pathToIntermediateFile`');
-      return;
-    }
     stateManagementConfig =
         configurations[MainInfo().configurations['state-management']];
   }
