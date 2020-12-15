@@ -230,7 +230,7 @@ class FlutterProjectBuilder {
         if (intermediateItem.node.auxiliaryData.stateGraph.states.isNotEmpty &&
             stateManagementConfig != null) {
           page = stateManagementConfig.setStatefulNode(intermediateItem.node,
-              flutterGenerator, '${projectName}/lib/screens/${directoryName}');
+              flutterGenerator, '${projectName}/lib/views/${directoryName}');
         } else {
           page = flutterGenerator.generate(intermediateItem.node);
         }

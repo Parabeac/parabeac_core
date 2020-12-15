@@ -13,18 +13,17 @@ class StatefulManagement extends StateManagementConfig {
       PBIntermediateNode node, PBGenerationManager manager, String path) {
     /// Add All States as Stateless Widget classes to a Views folder in the same directory as the current class being written in.
     /// If Views folder doesn't exist, inject the folder then begin writing the Stateless Widgets.
-    var pathToViews = '${path}/views';
-    Directory(pathToViews).createSync(recursive: true);
+    Directory(path).createSync(recursive: true);
     for (var state in node.auxiliaryData.stateGraph.states) {
       var generator = PBFlutterGenerator(manager.pageWriter);
       manager.pageWriter.write(
         generator.generate(state.variation.node),
-        '${pathToViews}/${state.variation.node.name.snakeCase}.dart',
+        '${path}/${state.variation.node.name.snakeCase}.dart',
       );
     }
 
     var nameOfDefaultNode = _getNameOfNode(node);
-    var defaultNodePath = '${pathToViews}/${node.name.snakeCase}';
+    var defaultNodePath = '${path}/${node.name.snakeCase}';
     var generator = PBFlutterGenerator(manager.pageWriter);
     manager.pageWriter
         .write(generator.generate(node), '${defaultNodePath}.dart');
