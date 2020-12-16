@@ -1,7 +1,9 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -68,14 +70,15 @@ void main() {
 
     test('', () {
       var result = PBLayoutGenerationService(currentContext: currentContext)
-          .injectNodes(tempGroup);
-      expect(result.child != null, true);
-      expect(result.child.children != null && result.child.children.isNotEmpty,
-          true);
-      expect(result.child.children[0].topLeftCorner, Point(0, 0));
-      expect(result.child.children[0].bottomRightCorner, Point(100, 100));
-      expect(result.child.children[1].topLeftCorner, Point(0, 150));
-      expect(result.child.children[1].bottomRightCorner, Point(200, 250));
+          .extractLayouts(tempGroup);
+      expect(result.runtimeType, PBIntermediateColumnLayout);
+      if (result is PBLayoutIntermediateNode) {
+        expect(result.children != null && result.children.isNotEmpty, true);
+        expect(result.children[0].topLeftCorner, Point(0, 0));
+        expect(result.children[0].bottomRightCorner, Point(100, 100));
+        expect(result.children[1].topLeftCorner, Point(0, 150));
+        expect(result.children[1].bottomRightCorner, Point(200, 250));
+      }
     });
   });
 }
