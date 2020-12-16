@@ -220,7 +220,7 @@ class FlutterProjectBuilder {
         var screenFilePath =
             '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         var viewFilePath =
-            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.dart';
+            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
         flutterGenerator.imports.addAll(ImportHelper.findImports(
             intermediateItem.node,
             intermediateItem.node is InheritedScaffold
