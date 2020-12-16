@@ -5,7 +5,9 @@ class PBConfiguration {
     widgetStyle = defaultConfig['widgetStyle'];
     widgetType = defaultConfig['widgetType'];
     widgetSpacing = defaultConfig['widgetSpacing'];
-    layoutPrecedence = defaultConfig['layoutPrecedence'] ?? ['column', 'row', 'stack'];
+    layoutPrecedence =
+        defaultConfig['layoutPrecedence'] ?? ['column', 'row', 'stack'];
+    stateManagement = defaultConfig['stateManagement'] ?? 'Provider';
   }
 
   String widgetStyle;
@@ -14,11 +16,12 @@ class PBConfiguration {
 
   String widgetSpacing;
 
+  String stateManagement;
+
   List<dynamic> layoutPrecedence;
 
   Map specificConfig;
 
   // not sure why setConfigurations(), so replaced with this class variable
   Map configurations;
-
 }
