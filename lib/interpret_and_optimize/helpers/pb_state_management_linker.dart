@@ -17,16 +17,16 @@ class PBStateManagementLinker {
   /// Adds the `node` variation to the [DirectedStateGraph] of the
   /// default [PBIntermediateNode], or sets up `node` as default
   /// to receive [IntermediateStates] in its state graph.
-  void processVariation(PBIntermediateNode node, String variationName) {
+  void processVariation(PBIntermediateNode node, String rootNodeName) {
     // Assign `node` as default
-    if (!containsElement(variationName)) {
-      _statemap[variationName] = node;
+    if (!containsElement(rootNodeName)) {
+      _statemap[rootNodeName] = node;
     }
     // Add state to default node
     else {
       var intermediateState =
           IntermediateState(variation: IntermediateVariation(node));
-      _statemap[variationName]
+      _statemap[rootNodeName]
           .auxiliaryData
           .stateGraph
           .addState(intermediateState);
