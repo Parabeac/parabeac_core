@@ -200,10 +200,10 @@ class FlutterProjectBuilder {
         } else if (intermediateItem.node is PBSharedMasterNode) {
           PBGenCache().addToCache(
               (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
-              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
+              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
         } else {
           PBGenCache().addToCache(intermediateItem.node.UUID,
-              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
+              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
         }
       }
     }
