@@ -11,12 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
 import 'package:test/test.dart';
 
-class MockSketchNode extends Mock implements SketchNode {
-  // @override
-  // Future<PBIntermediateNode> interpretNode(currentContext) =>
-  //     Future.value(InheritedContainer(MockSketchNode(), null, null,
-  //         currentContext: currentContext));
-}
+class MockSketchNode extends Mock implements SketchNode {}
 
 class ContextMock extends Mock implements PBContext {}
 
@@ -42,14 +37,6 @@ void main() {
     response = await vgs.getIntermediateTree();
     expect(response, isNotNull);
   });
-
-  // test('VisualGenerationService should not produce any alignment nodes.', (){
-  //   var queue = <PBIntermediateNode>[];
-  //   queue.add(response);
-  //   while(queue.isNotEmpty){
-
-  //   }
-  // });
 
   /// This test relies on previous tests running.
   test(

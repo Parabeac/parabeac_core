@@ -61,7 +61,6 @@ class PBLayoutGenerationService implements PBGenerationService {
   }
 
   ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
-
   ///The default [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode defaultLayout;
 
@@ -96,8 +95,6 @@ class PBLayoutGenerationService implements PBGenerationService {
       PBIntermediateNode rootNode,
       List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
           transformation) {
-    // var prototypeNode;
-
     ///The stack is going to saving the current layer of tree along with the parent of
     ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
     ///of nodes for the current layer in the second layer.
@@ -136,7 +133,8 @@ class PBLayoutGenerationService implements PBGenerationService {
   /// and that group contained the visual nodes.
   PBIntermediateNode _removingMeaninglessGroup(PBIntermediateNode tempGroup) {
     while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
-      tempGroup = (tempGroup as TempGroupLayoutNode).children[0];
+      tempGroup = _replaceNode(
+          tempGroup, (tempGroup as TempGroupLayoutNode).children[0]);
     }
     return tempGroup;
   }
@@ -201,15 +199,27 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
       parent.replaceChildren(children);
       if (children.length == 1) {
-        return children[0];
+        return _replaceNode(parent, children[0]);
       } else {
         return parent is! TempGroupLayoutNode
             ? parent
-            : defaultLayout.generateLayout(
-                children, currentContext, parent.name);
+            : _replaceNode(
+                parent,
+                defaultLayout.generateLayout(
+                    children, currentContext, parent.name));
       }
     }
     return parent;
+  }
+
+  ///Makes sure all the necessary attributes are recovered before replacing a [PBIntermediateNode]
+  PBIntermediateNode _replaceNode(
+      PBIntermediateNode candidate, PBIntermediateNode replacement) {
+    if (candidate is PBLayoutIntermediateNode &&
+        replacement is PBLayoutIntermediateNode) {
+      replacement.prototypeNode = candidate.prototypeNode;
+    }
+    return replacement;
   }
 
   ///Applying [PostConditionRule]s at the end of the [PBLayoutIntermediateNode]
@@ -222,7 +232,7 @@ class PBLayoutGenerationService implements PBGenerationService {
       if (postConditionRule.testRule(node, null)) {
         var result = postConditionRule.executeAction(node, null);
         if (result != null) {
-          return result;
+          return _replaceNode(node, result);
         }
       }
     }
