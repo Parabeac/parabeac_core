@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
 
@@ -16,17 +17,25 @@ class StatefulManagement extends StateManagementConfig {
     Directory(path).createSync(recursive: true);
     for (var state in node.auxiliaryData.stateGraph.states) {
       var generator = PBFlutterGenerator(manager.pageWriter);
-      manager.pageWriter.write(
-        generator.generate(state.variation.node),
-        '${path}/${state.variation.node.name.snakeCase}.dart',
-      );
+      if (node is! InheritedScaffold) {
+        manager.pageWriter.write(
+          generator.generate(state.variation.node),
+          '${path}/${state.variation.node.name.snakeCase}.g.dart',
+        );
+      } else {
+        print('Parabeac-Core does not support Scaffolds as a state.');
+        manager.pageWriter.write(
+          generator.generate(state.variation.node),
+          '${path}/${state.variation.node.name.snakeCase}.dart',
+        );
+      }
     }
 
     var nameOfDefaultNode = _getNameOfNode(node);
     var defaultNodePath = '${path}/${node.name.snakeCase}';
     var generator = PBFlutterGenerator(manager.pageWriter);
     manager.pageWriter
-        .write(generator.generate(node), '${defaultNodePath}.dart');
+        .write(generator.generate(node), '${defaultNodePath}.g.dart');
     manager.addImport(defaultNodePath);
 
     var variable = PBVariable(

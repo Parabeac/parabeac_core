@@ -200,10 +200,10 @@ class FlutterProjectBuilder {
         } else if (intermediateItem.node is PBSharedMasterNode) {
           PBGenCache().addToCache(
               (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
-              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
+              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
         } else {
           PBGenCache().addToCache(intermediateItem.node.UUID,
-              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
+              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
         }
       }
     }
@@ -220,7 +220,7 @@ class FlutterProjectBuilder {
         var screenFilePath =
             '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         var viewFilePath =
-            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.dart';
+            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
         flutterGenerator.imports.addAll(ImportHelper.findImports(
             intermediateItem.node,
             intermediateItem.node is InheritedScaffold
