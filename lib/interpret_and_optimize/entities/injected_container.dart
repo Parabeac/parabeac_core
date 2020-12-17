@@ -24,7 +24,6 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   @override
   final String color;
-  var child;
   Map size;
   Map margins;
   Map padding;
