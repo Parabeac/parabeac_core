@@ -29,7 +29,7 @@ class PBAlignGenerationService implements PBGenerationService {
   PBIntermediateNode addAlignmentToLayouts() {
     if (originalRoot == null) {
       log.warning(
-          '[VisualGenerationService] generate() attempted to generate a non-existing tree');
+          '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
       return null;
     }
 
