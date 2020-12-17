@@ -109,7 +109,7 @@ class Interpret {
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var parentVisualIntermediateNode = await _visualGenerationService(
+    var parentVisualIntermediateNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
     ///
@@ -117,20 +117,20 @@ class Interpret {
     /// NOTE Disabled Plugin Control Service for right now
     ///
     var stopwatch1 = Stopwatch()..start();
-    var parentPreLayoutIntermediateNode = await _pluginService(
+    var parentPreLayoutIntermediateNode = await pluginService(
         parentVisualIntermediateNode, currentContext, stopwatch1);
 
     var stopwatch2 = Stopwatch()..start();
 
     /// LayoutGenerationService
 
-    var parentLayoutIntermediateNode = await _layoutGenerationService(
+    var parentLayoutIntermediateNode = await layoutGenerationService(
         parentPreLayoutIntermediateNode, currentContext, stopwatch2);
 
     var stopwatch3 = Stopwatch()..start();
 
     /// AlignGenerationService
-    var parentAlignIntermediateNode = await _alignGenerationService(
+    var parentAlignIntermediateNode = await alignGenerationService(
         parentLayoutIntermediateNode, currentContext, stopwatch3);
 
     return parentAlignIntermediateNode;
@@ -210,7 +210,7 @@ class Interpret {
     return parentAlignIntermediateNode;
   }
 
-  Future<PBIntermediateNode> _visualGenerationService(
+  Future<PBIntermediateNode> visualGenerationService(
       var component, var context, var stopwatch) async {
     /// VisualGenerationService
     PBIntermediateNode node;
@@ -231,7 +231,7 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _pluginService(
+  Future<PBIntermediateNode> pluginService(
       PBIntermediateNode parentnode, var context, var stopwatch1) async {
     PBIntermediateNode node;
     try {
@@ -251,7 +251,7 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _layoutGenerationService(
+  Future<PBIntermediateNode> layoutGenerationService(
       PBIntermediateNode parentNode, var context, var stopwatch2) async {
     PBIntermediateNode node;
     try {
@@ -273,7 +273,7 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _alignGenerationService(
+  Future<PBIntermediateNode> alignGenerationService(
       PBIntermediateNode parentnode, var context, var stopwatch3) async {
     PBIntermediateNode node;
 

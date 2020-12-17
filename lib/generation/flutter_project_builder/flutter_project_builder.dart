@@ -4,6 +4,7 @@ import 'package:archive/archive.dart';
 import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
 import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
@@ -103,6 +104,9 @@ class FlutterProjectBuilder {
         }
       }
     }
+
+    // Wait for State Management nodes to finish being interpreted
+    await Future.wait(PBStateManagementLinker().stateQueue);
 
     // generate shared Styles if any found
     if (mainTree.sharedStyles != null && mainTree.sharedStyles.isNotEmpty) {

@@ -15,21 +15,34 @@ class PBStateManagementHelper {
   }
 
   void interpretStateManagementNode(PBIntermediateNode node) {
-    if (_hasValidName(node.name)) {
-      var nameAndStates = node.name.split('/');
-      var stateName = nameAndStates[0];
+    if (isValidStateNode(node.name)) {
+      var nodeName = _getNodeName(node.name);
       // TODO: these states will be used for phase 2 of state management
-      var variations = nameAndStates[1].split(',');
-      PBStateManagementLinker().processVariation(node, stateName);
+      var states = _getStates(node.name);
+      linker.processVariation(node, nodeName);
     }
   }
 
   /// Returns `true` if `node` is or would be the default node,
   /// `false` otherwise
   bool isDefaultNode(PBIntermediateNode node) =>
-      !linker.containsElement(node.name);
+      !linker.containsElement(_getNodeName(node.name));
+
+  String _getNodeName(String fullName) {
+    if (!isValidStateNode(fullName)) {
+      return '';
+    }
+    return fullName.split('/')[0];
+  }
+
+  List<String> _getStates(String fullName) {
+    if (!isValidStateNode(fullName)) {
+      return [];
+    }
+    return fullName.split('/')[1].split(',');
+  }
 
   /// Returns true if `name` is a valid state management name
-  bool _hasValidName(String name) =>
+  bool isValidStateNode(String name) =>
       RegExp(r'^\w*\/(\w*,?\s?)*[\w]$').hasMatch(name);
 }
