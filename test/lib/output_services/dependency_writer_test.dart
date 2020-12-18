@@ -6,9 +6,9 @@ void main() {
   group('Dependency writer test', () {
     var writer;
     var yamlAbsPath =
-        '${Directory.current.path}/test/lib/output_services/tempTest/pubspec.yaml';
+        '${Directory.current.path}/test/lib/output_services/tmptst/pubspec.yaml';
     setUp(() async {
-      Process.runSync('flutter', ['create', 'tempTest'],
+      Process.runSync('flutter', ['create', 'tmptst'],
           workingDirectory:
               '${Directory.current.path}/test/lib/output_services/');
       writer = PBFlutterWriter();
@@ -26,7 +26,7 @@ void main() {
       expect(lineShelf >= 0, true);
     });
     tearDownAll(() {
-      Process.runSync('rm', ['-r', 'tempTest'],
+      Process.runSync('rm', ['-r', 'tmptst'],
           workingDirectory:
               '${Directory.current.path}/test/lib/output_services/');
     });

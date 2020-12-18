@@ -40,8 +40,7 @@ class PBVisualGenerationService implements PBGenerationService {
   /// @return Returns the root node of the intermediate tree.
   Future<PBIntermediateNode> getIntermediateTree() async {
     if (originalRoot == null) {
-      assert(true,
-          '[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+      return Future.value(null);
     }
     PBPluginListHelper().initPlugins(currentContext);
 
@@ -62,8 +61,8 @@ class PBVisualGenerationService implements PBGenerationService {
           result = PBPluginListHelper()
               .returnAllowListNodeIfExists(currentNode.designNode);
 
-          // Generate general intermediate node if still null.
-          // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
+          /// Generate general intermediate node if still null.
+          /// needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
 
           if (result == null ||
               currentNode.designNode is PBSharedInstanceDesignNode ||
@@ -114,7 +113,21 @@ class PBVisualGenerationService implements PBGenerationService {
       destHolder.addChild(rootIntermediateNode);
       return destHolder;
     }
+    _extractScreenSize(rootIntermediateNode);
     return rootIntermediateNode;
+  }
+
+  ///Sets the size of the UI element.
+  ///
+  ///We are assuming that since the [rootIntermediateNode] contains all of the nodes
+  ///then it should represent the biggest screen size that encapsulates the entire UI elements.
+  void _extractScreenSize(PBIntermediateNode rootIntermediateNode) {
+    if (currentContext.screenBottomRightCorner == null &&
+        currentContext.screenTopLeftCorner == null) {
+      currentContext.screenBottomRightCorner =
+          rootIntermediateNode.bottomRightCorner;
+      currentContext.screenTopLeftCorner = rootIntermediateNode.topLeftCorner;
+    }
   }
 
   void _addToParent(PBIntermediateNode parentNode,

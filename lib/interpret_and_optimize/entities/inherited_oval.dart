@@ -10,11 +10,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:quick_log/quick_log.dart';
 
 class InheritedOval extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   var originalRef;
+  var log = Logger('Layout Generation Service');
 
   @override
   PrototypeNode prototypeNode;
@@ -54,9 +56,8 @@ class InheritedOval extends PBVisualIntermediateNode
     if (node is InheritedShapePath) {
       return;
     }
-    assert(false,
+    log.error(
         'Child with type ${node.runtimeType} could not be added as a child.');
-    return;
   }
 
   @override

@@ -29,12 +29,6 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   PBContext currentContext;
 
-  @override
-  Point topLeftCorner;
-
-  @override
-  Point bottomRightCorner;
-
   Map alignment = {};
 
   @override

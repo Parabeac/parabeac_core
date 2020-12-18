@@ -58,13 +58,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     generator = PBScaffoldGenerator();
 
-    this.currentContext.screenBottomRightCorner = Point(
-        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
-        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
-
-    this.currentContext.screenTopLeftCorner =
-        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
-
     auxiliaryData.color = toHex(originalRef.backgroundColor);
   }
 

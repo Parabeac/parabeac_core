@@ -30,10 +30,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   PBContext currentContext;
 
-  Point topLeftCorner;
-
-  Point bottomRightCorner;
-
   @override
   PrototypeNode prototypeNode;
 

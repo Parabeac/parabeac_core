@@ -25,12 +25,6 @@ class InjectedContainer extends PBVisualIntermediateNode
             UUID: UUID) {
     generator = PBContainerGenerator();
 
-    if (currentContext.screenBottomRightCorner == null &&
-        currentContext.screenTopLeftCorner == null) {
-      this.currentContext.screenBottomRightCorner = bottomRightCorner;
-      this.currentContext.screenTopLeftCorner = topLeftCorner;
-    }
-
     size = {
       'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
       'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
