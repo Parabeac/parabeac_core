@@ -68,7 +68,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     PBIntermediateNode rootNode,
   ) {
     try {
-      rootNode = _traverseLayers(rootNode, (layer) {
+      rootNode = _traverseLayersUtil(rootNode, (layer) {
         return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
@@ -91,7 +91,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     }
   }
 
-  PBIntermediateNode _traverseLayers(
+  PBIntermediateNode _traverseLayersUtil(
       PBIntermediateNode rootNode,
       List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
           transformation) {
@@ -111,7 +111,6 @@ class PBLayoutGenerationService implements PBGenerationService {
               : stack.add(Tuple2(currentNode, [currentNode.child]));
         }
       });
-
       var node = currentTuple.item1;
       if (node != null) {
         node is PBLayoutIntermediateNode
@@ -227,6 +226,12 @@ class PBLayoutGenerationService implements PBGenerationService {
     if (node == null) {
       return node;
     }
+    if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
+      node.replaceChildren(
+          node.children.map((node) => _applyPostConditionRules(node)).toList());
+    } else if (node is PBVisualIntermediateNode) {
+      node.child = _applyPostConditionRules(node.child);
+    }
 
     for (var postConditionRule in _postLayoutRules) {
       if (postConditionRule.testRule(node, null)) {
@@ -235,12 +240,6 @@ class PBLayoutGenerationService implements PBGenerationService {
           return _replaceNode(node, result);
         }
       }
-    }
-    if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
-      node.replaceChildren(
-          node.children.map((node) => _applyPostConditionRules(node)).toList());
-    } else if (node is PBVisualIntermediateNode) {
-      node.child = _applyPostConditionRules(node.child);
     }
     return node;
   }
