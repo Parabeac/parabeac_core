@@ -67,6 +67,9 @@ class PBLayoutGenerationService implements PBGenerationService {
   PBIntermediateNode extractLayouts(
     PBIntermediateNode rootNode,
   ) {
+    if (rootNode == null) {
+      return rootNode;
+    }
     try {
       rootNode = _traverseLayersUtil(rootNode, (layer) {
         return layer
@@ -74,7 +77,10 @@ class PBLayoutGenerationService implements PBGenerationService {
             ///Remove the `TempGroupLayout` nodes that only contain one node
             .map(_removingMeaninglessGroup)
             .map(_layoutConditionalReplacement)
-            .toList();
+            .toList()
+
+              /// Filter out the elements that are null in the tree
+              ..removeWhere((element) => element == null);
       });
 
       ///After all the layouts are generated, the [PostConditionRules] are going
@@ -132,6 +138,10 @@ class PBLayoutGenerationService implements PBGenerationService {
   /// and that group contained the visual nodes.
   PBIntermediateNode _removingMeaninglessGroup(PBIntermediateNode tempGroup) {
     while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
+      if ((tempGroup as TempGroupLayoutNode).children.isEmpty) {
+        /// No meaning of processing an empty [TempGroupLayoutNode].
+        return null;
+      }
       tempGroup = _replaceNode(
           tempGroup, (tempGroup as TempGroupLayoutNode).children[0]);
     }
