@@ -35,14 +35,6 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   PBContext currentContext;
 
-  @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
   Map alignment = {};
 
   @override

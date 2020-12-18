@@ -37,12 +37,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @JsonKey(ignore: true)
   PBContext currentContext;
 
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
   @override
   @JsonKey(ignore: true)
   PrototypeNode prototypeNode;

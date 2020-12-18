@@ -26,10 +26,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   final String UUID;
 
-  Point topLeftCorner;
-
-  Point bottomRightCorner;
-
   Map alignment = {};
 
   @override
