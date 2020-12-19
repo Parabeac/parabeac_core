@@ -14,20 +14,20 @@ class FigmaController extends Controller {
   FigmaController();
 
   @override
-  void convertFile(var jsonFigma, var projectName, var configurationPath,
+  void convertFile(var jsonFigma, var outputPath, var configurationPath,
       var configType) async {
     configure(configurationPath, configType);
 
-    var figmaNodeTree = await generateFigmaTree(jsonFigma, projectName);
+    var figmaNodeTree = await generateFigmaTree(jsonFigma, outputPath);
 
     figmaNodeTree = declareScaffolds(figmaNodeTree);
 
-    Interpret().init(projectName);
+    Interpret().init(outputPath);
 
     var mainTree = await Interpret().interpretAndOptimize(figmaNodeTree);
 
     var fpb =
-        FlutterProjectBuilder(projectName: projectName, mainTree: mainTree);
+        FlutterProjectBuilder(projectName: outputPath, mainTree: mainTree);
 
     fpb.convertToFlutterProject();
   }

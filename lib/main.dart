@@ -160,7 +160,10 @@ ${parser.usage}
     if (jsonOfFigma != null) {
       // Starts Figma to Object
       FigmaController().convertFile(
-          jsonOfFigma, projectName, configurationPath, configurationType);
+          jsonOfFigma,
+          MainInfo().outputPath + projectName,
+          configurationPath,
+          configurationType);
     } else {
       log.error('File was not retrieved from Figma.');
     }

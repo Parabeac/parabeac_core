@@ -34,8 +34,8 @@ Future<dynamic> _processImages(List<String> uuids) async {
               log.error('Image ${entry.key} was not processed correctly');
             }
 
-            var file = File(
-                '${MainInfo().outputPath}pngs/${entry.key.replaceAll(':', '_')}.png')
+            var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
+                .replaceAll(':', '_'))
               ..createSync(recursive: true);
             file.writeAsBytesSync(imageRes.bodyBytes);
             // TODO: Only print out when verbose flag is active
