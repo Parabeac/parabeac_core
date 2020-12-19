@@ -45,14 +45,20 @@ void main() async {
       await processImageQueue();
       for (var uuid in uuidQueue) {
         expect(
-            File('${MainInfo().outputPath}pngs/$uuid.png'.replaceAll(':', '_'))
+            File('${MainInfo().outputPath}pngs/${uuid.replaceAll(':', '_')}.png')
                 .existsSync(),
             true);
       }
     });
 
     tearDownAll(() {
-      Process.runSync('rm', ['-rf', '${Directory.current.path}/test/tmp/']);
+      if (Platform.isWindows) {
+        Process.runSync(
+            'rmdir', ['/s', '/q', '${Directory.current.path}/test/tmp/'],
+            runInShell: true);
+      } else {
+        Process.runSync('rm', ['-rf', '${Directory.current.path}/test/tmp/']);
+      }
     });
   },
       skip: !Platform.environment.containsKey('FIG_API_KEY'),
