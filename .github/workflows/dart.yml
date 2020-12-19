@@ -23,9 +23,9 @@ jobs:
       uses: subosito/flutter-action@v1.4.0    
     
     - name: Install dependencies
-      run: pub get
+      run: flutter pub get
     - name: Run tests
-      run: pub run test
+      run: flutter pub run test
       env:
         FIG_API_KEY: ${{ secrets.FIG_API_KEY }}
         PB_IS_GITHUB_TEST: true
