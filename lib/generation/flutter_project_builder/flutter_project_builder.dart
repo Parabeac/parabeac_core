@@ -16,7 +16,7 @@ import 'package:parabeac_core/input/figma/helper/image_helper.dart'
 
 import 'import_helper.dart';
 
-String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
+String pathToFlutterProject = '${MainInfo().outputPath}';
 
 class FlutterProjectBuilder {
   String projectName;
@@ -32,7 +32,7 @@ class FlutterProjectBuilder {
 
   FlutterProjectBuilder(
       {this.projectName, this.pathToIntermiateFile, this.mainTree}) {
-    pathToFlutterProject = '${projectName}/';
+    pathToFlutterProject += '${projectName}/';
     if (pathToIntermiateFile == null) {
       log.info(
           'Flutter Project Builder must have a JSON file in intermediate format passed to `pathToIntermediateFile`');
@@ -42,8 +42,12 @@ class FlutterProjectBuilder {
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      var createResult = Process.runSync('flutter', ['create', '$projectName'],
-          workingDirectory: MainInfo().outputPath);
+      var createResult = Process.runSync(
+        'flutter',
+        ['create', projectName],
+        workingDirectory: MainInfo().outputPath,
+        runInShell: true,
+      );
       if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
         log.error(createResult.stderr);
       } else {
@@ -83,14 +87,26 @@ class FlutterProjectBuilder {
       await image_helper.processImageQueue();
     }
 
-    Process.runSync(
-        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
-        [
-          'mv ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
-        ],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: '${pathToFlutterProject}assets/');
+    if (MainInfo().platform == 'WIN') {
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+          [
+            'move ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
+                .replaceAll('/', '\\')
+          ],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${pathToFlutterProject}assets/');
+    } else {
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
+          [
+            'mv ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
+          ],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${pathToFlutterProject}assets/');
+    }
 
     // Add all images
     if (rawImages != null) {
@@ -137,20 +153,37 @@ class FlutterProjectBuilder {
     }
     await s.close();
 
-    Process.runSync(
-        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
-        ['rm -rf .dart_tool/build'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: '${MainInfo().outputPath}');
+    //Cleanup
+    if (MainInfo().platform == 'WIN') {
+      //windows specific cleanup
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+          ['rmdir /s /q .dart_tool/build'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+          ['rmdir /s /q pngs'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
+    } else {
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
+          ['rm -rf .dart_tool/build'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
 
-    // Remove pngs folder
-    Process.runSync(
-        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
-        ['rm -rf ${MainInfo().outputPath}/pngs'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: '${MainInfo().outputPath}');
+      // Remove pngs folder
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
+          ['rm -rf ${MainInfo().outputPath}/pngs'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: MainInfo().outputPath);
+    }
 
     log.info(
       Process.runSync(
@@ -161,6 +194,7 @@ class FlutterProjectBuilder {
                 '${pathToFlutterProject}lib',
                 '${pathToFlutterProject}test'
               ],
+              runInShell: true,
               workingDirectory: MainInfo().outputPath)
           .stdout,
     );
