@@ -16,7 +16,7 @@ import 'package:parabeac_core/input/figma/helper/image_helper.dart'
 
 import 'import_helper.dart';
 
-String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
+String pathToFlutterProject = '${MainInfo().outputPath}';
 
 class FlutterProjectBuilder {
   String projectName;
@@ -32,7 +32,7 @@ class FlutterProjectBuilder {
 
   FlutterProjectBuilder(
       {this.projectName, this.pathToIntermiateFile, this.mainTree}) {
-    pathToFlutterProject = '${projectName}/';
+    pathToFlutterProject += '${projectName}/';
     if (pathToIntermiateFile == null) {
       log.info(
           'Flutter Project Builder must have a JSON file in intermediate format passed to `pathToIntermediateFile`');
@@ -42,8 +42,12 @@ class FlutterProjectBuilder {
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      var createResult = Process.runSync('flutter', ['create', '$projectName'],
-          workingDirectory: MainInfo().outputPath);
+      var createResult = Process.runSync(
+        'flutter',
+        ['create', '$projectName'],
+        workingDirectory: MainInfo().outputPath,
+        runInShell: true,
+      );
       if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
         log.error(createResult.stderr);
       } else {
@@ -82,15 +86,28 @@ class FlutterProjectBuilder {
       log.info('Processing remaining images...');
       await image_helper.processImageQueue();
     }
-
-    Process.runSync(
+    if (MainInfo().platform == 'WIN') {
+      Process.runSync(
+        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+        [
+          'move ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
+              .replaceAll('/', '\\')
+        ],
+        runInShell: true,
+        environment: Platform.environment,
+        workingDirectory: '${pathToFlutterProject}assets/',
+      );
+    } else {
+      Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
         [
           'mv ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
         ],
         runInShell: true,
         environment: Platform.environment,
-        workingDirectory: '${pathToFlutterProject}assets/');
+        workingDirectory: '${pathToFlutterProject}assets/',
+      );
+    }
 
     // Add all images
     if (rawImages != null) {
@@ -137,20 +154,36 @@ class FlutterProjectBuilder {
     }
     await s.close();
 
-    Process.runSync(
-        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
-        ['rm -rf .dart_tool/build'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: '${MainInfo().outputPath}');
+//cleanup
+    if (MainInfo().platform == 'WIN') {
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+          ['rmdir /s /q .dart_tool/build'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
 
-    // Remove pngs folder
-    Process.runSync(
-        '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
-        ['rm -rf ${MainInfo().outputPath}/pngs'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: '${MainInfo().outputPath}');
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.bat',
+          ['rmdir /s /q pngs'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
+    } else {
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
+          ['rm -rf .dart_tool/build'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
+
+      Process.runSync(
+          '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
+          ['rm -rf ${MainInfo().outputPath}/pngs'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: '${MainInfo().outputPath}');
+    }
 
     log.info(
       Process.runSync(
@@ -161,6 +194,7 @@ class FlutterProjectBuilder {
                 '${pathToFlutterProject}lib',
                 '${pathToFlutterProject}test'
               ],
+              runInShell: true,
               workingDirectory: MainInfo().outputPath)
           .stdout,
     );
@@ -180,7 +214,7 @@ class FlutterProjectBuilder {
           directory.name == SYMBOL_DIR_NAME && _symbolsSinglePage;
 
       if (!isFirstTraversal) {
-        await Directory('${projectName}/lib/screens/${directoryName}')
+        await Directory('${pathToFlutterProject}/lib/screens/${directoryName}')
             .create(recursive: true);
       }
 
@@ -195,9 +229,9 @@ class FlutterProjectBuilder {
 
         var name = isSymbolsDir ? SYMBOL_DIR_NAME : fileName;
         var symbolFilePath =
-            '${projectName}/lib/screens/${directoryName}/${name.snakeCase}.dart';
+            '${pathToFlutterProject}/lib/screens/${directoryName}/${name.snakeCase}.dart';
         var fileNamePath =
-            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
+            '${pathToFlutterProject}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         // TODO: Need FlutterGenerator for each page because otherwise
         // we'd add all imports to every single dart page. Discuss alternatives
         if (!isSymbolsDir) {
@@ -226,9 +260,10 @@ class FlutterProjectBuilder {
           if (intermediateItem.node is InheritedScaffold &&
               (intermediateItem.node as InheritedScaffold).isHomeScreen) {
             var relPath = PBGenCache().getRelativePath(
-                '${projectName}/lib/main.dart', intermediateItem.node.UUID);
+                '${pathToFlutterProject}/lib/main.dart',
+                intermediateItem.node.UUID);
             await pageWriter.writeMainScreenWithHome(intermediateItem.node.name,
-                '${projectName}/lib/main.dart', relPath);
+                '${pathToFlutterProject}/lib/main.dart', relPath);
           }
 
           var page = flutterGenerator.generate(intermediateItem.node);
@@ -242,7 +277,7 @@ class FlutterProjectBuilder {
       if (!isFirstTraversal) {
         if (isSymbolsDir) {
           var symbolPath =
-              '${projectName}/lib/screens/${directoryName}/symbols.dart';
+              '${pathToFlutterProject}/lib/screens/${directoryName}/symbols.dart';
           importSet.add(flutterGenerator.generateImports());
 
           var importBuffer = StringBuffer();
@@ -254,7 +289,7 @@ class FlutterProjectBuilder {
                   bodyBuffer.toString(),
               symbolPath);
         }
-        pageWriter.submitDependencies(projectName + '/pubspec.yaml');
+        pageWriter.submitDependencies(pathToFlutterProject + '/pubspec.yaml');
       }
     }
   }
