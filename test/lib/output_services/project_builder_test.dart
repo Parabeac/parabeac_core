@@ -70,7 +70,7 @@ void main() {
       when(container.generator).thenReturn(containerGenerator);
 
       projectBuilder = await FlutterProjectBuilder(
-          projectName: outputPath, mainTree: intermediateTree);
+          projectName: 'temp2', mainTree: intermediateTree);
     });
     test('', () async {
       /// Check that the Dart file was created
@@ -79,7 +79,11 @@ void main() {
       await projectBuilder.convertToFlutterProject();
     });
     tearDownAll(() {
-      Process.runSync('rm', ['-rf', '$outputPath']);
+      if (Platform.isWindows) {
+        Process.runSync('rmdir', ['/s', '/q', '$outputPath'], runInShell: true);
+      } else {
+        Process.runSync('rm', ['-rf', '$outputPath']);
+      }
     });
   });
 }
