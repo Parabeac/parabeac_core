@@ -17,24 +17,24 @@ class SketchController extends Controller {
 
   ///Converting the [fileAbsPath] sketch file to flutter
   @override
-  void convertFile(var fileAbsPath, var projectPath, var configurationPath,
+  void convertFile(var fileAbsPath, var projectName, var configurationPath,
       var configType) async {
     configure(configurationPath, configType);
 
     ///INTAKE
     var ids = InputDesignService(fileAbsPath);
     var sketchNodeTree = generateSketchNodeTree(
-        ids, ids.metaFileJson['pagesAndArtboards'], projectPath);
+        ids, ids.metaFileJson['pagesAndArtboards'], projectName);
 
     ///INTERPRETATION
-    Interpret().init(projectPath);
+    Interpret().init(projectName);
     var mainTree = await Interpret().interpretAndOptimize(
       sketchNodeTree,
     );
 
     ///GENERATE FLUTTER CODE
     var fpb =
-        FlutterProjectBuilder(projectName: projectPath, mainTree: mainTree);
+        FlutterProjectBuilder(projectName: projectName, mainTree: mainTree);
     fpb.convertToFlutterProject();
   }
 
