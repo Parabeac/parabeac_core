@@ -94,6 +94,11 @@ ${parser.usage}
     designType = 'figma';
   }
 
+  if (projectName == 'test') {
+    handleError(
+        'Invalid project name: \'test\' - this will conflict with Flutter package dependencies');
+  }
+
   //  usage -c "default:lib/configurations/configurations.json
   var configSet = configurationPath.split(':');
   if (configSet.isNotEmpty) {
@@ -137,11 +142,8 @@ ${parser.usage}
       }
     }
 
-    await SketchController().convertFile(
-        path,
-        MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType);
+    await SketchController()
+        .convertFile(path, projectName, configurationPath, configurationType);
     process.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
@@ -160,10 +162,7 @@ ${parser.usage}
     if (jsonOfFigma != null) {
       // Starts Figma to Object
       FigmaController().convertFile(
-          jsonOfFigma,
-          MainInfo().outputPath + projectName,
-          configurationPath,
-          configurationType);
+          jsonOfFigma, projectName, configurationPath, configurationType);
     } else {
       log.error('File was not retrieved from Figma.');
     }
