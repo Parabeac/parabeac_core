@@ -1,10 +1,6 @@
 import 'dart:mirrors';
-
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-
 import '../pb_flutter_generator.dart';
 import '../pb_generator.dart';
 

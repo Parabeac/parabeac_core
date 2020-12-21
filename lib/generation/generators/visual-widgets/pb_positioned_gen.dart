@@ -25,19 +25,18 @@ class PBPositionedGenerator extends PBGenerator {
       if (source.builder_type == BUILDER_TYPE.SHARED_MASTER) {
         if (source.currentContext?.screenTopLeftCorner?.x != null &&
             source.currentContext?.screenBottomRightCorner?.x != null) {
-          double screenWidth = ((source.currentContext?.screenTopLeftCorner?.x
-                      as double) -
-                  (source.currentContext?.screenBottomRightCorner?.x as double))
-              .abs();
+          double screenWidth =
+              ((source.currentContext?.screenTopLeftCorner?.x) -
+                      (source.currentContext?.screenBottomRightCorner?.x))
+                  .abs();
           multStringH = 'constraints.maxWidth * ';
           hAlignValue = hAlignValue / screenWidth;
         }
 
         if (source.currentContext?.screenTopLeftCorner?.y != null &&
             source.currentContext?.screenBottomRightCorner?.y != null) {
-          double screenHeight = ((source.currentContext.screenTopLeftCorner.y
-                      as double) -
-                  (source.currentContext.screenBottomRightCorner.y as double))
+          double screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
+                  (source.currentContext.screenBottomRightCorner.y))
               .abs();
           multStringV = 'constraints.maxHeight * ';
           vAlignValue = vAlignValue / screenHeight;

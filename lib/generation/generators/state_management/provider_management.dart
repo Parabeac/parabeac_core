@@ -6,27 +6,30 @@ import 'package:parabeac_core/generation/generators/state_management/state_manag
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
 
-class ProviderManagement extends StateManagementConfig {
+class ProviderGeneratorWrapper extends StateManagementGenerator {
+  final PACKAGE_NAME = 'provider';
+  final PACKAGE_VERSION = '1.0.0';
+
   @override
   String setStatefulNode(
       PBIntermediateNode node, PBGenerationManager manager, String path) {
     /// Folder Paths needed for Provider
-    var pathToViews = '${path}/views';
-    var pathToModel = '${path}/model';
-    Directory(pathToViews).createSync(recursive: true);
+    final PATH_TO_VIEWS = '${path}/views';
+    final PATH_TO_MODELS = '${path}/model';
+    Directory(PATH_TO_VIEWS).createSync(recursive: true);
 
     /// Create all Views
     for (var state in node.auxiliaryData.stateGraph.states) {
       var generator = PBFlutterGenerator(manager.pageWriter);
       manager.pageWriter.write(
         generator.generate(state.variation.node),
-        '${pathToViews}/${state.variation.node.name.snakeCase}.dart',
+        '${PATH_TO_VIEWS}/${state.variation.node.name.snakeCase}.dart',
       );
     }
 
     /// Create Default View
     var nameOfDefaultNode = _getNameOfNode(node);
-    var defaultNodePath = '${pathToViews}/${node.name.snakeCase}';
+    var defaultNodePath = '${PATH_TO_VIEWS}/${node.name.snakeCase}';
     var generator = PBFlutterGenerator(manager.pageWriter);
     manager.pageWriter.write(generator.generate(node), defaultNodePath);
     manager.addImport(defaultNodePath);
@@ -61,5 +64,12 @@ class ProviderManagement extends StateManagementConfig {
     return ''' 
       import ...
     ''';
+  }
+
+  @override
+  String generate(PBIntermediateNode source) {
+    manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+    manager.addImport('import provider;');
+    throw UnimplementedError();
   }
 }

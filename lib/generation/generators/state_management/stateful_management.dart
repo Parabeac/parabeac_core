@@ -8,7 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
 
-class StatefulManagement extends StateManagementConfig {
+class StatefulManagement extends StateManagementGenerator {
   @override
   String setStatefulNode(
       PBIntermediateNode node, PBGenerationManager manager, String path) {
@@ -45,7 +45,7 @@ class StatefulManagement extends StateManagementConfig {
       '${nameOfDefaultNode.pascalCase}()',
     );
 
-    manager.addInstanceVariable(variable);
+    manager.addGlobalVariable(variable);
 
     return '${variable.variableName},';
   }
@@ -56,5 +56,11 @@ class StatefulManagement extends StateManagementConfig {
     // Remove everything after the /. So if the name is SignUpButton/Default, we end up with SignUpButton as the name we produce.
     name.replaceRange(index, name.length, '');
     return name;
+  }
+
+  @override
+  String generate(PBIntermediateNode source) {
+    // TODO: implement generate
+    return source.generator.generate(source);
   }
 }

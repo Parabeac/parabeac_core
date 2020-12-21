@@ -1,9 +1,6 @@
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -26,8 +23,9 @@ class PBFlutterGenerator extends PBGenerationManager {
     body = StringBuffer();
   }
 
+  ///Generating a [StatefulWidget]
   String generateStatefulWidget(String body, String name) {
-    var widgetName = _generateWidgetName(name);
+    var widgetName = _formatWidgetName(name);
     var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
@@ -39,7 +37,7 @@ class ${widgetName} extends StatefulWidget{
 }
 
 class _${widgetName} extends State<${widgetName}>{
-  ${generateInstanceVariables()}
+  ${generateGlobalVariables()}
   ${generateConstructor(constructorName)}
 
   @override
@@ -49,15 +47,16 @@ class _${widgetName} extends State<${widgetName}>{
 }''';
   }
 
+  ///Generating [StatelessWidget]
   String generateStatelessWidget(String body, String name) {
-    var widgetName = _generateWidgetName(name);
+    var widgetName = _formatWidgetName(name);
     var constructorName = '_$widgetName';
     return '''
 ${generateImports()}
 
 class ${widgetName.pascalCase} extends StatelessWidget{
   const ${widgetName.pascalCase}({Key key}) : super(key : key);
-  ${generateInstanceVariables()}
+  ${generateGlobalVariables()}
   ${generateConstructor(constructorName)}
 
   @override
@@ -67,60 +66,74 @@ class ${widgetName.pascalCase} extends StatelessWidget{
 }''';
   }
 
-  String _generateWidgetName(name) => PBInputFormatter.formatLabel(
+  String _formatWidgetName(name) => PBInputFormatter.formatLabel(
         name,
         isTitle: true,
         space_to_underscore: false,
       );
 
+  ///Generates a constructor given a name and `constructorVariable`
   String generateConstructor(name) {
-    if (constructorVariables == null || constructorVariables.isEmpty) {
+    if (constructorVariables == null) {
       return '';
     }
-    var variables = <PBVariable>[];
-    var optionalVariables = <PBVariable>[];
-    constructorVariables.forEach((param) {
-      // Only accept constructor variable if they are
-      // part of the variable instances
-      if (param.isRequired && instanceVariables.contains(param)) {
-        variables.add(param);
-      } else if (instanceVariables.contains(param)) {
-        optionalVariables.add(param);
-      } else {} // Do nothing
-    });
     var stringBuffer = StringBuffer();
     stringBuffer.write(name + '(');
-    variables.forEach((p) {
-      stringBuffer.write('this.' + p.variableName + ',');
-    });
+    var param;
+    while (constructorVariables.moveNext()) {
+      param = constructorVariables.current;
+      if (param.isRequired) {
+        stringBuffer.write('this.' + param.variableName + ',');
+      }
+      param = constructorVariables.current;
+    }
     stringBuffer.write('{');
-    optionalVariables.forEach((o) {
-      stringBuffer.write('this.' + o.variableName + ',');
-    });
+    while (constructorVariables.moveNext()) {
+      param = constructorVariables.current;
+      if (!param.isRequired) {
+        stringBuffer.write('this.' + param.variableName + ',');
+      }
+    }
     stringBuffer.write('});');
     return stringBuffer.toString();
   }
 
-  String generateInstanceVariables() {
-    if (instanceVariables == null || instanceVariables.isEmpty) {
+  ///Generate global variables
+  String generateGlobalVariables() {
+    if (globalVariables == null) {
       return '';
     }
     var stringBuffer = StringBuffer();
-    instanceVariables.forEach((param) {
-      stringBuffer.write(
-          param.type + ' ' + param.variableName + param.defaultValue + ';\n');
-    });
-
+    var param;
+    while (globalVariables.moveNext()) {
+      param = globalVariables.current;
+      stringBuffer.write(param.type +
+          ' ' +
+          param.variableName +
+          (param.defaultValue == null ? '' : ' = ${param.defaultValue}') +
+          ';\n');
+    }
     return stringBuffer.toString();
   }
 
-  /// Formats and returns imports in the list
+  BUILDER_TYPE _assignType(PBIntermediateNode rootNode) {
+    ///Automatically assign type for symbols
+    if (rootNode is PBSharedMasterNode) {
+      return BUILDER_TYPE.SHARED_MASTER;
+    } else if (rootNode is PBSharedInstanceIntermediateNode) {
+      return BUILDER_TYPE.SHARED_INSTANCE;
+    } else if (rootNode is InheritedScaffold) {
+      return BUILDER_TYPE.STATEFUL_WIDGET;
+    }
+    return rootNode.builder_type;
+  }
+
+  /// Generates the imports
   String generateImports() {
     var buffer = StringBuffer();
     buffer.write('import \'package:flutter/material.dart\';\n');
-
-    for (var import in imports) {
-      buffer.write('import \'$import\';\n');
+    while (imports.moveNext()) {
+      buffer.write('import \'${imports.current}\';\n');
     }
     return buffer.toString();
   }
@@ -132,16 +145,7 @@ class ${widgetName.pascalCase} extends StatelessWidget{
       return null;
     }
 
-    ///Automatically assign type for symbols
-    if (rootNode is PBSharedMasterNode) {
-      type = BUILDER_TYPE.SHARED_MASTER;
-    } else if (rootNode is PBSharedInstanceIntermediateNode) {
-      type = BUILDER_TYPE.SHARED_INSTANCE;
-    } else if (rootNode is InheritedScaffold) {
-      type = BUILDER_TYPE.STATEFUL_WIDGET;
-    }
-    rootNode.builder_type = type;
-
+    rootNode.builder_type = _assignType(rootNode);
     rootNode.generator.manager = this;
 
     var gen = rootNode.generator;
@@ -169,19 +173,4 @@ class ${widgetName.pascalCase} extends StatelessWidget{
     }
     return null;
   }
-
-  @override
-  void addDependencies(String packageName, String version) {
-    pageWriter.addDependency(packageName, version);
-  }
-
-  @override
-  void addInstanceVariable(PBVariable param) => instanceVariables.add(param);
-
-  @override
-  void addConstructorVariable(PBVariable param) =>
-      constructorVariables.add(param);
-
-  @override
-  void addImport(String value) => imports.add(value);
 }

@@ -9,9 +9,9 @@ class PBSizeHelper extends PBAttributesHelper {
   @override
   String generate(PBIntermediateNode source) {
     final buffer = StringBuffer();
-    bool isSymbolMaster = (source.builder_type == BUILDER_TYPE.SHARED_MASTER);
-    bool isScaffoldBody = (source.builder_type == BUILDER_TYPE.SCAFFOLD_BODY);
-    Map body = source.size ?? {};
+    var isSymbolMaster = (source.builder_type == BUILDER_TYPE.SHARED_MASTER);
+    var isScaffoldBody = (source.builder_type == BUILDER_TYPE.SCAFFOLD_BODY);
+    var body = source.size ?? {};
     double height = body['height'];
     double width = body['width'];
     var wString = 'width: ';
