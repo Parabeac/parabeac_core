@@ -137,11 +137,9 @@ class PBLayoutGenerationService implements PBGenerationService {
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
   PBIntermediateNode _removingMeaninglessGroup(PBIntermediateNode tempGroup) {
-    while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
-      if ((tempGroup as TempGroupLayoutNode).children.isEmpty) {
-        /// No meaning of processing an empty [TempGroupLayoutNode].
-        return null;
-      }
+    while (tempGroup is TempGroupLayoutNode &&
+        tempGroup.children.length <= 1 &&
+        tempGroup.children.isNotEmpty) {
       tempGroup = _replaceNode(
           tempGroup, (tempGroup as TempGroupLayoutNode).children[0]);
     }

@@ -4,8 +4,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injecte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 
-import '../pb_flutter_generator.dart';
-
 class PBAlignGenerator extends PBGenerator {
   var log = Logger('Align Generator');
   PBAlignGenerator() : super();
@@ -22,8 +20,7 @@ class PBAlignGenerator extends PBGenerator {
           'alignment: Alignment(${source.alignX.toStringAsFixed(2)}, ${source.alignY.toStringAsFixed(2)}),');
 
       try {
-        buffer.write(
-            'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)},');
+        buffer.write('child: ${manager.generate(source.child)},');
       } catch (e, stackTrace) {
         MainInfo().sentry.captureException(
               exception: e,

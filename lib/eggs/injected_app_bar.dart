@@ -90,18 +90,15 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
       if (source.leadingItem != null) {
-        buffer.write(
-            'leading: ${manager.generate(source.leadingItem, type: source.leadingItem.builder_type ?? BUILDER_TYPE.BODY)},');
+        buffer.write('leading: ${manager.generate(source.leadingItem)},');
       }
       if (source.middleItem != null) {
-        buffer.write(
-            'title: ${manager.generate(source.middleItem, type: source.middleItem.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY)},');
+        buffer.write('title: ${manager.generate(source.middleItem)},');
       }
 
       if (source.trailingItem != null) {
         var trailingItem = '';
-        trailingItem =
-            '${manager.generate(source.trailingItem, type: source.trailingItem.builder_type ?? BUILDER_TYPE.SCAFFOLD_BODY)}';
+        trailingItem = '${manager.generate(source.trailingItem)}';
         buffer.write('actions: [$trailingItem],');
       }
 

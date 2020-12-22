@@ -1,10 +1,9 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
-
-import '../pb_flutter_generator.dart';
 
 class PBPositionedGenerator extends PBGenerator {
   PBPositionedGenerator() : super();
@@ -16,26 +15,25 @@ class PBPositionedGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Positioned(');
 
-      double hAlignValue = source.horizontalAlignValue;
-      double vAlignValue = source.verticalAlignValue;
+      var hAlignValue = source.horizontalAlignValue;
+      var vAlignValue = source.verticalAlignValue;
       var multStringH = '';
       var multStringV = '';
 
       // TODO: this should be for all widgets once LayoutBuilder and constraints are used
-      if (source.builder_type == BUILDER_TYPE.SHARED_MASTER) {
+      if (source.generator.templateStrategy is StatelessTemplateStrategy) {
         if (source.currentContext?.screenTopLeftCorner?.x != null &&
             source.currentContext?.screenBottomRightCorner?.x != null) {
-          double screenWidth =
-              ((source.currentContext?.screenTopLeftCorner?.x) -
-                      (source.currentContext?.screenBottomRightCorner?.x))
-                  .abs();
+          var screenWidth = ((source.currentContext?.screenTopLeftCorner?.x) -
+                  (source.currentContext?.screenBottomRightCorner?.x))
+              .abs();
           multStringH = 'constraints.maxWidth * ';
           hAlignValue = hAlignValue / screenWidth;
         }
 
         if (source.currentContext?.screenTopLeftCorner?.y != null &&
             source.currentContext?.screenBottomRightCorner?.y != null) {
-          double screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
+          var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
                   (source.currentContext.screenBottomRightCorner.y))
               .abs();
           multStringV = 'constraints.maxHeight * ';
@@ -53,8 +51,7 @@ class PBPositionedGenerator extends PBGenerator {
       }
 
       try {
-        buffer.write(
-            'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)},');
+        buffer.write('child: ${manager.generate(source.child)},');
       } catch (e, stackTrace) {
         MainInfo().sentry.captureException(
               exception: e,

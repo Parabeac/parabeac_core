@@ -1,13 +1,12 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 
-import '../pb_flutter_generator.dart';
-
 class PBMasterSymbolGenerator extends PBGenerator {
-  PBMasterSymbolGenerator() : super();
+  PBMasterSymbolGenerator() : super(strategy: StatelessTemplateStrategy());
 
   var log = Logger('Symbol Master Generator');
   @override
@@ -33,8 +32,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
         log.error(e.toString());
       }
 
-      var generatedWidget =
-          manager.generate(source.child, type: BUILDER_TYPE.BODY);
+      var generatedWidget = manager.generate(source.child);
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }

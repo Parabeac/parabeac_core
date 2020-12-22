@@ -1,76 +1,14 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:recase/recase.dart';
-
-enum BUILDER_TYPE {
-  STATEFUL_WIDGET,
-  SHARED_MASTER,
-  SHARED_INSTANCE,
-  STATELESS_WIDGET,
-  BODY,
-  SCAFFOLD_BODY,
-  EMPTY_PAGE
-}
+import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
+  final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
   PBFlutterGenerator(pageWriter) : super(pageWriter) {
     body = StringBuffer();
   }
-
-  ///Generating a [StatefulWidget]
-  String generateStatefulWidget(String body, String name) {
-    var widgetName = _formatWidgetName(name);
-    var constructorName = '_$widgetName';
-    return '''
-${generateImports()}
-
-class ${widgetName} extends StatefulWidget{
-  const ${widgetName}() : super();
-  @override
-  _${widgetName} createState() => _${widgetName}();
-}
-
-class _${widgetName} extends State<${widgetName}>{
-  ${generateGlobalVariables()}
-  ${generateConstructor(constructorName)}
-
-  @override
-  Widget build(BuildContext context){
-    return ${body};
-  }
-}''';
-  }
-
-  ///Generating [StatelessWidget]
-  String generateStatelessWidget(String body, String name) {
-    var widgetName = _formatWidgetName(name);
-    var constructorName = '_$widgetName';
-    return '''
-${generateImports()}
-
-class ${widgetName.pascalCase} extends StatelessWidget{
-  const ${widgetName.pascalCase}({Key key}) : super(key : key);
-  ${generateGlobalVariables()}
-  ${generateConstructor(constructorName)}
-
-  @override
-  Widget build(BuildContext context){
-    return ${body};
-  }
-}''';
-  }
-
-  String _formatWidgetName(name) => PBInputFormatter.formatLabel(
-        name,
-        isTitle: true,
-        space_to_underscore: false,
-      );
 
   ///Generates a constructor given a name and `constructorVariable`
   String generateConstructor(name) {
@@ -116,18 +54,6 @@ class ${widgetName.pascalCase} extends StatelessWidget{
     return stringBuffer.toString();
   }
 
-  BUILDER_TYPE _assignType(PBIntermediateNode rootNode) {
-    ///Automatically assign type for symbols
-    if (rootNode is PBSharedMasterNode) {
-      return BUILDER_TYPE.SHARED_MASTER;
-    } else if (rootNode is PBSharedInstanceIntermediateNode) {
-      return BUILDER_TYPE.SHARED_INSTANCE;
-    } else if (rootNode is InheritedScaffold) {
-      return BUILDER_TYPE.STATEFUL_WIDGET;
-    }
-    return rootNode.builder_type;
-  }
-
   /// Generates the imports
   String generateImports() {
     var buffer = StringBuffer();
@@ -139,38 +65,20 @@ class ${widgetName.pascalCase} extends StatelessWidget{
   }
 
   @override
-  String generate(PBIntermediateNode rootNode,
-      {type = BUILDER_TYPE.STATELESS_WIDGET}) {
+  String generate(
+    PBIntermediateNode rootNode,
+  ) {
     if (rootNode == null) {
       return null;
     }
-
-    rootNode.builder_type = _assignType(rootNode);
     rootNode.generator.manager = this;
-
-    var gen = rootNode.generator;
-
-    if (gen != null) {
-      switch (type) {
-        case BUILDER_TYPE.STATEFUL_WIDGET:
-          return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
-          break;
-        case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidget(gen.generate(rootNode), rootNode.name);
-          break;
-        case BUILDER_TYPE.EMPTY_PAGE:
-          return generateImports() + body.toString();
-          break;
-        case BUILDER_TYPE.SHARED_MASTER:
-          return generateStatelessWidget(gen.generate(rootNode), rootNode.name);
-        case BUILDER_TYPE.SHARED_INSTANCE:
-        case BUILDER_TYPE.BODY:
-        default:
-          return gen.generate(rootNode);
-      }
-    } else {
+    if (rootNode.generator == null) {
       log.error('Generator not registered for ${rootNode}');
     }
-    return null;
+    return rootNode.generator?.templateStrategy
+            ?.generateTemplate(rootNode, this) ??
+
+        ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
+        DEFAULT_STRATEGY.generateTemplate(rootNode, this);
   }
 }

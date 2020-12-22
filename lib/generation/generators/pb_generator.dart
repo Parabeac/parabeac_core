@@ -1,20 +1,27 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 abstract class PBGenerator {
-  @Deprecated('Widget Indentifier is not being used anymore')
-  final String WIDGET_TYPE_IDENTIFIER = 'widgetType';
   final String OBJECTID = 'UUID';
+
+  ///The [TemplateStrategy] that is going to be used to generate the boilerplate code around the node.
+  ///
+  ///The `default` [TemplateStrategy] is going to be [InlineTemplateStrategy]
+  TemplateStrategy _templateStrategy;
+  TemplateStrategy get templateStrategy => _templateStrategy;
+  set templateStrategy(TemplateStrategy strategy) =>
+      _templateStrategy = strategy;
+
   PBGenerationManager _manager;
   set manager(PBGenerationManager generationManager) =>
       _manager = generationManager;
   PBGenerationManager get manager => _manager;
 
-  PBGenerator();
-  String generate(PBIntermediateNode source);
+  PBGenerator({TemplateStrategy strategy}) {
+    _templateStrategy = strategy;
+    _templateStrategy ??= InlineTemplateStrategy();
+  }
 
-  ///Generating just a line in the code; this is used when to 'special' handleing is
-  @Deprecated('Widget Indentifier is not being used anymore')
-  String generateMapEntry(String key, String value) =>
-      value == null || key == WIDGET_TYPE_IDENTIFIER ? '' : '$key : $value,';
+  String generate(PBIntermediateNode source);
 }

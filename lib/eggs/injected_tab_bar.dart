@@ -77,8 +77,7 @@ class PBTabBarGenerator extends PBGenerator {
         buffer.write('items:[');
         for (var i = 0; i < source.tabs.length; i++) {
           buffer.write('BottomNavigationBarItem(');
-          var res =
-              manager.generate(source.tabs[i].child, type: BUILDER_TYPE.BODY);
+          var res = manager.generate(source.tabs[i].child);
           buffer.write('icon: $res,');
           buffer.write('title: Text(""),');
           buffer.write('),');

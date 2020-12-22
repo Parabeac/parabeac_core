@@ -2,8 +2,6 @@ import 'package:parabeac_core/generation/generators/layouts/pb_layout_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-import '../pb_flutter_generator.dart';
-
 class PBRowGenerator extends PBLayoutGenerator {
   PBRowGenerator() : super();
 
@@ -15,8 +13,7 @@ class PBRowGenerator extends PBLayoutGenerator {
       List<PBIntermediateNode> children = source.children;
 
       for (PBIntermediateNode child in children) {
-        buffer.write(manager.generate(child,
-            type: child.builder_type ?? BUILDER_TYPE.BODY));
+        buffer.write(manager.generate(child));
         var trailing_comma = (counter + 1) == children.length ? '' : ',';
         buffer.write(trailing_comma);
         counter++;

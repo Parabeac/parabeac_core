@@ -40,7 +40,7 @@ abstract class PBGenerationManager {
   );
   void addImport(String value) => _imports.add(value);
 
-  String generate(PBIntermediateNode rootNode, {type});
+  String generate(PBIntermediateNode rootNode);
 
   void addDependencies(String packageName, String version) =>
       _dependencies[packageName] = version;
@@ -55,4 +55,10 @@ abstract class PBGenerationManager {
 
   ///Injects a variable between the method declaration and the return statement of the method being proccessed
   void addMethodVariable(PBVariable variable) => _methodVariables.add(variable);
+
+  String generateImports();
+
+  String generateGlobalVariables();
+
+  String generateConstructor(String name);
 }

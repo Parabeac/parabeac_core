@@ -24,8 +24,7 @@ class PBColumnGenerator extends PBLayoutGenerator {
         }
         buffer.write('\nchildren: [');
         for (var index = 0; index < source.children.length; index++) {
-          var element = manager.generate(source.children[index],
-              type: source.children[index].builder_type ?? BUILDER_TYPE.BODY);
+          var element = manager.generate(source.children[index]);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

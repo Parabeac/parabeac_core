@@ -5,8 +5,6 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import '../pb_flutter_generator.dart';
-
 class PBContainerGenerator extends PBGenerator {
   String color;
 
@@ -37,7 +35,7 @@ class PBContainerGenerator extends PBGenerator {
       source.child.bottomRightCorner =
           Point(source.bottomRightCorner.x, source.bottomRightCorner.y);
       var statement = source.child != null
-          ? 'child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)}'
+          ? 'child: ${manager.generate(source.child)}'
           : '';
       buffer.write(statement);
     }

@@ -1,8 +1,8 @@
 import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 class PBTextGen extends PBGenerator with PBColorMixin {
@@ -10,7 +10,6 @@ class PBTextGen extends PBGenerator with PBColorMixin {
 
   @override
   String generate(PBIntermediateNode source) {
-    var isSymbolMaster = (source.builder_type == BUILDER_TYPE.SHARED_MASTER);
     if (source is InheritedText) {
       var buffer = StringBuffer();
       buffer.write('Text(\n');
@@ -19,7 +18,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
         var text = source.text;
         buffer.write('$text, \n');
       } else {
-        if (isSymbolMaster) {
+        if (source is PBSharedMasterNode) {
           var ovrName = SN_UUIDtoVarName[source.UUID + '_stringValue'];
           if (ovrName != null) {
             buffer.write('${ovrName} ?? ');
@@ -29,7 +28,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
       buffer.write('style: ');
-      if (isSymbolMaster) {
+      if (source is PBSharedMasterNode) {
         var ovrName = SN_UUIDtoVarName[source.UUID + '_textStyle'];
         if (ovrName != null) {
           buffer.write('${ovrName} ?? ');

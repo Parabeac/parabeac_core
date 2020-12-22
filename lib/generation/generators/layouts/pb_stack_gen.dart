@@ -2,8 +2,6 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-import '../pb_flutter_generator.dart';
-
 class PBStackGenerator extends PBGenerator {
   PBStackGenerator() : super();
 
@@ -15,8 +13,7 @@ class PBStackGenerator extends PBGenerator {
       if (source.children.isNotEmpty) {
         buffer.write('\nchildren: [');
         for (var index = 0; index < source.children.length; index++) {
-          var element = manager.generate(source.children[index],
-              type: source.children[index].builder_type ?? BUILDER_TYPE.BODY);
+          var element = manager.generate(source.children[index]);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

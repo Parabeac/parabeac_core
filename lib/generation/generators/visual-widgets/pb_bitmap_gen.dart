@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_hel
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 
@@ -16,11 +17,11 @@ class PBBitmapGenerator extends PBGenerator {
   String generate(PBIntermediateNode source) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
-    if (source.builder_type == BUILDER_TYPE.SHARED_MASTER) {
+    if (source is PBSharedMasterNode) {
       // see if source is overridden
-      String ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
+      var ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
       if (ovrName != null) {
-        buffer.write("${ovrName} ?? ");
+        buffer.write('${ovrName} ?? ');
       }
     }
     buffer.write(

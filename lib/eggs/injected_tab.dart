@@ -102,7 +102,7 @@ class PBTabGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBarItem(');
       buffer.write(source.child != null
-          ? 'icon: ${manager.generate(source.child, type: BUILDER_TYPE.BODY)}'
+          ? 'icon: ${manager.generate(source.child)}'
           : '');
       buffer.write(')');
       return buffer.toString();

@@ -1,4 +1,3 @@
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
@@ -23,11 +22,10 @@ class PBPrototypeGenerator extends PBGenerator {
           MaterialPageRoute(builder: (context) => ${name}()),
         );
       },
-      child: ${manager.generate(source.child, type: source.child.builder_type ?? BUILDER_TYPE.BODY)},
+      child: ${manager.generate(source.child)},
       )''';
     } else {
-      return manager.generate(source.child,
-          type: source.child.builder_type ?? BUILDER_TYPE.BODY);
+      return manager.generate(source.child);
     }
   }
 }

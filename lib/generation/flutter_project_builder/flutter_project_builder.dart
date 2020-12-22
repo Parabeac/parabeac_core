@@ -29,12 +29,12 @@ class FlutterProjectBuilder {
 
   final String SYMBOL_DIR_NAME = 'symbols';
 
-  Map<String, StateManagementConfig> configurations = {
-    'Provider': ProviderManagement(),
+  Map<String, StateManagementGenerator> configurations = {
+    'Provider': ProviderGeneratorWrapper(),
     'None': StatefulManagement(),
   };
 
-  StateManagementConfig stateManagementConfig;
+  StateManagementGenerator stateManagementConfig;
 
   FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
@@ -225,11 +225,12 @@ class FlutterProjectBuilder {
             '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
         var viewFilePath =
             '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-        flutterGenerator.imports.addAll(ImportHelper.findImports(
-            intermediateItem.node,
-            intermediateItem.node is InheritedScaffold
-                ? screenFilePath
-                : viewFilePath));
+        ImportHelper.findImports(
+                intermediateItem.node,
+                intermediateItem.node is InheritedScaffold
+                    ? screenFilePath
+                    : viewFilePath)
+            .forEach(flutterGenerator.addImport);
         var page;
         if (intermediateItem.node.auxiliaryData.stateGraph.states.isNotEmpty &&
             stateManagementConfig != null) {
