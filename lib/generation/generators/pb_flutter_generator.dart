@@ -11,6 +11,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   ///Generates a constructor given a name and `constructorVariable`
+  @override
   String generateConstructor(name) {
     if (constructorVariables == null) {
       return '';
@@ -18,16 +19,18 @@ class PBFlutterGenerator extends PBGenerationManager {
     var stringBuffer = StringBuffer();
     stringBuffer.write(name + '(');
     var param;
-    while (constructorVariables.moveNext()) {
-      param = constructorVariables.current;
+    var it = constructorVariables;
+    while (it.moveNext()) {
+      param = it.current;
       if (param.isRequired) {
         stringBuffer.write('this.' + param.variableName + ',');
       }
-      param = constructorVariables.current;
+      param = it.current;
     }
     stringBuffer.write('{');
-    while (constructorVariables.moveNext()) {
-      param = constructorVariables.current;
+    it = constructorVariables;
+    while (it.moveNext()) {
+      param = it.current;
       if (!param.isRequired) {
         stringBuffer.write('this.' + param.variableName + ',');
       }
@@ -37,14 +40,16 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   ///Generate global variables
+  @override
   String generateGlobalVariables() {
     if (globalVariables == null) {
       return '';
     }
     var stringBuffer = StringBuffer();
     var param;
-    while (globalVariables.moveNext()) {
-      param = globalVariables.current;
+    var it = globalVariables;
+    while (it.moveNext()) {
+      param = it.current;
       stringBuffer.write(param.type +
           ' ' +
           param.variableName +
@@ -55,11 +60,13 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   /// Generates the imports
+  @override
   String generateImports() {
     var buffer = StringBuffer();
     buffer.write('import \'package:flutter/material.dart\';\n');
-    while (imports.moveNext()) {
-      buffer.write('import \'${imports.current}\';\n');
+    var it = imports;
+    while (it.moveNext()) {
+      buffer.write('import \'${it.current}\';\n');
     }
     return buffer.toString();
   }

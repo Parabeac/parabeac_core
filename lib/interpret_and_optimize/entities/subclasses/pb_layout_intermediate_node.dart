@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:uuid/uuid.dart';
 
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.
 /// Superclass: PBIntermediateNode
@@ -34,8 +35,8 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner, UUID, this.prototypeNode})
-      : super(topLeftCorner, bottomRightCorner, UUID, name,
+      {topLeftCorner, bottomRightCorner, this.prototypeNode})
+      : super(topLeftCorner, bottomRightCorner, Uuid().v4(), name,
             currentContext: currentContext);
 
   void alignChildren();
@@ -68,8 +69,11 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   void _resize() {
-    assert(_children.isNotEmpty,
-        'There should be children in the layout so it can resize.');
+    if (_children.isEmpty) {
+      PBIntermediateNode.logger
+          .warning('There should be children in the layout so it can resize.');
+      return;
+    }
     var minX = (_children[0]).topLeftCorner.x,
         minY = (_children[0]).topLeftCorner.y,
         maxX = (_children[0]).bottomRightCorner.x,

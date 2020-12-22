@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
@@ -36,6 +37,10 @@ class PBLayoutGenerationService implements PBGenerationService {
   @override
   PBContext currentContext;
 
+  ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
+  ///The default [PBLayoutIntermediateNode]
+  PBLayoutIntermediateNode _defaultLayout;
+
   PBLayoutGenerationService({this.currentContext}) {
     var layoutHandlers = <String, PBLayoutIntermediateNode>{
       'column': PBIntermediateColumnLayout(
@@ -57,12 +62,8 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
     }
 
-    defaultLayout = _availableLayouts[0];
+    _defaultLayout = _availableLayouts[0];
   }
-
-  ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
-  ///The default [PBLayoutIntermediateNode]
-  PBLayoutIntermediateNode defaultLayout;
 
   PBIntermediateNode extractLayouts(
     PBIntermediateNode rootNode,
@@ -119,8 +120,8 @@ class PBLayoutGenerationService implements PBGenerationService {
       });
       var node = currentTuple.item1;
       if (node != null) {
-        node is PBLayoutIntermediateNode
-            ? node.replaceChildren(currentTuple.item2 ?? [])
+        node is PBLayoutIntermediateNode && node.children.isNotEmpty
+            ? node.replaceChildren(currentTuple.item2)
             : node.child =
                 (currentTuple.item2.isNotEmpty ? currentTuple.item2[0] : null);
       } else {
@@ -132,16 +133,20 @@ class PBLayoutGenerationService implements PBGenerationService {
     return rootNode;
   }
 
-  /// If this node is an unecessary [TempGroupLayoutNode], just return the child. These are groups
-  /// that only contains a single element within.
+  /// If this node is an unecessary [TempGroupLayoutNode], just return the child or an
+  /// [InjectContainer] if the group is empty
+  ///
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
   PBIntermediateNode _removingMeaninglessGroup(PBIntermediateNode tempGroup) {
-    while (tempGroup is TempGroupLayoutNode &&
-        tempGroup.children.length <= 1 &&
-        tempGroup.children.isNotEmpty) {
-      tempGroup = _replaceNode(
-          tempGroup, (tempGroup as TempGroupLayoutNode).children[0]);
+    while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
+      tempGroup = (tempGroup as TempGroupLayoutNode).children.isNotEmpty
+          ? _replaceNode(
+              tempGroup, (tempGroup as TempGroupLayoutNode).children[0])
+          : _replaceNode(
+              tempGroup,
+              InjectedContainer(tempGroup.bottomRightCorner,
+                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID));
     }
     return tempGroup;
   }
@@ -212,7 +217,7 @@ class PBLayoutGenerationService implements PBGenerationService {
             ? parent
             : _replaceNode(
                 parent,
-                defaultLayout.generateLayout(
+                _defaultLayout.generateLayout(
                     children, currentContext, parent.name));
       }
     }

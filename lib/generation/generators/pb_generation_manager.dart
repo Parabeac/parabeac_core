@@ -38,7 +38,11 @@ abstract class PBGenerationManager {
   PBGenerationManager(
     this.pageWriter,
   );
-  void addImport(String value) => _imports.add(value);
+  void addImport(String value) {
+    if (value != null) {
+      _imports.add(value);
+    }
+  }
 
   String generate(PBIntermediateNode rootNode);
 

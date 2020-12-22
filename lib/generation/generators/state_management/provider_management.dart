@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
@@ -68,8 +69,11 @@ class ProviderGeneratorWrapper extends StateManagementGenerator {
 
   @override
   String generate(PBIntermediateNode source) {
+    var watcherName = _getNameOfNode(source);
+    var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
     manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
     manager.addImport('import provider;');
-    throw UnimplementedError();
+    manager.addMethodVariable(watcher);
+    return watcherName;
   }
 }

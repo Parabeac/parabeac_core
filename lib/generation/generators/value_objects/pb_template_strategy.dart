@@ -27,7 +27,7 @@ class StatefulTemplateStrategy extends TemplateStrategy {
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       {args}) {
     var widgetName = retrieveNodeName(node);
-    var constructorName = '_$widgetName';
+    var constructorName = '$widgetName';
     return '''
 ${manager.generateImports()}
 
@@ -94,6 +94,7 @@ class StateManagementTemplateStrategy extends TemplateStrategy {
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       {args}) {
+    _generator.manager = manager;
     return _generator.generate(node);
   }
 }
