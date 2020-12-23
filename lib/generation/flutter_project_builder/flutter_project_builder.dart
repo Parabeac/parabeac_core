@@ -1,17 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
-import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
-import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
-import 'package:parabeac_core/generation/generators/state_management/stateful_management.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/pb_generation_configuration.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
@@ -29,16 +23,19 @@ class FlutterProjectBuilder {
 
   final String SYMBOL_DIR_NAME = 'symbols';
 
-  Map<String, StateManagementGenerator> configurations = {
-    'Provider': ProviderGeneratorWrapper(),
-    'None': StatefulManagement(),
-  };
+  ///The [GenerationConfiguration] that is going to be use in the generation of the code
+  ///
+  ///This is going to be defaulted to [StatefulGenerationConfiguration] if nothing else is specified.
+  GenerationConfiguration generationConfiguration;
 
-  StateManagementGenerator stateManagementConfig;
+  Map<String, GenerationConfiguration> configurations = {
+    'Provider': ProviderGenerationConfiguration(),
+    'None': StatefulGenerationConfiguraiton(),
+  };
 
   FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
-    stateManagementConfig =
+    generationConfiguration =
         configurations[MainInfo().configurations['state-management']];
   }
 
@@ -105,9 +102,6 @@ class FlutterProjectBuilder {
       }
     }
 
-    // Wait for State Management nodes to finish being interpreted
-    await Future.wait(PBStateManagementLinker().stateQueue);
-
     // generate shared Styles if any found
     if (mainTree.sharedStyles != null && mainTree.sharedStyles.isNotEmpty) {
       await Directory('${pathToFlutterProject}lib/document/')
@@ -128,7 +122,8 @@ class FlutterProjectBuilder {
       });
     }
 
-    await _initializeProject();
+    await generationConfiguration.initializeFileStructure(
+        pathToFlutterProject, mainTree);
 
     await _populateProject();
 
@@ -169,52 +164,8 @@ class FlutterProjectBuilder {
     );
   }
 
-  void _initializeProject() async {
-    for (var directory in mainTree.groups) {
-      var directoryName = directory.name.snakeCase;
-      var screenDirectoryName = '${projectName}/lib/screens/${directoryName}';
-      var viewDirectoryName = '${projectName}/lib/views/${directoryName}';
-
-      /// Establish Directories where needed.
-      if (directory.items.isNotEmpty) {
-        for (var i = 0; i < directory.items.length; i++) {
-          var containsScreens = false;
-          var containsViews = false;
-          if (directory.items[i].node is InheritedScaffold &&
-              !containsScreens) {
-            containsScreens = true;
-            await Directory(screenDirectoryName).create(recursive: true);
-          }
-          if (directory.items[i].node is PBSharedMasterNode && !containsViews) {
-            containsViews = true;
-            await Directory(viewDirectoryName).create(recursive: true);
-          }
-          if (containsScreens && containsViews) {
-            continue;
-          }
-        }
-      }
-
-      /// Add import Info.
-      for (var intermediateItem in directory.items) {
-        // Add to cache if node is scaffold or symbol master
-        if (intermediateItem.node is InheritedScaffold) {
-          PBGenCache().addToCache(intermediateItem.node.UUID,
-              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.dart');
-        } else if (intermediateItem.node is PBSharedMasterNode) {
-          PBGenCache().addToCache(
-              (intermediateItem.node as PBSharedMasterNode).SYMBOL_ID,
-              '${viewDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
-        } else {
-          PBGenCache().addToCache(intermediateItem.node.UUID,
-              '${screenDirectoryName}/${intermediateItem.node.name.snakeCase}.g.dart');
-        }
-      }
-    }
-  }
-
   void _populateProject() {
-    var pageWriter = PBFlutterWriter();
+    var fileStruct = generationConfiguration.fileStructureStrategy;
     for (var directory in mainTree.groups) {
       var directoryName = directory.name.snakeCase;
 
@@ -233,8 +184,8 @@ class FlutterProjectBuilder {
             .forEach(flutterGenerator.addImport);
         var page;
         if (intermediateItem.node.auxiliaryData.stateGraph.states.isNotEmpty &&
-            stateManagementConfig != null) {
-          page = stateManagementConfig.setStatefulNode(intermediateItem.node,
+            generationConfiguration != null) {
+          page = generationConfiguration.setStatefulNode(intermediateItem.node,
               flutterGenerator, '${projectName}/lib/views/${directoryName}');
         } else {
           page = flutterGenerator.generate(intermediateItem.node);

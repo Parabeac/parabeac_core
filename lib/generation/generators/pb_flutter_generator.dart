@@ -30,7 +30,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     stringBuffer.write('{');
     it = constructorVariables;
     while (it.moveNext()) {
-      param = it.current;
+      param = constructorVariables.current;
       if (!param.isRequired) {
         stringBuffer.write('this.' + param.variableName + ',');
       }

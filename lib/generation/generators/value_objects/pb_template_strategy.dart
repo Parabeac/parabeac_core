@@ -98,20 +98,3 @@ class StateManagementTemplateStrategy extends TemplateStrategy {
     return _generator.generate(node);
   }
 }
-
-///Skip this node; its only purpose is to be a `host` for the [StateManagementGenerator]
-///
-///TODO no need for this class?
-class StateManagementIntermediateNodeAdapter extends PBIntermediateNode {
-  StateManagementIntermediateNodeAdapter(
-      PBIntermediateNode node, StateManagementGenerator generator)
-      : super(node.topLeftCorner, node.bottomRightCorner, node.UUID,
-            '${node.name}adapter') {
-    this.generator = generator;
-    child = node;
-  }
-  @override
-  void addChild(PBIntermediateNode node) {
-    child.addChild(node);
-  }
-}
