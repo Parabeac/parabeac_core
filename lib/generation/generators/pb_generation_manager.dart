@@ -1,5 +1,7 @@
 import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/generation/generators/value_objects/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -10,8 +12,7 @@ import 'pb_variable.dart';
 /// Furthermore, it provides a set of method that allows [PBIntermediateNode]s to add
 /// imports, dependencies, etc.
 abstract class PBGenerationManager {
-  ///[PBPageWriter] writes the generated code into its corresponding files
-  PBPageWriter pageWriter;
+  FileStructureStrategy fileStrategy;
 
   ///* Keep track of the imports the current page may have
   final Set<String> _imports = {};
@@ -34,9 +35,19 @@ abstract class PBGenerationManager {
   ///The [PBVariable]s that need to be added in between the method definition and its return statement
   final Set<PBVariable> _methodVariables = {};
   Iterator<PBVariable> get methodVariables => _methodVariables.iterator;
+  String get methodVariableStr {
+    var buffer = StringBuffer();
+    var it = _methodVariables.iterator;
+    while (it.moveNext()) {
+      var param = it.current;
+      buffer.writeln(
+          '${param.type} ${PBInputFormatter.formatLabel(param.variableName)} = ${param.defaultValue};');
+    }
+    return buffer.toString();
+  }
 
   PBGenerationManager(
-    this.pageWriter,
+    this.fileStrategy,
   );
   void addImport(String value) {
     if (value != null) {

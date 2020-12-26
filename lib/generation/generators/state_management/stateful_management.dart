@@ -16,26 +16,26 @@ class StatefulManagement extends StateManagementGenerator {
     /// If Views folder doesn't exist, inject the folder then begin writing the Stateless Widgets.
     Directory(path).createSync(recursive: true);
     for (var state in node.auxiliaryData.stateGraph.states) {
-      var generator = PBFlutterGenerator(manager.pageWriter);
-      if (node is! InheritedScaffold) {
-        manager.pageWriter.write(
-          generator.generate(state.variation.node),
-          '${path}/${state.variation.node.name.snakeCase}.g.dart',
-        );
-      } else {
-        print('Parabeac-Core does not support Scaffolds as a state.');
-        manager.pageWriter.write(
-          generator.generate(state.variation.node),
-          '${path}/${state.variation.node.name.snakeCase}.dart',
-        );
-      }
+      var generator = PBFlutterGenerator(manager.fileStrategy);
+      // if (node is! InheritedScaffold) {
+      //   manager.fileStrategy.write(
+      //     generator.generate(state.variation.node),
+      //     '${path}/${state.variation.node.name.snakeCase}.g.dart',
+      //   );
+      // } else {
+      //   print('Parabeac-Core does not support Scaffolds as a state.');
+      //   manager.fileStrategy.write(
+      //     generator.generate(state.variation.node),
+      //     '${path}/${state.variation.node.name.snakeCase}.dart',
+      //   );
+      // }
     }
 
     var nameOfDefaultNode = _getNameOfNode(node);
     var defaultNodePath = '${path}/${node.name.snakeCase}';
-    var generator = PBFlutterGenerator(manager.pageWriter);
-    manager.pageWriter
-        .write(generator.generate(node), '${defaultNodePath}.g.dart');
+    var generator = PBFlutterGenerator(manager.fileStrategy);
+    // manager.fileStrategy
+    //     .write(generator.generate(node), '${defaultNodePath}.g.dart');
     manager.addImport(defaultNodePath);
 
     var variable = PBVariable(

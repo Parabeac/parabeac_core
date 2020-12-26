@@ -1,6 +1,4 @@
 import 'package:parabeac_core/controllers/interpret.dart';
-import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
@@ -32,8 +30,6 @@ class PBStateManagementLinker {
     // Assign `node` as default
     if (!containsElement(rootNodeName)) {
       _statemap[rootNodeName] = node;
-      node.generator.templateStrategy = StateManagementTemplateStrategy(
-          ProviderGeneratorWrapper()); //TODO grab configuration and switch based on configuration
     }
     // Add state to default node
     else {

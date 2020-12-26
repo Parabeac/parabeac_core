@@ -28,6 +28,7 @@ class StatefulTemplateStrategy extends TemplateStrategy {
       {args}) {
     var widgetName = retrieveNodeName(node);
     var constructorName = '$widgetName';
+    var returnStatement = manager.generate(node?.child);
     return '''
 ${manager.generateImports()}
 
@@ -43,7 +44,8 @@ class _${widgetName} extends State<${widgetName}>{
 
   @override
   Widget build(BuildContext context){
-    return ${manager.body};
+    ${manager.methodVariableStr}
+    return ${returnStatement};
   }
 }''';
   }
@@ -55,6 +57,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
       {args}) {
     var widgetName = retrieveNodeName(node);
     var constructorName = '_$widgetName';
+    var returnStatement = manager.generate(node.child);
     return '''
 ${manager.generateImports()}
 
@@ -65,7 +68,7 @@ class ${widgetName} extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return ${manager.body};
+    return ${returnStatement};
   }
 }''';
   }

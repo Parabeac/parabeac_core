@@ -2,16 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/generation/generators/value_objects/pb_generation_configuration.dart';
-import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
     as image_helper;
-
-import 'import_helper.dart';
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -30,13 +25,15 @@ class FlutterProjectBuilder {
 
   Map<String, GenerationConfiguration> configurations = {
     'Provider': ProviderGenerationConfiguration(),
-    'None': StatefulGenerationConfiguraiton(),
+    'None': StatefulGenerationConfiguration(),
   };
 
   FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
     generationConfiguration =
         configurations[MainInfo().configurations['state-management']];
+    mainTree.projectName = projectName;
+    mainTree.projectAbsPath = pathToFlutterProject;
   }
 
   void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
@@ -122,10 +119,7 @@ class FlutterProjectBuilder {
       });
     }
 
-    await generationConfiguration.initializeFileStructure(
-        pathToFlutterProject, mainTree);
-
-    await _populateProject();
+    await generationConfiguration.generateProject(mainTree);
 
     var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
     var s = File('${pathToFlutterProject}lib/main.dart')
@@ -162,42 +156,5 @@ class FlutterProjectBuilder {
               workingDirectory: MainInfo().outputPath)
           .stdout,
     );
-  }
-
-  void _populateProject() {
-    var fileStruct = generationConfiguration.fileStructureStrategy;
-    for (var directory in mainTree.groups) {
-      var directoryName = directory.name.snakeCase;
-
-      for (var intermediateItem in directory.items) {
-        var flutterGenerator = PBFlutterGenerator(pageWriter);
-        var fileName = intermediateItem.node.name;
-        var screenFilePath =
-            '${projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
-        var viewFilePath =
-            '${projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-        ImportHelper.findImports(
-                intermediateItem.node,
-                intermediateItem.node is InheritedScaffold
-                    ? screenFilePath
-                    : viewFilePath)
-            .forEach(flutterGenerator.addImport);
-        var page;
-        if (intermediateItem.node.auxiliaryData.stateGraph.states.isNotEmpty &&
-            generationConfiguration != null) {
-          page = generationConfiguration.setStatefulNode(intermediateItem.node,
-              flutterGenerator, '${projectName}/lib/views/${directoryName}');
-        } else {
-          page = flutterGenerator.generate(intermediateItem.node);
-        }
-        pageWriter.write(
-            page,
-            intermediateItem.node is InheritedScaffold
-                ? screenFilePath
-                : viewFilePath);
-      }
-
-      pageWriter.submitDependencies(projectName + '/pubspec.yaml');
-    }
   }
 }

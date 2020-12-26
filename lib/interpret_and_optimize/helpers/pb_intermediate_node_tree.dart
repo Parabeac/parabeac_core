@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_ite
 
 class PBIntermediateTree {
   String projectName;
+  String projectAbsPath;
   List<SharedStyle> sharedStyles = [];
   PBIntermediateItem rootItem;
   List<PBIntermediateGroup> groups = [];
