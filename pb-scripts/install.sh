@@ -30,6 +30,7 @@ stop_spin(){
   kill -9 $SPIN_PID
 }
 
+# only install dependencies if SAC_ENDPOINT envvar is not set
 if [[ -z "${SAC_ENDPOINT}" ]]; then
   start_spin "Installing Parabeac-core and its dependencies"
   tput civis # stop mouse pointer from blinking
