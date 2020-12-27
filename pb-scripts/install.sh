@@ -30,11 +30,12 @@ stop_spin(){
   kill -9 $SPIN_PID
 }
 
-
-start_spin "Installing Parabeac-core and its dependencies"
-tput civis # stop mouse pointer from blinking
-cd ./SketchAssetConverter && npm i # Assuming install.sh is being run from Parabeac-Core directory
-pub get
-stop_spin
-tput cnorm # return mouse pointer
-echo -e "\033[1;32m[====]\033[0m Installed Sketch Asset Converter dependencies"
+if [[ -z "${SAC_ENDPOINT}" ]]; then
+  start_spin "Installing Parabeac-core and its dependencies"
+  tput civis # stop mouse pointer from blinking
+  cd ./SketchAssetConverter && npm i # Assuming install.sh is being run from Parabeac-Core directory
+  pub get
+  stop_spin
+  tput cnorm # return mouse pointer
+  echo -e "\033[1;32m[====]\033[0m Installed Sketch Asset Converter dependencies"
+fi
