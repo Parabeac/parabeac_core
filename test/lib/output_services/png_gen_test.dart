@@ -45,7 +45,7 @@ void main() async {
 
     test('Testing Image Conversion', () async {
       for (var uuid in uuids) {
-        var image = await convertImageLocal(uuid, 23, 21);
+        var image = await convertImage(uuid, 23, 21);
         expect(image, isNot(null));
       }
     });
@@ -67,7 +67,7 @@ void main() async {
 
     test('Testing Image Conversion', () async {
       for (var uuid in uuids) {
-        var image = await convertImageLocal(uuid, 23, 21);
+        var image = await convertImage(uuid, 23, 21);
         expect(image, isNot(null));
       }
     });
