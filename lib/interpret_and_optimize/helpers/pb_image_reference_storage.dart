@@ -25,11 +25,12 @@ class ImageReferenceStorage {
   /// Returns true if the image was written successfully, false otherwise
   bool addReferenceAndWrite(String name, String path, Uint8List image) {
     if (image == null &&
-        File('${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png')
+        File('${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
             .existsSync() &&
-        addReference(
-            name, '${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png')) {
-      File('${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png').copySync('${MainInfo().outputPath}pngs/${name}.png');
+        addReference(name,
+            '${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')) {
+      File('${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
+          .copySync('${MainInfo().outputPath}pngs/${name}.png');
       return true;
     }
     if (addReference(name, path)) {
@@ -40,7 +41,7 @@ class ImageReferenceStorage {
   }
 
   bool addReference(String name, String path) {
-    if (name != null && path != null) {
+    if (name != null && path != null && name.isNotEmpty && path.isNotEmpty) {
       images_references[name] = path;
       return true;
     } else {
