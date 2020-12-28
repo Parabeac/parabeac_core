@@ -118,9 +118,7 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var image = await convertImage(
         UUID, boundaryRectangle.width, boundaryRectangle.height);
-    if (image == null) {
-      return null;
-    }
+
     return Future.value(InheritedOval(this, name,
         currentContext: currentContext, image: image));
   }
