@@ -3,7 +3,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_gro
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -36,9 +35,7 @@ abstract class FileStructureStrategy {
   ///Indicator that signals if the required directories are constructed.
   ///
   ///Before generating any files, the caller must call the [setUpDirectories]
-  // ignore: prefer_final_fields
-  bool _isSetUp = false;
-  bool get isSetUp => _isSetUp;
+  bool isSetUp = false;
 
   String _screenDirectoryPath;
   String _viewDirectoryPath;
@@ -53,7 +50,7 @@ abstract class FileStructureStrategy {
   ///Default directories that are going to be generated is the
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
-    if (!_isSetUp) {
+    if (!isSetUp) {
       _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _projectIntermediateTree.groups.forEach((dir) {
@@ -63,7 +60,7 @@ abstract class FileStructureStrategy {
       });
       Directory(_screenDirectoryPath).createSync();
       Directory(_viewDirectoryPath).createSync();
-      _isSetUp = true;
+      isSetUp = true;
     }
   }
 
@@ -116,8 +113,8 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
 
   @override
   Future<void> setUpDirectories() async {
-    if (!_isSetUp) {
-      _isSetUp = true;
+    if (!isSetUp) {
+      isSetUp = true;
       return Future.wait(
           [super.setUpDirectories(), _generateMissingDirectories()]);
     }
@@ -127,10 +124,4 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
     Directory(_providersPath).createSync(recursive: true);
     Directory(_modelsPath).createSync(recursive: true);
   }
-}
-
-class FlutterFileStructureStrategy extends FileStructureStrategy {
-  FlutterFileStructureStrategy(String genProjectPath, PBPageWriter pageWriter,
-      PBIntermediateTree projectIntermediateTree)
-      : super(genProjectPath, pageWriter, projectIntermediateTree);
 }
