@@ -54,30 +54,15 @@ abstract class FileStructureStrategy {
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
     if (!_isSetUp) {
+      _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
+      _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _projectIntermediateTree.groups.forEach((dir) {
         if (dir.items.isNotEmpty) {
           _addImportsInfo(dir);
         }
       });
-      _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
-      _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       Directory(_screenDirectoryPath).createSync();
       Directory(_viewDirectoryPath).createSync();
-      // for (var directory in _projectIntermediateTree.groups) {
-      //   if (directory.items.isNotEmpty) {
-      //     var node = directory.items.first?.node;
-      //     var path;
-      //     if (node is InheritedScaffold) {
-      //       path = '${_screenDirectoryPath}${directory.name}';
-      //     } else if (node is PBSharedMasterNode) {
-      //       path = '${_viewDirectoryPath}${directory.name}';
-      //     } else {
-      //       path = '${GENERATED_PROJECT_PATH}${directory.name}';
-      //     }
-      //     Directory(path).createSync(recursive: true);
-      //   }
-      //   _addImportsInfo(directory);
-      // }
       _isSetUp = true;
     }
   }

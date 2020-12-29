@@ -27,15 +27,23 @@ class PBFlutterGenerator extends PBGenerationManager {
       }
       param = it.current;
     }
-    stringBuffer.write('{');
+
+    var counter = 0;
+    var optionalParamBuffer = StringBuffer();
+    optionalParamBuffer.write('{');
     it = constructorVariables;
     while (it.moveNext()) {
       param = constructorVariables.current;
       if (!param.isRequired) {
-        stringBuffer.write('this.' + param.variableName + ',');
+        optionalParamBuffer.write('this.' + param.variableName + ',');
+        counter++;
       }
     }
-    stringBuffer.write('});');
+    optionalParamBuffer.write('}');
+    if (counter >= 1) {
+      stringBuffer.write(optionalParamBuffer.toString());
+    }
+    stringBuffer.write(');');
     return stringBuffer.toString();
   }
 

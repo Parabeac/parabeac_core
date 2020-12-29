@@ -40,7 +40,7 @@ class ${widgetName} extends StatefulWidget{
 
 class _${widgetName} extends State<${widgetName}>{
   ${manager.generateGlobalVariables()}
-  ${manager.generateConstructor(constructorName)}
+  _${manager.generateConstructor(constructorName)}
 
   @override
   Widget build(BuildContext context){
