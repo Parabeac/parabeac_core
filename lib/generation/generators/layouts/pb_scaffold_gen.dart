@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateful_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
