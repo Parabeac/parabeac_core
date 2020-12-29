@@ -154,6 +154,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBVisualGenerationService from generateNonRootItem');
     }
 
     ///
@@ -171,6 +172,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBPluginControlService from generateNonRootItem');
       parentPreLayoutIntermediateNode =
           parentVisualIntermediateNode; //parentVisualIntermediateNode;
     }
@@ -188,6 +190,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBLayoutGenerationService from generateNonRootItem');
       parentLayoutIntermediateNode = parentPreLayoutIntermediateNode;
     }
     var parentAlignIntermediateNode;
@@ -204,6 +207,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBAlignGenerationService from generateNonRootItem');
       parentAlignIntermediateNode = parentLayoutIntermediateNode;
     }
 
@@ -223,6 +227,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBVisualGenerationService');
     }
     // print(
     //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
@@ -243,6 +248,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBPluginControlService');
       node = parentnode;
     }
     // print(
@@ -263,6 +269,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBLayoutGenerationService');
       node = parentNode;
     }
 
@@ -291,6 +298,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBAlignGenerationService');
       node = parentnode;
     }
     // print(
