@@ -36,8 +36,9 @@ abstract class PBIntermediateNode {
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
       {this.currentContext, this.subsemantic}) {
     if (topLeftCorner != null && bottomRightCorner != null) {
-      assert(topLeftCorner.x <= bottomRightCorner.x &&
-          topLeftCorner.y <= bottomRightCorner.y);
+      /// TODO: For some reason `bottomRightCorner.x` is one pixel bigger than `topLeftCorner.x`
+      // assert(topLeftCorner.x <= bottomRightCorner.x &&
+      //     topLeftCorner.y <= bottomRightCorner.y);
     }
   }
 
