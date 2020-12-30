@@ -58,8 +58,8 @@ abstract class FileStructureStrategy {
           _addImportsInfo(dir);
         }
       });
-      Directory(_screenDirectoryPath).createSync();
-      Directory(_viewDirectoryPath).createSync();
+      Directory(_screenDirectoryPath).createSync(recursive: true);
+      Directory(_viewDirectoryPath).createSync(recursive: true);
       isSetUp = true;
     }
   }
@@ -73,8 +73,8 @@ abstract class FileStructureStrategy {
       if (name != null) {
         var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
         var path = node is PBSharedMasterNode
-            ? '${_viewDirectoryPath}${name}.g.dart'
-            : '${_screenDirectoryPath}${name}.dart';
+            ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.g.dart'
+            : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
         PBGenCache().addToCache(uuid, path);
       } else {
         logger.warning(

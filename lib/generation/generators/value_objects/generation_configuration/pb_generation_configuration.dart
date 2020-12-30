@@ -41,9 +41,11 @@ abstract class GenerationConfiguration {
     await setUpConfiguration();
     intermediateTree.groups.forEach((group) {
       for (var item in group.items) {
+        _generationManager = PBFlutterGenerator(null);
+
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
         _commitImports(item.node, group.name.snakeCase, fileName);
-        _generateNode(item.node, fileName);
+        _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
         _commitDependencies(
             projectIntermediateTree.projectName /*+ '/pubspec.yaml'*/);
       }
@@ -58,14 +60,17 @@ abstract class GenerationConfiguration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  void _commitImports(
+  List<String> _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
     var screenFilePath =
         '${intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
         '${intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-    ImportHelper.findImports(
+    var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
+    for (var i = 0; i < imports.length; i++) {
+      _generationManager.addImport(imports[i]);
+    }
   }
 
   void _commitDependencies(String projectName) {
