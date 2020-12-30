@@ -15,18 +15,28 @@ Logger log = Logger('Image conversion');
 /// `width` and `height`
 Future<Uint8List> convertImage(String uuid, num width, num height) async {
   try {
-    var body = {
-      'uuid': uuid,
-      'path': MainInfo().sketchPath,
-      'width': width,
-      'height': height
-    };
+    var body = Platform.environment.containsKey('SAC_ENDPOINT')
+        ? {
+            'uuid': uuid,
+            'width': width,
+            'height': height,
+            'blob': getBlobName(MainInfo().sketchPath),
+            'container': 'design-file'
+          }
+        : {
+            'uuid': uuid,
+            'path': MainInfo().sketchPath,
+            'width': width,
+            'height': height
+          };
 
-    var response = await http.post(
-      svg_convertion_endpoint,
-      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-      body: jsonEncode(body),
-    );
+    var response = await http
+        .post(
+          svg_convertion_endpoint,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(body),
+        )
+        .timeout(Duration(minutes: 1));
 
     if (response.statusCode >= 400) {
       var bodyMap = jsonDecode(response.body);
@@ -38,3 +48,5 @@ Future<Uint8List> convertImage(String uuid, num width, num height) async {
   }
   return null;
 }
+
+String getBlobName(String path) => path.split('/').last;
