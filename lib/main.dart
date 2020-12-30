@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/controllers/project_name_validator.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
@@ -94,9 +95,10 @@ ${parser.usage}
     designType = 'figma';
   }
 
-  if (projectName == 'test') {
+  if (!ProjectNameValidator.isSafe(projectName)) {
     handleError(
-        'Invalid project name: \'test\' - this will conflict with Flutter package dependencies');
+      'Invalid project name: \'$projectName\'. Ensure that \'$projectName\' is all lowercase, with underscores to separate words; uses only basic Latin letters and Arabic digits; doesn\'t start with digits and isn’t a reserved word.',
+    );
   }
 
   //  usage -c "default:lib/configurations/configurations.json
