@@ -127,13 +127,16 @@ ${parser.usage}
     MainInfo().sketchPath = path;
     InputDesignService(path);
 
-    var process = await Process.start('npm', ['run', 'prod'],
-        workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+    var process;
+    if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+      process = await Process.start('npm', ['run', 'prod'],
+          workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
-    await for (var event in process.stdout.transform(utf8.decoder)) {
-      if (event.toLowerCase().contains('server is listening on port')) {
-        log.fine('Successfully started Sketch Asset Converter');
-        break;
+      await for (var event in process.stdout.transform(utf8.decoder)) {
+        if (event.toLowerCase().contains('server is listening on port')) {
+          log.fine('Successfully started Sketch Asset Converter');
+          break;
+        }
       }
     }
 
@@ -142,7 +145,7 @@ ${parser.usage}
         MainInfo().outputPath + projectName,
         configurationPath,
         configurationType);
-    process.kill();
+    process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
