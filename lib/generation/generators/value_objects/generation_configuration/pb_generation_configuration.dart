@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:sentry/sentry.dart';
 
 abstract class GenerationConfiguration {
   FileStructureStrategy fileStructureStrategy;
@@ -42,6 +43,7 @@ abstract class GenerationConfiguration {
     intermediateTree.groups.forEach((group) {
       for (var item in group.items) {
         _generationManager = PBFlutterGenerator(null);
+        _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
         _commitImports(item.node, group.name.snakeCase, fileName);
