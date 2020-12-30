@@ -10,9 +10,6 @@ void main() async {
   var process;
   var uuids;
 
-<<<<<<< HEAD
-  group('Sketch PNG Testing', () {
-=======
   /// This boolean is used to differentiate between local testing and github testing.
   /// This environment variable should only be set in github and the test will fail
   /// if this environment variable is enabled locally
@@ -59,7 +56,6 @@ void main() async {
   }, skip: isGithub);
 
   group('Github Sketch PNG Testing:', () {
->>>>>>> 7f46ee6... Added envvar to check for an external SAC endpoint
     setUpAll(() async {
       MainInfo().sketchPath =
           '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch';
@@ -75,7 +71,7 @@ void main() async {
         expect(image, isNot(null));
       }
     });
-  });
+  }, skip: !isGithub);
 
   group('Figma PNG Testing', () {
     setUpAll(() {
