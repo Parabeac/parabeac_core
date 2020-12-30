@@ -116,11 +116,9 @@ class Star extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImageLocal(
+    var image = await convertImage(
         UUID, boundaryRectangle.width, boundaryRectangle.height);
-    if (image == null) {
-      return null;
-    }
+
     return Future.value(InheritedStar(this, name,
         currentContext: currentContext, image: image));
   }
