@@ -45,7 +45,7 @@ abstract class GenerationConfiguration {
         _commitImports(item.node, group.name.snakeCase, fileName);
         _generateNode(item.node, fileName);
         _commitDependencies(
-            projectIntermediateTree.projectName + '/pubspec.yalm');
+            projectIntermediateTree.projectName /*+ '/pubspec.yaml'*/);
       }
     });
   }
@@ -54,7 +54,7 @@ abstract class GenerationConfiguration {
     fileStructureStrategy = FlutterFileStructureStrategy(
         intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
     _generationManager.fileStrategy = fileStructureStrategy;
-    logger.info('Settting up the directories');
+    logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
 
