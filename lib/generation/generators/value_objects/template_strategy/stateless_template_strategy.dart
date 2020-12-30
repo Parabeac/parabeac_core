@@ -11,7 +11,11 @@ class StatelessTemplateStrategy extends TemplateStrategy {
     var widgetName = retrieveNodeName(node);
     var returnStatement = manager.generate(node.child);
     if (node is InheritedScaffold) {
-      returnStatement = 'Scaffold( body: ${returnStatement})';
+      returnStatement = '''Scaffold(
+        ${getAppbar(node, manager)}
+        body: ${returnStatement},
+        ${getTabbar(node, manager)}
+        )''';
     }
     return '''
 ${manager.generateImports()}

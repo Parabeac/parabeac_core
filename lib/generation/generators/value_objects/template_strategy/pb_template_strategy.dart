@@ -18,4 +18,22 @@ abstract class TemplateStrategy {
     }
     return widgetName;
   }
+
+  String getAppbar(node, manager) {
+    if (node.navbar != null) {
+      node.navbar.generator.manager = manager;
+      return 'appBar: ${node.navbar.generator.generate(node.navbar)}, ';
+    } else {
+      return '';
+    }
+  }
+
+  String getTabbar(node, manager) {
+    if (node.tabbar != null) {
+      node.tabbar.generator.manager = manager;
+      return 'bottomNavigationBar: ${node.tabbar.generator.generate(node.tabbar)},';
+    } else {
+      return '';
+    }
+  }
 }
