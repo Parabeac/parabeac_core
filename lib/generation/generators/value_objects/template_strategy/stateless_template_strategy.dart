@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
 
@@ -9,7 +10,9 @@ class StatelessTemplateStrategy extends TemplateStrategy {
       {args}) {
     var widgetName = retrieveNodeName(node);
     var returnStatement = manager.generate(node.child);
-
+    if (node is InheritedScaffold) {
+      returnStatement = 'Scaffold( body: ${returnStatement})';
+    }
     return '''
 ${manager.generateImports()}
 
