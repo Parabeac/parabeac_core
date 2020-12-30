@@ -72,15 +72,17 @@ ${parser.usage}
   _basePath = io.Directory.current.path;
 
   if (_os != 'WIN') {
-    var install = await Process.start('bash', [
-      '${Directory.current.path}/pb-scripts/install.sh',
-    ]);
+    if (!isFigmaInput) {
+      var install = await Process.start('bash', [
+        '${Directory.current.path}/pb-scripts/install.sh',
+      ]);
 
-    await stdout.addStream(install.stdout);
-    await stderr.addStream(install.stderr);
-    var exitCode = await install.exitCode;
-    if (exitCode != 0) {
-      print('install.sh finished with exit code $exitCode');
+      await stdout.addStream(install.stdout);
+      await stderr.addStream(install.stderr);
+      var exitCode = await install.exitCode;
+      if (exitCode != 0) {
+        print('install.sh finished with exit code $exitCode');
+      }
     }
 
     /// To Download and merge the plugins on the codebase
