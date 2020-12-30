@@ -9,14 +9,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       {args}) {
     var widgetName = retrieveNodeName(node);
-    var returnStatement = manager.generate(node.child);
-    if (node is InheritedScaffold) {
-      returnStatement = '''Scaffold(
-        ${getAppbar(node, manager)}
-        body: ${returnStatement},
-        ${getTabbar(node, manager)}
-        )''';
-    }
+    var returnStatement = node.generator.generate(node);
     return '''
 ${manager.generateImports()}
 
