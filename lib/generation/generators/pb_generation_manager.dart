@@ -20,6 +20,8 @@ abstract class PBGenerationManager {
   ///* Keep track of the current page body
   StringBuffer body;
 
+  Type rootType;
+
   ///* Keep track of the instance variable a class may have
   final Set<PBVariable> _constructorVariables = {};
   Iterator<PBVariable> get constructorVariables =>
