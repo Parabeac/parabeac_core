@@ -47,14 +47,8 @@ class PBSizeHelper extends PBAttributesHelper {
       buffer.write(
           'height: constraints.maxHeight * ${height.toStringAsFixed(3)},');
     } else {
-      // height = body['height'];
-      // width = body['width'];
-      // height = (height != null && screenHeight != null && screenHeight > 0.0)
-      //     ? height / screenHeight
-      //     : height;
-      // width = (width != null && screenWidth != null && screenWidth > 0.0)
-      //     ? width / screenWidth
-      //     : width;
+      height = body['height'];
+      width = body['width'];
       if (width != null) {
         buffer.write('width: ${width.toStringAsFixed(3)},');
       }
