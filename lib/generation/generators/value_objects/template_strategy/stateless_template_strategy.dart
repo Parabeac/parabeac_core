@@ -12,12 +12,21 @@ class StatelessTemplateStrategy extends TemplateStrategy {
       {args}) {
     var widgetName = retrieveNodeName(node);
     var returnStatement = node.generator.generate(node, generatorContext);
+    var overrides = '';
+    var overrideVars = '';
+    if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
+      node.overridableProperties.forEach((prop) {
+        overrides += 'this.${prop.friendlyName}, ';
+        overrideVars += 'final ${prop.friendlyName};';
+      });
+    }
     return '''
 ${manager.generateImports()}
 
 class ${widgetName.pascalCase} extends StatelessWidget{
   ${node is PBSharedMasterNode ? 'final constraints;' : ''}
-  const ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''}{Key key}) : super(key : key);
+  ${overrideVars.isNotEmpty ? overrideVars : ''}
+  const ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
   ${manager.generateGlobalVariables()}
 
   @override
