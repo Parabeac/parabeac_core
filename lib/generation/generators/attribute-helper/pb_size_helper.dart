@@ -25,7 +25,8 @@ class PBSizeHelper extends PBAttributesHelper {
             (source.currentContext.screenBottomRightCorner.x))
         .abs();
     var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
-        (source.currentContext.screenBottomRightCorner.y));
+            (source.currentContext.screenBottomRightCorner.y))
+        .abs();
 
     height = (height != null && screenHeight != null && screenHeight > 0.0)
         ? height / screenHeight
