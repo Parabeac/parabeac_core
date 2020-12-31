@@ -33,6 +33,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('    return ');
       buffer.write(method_signature);
       buffer.write('(');
+      buffer.write('constraints,');
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedParameterValue:
