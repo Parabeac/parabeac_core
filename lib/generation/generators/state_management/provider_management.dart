@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
@@ -27,14 +28,16 @@ class ProviderGeneratorWrapper extends StateManagementGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     var watcherName = _getNameOfNode(source);
     var fileStrategy = manager.fileStrategy;
     var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
     manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
     manager.addImport('import provider');
     manager.addMethodVariable(watcher);
-    fileStrategy.generatePage(source.generator.generate(source),
+    fileStrategy.generatePage(
+        source.generator.generate(source, generatorContext),
         '${fileStrategy.GENERATED_PROJECT_PATH}${fileStrategy.RELATIVE_VIEW_PATH}EDDIE.g.dart');
     return PBInputFormatter.formatLabel(watcherName);
   }

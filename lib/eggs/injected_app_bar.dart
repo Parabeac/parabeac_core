@@ -1,5 +1,6 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
@@ -84,21 +85,26 @@ class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
+    generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedNavbar) {
       var buffer = StringBuffer();
 
       buffer.write('AppBar(');
       if (source.leadingItem != null) {
-        buffer.write('leading: ${manager.generate(source.leadingItem)},');
+        buffer.write(
+            'leading: ${source.leadingItem.generator.generate(source.leadingItem, generatorContext)},');
       }
       if (source.middleItem != null) {
-        buffer.write('title: ${manager.generate(source.middleItem)},');
+        buffer.write(
+            'title: ${source.middleItem.generator.generate(source.middleItem, generatorContext)},');
       }
 
       if (source.trailingItem != null) {
         var trailingItem = '';
-        trailingItem = '${manager.generate(source.trailingItem)}';
+        trailingItem =
+            '${source.trailingItem.generator.generate(source.trailingItem, generatorContext)}';
         buffer.write('actions: [$trailingItem],');
       }
 

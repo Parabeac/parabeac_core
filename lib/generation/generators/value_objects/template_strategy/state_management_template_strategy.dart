@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
@@ -10,8 +11,9 @@ class StateManagementTemplateStrategy extends TemplateStrategy {
   StateManagementTemplateStrategy(this._generator);
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
+      GeneratorContext generatorContext,
       {args}) {
     _generator.manager = manager;
-    return _generator.generate(node);
+    return _generator.generate(node, generatorContext);
   }
 }

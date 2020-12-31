@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
@@ -13,7 +14,8 @@ class PBBitmapGenerator extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
     if (source is PBSharedMasterNode) {
@@ -24,7 +26,7 @@ class PBBitmapGenerator extends PBGenerator {
       }
     }
     buffer.write(
-        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source)})');
+        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source, generatorContext)})');
     return buffer.toString();
   }
 }

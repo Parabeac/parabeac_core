@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
@@ -9,7 +10,8 @@ class PBTextGen extends PBGenerator with PBColorMixin {
   PBTextGen() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is InheritedText) {
       var buffer = StringBuffer();
       buffer.write('Text(\n');

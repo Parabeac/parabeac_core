@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -10,7 +11,9 @@ class PBMasterSymbolGenerator extends PBGenerator {
 
   var log = Logger('Symbol Master Generator');
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
+    generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
       if (source.child == null) {
@@ -32,12 +35,15 @@ class PBMasterSymbolGenerator extends PBGenerator {
         log.error(e.toString());
       }
 
-      var generatedWidget = manager.generate(source.child);
+      var generatedWidget =
+          source.child.generator.generate(source.child, generatorContext);
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }
       buffer.write(generatedWidget);
       return buffer.toString();
+    } else {
+      return '';
     }
   }
 }
