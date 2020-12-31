@@ -1,25 +1,17 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
-import 'package:parabeac_core/generation/generators/state_management/state_management_config.dart';
+import 'package:parabeac_core/generation/generators/state_management_wrappers/state_generator_wrapper.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-class ProviderGeneratorWrapper extends StateManagementGenerator {
+class ProviderGeneratorWrapper extends StateManagementWrapper {
   final PACKAGE_NAME = 'provider';
   final PACKAGE_VERSION = '1.0.0';
 
   @override
   String setStatefulNode(
       PBIntermediateNode node, PBGenerationManager manager, String path) {}
-
-  String _getNameOfNode(PBIntermediateNode node) {
-    var name = node.name;
-    var index = name.indexOf('/');
-    // Remove everything after the /. So if the name is SignUpButton/Default, we end up with SignUpButton as the name we produce.
-    name.replaceRange(index, name.length, '');
-    return name;
-  }
 
   String providerModelGenerator() {
     return ''' 
@@ -30,7 +22,7 @@ class ProviderGeneratorWrapper extends StateManagementGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    var watcherName = _getNameOfNode(source);
+    var watcherName = getNameOfNode(source);
     var fileStrategy = manager.fileStrategy;
     var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
     manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
