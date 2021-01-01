@@ -27,11 +27,8 @@ class PBTextGen extends PBGenerator with PBColorMixin {
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
       buffer.write('style: ');
-      if (source is PBSharedMasterNode) {
-        var ovrName = SN_UUIDtoVarName[source.UUID + '_textStyle'];
-        if (ovrName != null) {
-          buffer.write('${ovrName} ?? ');
-        }
+      if(SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')){
+        buffer.write(SN_UUIDtoVarName[source.UUID + '_textStyle']);
       }
 
       buffer.write('TextStyle(\n');
