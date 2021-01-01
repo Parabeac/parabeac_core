@@ -18,12 +18,8 @@ class PBBitmapGenerator extends PBGenerator {
       PBIntermediateNode source, GeneratorContext generatorContext) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
-    if (source is PBSharedMasterNode) {
-      // see if source is overridden
-      var ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
-      if (ovrName != null) {
-        buffer.write('${ovrName} ?? ');
-      }
+    if(SN_UUIDtoVarName.containsKey('${source.UUID}_image')){
+      buffer.write('${SN_UUIDtoVarName[source.UUID + '_image']} ?? ');
     }
     buffer.write(
         '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source, generatorContext)})');
