@@ -42,7 +42,7 @@ abstract class GenerationConfiguration {
     await setUpConfiguration();
     intermediateTree.groups.forEach((group) {
       for (var item in group.items) {
-        _generationManager = PBFlutterGenerator(null);
+        _generationManager = PBFlutterGenerator(fileStructureStrategy);
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
