@@ -1,11 +1,12 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/provider_management.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/state_management/provider_management.dart';
 import 'package:parabeac_core/generation/generators/value_objects/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+`import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
@@ -24,6 +25,8 @@ abstract class GenerationConfiguration {
 
   Logger logger;
 
+  final Set<Middleware> _middleware = {};
+
   ///The tree that contains the node for all the pages.
   PBIntermediateTree _intermediateTree;
 
@@ -39,7 +42,11 @@ abstract class GenerationConfiguration {
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    return Future.value(node);
+    var it = _middleware.iterator;
+    while (it.moveNext()) {
+      node = await it.current.applyMiddleware(node);
+    }
+    return node;
   }
 
   ///generates the Project based on the [projectIntermediateTree]
@@ -56,6 +63,12 @@ abstract class GenerationConfiguration {
             projectIntermediateTree.projectName + '/pubspec.yalm');
       }
     });
+  }
+
+  void registerMiddleware(Middleware middleware) {
+    if (middleware != null) {
+      _middleware.add(middleware);
+    }
   }
 
   Future<void> setUpConfiguration() async {
@@ -90,19 +103,9 @@ abstract class GenerationConfiguration {
 }
 
 class ProviderGenerationConfiguration extends GenerationConfiguration {
-  TemplateStrategy _templateStrategy;
-  PBGenerator _providerGenerator;
+  ProviderMiddleware middleware;
   ProviderGenerationConfiguration() {
-    _providerGenerator = ProviderGeneratorWrapper();
-    _templateStrategy = StateManagementTemplateStrategy(_providerGenerator);
-  }
-
-  @override
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-      node.generator.templateStrategy = _templateStrategy;
-    }
-    return node;
+    registerMiddleware(ProviderMiddleware());
   }
 
   @override
@@ -115,5 +118,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
 }
 
 class StatefulGenerationConfiguration extends GenerationConfiguration {
-  StatefulGenerationConfiguration();
+  StatefulGenerationConfiguration() {
+    registerMiddleware(StatefulMiddleware());
+  }
 }
