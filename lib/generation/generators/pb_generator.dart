@@ -1,7 +1,10 @@
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/inline_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+
+import 'attribute-helper/pb_generator_context.dart';
 
 abstract class PBGenerator {
   final String OBJECTID = 'UUID';
@@ -24,5 +27,5 @@ abstract class PBGenerator {
     _templateStrategy ??= InlineTemplateStrategy();
   }
 
-  String generate(PBIntermediateNode source);
+  String generate(PBIntermediateNode source, GeneratorContext generatorContext);
 }

@@ -1,7 +1,6 @@
-import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -20,6 +19,8 @@ abstract class PBGenerationManager {
 
   ///* Keep track of the current page body
   StringBuffer body;
+
+  Type rootType;
 
   ///* Keep track of the instance variable a class may have
   final Set<PBVariable> _constructorVariables = {};

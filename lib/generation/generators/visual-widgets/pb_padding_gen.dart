@@ -1,5 +1,7 @@
 import 'dart:mirrors';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import '../pb_generator.dart';
@@ -18,12 +20,11 @@ class PBPaddingGen extends PBGenerator {
     return 'MediaQuery.of(context).size.' +
         (isVertical ? 'height' : 'width') +
         ' * $fixedValue';
-
-    return '$fixedValue';
   }
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (!(source is Padding)) {
       return '';
     }
@@ -58,7 +59,8 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('),');
 
     if (source.child != null) {
-      buffer.write('child: ${manager.generate(source.child)}');
+      buffer.write(
+          'child: ${source.child.generator.generate(source.child, generatorContext)}');
     }
     buffer.write(')');
 

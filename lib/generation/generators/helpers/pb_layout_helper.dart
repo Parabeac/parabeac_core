@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/helpers/pb_gen_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -6,7 +7,8 @@ class PBLayoutManager implements PBGenHelper {
   final List<PBLayoutIntermediateNode> _registeredGenLayouts = [];
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source == null) {
       throw NullThrownError();
     }
@@ -15,7 +17,7 @@ class PBLayoutManager implements PBGenHelper {
       var body = _registeredGenLayouts
           .firstWhere((layout) => layout.runtimeType == source.runtimeType)
           .generator
-          .generate(source);
+          .generate(source, generatorContext);
       buffer.write(body);
 
       return buffer.toString();
@@ -24,8 +26,9 @@ class PBLayoutManager implements PBGenHelper {
   }
 
   @override
-  bool containsIntermediateNode(PBIntermediateNode node) => _registeredGenLayouts
-      .any((layout) => layout.runtimeType == node.runtimeType);
+  bool containsIntermediateNode(PBIntermediateNode node) =>
+      _registeredGenLayouts
+          .any((layout) => layout.runtimeType == node.runtimeType);
 
   @override
   void registerIntemediateNode(PBIntermediateNode generator) {

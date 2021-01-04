@@ -5,30 +5,26 @@ import 'package:parabeac_core/generation/generators/middleware/state_management/
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_file_structure_strategy.dart';
-`import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:sentry/sentry.dart';
 
 abstract class GenerationConfiguration {
-  FileStructureStrategy _fileStructureStrategy;
-  FileStructureStrategy get fileStructureStrategy {
-    if (_fileStructureStrategy == null) {
-      throw Exception(
-          'Do not forget to initialize the fileStructure by calling `initializeFileStructure()`');
-    }
-    return _fileStructureStrategy;
-  }
+  FileStructureStrategy fileStructureStrategy;
 
   Logger logger;
 
   final Set<Middleware> _middleware = {};
 
   ///The tree that contains the node for all the pages.
-  PBIntermediateTree _intermediateTree;
+  PBIntermediateTree intermediateTree;
 
   ///The manager in charge of the independent [PBGenerator]s by providing an interface for adding imports, global variables, etc.
   ///
@@ -52,15 +48,18 @@ abstract class GenerationConfiguration {
   ///generates the Project based on the [projectIntermediateTree]
   Future<void> generateProject(
       PBIntermediateTree projectIntermediateTree) async {
-    _intermediateTree = projectIntermediateTree;
+    intermediateTree = projectIntermediateTree;
     await setUpConfiguration();
-    _intermediateTree.groups.forEach((group) {
+    intermediateTree.groups.forEach((group) {
       for (var item in group.items) {
+        _generationManager = PBFlutterGenerator(fileStructureStrategy);
+        _generationManager.rootType = item.node.runtimeType;
+
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
         _commitImports(item.node, group.name.snakeCase, fileName);
-        _generateNode(item.node, fileName);
+        _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
         _commitDependencies(
-            projectIntermediateTree.projectName + '/pubspec.yalm');
+            projectIntermediateTree.projectName /*+ '/pubspec.yaml'*/);
       }
     });
   }
@@ -72,21 +71,24 @@ abstract class GenerationConfiguration {
   }
 
   Future<void> setUpConfiguration() async {
-    _fileStructureStrategy = FlutterFileStructureStrategy(
-        _intermediateTree.projectAbsPath, PBFlutterWriter(), _intermediateTree);
-    _generationManager.fileStrategy = _fileStructureStrategy;
-    logger.info('Settting up the directories');
-    await _fileStructureStrategy.setUpDirectories();
+    fileStructureStrategy = FlutterFileStructureStrategy(
+        intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
+    _generationManager.fileStrategy = fileStructureStrategy;
+    logger.info('Setting up the directories');
+    await fileStructureStrategy.setUpDirectories();
   }
 
-  void _commitImports(
+  List<String> _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
     var screenFilePath =
-        '${_intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
+        '${intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
-        '${_intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-    ImportHelper.findImports(
+        '${intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
+    var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
+    for (var i = 0; i < imports.length; i++) {
+      _generationManager.addImport(imports[i]);
+    }
   }
 
   void _commitDependencies(String projectName) {
@@ -97,7 +99,7 @@ abstract class GenerationConfiguration {
   }
 
   Future<void> _generateNode(PBIntermediateNode node, String filename) async =>
-      _fileStructureStrategy.generatePage(
+      fileStructureStrategy.generatePage(
           _generationManager.generate(await applyMiddleware(node)), filename,
           args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
 }
@@ -110,10 +112,10 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
 
   @override
   Future<void> setUpConfiguration() async {
-    _fileStructureStrategy = ProviderFileStructureStrategy(
-        _intermediateTree.projectAbsPath, PBFlutterWriter(), _intermediateTree);
+    fileStructureStrategy = ProviderFileStructureStrategy(
+        intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
     logger.info('Settting up the directories');
-    await _fileStructureStrategy.setUpDirectories();
+    await fileStructureStrategy.setUpDirectories();
   }
 }
 

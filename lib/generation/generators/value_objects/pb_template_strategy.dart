@@ -77,7 +77,7 @@ class InlineTemplateStrategy extends TemplateStrategy {
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       {var args}) {
-    return node is String ? node : node.generator.generate(node);
+    return node is String ? node : node.generator.generate(node, null);
   }
 }
 

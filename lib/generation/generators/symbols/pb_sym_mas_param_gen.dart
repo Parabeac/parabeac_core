@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -6,7 +7,8 @@ class PBSymbolMasterParamGen extends PBGenerator {
   PBSymbolMasterParamGen() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     //TODO: is PBParam correct here?
     var name = (source as PBVariable).variableName;
 

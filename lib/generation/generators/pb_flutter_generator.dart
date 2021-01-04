@@ -1,7 +1,8 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/empty_page_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_template_strategy.dart';
 
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
@@ -90,10 +91,13 @@ class PBFlutterGenerator extends PBGenerationManager {
     if (rootNode.generator == null) {
       log.error('Generator not registered for ${rootNode}');
     }
-    return rootNode.generator?.templateStrategy
-            ?.generateTemplate(rootNode, this) ??
+    return rootNode.generator?.templateStrategy?.generateTemplate(
+            rootNode,
+            this,
+            GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
-        DEFAULT_STRATEGY.generateTemplate(rootNode, this);
+        DEFAULT_STRATEGY.generateTemplate(rootNode, this,
+            GeneratorContext(sizingContext: SizingValueContext.PointValue));
   }
 }

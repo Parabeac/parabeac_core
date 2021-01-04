@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -13,8 +14,6 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
 class Tab extends PBEgg implements PBInjectedIntermediate {
-  PBContext currentContext;
-
   PrototypeNode prototypeNode;
 
   Tab(
@@ -22,7 +21,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate {
     Point bottomRightCorner,
     String name, {
     UUID,
-    this.currentContext,
+    PBContext currentContext,
     this.prototypeNode,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID) {
@@ -96,16 +95,18 @@ class PBTabGenerator extends PBGenerator {
   PBTabGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is Tab) {
-      if (source.child != null) {}
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBarItem(');
       buffer.write(source.child != null
-          ? 'icon: ${manager.generate(source.child)}'
+          ? 'icon: ${source.child.generator.generate(source.child, generatorContext)}'
           : '');
       buffer.write(')');
       return buffer.toString();
+    } else {
+      return '';
     }
   }
 }

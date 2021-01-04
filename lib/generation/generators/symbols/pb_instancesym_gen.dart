@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
@@ -15,7 +16,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   var log = Logger('Symbol Instance Generator');
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
       var method_signature = source.functionCallName;
       if (method_signature == null) {
@@ -31,6 +33,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('    return ');
       buffer.write(method_signature);
       buffer.write('(');
+      buffer.write('constraints,');
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedParameterValue:

@@ -1,5 +1,5 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -14,18 +14,15 @@ class PBBitmapGenerator extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
-    if (source is PBSharedMasterNode) {
-      // see if source is overridden
-      var ovrName = SN_UUIDtoVarName[source.UUID + '_image'];
-      if (ovrName != null) {
-        buffer.write('${ovrName} ?? ');
-      }
+    if(SN_UUIDtoVarName.containsKey('${source.UUID}_image')){
+      buffer.write('${SN_UUIDtoVarName[source.UUID + '_image']} ?? ');
     }
     buffer.write(
-        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source)})');
+        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source, generatorContext)})');
     return buffer.toString();
   }
 }

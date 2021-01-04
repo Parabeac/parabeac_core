@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
-import 'package:parabeac_core/generation/generators/value_objects/pb_generation_configuration.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
@@ -20,7 +22,7 @@ class FlutterProjectBuilder {
 
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
-  ///This is going to be defaulted to [StatefulGenerationConfiguration] if nothing else is specified.
+  ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
   Map<String, GenerationConfiguration> configurations = {

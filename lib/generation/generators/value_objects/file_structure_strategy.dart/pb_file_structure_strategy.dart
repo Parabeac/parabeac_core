@@ -3,7 +3,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_gro
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -36,9 +35,7 @@ abstract class FileStructureStrategy {
   ///Indicator that signals if the required directories are constructed.
   ///
   ///Before generating any files, the caller must call the [setUpDirectories]
-  // ignore: prefer_final_fields
-  bool _isSetUp = false;
-  bool get isSetUp => _isSetUp;
+  bool isSetUp = false;
 
   String _screenDirectoryPath;
   String _viewDirectoryPath;
@@ -53,7 +50,7 @@ abstract class FileStructureStrategy {
   ///Default directories that are going to be generated is the
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
-    if (!_isSetUp) {
+    if (!isSetUp) {
       _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _projectIntermediateTree.groups.forEach((dir) {
@@ -61,9 +58,9 @@ abstract class FileStructureStrategy {
           _addImportsInfo(dir);
         }
       });
-      Directory(_screenDirectoryPath).createSync();
-      Directory(_viewDirectoryPath).createSync();
-      _isSetUp = true;
+      Directory(_screenDirectoryPath).createSync(recursive: true);
+      Directory(_viewDirectoryPath).createSync(recursive: true);
+      isSetUp = true;
     }
   }
 
@@ -76,8 +73,8 @@ abstract class FileStructureStrategy {
       if (name != null) {
         var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
         var path = node is PBSharedMasterNode
-            ? '${_viewDirectoryPath}${name}.g.dart'
-            : '${_screenDirectoryPath}${name}.dart';
+            ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.g.dart'
+            : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
         PBGenCache().addToCache(uuid, path);
       } else {
         logger.warning(
@@ -99,38 +96,4 @@ abstract class FileStructureStrategy {
     }
     return Future.value();
   }
-}
-
-class ProviderFileStructureStrategy extends FileStructureStrategy {
-  final RELATIVE_PROVIDER_PATH = 'providers/';
-  final RELATIVE_MODEL_PATH = 'models/';
-  var _providersPath;
-  var _modelsPath;
-
-  ProviderFileStructureStrategy(String genProjectPath, PBPageWriter pageWriter,
-      PBIntermediateTree projectIntermediateTree)
-      : super(genProjectPath, pageWriter, projectIntermediateTree) {
-    _providersPath = '${genProjectPath}${RELATIVE_PROVIDER_PATH}';
-    _modelsPath = '${genProjectPath}${RELATIVE_MODEL_PATH}';
-  }
-
-  @override
-  Future<void> setUpDirectories() async {
-    if (!_isSetUp) {
-      _isSetUp = true;
-      return Future.wait(
-          [super.setUpDirectories(), _generateMissingDirectories()]);
-    }
-  }
-
-  Future<void> _generateMissingDirectories() async {
-    Directory(_providersPath).createSync(recursive: true);
-    Directory(_modelsPath).createSync(recursive: true);
-  }
-}
-
-class FlutterFileStructureStrategy extends FileStructureStrategy {
-  FlutterFileStructureStrategy(String genProjectPath, PBPageWriter pageWriter,
-      PBIntermediateTree projectIntermediateTree)
-      : super(genProjectPath, pageWriter, projectIntermediateTree);
 }
