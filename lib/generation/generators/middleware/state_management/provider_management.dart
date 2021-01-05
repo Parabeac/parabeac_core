@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_generato
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
+import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -13,7 +14,7 @@ class ProviderMiddleware extends Middleware {
       : super(generationManager);
 
   @override
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) {
+  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
       var watcherName = getNameOfNode(node);
       var manager = generationManager;
@@ -23,10 +24,17 @@ class ProviderMiddleware extends Middleware {
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       manager.addImport('import provider');
       manager.addMethodVariable(watcher);
-      //TODO iterate states,
-      // for (var state in node.auxiliaryData.stateGraph.states) {
-      // }
-      fileStrategy.generatePage(
+      // Iterating through states
+      node.auxiliaryData.stateGraph.states.forEach((state) async {
+        var variationNode = state.variation.node;
+        var statelessNode = manager.generate(node);
+        await fileStrategy.generatePage(statelessNode,
+            '${fileStrategy.GENERATED_PROJECT_PATH}${fileStrategy.RELATIVE_VIEW_PATH}${variationNode.name.snakeCase}.g.dart',
+            args: 'SCREEN');
+        print(state.variation.node);
+      });
+
+      await fileStrategy.generatePage(
           node.generator.generate(node, GeneratorContext()),
           '${fileStrategy.GENERATED_PROJECT_PATH}${fileStrategy.RELATIVE_VIEW_PATH}.g.dart');
       node.generator = StringGeneratorAdapter(watcherName);
