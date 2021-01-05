@@ -1,6 +1,11 @@
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 abstract class Middleware {
+  final PBGenerationManager generationManager;
+
+  Middleware(this.generationManager);
+
   String getNameOfNode(PBIntermediateNode node) {
     var name = node.name;
     var index = name.indexOf('/');

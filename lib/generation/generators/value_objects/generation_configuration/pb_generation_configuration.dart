@@ -1,11 +1,8 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
-import 'package:parabeac_core/generation/generators/middleware/state_management/provider_management.dart';
-import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_management.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
@@ -14,7 +11,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
-import 'package:sentry/sentry.dart';
 
 abstract class GenerationConfiguration {
   FileStructureStrategy fileStructureStrategy;
@@ -35,6 +31,8 @@ abstract class GenerationConfiguration {
     logger = Logger(runtimeType.toString());
     _generationManager = PBFlutterGenerator(null);
   }
+
+  PBGenerationManager get generationManager => _generationManager;
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
