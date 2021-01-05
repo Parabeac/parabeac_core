@@ -7,7 +7,7 @@ class PBConfiguration {
     widgetSpacing = defaultConfig['widgetSpacing'];
     layoutPrecedence =
         defaultConfig['layoutPrecedence'] ?? ['column', 'row', 'stack'];
-    stateManagement = defaultConfig['stateManagement'] ?? 'Provider';
+    stateManagement = defaultConfig['stateManagement'] ?? 'provider';
   }
 
   String widgetStyle;

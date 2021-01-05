@@ -26,14 +26,14 @@ class FlutterProjectBuilder {
   GenerationConfiguration generationConfiguration;
 
   Map<String, GenerationConfiguration> configurations = {
-    'Provider': ProviderGenerationConfiguration(),
-    'None': StatefulGenerationConfiguration(),
+    'provider': ProviderGenerationConfiguration(),
+    'none': StatefulGenerationConfiguration(),
   };
 
   FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
-    generationConfiguration =
-        configurations[MainInfo().configurations['state-management']];
+    generationConfiguration = configurations[
+        MainInfo().configurations['state-management'].toString().toLowerCase()];
     mainTree.projectName = projectName;
     mainTree.projectAbsPath = pathToFlutterProject;
   }
