@@ -103,24 +103,3 @@ abstract class GenerationConfiguration {
           _generationManager.generate(await applyMiddleware(node)), filename,
           args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
 }
-
-class ProviderGenerationConfiguration extends GenerationConfiguration {
-  ProviderMiddleware middleware;
-  ProviderGenerationConfiguration() {
-    registerMiddleware(ProviderMiddleware());
-  }
-
-  @override
-  Future<void> setUpConfiguration() async {
-    fileStructureStrategy = ProviderFileStructureStrategy(
-        intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
-    logger.info('Settting up the directories');
-    await fileStructureStrategy.setUpDirectories();
-  }
-}
-
-class StatefulGenerationConfiguration extends GenerationConfiguration {
-  StatefulGenerationConfiguration() {
-    registerMiddleware(StatefulMiddleware());
-  }
-}
