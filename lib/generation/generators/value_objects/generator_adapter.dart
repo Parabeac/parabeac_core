@@ -8,6 +8,6 @@ class StringGeneratorAdapter extends PBGenerator {
   StringGeneratorAdapter(this.overridenString);
   @override
   String generate(PBIntermediateNode source, GeneratorContext context) {
-    overridenString;
+    return overridenString;
   }
 }
