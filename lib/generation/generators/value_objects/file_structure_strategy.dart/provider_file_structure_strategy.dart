@@ -20,14 +20,18 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
   @override
   Future<void> setUpDirectories() async {
     if (!isSetUp) {
-      isSetUp = true;
-      return Future.wait(
+      await Future.wait(
           [super.setUpDirectories(), _generateMissingDirectories()]);
+      isSetUp = true;
     }
   }
 
   Future<void> _generateMissingDirectories() async {
     Directory(_providersPath).createSync(recursive: true);
     Directory(_modelsPath).createSync(recursive: true);
+  }
+
+  String writeProviderModelFile(String code, String fileName) {
+    super.pageWriter.write(code, _modelsPath + '...');
   }
 }
