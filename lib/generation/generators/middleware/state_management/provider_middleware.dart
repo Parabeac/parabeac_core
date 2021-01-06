@@ -23,24 +23,38 @@ class ProviderMiddleware extends Middleware {
 
       var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('import provider');
+      manager.addImport('package:provider/provider.dart');
       manager.addMethodVariable(watcher);
-      var str = '';
+
       // Iterating through states
+      var stateBuffer = StringBuffer();
+      stateBuffer.write(_generateProviderVariable(node));
       node.auxiliaryData.stateGraph.states.forEach((state) async {
         var variationNode = state.variation.node;
-        str += _generateProviderClass();
-        var statelessNode = manager.generate(node);
-       
+
+        stateBuffer.write(_generateProviderVariable(variationNode));
       });
-      // fileStrategy.writeProviderModelFile(code, fileName);
-      node.generator = StringGeneratorAdapter(watcherName);
+
+      var code = _generateProviderClass(stateBuffer.toString(), watcherName);
+      fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
+      node.generator = StringGeneratorAdapter(watcherName.snakeCase);
     }
     return Future.value(node);
   }
 
-  String _generateProviderClass() {
-    // Generate model class
+  String _generateProviderClass(String states, String defaultStateName) {
+    return '''
+class ${defaultStateName} extends ChangeNotifier{
+  ${states}
+  }
+''';
+  }
+
+  String _generateProviderVariable(PBIntermediateNode node) {
+    return 'var ${node.name.camelCase} = ' +
+        node?.generator?.generate(node ?? '',
+            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
+        ';';
   }
 
   ///lib/models/Custombutton.dart - models
