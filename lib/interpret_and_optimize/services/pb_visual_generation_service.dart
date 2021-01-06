@@ -72,7 +72,11 @@ class PBVisualGenerationService implements PBGenerationService {
           }
 
           // Interpret state management node
-          if (!ignoreStates && smHelper.isValidStateNode(result.name)) {
+          if (!ignoreStates &&
+                  smHelper.isValidStateNode(result.name) &&
+                  currentNode.designNode.name !=
+                      currentNode.convertedParent?.name ??
+              true) {
             if (smHelper.isDefaultNode(result)) {
               smHelper.interpretStateManagementNode(result);
             } else {

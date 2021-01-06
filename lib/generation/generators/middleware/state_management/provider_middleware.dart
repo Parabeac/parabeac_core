@@ -25,6 +25,7 @@ class ProviderMiddleware extends Middleware {
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       manager.addImport('package:provider/provider.dart');
       manager.addMethodVariable(watcher);
+      manager.generateImports();
 
       // Iterating through states
       var stateBuffer = StringBuffer();
@@ -35,19 +36,22 @@ class ProviderMiddleware extends Middleware {
         stateBuffer.write(_generateProviderVariable(variationNode));
       });
 
-      var code = _generateProviderClass(stateBuffer.toString(), watcherName);
+      var code =
+          _generateProviderClass(stateBuffer.toString(), watcherName, manager);
       fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
       node.generator = StringGeneratorAdapter(watcherName.snakeCase);
     }
     return Future.value(node);
   }
 
-  String _generateProviderClass(String states, String defaultStateName) {
+  String _generateProviderClass(
+      String states, String defaultStateName, PBGenerationManager manager) {
     return '''
-class ${defaultStateName} extends ChangeNotifier{
-  ${states}
-  }
-''';
+      ${manager.generateImports()}
+      class ${defaultStateName} extends ChangeNotifierProvider {
+      ${states}
+      }
+      ''';
   }
 
   String _generateProviderVariable(PBIntermediateNode node) {

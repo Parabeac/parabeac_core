@@ -13,7 +13,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
+    generatorContext.sizingContext ??= SizingValueContext.LayoutBuilderValue;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
       if (source.child == null) {
