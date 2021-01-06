@@ -38,7 +38,8 @@ class PBVisualGenerationService implements PBGenerationService {
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateNode> getIntermediateTree() async {
+  Future<PBIntermediateNode> getIntermediateTree(
+      {bool ignoreStates = false}) async {
     if (originalRoot == null) {
       return Future.value(null);
     }
@@ -71,7 +72,7 @@ class PBVisualGenerationService implements PBGenerationService {
           }
 
           // Interpret state management node
-          if (smHelper.isValidStateNode(result.name)) {
+          if (!ignoreStates && smHelper.isValidStateNode(result.name)) {
             if (smHelper.isDefaultNode(result)) {
               smHelper.interpretStateManagementNode(result);
             } else {

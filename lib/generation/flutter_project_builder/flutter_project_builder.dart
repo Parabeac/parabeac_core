@@ -5,6 +5,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
@@ -120,7 +121,7 @@ class FlutterProjectBuilder {
         log.error(e.toString());
       });
     }
-
+    await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
     await generationConfiguration.generateProject(mainTree);
 
     var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();

@@ -214,13 +214,16 @@ class Interpret {
     return parentAlignIntermediateNode;
   }
 
+  // TODO: refactor this method and/or `getIntermediateTree`
+  // to not take the [ignoreStates] variable.
   Future<PBIntermediateNode> visualGenerationService(
-      var component, var context, var stopwatch) async {
+      var component, var context, var stopwatch,
+      {bool ignoreStates = false}) async {
     /// VisualGenerationService
     PBIntermediateNode node;
     try {
       node = await PBVisualGenerationService(component, currentContext: context)
-          .getIntermediateTree();
+          .getIntermediateTree(ignoreStates: ignoreStates);
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,

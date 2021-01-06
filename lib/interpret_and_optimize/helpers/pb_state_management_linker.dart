@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/interpret.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
@@ -48,8 +49,13 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node) async {
+    var visualServiceResult = await interpret.visualGenerationService(
+        (node as PBInheritedIntermediate).originalRef,
+        node.currentContext,
+        Stopwatch()..start(),
+        ignoreStates: true);
     var pluginServiceResult = await interpret.pluginService(
-        node, node.currentContext, Stopwatch()..start());
+        visualServiceResult, node.currentContext, Stopwatch()..start());
     var layoutServiceResult = await interpret.layoutGenerationService(
         pluginServiceResult,
         pluginServiceResult.currentContext,
