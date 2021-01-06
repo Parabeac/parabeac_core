@@ -4,6 +4,12 @@ import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
 
 ///Responsible for writing code into files in the desired folder structure
 class PBFlutterWriter implements PBPageWriter {
+  PBFlutterWriter._internal();
+
+  static final PBFlutterWriter _instance = PBFlutterWriter._internal();
+
+  factory PBFlutterWriter() => _instance;
+
   @override
   Map<String, String> dependencies = {};
   @override
@@ -67,6 +73,7 @@ class MyApp extends StatelessWidget {
           writeYaml.writeln(readYaml[i]);
         }
         await writeYaml.flush();
+        dependencies.clear(); // Clear dependencies to prevent duplicates
       }
     }
   }

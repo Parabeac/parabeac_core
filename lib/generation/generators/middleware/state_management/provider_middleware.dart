@@ -23,10 +23,7 @@ class ProviderMiddleware extends Middleware {
 
       var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('package:provider/provider.dart');
       manager.addMethodVariable(watcher);
-      manager.generateImports();
-
       // Iterating through states
       var stateBuffer = StringBuffer();
       stateBuffer.write(_generateProviderVariable(node));

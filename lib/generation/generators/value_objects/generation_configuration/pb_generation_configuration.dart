@@ -56,10 +56,9 @@ abstract class GenerationConfiguration {
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
         _commitImports(item.node, group.name.snakeCase, fileName);
         await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
-        await _commitDependencies(
-            projectIntermediateTree.projectName /*+ '/pubspec.yaml'*/);
       });
     });
+    await _commitDependencies(projectIntermediateTree.projectName);
   }
 
   void registerMiddleware(Middleware middleware) {
@@ -90,7 +89,7 @@ abstract class GenerationConfiguration {
   }
 
   Future<void> _commitDependencies(String projectName) async {
-    var writer = fileStructureStrategy.pageWriter;
+    var writer = PBFlutterWriter();
     if (writer is PBFlutterWriter) {
       writer.submitDependencies(projectName + '/pubspec.yaml');
     }
