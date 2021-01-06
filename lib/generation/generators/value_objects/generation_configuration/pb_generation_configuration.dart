@@ -48,17 +48,17 @@ abstract class GenerationConfiguration {
       PBIntermediateTree projectIntermediateTree) async {
     intermediateTree = projectIntermediateTree;
     await setUpConfiguration();
-    intermediateTree.groups.forEach((group) {
-      for (var item in group.items) {
+    intermediateTree.groups.forEach((group) async {
+      await group.items.forEach((item) async {
         _generationManager = PBFlutterGenerator(fileStructureStrategy);
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
         _commitImports(item.node, group.name.snakeCase, fileName);
-        _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
-        _commitDependencies(
+        await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
+        await _commitDependencies(
             projectIntermediateTree.projectName /*+ '/pubspec.yaml'*/);
-      }
+      });
     });
   }
 
@@ -89,7 +89,7 @@ abstract class GenerationConfiguration {
     }
   }
 
-  void _commitDependencies(String projectName) {
+  Future<void> _commitDependencies(String projectName) async {
     var writer = fileStructureStrategy.pageWriter;
     if (writer is PBFlutterWriter) {
       writer.submitDependencies(projectName + '/pubspec.yaml');
