@@ -47,10 +47,12 @@ abstract class GenerationConfiguration {
   Future<void> generateProject(
       PBIntermediateTree projectIntermediateTree) async {
     intermediateTree = projectIntermediateTree;
+
+    _generationManager = PBFlutterGenerator(fileStructureStrategy);
     await setUpConfiguration();
+
     intermediateTree.groups.forEach((group) async {
       await group.items.forEach((item) async {
-        _generationManager = PBFlutterGenerator(fileStructureStrategy);
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';

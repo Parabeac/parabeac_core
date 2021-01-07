@@ -9,7 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 
 class ProviderMiddleware extends Middleware {
   final PACKAGE_NAME = 'provider';
-  final PACKAGE_VERSION = '1.0.0';
+  final PACKAGE_VERSION = '^4.3.2+3';
 
   ProviderMiddleware(PBGenerationManager generationManager)
       : super(generationManager);
@@ -22,8 +22,10 @@ class ProviderMiddleware extends Middleware {
       var fileStrategy = manager.fileStrategy as ProviderFileStructureStrategy;
 
       var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
-      manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       manager.addMethodVariable(watcher);
+
+      manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+      manager.addImport('package:provider/provider.dart');
       // Iterating through states
       var stateBuffer = StringBuffer();
       stateBuffer.write(_generateProviderVariable(node));
@@ -44,7 +46,8 @@ class ProviderMiddleware extends Middleware {
   String _generateProviderClass(
       String states, String defaultStateName, PBGenerationManager manager) {
     return '''
-      ${manager.generateImports()}
+      import 'package:provider/provider.dart';
+      import 'package:flutter/material.dart';
       class ${defaultStateName} extends ChangeNotifierProvider {
       ${states}
       }
