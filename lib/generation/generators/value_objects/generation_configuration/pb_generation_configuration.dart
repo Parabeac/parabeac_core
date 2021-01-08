@@ -48,15 +48,15 @@ abstract class GenerationConfiguration {
       PBIntermediateTree projectIntermediateTree) async {
     intermediateTree = projectIntermediateTree;
 
+    _generationManager = PBFlutterGenerator(fileStructureStrategy);
     await setUpConfiguration();
-
-    intermediateTree.groups.forEach((group) async {
+    await intermediateTree.groups.forEach((group) async {
       await group.items.forEach((item) async {
         _generationManager = PBFlutterGenerator(fileStructureStrategy);
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
-        _commitImports(item.node, group.name.snakeCase, fileName);
+        await _commitImports(item.node, group.name.snakeCase, fileName);
         await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
       });
     });
@@ -77,17 +77,17 @@ abstract class GenerationConfiguration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  List<String> _commitImports(
-      PBIntermediateNode node, String directoryName, String fileName) {
+  Future<List<String>> _commitImports(
+      PBIntermediateNode node, String directoryName, String fileName) async {
     var screenFilePath =
         '${intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
         '${intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-    var imports = ImportHelper.findImports(
+    var imports = await ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
-    for (var i = 0; i < imports.length; i++) {
-      _generationManager.addImport(imports[i]);
-    }
+    await imports.forEach((import) {
+      _generationManager.addImport(import);
+    });
   }
 
   Future<void> _commitDependencies(String projectName) async {
@@ -97,8 +97,10 @@ abstract class GenerationConfiguration {
     }
   }
 
-  Future<void> _generateNode(PBIntermediateNode node, String filename) async =>
-      fileStructureStrategy.generatePage(
-          _generationManager.generate(await applyMiddleware(node)), filename,
-          args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+  Future<void> _generateNode(PBIntermediateNode node, String filename) async {
+    await _generationManager.fileStrategy.generatePage(
+        await _generationManager.generate(await applyMiddleware(node)),
+        filename,
+        args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+  }
 }
