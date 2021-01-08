@@ -70,6 +70,9 @@ abstract class PBGenerationManager {
   ///Adding a global variable to the current class that is being generated.
   void addGlobalVariable(PBVariable variable) => _globalVariables.add(variable);
 
+  void addAllGlobalVariable(Iterable<PBVariable> variable) =>
+      _globalVariables.addAll(variable);
+
   ///Injects a variable between the method declaration and the return statement of the method being proccessed
   void addMethodVariable(PBVariable variable) => _methodVariables.add(variable);
 
