@@ -97,9 +97,12 @@ abstract class GenerationConfiguration {
   }
 
   Future<void> _generateNode(PBIntermediateNode node, String filename) async {
-    await _generationManager.fileStrategy.generatePage(
-        await _generationManager.generate(await applyMiddleware(node)),
-        filename,
-        args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+    if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
+      await applyMiddleware(node);
+    } else {
+      await _generationManager.fileStrategy.generatePage(
+          await _generationManager.generate(node), filename,
+          args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+    }
   }
 }
