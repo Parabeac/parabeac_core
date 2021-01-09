@@ -55,7 +55,7 @@ abstract class GenerationConfiguration {
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
-        await _commitImports(item.node, group.name.snakeCase, fileName);
+        _commitImports(item.node, group.name.snakeCase, fileName);
         await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
       });
     });
@@ -76,15 +76,15 @@ abstract class GenerationConfiguration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  Future<List<String>> _commitImports(
-      PBIntermediateNode node, String directoryName, String fileName) async {
+  void _commitImports(
+      PBIntermediateNode node, String directoryName, String fileName) {
     var screenFilePath =
         '${intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
         '${intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
-    var imports = await ImportHelper.findImports(
+    var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
-    await imports.forEach((import) {
+    imports.forEach((import) {
       _generationManager.addImport(import);
     });
   }
