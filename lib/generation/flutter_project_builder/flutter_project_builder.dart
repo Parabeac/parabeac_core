@@ -33,10 +33,15 @@ class FlutterProjectBuilder {
     'none': StatefulGenerationConfiguration(),
   };
 
+  final DEFAULT_CONFIGURATION = StatefulGenerationConfiguration();
+
   FlutterProjectBuilder({this.projectName, this.mainTree}) {
     pathToFlutterProject = '${projectName}/';
-    generationConfiguration = configurations[
-        MainInfo().configurations['state-management'].toString().toLowerCase()];
+    generationConfiguration = configurations[MainInfo()
+            .configurations['state-management']
+            .toString()
+            .toLowerCase()] ??
+        DEFAULT_CONFIGURATION;
     mainTree.projectName = projectName;
     mainTree.projectAbsPath = pathToFlutterProject;
   }
