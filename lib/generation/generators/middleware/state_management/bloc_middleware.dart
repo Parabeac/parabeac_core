@@ -32,7 +32,6 @@ class BLoCMiddleware extends Middleware {
 
       var isFirst = true;
       await states.forEach((element) {
-        //TODO: create another template strategy
         element.generator.templateStrategy = BLoCStateTemplateStrategy(
           isFirst: isFirst,
           abstractClassName: parentState,
@@ -68,7 +67,7 @@ class BLoCMiddleware extends Middleware {
     return node;
   }
 
-  String _createBlocPage(String name, String initialState) {
+  String _createBlocPage(String name, String initialStateName) {
     var pascalName = name.pascalCase;
     var snakeName = name.snakeCase;
     return '''
@@ -82,7 +81,7 @@ class BLoCMiddleware extends Middleware {
     part '${snakeName}_state.dart';
 
     class ${pascalName}Bloc extends Bloc<${pascalName}Event, ${pascalName}State> {
-      ${pascalName}Bloc() : super(${initialState.pascalCase}State());
+      ${pascalName}Bloc() : super(${initialStateName.pascalCase}State());
 
       @override
       Stream<${pascalName}State> mapEventToState(
