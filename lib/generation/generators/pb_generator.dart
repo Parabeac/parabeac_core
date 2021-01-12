@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/inline_template_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
@@ -17,7 +17,7 @@ abstract class PBGenerator {
   set templateStrategy(TemplateStrategy strategy) =>
       _templateStrategy = strategy;
 
-  PBGenerationManager _manager;
+  PBGenerationManager _manager = PBFlutterGenerator(null);
   set manager(PBGenerationManager generationManager) =>
       _manager = generationManager;
   PBGenerationManager get manager => _manager;
