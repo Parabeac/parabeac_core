@@ -73,21 +73,21 @@ class Interpret {
     var intermediateGroup = PBIntermediateGroup(group.name.toLowerCase());
     var pageItems = group.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
-      var item = await _generateScreen(pageItems[i]);
+      var iTree = await _generateScreen(pageItems[i]);
       String itemType;
-      if (item is InheritedScaffold) {
+      if (iTree.rootNode is InheritedScaffold) {
         itemType = 'SCREEN';
-      } else if (item is PBSharedMasterNode) {
+      } else if (iTree.rootNode is PBSharedMasterNode) {
         itemType = 'SHARED';
       } else {
         itemType = 'MISC';
       }
 
-      if (item.rootNode != null) {
+      if (iTree.rootNode != null) {
         log.fine(
-            'Processed \'${item.rootNode.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
+            'Processed \'${iTree.rootNode.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
 
-        var newItem = PBIntermediateItem(item.rootNode, itemType);
+        var newItem = PBIntermediateItem(iTree.rootNode, itemType);
 
         ///Searching for the root item.
         if (newItem.node is InheritedScaffold) {
