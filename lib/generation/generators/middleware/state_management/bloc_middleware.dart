@@ -17,7 +17,8 @@ class BLoCMiddleware extends Middleware {
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
       var parentState = getNameOfNode(node);
-      var parentDirectory = parentState.snakeCase;
+      var generalName = parentState.snakeCase;
+      var parentDirectory = generalName + '_bloc';
       var states = <PBIntermediateNode>[node];
       var manager = generationManager;
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -43,21 +44,21 @@ class BLoCMiddleware extends Middleware {
       /// Creates state page
       await fileStrategy.generatePage(
         stateBuffer.toString(),
-        '${parentDirectory}/${parentDirectory}_state',
+        '${parentDirectory}/${generalName}_state',
         args: 'VIEW',
       );
 
       /// Creates event page
       await fileStrategy.generatePage(
         _createEventPage(parentState),
-        '${parentDirectory}/${parentDirectory}_event',
+        '${parentDirectory}/${generalName}_event',
         args: 'VIEW',
       );
 
       /// Creates bloc page
       await fileStrategy.generatePage(
         _createBlocPage(parentState, node.name),
-        '${parentDirectory}/${parentDirectory}_bloc',
+        '${parentDirectory}/${generalName}_bloc',
         args: 'VIEW',
       );
 
