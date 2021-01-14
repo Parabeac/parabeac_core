@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/generators/pb_page_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 
 ///Responsible for writing code into files in the desired folder structure
 class PBFlutterWriter implements PBPageWriter {
