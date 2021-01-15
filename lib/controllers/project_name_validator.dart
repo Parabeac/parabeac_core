@@ -27,7 +27,7 @@ class ProjectNameValidator {
 
   bool isSafe(String project_name) {
     /// Check `project_name` against Dart identifiers & keywords
-    if (isValidPackageName(project_name)) {
+    if (!isValidPackageName(project_name)) {
       return false;
     }
 
