@@ -109,8 +109,9 @@ class Interpret {
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var parentVisualIntermediateTree = PBIntermediateTree(projectName, []);
-    parentVisualIntermediateTree.rootNode = await visualGenerationService(
+    var intermediateTree = PBIntermediateTree(projectName, []);
+    currentContext.tree = intermediateTree;
+    intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
     ///
@@ -118,26 +119,23 @@ class Interpret {
     /// NOTE Disabled Plugin Control Service for right now
     ///
     var stopwatch1 = Stopwatch()..start();
-    var parentPreLayoutIntermediateTree = PBIntermediateTree(projectName, []);
-    parentPreLayoutIntermediateTree.rootNode = await pluginService(
-        parentVisualIntermediateTree.rootNode, currentContext, stopwatch1);
+    intermediateTree.rootNode = await pluginService(
+        intermediateTree.rootNode, currentContext, stopwatch1);
 
     var stopwatch2 = Stopwatch()..start();
 
     /// LayoutGenerationService
 
-    var parentLayoutIntermediateTree = PBIntermediateTree(projectName, []);
-    parentLayoutIntermediateTree.rootNode = await layoutGenerationService(
-        parentPreLayoutIntermediateTree.rootNode, currentContext, stopwatch2);
+    intermediateTree.rootNode = await layoutGenerationService(
+        intermediateTree.rootNode, currentContext, stopwatch2);
 
     var stopwatch3 = Stopwatch()..start();
 
     /// AlignGenerationService
-    var parentAlignIntermediateTree = PBIntermediateTree(projectName, []);
-    parentAlignIntermediateTree.rootNode = await alignGenerationService(
-        parentLayoutIntermediateTree.rootNode, currentContext, stopwatch3);
+    intermediateTree.rootNode = await alignGenerationService(
+        intermediateTree.rootNode, currentContext, stopwatch3);
 
-    return parentAlignIntermediateTree;
+    return intermediateTree;
   }
 
   Future<PBIntermediateNode> generateNonRootItem(DesignNode root) async {
