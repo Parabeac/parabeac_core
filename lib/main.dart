@@ -95,7 +95,7 @@ ${parser.usage}
     designType = 'figma';
   }
 
-  if (!ProjectNameValidator.isSafe(projectName)) {
+  if (!ProjectNameValidator().isSafe(projectName)) {
     handleError(
       'Invalid project name: \'$projectName\'. Ensure that \'$projectName\' is all lowercase, with underscores to separate words; uses only basic Latin letters and Arabic digits; doesn\'t start with digits and isn’t a reserved word.',
     );
