@@ -47,7 +47,7 @@ class PBVisualGenerationService implements PBGenerationService {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
 
-      if (currentNode.designNode.isVisible) {
+      if (currentNode?.designNode?.isVisible ?? false) {
         PBIntermediateNode result;
         // Check semantics
         result = PBDenyListHelper()
