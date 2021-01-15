@@ -5,8 +5,7 @@ class PBInputFormatter {
       bool space_to_underscore = true,
       bool destroy_digits = false,
       bool destroy_special_sym = false}) {
-    assert(input != null);
-    var result = input;
+    var result = (input.isEmpty) ? 'tempName' : input;
     result = _removeFirstDigits(result);
     result = result.trim();
     var space_char = (space_to_underscore) ? '_' : '';

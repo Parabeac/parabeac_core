@@ -29,14 +29,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Getting the exceptions of the rules.
   List<LayoutException> get exceptions => List.from(_exceptions);
 
-  final String UUID;
-
   PrototypeNode prototypeNode;
 
   ///
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner, this.UUID, this.prototypeNode})
+      {topLeftCorner, bottomRightCorner, UUID, this.prototypeNode})
       : super(topLeftCorner, bottomRightCorner, UUID, name,
             currentContext: currentContext);
 
@@ -44,10 +42,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children) {
-    if (children != null || children.isNotEmpty) {
+    if (children != null && children.isNotEmpty) {
       _children = children;
+      _children.removeWhere((element) =>
+          element.topLeftCorner == null || element.bottomRightCorner == null);
+      _resize();
     }
-    _resize();
   }
 
   /// Replace the child at `index` for `replacement`.
