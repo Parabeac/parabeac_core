@@ -68,7 +68,7 @@ void main() {
 
     test('', () {
       var result = PBLayoutGenerationService(currentContext: currentContext)
-          .injectNodes(tempGroup);
+          .extractLayouts(tempGroup);
       expect(result.child != null, true);
       expect(result.child.children != null && result.child.children.isNotEmpty,
           true);

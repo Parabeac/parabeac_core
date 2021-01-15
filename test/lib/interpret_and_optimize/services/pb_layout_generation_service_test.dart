@@ -77,8 +77,8 @@ void main() {
     });
 
     test('', () {
-      var result =
-          PBLayoutGenerationService(currentContext: context).injectNodes(root);
+      var result = PBLayoutGenerationService(currentContext: context)
+          .extractLayouts(root);
       expect(result.child.runtimeType, PBIntermediateColumnLayout);
       expect(0, result.topLeftCorner.x);
       expect(0, result.topLeftCorner.y);
