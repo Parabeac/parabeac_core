@@ -1,6 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';

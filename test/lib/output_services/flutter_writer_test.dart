@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:test/test.dart';
 import 'dart:io';
 
