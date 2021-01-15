@@ -76,6 +76,9 @@ abstract class PBGenerationManager {
   ///Injects a variable between the method declaration and the return statement of the method being proccessed
   void addMethodVariable(PBVariable variable) => _methodVariables.add(variable);
 
+  void addAllMethodVariable(Iterable<PBVariable> variables) =>
+      _methodVariables.addAll(variables);
+
   String generateImports();
 
   String generateGlobalVariables();

@@ -6,9 +6,12 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
@@ -43,18 +46,55 @@ abstract class GenerationConfiguration {
     return node;
   }
 
+  Future<PBIntermediateNode> conditionsToApplyMiddleware(
+      PBIntermediateNode node) async {
+    if ((node is PBSharedInstanceIntermediateNode && _isMasterState(node)) ||
+        (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false)) {
+      return await applyMiddleware(node);
+    }
+    return node;
+  }
+
+  bool _isMasterState(PBSharedInstanceIntermediateNode node) {
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+    return symbolMaster?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;
+  }
+
+  Future<PBIntermediateNode> _iterateNode(PBIntermediateNode node) async {
+    var stack = <PBIntermediateNode>[node];
+    while (stack.isNotEmpty) {
+      var currentNode = stack.removeLast();
+
+      /// Add all children to the stack
+      if (currentNode.child != null) {
+        stack.add(currentNode.child);
+      } else if (currentNode is PBLayoutIntermediateNode) {
+        currentNode.children.forEach((node) {
+          stack.add(node);
+        });
+      }
+
+      /// Apply incoming function to all nodes
+      await conditionsToApplyMiddleware(currentNode);
+    }
+    return node;
+  }
+
   ///generates the Project based on the [projectIntermediateTree]
   Future<void> generateProject(
       PBIntermediateTree projectIntermediateTree) async {
     intermediateTree = projectIntermediateTree;
 
     await setUpConfiguration();
+
     await intermediateTree.groups.forEach((group) async {
       await group.items.forEach((item) async {
         _generationManager = PBFlutterGenerator(fileStructureStrategy);
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
+        await _iterateNode(item.node);
         _commitImports(item.node, group.name.snakeCase, fileName);
         await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
       });
@@ -98,7 +138,9 @@ abstract class GenerationConfiguration {
 
   Future<void> _generateNode(PBIntermediateNode node, String filename) async {
     if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-      await applyMiddleware(node);
+      /// Since these nodes are being processed on the middlewares
+      /// we can ignore them here
+      /// TODO: change it
     } else {
       await _generationManager.fileStrategy.generatePage(
           await _generationManager.generate(node), filename,
