@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/bloc_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
@@ -28,6 +29,7 @@ class FlutterProjectBuilder {
 
   Map<String, GenerationConfiguration> configurations = {
     'provider': ProviderGenerationConfiguration(),
+    'bloc': BLoCGenerationConfiguration(),
     'none': StatefulGenerationConfiguration(),
   };
 
