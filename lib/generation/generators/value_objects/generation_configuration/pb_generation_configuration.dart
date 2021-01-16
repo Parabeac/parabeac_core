@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
@@ -29,6 +30,13 @@ abstract class GenerationConfiguration {
   ///
   ///The default [PBGenerationManager] will be [PBFlutterGenerator]
   PBGenerationManager _generationManager;
+
+  /// PageWriter to be used for generation
+  PBPageWriter _pageWriter = PBFlutterWriter(); // Default to Flutter
+
+  PBPageWriter get pageWriter => _pageWriter;
+
+  set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
@@ -90,7 +98,7 @@ abstract class GenerationConfiguration {
 
     await intermediateTree.groups.forEach((group) async {
       await group.items.forEach((item) async {
-        _generationManager = PBFlutterGenerator(fileStructureStrategy);
+        _generationManager = projectIntermediateTree.manager;
         _generationManager.rootType = item.node.runtimeType;
 
         var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
@@ -110,7 +118,7 @@ abstract class GenerationConfiguration {
 
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
+        intermediateTree.projectAbsPath, _pageWriter, intermediateTree);
     _generationManager.fileStrategy = fileStructureStrategy;
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
@@ -130,7 +138,7 @@ abstract class GenerationConfiguration {
   }
 
   Future<void> _commitDependencies(String projectName) async {
-    var writer = PBFlutterWriter();
+    var writer = _pageWriter;
     if (writer is PBFlutterWriter) {
       writer.submitDependencies(projectName + '/pubspec.yaml');
     }

@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generation_con
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -35,13 +36,16 @@ class FlutterProjectBuilder {
 
   final DEFAULT_CONFIGURATION = StatefulGenerationConfiguration();
 
-  FlutterProjectBuilder({this.projectName, this.mainTree}) {
+  PBPageWriter pageWriter;
+
+  FlutterProjectBuilder({this.projectName, this.mainTree, this.pageWriter}) {
     pathToFlutterProject = '${projectName}/';
     generationConfiguration = configurations[MainInfo()
             .configurations['state-management']
             .toString()
             .toLowerCase()] ??
         DEFAULT_CONFIGURATION;
+    generationConfiguration.pageWriter = pageWriter;
     mainTree.projectName = projectName;
     mainTree.projectAbsPath = pathToFlutterProject;
   }
