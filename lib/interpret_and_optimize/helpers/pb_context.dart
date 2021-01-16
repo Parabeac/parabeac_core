@@ -10,7 +10,7 @@ class PBContext {
   Map jsonConfigurations;
   PBIntermediateTree tree;
 
-  PBGenerationManager get manager => tree?.manager;
+  PBGenerationManager get manager => tree?.generationManager;
 
   PBContext({this.jsonConfigurations}) {
     assert(jsonConfigurations != null);
