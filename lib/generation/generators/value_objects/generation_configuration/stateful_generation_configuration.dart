@@ -10,7 +10,7 @@ class StatefulGenerationConfiguration extends GenerationConfiguration {
   @override
   Future<void> setUpConfiguration() async {
     generationManager.fileStrategy = FlutterFileStructureStrategy(
-        intermediateTree.projectAbsPath, PBFlutterWriter(), intermediateTree);
+        pbProject.projectAbsPath, PBFlutterWriter(), pbProject);
     registerMiddleware(StatefulMiddleware(generationManager));
     fileStructureStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');

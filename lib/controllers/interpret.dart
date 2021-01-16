@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
@@ -36,7 +37,7 @@ class Interpret {
 
   @visibleForTesting
   String projectName;
-  PBIntermediateTree _pb_intermediate_tree;
+  PBProject _pb_project;
   PBSymbolLinkerService _pbSymbolLinkerService;
   PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBGenerationManager _generationManager;
@@ -48,55 +49,58 @@ class Interpret {
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBIntermediateTree> interpretAndOptimize(NodeTree tree) async {
-    _pb_intermediate_tree = PBIntermediateTree(projectName, tree.sharedStyles);
+  Future<PBProject> interpretAndOptimize(NodeTree tree) async {
+    _pb_project = PBProject(projectName, tree.sharedStyles);
 
     ///3rd Party Symbols
     if (tree.miscPages != null) {
       for (var i = 0; i < tree.miscPages?.length; i++) {
-        _pb_intermediate_tree.groups
-            .add((await _generateGroup(tree.miscPages[i])));
+        _pb_project.forest.addAll((await _generateGroup(tree.miscPages[i])));
       }
     }
 
     /// Main Pages
     if (tree.pages != null) {
       for (var i = 0; i < tree.pages?.length; i++) {
-        _pb_intermediate_tree.groups.add((await _generateGroup(tree.pages[i])));
+        _pb_project.forest.addAll((await _generateGroup(tree.pages[i])));
       }
     }
 
-    return _pb_intermediate_tree;
+    return _pb_project;
   }
 
-  Future<PBIntermediateGroup> _generateGroup(Page group) async {
-    var intermediateGroup = PBIntermediateGroup(group.name.toLowerCase());
+  Future<Iterable<PBIntermediateTree>> _generateGroup(Page group) async {
+    var tempForest = <PBIntermediateTree>[];
     var pageItems = group.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
-      var iTree = await _generateScreen(pageItems[i]);
-      String itemType;
-      if (iTree.rootNode is InheritedScaffold) {
-        itemType = 'SCREEN';
-      } else if (iTree.rootNode is PBSharedMasterNode) {
-        itemType = 'SHARED';
-      } else {
-        itemType = 'MISC';
-      }
+      var item = await _generateScreen(pageItems[i]);
+      if (item != null && item.rootNode != null) {
+        var tempTree = item;
+        // tempTree.rootNode = item;
 
-      if (iTree.rootNode != null) {
-        log.fine(
-            'Processed \'${iTree.rootNode.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
-
-        var newItem = PBIntermediateItem(iTree.rootNode, itemType);
-
-        ///Searching for the root item.
-        if (newItem.node is InheritedScaffold) {
-          _pb_intermediate_tree.rootItem ??= newItem;
+        if (item is InheritedScaffold) {
+          tempTree.tree_type = TREE_TYPE.SCREEN;
+        } else if (item is PBSharedMasterNode) {
+          tempTree.tree_type = TREE_TYPE.VIEW;
+        } else {
+          tempTree.tree_type = TREE_TYPE.MISC;
         }
-        intermediateGroup.addItem(newItem);
+
+        if (item != null) {
+          log.fine(
+              'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${tempTree.tree_type}\'');
+
+          // var newItem = PBIntermediateItem(item, itemType);
+
+          ///Searching for the root item.
+          // if (item is InheritedScaffold) {
+          tempForest.add(tempTree);
+          // }
+          // intermediateGroup.addItem(newItem);
+        }
       }
     }
-    return intermediateGroup;
+    return tempForest;
   }
 
   Future<PBIntermediateTree> _generateScreen(PageItem item) async {
@@ -109,7 +113,7 @@ class Interpret {
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var intermediateTree = PBIntermediateTree(projectName, []);
+    var intermediateTree = PBIntermediateTree(item.root.name);
     currentContext.tree = intermediateTree;
     intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);

@@ -16,6 +16,6 @@
         "widgetType": "Stateless",
         "widgetSpacing": "Expanded"
     },
-    "state-management": "Provider",
+    "state-management": "None",
     "root": "AC2E7423-4609-4F37-8BCA-7E915944FFE2"
 }
