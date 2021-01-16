@@ -1,8 +1,8 @@
-import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_management.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_middleware.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 
-import '../../pb_flutter_writer.dart';
+import '../../writers/pb_flutter_writer.dart';
 
 class StatefulGenerationConfiguration extends GenerationConfiguration {
   StatefulGenerationConfiguration();
