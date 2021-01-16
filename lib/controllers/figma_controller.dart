@@ -1,5 +1,8 @@
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
+import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/helper/figma_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
@@ -26,8 +29,16 @@ class FigmaController extends Controller {
 
     var mainTree = await Interpret().interpretAndOptimize(figmaNodeTree);
 
-    var fpb =
-        FlutterProjectBuilder(projectName: outputPath, mainTree: mainTree);
+    await PreGenerationService(
+      projectName: outputPath,
+      mainTree: mainTree,
+      pageWriter: PBTraversalAdapterWriter(),
+    ).convertToFlutterProject();
+
+    var fpb = FlutterProjectBuilder(
+        projectName: outputPath,
+        mainTree: mainTree,
+        pageWriter: PBFlutterWriter());
 
     fpb.convertToFlutterProject();
   }
