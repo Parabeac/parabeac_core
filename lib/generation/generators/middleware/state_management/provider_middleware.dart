@@ -44,7 +44,6 @@ class ProviderMiddleware extends Middleware {
     var code =
         _generateProviderClass(stateBuffer.toString(), watcherName, manager);
     fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
-    // node.generator = StringGeneratorAdapter(watcherName.snakeCase);
 
     return Future.value(node);
   }
@@ -66,62 +65,4 @@ class ProviderMiddleware extends Middleware {
             GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
         ';';
   }
-
-  ///lib/models/Custombutton.dart - models
-  ///class CustomButton extends ModelLister{
-  ///
-  ///Button colorBlue = FlatButton( color: Colors.Blue),
-  /// Button colorRed = FlatButton( color: Colors.Red).
-  ///Button defaultButton = colorBlue;
-  ///TODO developer does this
-  ///void onclick(){
-  ///defaultButton = colorRed;
-  /// notifyListeners();
-  ///}
-  ///}
-  ///lib/screes/screen1/
-  ///class screen1 extends stateful{
-  ///...
-  ///
-  ///build(BuildContext context){
-  ///final customButton = watch(context);
-  ///return ...
-  ///
-  ///Container(
-  /// child: customButton;//FlatButton(colors: Colors.Red)
-  ///)
-  ///
-  ///GestureDetector(build: onClick())
-  ///}
-  ///
-
-  /// TODO: Use this method as baseline for stateful generation.
-  // @override
-  // Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-  //   if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-  //     var watcherName = getNameOfNode(node);
-  //     var manager = generationManager;
-  //     var fileStrategy = manager.fileStrategy;
-
-  //     var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
-  //     manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-  //     manager.addImport('import provider');
-  //     manager.addMethodVariable(watcher);
-  //     // Iterating through states
-  //     node.auxiliaryData.stateGraph.states.forEach((state) async {
-  //       var variationNode = state.variation.node;
-  //       var statelessNode = manager.generate(node);
-  //       await fileStrategy.generatePage(statelessNode,
-  //           '${fileStrategy.GENERATED_PROJECT_PATH}${fileStrategy.RELATIVE_VIEW_PATH}${variationNode.name.snakeCase}.g.dart',
-  //           args: 'SCREEN');
-  //       print(state.variation.node);
-  //     });
-
-  //     await fileStrategy.generatePage(
-  //         node.generator.generate(node, GeneratorContext()),
-  //         '${fileStrategy.GENERATED_PROJECT_PATH}${fileStrategy.RELATIVE_VIEW_PATH}.g.dart');
-  //     node.generator = StringGeneratorAdapter(watcherName);
-  //   }
-  //   return Future.value(node);
-  // }
 }
