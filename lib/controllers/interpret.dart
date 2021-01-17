@@ -76,7 +76,7 @@ class Interpret {
       var item = await _generateScreen(pageItems[i]);
       if (item != null && item.rootNode != null) {
         var tempTree = item;
-        // tempTree.rootNode = item;
+        tempTree.name = group.name;
 
         if (item.rootNode is InheritedScaffold) {
           tempTree.tree_type = TREE_TYPE.SCREEN;
@@ -90,14 +90,8 @@ class Interpret {
           log.fine(
               'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${tempTree.tree_type}\'');
 
-          // var newItem = PBIntermediateItem(item, itemType);
-
-          ///Searching for the root item.
-          // if (item is InheritedScaffold) {
           tempTree.rootNode;
           tempForest.add(tempTree);
-          // }
-          // intermediateGroup.addItem(newItem);
         }
       }
     }
