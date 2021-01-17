@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -22,6 +23,9 @@ abstract class PBIntermediateNode {
   Point bottomRightCorner;
 
   PBContext currentContext;
+
+  PBGenerationManager get treeManager =>
+      currentContext.treeRoot.generationManager;
 
   /// Size of the element.
   Map size;

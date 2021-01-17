@@ -10,7 +10,6 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -90,32 +89,19 @@ abstract class GenerationConfiguration {
     return node;
   }
 
-  // Future<void> generateProject(
-  //     PBIntermediateTree projectIntermediateTree) async {
-  //   intermediateTree = projectIntermediateTree;
-
-  //   await setUpConfiguration();
-
-  //   await intermediateTree.groups.forEach((group) async {
-  //     await group.items.forEach((item) async {
-  //       _generationManager = projectIntermediateTree.manager;
-  //       _generationManager.rootType = item.node.runtimeType;
-
-  //       var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
-  //       await _iterateNode(item.node);
-  //       _commitImports(item.node, group.name.snakeCase, fileName);
-  //       await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
-  //     });
   ///generates the Project based on the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
     pbProject = pb_project;
 
     await setUpConfiguration();
     await pbProject.forest.forEach((tree) async {
-      _generationManager = PBFlutterGenerator(fileStructureStrategy);
-      _generationManager.rootType = tree.rootNode.runtimeType;
+      tree.generationManager = PBFlutterGenerator(fileStructureStrategy);
+      tree.generationManager.rootType = tree.rootNode.runtimeType;
+
+      _generationManager = tree.generationManager;
 
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
+      await _iterateNode(tree.rootNode);
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
     });
@@ -145,7 +131,7 @@ abstract class GenerationConfiguration {
     var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
     imports.forEach((import) {
-      _generationManager.addImport(import);
+      node.treeManager.addImport(import);
     });
   }
 
