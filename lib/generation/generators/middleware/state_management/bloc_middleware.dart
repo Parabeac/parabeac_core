@@ -24,7 +24,14 @@ class BLoCMiddleware extends Middleware {
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
+      var genericName = node.functionCallName
+          .substring(0, node.functionCallName.lastIndexOf('/'));
       var variableName = node.functionCallName.snakeCase;
+      var generalName = genericName.snakeCase;
+      var parentDirectory = generalName + '_bloc';
+
+      await manager.replaceImport(
+          variableName, '${parentDirectory}/${generalName}_bloc.dart');
       manager.addGlobalVariable(PBVariable(variableName, 'final ', true, null));
       node.generator = StringGeneratorAdapter(variableName);
       return node;

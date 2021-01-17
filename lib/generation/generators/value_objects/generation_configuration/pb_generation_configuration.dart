@@ -101,8 +101,9 @@ abstract class GenerationConfiguration {
       _generationManager = tree.generationManager;
 
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
-      await _iterateNode(tree.rootNode);
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
+      await _iterateNode(tree.rootNode);
+
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
     });
     await _commitDependencies(pb_project.projectName);
