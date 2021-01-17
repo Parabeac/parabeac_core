@@ -43,9 +43,15 @@ abstract class PBGenerationManager {
     while (it.moveNext()) {
       var param = it.current;
       buffer.writeln(
-          '${param.type} ${PBInputFormatter.formatLabel(param.variableName)} = ${param.defaultValue};');
+          '${param.type} ${PBInputFormatter.formatLabel(param.variableName)} ${_getDefaultValue(param)};');
     }
     return buffer.toString();
+  }
+
+  String _getDefaultValue(PBVariable pbVariable) {
+    return pbVariable.defaultValue == null
+        ? ''
+        : '= ${pbVariable.defaultValue}';
   }
 
   PBGenerationManager(
