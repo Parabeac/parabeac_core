@@ -1,6 +1,8 @@
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager_data.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
@@ -31,6 +33,8 @@ class SketchController extends Controller {
     var mainTree = await Interpret().interpretAndOptimize(
       sketchNodeTree,
     );
+    mainTree.manager =
+        PBFlutterGenerator(null, data: PBGenerationManagerData());
 
     // TODO: ensure manager is populated
 

@@ -22,7 +22,7 @@ class BLoCMiddleware extends Middleware {
       var states = <PBIntermediateNode>[node];
       var manager = generationManager;
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('package:bloc/bloc.dart');
+      manager.data.addImport('package:bloc/bloc.dart');
       var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
 
       var stateBuffer = StringBuffer();

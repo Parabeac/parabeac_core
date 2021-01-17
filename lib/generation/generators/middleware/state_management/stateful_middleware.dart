@@ -20,7 +20,7 @@ class StatefulMiddleware extends Middleware {
     var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
-      manager.addAllMethodVariable(await _getVariables(node));
+      manager.data.addAllMethodVariable(await _getVariables(node));
       print('Hello Symbol Instance');
       node.generator = StringGeneratorAdapter(await _generateInstance(node));
       return node;
@@ -41,7 +41,7 @@ class StatefulMiddleware extends Middleware {
         args: 'VIEW',
       );
     });
-    manager.addAllGlobalVariable(variables);
+    manager.data.addAllGlobalVariable(variables);
     node.generator = StringGeneratorAdapter(node.name.snakeCase);
 
     return node;

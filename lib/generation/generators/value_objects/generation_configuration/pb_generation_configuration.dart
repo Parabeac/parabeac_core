@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager_data.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -40,10 +41,14 @@ abstract class GenerationConfiguration {
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(null);
+    _generationManager =
+        PBFlutterGenerator(null, data: PBGenerationManagerData());
   }
 
   PBGenerationManager get generationManager => _generationManager;
+
+  final Map<String, String> _dependencies = {};
+  Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
@@ -105,6 +110,7 @@ abstract class GenerationConfiguration {
         await _iterateNode(item.node);
         _commitImports(item.node, group.name.snakeCase, fileName);
         await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
+        projectIntermediateTree.manager.data = PBGenerationManagerData();
       });
     });
     await _commitDependencies(projectIntermediateTree.projectName);
@@ -120,6 +126,7 @@ abstract class GenerationConfiguration {
     fileStructureStrategy = FlutterFileStructureStrategy(
         intermediateTree.projectAbsPath, _pageWriter, intermediateTree);
     _generationManager.fileStrategy = fileStructureStrategy;
+    intermediateTree.manager.fileStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
@@ -133,7 +140,7 @@ abstract class GenerationConfiguration {
     var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
     imports.forEach((import) {
-      _generationManager.addImport(import);
+      _generationManager.data.addImport(import);
     });
   }
 

@@ -9,6 +9,7 @@ class BLoCGenerationConfiguration extends GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     generationManager.fileStrategy = FlutterFileStructureStrategy(
         intermediateTree.projectAbsPath, pageWriter, intermediateTree);
+    intermediateTree.manager.fileStrategy = generationManager.fileStrategy;
     registerMiddleware(BLoCMiddleware(generationManager));
     fileStructureStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');

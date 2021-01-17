@@ -9,6 +9,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     generationManager.fileStrategy = ProviderFileStructureStrategy(
         intermediateTree.projectAbsPath, pageWriter, intermediateTree);
+    intermediateTree.manager.fileStrategy = generationManager.fileStrategy;
     registerMiddleware(ProviderMiddleware(generationManager));
     fileStructureStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');

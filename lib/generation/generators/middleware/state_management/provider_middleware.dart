@@ -18,14 +18,14 @@ class ProviderMiddleware extends Middleware {
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
       var watcherName = getNameOfNode(node);
-      var manager = node.currentContext.manager;
+      var manager = generationManager;
       var fileStrategy = manager.fileStrategy as ProviderFileStructureStrategy;
 
       var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
-      manager.addMethodVariable(watcher);
+      manager.data.addMethodVariable(watcher);
 
       manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('package:provider/provider.dart');
+      manager.data.addImport('package:provider/provider.dart');
       // Iterating through states
       var stateBuffer = StringBuffer();
       stateBuffer.write(_generateProviderVariable(node));

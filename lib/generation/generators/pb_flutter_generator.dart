@@ -1,5 +1,7 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/empty_page_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
@@ -7,20 +9,22 @@ import 'package:quick_log/quick_log.dart';
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
-  PBFlutterGenerator(pageWriter) : super(pageWriter) {
+  PBFlutterGenerator(FileStructureStrategy fileStructureStrategy,
+      {PBGenerationManagerData data})
+      : super(fileStructureStrategy, data: data) {
     body = StringBuffer();
   }
 
   ///Generates a constructor given a name and `constructorVariable`
   @override
   String generateConstructor(name) {
-    if (constructorVariables == null) {
+    if (data.constructorVariables == null) {
       return '';
     }
     var stringBuffer = StringBuffer();
     stringBuffer.write(name + '(');
     var param;
-    var it = constructorVariables;
+    var it = data.constructorVariables;
     while (it.moveNext()) {
       param = it.current;
       if (param.isRequired) {
@@ -32,9 +36,9 @@ class PBFlutterGenerator extends PBGenerationManager {
     var counter = 0;
     var optionalParamBuffer = StringBuffer();
     optionalParamBuffer.write('{');
-    it = constructorVariables;
+    it = data.constructorVariables;
     while (it.moveNext()) {
-      param = constructorVariables.current;
+      param = data.constructorVariables.current;
       if (!param.isRequired) {
         optionalParamBuffer.write('this.' + param.variableName + ',');
         counter++;
@@ -51,12 +55,12 @@ class PBFlutterGenerator extends PBGenerationManager {
   ///Generate global variables
   @override
   String generateGlobalVariables() {
-    if (globalVariables == null) {
+    if (data.globalVariables == null) {
       return '';
     }
     var stringBuffer = StringBuffer();
     var param;
-    var it = globalVariables;
+    var it = data.globalVariables;
     while (it.moveNext()) {
       param = it.current;
       stringBuffer.write(param.type +
@@ -73,7 +77,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   String generateImports() {
     var buffer = StringBuffer();
     buffer.write('import \'package:flutter/material.dart\';\n');
-    var it = imports;
+    var it = data.imports;
     while (it.moveNext()) {
       buffer.write('import \'${it.current}\';\n');
     }
