@@ -78,9 +78,9 @@ class Interpret {
         var tempTree = item;
         // tempTree.rootNode = item;
 
-        if (item is InheritedScaffold) {
+        if (item.rootNode is InheritedScaffold) {
           tempTree.tree_type = TREE_TYPE.SCREEN;
-        } else if (item is PBSharedMasterNode) {
+        } else if (item.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {
           tempTree.tree_type = TREE_TYPE.MISC;
@@ -94,6 +94,7 @@ class Interpret {
 
           ///Searching for the root item.
           // if (item is InheritedScaffold) {
+          tempTree.rootNode;
           tempForest.add(tempTree);
           // }
           // intermediateGroup.addItem(newItem);
@@ -114,7 +115,7 @@ class Interpret {
 
     /// VisualGenerationService
     var intermediateTree = PBIntermediateTree(item.root.name);
-    currentContext.tree = intermediateTree;
+    currentContext.treeRoot = intermediateTree;
     intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
