@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
@@ -26,7 +27,7 @@ abstract class FileStructureStrategy {
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
 
-  final PBIntermediateTree _projectIntermediateTree;
+  final PBProject _pbProject;
 
   ///The page writer used to generated the actual files.
   final PBPageWriter _pageWriter;
@@ -40,8 +41,8 @@ abstract class FileStructureStrategy {
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
-  FileStructureStrategy(this.GENERATED_PROJECT_PATH, this._pageWriter,
-      this._projectIntermediateTree) {
+  FileStructureStrategy(
+      this.GENERATED_PROJECT_PATH, this._pageWriter, this._pbProject) {
     logger = Logger(runtimeType.toString());
   }
 
@@ -53,8 +54,8 @@ abstract class FileStructureStrategy {
     if (!isSetUp) {
       _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
-      _projectIntermediateTree.groups.forEach((dir) {
-        if (dir.items.isNotEmpty) {
+      _pbProject.forest.forEach((dir) {
+        if (dir.rootNode != null) {
           _addImportsInfo(dir);
         }
       });
@@ -65,21 +66,20 @@ abstract class FileStructureStrategy {
   }
 
   ///Add the import information to correctly generate them in the corresponding files.
-  void _addImportsInfo(PBIntermediateGroup directory) {
-    for (var intermediateItem in directory.items) {
-      // Add to cache if node is scaffold or symbol master
-      var node = intermediateItem.node;
-      var name = node?.name?.snakeCase;
-      if (name != null) {
-        var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
-        var path = node is PBSharedMasterNode
-            ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.g.dart'
-            : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
-        PBGenCache().addToCache(uuid, path);
-      } else {
-        logger.warning(
-            'The following intermediateNode was missing a name: ${intermediateItem.toString()}');
-      }
+  void _addImportsInfo(PBIntermediateTree directory) {
+    var intermediateItem = directory;
+    // Add to cache if node is scaffold or symbol master
+    var node = intermediateItem.rootNode;
+    var name = node?.name?.snakeCase;
+    if (name != null) {
+      var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
+      var path = node is PBSharedMasterNode
+          ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.g.dart'
+          : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
+      PBGenCache().addToCache(uuid, path);
+    } else {
+      logger.warning(
+          'The following intermediateNode was missing a name: ${intermediateItem.toString()}');
     }
   }
 

@@ -8,9 +8,9 @@ class PBContext {
   PBConfiguration configuration;
   Point screenTopLeftCorner, screenBottomRightCorner;
   Map jsonConfigurations;
-  PBIntermediateTree tree;
+  PBIntermediateTree treeRoot;
 
-  PBGenerationManager get manager => tree?.manager;
+  PBGenerationManager get manager => treeRoot?.generationManager;
 
   PBContext({this.jsonConfigurations}) {
     assert(jsonConfigurations != null);

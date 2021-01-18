@@ -11,9 +11,9 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
@@ -24,8 +24,8 @@ abstract class GenerationConfiguration {
 
   final Set<Middleware> _middleware = {};
 
-  ///The tree that contains the node for all the pages.
-  PBIntermediateTree intermediateTree;
+  ///The project that contains the node for all the pages.
+  PBProject pbProject;
 
   ///The manager in charge of the independent [PBGenerator]s by providing an interface for adding imports, global variables, etc.
   ///
@@ -94,26 +94,24 @@ abstract class GenerationConfiguration {
     return node;
   }
 
-  ///generates the Project based on the [projectIntermediateTree]
-  Future<void> generateProject(
-      PBIntermediateTree projectIntermediateTree) async {
-    intermediateTree = projectIntermediateTree;
+  ///generates the Project based on the [pb_project]
+  Future<void> generateProject(PBProject pb_project) async {
+    pbProject = pb_project;
 
     await setUpConfiguration();
+    await pbProject.forest.forEach((tree) async {
+      tree.generationManager = PBFlutterGenerator(fileStructureStrategy);
+      tree.generationManager.rootType = tree.rootNode.runtimeType;
 
-    await intermediateTree.groups.forEach((group) async {
-      await group.items.forEach((item) async {
-        _generationManager = projectIntermediateTree.manager;
-        _generationManager.rootType = item.node.runtimeType;
+      _generationManager = tree.generationManager;
 
-        var fileName = item.node?.name?.snakeCase ?? 'no_name_found';
-        await _iterateNode(item.node);
-        _commitImports(item.node, group.name.snakeCase, fileName);
-        await _generateNode(item.node, '${group.name.snakeCase}/${fileName}');
-        projectIntermediateTree.manager.data = PBGenerationManagerData();
-      });
+      var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
+      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
+      await _iterateNode(tree.rootNode);
+
+      await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
     });
-    await _commitDependencies(projectIntermediateTree.projectName);
+    await _commitDependencies(pb_project.projectName);
   }
 
   void registerMiddleware(Middleware middleware) {
@@ -124,9 +122,9 @@ abstract class GenerationConfiguration {
 
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        intermediateTree.projectAbsPath, _pageWriter, intermediateTree);
+        pbProject.projectAbsPath, _pageWriter, pbProject);
     _generationManager.fileStrategy = fileStructureStrategy;
-    intermediateTree.manager.fileStrategy = generationManager.fileStrategy;
+    pbProject.data.fileStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
@@ -134,13 +132,13 @@ abstract class GenerationConfiguration {
   void _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
     var screenFilePath =
-        '${intermediateTree.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
+        '${pbProject.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
-        '${intermediateTree.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
+        '${pbProject.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
     var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
     imports.forEach((import) {
-      _generationManager.data.addImport(import);
+      node.treeManager.data.addImport(import);
     });
   }
 
