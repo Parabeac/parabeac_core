@@ -10,7 +10,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       GeneratorContext generatorContext,
       {args}) {
-    var widgetName = retrieveNodeName(node);
+    var widgetName = node.name;
     var returnStatement = node.generator.generate(node, generatorContext);
     var overrides = '';
     var overrideVars = '';

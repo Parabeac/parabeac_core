@@ -16,12 +16,11 @@ class StatefulMiddleware extends Middleware {
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    var manager = generationManager;
+    var manager = node.treeManager;
     var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
       manager.addAllMethodVariable(await _getVariables(node));
-      print('Hello Symbol Instance');
       node.generator = StringGeneratorAdapter(await _generateInstance(node));
       return node;
     }
@@ -32,8 +31,6 @@ class StatefulMiddleware extends Middleware {
       states.add(state.variation.node);
     });
 
-    var variables = await _getVariables(node);
-
     await states.forEach((element) async {
       await fileStrategy.generatePage(
         await manager.generate(element),
@@ -41,8 +38,6 @@ class StatefulMiddleware extends Middleware {
         args: 'VIEW',
       );
     });
-    manager.addAllGlobalVariable(variables);
-    node.generator = StringGeneratorAdapter(node.name.snakeCase);
 
     return node;
   }
@@ -75,7 +70,7 @@ class StatefulMiddleware extends Middleware {
     return variables;
   }
 
-  String _generateInstance(PBIntermediateNode node) {
-    return node.name.snakeCase;
+  String _generateInstance(PBSharedInstanceIntermediateNode node) {
+    return node.functionCallName.snakeCase;
   }
 }

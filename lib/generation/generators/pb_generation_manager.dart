@@ -43,9 +43,15 @@ abstract class PBGenerationManager {
     while (it.moveNext()) {
       var param = it.current;
       buffer.writeln(
-          '${param.type} ${PBInputFormatter.formatLabel(param.variableName)} = ${param.defaultValue};');
+          '${param.type} ${PBInputFormatter.formatLabel(param.variableName)} ${_getDefaultValue(param)};');
     }
     return buffer.toString();
+  }
+
+  String _getDefaultValue(PBVariable pbVariable) {
+    return pbVariable.defaultValue == null
+        ? ''
+        : '= ${pbVariable.defaultValue}';
   }
 
   PBGenerationManager(
@@ -84,4 +90,31 @@ abstract class PBGenerationManager {
   String generateGlobalVariables();
 
   String generateConstructor(String name);
+
+  Future<String> removeImportThatContains(String pattern) async {
+    for (var import in _imports) {
+      if (import is String && import.contains(pattern)) {
+        _imports.remove(import);
+        return import;
+      }
+    }
+    return '';
+  }
+
+  Future<void> replaceImport(String oldImport, String newImport) async {
+    var oldVersion = await removeImportThatContains(oldImport);
+    var tempList = oldVersion.split('/');
+    tempList.removeLast();
+    tempList.add(newImport);
+    var tempList2 = tempList;
+    _imports.add(await _makeImport(tempList2));
+  }
+
+  Future<String> _makeImport(List<String> tempList) async {
+    var tempString = tempList.removeAt(0);
+    await tempList.forEach((item) {
+      tempString += '/${item}';
+    });
+    return tempString;
+  }
 }

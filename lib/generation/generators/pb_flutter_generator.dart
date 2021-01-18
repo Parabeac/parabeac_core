@@ -93,11 +93,13 @@ class PBFlutterGenerator extends PBGenerationManager {
     }
     return rootNode.generator?.templateStrategy?.generateTemplate(
             rootNode,
-            this,
+            rootNode.treeManager ?? this,
             GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
-        DEFAULT_STRATEGY.generateTemplate(rootNode, this,
+        DEFAULT_STRATEGY.generateTemplate(
+            rootNode,
+            rootNode.treeManager ?? this,
             GeneratorContext(sizingContext: SizingValueContext.PointValue));
   }
 }

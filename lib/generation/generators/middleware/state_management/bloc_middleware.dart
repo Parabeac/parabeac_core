@@ -1,6 +1,8 @@
+import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
@@ -15,55 +17,66 @@ class BLoCMiddleware extends Middleware {
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-      var parentState = getNameOfNode(node);
-      var generalName = parentState.snakeCase;
+    var manager = node.treeManager;
+    manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+    manager.addImport('package:bloc/bloc.dart');
+    var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
+
+    /// Incase of SymbolInstance
+    if (node is PBSharedInstanceIntermediateNode) {
+      var genericName = node.functionCallName
+          .substring(0, node.functionCallName.lastIndexOf('/'));
+      var variableName = node.functionCallName.snakeCase;
+      var generalName = genericName.snakeCase;
       var parentDirectory = generalName + '_bloc';
-      var states = <PBIntermediateNode>[node];
-      var manager = generationManager;
-      manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('package:bloc/bloc.dart');
-      var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
 
-      var stateBuffer = StringBuffer();
-
-      await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-        states.add(state.variation.node);
-      });
-
-      var isFirst = true;
-      await states.forEach((element) {
-        element.generator.templateStrategy = BLoCStateTemplateStrategy(
-          isFirst: isFirst,
-          abstractClassName: parentState,
-        );
-        stateBuffer.write(manager.generate(element));
-        isFirst = false;
-      });
-
-      /// Creates state page
-      await fileStrategy.generatePage(
-        stateBuffer.toString(),
-        '${parentDirectory}/${generalName}_state',
-        args: 'VIEW',
-      );
-
-      /// Creates event page
-      await fileStrategy.generatePage(
-        _createEventPage(parentState),
-        '${parentDirectory}/${generalName}_event',
-        args: 'VIEW',
-      );
-
-      /// Creates bloc page
-      await fileStrategy.generatePage(
-        _createBlocPage(parentState, node.name),
-        '${parentDirectory}/${generalName}_bloc',
-        args: 'VIEW',
-      );
-
-      node.generator = StringGeneratorAdapter(node.name.snakeCase);
+      await manager.replaceImport(
+          variableName, '${parentDirectory}/${generalName}_bloc.dart');
+      manager.addGlobalVariable(PBVariable(variableName, 'final ', true, null));
+      node.generator = StringGeneratorAdapter(variableName);
+      return node;
     }
+    var parentState = getNameOfNode(node);
+    var generalName = parentState.snakeCase;
+    var parentDirectory = generalName + '_bloc';
+    var states = <PBIntermediateNode>[node];
+
+    var stateBuffer = StringBuffer();
+
+    await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      states.add(state.variation.node);
+    });
+
+    var isFirst = true;
+    await states.forEach((element) {
+      element.generator.templateStrategy = BLoCStateTemplateStrategy(
+        isFirst: isFirst,
+        abstractClassName: parentState,
+      );
+      stateBuffer.write(manager.generate(element));
+      isFirst = false;
+    });
+
+    /// Creates state page
+    await fileStrategy.generatePage(
+      stateBuffer.toString(),
+      '${parentDirectory}/${generalName}_state',
+      args: 'VIEW',
+    );
+
+    /// Creates event page
+    await fileStrategy.generatePage(
+      _createEventPage(parentState),
+      '${parentDirectory}/${generalName}_event',
+      args: 'VIEW',
+    );
+
+    /// Creates bloc page
+    await fileStrategy.generatePage(
+      _createBlocPage(parentState, node.name),
+      '${parentDirectory}/${generalName}_bloc',
+      args: 'VIEW',
+    );
 
     return node;
   }
