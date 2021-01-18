@@ -10,7 +10,6 @@ import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart'
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
     as image_helper;
 
@@ -51,7 +50,7 @@ class FlutterProjectBuilder {
     mainTree.projectAbsPath = pathToFlutterProject;
   }
 
-  void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
+  Future<void> convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
       var createResult = Process.runSync('flutter', ['create', '$projectName'],
           workingDirectory: MainInfo().outputPath);

@@ -1,7 +1,6 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/pb_generation_manager_data.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/empty_page_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
@@ -9,9 +8,7 @@ import 'package:quick_log/quick_log.dart';
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
-  PBFlutterGenerator(FileStructureStrategy fileStructureStrategy,
-      {PBGenerationManagerData data})
-      : super(fileStructureStrategy, data: data) {
+  PBFlutterGenerator({PBGenerationViewData data}) : super(data: data) {
     body = StringBuffer();
   }
 
@@ -97,13 +94,11 @@ class PBFlutterGenerator extends PBGenerationManager {
     }
     return rootNode.generator?.templateStrategy?.generateTemplate(
             rootNode,
-            rootNode.treeManager ?? this,
+            this,
             GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
-        DEFAULT_STRATEGY.generateTemplate(
-            rootNode,
-            rootNode.treeManager ?? this,
+        DEFAULT_STRATEGY.generateTemplate(rootNode, this,
             GeneratorContext(sizingContext: SizingValueContext.PointValue));
   }
 }

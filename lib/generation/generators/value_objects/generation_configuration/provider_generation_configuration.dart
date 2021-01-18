@@ -7,10 +7,9 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
 
   @override
   Future<void> setUpConfiguration() async {
-    generationManager.fileStrategy = ProviderFileStructureStrategy(
+    fileStructureStrategy = ProviderFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject);
     registerMiddleware(ProviderMiddleware(generationManager));
-    fileStructureStrategy = generationManager.fileStrategy;
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }

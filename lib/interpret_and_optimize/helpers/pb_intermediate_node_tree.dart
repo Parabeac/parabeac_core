@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 enum TREE_TYPE {
@@ -8,7 +8,7 @@ enum TREE_TYPE {
 }
 
 class PBIntermediateTree {
-  PBGenerationManager generationManager;
+  PBGenerationViewData data;
   PBIntermediateNode rootNode;
   String name;
   PBIntermediateTree(this.name);

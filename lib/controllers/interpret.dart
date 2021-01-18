@@ -10,8 +10,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_group.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
@@ -110,6 +108,7 @@ class Interpret {
     /// VisualGenerationService
     var intermediateTree = PBIntermediateTree(item.root.name);
     currentContext.treeRoot = intermediateTree;
+    currentContext.project = _pb_project;
     intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
