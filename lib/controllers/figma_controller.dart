@@ -1,5 +1,6 @@
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
@@ -27,20 +28,25 @@ class FigmaController extends Controller {
 
     Interpret().init(outputPath);
 
-    var mainTree = await Interpret().interpretAndOptimize(figmaNodeTree);
+    var pbProject = await Interpret().interpretAndOptimize(figmaNodeTree);
+
+    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
 
     await PreGenerationService(
       projectName: outputPath,
-      mainTree: mainTree,
+      mainTree: pbProject,
       pageWriter: PBTraversalAdapterWriter(),
     ).convertToFlutterProject();
 
+    //Making the data immutable for writing into the file
+    pbProject.forest.forEach((tree) => tree.data.lockData());
+
     var fpb = FlutterProjectBuilder(
         projectName: outputPath,
-        mainTree: mainTree,
+        mainTree: pbProject,
         pageWriter: PBFlutterWriter());
 
-    fpb.convertToFlutterProject();
+    await fpb.convertToFlutterProject();
   }
 
   FigmaNodeTree generateFigmaTree(var jsonFigma, var projectname) {

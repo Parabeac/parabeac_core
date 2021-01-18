@@ -18,15 +18,17 @@ class ProviderMiddleware extends Middleware {
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     String watcherName;
-    var manager = node.treeManager;
-    var fileStrategy = manager.fileStrategy as ProviderFileStructureStrategy;
+    var managerData = node.managerData;
+    var fileStrategy = node.currentContext.project.fileStructureStrategy
+        as ProviderFileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
-      manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      manager.addImport('package:provider/provider.dart');
+      node.currentContext.project.genProjectData
+          .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+      managerData.addImport('package:provider/provider.dart');
       watcherName = node.functionCallName.snakeCase;
       var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
-      manager.addMethodVariable(watcher);
+      managerData.addMethodVariable(watcher);
       node.generator = StringGeneratorAdapter(watcherName);
       return node;
     }
@@ -41,11 +43,9 @@ class ProviderMiddleware extends Middleware {
       stateBuffer.write(_generateProviderVariable(variationNode));
     });
 
-    var code =
-        _generateProviderClass(stateBuffer.toString(), watcherName, manager);
+    var code = _generateProviderClass(
+        stateBuffer.toString(), watcherName, generationManager);
     fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
-
-    return Future.value(node);
   }
 
   String _generateProviderClass(

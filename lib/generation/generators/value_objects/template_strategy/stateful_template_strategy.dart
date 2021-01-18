@@ -27,7 +27,7 @@ class _${widgetName} extends State<${widgetName}>{
 
   @override
   Widget build(BuildContext context){
-    ${manager.methodVariableStr}
+    ${manager.data.methodVariableStr}
     return ${returnStatement};
   }
 }''';

@@ -18,7 +18,7 @@ class PreGenerationService extends FlutterProjectBuilder {
         );
 
   @override
-  void convertToFlutterProject({List<ArchiveFile> rawImages}) async {
+  Future<void> convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     // TODO: This could be moved one level up to Controllers since
     // it is currently in here and FlutterProjectBuilder
     await Future.wait(PBStateManagementLinker().stateQueue);

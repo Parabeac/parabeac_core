@@ -3,7 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:recase/recase.dart';
 
 abstract class Middleware {
-  final PBGenerationManager generationManager;
+  PBGenerationManager generationManager;
 
   Middleware(this.generationManager);
 

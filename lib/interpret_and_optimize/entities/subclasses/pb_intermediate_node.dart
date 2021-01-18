@@ -1,5 +1,5 @@
-import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -24,10 +24,8 @@ abstract class PBIntermediateNode {
 
   PBContext currentContext;
 
-  PBGenerationManager get treeManager =>
-      currentContext.treeRoot.generationManager;
+  PBGenerationViewData get managerData => currentContext.treeRoot.data;
 
-  /// Size of the element.
   Map size;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.

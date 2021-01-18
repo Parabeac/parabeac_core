@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -33,17 +34,21 @@ abstract class GenerationConfiguration {
 
   /// PageWriter to be used for generation
   PBPageWriter _pageWriter = PBFlutterWriter(); // Default to Flutter
-
   PBPageWriter get pageWriter => _pageWriter;
 
   set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(null);
+    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
   }
 
   PBGenerationManager get generationManager => _generationManager;
+  set generationManager(PBGenerationManager manager) =>
+      _generationManager = manager;
+
+  final Map<String, String> _dependencies = {};
+  Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
@@ -94,23 +99,21 @@ abstract class GenerationConfiguration {
     pbProject = pb_project;
 
     await setUpConfiguration();
-    await pbProject.forest.forEach((tree) async {
-      tree.generationManager = PBFlutterGenerator(fileStructureStrategy);
-      tree.generationManager.rootType = tree.rootNode.runtimeType;
-
-      _generationManager = tree.generationManager;
-
+    pbProject.fileStructureStrategy = fileStructureStrategy;
+    for (var tree in pbProject.forest) {
+      _generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
       await _iterateNode(tree.rootNode);
 
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
-    });
+    }
     await _commitDependencies(pb_project.projectName);
   }
 
   void registerMiddleware(Middleware middleware) {
     if (middleware != null) {
+      middleware.generationManager = _generationManager;
       _middleware.add(middleware);
     }
   }
@@ -118,7 +121,6 @@ abstract class GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, _pageWriter, pbProject);
-    _generationManager.fileStrategy = fileStructureStrategy;
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
@@ -132,7 +134,7 @@ abstract class GenerationConfiguration {
     var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
     imports.forEach((import) {
-      node.treeManager.addImport(import);
+      node.managerData.addImport(import);
     });
   }
 
@@ -149,7 +151,7 @@ abstract class GenerationConfiguration {
       /// we can ignore them here
       /// TODO: change it
     } else {
-      await _generationManager.fileStrategy.generatePage(
+      await pbProject.fileStructureStrategy.generatePage(
           await _generationManager.generate(node), filename,
           args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
     }

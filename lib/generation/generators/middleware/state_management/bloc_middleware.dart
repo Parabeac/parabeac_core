@@ -1,4 +1,3 @@
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
@@ -9,7 +8,7 @@ import '../../pb_generation_manager.dart';
 import '../middleware.dart';
 
 class BLoCMiddleware extends Middleware {
-  final PACKAGE_NAME = 'bloc';
+  final PACKAGE_NAME = 'flutter_bloc';
   final PACKAGE_VERSION = '^6.1.1';
 
   BLoCMiddleware(PBGenerationManager generationManager)
@@ -17,10 +16,12 @@ class BLoCMiddleware extends Middleware {
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    var manager = node.treeManager;
-    manager.addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-    manager.addImport('package:bloc/bloc.dart');
-    var fileStrategy = manager.fileStrategy as FlutterFileStructureStrategy;
+    var managerData = node.managerData;
+    node.currentContext.project.genProjectData
+        .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+    managerData.addImport('package:flutter_bloc/flutter_bloc.dart');
+    var fileStrategy = node.currentContext.project.fileStructureStrategy
+        as FlutterFileStructureStrategy;
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
@@ -30,10 +31,13 @@ class BLoCMiddleware extends Middleware {
       var generalName = genericName.snakeCase;
       var parentDirectory = generalName + '_bloc';
 
-      await manager.replaceImport(
+      await managerData.replaceImport(
           variableName, '${parentDirectory}/${generalName}_bloc.dart');
-      manager.addGlobalVariable(PBVariable(variableName, 'final ', true, null));
-      node.generator = StringGeneratorAdapter(variableName);
+      node.generator = StringGeneratorAdapter('''
+      BlocBuilder<${genericName.pascalCase}Bloc, ${genericName.pascalCase}State>(
+      builder: (context, state) => state.widget  
+      )
+      ''');
       return node;
     }
     var parentState = getNameOfNode(node);
@@ -53,7 +57,7 @@ class BLoCMiddleware extends Middleware {
         isFirst: isFirst,
         abstractClassName: parentState,
       );
-      stateBuffer.write(manager.generate(element));
+      stateBuffer.write(generationManager.generate(element));
       isFirst = false;
     });
 
@@ -87,7 +91,7 @@ class BLoCMiddleware extends Middleware {
     return '''
     import 'dart:async';
 
-    import 'package:bloc/bloc.dart';
+    import 'package:flutter_bloc/flutter_bloc.dart';
     import 'package:meta/meta.dart';
     import 'package:flutter/material.dart';
 
