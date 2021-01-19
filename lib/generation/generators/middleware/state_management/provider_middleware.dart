@@ -51,7 +51,6 @@ class ProviderMiddleware extends Middleware {
   String _generateProviderClass(
       String states, String defaultStateName, PBGenerationManager manager) {
     return '''
-      import 'package:provider/provider.dart';
       import 'package:flutter/material.dart';
       class ${defaultStateName} extends ChangeNotifier {
       ${states}
