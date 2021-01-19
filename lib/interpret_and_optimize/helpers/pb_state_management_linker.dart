@@ -39,7 +39,7 @@ class PBStateManagementLinker {
       if (node is PBSharedMasterNode) {
         var tempSym =
             PBSymbolStorage().getSharedInstanceNodeBySymbolID(node.SYMBOL_ID);
-        tempSym.isMasterState = true;
+        tempSym?.isMasterState = true;
       }
       stateQueue.add(_interpretVariationNode(node).then((processedNode) {
         var intermediateState =
