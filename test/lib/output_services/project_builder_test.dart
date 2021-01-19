@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/flutter_project_builder/flutter_project
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -28,7 +29,8 @@ void main() {
   group('Project Builder Test', () {
     var projectBuilder;
 
-    var outputPath = '${Directory.current.path}/test/lib/output_services/temp2';
+    var outputPath =
+        '${Directory.current.path}/test/lib/output_services/temp2/';
 
     MockIntermediateTree intermediateTree;
 
@@ -43,6 +45,8 @@ void main() {
     PBScaffoldGenerator scaffoldGenerator;
 
     MockData mockData;
+
+    FileStructureStrategy fss;
 
     setUp(() async {
       MainInfo().cwd = Directory.current;
@@ -60,15 +64,13 @@ void main() {
 
       MainInfo().configurations = {'state-management': 'none'};
 
-      when(project.projectName).thenReturn('intermediateTest');
-
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
 
+      when(project.projectName).thenReturn('intermediateTest');
       when(project.forest).thenReturn([intermediateTree]);
-      when(project.fileStructureStrategy).thenReturn(
-          FlutterFileStructureStrategy('', PBFlutterWriter(), project));
+      when(project.projectAbsPath).thenReturn(outputPath);
 
       when(scaffold.child).thenReturn(container);
       when(scaffold.isHomeScreen).thenReturn(false);
@@ -81,8 +83,15 @@ void main() {
       when(container.auxiliaryData).thenReturn(mockData);
       when(container.managerData).thenReturn(PBGenerationViewData());
 
+      fss =
+          FlutterFileStructureStrategy(outputPath, PBFlutterWriter(), project);
+      await fss.setUpDirectories();
+      when(project.fileStructureStrategy).thenReturn(fss);
+
       projectBuilder = await FlutterProjectBuilder(
-          projectName: outputPath, mainTree: project);
+          projectName: outputPath,
+          mainTree: project,
+          pageWriter: PBFlutterWriter());
     });
     test('', () async {
       /// Check that the Dart file was created
