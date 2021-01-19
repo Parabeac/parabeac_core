@@ -47,9 +47,18 @@ class PBGenerationViewData {
   }
 
   void addGlobalVariable(PBVariable variable) {
-    if (!_isDataLocked && variable != null) {
+    if (!_isDataLocked && variable != null && globalHas(variable)) {
       _globalVariables.add(variable);
     }
+  }
+
+  bool globalHas(PBVariable variable) {
+    for (var v in _globalVariables) {
+      if (v.variableName == variable.variableName) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void addAllGlobalVariable(Iterable<PBVariable> variable) =>
