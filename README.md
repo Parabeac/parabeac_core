@@ -9,7 +9,6 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 ![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md)
 
 <h3>
-<span> · </span>
   <a href="https://docs.parabeac.com/parabeac-designers/getting-started">Designer Protocol</a>
     <span> · </span>
   <a href="https://docs.parabeac.com/parabeac-developers/getting-started">Understanding the code export</a>
@@ -98,6 +97,9 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 2. Navigate to your user Profile
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
+
+## Using State Management Configuration
+Coming Soon... See [here](https://dev.to/parabeac/bloc-provider-riverpod-support-parabeac-core-v1-3-29pj)!
 
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
