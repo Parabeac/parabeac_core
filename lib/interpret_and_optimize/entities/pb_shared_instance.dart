@@ -28,6 +28,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   bool foundMaster = false;
 
+  bool isMasterState = false;
+
   @override
   var originalRef;
 

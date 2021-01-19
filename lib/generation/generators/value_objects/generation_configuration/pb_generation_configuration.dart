@@ -69,6 +69,9 @@ abstract class GenerationConfiguration {
   }
 
   bool _isMasterState(PBSharedInstanceIntermediateNode node) {
+    if (node.isMasterState) {
+      return true;
+    }
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return symbolMaster?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;

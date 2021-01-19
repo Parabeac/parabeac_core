@@ -1,6 +1,8 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
 
@@ -34,6 +36,11 @@ class PBStateManagementLinker {
     }
     // Add state to default node
     else {
+      if (node is PBSharedMasterNode) {
+        var tempSym =
+            PBSymbolStorage().getSharedInstanceNodeBySymbolID(node.SYMBOL_ID);
+        tempSym.isMasterState = true;
+      }
       stateQueue.add(_interpretVariationNode(node).then((processedNode) {
         var intermediateState =
             IntermediateState(variation: IntermediateVariation(processedNode));
