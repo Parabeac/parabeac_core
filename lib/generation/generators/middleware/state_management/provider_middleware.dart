@@ -27,7 +27,8 @@ class ProviderMiddleware extends Middleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
       watcherName = node.functionCallName.snakeCase;
-      var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
+      var watcher = PBVariable(watcherName, 'final ', true,
+          'context.watch<${getName(node.functionCallName).pascalCase}>().defaultWidget');
       managerData.addMethodVariable(watcher);
       node.generator = StringGeneratorAdapter(watcherName);
       return node;
@@ -36,7 +37,7 @@ class ProviderMiddleware extends Middleware {
 
     // Iterating through states
     var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node));
+    stateBuffer.write(_generateProviderVariable(node, isDefault: true));
     node.auxiliaryData.stateGraph.states.forEach((state) async {
       var variationNode = state.variation.node;
 
@@ -58,8 +59,9 @@ class ProviderMiddleware extends Middleware {
       ''';
   }
 
-  String _generateProviderVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
+  String _generateProviderVariable(PBIntermediateNode node,
+      {bool isDefault = false}) {
+    return 'var ${isDefault ? 'defaultWidget' : node.name.camelCase} = ' +
         node?.generator?.generate(node ?? '',
             GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
         ';';
