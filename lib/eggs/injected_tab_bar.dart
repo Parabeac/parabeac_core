@@ -1,5 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
@@ -68,7 +69,9 @@ class PBTabBarGenerator extends PBGenerator {
   PBTabBarGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
+    generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
@@ -77,8 +80,8 @@ class PBTabBarGenerator extends PBGenerator {
         buffer.write('items:[');
         for (var i = 0; i < source.tabs.length; i++) {
           buffer.write('BottomNavigationBarItem(');
-          var res =
-              manager.generate(source.tabs[i].child, type: BUILDER_TYPE.BODY);
+          var res = source.tabs[i].child.generator
+              .generate(source.tabs[i].child, generatorContext);
           buffer.write('icon: $res,');
           buffer.write('title: Text(""),');
           buffer.write('),');

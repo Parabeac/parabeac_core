@@ -4,13 +4,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-part 'pb_symbol_master_params.g.dart';
 
 ///TODO: Need another class for elements that generate but are not visuals.
-@JsonSerializable(nullable: true)
+
 class PBSymbolMasterParameter extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
-  @JsonKey(toJson: _typeToJson, fromJson: _typeFromJson)
   final Type type;
   final String parameterID;
   final bool canOverride;
@@ -18,7 +16,6 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
   final parameterDefinition;
   double topLeftX, topLeftY, bottomRightX, bottomRightY;
 
-  @JsonKey(ignore: true)
   PBContext context;
 
   PBSymbolMasterParameter(
@@ -43,12 +40,6 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
     //TODO: return a more specified Type
     return PBIntermediateNode;
   }
-
-  factory PBSymbolMasterParameter.fromJson(Map<String, Object> json) =>
-      _$PBSymbolMasterParameterFromJson(json);
-
-  @override
-  Map<String, Object> toJson() => _$PBSymbolMasterParameterToJson(this);
 
   @override
   void addChild(PBIntermediateNode node) {}

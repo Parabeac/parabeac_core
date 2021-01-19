@@ -33,7 +33,7 @@ abstract class SketchNode implements DesignNode {
   final bool nameIsFixed;
   final dynamic resizingConstraint;
   final dynamic resizingType;
-  final double rotation;
+  final num rotation;
   final dynamic sharedStyleID;
   final bool shouldBreakMaskChain;
   final bool hasClippingMask;

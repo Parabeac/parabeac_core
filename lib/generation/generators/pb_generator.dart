@@ -1,20 +1,35 @@
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/inline_template_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
+import 'attribute-helper/pb_generator_context.dart';
+
 abstract class PBGenerator {
-  @Deprecated('Widget Indentifier is not being used anymore')
-  final String WIDGET_TYPE_IDENTIFIER = 'widgetType';
   final String OBJECTID = 'UUID';
-  PBGenerationManager _manager;
+
+  ///The [TemplateStrategy] that is going to be used to generate the boilerplate code around the node.
+  ///
+  ///The `default` [TemplateStrategy] is going to be [InlineTemplateStrategy]
+  TemplateStrategy _templateStrategy;
+  TemplateStrategy get templateStrategy => _templateStrategy;
+  set templateStrategy(TemplateStrategy strategy) =>
+      _templateStrategy = strategy;
+
+  PBGenerationManager _manager =
+      PBFlutterGenerator(data: PBGenerationViewData());
   set manager(PBGenerationManager generationManager) =>
       _manager = generationManager;
   PBGenerationManager get manager => _manager;
 
-  PBGenerator();
-  String generate(PBIntermediateNode source);
+  PBGenerationViewData get data => _manager.data;
 
-  ///Generating just a line in the code; this is used when to 'special' handleing is
-  @Deprecated('Widget Indentifier is not being used anymore')
-  String generateMapEntry(String key, String value) =>
-      value == null || key == WIDGET_TYPE_IDENTIFIER ? '' : '$key : $value,';
+  PBGenerator({TemplateStrategy strategy}) {
+    _templateStrategy = strategy;
+    _templateStrategy ??= InlineTemplateStrategy();
+  }
+
+  String generate(PBIntermediateNode source, GeneratorContext generatorContext);
 }

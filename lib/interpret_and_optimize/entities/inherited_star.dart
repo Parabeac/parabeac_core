@@ -10,34 +10,17 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'inherited_star.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedStar extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   var originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  @JsonKey(ignore: true)
-  Uint8List image;
-
-  @override
-  String UUID;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  Map size;
-
-  String referenceImage;
 
   InheritedStar(this.originalRef, String name,
-      {this.image, this.currentContext})
+      {Uint8List image, PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -47,7 +30,8 @@ class InheritedStar extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -57,7 +41,6 @@ class InheritedStar extends PBVisualIntermediateNode
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height
     };
-    UUID = originalRef.UUID;
 
     name = originalRef.name;
 
@@ -78,10 +61,6 @@ class InheritedStar extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    // Images don't have children.
   }
-
-  factory InheritedStar.fromJson(Map<String, Object> json) =>
-      _$InheritedStarFromJson(json);
-  Map<String, Object> toJson() => _$InheritedStarToJson(this);
 }

@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
@@ -13,7 +13,8 @@ class PBPrototypeGenerator extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     var name = _storage.getPageNodeById(prototypeNode.destinationUUID)?.name;
     if (name != null && name.isNotEmpty) {
       return '''GestureDetector(
@@ -23,11 +24,10 @@ class PBPrototypeGenerator extends PBGenerator {
           MaterialPageRoute(builder: (context) => ${name}()),
         );
       },
-      child: ${manager.generate(source.child, type: source.builder_type ?? BUILDER_TYPE.BODY)},
+      child: ${source.child.generator.generate(source.child, generatorContext)},
       )''';
     } else {
-      return manager.generate(source.child,
-          type: source.builder_type ?? BUILDER_TYPE.BODY);
+      return source.child.generator.generate(source.child, generatorContext);
     }
   }
 }

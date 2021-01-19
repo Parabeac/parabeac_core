@@ -1,179 +1,104 @@
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/empty_page_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 
-enum BUILDER_TYPE {
-  STATEFUL_WIDGET,
-  SYMBOL_MASTER,
-  SYMBOL_INSTANCE,
-  STATELESS_WIDGET,
-  BODY,
-  SCAFFOLD_BODY,
-  EMPTY_PAGE
-}
-
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
-  PBFlutterGenerator(pageWriter) : super(pageWriter) {
+  final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
+  PBFlutterGenerator({PBGenerationViewData data}) : super(data: data) {
     body = StringBuffer();
   }
 
-  String generateStatefulWidget(String body, String name) {
-    var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
-    return '''
-${generateImports()}
-
-class ${widgetName} extends StatefulWidget{
-  const ${widgetName}() : super();
+  ///Generates a constructor given a name and `constructorVariable`
   @override
-  _${widgetName} createState() => _${widgetName}();
-}
-
-class _${widgetName} extends State<${widgetName}>{
-  ${generateInstanceVariables()}
-  ${generateConstructor(constructorName)}
-
-  @override
-  Widget build(BuildContext context){
-    return ${body};
-  }
-}''';
-  }
-
-  String generateStatelessWidget(String body, String name) {
-    var widgetName = _generateWidgetName(name);
-    var constructorName = '_$name';
-    return '''
-${generateImports()}
-
-class ${widgetName} extends StatelessWidget{
-  const ${widgetName}({Key key}) : super(key : key);
-  ${generateInstanceVariables()}
-  ${generateConstructor(constructorName)}
-
-  @override
-  Widget build(BuildContext context){
-    return ${body};
-  }
-}''';
-  }
-
-  String _generateWidgetName(name) => PBInputFormatter.formatLabel(
-        name,
-        isTitle: true,
-        space_to_underscore: false,
-      );
-
   String generateConstructor(name) {
-    if (constructorVariables == null || constructorVariables.isEmpty) {
+    if (data.constructorVariables == null) {
       return '';
     }
-    List<PBVariable> variables = [];
-    List<PBVariable> optionalVariables = [];
-    constructorVariables.forEach((param) {
-      // Only accept constructor variable if they are
-      // part of the variable instances
-      if (param.isRequired && instanceVariables.contains(param)) {
-        variables.add(param);
-      } else if (instanceVariables.contains(param)) {
-        optionalVariables.add(param);
-      } else {} // Do nothing
-    });
     var stringBuffer = StringBuffer();
     stringBuffer.write(name + '(');
-    variables.forEach((p) {
-      stringBuffer.write('this.' + p.variableName + ',');
-    });
-    stringBuffer.write('{');
-    optionalVariables.forEach((o) {
-      stringBuffer.write('this.' + o.variableName + ',');
-    });
-    stringBuffer.write('});');
+    var param;
+    var it = data.constructorVariables;
+    while (it.moveNext()) {
+      param = it.current;
+      if (param.isRequired) {
+        stringBuffer.write('this.' + param.variableName + ',');
+      }
+      param = it.current;
+    }
+
+    var counter = 0;
+    var optionalParamBuffer = StringBuffer();
+    optionalParamBuffer.write('{');
+    it = data.constructorVariables;
+    while (it.moveNext()) {
+      param = data.constructorVariables.current;
+      if (!param.isRequired) {
+        optionalParamBuffer.write('this.' + param.variableName + ',');
+        counter++;
+      }
+    }
+    optionalParamBuffer.write('}');
+    if (counter >= 1) {
+      stringBuffer.write(optionalParamBuffer.toString());
+    }
+    stringBuffer.write(');');
     return stringBuffer.toString();
   }
 
-  String generateInstanceVariables() {
-    if (instanceVariables == null || instanceVariables.isEmpty) {
+  ///Generate global variables
+  @override
+  String generateGlobalVariables() {
+    if (data.globalVariables == null) {
       return '';
     }
     var stringBuffer = StringBuffer();
-    instanceVariables.forEach((param) {
-      stringBuffer.write(param.type + ' ' + param.variableName + ';\n');
-    });
-
+    var param;
+    var it = data.globalVariables;
+    while (it.moveNext()) {
+      param = it.current;
+      stringBuffer.write(param.type +
+          ' ' +
+          param.variableName +
+          (param.defaultValue == null ? '' : ' = ${param.defaultValue}') +
+          ';\n');
+    }
     return stringBuffer.toString();
   }
 
-  /// Formats and returns imports in the list
+  /// Generates the imports
+  @override
   String generateImports() {
-    StringBuffer buffer = StringBuffer();
+    var buffer = StringBuffer();
     buffer.write('import \'package:flutter/material.dart\';\n');
-
-    for (String import in imports) {
-      buffer.write('import \'$import\';\n');
+    var it = data.imports;
+    while (it.moveNext()) {
+      buffer.write('import \'${it.current}\';\n');
     }
     return buffer.toString();
   }
 
   @override
-  String generate(PBIntermediateNode rootNode,
-      {type = BUILDER_TYPE.STATEFUL_WIDGET}) {
+  String generate(
+    PBIntermediateNode rootNode,
+  ) {
     if (rootNode == null) {
       return null;
     }
-
-    ///Automatically assign type for symbols
-    if (rootNode is PBSharedMasterNode) {
-      type = BUILDER_TYPE.SYMBOL_MASTER;
-    } else if (rootNode is PBSharedInstanceIntermediateNode) {
-      type = BUILDER_TYPE.SYMBOL_INSTANCE;
-    }
-    rootNode.builder_type = type;
-
     rootNode.generator.manager = this;
-
-    var gen = rootNode.generator;
-
-    if (gen != null) {
-      switch (type) {
-        case BUILDER_TYPE.STATEFUL_WIDGET:
-          return generateStatefulWidget(gen.generate(rootNode), rootNode.name);
-          break;
-        case BUILDER_TYPE.STATELESS_WIDGET:
-          return generateStatelessWidget(
-              gen.generate(rootNode), rootNode.name);
-          break;
-        case BUILDER_TYPE.EMPTY_PAGE:
-          return generateImports() + body.toString();
-          break;
-        case BUILDER_TYPE.SYMBOL_MASTER:
-        case BUILDER_TYPE.SYMBOL_INSTANCE:
-        case BUILDER_TYPE.BODY:
-        default:
-          return gen.generate(rootNode);
-      }
-    } else {
+    if (rootNode.generator == null) {
       log.error('Generator not registered for ${rootNode}');
     }
-    return null;
+    return rootNode.generator?.templateStrategy?.generateTemplate(
+            rootNode,
+            this,
+            GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
+
+        ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
+        DEFAULT_STRATEGY.generateTemplate(rootNode, this,
+            GeneratorContext(sizingContext: SizingValueContext.PointValue));
   }
-
-  @override
-  void addDependencies(String packageName, String version) {
-    pageWriter.addDependency(packageName, version);
-  }
-
-  @override
-  void addInstanceVariable(PBVariable param) => instanceVariables.add(param);
-
-  @override
-  void addConstructorVariable(PBVariable param) => constructorVariables.add(param);
-
-  @override
-  void addImport(String value) => imports.add(value);
 }

@@ -3,22 +3,15 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'injected_positioned.g.dart';
-
-@JsonSerializable(nullable: true)
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
-  @JsonKey(ignore: true)
   final PositioningHolder positionedHolder;
-  @JsonKey(ignore: true)
+
   PBContext currentContext;
   var child;
 
   final String UUID;
-
-  
 
   double horizontalAlignValue, verticalAlignValue;
   String horizontalAlignType, verticalAlignType;
@@ -39,11 +32,6 @@ class InjectedPositioned extends PBIntermediateNode
         'Tried assigning multiple children to class [InjectedPositioned]');
     child = node;
   }
-
-  factory InjectedPositioned.fromJson(Map<String, Object> json) =>
-      _$InjectedPositionedFromJson(json);
-
-  Map<String, Object> toJson() => _$InjectedPositionedToJson(this);
 }
 
 /// A object to help us communicate positioning type & value.

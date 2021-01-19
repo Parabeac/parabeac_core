@@ -3,19 +3,11 @@
         "widgetStyle": "Material",
         "widgetType": "Stateless",
         "widgetSpacing": "Expanded",
-        "layoutPrecedence" : ["column", "row", "stack"]
+        "layoutPrecedence": [
+            "column",
+            "row",
+            "stack"
+        ]
     },
-    "stack": {
-        "widgetStyle": "Material",
-        "widgetType": "Stateless",
-        "widgetSpacing": "Expanded",
-        "layoutPrecedence" : ["stack"]
-    },
-    "This will be replaced by a Object ID to determine specific configurations for each page": {
-        "widgetStyle": "Material",
-        "widgetType": "Stateless",
-        "widgetSpacing": "Expanded"
-    },
-    "state-management" : "None",
-    "root": "AC2E7423-4609-4F37-8BCA-7E915944FFE2"
+    "state-management": "provider"
 }

@@ -1,9 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:archive/archive_io.dart';
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
+import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
@@ -28,14 +29,28 @@ class SketchController extends Controller {
 
     ///INTERPRETATION
     Interpret().init(projectPath);
-    var mainTree = await Interpret().interpretAndOptimize(
+    var pbProject = await Interpret().interpretAndOptimize(
       sketchNodeTree,
     );
+    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
+
+    ///PRE-GENERATION SERVICE
+    var pgs = PreGenerationService(
+      projectName: projectPath,
+      mainTree: pbProject,
+      pageWriter: PBTraversalAdapterWriter(),
+    );
+    await pgs.convertToFlutterProject();
+
+    //Making the data immutable for writing into the file
+    pbProject.forest.forEach((tree) => tree.data.lockData());
 
     ///GENERATE FLUTTER CODE
-    var fpb =
-        FlutterProjectBuilder(projectName: projectPath, mainTree: mainTree);
-    fpb.convertToFlutterProject();
+    var fpb = FlutterProjectBuilder(
+        projectName: projectPath,
+        mainTree: pbProject,
+        pageWriter: PBFlutterWriter());
+    await fpb.convertToFlutterProject();
   }
 
   SketchNodeTree generateSketchNodeTree(

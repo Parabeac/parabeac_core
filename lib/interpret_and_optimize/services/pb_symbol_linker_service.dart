@@ -6,23 +6,22 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
-class PBSymbolLinkerService{
-
+class PBSymbolLinkerService {
   PBSymbolStorage _symbolStorage;
   PBSharedInterAggregationService _aggregationService;
 
-  PBSymbolLinkerService(){
+  PBSymbolLinkerService() {
     _symbolStorage = PBSymbolStorage();
     _aggregationService = PBSharedInterAggregationService();
   }
 
-  ///Linking [PBSharedMasterNode] and [PBSharedInsstanceIntermediateNode] together; linking its 
-  ///parameter and values.
+// /Linking [PBSharedMasterNode] and [PBSharedInsstanceIntermediateNode] together; linking its
+// /parameter and values.
   Future<PBIntermediateNode> linkSymbols(PBIntermediateNode rootNode) async{
     if(rootNode == null){
       return rootNode;
     }
-    
+
     var stack = <PBIntermediateNode>[];
     PBIntermediateNode rootIntermediateNode;
     stack.add(rootNode);
