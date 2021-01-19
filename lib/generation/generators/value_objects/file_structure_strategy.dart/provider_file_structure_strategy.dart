@@ -5,8 +5,8 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 
 class ProviderFileStructureStrategy extends FileStructureStrategy {
-  final RELATIVE_PROVIDER_PATH = 'providers/';
-  final RELATIVE_MODEL_PATH = 'models/';
+  final RELATIVE_PROVIDER_PATH = 'lib/providers/';
+  final RELATIVE_MODEL_PATH = 'lib/models/';
   var _providersPath;
   var _modelsPath;
 
