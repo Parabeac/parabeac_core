@@ -1,6 +1,5 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -21,8 +20,7 @@ void main() {
       currentContext = ContextMock();
       when(currentContext.screenTopLeftCorner).thenReturn(Point(215, -295));
       when(currentContext.screenBottomRightCorner).thenReturn(Point(590, 955));
-      when(currentContext.generationManager)
-          .thenReturn(PBFlutterGenerator(PBFlutterWriter()));
+      when(currentContext.generationManager).thenReturn(PBFlutterGenerator());
 
       currentChild = NodeMock();
       when(currentChild.currentContext).thenReturn(currentContext);
@@ -35,11 +33,11 @@ void main() {
     });
     test('Calculating dynamic padding size', () {
       currentPadding.addChild(currentChild);
-      Map pbPadding = currentPadding.toJson();
-      expect(pbPadding['left'], 0.04);
-      expect(pbPadding['top'], 0.012);
-      expect(pbPadding['right'], 0.04);
-      expect(pbPadding['bottom'], 0.012);
+      currentPadding = currentPadding as Padding;
+      expect(currentPadding.left, 0.04);
+      expect(currentPadding.top, 0.012);
+      expect(currentPadding.right, 0.04);
+      expect(currentPadding.bottom, 0.012);
     });
   });
 }

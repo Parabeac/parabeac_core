@@ -140,9 +140,9 @@ class SymbolMaster extends AbstractGroupLayer
             userInfo,
             style,
             maintainScrollPosition) {
-    this.name = name
-        ?.replaceAll(RegExp(r'[\W]'), '')
-        ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+    this.name = name?.replaceAll(RegExp(r'[\d\s_\+]'), '');
+    // ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+    // someElement/default
   }
 
   @override
@@ -157,12 +157,25 @@ class SymbolMaster extends AbstractGroupLayer
   Map<String, dynamic> toJson() => _$SymbolMasterToJson(this);
 
   ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
-  List<PBSharedParameterProp> _extractParameters() =>
-      overrideProperties?.map((prop) {
-        var properties = extractParameter(prop.overrideName);
-        return PBSharedParameterProp(
-            properties[0], null, prop.canOverride, name, properties[1]);
-      })?.toList();
+  List<PBSharedParameterProp> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterProp> sharedParameters = [];
+    for (var prop in overrideProperties) {
+      if (!ovrNames.contains(prop.overrideName)) {
+        var properties = AddMasterSymbolName(prop.overrideName, children);
+        sharedParameters.add(PBSharedParameterProp(
+            properties['name'],
+            properties['type'],
+            null,
+            prop.canOverride,
+            prop.overrideName,
+            properties['uuid'],
+            properties['default_value']));
+        ovrNames.add(prop.overrideName);
+      }
+    }
+    return sharedParameters;
+  }
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {

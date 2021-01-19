@@ -1,6 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/pb_widget_manager.dart';
+import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/helper/node_tree.dart';
 import 'package:parabeac_core/input/helper/page.dart';
@@ -10,9 +10,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_group.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_item.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
@@ -36,7 +35,7 @@ class Interpret {
 
   @visibleForTesting
   String projectName;
-  PBIntermediateTree _pb_intermediate_tree;
+  PBProject _pb_project;
   PBSymbolLinkerService _pbSymbolLinkerService;
   PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBGenerationManager _generationManager;
@@ -48,58 +47,56 @@ class Interpret {
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBIntermediateTree> interpretAndOptimize(NodeTree tree) async {
-    _pb_intermediate_tree = PBIntermediateTree(projectName);
+  Future<PBProject> interpretAndOptimize(NodeTree tree) async {
+    _pb_project = PBProject(projectName, tree.sharedStyles);
 
     ///3rd Party Symbols
     if (tree.miscPages != null) {
       for (var i = 0; i < tree.miscPages?.length; i++) {
-        _pb_intermediate_tree.groups
-            .add((await _generateGroup(tree.miscPages[i])));
+        _pb_project.forest.addAll((await _generateGroup(tree.miscPages[i])));
       }
     }
 
     /// Main Pages
     if (tree.pages != null) {
       for (var i = 0; i < tree.pages?.length; i++) {
-        _pb_intermediate_tree.groups.add((await _generateGroup(tree.pages[i])));
+        _pb_project.forest.addAll((await _generateGroup(tree.pages[i])));
       }
     }
 
-    return _pb_intermediate_tree;
+    return _pb_project;
   }
 
-  Future<PBIntermediateGroup> _generateGroup(Page group) async {
-    var intermediateGroup = PBIntermediateGroup(group.name.toLowerCase());
+  Future<Iterable<PBIntermediateTree>> _generateGroup(Page group) async {
+    var tempForest = <PBIntermediateTree>[];
     var pageItems = group.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
       var item = await _generateScreen(pageItems[i]);
-      String itemType;
-      if (item is InheritedScaffold) {
-        itemType = 'SCREEN';
-      } else if (item is PBSharedMasterNode) {
-        itemType = 'SHARED';
-      } else {
-        itemType = 'MISC';
-      }
+      if (item != null && item.rootNode != null) {
+        var tempTree = item;
+        tempTree.name = group.name;
 
-      if (item != null) {
-        log.fine(
-            'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${itemType}\'');
-
-        var newItem = PBIntermediateItem(item, itemType);
-
-        ///Searching for the root item.
-        if (newItem.node is InheritedScaffold) {
-          _pb_intermediate_tree.rootItem ??= newItem;
+        if (item.rootNode is InheritedScaffold) {
+          tempTree.tree_type = TREE_TYPE.SCREEN;
+        } else if (item.rootNode is PBSharedMasterNode) {
+          tempTree.tree_type = TREE_TYPE.VIEW;
+        } else {
+          tempTree.tree_type = TREE_TYPE.MISC;
         }
-        intermediateGroup.addItem(newItem);
+
+        if (item != null) {
+          log.fine(
+              'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${tempTree.tree_type}\'');
+
+          tempTree.rootNode;
+          tempForest.add(tempTree);
+        }
       }
     }
-    return intermediateGroup;
+    return tempForest;
   }
 
-  Future<PBIntermediateNode> _generateScreen(PageItem item) async {
+  Future<PBIntermediateTree> _generateScreen(PageItem item) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
@@ -109,7 +106,10 @@ class Interpret {
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var parentVisualIntermediateNode = await _visualGenerationService(
+    var intermediateTree = PBIntermediateTree(item.root.name);
+    currentContext.treeRoot = intermediateTree;
+    currentContext.project = _pb_project;
+    intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
     ///
@@ -117,23 +117,23 @@ class Interpret {
     /// NOTE Disabled Plugin Control Service for right now
     ///
     var stopwatch1 = Stopwatch()..start();
-    var parentPreLayoutIntermediateNode = await _pluginService(
-        parentVisualIntermediateNode, currentContext, stopwatch1);
+    intermediateTree.rootNode = await pluginService(
+        intermediateTree.rootNode, currentContext, stopwatch1);
 
     var stopwatch2 = Stopwatch()..start();
 
     /// LayoutGenerationService
 
-    var parentLayoutIntermediateNode = await _layoutGenerationService(
-        parentPreLayoutIntermediateNode, currentContext, stopwatch2);
+    intermediateTree.rootNode = await layoutGenerationService(
+        intermediateTree.rootNode, currentContext, stopwatch2);
 
     var stopwatch3 = Stopwatch()..start();
 
     /// AlignGenerationService
-    var parentAlignIntermediateNode = await _alignGenerationService(
-        parentLayoutIntermediateNode, currentContext, stopwatch3);
+    intermediateTree.rootNode = await alignGenerationService(
+        intermediateTree.rootNode, currentContext, stopwatch3);
 
-    return parentAlignIntermediateNode;
+    return intermediateTree;
   }
 
   Future<PBIntermediateNode> generateNonRootItem(DesignNode root) async {
@@ -141,57 +141,93 @@ class Interpret {
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
 
-    PBIntermediateNode parentVisualIntermediateNode;
+    PBIntermediateNode rootNode;
 
     /// VisualGenerationService
     try {
-      parentVisualIntermediateNode =
+      rootNode =
           await PBVisualGenerationService(root, currentContext: currentContext)
               .getIntermediateTree();
-    } catch (e, stackTrace) {
-      // await MainInfo().sentry.captureException(
-      //       exception: e,
-      //       stackTrace: stackTrace,
-      //     );
-      log.error(e.toString());
-    }
-
-    ///
-    /// pre-layout generation service for plugin nodes.
-    ///
-    var stopwatch1 = Stopwatch()..start();
-    var parentPreLayoutIntermediateNode = await _pluginService(
-        parentVisualIntermediateNode, currentContext, stopwatch1);
-
-    var stopwatch2 = Stopwatch()..start();
-
-    /// LayoutGenerationService
-
-    var parentLayoutIntermediateNode = await _layoutGenerationService(
-        parentPreLayoutIntermediateNode, currentContext, stopwatch2);
-
-    var stopwatch3 = Stopwatch()..start();
-
-    /// AlignGenerationService
-    var parentAlignIntermediateNode = await _alignGenerationService(
-        parentLayoutIntermediateNode, currentContext, stopwatch3);
-
-    return parentAlignIntermediateNode;
-  }
-
-  Future<PBIntermediateNode> zz(
-      var component, var context, var stopwatch) async {
-    /// VisualGenerationService
-    PBIntermediateNode node;
-    try {
-      node = await PBVisualGenerationService(component, currentContext: context)
-          .getIntermediateTree();
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBVisualGenerationService from generateNonRootItem');
+    }
+
+    ///
+    /// pre-layout generation service for plugin nodes.
+    ///
+    PBIntermediateNode parentPreLayoutIntermediateNode;
+    try {
+      parentPreLayoutIntermediateNode =
+          PBPluginControlService(rootNode, currentContext: currentContext)
+              .convertAndModifyPluginNodeTree();
+    } catch (e, stackTrace) {
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
+      log.error(e.toString());
+      log.error('at PBPluginControlService from generateNonRootItem');
+      parentPreLayoutIntermediateNode =
+          rootNode; //parentVisualIntermediateNode;
+    }
+
+    var stopwatch2 = Stopwatch()..start();
+
+    /// LayoutGenerationService
+    try {
+      parentPreLayoutIntermediateNode =
+          PBLayoutGenerationService(currentContext: currentContext)
+              .extractLayouts(parentPreLayoutIntermediateNode);
+    } catch (e, stackTrace) {
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
+      log.error(e.toString());
+      log.error('at PBLayoutGenerationService from generateNonRootItem');
+    }
+    var parentAlignIntermediateNode;
+
+    /// AlignGenerationService
+    try {
+      parentAlignIntermediateNode = PBAlignGenerationService(
+              parentPreLayoutIntermediateNode,
+              currentContext: currentContext)
+          .addAlignmentToLayouts();
+    } catch (e, stackTrace) {
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
+      log.error(e.toString());
+      log.error('at PBAlignGenerationService from generateNonRootItem');
+    }
+
+    return parentAlignIntermediateNode;
+  }
+
+  // TODO: refactor this method and/or `getIntermediateTree`
+  // to not take the [ignoreStates] variable.
+  Future<PBIntermediateNode> visualGenerationService(
+      var component, var context, var stopwatch,
+      {bool ignoreStates = false}) async {
+    /// VisualGenerationService
+    PBIntermediateNode node;
+    try {
+      node = await PBVisualGenerationService(component, currentContext: context)
+          .getIntermediateTree(ignoreStates: ignoreStates);
+    } catch (e, stackTrace) {
+      await MainInfo().sentry.captureException(
+            exception: e,
+            stackTrace: stackTrace,
+          );
+      log.error(e.toString());
+      log.error('at PBVisualGenerationService');
     }
     // print(
     //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
@@ -200,7 +236,7 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _pluginService(
+  Future<PBIntermediateNode> pluginService(
       PBIntermediateNode parentnode, var context, var stopwatch1) async {
     PBIntermediateNode node;
     try {
@@ -212,6 +248,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBPluginControlService');
       node = parentnode;
     }
     // print(
@@ -220,18 +257,19 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _layoutGenerationService(
+  Future<PBIntermediateNode> layoutGenerationService(
       PBIntermediateNode parentNode, var context, var stopwatch2) async {
     PBIntermediateNode node;
     try {
       node = PBLayoutGenerationService(currentContext: context)
-          .injectNodes(parentNode);
+          .extractLayouts(parentNode);
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBLayoutGenerationService');
       node = parentNode;
     }
 
@@ -242,7 +280,7 @@ class Interpret {
     return node;
   }
 
-  Future<PBIntermediateNode> _alignGenerationService(
+  Future<PBIntermediateNode> alignGenerationService(
       PBIntermediateNode parentnode, var context, var stopwatch3) async {
     PBIntermediateNode node;
 
@@ -260,6 +298,7 @@ class Interpret {
             stackTrace: stackTrace,
           );
       log.error(e.toString());
+      log.error('at PBAlignGenerationService');
       node = parentnode;
     }
     // print(

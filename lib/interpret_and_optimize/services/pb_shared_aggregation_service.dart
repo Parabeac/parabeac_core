@@ -84,9 +84,8 @@ class PBSharedInterAggregationService {
       instanceIntermediateNode.sharedParamValues =
           instanceIntermediateNode.sharedParamValues.map((v) {
         for (var symParam in masterNode.overridableProperties) {
-          if (symParam.UUID == v.UUID) {
-            return PBSharedParameterValue(
-                symParam.type, v.value, symParam.UUID);
+          if (symParam.propertyName == v.overrideName) {
+            return PBSharedParameterValue(symParam.type, v.value, symParam.UUID, symParam.propertyName);
           }
         }
         return null;

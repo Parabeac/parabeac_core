@@ -9,31 +9,20 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'stack.g.dart';
-
 ///Row contains nodes that are all `overlapping` to each other, without overlapping eachother
-@JsonSerializable(nullable: true)
+
 class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
-  @JsonKey(ignore: true)
   static final List<LayoutRule> STACK_RULES = [OverlappingNodesLayoutRule()];
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
   @override
   final String UUID;
 
-  Point topLeftCorner;
-
-  Point bottomRightCorner;
-
   Map alignment = {};
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   PBIntermediateStackLayout(String name, this.UUID, {this.currentContext})
@@ -96,8 +85,4 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     children.forEach((child) => stack.addChild(child));
     return stack;
   }
-
-  factory PBIntermediateStackLayout.fromJson(Map<String, Object> json) =>
-      _$PBIntermediateStackLayoutFromJson(json);
-  Map<String, Object> toJson() => _$PBIntermediateStackLayoutToJson(this);
 }

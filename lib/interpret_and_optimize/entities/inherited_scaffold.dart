@@ -4,7 +4,7 @@ import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -14,11 +14,6 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'inherited_scaffold.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedScaffold extends PBVisualIntermediateNode
     with
         PBColorMixin
@@ -27,30 +22,21 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   var originalRef;
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-  @JsonSerializable(nullable: true)
+
   var navbar;
-  @JsonSerializable(nullable: true)
+
   var tabbar;
-  @JsonSerializable(nullable: true)
-  String backgroundColor;
 
   bool isHomeScreen = false;
 
-  @override
-  String UUID;
-
   var body;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   InheritedScaffold(this.originalRef,
       {Point topLeftCorner,
       Point bottomRightCorner,
       String name,
-      this.currentContext,
+      PBContext currentContext,
       this.isHomeScreen})
       : super(
             Point(originalRef.boundaryRectangle.x,
@@ -61,7 +47,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -71,25 +58,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     generator = PBScaffoldGenerator();
 
-    this.currentContext.screenBottomRightCorner = Point(
-        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
-        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
-
-    this.currentContext.screenTopLeftCorner =
-        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
-
-    UUID = originalRef.UUID;
-
-    backgroundColor = toHex(originalRef.backgroundColor);
+    auxiliaryData.color = toHex(originalRef.backgroundColor);
   }
 
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
-
-  @override
-  String semanticName;
 
   @override
   void addChild(PBIntermediateNode node) {
@@ -136,8 +111,4 @@ class InheritedScaffold extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  Map<String, Object> toJson() => _$InheritedScaffoldToJson(this);
-  factory InheritedScaffold.fromJson(Map<String, Object> json) =>
-      _$InheritedScaffoldFromJson(json);
 }

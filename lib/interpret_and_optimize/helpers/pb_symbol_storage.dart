@@ -96,6 +96,12 @@ class PBSymbolStorage {
           (element) => element.SYMBOL_ID == symbolID,
           orElse: () => null);
 
+  PBSharedInstanceIntermediateNode getSharedInstanceNodeBySymbolID(
+          String symbolID) =>
+      _pbSharedInstanceNodes.values.firstWhere(
+          (element) => element.SYMBOL_ID == symbolID,
+          orElse: () => null);
+
   PBSharedInstanceIntermediateNode getSharedInstaceNode(String id) =>
       _pbSharedInstanceNodes['$id'];
 

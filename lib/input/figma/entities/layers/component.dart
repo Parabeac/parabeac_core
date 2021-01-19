@@ -81,12 +81,26 @@ class Component extends FigmaFrame
   @override
   Map<String, dynamic> toJson() => _$ComponentToJson(this);
 
-  List<PBSharedParameterProp> _extractParameters() =>
-      overrideProperties?.map((prop) {
+  List<PBSharedParameterProp> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterProp> sharedParameters = [];
+    overrideProperties ??= [];
+    for (var prop in overrideProperties) {
+      if (!ovrNames.contains(prop.overrideName)) {
         var properties = extractParameter(prop.overrideName);
-        return PBSharedParameterProp(
-            properties[0], null, prop.canOverride, name, properties[1]);
-      })?.toList();
+        sharedParameters.add(PBSharedParameterProp(
+            name,
+            properties['type'],
+            null,
+            prop.canOverride,
+            prop.overrideName,
+            properties['uuid'],
+            properties['default_value']));
+        ovrNames.add(prop.overrideName);
+      }
+    }
+    return sharedParameters;
+  }
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {

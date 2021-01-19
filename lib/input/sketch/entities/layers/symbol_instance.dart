@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+
 part 'symbol_instance.g.dart';
 
 // title: Symbol Instance Layer
@@ -114,16 +115,28 @@ class SymbolInstance extends SketchNode
   @override
   SketchNode createSketchNode(Map<String, dynamic> json) =>
       SymbolInstance.fromJson(json);
+
   factory SymbolInstance.fromJson(Map<String, dynamic> json) =>
       _$SymbolInstanceFromJson(json);
+
   @override
   Map<String, dynamic> toJson() => _$SymbolInstanceToJson(this);
 
   ///Converting the [OverridableValue] into [PBSharedParameterValue] to be processed in intermediate phase.
-  List<PBSharedParameterValue> _extractParameters() => overrideValues?.map((e) {
-        var properties = extractParameter(e.overrideName);
-        return PBSharedParameterValue(properties[0], e.value, properties[1]);
-      })?.toList();
+  List<PBSharedParameterValue> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterValue> sharedParameters = [];
+    for (var overrideValue in overrideValues) {
+      if (!ovrNames.contains(overrideValue.overrideName)) {
+        var properties = extractParameter(overrideValue.overrideName);
+        sharedParameters.add(PBSharedParameterValue(
+            properties['type'], overrideValue.value, properties['uuid'], overrideValue.overrideName));
+        ovrNames.add(overrideValue.overrideName);
+      }
+    }
+
+    return sharedParameters;
+  }
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {

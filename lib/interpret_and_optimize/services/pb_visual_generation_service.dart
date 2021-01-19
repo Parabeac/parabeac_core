@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 /// Takes a SketchNodeTree and begins generating PBNode interpretations. For each node, the node is going to pass through the PBSemanticInterpretationService which checks if the node should generate a specific PBIntermediateNode based on the semantics that it contains.
@@ -25,19 +26,22 @@ class PBVisualGenerationService implements PBGenerationService {
   @override
   PBContext currentContext;
 
+  PBStateManagementHelper smHelper;
+
   /// Constructor for PBVisualGenerationService, must include the root SketchNode
   PBVisualGenerationService(originalRoot, {this.currentContext}) {
     _positionalCleansingService = PositionalCleansingService();
     this.originalRoot =
         _positionalCleansingService.eliminateOffset(originalRoot);
+    smHelper = PBStateManagementHelper();
   }
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateNode> getIntermediateTree() async {
+  Future<PBIntermediateNode> getIntermediateTree(
+      {bool ignoreStates = false}) async {
     if (originalRoot == null) {
-      assert(true,
-          '[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+      return Future.value(null);
     }
     PBPluginListHelper().initPlugins(currentContext);
 
@@ -52,18 +56,33 @@ class PBVisualGenerationService implements PBGenerationService {
         // Check semantics
         result = PBDenyListHelper()
             .returnDenyListNodeIfExist(currentNode.designNode);
+
         if (result is PBDenyListNode) {
         } else {
           result = PBPluginListHelper()
               .returnAllowListNodeIfExists(currentNode.designNode);
 
-          // Generate general intermediate node if still null.
-          // needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
+          /// Generate general intermediate node if still null.
+          /// needs to be assigned to [original], because [symbolMaster] needs to be registered to SymbolMaster
 
           if (result == null ||
               currentNode.designNode is PBSharedInstanceDesignNode ||
               currentNode.designNode is PBSharedMasterDesignNode) {
             result = await currentNode.designNode.interpretNode(currentContext);
+          }
+
+          // Interpret state management node
+          if (!ignoreStates &&
+                  smHelper.isValidStateNode(result.name) &&
+                  currentNode.designNode.name !=
+                      currentNode.convertedParent?.name ??
+              true) {
+            if (smHelper.isDefaultNode(result)) {
+              smHelper.interpretStateManagementNode(result);
+            } else {
+              smHelper.interpretStateManagementNode(result);
+              continue;
+            }
           }
 
           if (currentNode.convertedParent != null) {
@@ -99,7 +118,21 @@ class PBVisualGenerationService implements PBGenerationService {
       destHolder.addChild(rootIntermediateNode);
       return destHolder;
     }
+    _extractScreenSize(rootIntermediateNode);
     return rootIntermediateNode;
+  }
+
+  ///Sets the size of the UI element.
+  ///
+  ///We are assuming that since the [rootIntermediateNode] contains all of the nodes
+  ///then it should represent the biggest screen size that encapsulates the entire UI elements.
+  void _extractScreenSize(PBIntermediateNode rootIntermediateNode) {
+    if (currentContext.screenBottomRightCorner == null &&
+        currentContext.screenTopLeftCorner == null) {
+      currentContext.screenBottomRightCorner =
+          rootIntermediateNode.bottomRightCorner;
+      currentContext.screenTopLeftCorner = rootIntermediateNode.topLeftCorner;
+    }
   }
 
   void _addToParent(PBIntermediateNode parentNode,

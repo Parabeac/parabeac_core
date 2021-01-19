@@ -3,23 +3,16 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-part 'flexible.g.dart';
-
-@JsonSerializable(nullable: true)
 class Flexible extends PBVisualIntermediateNode {
   int flex;
   var child;
 
   @override
-  @JsonKey(ignore: true)
   var currentContext;
 
   final String UUID;
 
   @override
-  @JsonKey(nullable: true, ignore: false)
-  
 
   //TODO: Find a way to make currentContext required
   //without breaking the json serializable
@@ -40,9 +33,8 @@ class Flexible extends PBVisualIntermediateNode {
     generator = PBFlexibleGenerator();
   }
 
-  @JsonKey(ignore: true)
   Point topLeftCorner;
-  @JsonKey(ignore: true)
+
   Point bottomRightCorner;
 
   @override
@@ -50,11 +42,6 @@ class Flexible extends PBVisualIntermediateNode {
     assert(child == null, 'Tried adding another child to Flexible');
     child = node;
   }
-
-  factory Flexible.fromJson(Map<String, Object> json) =>
-      _$FlexibleFromJson(json);
-
-  Map<String, Object> toJson() => _$FlexibleToJson(this);
 
   @override
   void alignChild() {}

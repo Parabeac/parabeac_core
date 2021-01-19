@@ -14,9 +14,6 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '<back-arrow>': InjectedBackArrow(
-          Point(0, 0), Point(0, 0), Uuid().v4(), '',
-          currentContext: context),
       '<tabbar>': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
       '<navbar>': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
@@ -34,7 +31,6 @@ class PBPluginListHelper {
 
   /// List of static plugin names used for Amplitude
   static List<String> names = [
-    '<back-arrow>',
     '<background>',
     '<navbar>',
     '<tabbar>',

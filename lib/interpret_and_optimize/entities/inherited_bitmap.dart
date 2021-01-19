@@ -9,37 +9,24 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:quick_log/quick_log.dart';
 
-part 'inherited_bitmap.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedBitmap extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  @override
-  String UUID;
-
-  @JsonKey(ignore: true)
   var log = Logger('Inherited Bitmap');
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   String referenceImage;
 
   InheritedBitmap(
     this.originalRef,
     String name, {
-    this.currentContext,
+    PBContext currentContext,
     this.referenceImage,
   }) : super(
             Point(originalRef.boundaryRectangle.x,
@@ -50,7 +37,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -60,13 +48,12 @@ class InheritedBitmap extends PBVisualIntermediateNode
         (originalRef as Image).imageReference == null) {
       log.debug('NULL BITMAP');
     }
-    UUID = originalRef.UUID;
     name = (originalRef as Image).imageReference;
     size = {
       'width': originalRef.boundaryRectangle.width,
       'height': originalRef.boundaryRectangle.height
     };
-    this.referenceImage = (originalRef as Image).imageReference;
+    referenceImage = (originalRef as Image).imageReference;
     ImageReferenceStorage().addReference(
         originalRef.UUID, '${MainInfo().outputPath}assets/images');
   }
@@ -81,8 +68,4 @@ class InheritedBitmap extends PBVisualIntermediateNode
   void alignChild() {
     return;
   }
-
-  factory InheritedBitmap.fromJson(Map<String, Object> json) =>
-      _$InheritedBitmapFromJson(json);
-  Map<String, Object> toJson() => _$InheritedBitmapToJson(this);
 }

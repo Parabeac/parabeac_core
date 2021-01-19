@@ -47,16 +47,19 @@ void main() {
 
       for (var i = 0; i < 2; i++) {
         var masterParameter = PBSharedParameterProp(
+          'masterParam',
           parameterAlternator ? String : PBSharedInstanceIntermediateNode,
           parameterAlternator ? null : instanceNode0,
           true,
           parameterAlternator ? 'test0' : 'test1',
           parameterAlternator ? 'uuid0' : INSTANCE0_UUID,
+          null,
         );
         var instaceParameter = PBSharedParameterValue(
           parameterAlternator ? String : PBSharedInstanceIntermediateNode,
           parameterAlternator ? 'test' : instanceNode0,
           null,
+          'instanceParam',
         );
 
         instaceValues.add(instaceParameter);

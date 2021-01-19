@@ -1,12 +1,17 @@
+import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
-class PBTextGen extends PBGenerator {
+class PBTextGen extends PBGenerator with PBColorMixin {
   PBTextGen() : super();
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is InheritedText) {
       var buffer = StringBuffer();
       buffer.write('Text(\n');
@@ -15,10 +20,18 @@ class PBTextGen extends PBGenerator {
         var text = source.text;
         buffer.write('$text, \n');
       } else {
+        if (SN_UUIDtoVarName.containsKey('${source.UUID}_stringValue')) {
+          buffer.write('${SN_UUIDtoVarName[source.UUID + '_stringValue']} ?? ');
+        }
         buffer
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
-      buffer.write('style: TextStyle(\n');
+      buffer.write('style: ');
+      if(SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')){
+        buffer.write(SN_UUIDtoVarName[source.UUID + '_textStyle']);
+      }
+
+      buffer.write('TextStyle(\n');
       if (source.fontName != null) {
         buffer.write('fontFamily: \'${source.fontName}\',\n');
       }
@@ -26,7 +39,8 @@ class PBTextGen extends PBGenerator {
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
       }
       if (source.fontWeight != null) {
-        buffer.write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
+        buffer
+            .write('fontWeight: FontWeight.${source.fontWeight.toString()},\n');
       }
       if (source.fontStyle != null) {
         buffer.write('fontStyle: FontStyle.${source.fontStyle},\n');
@@ -34,11 +48,12 @@ class PBTextGen extends PBGenerator {
       if (source.letterSpacing != null) {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
-      if (source.color != null) {
-        if (findDefaultColor(source.color) == null) {
-          buffer.write('color: Color(${source.color}),');
+      if (source.auxiliaryData.color != null) {
+        if (findDefaultColor(source.auxiliaryData.color) == null) {
+          buffer.write('color: Color(${source.auxiliaryData.color}),');
         } else {
-          buffer.write('color: ${findDefaultColor(source.color)},');
+          buffer
+              .write('color: ${findDefaultColor(source.auxiliaryData.color)},');
         }
       }
 
@@ -51,17 +66,5 @@ class PBTextGen extends PBGenerator {
       return buffer.toString();
     }
     return '';
-  }
-
-  String findDefaultColor(String hex) {
-    switch (hex) {
-      case '0xffffffff':
-        return 'Colors.white';
-        break;
-      case '0xff000000':
-        return 'Colors.black';
-        break;
-    }
-    return null;
   }
 }

@@ -1,12 +1,17 @@
 class PBVariable {
+  ///Name of the variable
   String variableName;
+
+  ///static type of the variable.
   String type;
   bool isRequired;
+  String defaultValue;
 
   PBVariable(
     this.variableName,
     this.type,
     this.isRequired,
+    this.defaultValue,
   );
 
   @override

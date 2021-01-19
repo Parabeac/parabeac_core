@@ -6,13 +6,14 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:uuid/uuid.dart';
 
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.
 /// Superclass: PBIntermediateNode
 abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     implements PBInjectedIntermediate {
   /// LayoutNodes support 0 or multiple children.
-  List _children = [];
+  List<PBIntermediateNode> _children = [];
 
   ///Getting the children
   List<PBIntermediateNode> get children => List.from(_children);
@@ -29,25 +30,26 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Getting the exceptions of the rules.
   List<LayoutException> get exceptions => List.from(_exceptions);
 
-  final String UUID;
-
   PrototypeNode prototypeNode;
 
   ///
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner, this.UUID, this.prototypeNode})
-      : super(topLeftCorner, bottomRightCorner, UUID, name,
+      {topLeftCorner, bottomRightCorner, this.prototypeNode})
+      : super(topLeftCorner, bottomRightCorner, Uuid().v4(), name,
             currentContext: currentContext);
 
   void alignChildren();
 
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children) {
-    if (children != null || children.isNotEmpty) {
+    if (children.isNotEmpty) {
       _children = children;
+      _resize();
+    } else {
+      PBIntermediateNode.logger.warning(
+          'Trying to add a list of children to the $runtimeType that is either null or empty');
     }
-    _resize();
   }
 
   /// Replace the child at `index` for `replacement`.
@@ -67,17 +69,20 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   void _resize() {
-    assert(_children.isNotEmpty,
-        'There should be children in the layout so it can resize.');
-    var minX = (_children[0] as PBIntermediateNode).topLeftCorner.x,
-        minY = (_children[0] as PBIntermediateNode).topLeftCorner.y,
-        maxX = (_children[0] as PBIntermediateNode).bottomRightCorner.x,
-        maxY = (_children[0] as PBIntermediateNode).bottomRightCorner.y;
+    if (_children.isEmpty) {
+      PBIntermediateNode.logger
+          .warning('There should be children in the layout so it can resize.');
+      return;
+    }
+    var minX = (_children[0]).topLeftCorner.x,
+        minY = (_children[0]).topLeftCorner.y,
+        maxX = (_children[0]).bottomRightCorner.x,
+        maxY = (_children[0]).bottomRightCorner.y;
     for (var child in _children) {
-      minX = min((child as PBIntermediateNode).topLeftCorner.x, minX);
-      minY = min((child as PBIntermediateNode).topLeftCorner.y, minY);
-      maxX = max((child as PBIntermediateNode).bottomRightCorner.x, maxX);
-      maxY = max((child as PBIntermediateNode).bottomRightCorner.y, maxY);
+      minX = min((child).topLeftCorner.x, minX);
+      minY = min((child).topLeftCorner.y, minY);
+      maxX = max((child).bottomRightCorner.x, maxX);
+      maxY = max((child).bottomRightCorner.y, maxY);
     }
     topLeftCorner = Point(minX, minY);
     bottomRightCorner = Point(maxX, maxY);

@@ -10,36 +10,17 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'inherited_shape_group.g.dart';
-
-@JsonSerializable(nullable: true)
 class InheritedShapeGroup extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   var originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
-  ///Represents the location of the png file.
-  @JsonKey(ignore: true)
-  Uint8List image;
-
-  @override
-  String UUID;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  String referenceImage;
-
-  Map size;
-
   InheritedShapeGroup(this.originalRef, String name,
-      {this.image, this.currentContext})
+      {Uint8List image, PBContext currentContext})
       : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
@@ -49,13 +30,12 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.y +
                     originalRef.boundaryRectangle.height),
             currentContext,
-            name) {
+            name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
     generator = PBBitmapGenerator();
-
-    UUID = originalRef.UUID;
 
     size = {
       'width': originalRef.boundaryRectangle.width,
@@ -73,11 +53,6 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    // Images don't have children.
   }
-
-  factory InheritedShapeGroup.fromJson(Map<String, Object> json) =>
-      _$InheritedShapeGroupFromJson(json);
-
-  Map<String, Object> toJson() => _$InheritedShapeGroupToJson(this);
 }

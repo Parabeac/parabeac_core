@@ -1,9 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'point.g.dart';
-
-@JsonSerializable(nullable: true)
-
 ///Geographical point on the canvas.
 class Point implements Comparable<Point> {
   ///absolue positions
@@ -13,8 +7,6 @@ class Point implements Comparable<Point> {
 
   @override
   String toString() => ' X: $x, Y:$y';
-  Map<String, Object> toJson() => _$PointToJson(this);
-  factory Point.fromJson(Map<String, dynamic> json) => _$PointFromJson(json);
 
   Point clone(Point point) => Point(point.x, point.y);
 

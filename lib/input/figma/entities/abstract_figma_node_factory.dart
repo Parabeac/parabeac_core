@@ -12,6 +12,7 @@ import 'package:parabeac_core/input/figma/entities/layers/star.dart';
 import 'package:parabeac_core/input/figma/entities/layers/text.dart';
 
 import 'layers/figma_node.dart';
+import 'layers/regular_polygon.dart';
 import 'layers/vector.dart';
 
 class AbstractFigmaNodeFactory {
@@ -31,6 +32,7 @@ class AbstractFigmaNodeFactory {
     FigmaStar(),
     FigmaText(),
     FigmaVector(),
+    FigmaRegularPolygon(),
   ];
 
   AbstractFigmaNodeFactory();
