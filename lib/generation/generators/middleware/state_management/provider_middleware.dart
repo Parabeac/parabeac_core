@@ -37,31 +37,35 @@ class ProviderMiddleware extends Middleware {
 
     // Iterating through states
     var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node, isDefault: true));
+    stateBuffer.write(_generateProviderVariable(node));
     node.auxiliaryData.stateGraph.states.forEach((state) async {
       var variationNode = state.variation.node;
 
       stateBuffer.write(_generateProviderVariable(variationNode));
     });
 
-    var code = _generateProviderClass(
-        stateBuffer.toString(), watcherName, generationManager);
+    var code = _generateProviderClass(stateBuffer.toString(), watcherName,
+        generationManager, node.name.camelCase);
     fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
   }
 
-  String _generateProviderClass(
-      String states, String defaultStateName, PBGenerationManager manager) {
+  String _generateProviderClass(String states, String defaultStateName,
+      PBGenerationManager manager, String defaultWidgetName) {
     return '''
       import 'package:flutter/material.dart';
       class ${defaultStateName} extends ChangeNotifier {
       ${states}
+
+      Widget defaultWidget;
+      ${defaultStateName}(){
+        defaultWidget = ${defaultWidgetName};
+      }
       }
       ''';
   }
 
-  String _generateProviderVariable(PBIntermediateNode node,
-      {bool isDefault = false}) {
-    return 'var ${isDefault ? 'defaultWidget' : node.name.camelCase} = ' +
+  String _generateProviderVariable(PBIntermediateNode node) {
+    return 'var ${node.name.camelCase} = ' +
         node?.generator?.generate(node ?? '',
             GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
         ';';
