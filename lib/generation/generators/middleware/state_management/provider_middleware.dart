@@ -53,7 +53,7 @@ class ProviderMiddleware extends Middleware {
     return '''
       import 'package:provider/provider.dart';
       import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifierProvider {
+      class ${defaultStateName} extends ChangeNotifier {
       ${states}
       }
       ''';
