@@ -15,7 +15,9 @@ abstract class Middleware {
   String getName(String name) {
     var index = name.indexOf('/');
     // Remove everything after the /. So if the name is SignUpButton/Default, we end up with SignUpButton as the name we produce.
-    return name.replaceRange(index, name.length, '').pascalCase;
+    return index < 0
+        ? name
+        : name.replaceRange(index, name.length, '').pascalCase;
   }
 
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) =>
