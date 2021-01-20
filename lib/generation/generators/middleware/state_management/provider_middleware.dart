@@ -27,7 +27,8 @@ class ProviderMiddleware extends Middleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
       watcherName = node.functionCallName.snakeCase;
-      var watcher = PBVariable(watcherName, 'final ', true, 'watch(context)');
+      var watcher = PBVariable(watcherName, 'final ', true,
+          'context.watch<${getName(node.functionCallName).pascalCase}>().defaultWidget');
       managerData.addMethodVariable(watcher);
       node.generator = StringGeneratorAdapter(watcherName);
       return node;
@@ -43,18 +44,22 @@ class ProviderMiddleware extends Middleware {
       stateBuffer.write(_generateProviderVariable(variationNode));
     });
 
-    var code = _generateProviderClass(
-        stateBuffer.toString(), watcherName, generationManager);
+    var code = _generateProviderClass(stateBuffer.toString(), watcherName,
+        generationManager, node.name.camelCase);
     fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
   }
 
-  String _generateProviderClass(
-      String states, String defaultStateName, PBGenerationManager manager) {
+  String _generateProviderClass(String states, String defaultStateName,
+      PBGenerationManager manager, String defaultWidgetName) {
     return '''
-      import 'package:provider/provider.dart';
       import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifierProvider {
+      class ${defaultStateName} extends ChangeNotifier {
       ${states}
+
+      Widget defaultWidget;
+      ${defaultStateName}(){
+        defaultWidget = ${defaultWidgetName};
+      }
       }
       ''';
   }
