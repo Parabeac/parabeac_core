@@ -138,7 +138,7 @@ abstract class GenerationConfiguration {
     var screenFilePath =
         '${pbProject.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
-        '${pbProject.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.g.dart';
+        '${pbProject.projectName}/lib/views/${directoryName}/${fileName.snakeCase}.dart'; // Removed .g
     var imports = ImportHelper.findImports(
         node, node is InheritedScaffold ? screenFilePath : viewFilePath);
     imports.forEach((import) {
