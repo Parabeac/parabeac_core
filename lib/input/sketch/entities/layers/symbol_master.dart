@@ -140,7 +140,7 @@ class SymbolMaster extends AbstractGroupLayer
             userInfo,
             style,
             maintainScrollPosition) {
-    this.name = name?.replaceAll(RegExp(r'[\d\s_\+]'), '');
+    this.name = name?.replaceAll(RegExp(r'[\s_\+]'), '');
     // ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
     // someElement/default
   }
