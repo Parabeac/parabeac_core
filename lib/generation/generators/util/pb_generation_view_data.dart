@@ -99,25 +99,31 @@ class PBGenerationViewData {
   }
 
   Future<void> replaceImport(String oldImport, String newImport) async {
-    var oldVersion = await removeImportThatContains(oldImport);
-    if (oldVersion == '') {
-      return null;
+    if (!_isDataLocked) {
+      var oldVersion = await removeImportThatContains(oldImport);
+      if (oldVersion == '') {
+        return null;
+      }
+      var tempList = oldVersion.split('/');
+      tempList.removeLast();
+      tempList.add(newImport);
+      var tempList2 = tempList;
+      _imports.add(await _makeImport(tempList2));
     }
-    var tempList = oldVersion.split('/');
-    tempList.removeLast();
-    tempList.add(newImport);
-    var tempList2 = tempList;
-    _imports.add(await _makeImport(tempList2));
   }
 
   Future<String> _makeImport(List<String> tempList) async {
     var tempString = tempList.removeAt(0);
     for (var item in tempList) {
-      tempString += '/${item}';
       if (item == 'view') {
-        tempString += '/${tempList.removeLast()}';
+        var tempLast = tempList.removeLast();
+        if (!tempLast.contains('models')) {
+          tempString += '/${item}';
+        }
+        tempString += '/${tempLast}';
         break;
       }
+      tempString += '/${item}';
     }
     return tempString;
   }
