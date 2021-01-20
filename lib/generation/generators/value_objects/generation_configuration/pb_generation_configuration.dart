@@ -106,6 +106,11 @@ abstract class GenerationConfiguration {
     for (var tree in pbProject.forest) {
       _generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
+      if (tree.rootNode is InheritedScaffold &&
+          (tree.rootNode as InheritedScaffold).isHomeScreen) {
+        _setMainScreen(
+            tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
+      }
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
       await _iterateNode(tree.rootNode);
 
@@ -145,6 +150,16 @@ abstract class GenerationConfiguration {
     var writer = _pageWriter;
     if (writer is PBFlutterWriter) {
       writer.submitDependencies(projectName + '/pubspec.yaml');
+    }
+  }
+
+  void _setMainScreen(InheritedScaffold node, String outputMain) {
+    var writer = _pageWriter;
+    if (writer is PBFlutterWriter) {
+      writer.writeMainScreenWithHome(
+          node.name,
+          fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
+          'screens/${outputMain}');
     }
   }
 
