@@ -29,4 +29,6 @@ abstract class PBGenerationManager {
   String generateGlobalVariables();
 
   String generateConstructor(String name);
+
+  String generateDispose();
 }

@@ -11,6 +11,8 @@ class PBGenerationViewData {
 
   PBGenerationViewData();
 
+  Iterator<String> get toDispose => _toDispose.iterator;
+
   Iterator<PBVariable> get globalVariables => _globalVariables.iterator;
 
   Iterator<PBVariable> get constructorVariables =>
