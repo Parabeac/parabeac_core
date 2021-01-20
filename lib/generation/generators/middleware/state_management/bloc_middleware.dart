@@ -37,6 +37,8 @@ class BLoCMiddleware extends Middleware {
 
       await managerData.replaceImport(
           importName, '${parentDirectory}/${generalName}_bloc.dart');
+
+      managerData.addToDispose('bloc.dispose()');
       node.generator = StringGeneratorAdapter('''
       BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
         cubit: ${globalVariableName},

@@ -6,6 +6,7 @@ class PBGenerationViewData {
   final Set<PBVariable> _constructorVariables = {};
   final Set<PBVariable> _methodVariables = {};
   final Set<String> _imports = {};
+  final Set<String> _toDispose = {};
   bool _isDataLocked = false;
 
   PBGenerationViewData();
@@ -33,6 +34,15 @@ class PBGenerationViewData {
   }
 
   void lockData() => _isDataLocked = true;
+
+  void addToDispose(String dispose) {
+    if (!_isDataLocked &&
+        dispose != null &&
+        dispose.isNotEmpty &&
+        !_toDispose.contains(dispose)) {
+      _toDispose.add(dispose);
+    }
+  }
 
   void addImport(String import) {
     if (!_isDataLocked && import != null && import.isNotEmpty) {
