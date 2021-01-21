@@ -6,9 +6,12 @@ class PBGenerationViewData {
   final Set<PBVariable> _constructorVariables = {};
   final Set<PBVariable> _methodVariables = {};
   final Set<String> _imports = {};
+  final Set<String> _toDispose = {};
   bool _isDataLocked = false;
 
   PBGenerationViewData();
+
+  Iterator<String> get toDispose => _toDispose.iterator;
 
   Iterator<PBVariable> get globalVariables => _globalVariables.iterator;
 
@@ -34,6 +37,15 @@ class PBGenerationViewData {
 
   void lockData() => _isDataLocked = true;
 
+  void addToDispose(String dispose) {
+    if (!_isDataLocked &&
+        dispose != null &&
+        dispose.isNotEmpty &&
+        !_toDispose.contains(dispose)) {
+      _toDispose.add(dispose);
+    }
+  }
+
   void addImport(String import) {
     if (!_isDataLocked && import != null && import.isNotEmpty) {
       _imports.add(import);
@@ -47,9 +59,18 @@ class PBGenerationViewData {
   }
 
   void addGlobalVariable(PBVariable variable) {
-    if (!_isDataLocked && variable != null) {
+    if (!_isDataLocked && variable != null && globalHas(variable)) {
       _globalVariables.add(variable);
     }
+  }
+
+  bool globalHas(PBVariable variable) {
+    for (var v in _globalVariables) {
+      if (v.variableName == variable.variableName) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void addAllGlobalVariable(Iterable<PBVariable> variable) =>
@@ -78,25 +99,31 @@ class PBGenerationViewData {
   }
 
   Future<void> replaceImport(String oldImport, String newImport) async {
-    var oldVersion = await removeImportThatContains(oldImport);
-    if (oldVersion == '') {
-      return null;
+    if (!_isDataLocked) {
+      var oldVersion = await removeImportThatContains(oldImport);
+      if (oldVersion == '') {
+        return null;
+      }
+      var tempList = oldVersion.split('/');
+      tempList.removeLast();
+      tempList.add(newImport);
+      var tempList2 = tempList;
+      _imports.add(await _makeImport(tempList2));
     }
-    var tempList = oldVersion.split('/');
-    tempList.removeLast();
-    tempList.add(newImport);
-    var tempList2 = tempList;
-    _imports.add(await _makeImport(tempList2));
   }
 
   Future<String> _makeImport(List<String> tempList) async {
     var tempString = tempList.removeAt(0);
     for (var item in tempList) {
-      tempString += '/${item}';
       if (item == 'view') {
-        tempString += '/${tempList.removeLast()}';
+        var tempLast = tempList.removeLast();
+        if (!tempLast.contains('models')) {
+          tempString += '/${item}';
+        }
+        tempString += '/${tempLast}';
         break;
       }
+      tempString += '/${item}';
     }
     return tempString;
   }

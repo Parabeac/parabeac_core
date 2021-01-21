@@ -73,7 +73,7 @@ abstract class FileStructureStrategy {
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
       var path = node is PBSharedMasterNode
-          ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.g.dart'
+          ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.dart' // Removed .g
           : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
       PBGenCache().addToCache(uuid, path);
     } else {
@@ -90,7 +90,7 @@ abstract class FileStructureStrategy {
     if (args is String) {
       var path = args == 'SCREEN'
           ? '${_screenDirectoryPath}${fileName}.dart'
-          : '${_viewDirectoryPath}${fileName}.g.dart';
+          : '${_viewDirectoryPath}${fileName}.dart'; // Removed .g
       pageWriter.write(code, path);
     }
     return Future.value();

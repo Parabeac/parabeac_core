@@ -30,6 +30,10 @@ class _${widgetName} extends State<${widgetName}>{
     ${manager.data.methodVariableStr}
     return ${returnStatement};
   }
-}''';
+
+  ${manager.generateDispose()}
+}
+
+''';
   }
 }
