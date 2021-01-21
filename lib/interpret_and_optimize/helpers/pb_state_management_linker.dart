@@ -40,7 +40,9 @@ class PBStateManagementLinker {
     // Assign `node` as default
     if (!containsElement(rootNodeName)) {
       _statemap[rootNodeName] = node;
-    } else if (node is PBSharedMasterNode &&
+    } 
+    // Replacing a default node that was an instance node
+    else if (node is PBSharedMasterNode &&
         _statemap[rootNodeName] is PBSharedInstanceIntermediateNode) {
       var instanceNode = _statemap[rootNodeName];
 
