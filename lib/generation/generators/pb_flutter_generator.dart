@@ -81,6 +81,22 @@ class PBFlutterGenerator extends PBGenerationManager {
     return buffer.toString();
   }
 
+  /// Generates the dispose method
+  String generateDispose() {
+    var buffer = StringBuffer();
+    var it = data.toDispose;
+    while (it.moveNext()) {
+      buffer.write('${it.current};\n');
+    }
+    return '''
+    @override
+    void dispose() {
+      ${buffer.toString()}
+      super.dispose();
+    }
+    ''';
+  }
+
   @override
   String generate(
     PBIntermediateNode rootNode,

@@ -30,6 +30,8 @@ class ProviderMiddleware extends Middleware {
       var watcher = PBVariable(watcherName, 'final ', true,
           'context.watch<${getName(node.functionCallName).pascalCase}>().defaultWidget');
       managerData.addMethodVariable(watcher);
+      await managerData.replaceImport(
+          watcherName, 'models/${watcherName}.dart');
       node.generator = StringGeneratorAdapter(watcherName);
       return node;
     }
