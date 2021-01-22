@@ -13,6 +13,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:test/test.dart';
 
+import 'provider_test.dart';
+
 class MockPBGenerationManager extends Mock implements PBGenerationManager {}
 
 class MockPBIntermediateNode extends Mock implements PBIntermediateNode {}
@@ -28,77 +30,72 @@ class MockPBGenerationViewData extends Mock implements PBGenerationViewData {}
 
 class MockPBGenerator extends Mock implements PBGenerator {}
 
-// class MockFileStructureStrategy extends Mock
-//     implements FlutterFileStructureStrategy {}
-
 void main() {
-  group('BLoC Strategy Test', () {
-    MockPBGenerationManager mockPBGenerationManager;
-
-    BLoCMiddleware bLoCMiddleware;
-
-    MockPBIntermediateNode node;
-
-    MockContext mockContext;
-
-    MockProject mockProject;
-
-    MockPBGenerationProjectData mockPBGenerationProjectData;
-
-    MockPBGenerationViewData mockPBGenerationViewData;
-
-    MockPBGenerator mockPBGenerator;
-
-    FlutterFileStructureStrategy mockFileStructureStrategy;
+  group('Middlewares Tests', () {
+    var mockPBGenerationManager = MockPBGenerationManager();
+    var bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager);
+    var node = MockPBIntermediateNode();
+    var node2 = MockPBIntermediateNode();
+    var mockContext = MockContext();
+    var mockProject = MockProject();
+    var mockPBGenerationProjectData = MockPBGenerationProjectData();
+    var mockPBGenerationViewData = MockPBGenerationViewData();
+    var mockPBGenerator = MockPBGenerator();
+    var mockFileStructureStrategy = FlutterFileStructureStrategy(
+      '${Directory.current.path}/test/lib/middleware/',
+      PBFlutterWriter(),
+      mockProject,
+    );
+    var mockIntermediateAuxiliaryData = MockIntermediateAuxiliaryData();
+    var mockDirectedStateGraph = MockDirectedStateGraph();
+    var mockIntermediateState = MockIntermediateState();
+    var mockIntermediateVariation = MockIntermediateVariation();
 
     setUp(() async {
-      mockPBGenerationManager = MockPBGenerationManager();
-      node = MockPBIntermediateNode();
-      mockContext = MockContext();
-      mockProject = MockProject();
-      mockPBGenerationProjectData = MockPBGenerationProjectData();
-      bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager);
-      mockPBGenerationViewData = MockPBGenerationViewData();
-      mockPBGenerator = MockPBGenerator();
-      mockFileStructureStrategy = FlutterFileStructureStrategy(
-        '${Directory.current.path}/test/lib/middleware/',
-        PBFlutterWriter(),
-        mockProject,
-      );
-
-      when(node.name).thenReturn('someEle/blue');
-
+      /// Set up nodes
+      when(node.name).thenReturn('someElement/blue');
       when(node.generator).thenReturn(mockPBGenerator);
-
       when(node.managerData).thenReturn(mockPBGenerationViewData);
-
       when(node.currentContext).thenReturn(mockContext);
+      when(node.auxiliaryData).thenReturn(mockIntermediateAuxiliaryData);
+      // 2
+      when(node2.name).thenReturn('someElement/green');
+      when(node2.generator).thenReturn(mockPBGenerator);
 
+      /// IntermediateAuxiliaryData
+      when(mockIntermediateAuxiliaryData.stateGraph)
+          .thenReturn(mockDirectedStateGraph);
+
+      /// DirectedStateGraph
+      when(mockDirectedStateGraph.states).thenReturn([mockIntermediateState]);
+
+      /// IntermediateState
+      when(mockIntermediateState.variation)
+          .thenReturn(mockIntermediateVariation);
+
+      /// IntermediateVariation
+      when(mockIntermediateVariation.node).thenReturn(node2);
+
+      /// Context
       when(mockContext.project).thenReturn(mockProject);
 
+      /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
-
       when(mockProject.forest).thenReturn([]);
-
-      // when(mockFileStructureStrategy.pageWriter).thenReturn(PBFlutterWriter());
-
-      // when(mockFileStructureStrategy.screenDirectoryPath)
-      //     .thenReturn('${Directory.current.path}/test/lib/middleware/');
-
-      // when(mockFileStructureStrategy.viewDirectoryPath)
-      //     .thenReturn('${Directory.current.path}/test/lib/middleware/');
-
-      // when(mockFileStructureStrategy.isSetUp).thenReturn(false);
-
       when(mockProject.fileStructureStrategy)
           .thenReturn(mockFileStructureStrategy);
 
-      when(mockPBGenerationManager.generate(node)).thenReturn('code');
+      /// PBGenerationManager
+      when(mockPBGenerationManager.generate(node)).thenReturn('codeForBlue\n');
+      when(mockPBGenerationManager.generate(node2))
+          .thenReturn('codeForGreen\n');
 
-      when(mockPBGenerationProjectData.addDependencies('', '')).thenReturn('');
+      /// PBGenerationProjectData
+      when(mockPBGenerationProjectData.addDependencies(any, any))
+          .thenReturn('mockDependency');
     });
 
-    test('', () async {
+    test('BLoC Strategy Test', () async {
       await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
