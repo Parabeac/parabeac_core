@@ -90,7 +90,7 @@ do
         else
             if [ -z "${inline[newCounter]}" ]
             then
-                echo "[ERROR]: No semantics found for ${classSaved[newCounter]}"
+                echo "[WARNING]: No semantics found for ${classSaved[newCounter]}"
             else
                 if [ -z "${tempLine}" ]
                 then
