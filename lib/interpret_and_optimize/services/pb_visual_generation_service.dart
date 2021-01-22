@@ -118,7 +118,9 @@ class PBVisualGenerationService implements PBGenerationService {
       destHolder.addChild(rootIntermediateNode);
       return destHolder;
     }
-    _extractScreenSize(rootIntermediateNode);
+    if (rootIntermediateNode != null) {
+      _extractScreenSize(rootIntermediateNode);
+    }
     return rootIntermediateNode;
   }
 
