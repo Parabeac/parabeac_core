@@ -46,7 +46,9 @@ class ProviderMiddleware extends Middleware {
 
     var code = _generateProviderClass(stateBuffer.toString(), watcherName,
         generationManager, node.name.camelCase);
-    fileStrategy.writeProviderModelFile(code, node.name.snakeCase);
+    fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
+
+    return node;
   }
 
   String _generateProviderClass(String states, String defaultStateName,
