@@ -41,7 +41,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   Map size;
 
-
   InheritedShapePath(this.originalRef, String name,
       {this.image, this.currentContext})
       : super(
@@ -104,7 +103,9 @@ class InheritedShapePath extends PBVisualIntermediateNode
                 originalRef.boundaryRectangle.height);
 
         generator = PBContainerGenerator();
-        color = toHex(originalRef.style.borders[0].color);
+        color = originalRef.style.borders.isNotEmpty
+            ? toHex(originalRef.style.borders[0].color)
+            : toHex(null); // Interpret as default color
       }
     }
   }
