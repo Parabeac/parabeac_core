@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
@@ -96,6 +97,11 @@ class Group extends FigmaFrame
     if (areAllVectors()) {
       imageReference = addToImageQueue(UUID);
 
+      var tempPrototypeID = childrenHavePrototypeNode();
+      if (tempPrototypeID != null) {
+        this.prototypeNodeUUID = tempPrototypeID;
+      }
+
       children.clear();
 
       return Future.value(
@@ -117,5 +123,14 @@ class Group extends FigmaFrame
       }
     }
     return true;
+  }
+
+  String childrenHavePrototypeNode() {
+    for (DesignNode child in children) {
+      if (child.prototypeNodeUUID != null) {
+        return child.prototypeNodeUUID;
+      }
+    }
+    return null;
   }
 }
