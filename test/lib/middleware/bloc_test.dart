@@ -28,8 +28,8 @@ class MockPBGenerationViewData extends Mock implements PBGenerationViewData {}
 
 class MockPBGenerator extends Mock implements PBGenerator {}
 
-class MockFileStructureStrategy extends Mock
-    implements FlutterFileStructureStrategy {}
+// class MockFileStructureStrategy extends Mock
+//     implements FlutterFileStructureStrategy {}
 
 void main() {
   group('BLoC Strategy Test', () {
@@ -49,7 +49,7 @@ void main() {
 
     MockPBGenerator mockPBGenerator;
 
-    MockFileStructureStrategy mockFileStructureStrategy;
+    FlutterFileStructureStrategy mockFileStructureStrategy;
 
     setUp(() async {
       mockPBGenerationManager = MockPBGenerationManager();
@@ -60,7 +60,11 @@ void main() {
       bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager);
       mockPBGenerationViewData = MockPBGenerationViewData();
       mockPBGenerator = MockPBGenerator();
-      mockFileStructureStrategy = MockFileStructureStrategy();
+      mockFileStructureStrategy = FlutterFileStructureStrategy(
+        '${Directory.current.path}/test/lib/middleware/',
+        PBFlutterWriter(),
+        mockProject,
+      );
 
       when(node.name).thenReturn('someEle/blue');
 
@@ -74,10 +78,17 @@ void main() {
 
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
 
-      when(mockFileStructureStrategy.pageWriter).thenReturn(PBFlutterWriter());
+      when(mockProject.forest).thenReturn([]);
 
-      when(mockFileStructureStrategy.GENERATED_PROJECT_PATH)
-          .thenReturn('${Directory.current.path}/test/lib/middleware/');
+      // when(mockFileStructureStrategy.pageWriter).thenReturn(PBFlutterWriter());
+
+      // when(mockFileStructureStrategy.screenDirectoryPath)
+      //     .thenReturn('${Directory.current.path}/test/lib/middleware/');
+
+      // when(mockFileStructureStrategy.viewDirectoryPath)
+      //     .thenReturn('${Directory.current.path}/test/lib/middleware/');
+
+      // when(mockFileStructureStrategy.isSetUp).thenReturn(false);
 
       when(mockProject.fileStructureStrategy)
           .thenReturn(mockFileStructureStrategy);
@@ -88,6 +99,7 @@ void main() {
     });
 
     test('', () async {
+      await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
     });
