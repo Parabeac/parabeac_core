@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:mockito/mockito.dart';
-import 'package:parabeac_core/generation/generators/middleware/state_management/bloc_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -13,7 +12,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:test/test.dart';
-
 import 'provider_test.dart';
 
 class MockPBGenerationManager extends Mock implements PBGenerationManager {}
@@ -33,6 +31,7 @@ class MockPBGenerator extends Mock implements PBGenerator {}
 
 void main() {
   group('Middlewares Tests', () {
+    var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
     var bLoCMiddleware = StatefulMiddleware(mockPBGenerationManager);
     var node = MockPBIntermediateNode();
@@ -43,7 +42,7 @@ void main() {
     var mockPBGenerationViewData = MockPBGenerationViewData();
     var mockPBGenerator = MockPBGenerator();
     var mockFileStructureStrategy = FlutterFileStructureStrategy(
-      '${Directory.current.path}/test/lib/middleware/',
+      testingPath,
       PBFlutterWriter(),
       mockProject,
     );
@@ -100,6 +99,20 @@ void main() {
       await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
+      expect(
+          await File(
+                  '${testingPath}lib/view/some_element_blue/some_element_blue.dart')
+              .exists(),
+          true);
+      expect(
+          await File(
+                  '${testingPath}lib/view/some_element_blue/some_element_green.dart')
+              .exists(),
+          true);
+    });
+
+    tearDownAll(() {
+      Process.runSync('rm', ['-rf', '${testingPath}lib']);
     });
   });
 }
