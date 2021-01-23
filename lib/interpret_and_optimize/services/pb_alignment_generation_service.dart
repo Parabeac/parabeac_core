@@ -1,5 +1,4 @@
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -29,7 +28,8 @@ class PBAlignGenerationService implements PBGenerationService {
   /// Should find all layout nodes
   PBIntermediateNode addAlignmentToLayouts() {
     if (originalRoot == null) {
-      log.warning('[VisualGenerationService] generate() attempted to generate a non-existing tree');
+      log.warning(
+          '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
       return null;
     }
 

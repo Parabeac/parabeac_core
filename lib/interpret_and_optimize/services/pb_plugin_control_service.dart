@@ -24,7 +24,8 @@ class PBPluginControlService implements PBGenerationService {
   /// @return Returns the root node of the intermediate tree.
   PBIntermediateNode convertAndModifyPluginNodeTree() {
     if (originalRoot == null) {
-      log.warning('[VisualGenerationService] generate() attempted to generate a non-existing tree.');
+      log.warning(
+          '[PBPluginControlService] generate() attempted to generate a non-existing tree.');
       return null;
     }
 

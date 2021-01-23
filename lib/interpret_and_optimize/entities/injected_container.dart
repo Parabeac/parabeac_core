@@ -1,6 +1,6 @@
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -8,58 +8,29 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'injected_container.g.dart';
-
-@JsonSerializable(nullable: true)
 class InjectedContainer extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
-  /// Used for setting the alignment of it's children
-  double alignX;
-  double alignY;
-
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  @override
-  final String color;
-  var child;
-  Map size;
-  Map margins;
-  Map padding;
-  Map borderInfo;
-  Map alignment;
-
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
-
-  final String UUID;
 
   InjectedContainer(
     Point bottomRightCorner,
     Point topLeftCorner,
     String name,
-    this.UUID, {
-    this.alignX,
-    this.alignY,
-    this.color,
-    this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+    String UUID, {
+    double alignX,
+    double alignY,
+    String color,
+    PBContext currentContext,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID) {
     generator = PBContainerGenerator();
-
-    if (currentContext.screenBottomRightCorner == null &&
-        currentContext.screenTopLeftCorner == null) {
-      this.currentContext.screenBottomRightCorner = bottomRightCorner;
-      this.currentContext.screenTopLeftCorner = topLeftCorner;
-    }
 
     size = {
       'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
       'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
     };
 
-    alignment = alignX != null && alignY != null
+    auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
   }
@@ -91,8 +62,4 @@ class InjectedContainer extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
-
-  factory InjectedContainer.fromJson(Map<String, Object> json) =>
-      _$InjectedContainerFromJson(json);
-  Map<String, Object> toJson() => _$InjectedContainerToJson(this);
 }

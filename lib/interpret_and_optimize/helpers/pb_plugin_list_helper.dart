@@ -1,3 +1,4 @@
+import 'package:parabeac_core/eggs/injected_back_arrow.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';

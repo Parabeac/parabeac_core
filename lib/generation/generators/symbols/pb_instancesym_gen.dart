@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
@@ -7,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:recase/recase.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
   PBSymbolInstanceGenerator() : super();
@@ -14,26 +16,24 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   var log = Logger('Symbol Instance Generator');
 
   @override
-  String generate(PBIntermediateNode source) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
-      String method_signature = source.functionCallName;
+      var method_signature = source.functionCallName;
       if (method_signature == null) {
           log.error(' Could not find master name on: $source');
           return 'Container(/** This Symbol was not found **/)';
       }
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
+      method_signature = method_signature.pascalCase;
       var buffer = StringBuffer();
-
-
-      method_signature = method_signature[0].toLowerCase() +
-          method_signature.substring(1, method_signature.length);
-
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
       buffer.write(method_signature);
-      buffer.write('(context, constraints,');
+      buffer.write('(');
+      buffer.write('constraints,');
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedParameterValue:
@@ -47,13 +47,14 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             // hack to include import
-            source.generator.manager.addImport('package:${MainInfo().projectName}/document/shared_props.g.dart');
-            buffer.write('${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
+            source.generator.manager.data.addImport(
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            buffer.write(
+                '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
             break;
           default:
             buffer.write('${param.name}: \"${param.value}\",');
             break;
-
         }
       }
       // end of return function();

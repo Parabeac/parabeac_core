@@ -11,36 +11,18 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'pb_shared_master_node.g.dart';
-
-@JsonSerializable(nullable: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
-  @override
-  String UUID;
-
   @override
   final originalRef;
 
   @override
-  @JsonKey(ignore: true)
   PrototypeNode prototypeNode;
 
   ///The unique symbol identifier of the [PBSharedMasterNode]
   final String SYMBOL_ID;
 
-  ///The name of the [PBSharedMasterNode]
-  final String name;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
   List<PBSymbolMasterParameter> parametersDefinition;
-
-  
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
@@ -55,23 +37,22 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
-  @JsonKey(ignore: true)
+
   List<PBSharedParameterProp> overridableProperties;
 
   PBSharedMasterNode(
     this.originalRef,
     this.SYMBOL_ID,
-    this.name,
+    String name,
     Point topLeftCorner,
     Point bottomRightCorner, {
     this.overridableProperties,
-    this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+    PBContext currentContext,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: originalRef.UUID ?? '') {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
-    UUID = originalRef.UUID;
-
     generator = PBMasterSymbolGenerator();
 
     this.currentContext.screenBottomRightCorner = Point(
@@ -87,7 +68,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             p.UUID,
             p.canOverride,
             p.propertyName,
-            p.value?.toJson(),
+            /* Removed Parameter Defintion as it was accepting JSON?*/
+            null, // TODO: @Eddie
             currentContext.screenTopLeftCorner.x,
             currentContext.screenTopLeftCorner.y,
             currentContext.screenBottomRightCorner.x,
@@ -103,10 +85,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   void alignChild() {}
-
-  factory PBSharedMasterNode.fromJson(Map<String, Object> json) =>
-      _$PBSharedMasterNodeFromJson(json);
-  Map<String, Object> toJson() => _$PBSharedMasterNodeToJson(this);
 }
 
 class PBSharedParameterProp {
@@ -131,6 +109,6 @@ class PBSharedParameterProp {
   final String _friendlyName;
   String get friendlyName => _friendlyName;
 
-  PBSharedParameterProp(this._friendlyName, this._type, this.value, this._canOverride,
-      this._propertyName, this._UUID, this._initialValue);
+  PBSharedParameterProp(this._friendlyName, this._type, this.value,
+      this._canOverride, this._propertyName, this._UUID, this._initialValue);
 }

@@ -140,9 +140,9 @@ class SymbolMaster extends AbstractGroupLayer
             userInfo,
             style,
             maintainScrollPosition) {
-    this.name = name
-        ?.replaceAll(RegExp(r'[\W]'), '')
-        ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+    this.name = name?.replaceAll(RegExp(r'[\d\s_\+]'), '');
+    // ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+    // someElement/default
   }
 
   @override
@@ -163,9 +163,14 @@ class SymbolMaster extends AbstractGroupLayer
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {
         var properties = AddMasterSymbolName(prop.overrideName, children);
-        sharedParameters.add(PBSharedParameterProp(properties['name'],
-            properties['type'], null, prop.canOverride, prop.overrideName,
-            properties['uuid'], properties['default_value']));
+        sharedParameters.add(PBSharedParameterProp(
+            properties['name'],
+            properties['type'],
+            null,
+            prop.canOverride,
+            prop.overrideName,
+            properties['uuid'],
+            properties['default_value']));
         ovrNames.add(prop.overrideName);
       }
     }
