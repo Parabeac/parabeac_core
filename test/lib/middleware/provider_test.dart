@@ -43,6 +43,7 @@ class MockIntermediateVariation extends Mock implements IntermediateVariation {}
 
 void main() {
   group('Middlewares Tests', () {
+    var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
     var providerMiddleware = ProviderMiddleware(mockPBGenerationManager);
     var node = MockPBIntermediateNode();
@@ -53,7 +54,7 @@ void main() {
     var mockPBGenerationViewData = MockPBGenerationViewData();
     var mockPBGenerator = MockPBGenerator();
     var providerFileStructureStrategy = ProviderFileStructureStrategy(
-      '${Directory.current.path}/test/lib/middleware/',
+      testingPath,
       PBFlutterWriter(),
       mockProject,
     );
@@ -111,6 +112,12 @@ void main() {
       await providerFileStructureStrategy.setUpDirectories();
       var tempNode = await providerMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
+      expect(await File('${testingPath}lib/models/some_element.dart').exists(),
+          true);
+    });
+
+    tearDownAll(() {
+      Process.runSync('rm', ['-rf', '${testingPath}lib']);
     });
   });
 }
