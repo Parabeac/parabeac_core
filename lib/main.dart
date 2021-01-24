@@ -11,8 +11,8 @@ import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
-
 import 'controllers/main_info.dart';
+import 'package:yaml/yaml.dart';
 
 ArgResults argResults;
 
@@ -24,6 +24,11 @@ void main(List<String> args) async {
       dsn:
           'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747');
   var log = Logger('Main');
+  var pubspec = File('pubspec.yaml');
+  await pubspec.readAsString().then((String text) {
+    Map yaml = loadYaml(text);
+    log.info('Current version: ${yaml['version']}');
+  });
   log.info(args.toString());
 
   MainInfo().cwd = Directory.current;
