@@ -112,6 +112,10 @@ class Interpret {
     intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);
 
+    if (intermediateTree.rootNode == null) {
+      return intermediateTree;
+    }
+
     ///
     /// pre-layout generation service for plugin nodes.
     /// NOTE Disabled Plugin Control Service for right now
