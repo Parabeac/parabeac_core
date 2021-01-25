@@ -2,28 +2,29 @@ name: Dart CI
 
 on:
   push:
-    branches: [stable, dev]
+    branches: [ stable, dev ]
   pull_request:
-    branches: [stable, dev]
+    branches: [ stable, dev ]    
 
 jobs:
+    
   build:
+
     runs-on: ubuntu-latest
     services:
       sketch_asset_converter:
         image: parabeac/sac
-        ports:
+        ports: 
           - 4000:4000
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Flutter action
-        uses: subosito/flutter-action@v1.4.0
-
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter pub run test
-        env:
-          FIG_API_KEY: ${{ secrets.FIG_API_KEY }}
-          PB_IS_GITHUB_TEST: true
+    - uses: actions/checkout@v2
+    - name: Flutter action
+      uses: subosito/flutter-action@v1.4.0    
+    
+    - name: Install dependencies
+      run: flutter pub get
+    - name: Run tests
+      run: flutter pub run test
+      env:
+        FIG_API_KEY: ${{ secrets.FIG_API_KEY }}

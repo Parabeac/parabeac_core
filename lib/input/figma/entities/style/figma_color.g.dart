@@ -8,17 +8,17 @@ part of 'figma_color.dart';
 
 FigmaColor _$FigmaColorFromJson(Map<String, dynamic> json) {
   return FigmaColor(
-    alpha: (json['alpha'] as num)?.toDouble(),
-    red: (json['red'] as num)?.toDouble(),
-    green: (json['green'] as num)?.toDouble(),
-    blue: (json['blue'] as num)?.toDouble(),
+    alpha: (json['a'] as num)?.toDouble(),
+    red: (json['r'] as num)?.toDouble(),
+    green: (json['g'] as num)?.toDouble(),
+    blue: (json['b'] as num)?.toDouble(),
   );
 }
 
 Map<String, dynamic> _$FigmaColorToJson(FigmaColor instance) =>
     <String, dynamic>{
-      'alpha': instance.alpha,
-      'blue': instance.blue,
-      'green': instance.green,
-      'red': instance.red,
+      'a': instance.alpha,
+      'b': instance.blue,
+      'g': instance.green,
+      'r': instance.red,
     };

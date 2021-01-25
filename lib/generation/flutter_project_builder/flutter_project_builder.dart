@@ -13,8 +13,6 @@ import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/input/figma/helper/image_helper.dart'
     as image_helper;
 
-import 'import_helper.dart';
-
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
 class FlutterProjectBuilder {

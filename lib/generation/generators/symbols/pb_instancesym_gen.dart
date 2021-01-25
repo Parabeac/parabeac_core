@@ -21,8 +21,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     if (source is PBSharedInstanceIntermediateNode) {
       var method_signature = source.functionCallName;
       if (method_signature == null) {
-        log.error(' Could not find master name on: $source');
-        return 'Container(/** This Symbol was not found **/)';
+          log.error(' Could not find master name on: $source');
+          return 'Container(/** This Symbol was not found **/)';
       }
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);

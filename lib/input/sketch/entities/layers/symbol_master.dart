@@ -177,18 +177,19 @@ class SymbolMaster extends AbstractGroupLayer
     return sharedParameters;
   }
 
-  @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    var sym_master = PBSharedMasterNode(
-      this,
-      symbolID,
-      name,
-      Point(boundaryRectangle.x, boundaryRectangle.y),
-      Point(boundaryRectangle.x + boundaryRectangle.width,
-          boundaryRectangle.y + boundaryRectangle.height),
-      overridableProperties: _extractParameters(),
-      currentContext: currentContext,
-    );
-    return Future.value(sym_master);
+    @override
+    Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+      var sym_master = PBSharedMasterNode(
+        this,
+        symbolID,
+        name,
+        Point(boundaryRectangle.x, boundaryRectangle.y),
+        Point(boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
+        overridableProperties: _extractParameters(),
+        currentContext: currentContext,
+      );
+      return Future.value(sym_master);
+    }
   }
-}
+

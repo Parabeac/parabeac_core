@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -37,9 +39,21 @@ abstract class PBIntermediateNode {
   PBIntermediateNode(
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
       {this.currentContext, this.subsemantic}) {
+    _pointCorrection();
+  }
+
+  ///Correcting the pints when given the incorrect ones
+  void _pointCorrection() {
     if (topLeftCorner != null && bottomRightCorner != null) {
-      assert(topLeftCorner.x <= bottomRightCorner.x &&
-          topLeftCorner.y <= bottomRightCorner.y);
+      if (topLeftCorner.x > bottomRightCorner.x &&
+          topLeftCorner.y > bottomRightCorner.y) {
+        logger.warning(
+            'Correcting the positional data. BTC is higher than TLC for node: ${this}');
+        topLeftCorner = Point(min(topLeftCorner.x, bottomRightCorner.x),
+            min(topLeftCorner.y, bottomRightCorner.y));
+        bottomRightCorner = Point(max(topLeftCorner.x, bottomRightCorner.x),
+            max(topLeftCorner.y, bottomRightCorner.y));
+      }
     }
   }
 
