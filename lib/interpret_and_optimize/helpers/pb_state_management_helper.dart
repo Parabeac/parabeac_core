@@ -1,3 +1,4 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 
@@ -26,21 +27,15 @@ class PBStateManagementHelper {
   /// Returns `true` if `node` is or would be the default node,
   /// `false` otherwise
   bool isDefaultNode(PBIntermediateNode node) =>
-      !linker.containsElement(_getNodeName(node.name));
+      node is PBSharedMasterNode &&
+      (linker.isSymbolInstance(_getNodeName(node.name)) ||
+          !linker.containsElement(_getNodeName(node.name)));
 
-  String _getNodeName(String fullName) {
-    if (!isValidStateNode(fullName)) {
-      return '';
-    }
-    return fullName.split('/')[0];
-  }
+  String _getNodeName(String fullName) =>
+      isValidStateNode(fullName) ? fullName.split('/')[0] : '';
 
-  List<String> _getStates(String fullName) {
-    if (!isValidStateNode(fullName)) {
-      return [];
-    }
-    return fullName.split('/')[1].split(',');
-  }
+  List<String> _getStates(String fullName) =>
+      isValidStateNode(fullName) ? fullName.split('/')[1].split(',') : [];
 
   /// Returns true if `name` is a valid state management name
   bool isValidStateNode(String name) =>
