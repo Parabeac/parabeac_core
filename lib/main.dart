@@ -126,24 +126,26 @@ ${parser.usage}
   await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
 
   if (designType == 'sketch') {
-    var file = await FileSystemEntity.isFile(path);
-    var exists = await File(path).exists();
-
-    if (!file || !exists) {
-      handleError('$path is not a file');
-    }
-    MainInfo().sketchPath = path;
-    InputDesignService(path);
-
     var process;
-    if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
-      process = await Process.start('npm', ['run', 'prod'],
-          workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+    if (jsonOnly) {
+      var file = await FileSystemEntity.isFile(path);
+      var exists = await File(path).exists();
 
-      await for (var event in process.stdout.transform(utf8.decoder)) {
-        if (event.toLowerCase().contains('server is listening on port')) {
-          log.fine('Successfully started Sketch Asset Converter');
-          break;
+      if (!file || !exists) {
+        handleError('$path is not a file');
+      }
+      MainInfo().sketchPath = path;
+      InputDesignService(path);
+
+      if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        process = await Process.start('npm', ['run', 'prod'],
+            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+
+        await for (var event in process.stdout.transform(utf8.decoder)) {
+          if (event.toLowerCase().contains('server is listening on port')) {
+            log.fine('Successfully started Sketch Asset Converter');
+            break;
+          }
         }
       }
     }
