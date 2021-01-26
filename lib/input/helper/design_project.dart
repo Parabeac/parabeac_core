@@ -16,10 +16,10 @@ abstract class DesignProject {
     var result = <String, Object>{};
     result['projectName'] = projectName;
     for (var page in pages) {
-      result.addAll(page.toJson());
+      result.addAll({page.name: page.toJson()});
     }
     for (var page in miscPages) {
-      result.addAll(page.toJson());
+      result.addAll({page.name: page.toJson()});
     }
 
     for (var sharedStyle in sharedStyles) {

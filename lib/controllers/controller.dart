@@ -1,3 +1,4 @@
+import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -35,4 +36,6 @@ abstract class Controller {
     MainInfo().configurations = configurations;
     MainInfo().configurationType = configType;
   }
+
+  void stopAndToJson(DesignProject project);
 }

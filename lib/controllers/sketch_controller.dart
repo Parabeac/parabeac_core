@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -5,7 +8,8 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_view_data
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/helper/design_project.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -25,13 +29,18 @@ class SketchController extends Controller {
 
     ///INTAKE
     var ids = InputDesignService(fileAbsPath);
-    var sketchNodeTree = generateSketchNodeTree(
+    var sketchProject = generateSketchNodeTree(
         ids, ids.metaFileJson['pagesAndArtboards'], projectPath);
+
+    /// IN CASE OF JSON ONLY
+    if (jsonOnly) {
+      return stopAndToJson(sketchProject);
+    }
 
     ///INTERPRETATION
     Interpret().init(projectPath);
     var pbProject = await Interpret().interpretAndOptimize(
-      sketchNodeTree,
+      sketchProject,
     );
     pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
 
@@ -54,10 +63,10 @@ class SketchController extends Controller {
     await fpb.convertToFlutterProject();
   }
 
-  SketchNodeTree generateSketchNodeTree(
+  SketchProject generateSketchNodeTree(
       InputDesignService ids, Map pagesAndArtboards, projectName) {
     try {
-      return SketchNodeTree(ids, pagesAndArtboards, projectName);
+      return SketchProject(ids, pagesAndArtboards, projectName);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -66,5 +75,13 @@ class SketchController extends Controller {
       log.error(e.toString());
       return null;
     }
+  }
+
+  @override
+  void stopAndToJson(DesignProject project) {
+    project.projectName = MainInfo().projectName;
+    File('outputJSON.json').writeAsString(json.encode(project.toJson()));
+
+    print('Output JSON');
   }
 }
