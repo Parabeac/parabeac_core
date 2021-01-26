@@ -35,6 +35,8 @@ void main(List<String> args) async {
 
   ///sets up parser
   final parser = ArgParser()
+    ..addOption('json-only',
+        help: 'This outputs only the JSON verion of the design file')
     ..addOption('path',
         help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
     ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
@@ -81,6 +83,7 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
+  var jsonOnly = argResults.arguments.contains('json-only');
 
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';
@@ -149,7 +152,8 @@ ${parser.usage}
         path,
         MainInfo().outputPath + projectName,
         configurationPath,
-        configurationType);
+        configurationType,
+        jsonOnly: jsonOnly);
     process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
@@ -171,7 +175,8 @@ ${parser.usage}
           jsonOfFigma,
           MainInfo().outputPath + projectName,
           configurationPath,
-          configurationType);
+          configurationType,
+          jsonOnly: jsonOnly);
     } else {
       log.error('File was not retrieved from Figma.');
     }
