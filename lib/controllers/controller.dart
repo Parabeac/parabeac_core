@@ -10,7 +10,8 @@ abstract class Controller {
   Controller();
 
   void convertFile(
-      var fileAbsPath, var projectPath, var configurationPath, var configType);
+      var fileAbsPath, var projectPath, var configurationPath, var configType,
+      {bool jsonOnly});
 
   void configure(var configurationPath, var configType) async {
     Map configurations;

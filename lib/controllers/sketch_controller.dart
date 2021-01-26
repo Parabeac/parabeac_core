@@ -18,8 +18,9 @@ class SketchController extends Controller {
 
   ///Converting the [fileAbsPath] sketch file to flutter
   @override
-  void convertFile(var fileAbsPath, var projectPath, var configurationPath,
-      var configType) async {
+  void convertFile(
+      var fileAbsPath, var projectPath, var configurationPath, var configType,
+      {bool jsonOnly}) async {
     configure(configurationPath, configType);
 
     ///INTAKE

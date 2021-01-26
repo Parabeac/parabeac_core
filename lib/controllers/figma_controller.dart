@@ -18,8 +18,9 @@ class FigmaController extends Controller {
   FigmaController();
 
   @override
-  void convertFile(var jsonFigma, var outputPath, var configurationPath,
-      var configType) async {
+  void convertFile(
+      var jsonFigma, var outputPath, var configurationPath, var configType,
+      {bool jsonOnly}) async {
     configure(configurationPath, configType);
 
     var figmaNodeTree = await generateFigmaTree(jsonFigma, outputPath);
