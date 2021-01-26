@@ -1,14 +1,15 @@
-import 'package:parabeac_core/input/helper/page.dart';
+import 'package:parabeac_core/input/helper/design_page.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:quick_log/quick_log.dart';
 
-abstract class NodeTree {
-  var log = Logger('NodeTree');
+abstract class DesignProject {
+  var log = Logger('DesignProject');
   String projectName;
   bool debug = false;
+  String id;
 
-  List<Page> pages = [];
-  List<Page> miscPages = [];
+  List<DesignPage> pages = [];
+  List<DesignPage> miscPages = [];
   List<SharedStyle> sharedStyles = [];
 
   Map<String, Object> toJson() {
