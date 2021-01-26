@@ -1,3 +1,4 @@
+import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -10,7 +11,8 @@ abstract class Controller {
   Controller();
 
   void convertFile(
-      var fileAbsPath, var projectPath, var configurationPath, var configType);
+      var fileAbsPath, var projectPath, var configurationPath, var configType,
+      {bool jsonOnly});
 
   void configure(var configurationPath, var configType) async {
     Map configurations;
@@ -34,4 +36,6 @@ abstract class Controller {
     MainInfo().configurations = configurations;
     MainInfo().configurationType = configType;
   }
+
+  void stopAndToJson(DesignProject project);
 }

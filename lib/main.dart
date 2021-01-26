@@ -35,6 +35,8 @@ void main(List<String> args) async {
 
   ///sets up parser
   final parser = ArgParser()
+    ..addOption('json-only',
+        help: 'This outputs only the JSON verion of the design file')
     ..addOption('path',
         help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
     ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
@@ -81,6 +83,7 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
+  var jsonOnly = argResults.arguments.contains('json-only');
 
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';
@@ -123,24 +126,26 @@ ${parser.usage}
   await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
 
   if (designType == 'sketch') {
-    var file = await FileSystemEntity.isFile(path);
-    var exists = await File(path).exists();
-
-    if (!file || !exists) {
-      handleError('$path is not a file');
-    }
-    MainInfo().sketchPath = path;
-    InputDesignService(path);
-
     var process;
-    if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
-      process = await Process.start('npm', ['run', 'prod'],
-          workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+    if (!jsonOnly) {
+      var file = await FileSystemEntity.isFile(path);
+      var exists = await File(path).exists();
 
-      await for (var event in process.stdout.transform(utf8.decoder)) {
-        if (event.toLowerCase().contains('server is listening on port')) {
-          log.fine('Successfully started Sketch Asset Converter');
-          break;
+      if (!file || !exists) {
+        handleError('$path is not a file');
+      }
+      MainInfo().sketchPath = path;
+      InputDesignService(path);
+
+      if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        process = await Process.start('npm', ['run', 'prod'],
+            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+
+        await for (var event in process.stdout.transform(utf8.decoder)) {
+          if (event.toLowerCase().contains('server is listening on port')) {
+            log.fine('Successfully started Sketch Asset Converter');
+            break;
+          }
         }
       }
     }
@@ -149,7 +154,8 @@ ${parser.usage}
         path,
         MainInfo().outputPath + projectName,
         configurationPath,
-        configurationType);
+        configurationType,
+        jsonOnly: jsonOnly);
     process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
@@ -171,7 +177,8 @@ ${parser.usage}
           jsonOfFigma,
           MainInfo().outputPath + projectName,
           configurationPath,
-          configurationType);
+          configurationType,
+          jsonOnly: jsonOnly);
     } else {
       log.error('File was not retrieved from Figma.');
     }
