@@ -38,4 +38,12 @@ abstract class Controller {
   }
 
   void stopAndToJson(DesignProject project);
+
+  String verifyPath(String path) {
+    if (path.endsWith('/')) {
+      return path;
+    } else {
+      return '${path}/';
+    }
+  }
 }

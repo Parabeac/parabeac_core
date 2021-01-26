@@ -80,17 +80,9 @@ class SketchController extends Controller {
   @override
   void stopAndToJson(DesignProject project) {
     project.projectName = MainInfo().projectName;
-    File('${_verifyPath(MainInfo().outputPath)}${project.projectName}.json')
+    File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
         .writeAsString(json.encode(project.toJson()));
 
     print('Output JSON');
-  }
-
-  String _verifyPath(String path) {
-    if (path.endsWith('/')) {
-      return path;
-    } else {
-      return '${path}/';
-    }
   }
 }
