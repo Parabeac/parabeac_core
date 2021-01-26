@@ -127,7 +127,7 @@ ${parser.usage}
 
   if (designType == 'sketch') {
     var process;
-    if (jsonOnly) {
+    if (!jsonOnly) {
       var file = await FileSystemEntity.isFile(path);
       var exists = await File(path).exists();
 
