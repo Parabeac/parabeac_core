@@ -35,8 +35,6 @@ void main(List<String> args) async {
 
   ///sets up parser
   final parser = ArgParser()
-    ..addOption('json-only',
-        help: 'This outputs only the JSON verion of the design file')
     ..addOption('path',
         help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
     ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
@@ -49,7 +47,9 @@ void main(List<String> args) async {
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
     ..addFlag('help',
-        help: 'Displays this help information.', abbr: 'h', negatable: false);
+        help: 'Displays this help information.', abbr: 'h', negatable: false)
+    ..addFlag('export-pbdl',
+        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.');
 
 //error handler using logger package
   void handleError(String msg) {
@@ -83,7 +83,7 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
-  var jsonOnly = argResults.arguments.contains('json-only');
+  var jsonOnly = argResults['export-pbdl'];
 
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';

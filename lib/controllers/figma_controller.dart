@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -82,7 +85,9 @@ class FigmaController extends Controller {
   @override
   void stopAndToJson(DesignProject project) {
     project.projectName = MainInfo().projectName;
-    print(project.toString());
+    var encodedJson = json.encode(project.toJson());
+    File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
+        .writeAsStringSync(encodedJson);
     print('Output JSON');
   }
 }
