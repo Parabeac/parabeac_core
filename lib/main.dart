@@ -69,6 +69,7 @@ ${parser.usage}
     exit(0);
   }
 
+  // Detect platform
   if (Platform.isMacOS || Platform.isLinux) {
     MainInfo().platform = 'UIX';
   } else if (Platform.isWindows) {
@@ -90,12 +91,10 @@ ${parser.usage}
   String projectName = argResults['project-name'];
 
   // Handle input errors
-  if (path == null &&
-      (MainInfo().figmaKey == null || MainInfo().figmaProjectID == null)) {
+  if (hasTooFewArgs(argResults)) {
     handleError(
         'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
-  } else if (path != null &&
-      (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
+  } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   } else if (path == null) {
@@ -257,4 +256,22 @@ Future<String> getCleanPath(String path) async {
     result += dir + '/';
   }
   return result;
+}
+
+/// Returns true if `result` contains two or more
+/// types of intake to parabeac-core
+bool hasTooManyArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null || args['fig'] != null;
+
+  var hasAll = hasSketch && hasFigma;
+
+  return hasAll || !(hasSketch ^ hasFigma);
+}
+
+bool hasTooFewArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null && args['fig'] != null;
+
+  return !(hasSketch || hasFigma);
 }
