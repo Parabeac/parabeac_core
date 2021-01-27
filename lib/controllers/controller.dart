@@ -47,5 +47,11 @@ abstract class Controller {
     }
   }
 
-  void stopAndToJson(DesignProject project);
+  void stopAndToJson(DesignProject project) {
+    project.projectName = MainInfo().projectName;
+    var encodedJson = json.encode(project.toJson());
+    File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
+        .writeAsStringSync(encodedJson);
+    print('Output JSON');
+  }
 }
