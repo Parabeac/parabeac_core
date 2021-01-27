@@ -83,7 +83,7 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
-  var jsonOnly = argResults.options.contains('export-pbdl');
+  var jsonOnly = argResults['export-pbdl'];
 
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';
