@@ -24,40 +24,26 @@ class FigmaController extends Controller {
 
   @override
   void convertFile(
-      var jsonFigma, var outputPath, var configurationPath, var configType,
-      {bool jsonOnly}) async {
+    var jsonFigma,
+    var outputPath,
+    var configurationPath,
+    var configType, {
+    bool jsonOnly = false,
+    DesignProject designProject,
+  }) async {
     configure(configurationPath, configType);
 
     var figmaProject = await generateFigmaTree(jsonFigma, outputPath);
 
     figmaProject = declareScaffolds(figmaProject);
 
-    /// IN CASE OF JSON ONLY
-    if (jsonOnly) {
-      return stopAndToJson(figmaProject);
-    }
-
-    Interpret().init(outputPath);
-
-    var pbProject = await Interpret().interpretAndOptimize(figmaProject);
-
-    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
-
-    await PreGenerationService(
-      projectName: outputPath,
-      mainTree: pbProject,
-      pageWriter: PBTraversalAdapterWriter(),
-    ).convertToFlutterProject();
-
-    //Making the data immutable for writing into the file
-    pbProject.forest.forEach((tree) => tree.data.lockData());
-
-    var fpb = FlutterProjectBuilder(
-        projectName: outputPath,
-        mainTree: pbProject,
-        pageWriter: PBFlutterWriter());
-
-    await fpb.convertToFlutterProject();
+    await super.convertFile(
+      jsonFigma,
+      outputPath,
+      configurationPath,
+      configType,
+      designProject: figmaProject,
+    );
   }
 
   FigmaProject generateFigmaTree(var jsonFigma, var projectname) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/design_controller.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
@@ -130,7 +131,8 @@ ${parser.usage}
 
   // Create pngs directory
 
-  await Directory('${MainInfo().outputPath}' + (jsonOnly ? '' : 'pngs'))
+  await Directory('${MainInfo().outputPath}' +
+          (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'))
       .create(recursive: true);
 
   if (designType == 'sketch') {
@@ -158,11 +160,8 @@ ${parser.usage}
       }
     }
 
-    await SketchController().convertFile(
-        path,
-        MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType,
+    SketchController().convertFile(path, MainInfo().outputPath + projectName,
+        configurationPath, configurationType,
         jsonOnly: jsonOnly);
     process?.kill();
   } else if (designType == 'xd') {
@@ -198,6 +197,13 @@ ${parser.usage}
     if (!isFile || !exists) {
       handleError('$path is not a file');
     }
+
+    DesignController().convertFile(
+      pbdlPath,
+      MainInfo().outputPath + projectName,
+      configurationPath,
+      configurationType,
+    );
   }
   exitCode = 0;
 }

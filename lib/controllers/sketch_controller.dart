@@ -23,8 +23,13 @@ class SketchController extends Controller {
   ///Converting the [fileAbsPath] sketch file to flutter
   @override
   void convertFile(
-      var fileAbsPath, var projectPath, var configurationPath, var configType,
-      {bool jsonOnly}) async {
+    var fileAbsPath,
+    var projectPath,
+    var configurationPath,
+    var configType, {
+    bool jsonOnly = false,
+    DesignProject designProject,
+  }) async {
     configure(configurationPath, configType);
 
     ///INTAKE
@@ -32,35 +37,13 @@ class SketchController extends Controller {
     var sketchProject = generateSketchNodeTree(
         ids, ids.metaFileJson['pagesAndArtboards'], projectPath);
 
-    /// IN CASE OF JSON ONLY
-    if (jsonOnly) {
-      return stopAndToJson(sketchProject);
-    }
-
-    ///INTERPRETATION
-    Interpret().init(projectPath);
-    var pbProject = await Interpret().interpretAndOptimize(
-      sketchProject,
+    await super.convertFile(
+      fileAbsPath,
+      projectPath,
+      configurationPath,
+      configType,
+      designProject: sketchProject,
     );
-    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
-
-    ///PRE-GENERATION SERVICE
-    var pgs = PreGenerationService(
-      projectName: projectPath,
-      mainTree: pbProject,
-      pageWriter: PBTraversalAdapterWriter(),
-    );
-    await pgs.convertToFlutterProject();
-
-    //Making the data immutable for writing into the file
-    pbProject.forest.forEach((tree) => tree.data.lockData());
-
-    ///GENERATE FLUTTER CODE
-    var fpb = FlutterProjectBuilder(
-        projectName: projectPath,
-        mainTree: pbProject,
-        pageWriter: PBFlutterWriter());
-    await fpb.convertToFlutterProject();
   }
 
   SketchProject generateSketchNodeTree(

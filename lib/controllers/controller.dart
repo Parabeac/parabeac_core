@@ -1,3 +1,9 @@
+import 'package:parabeac_core/controllers/interpret.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
+import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
@@ -11,8 +17,40 @@ abstract class Controller {
   Controller();
 
   void convertFile(
-      var fileAbsPath, var projectPath, var configurationPath, var configType,
-      {bool jsonOnly});
+    var fileAbsPath,
+    var projectPath,
+    var configurationPath,
+    var configType, {
+    bool jsonOnly = false,
+    DesignProject designProject,
+  }) async {
+    /// IN CASE OF JSON ONLY
+    if (jsonOnly) {
+      return stopAndToJson(fileAbsPath);
+    }
+
+    Interpret().init(projectPath);
+
+    var pbProject = await Interpret().interpretAndOptimize(designProject);
+
+    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
+
+    await PreGenerationService(
+      projectName: projectPath,
+      mainTree: pbProject,
+      pageWriter: PBTraversalAdapterWriter(),
+    ).convertToFlutterProject();
+
+    //Making the data immutable for writing into the file
+    pbProject.forest.forEach((tree) => tree.data.lockData());
+
+    var fpb = FlutterProjectBuilder(
+        projectName: projectPath,
+        mainTree: pbProject,
+        pageWriter: PBFlutterWriter());
+
+    await fpb.convertToFlutterProject();
+  }
 
   void configure(var configurationPath, var configType) async {
     Map configurations;
