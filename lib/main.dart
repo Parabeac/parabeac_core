@@ -46,6 +46,11 @@ void main(List<String> args) async {
         defaultsTo: 'default:lib/configurations/configurations.json')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
+    ..addOption(
+      'pbdl-in',
+      help:
+          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+    )
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addFlag('export-pbdl',
@@ -97,8 +102,10 @@ ${parser.usage}
   } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  } else if (path == null) {
+  } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
+  } else if (argResults['pbdl-in'] != null) {
+    designType = 'pbdl';
   }
 
   //  usage -c "default:lib/configurations/configurations.json
@@ -181,6 +188,14 @@ ${parser.usage}
     } else {
       log.error('File was not retrieved from Figma.');
     }
+  } else if (designType == 'pbdl') {
+    var pbdlPath = argResults['pbdl-in'];
+    var isFile = FileSystemEntity.isFileSync(pbdlPath);
+    var exists = File(pbdlPath).existsSync();
+
+    if (!isFile || !exists) {
+      handleError('$path is not a file');
+    }
   }
   exitCode = 0;
 }
@@ -258,20 +273,24 @@ Future<String> getCleanPath(String path) async {
   return result;
 }
 
-/// Returns true if `result` contains two or more
+/// Returns true if `args` contains two or more
 /// types of intake to parabeac-core
 bool hasTooManyArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
   var hasFigma = args['figKey'] != null || args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
 
-  var hasAll = hasSketch && hasFigma;
+  var hasAll = hasSketch && hasFigma && hasPbdl;
 
-  return hasAll || !(hasSketch ^ hasFigma);
+  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
 }
 
+/// Returns true if `args` does not contain any intake
+/// to parabeac-core
 bool hasTooFewArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
   var hasFigma = args['figKey'] != null && args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
 
-  return !(hasSketch || hasFigma);
+  return !(hasSketch || hasFigma || hasPbdl);
 }
