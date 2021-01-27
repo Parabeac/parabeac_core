@@ -17,9 +17,11 @@ class InputDesignService {
 
   Archive _archive;
 
-  InputDesignService(this.pathToFile) {
+  InputDesignService(this.pathToFile, {bool jsonOnly = false}) {
     _archive = _unzip(File(pathToFile));
-    setImageDir();
+    if (!jsonOnly) {
+      setImageDir();
+    }
   }
 
   ///The archive of the unzipped sketch project
