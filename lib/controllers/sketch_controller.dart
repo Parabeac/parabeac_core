@@ -81,7 +81,7 @@ class SketchController extends Controller {
   void stopAndToJson(DesignProject project) {
     project.projectName = MainInfo().projectName;
     File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
-        .writeAsString(json.encode(project.toJson()));
+        .writeAsStringSync(json.encode(project.toJson()));
 
     print('Output JSON');
   }
