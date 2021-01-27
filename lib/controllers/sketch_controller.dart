@@ -28,7 +28,7 @@ class SketchController extends Controller {
     configure(configurationPath, configType);
 
     ///INTAKE
-    var ids = InputDesignService(fileAbsPath);
+    var ids = InputDesignService(fileAbsPath, jsonOnly: jsonOnly);
     var sketchProject = generateSketchNodeTree(
         ids, ids.metaFileJson['pagesAndArtboards'], projectPath);
 

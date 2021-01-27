@@ -129,7 +129,9 @@ ${parser.usage}
   MainInfo().projectName = projectName;
 
   // Create pngs directory
-  await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+
+  await Directory('${MainInfo().outputPath}' + (jsonOnly ? '' : 'pngs'))
+      .create(recursive: true);
 
   if (designType == 'sketch') {
     var process;
