@@ -76,13 +76,4 @@ class SketchController extends Controller {
       return null;
     }
   }
-
-  @override
-  void stopAndToJson(DesignProject project) {
-    project.projectName = MainInfo().projectName;
-    File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
-        .writeAsStringSync(json.encode(project.toJson()));
-
-    print('Output JSON');
-  }
 }
