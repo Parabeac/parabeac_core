@@ -37,5 +37,15 @@ abstract class Controller {
     MainInfo().configurationType = configType;
   }
 
+  /// Method that returns the given path and ensures
+  /// it ends with a /
+  String verifyPath(String path) {
+    if (path.endsWith('/')) {
+      return path;
+    } else {
+      return '${path}/';
+    }
+  }
+
   void stopAndToJson(DesignProject project);
 }
