@@ -2,6 +2,8 @@ import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
+import 'abstract_design_node_factory.dart';
+
 class DesignNode {
   DesignNode(
     this.UUID,
@@ -25,7 +27,8 @@ class DesignNode {
 
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {}
 
-  Map<String, Object> toPBDF() {
-    // TODO: implement
-  }
+  Map<String, Object> toPBDF() {}
+
+  factory DesignNode.fromJson(Map<String, dynamic> json) =>
+      AbstractDesignNodeFactory.getDesignNode(json);
 }
