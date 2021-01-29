@@ -25,7 +25,7 @@ class DesignNode {
 
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {}
 
-  String toPBDF() {
+  Map<String, Object> toPBDF() {
     // TODO: implement
   }
 }
