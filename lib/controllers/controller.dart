@@ -26,7 +26,7 @@ abstract class Controller {
   }) async {
     /// IN CASE OF JSON ONLY
     if (jsonOnly) {
-      return stopAndToJson(fileAbsPath);
+      return stopAndToJson(designProject);
     }
 
     Interpret().init(projectPath);
@@ -87,7 +87,7 @@ abstract class Controller {
 
   void stopAndToJson(DesignProject project) {
     project.projectName = MainInfo().projectName;
-    var encodedJson = json.encode(project.toJson());
+    var encodedJson = json.encode(project.toPBDF());
     File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
         .writeAsStringSync(encodedJson);
     print('Output JSON');

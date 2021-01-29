@@ -43,6 +43,7 @@ class FigmaController extends Controller {
       configurationPath,
       configType,
       designProject: figmaProject,
+      jsonOnly: jsonOnly,
     );
   }
 
