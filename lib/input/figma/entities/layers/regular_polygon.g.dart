@@ -50,6 +50,6 @@ Map<String, dynamic> _$FigmaRegularPolygonToJson(
       'strokeAlign': instance.strokeAlign,
       'styles': instance.styles,
       'fills': instance.fillsList,
-      'imageReference': instance.imageReference,
       'type': instance.type,
+      'imageReference': instance.imageReference,
     };
