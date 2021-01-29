@@ -64,4 +64,7 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   @override
   @JsonKey(ignore: true)
   var style;
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

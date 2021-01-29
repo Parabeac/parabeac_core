@@ -63,4 +63,7 @@ class BooleanOperation extends FigmaVector
 
   @override
   String imageReference;
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

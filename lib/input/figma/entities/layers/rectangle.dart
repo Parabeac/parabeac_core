@@ -112,4 +112,7 @@ class FigmaRectangle extends FigmaVector
       },
     ));
   }
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

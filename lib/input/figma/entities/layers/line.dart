@@ -59,4 +59,7 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
     // TODO: implement interpretNode
     throw UnimplementedError();
   }
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

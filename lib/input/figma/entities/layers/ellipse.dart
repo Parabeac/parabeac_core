@@ -76,4 +76,7 @@ class FigmaEllipse extends FigmaVector
     return Future.value(
         InheritedBitmap(this, name, currentContext: currentContext));
   }
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

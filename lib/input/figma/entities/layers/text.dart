@@ -93,4 +93,7 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
         InheritedText(this, name, currentContext: currentContext),
       ));
   }
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

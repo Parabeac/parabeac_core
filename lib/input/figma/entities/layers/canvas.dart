@@ -60,4 +60,7 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
     assert(false, 'We don\'t product pages as Intermediate Nodes.');
     return null;
   }
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }

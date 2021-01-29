@@ -122,4 +122,7 @@ class Component extends FigmaFrame
 
   @override
   String symbolID;
+
+  @override
+  Map<String, Object> toPBDF() => toJson();
 }
