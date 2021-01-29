@@ -123,4 +123,42 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
     assert(false, 'We don\'t product pages as Intermediate Nodes.');
     return null;
   }
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'hasClickThrough': hasClickThrough,
+        'groupLayout': groupLayout,
+        'CLASS_NAME': CLASS_NAME,
+        'includeInCloudUpload': includeInCloudUpload,
+        'horizontalRulerData': horizontalRulerData,
+        'verticalRulerData': verticalRulerData,
+        'layout': layout,
+        'grid': grid,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'children': children,
+        'visible': isVisible,
+        'style': style,
+      };
 }

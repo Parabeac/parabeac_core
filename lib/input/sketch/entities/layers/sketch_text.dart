@@ -138,4 +138,40 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   @JsonKey(ignore: true)
   String content;
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'CLASS_NAME': CLASS_NAME,
+        'attributedString': attributedString,
+        'automaticallyDrawOnUnderlyingPath': automaticallyDrawOnUnderlyingPath,
+        'dontSynchroniseWithSymbol': dontSynchroniseWithSymbol,
+        'lineSpacingBehaviour': lineSpacingBehaviour,
+        'textBehaviour': textBehaviour,
+        'glyphBounds': glyphBounds,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+      };
 }

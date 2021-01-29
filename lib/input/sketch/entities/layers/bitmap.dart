@@ -139,4 +139,38 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
 
   @override
   Style get style => _style;
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'CLASS_NAME': CLASS_NAME,
+        'fillReplacesImage': fillReplacesImage,
+        'intendedDPI': intendedDPI,
+        'clippingMask': clippingMask,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'image': imageReferenceMap,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+      };
 }

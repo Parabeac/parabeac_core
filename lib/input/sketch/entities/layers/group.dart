@@ -120,4 +120,38 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
           bottomRightCorner: Point(
               boundaryRectangle.x + boundaryRectangle.width,
               boundaryRectangle.y + boundaryRectangle.height)));
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'hasClickThrough': hasClickThrough,
+        'groupLayout': groupLayout,
+        'CLASS_NAME': CLASS_NAME,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        '_ref': imageReference,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'children': children,
+      };
 }

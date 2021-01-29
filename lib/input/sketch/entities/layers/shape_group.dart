@@ -125,4 +125,38 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
     return InheritedShapeGroup(this, name,
         currentContext: currentContext, image: image);
   }
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'hasClickThrough': hasClickThrough,
+        'groupLayout': groupLayout,
+        'CLASS_NAME': CLASS_NAME,
+        'windingRule': windingRule,
+        'absoluteBoudingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'children': children,
+      };
 }

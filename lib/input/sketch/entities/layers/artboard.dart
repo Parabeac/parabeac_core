@@ -149,4 +149,49 @@ class Artboard extends AbstractGroupLayer
       isHomeScreen: isFlowHome,
     ));
   }
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        // Change _class for type and layers for children and do_objectID for id
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'hasClickThrough': hasClickThrough,
+        'groupLayout': groupLayout,
+        'children': children, // changed it was layers
+        'CLASS_NAME': CLASS_NAME,
+        'type': type, // changed it was _class
+        'includeInCloudUpload': includeInCloudUpload,
+        'includeBackgroundColorInExport': includeBackgroundColorInExport,
+        'horizontalRulerData': horizontalRulerData,
+        'verticalRulerData': verticalRulerData,
+        'layout': layout,
+        'grid': grid,
+        'absoluteBoundingBox': boundaryRectangle, // changed it was frame
+        'backgroundColor': backgroundColor,
+        'id': UUID, // changed it was do_objectID
+        'hasBackgroundColor': hasBackgroundColor,
+        'isFlowHome': isFlowHome,
+        'resizesContent': resizesContent,
+        'presetDictionary': presetDictionary,
+        'visible': isVisible, // changed it was isVisible
+        'style': style,
+      };
 }

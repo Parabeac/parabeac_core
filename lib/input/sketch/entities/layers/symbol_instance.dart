@@ -130,7 +130,10 @@ class SymbolInstance extends SketchNode
       if (!ovrNames.contains(overrideValue.overrideName)) {
         var properties = extractParameter(overrideValue.overrideName);
         sharedParameters.add(PBSharedParameterValue(
-            properties['type'], overrideValue.value, properties['uuid'], overrideValue.overrideName));
+            properties['type'],
+            overrideValue.value,
+            properties['uuid'],
+            overrideValue.overrideName));
         ovrNames.add(overrideValue.overrideName);
       }
     }
@@ -148,4 +151,40 @@ class SymbolInstance extends SketchNode
 
   @override
   List parameters;
+
+  @override
+  Map<String, Object> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'CLASS_NAME': CLASS_NAME,
+        'overrideValues': overrideValues,
+        'scale': scale,
+        'symbolID': symbolID,
+        'verticalSpacing': verticalSpacing,
+        'horizontalSpacing': horizontalSpacing,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'parameters': parameters,
+      };
 }
