@@ -125,7 +125,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
   }
 
   @override
-  Map<String, Object> toPBDF() => <String, dynamic>{
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
         'booleanOperation': booleanOperation,
         'exportOptions': exportOptions,
         'flow': flow,
@@ -157,7 +157,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
         'absoluteBoundingBox': boundaryRectangle,
         'id': UUID,
         'type': type,
-        'children': children,
+        'children': getChildren(),
         'visible': isVisible,
         'style': style,
       };

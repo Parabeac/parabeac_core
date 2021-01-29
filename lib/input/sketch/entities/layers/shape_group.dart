@@ -127,7 +127,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
   }
 
   @override
-  Map<String, Object> toPBDF() => <String, dynamic>{
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
         'booleanOperation': booleanOperation,
         'exportOptions': exportOptions,
         'flow': flow,
@@ -157,6 +157,6 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         'type': type,
         'visible': isVisible,
         'style': style,
-        'children': children,
+        'children': getChildren(),
       };
 }

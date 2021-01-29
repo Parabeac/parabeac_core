@@ -12,8 +12,8 @@ class DesignProject with MapMixin {
   List<SharedStyle> sharedStyles = [];
 
   /// Parabeac Design File
-  Map<String, Object> toPBDF() {
-    Map result = <String, Object>{};
+  Map<String, dynamic> toPBDF() {
+    Map result = <String, dynamic>{};
     result['projectName'] = projectName;
     for (var page in pages) {
       addToMap('pages', result, {page.name: page.toPBDF()});

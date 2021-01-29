@@ -193,7 +193,7 @@ class SymbolMaster extends AbstractGroupLayer
   }
 
   @override
-  Map<String, Object> toPBDF() => <String, dynamic>{
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
         'booleanOperation': booleanOperation,
         'exportOptions': exportOptions,
         'flow': flow,
@@ -236,7 +236,7 @@ class SymbolMaster extends AbstractGroupLayer
         'type': type,
         'visible': isVisible,
         'style': style,
-        'children': children,
+        'children': getChildren(),
         'parameters': parameters,
       };
 }

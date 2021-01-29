@@ -27,7 +27,7 @@ class DesignNode {
 
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {}
 
-  Map<String, Object> toPBDF() {}
+  Map<String, dynamic> toPBDF() {}
 
   factory DesignNode.fromJson(Map<String, dynamic> json) =>
       AbstractDesignNodeFactory.getDesignNode(json);

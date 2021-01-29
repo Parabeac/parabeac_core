@@ -19,8 +19,8 @@ class DesignScreen {
     this.designNode = designNode;
   }
 
-  Map<String, Object> toPBDF() {
-    Map<String, Object> result = {};
+  Map<String, dynamic> toPBDF() {
+    Map<String, dynamic> result = {};
     result['id'] = id;
     result['name'] = name;
     result['convert'] = convert;

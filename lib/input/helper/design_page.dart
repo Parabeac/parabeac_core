@@ -29,8 +29,8 @@ class DesignPage with MapMixin {
   }
 
   /// Parabeac Design File
-  Map<String, Object> toPBDF() {
-    Map<String, Object> result = {};
+  Map<String, dynamic> toPBDF() {
+    Map<String, dynamic> result = {};
     for (var screen in screens) {
       addToMap('screens', result, {screen.name: screen.toPBDF()});
     }

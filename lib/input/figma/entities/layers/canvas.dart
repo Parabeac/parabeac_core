@@ -62,5 +62,5 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
   }
 
   @override
-  Map<String, Object> toPBDF() => toJson();
+  Map<String, dynamic> toPBDF() => toJson();
 }

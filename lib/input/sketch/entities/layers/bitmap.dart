@@ -141,7 +141,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
   Style get style => _style;
 
   @override
-  Map<String, Object> toPBDF() => <String, dynamic>{
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
         'booleanOperation': booleanOperation,
         'exportOptions': exportOptions,
         'flow': flow,

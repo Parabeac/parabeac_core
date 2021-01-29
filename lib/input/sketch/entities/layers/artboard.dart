@@ -151,7 +151,7 @@ class Artboard extends AbstractGroupLayer
   }
 
   @override
-  Map<String, Object> toPBDF() => <String, dynamic>{
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
         // Change _class for type and layers for children and do_objectID for id
         'booleanOperation': booleanOperation,
         'exportOptions': exportOptions,
@@ -175,7 +175,7 @@ class Artboard extends AbstractGroupLayer
         'prototypeNodeUUID': prototypeNodeUUID,
         'hasClickThrough': hasClickThrough,
         'groupLayout': groupLayout,
-        'children': children, // changed it was layers
+        'children': getChildren(), // changed it was layers
         'CLASS_NAME': CLASS_NAME,
         'type': type, // changed it was _class
         'includeInCloudUpload': includeInCloudUpload,
