@@ -6,7 +6,7 @@ class DesignScreen {
   bool convert;
   String imageURI;
   String type;
-  var designNode;
+  DesignNode designNode;
 
   // Do we still need this?
   // DesignPage parentPage;
@@ -19,5 +19,14 @@ class DesignScreen {
     this.designNode = designNode;
   }
 
-  Map<String, Object> toPBDF() => designNode.toPBDF();
+  Map<String, Object> toPBDF() {
+    Map<String, Object> result = {};
+    result['id'] = id;
+    result['name'] = name;
+    result['convert'] = convert;
+    result['imageURI'] = imageURI;
+    result['type'] = type;
+    result['designNode'] = designNode.toPBDF();
+    return result;
+  }
 }

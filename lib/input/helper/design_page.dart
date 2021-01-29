@@ -32,7 +32,7 @@ class DesignPage with MapMixin {
   Map<String, Object> toPBDF() {
     Map<String, Object> result = {};
     for (var screen in screens) {
-      addToMap('screens', result, {screen.name: screen.designNode.toJson()});
+      addToMap('screens', result, {screen.name: screen.toPBDF()});
     }
     return result;
   }
