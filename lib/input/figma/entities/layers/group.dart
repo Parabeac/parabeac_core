@@ -83,6 +83,9 @@ class Group extends FigmaFrame
           UUID: UUID,
           backgroundColor: backgroundColor,
         ) {
+    if (areAllVectors()) {
+      pbdfType = 'image';
+    }
     log = Logger(runtimeType.toString());
   }
 
@@ -133,4 +136,7 @@ class Group extends FigmaFrame
     }
     return null;
   }
+
+  @override
+  String pbdfType = 'group';
 }

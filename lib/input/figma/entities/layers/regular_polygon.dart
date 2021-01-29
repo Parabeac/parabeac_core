@@ -69,4 +69,7 @@ class FigmaRegularPolygon extends FigmaVector
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'polygon';
 }

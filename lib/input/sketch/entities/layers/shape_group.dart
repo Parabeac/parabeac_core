@@ -159,4 +159,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         'style': style,
         'children': getChildren(),
       };
+
+  @override
+  String pbdfType = 'image';
 }

@@ -58,7 +58,13 @@ class FigmaRectangle extends FigmaVector
           strokeAlign: strokeAlign,
           styles: styles,
           fillsList: fillsList,
-        );
+        ) {
+    var fillsMap =
+        (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
+    if (fillsMap != null && fillsMap['type'] == 'IMAGE') {
+      pbdfType = 'image';
+    }
+  }
 
   List points;
   double cornerRadius;
@@ -115,4 +121,7 @@ class FigmaRectangle extends FigmaVector
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'rectangle';
 }

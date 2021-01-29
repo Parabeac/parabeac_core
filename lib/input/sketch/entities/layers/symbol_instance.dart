@@ -187,4 +187,7 @@ class SymbolInstance extends SketchNode
         'style': style,
         'parameters': parameters,
       };
+
+  @override
+  String pbdfType = 'symbol_instance';
 }

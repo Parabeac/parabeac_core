@@ -99,4 +99,7 @@ class FigmaVector extends FigmaNode
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'vector';
 }

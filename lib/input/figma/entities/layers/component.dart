@@ -125,4 +125,7 @@ class Component extends FigmaFrame
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'symbol_master';
 }

@@ -62,4 +62,7 @@ class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'star';
 }

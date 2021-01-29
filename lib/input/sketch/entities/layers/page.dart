@@ -161,4 +161,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
         'visible': isVisible,
         'style': style,
       };
+
+  @override
+  String pbdfType = 'page';
 }

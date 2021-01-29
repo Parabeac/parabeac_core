@@ -15,6 +15,7 @@ class DesignNode {
     this.prototypeNodeUUID,
   );
 
+  String pbdfType;
   String UUID;
   String name;
   bool isVisible;

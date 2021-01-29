@@ -182,4 +182,7 @@ class Rectangle extends AbstractShapeLayer
         'visible': isVisible,
         'style': style,
       };
+
+  @override
+  String pbdfType = 'rectangle';
 }

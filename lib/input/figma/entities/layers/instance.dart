@@ -96,4 +96,7 @@ class Instance extends FigmaFrame
     );
     return Future.value(sym);
   }
+
+  @override
+  String pbdfType = 'symbol_instance';
 }

@@ -239,4 +239,7 @@ class SymbolMaster extends AbstractGroupLayer
         'children': getChildren(),
         'parameters': parameters,
       };
+
+  @override
+  String pbdfType = 'symbol_master';
 }

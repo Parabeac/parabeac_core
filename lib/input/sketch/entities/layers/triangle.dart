@@ -157,4 +157,7 @@ class Triangle extends AbstractShapeLayer implements SketchNodeFactory {
         'visible': isVisible,
         'style': style,
       };
+
+  @override
+  String pbdfType = 'triangle';
 }

@@ -66,4 +66,7 @@ class BooleanOperation extends FigmaVector
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'boolean_operation';
 }

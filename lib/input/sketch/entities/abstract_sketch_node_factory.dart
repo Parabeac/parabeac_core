@@ -24,7 +24,7 @@ class AbstractSketchNodeFactory {
     Bitmap(),
     Group(),
     Oval(),
-    Page(),
+    // Page(),
     Polygon(),
     Rectangle(),
     ShapeGroup(),

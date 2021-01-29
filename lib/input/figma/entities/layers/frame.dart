@@ -164,4 +164,7 @@ class FigmaFrame extends FigmaNode
 
   @override
   Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'frame';
 }

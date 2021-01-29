@@ -193,5 +193,9 @@ class Artboard extends AbstractGroupLayer
         'presetDictionary': presetDictionary,
         'visible': isVisible, // changed it was isVisible
         'style': style,
+        'pbdfType': pbdfType
       };
+
+  @override
+  String pbdfType = 'artboard';
 }
