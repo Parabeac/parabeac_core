@@ -1,9 +1,8 @@
 import 'package:parabeac_core/input/helper/design_page.dart';
+import 'package:parabeac_core/input/helper/map_mixin.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
-import 'package:quick_log/quick_log.dart';
 
-abstract class DesignProject {
-  var log = Logger('DesignProject');
+class DesignProject with MapMixin {
   String projectName;
   bool debug = false;
   String id;
@@ -12,14 +11,15 @@ abstract class DesignProject {
   List<DesignPage> miscPages = [];
   List<SharedStyle> sharedStyles = [];
 
-  Map<String, Object> toJson() {
-    var result = <String, Object>{};
+  /// Parabeac Design File
+  Map<String, Object> toPBDF() {
+    Map result = <String, Object>{};
     result['projectName'] = projectName;
     for (var page in pages) {
-      result.addAll({page.name: page.toJson()});
+      addToMap('pages', result, {page.name: page.toPBDF()});
     }
     for (var page in miscPages) {
-      result.addAll({page.name: page.toJson()});
+      addToMap('miscPages', result, {page.name: page.toPBDF()});
     }
 
     for (var sharedStyle in sharedStyles) {

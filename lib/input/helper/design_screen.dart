@@ -1,5 +1,4 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/helper/design_page.dart';
 
 class DesignScreen {
   String id;
@@ -7,16 +6,18 @@ class DesignScreen {
   bool convert;
   String imageURI;
   String type;
-  DesignNode designNode;
+  var designNode;
 
   // Do we still need this?
   // DesignPage parentPage;
 
   DesignScreen(
-    this.designNode,
+    DesignNode designNode,
     this.id,
     this.name,
-  );
+  ) {
+    this.designNode = designNode;
+  }
 
-  Map<String, Object> toJson() => designNode.toJson();
+  Map<String, Object> toPBDF() => designNode.toPBDF();
 }

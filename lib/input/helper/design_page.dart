@@ -1,8 +1,9 @@
 import 'package:quick_log/quick_log.dart';
-
 import 'design_screen.dart';
 
-class DesignPage {
+import 'map_mixin.dart';
+
+class DesignPage with MapMixin {
   var log = Logger('DesignPage');
 
   String id;
@@ -27,11 +28,11 @@ class DesignPage {
     return screens;
   }
 
-  Map<String, Object> toJson() {
+  /// Parabeac Design File
+  Map<String, Object> toPBDF() {
     Map<String, Object> result = {};
-    result['name'] = name;
     for (var screen in screens) {
-      result.addAll(screen.designNode.toJson());
+      addToMap('screens', result, {screen.name: screen.designNode.toJson()});
     }
     return result;
   }
