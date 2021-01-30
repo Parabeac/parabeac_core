@@ -1,9 +1,11 @@
+import 'artboard.dart';
 import 'design_node.dart';
 
 class AbstractDesignNodeFactory {
   static final String DESIGN_CLASS_KEY = 'pbdfType';
 
   static final List<DesignNodeFactory> _designNodes = [
+    PBArtboard(),
     // TODO: add classes
   ];
 

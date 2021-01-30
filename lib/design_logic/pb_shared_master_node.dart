@@ -1,6 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 
-abstract class PBSharedMasterDesignNode extends DesignNode {
+class PBSharedMasterDesignNode extends DesignNode {
   String symbolID;
   List overriadableProperties;
 
@@ -8,4 +8,15 @@ abstract class PBSharedMasterDesignNode extends DesignNode {
       boundaryRectangle, String type, style, prototypeNode)
       : super(UUID, name, isVisible, boundaryRectangle, type, style,
             prototypeNode);
+
+  @override
+  String pbdfType = 'symbol_master';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
+
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO implement
+    return null;
+  }
 }
