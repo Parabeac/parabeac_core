@@ -129,7 +129,7 @@ ${parser.usage}
       .create(recursive: true);
 
   if (designType == 'sketch') {
-    var process;
+    Process process;
     if (!jsonOnly) {
       var file = await FileSystemEntity.isFile(path);
       var exists = await File(path).exists();

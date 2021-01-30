@@ -63,10 +63,11 @@ class SketchAssetProcessor extends AssetProcessingService {
   }
 
   @override
-  Future<void> processRootElements(List<String> uuids) async {
-    for (var uuid in uuids) {
-      var image = await processImage(uuid);
-      await super.uploadToStorage(image, uuid);
+  Future<void> processRootElements(Map uuids) async {
+    for (var entry in uuids.entries) {
+      var image = await processImage(
+          entry.key, uuids[entry.key]['width'], uuids[entry.key]['height']);
+      await super.uploadToStorage(image, entry.key);
     }
   }
 }
