@@ -158,6 +158,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         'visible': isVisible,
         'style': style,
         'children': getChildren(),
+        'pbdfType': pbdfType
       };
 
   @override

@@ -69,7 +69,8 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
-    ..parameters = json['parameters'] as List;
+    ..parameters = json['parameters'] as List
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
@@ -119,4 +120,5 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'style': instance.style,
       'layers': instance.children,
       'parameters': instance.parameters,
+      'pbdfType': instance.pbdfType,
     };

@@ -238,6 +238,7 @@ class SymbolMaster extends AbstractGroupLayer
         'style': style,
         'children': getChildren(),
         'parameters': parameters,
+        'pbdfType': pbdfType
       };
 
   @override

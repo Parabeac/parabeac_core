@@ -181,6 +181,7 @@ class Rectangle extends AbstractShapeLayer
         'type': type,
         'visible': isVisible,
         'style': style,
+        'pbdfType': pbdfType
       };
 
   @override

@@ -35,7 +35,8 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
     ..isVisible = json['visible'] as bool ?? true
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
-    ..imageReference = json['imageReference'] as String;
+    ..imageReference = json['imageReference'] as String
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
@@ -60,4 +61,5 @@ Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'style': instance.style,
       'characterStyleOverrides': instance.characterStyleOverrides,
       'styleOverrideTable': instance.styleOverrideTable,
+      'pbdfType': instance.pbdfType,
     };

@@ -156,6 +156,7 @@ class Polygon extends AbstractShapeLayer implements SketchNodeFactory {
         'type': type,
         'visible': isVisible,
         'style': style,
+        'pbdfType': pbdfType
       };
 
   @override

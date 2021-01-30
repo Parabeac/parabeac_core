@@ -160,6 +160,7 @@ class Page extends AbstractGroupLayer implements SketchNodeFactory {
         'children': getChildren(),
         'visible': isVisible,
         'style': style,
+        'pbdfType': pbdfType
       };
 
   @override

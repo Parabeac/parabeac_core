@@ -186,6 +186,7 @@ class SymbolInstance extends SketchNode
         'visible': isVisible,
         'style': style,
         'parameters': parameters,
+        'pbdfType': pbdfType
       };
 
   @override

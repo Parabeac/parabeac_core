@@ -51,7 +51,8 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     ..verticalRulerData = json['verticalRulerData']
     ..layout = json['layout']
     ..grid = json['grid']
-    ..type = json['_class'] as String;
+    ..type = json['_class'] as String
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
@@ -89,4 +90,5 @@ Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'layers': instance.children,
       'isVisible': instance.isVisible,
       'style': instance.style,
+      'pbdfType': instance.pbdfType,
     };

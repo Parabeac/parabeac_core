@@ -37,7 +37,8 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
   )
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
-    ..imageReference = json['imageReference'] as String;
+    ..imageReference = json['imageReference'] as String
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
@@ -63,4 +64,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'fills': instance.fillsList,
       'type': instance.type,
       'imageReference': instance.imageReference,
+      'pbdfType': instance.pbdfType,
     };

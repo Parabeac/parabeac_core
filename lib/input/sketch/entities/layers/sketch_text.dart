@@ -173,6 +173,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         'type': type,
         'visible': isVisible,
         'style': style,
+        'pbdfType': pbdfType
       };
 
   @override

@@ -44,7 +44,8 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
-    ..imageReference = json['imageReference'] as String;
+    ..imageReference = json['imageReference'] as String
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
@@ -73,4 +74,5 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'overrideProperties': instance.overrideProperties,
       'overriadableProperties': instance.overriadableProperties,
       'symbolID': instance.symbolID,
+      'pbdfType': instance.pbdfType,
     };

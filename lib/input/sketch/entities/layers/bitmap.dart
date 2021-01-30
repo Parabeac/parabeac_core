@@ -172,6 +172,7 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
         'type': type,
         'visible': isVisible,
         'style': style,
+        'pbdfType': pbdfType
       };
 
   @override
