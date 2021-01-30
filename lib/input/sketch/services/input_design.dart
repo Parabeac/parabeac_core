@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
 import 'package:path/path.dart';
 import 'package:archive/archive.dart';
@@ -37,6 +38,7 @@ class InputDesignService {
     final doc_page = archive.findFile('document.json').content;
     assert(doc_page != null, "Document page from Sketch doesn't exist.");
     final doc_map = json.decode(utf8.decode(doc_page));
+    SketchAssetProcessor().projectUUID = doc_map['do_objectID'];
     return doc_map;
   }
 

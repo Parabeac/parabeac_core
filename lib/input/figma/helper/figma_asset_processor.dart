@@ -19,17 +19,24 @@ class FigmaAssetProcessor extends AssetProcessingService {
 
   Logger log = Logger('Figma Image helper');
 
+  String _getImageName(String uuid) =>
+      ('images/' + uuid + '.png').replaceAll(':', '_');
+
   /// Adds [uuid] to queue to be processed as an image.
   /// Returns the formatted name of the image reference.
   @override
   String processImage(String uuid) {
     _uuidQueue.add(uuid);
-    return ('images/' + uuid + '.png').replaceAll(':', '_');
+    return _getImageName(uuid);
   }
+
+  /// Adds [uuids] to queue to be processed as an image.
+  /// Does NOT return image names when finished.
+  void _addImagesToQueue(List<String> uuids) => _uuidQueue.addAll(uuids);
 
   /// Creates separate API requests from `uuidQueue` to speed up
   /// the image downloading process.
-  Future<void> processImageQueue() async {
+  Future<void> processImageQueue({bool writeAsFile = true}) async {
     List<List<String>> uuidLists;
     if (_uuidQueue.length >= 8) {
       // Split uuids into 8 lists to create separate API requests to figma
@@ -44,7 +51,7 @@ class FigmaAssetProcessor extends AssetProcessingService {
     // Process images in separate queues
     var futures = <Future>[];
     for (var uuidList in uuidLists) {
-      futures.add(_processImages(uuidList));
+      futures.add(_processImages(uuidList, writeAsFile: writeAsFile));
     }
 
     // Wait for the images to complete writing process
@@ -55,7 +62,8 @@ class FigmaAssetProcessor extends AssetProcessingService {
   /// and writes it to the `pngs` folder in the `outputPath`.
   /// Returns true if the operation was successful. Returns false
   /// otherwise.
-  Future<dynamic> _processImages(List<String> uuids) async {
+  Future<dynamic> _processImages(List<String> uuids,
+      {bool writeAsFile = true}) async {
     // Call Figma API to get Image link
     return Future(() async {
       var response = await APICallService.makeAPICall(
@@ -70,16 +78,20 @@ class FigmaAssetProcessor extends AssetProcessingService {
         // Download the images
         for (var entry in images.entries) {
           if (entry?.value != null && entry?.value?.isNotEmpty) {
-            response = await http.get(entry.value).then((imageRes) {
+            response = await http.get(entry.value).then((imageRes) async {
               // Check if the request was successful
               if (imageRes == null || imageRes.statusCode != 200) {
                 log.error('Image ${entry.key} was not processed correctly');
               }
 
-              var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
-                  .replaceAll(':', '_'))
-                ..createSync(recursive: true);
-              file.writeAsBytesSync(imageRes.bodyBytes);
+              if (writeAsFile) {
+                var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
+                    .replaceAll(':', '_'))
+                  ..createSync(recursive: true);
+                file.writeAsBytesSync(imageRes.bodyBytes);
+              } else {
+                await super.uploadToStorage(imageRes.bodyBytes, entry.key);
+              }
               // TODO: Only print out when verbose flag is active
               // log.debug('File written to following path ${file.path}');
             }).catchError((e) => log.error(e.toString()));
@@ -91,8 +103,8 @@ class FigmaAssetProcessor extends AssetProcessingService {
   }
 
   @override
-  Future<void> processRootElements(List<String> uuids) {
-    // TODO: implement processRootElements
-    throw UnimplementedError();
+  Future<void> processRootElements(List<String> uuids) async {
+    _addImagesToQueue(uuids);
+    await processImageQueue(writeAsFile: false);
   }
 }

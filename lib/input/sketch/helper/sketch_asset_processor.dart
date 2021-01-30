@@ -6,7 +6,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:quick_log/quick_log.dart';
 
-class SketchAssetProcessor implements AssetProcessingService {
+class SketchAssetProcessor extends AssetProcessingService {
   final svg_convertion_endpoint =
       Platform.environment.containsKey('SAC_ENDPOINT')
           ? Platform.environment['SAC_ENDPOINT']
@@ -26,7 +26,7 @@ class SketchAssetProcessor implements AssetProcessingService {
   /// Converts an svg with `uuid` from a sketch file to a png with specified
   /// `width` and `height`
   @override
-  Future<Uint8List> processImage(String uuid, [int width, int height]) async {
+  Future<Uint8List> processImage(String uuid, [num width, num height]) async {
     try {
       var body = Platform.environment.containsKey('SAC_ENDPOINT')
           ? {
@@ -63,8 +63,10 @@ class SketchAssetProcessor implements AssetProcessingService {
   }
 
   @override
-  Future<void> processRootElements(List<String> uuids) {
-    // TODO: implement processRootElements
-    throw UnimplementedError();
+  Future<void> processRootElements(List<String> uuids) async {
+    for (var uuid in uuids) {
+      var image = await processImage(uuid);
+      await super.uploadToStorage(image, uuid);
+    }
   }
 }
