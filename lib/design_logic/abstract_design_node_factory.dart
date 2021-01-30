@@ -9,7 +9,7 @@ class AbstractDesignNodeFactory {
 
   AbstractDesignNodeFactory();
 
-  static DesignNode getFigmaNode(Map<String, dynamic> json) {
+  static DesignNode getDesignNode(Map<String, dynamic> json) {
     var className = json[DESIGN_CLASS_KEY];
     if (className != null) {
       for (var designNode in _designNodes) {
