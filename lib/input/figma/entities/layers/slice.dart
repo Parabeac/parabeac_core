@@ -69,5 +69,5 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   Map<String, dynamic> toPBDF() => toJson();
 
   @override
-  String pbdfType = 'slice';
+  String pbdfType = 'image';
 }

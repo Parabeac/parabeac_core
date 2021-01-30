@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -158,4 +159,16 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
 
   @override
   String pbdfType = 'group';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }

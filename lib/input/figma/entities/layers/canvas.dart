@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -66,4 +67,16 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
 
   @override
   String pbdfType = 'artboard';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }

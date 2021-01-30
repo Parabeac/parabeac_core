@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -64,5 +65,17 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
   Map<String, dynamic> toPBDF() => toJson();
 
   @override
-  String pbdfType = 'line';
+  String pbdfType = 'image';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }

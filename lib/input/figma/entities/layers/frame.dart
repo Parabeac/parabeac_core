@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/design_logic/artboard.dart';
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
@@ -166,5 +167,17 @@ class FigmaFrame extends FigmaNode
   Map<String, dynamic> toPBDF() => toJson();
 
   @override
-  String pbdfType = 'frame';
+  String pbdfType = 'group';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }
