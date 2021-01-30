@@ -19,11 +19,13 @@ abstract class AssetProcessingService {
       var cont = await _createContainer(
         storage,
         projectUUID.toLowerCase(),
+        img,
       );
       var blob = await _putBlob(
         storage,
         projectUUID.toLowerCase(),
         '${name}.png',
+        img,
       );
       await cont.stream.drain();
       await blob.stream.drain();
@@ -31,7 +33,7 @@ abstract class AssetProcessingService {
   }
 
   Future<http.StreamedResponse> _putRequestBlob(
-      AzureStorage storage, String path,
+      AzureStorage storage, String path, Uint8List bodyBytes,
       {Map<String, String> queryParams}) async {
     var uri, headers;
     // Request
@@ -46,6 +48,7 @@ abstract class AssetProcessingService {
     if (headers != null) {
       request.headers.addAll(headers);
     }
+    request.bodyBytes = bodyBytes;
     storage.sign(request);
 
     var res = await request.send();
@@ -53,11 +56,11 @@ abstract class AssetProcessingService {
   }
 
   Future<http.StreamedResponse> _createContainer(
-          AzureStorage storage, String container) async =>
-      await _putRequestBlob(storage, '/${container}',
+          AzureStorage storage, String container, Uint8List bodyBytes) async =>
+      await _putRequestBlob(storage, '/${container}', bodyBytes,
           queryParams: {'restype': 'container'});
 
-  Future<http.StreamedResponse> _putBlob(
-          AzureStorage storage, String container, String filename) async =>
-      await _putRequestBlob(storage, '/${container}/${filename}');
+  Future<http.StreamedResponse> _putBlob(AzureStorage storage, String container,
+          String filename, Uint8List bodyBytes) async =>
+      await _putRequestBlob(storage, '/${container}/${filename}', bodyBytes);
 }

@@ -104,7 +104,7 @@ class FigmaAssetProcessor extends AssetProcessingService {
 
   @override
   Future<void> processRootElements(Map uuids) async {
-    _addImagesToQueue(uuids.keys);
+    _addImagesToQueue(uuids.keys.toList());
     await processImageQueue(writeAsFile: false);
   }
 }
