@@ -4,7 +4,11 @@ import 'package:azblob/azblob.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AssetProcessingService {
-  String projectUUID;
+  String _projectUUID;
+
+  set projectUUID(String UUID) => _projectUUID = UUID;
+
+  String get projectUUID => _projectUUID.toLowerCase();
 
   dynamic processImage(String uuid);
 
@@ -12,18 +16,29 @@ abstract class AssetProcessingService {
 
   static const KEY_NAME = 'STORAGE_CONNECTION_STRING';
 
+  String getContainerUri() {
+    if (Platform.environment.containsKey(KEY_NAME) && projectUUID != null) {
+      var storageStringList = Platform.environment[KEY_NAME].split(';');
+      var protocol = storageStringList[0].split('=')[1];
+      var accName = storageStringList[1].split('=')[1];
+      var suffix = storageStringList.last.split('=')[1];
+      return '${protocol}://${accName}.blob.${suffix}/${projectUUID}';
+    }
+    return '';
+  }
+
   Future<void> uploadToStorage(Uint8List img, String name) async {
     if (Platform.environment.containsKey(KEY_NAME) && projectUUID != null) {
       // Upload image to storage
       var storage = AzureStorage.parse(Platform.environment[KEY_NAME]);
       var cont = await _createContainer(
         storage,
-        projectUUID.toLowerCase(),
+        projectUUID,
         img,
       );
       var blob = await _putBlob(
         storage,
-        projectUUID.toLowerCase(),
+        projectUUID,
         '${name}.png',
         img,
       );

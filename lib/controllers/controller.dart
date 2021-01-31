@@ -54,7 +54,9 @@ abstract class Controller {
     // Process rootnode UUIDs
     await apService.processRootElements(uuids);
     project.projectName = MainInfo().projectName;
-    var encodedJson = json.encode(project.toJson());
+    var projectJson = project.toJson();
+    projectJson['azure_uri'] = apService.getContainerUri();
+    var encodedJson = json.encode(projectJson);
     File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
         .writeAsStringSync(encodedJson);
     log.info(
