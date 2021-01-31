@@ -6,6 +6,9 @@ import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 import 'abstract_design_node_factory.dart';
 
@@ -103,5 +106,15 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
       }
     }
     return node;
+  }
+
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    return Future.value(InheritedScaffold(
+      this,
+      currentContext: currentContext,
+      name: name,
+      isHomeScreen: isFlowHome,
+    ));
   }
 }

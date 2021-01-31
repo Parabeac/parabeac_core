@@ -24,6 +24,8 @@ class SymbolMaster extends AbstractGroupLayer
     implements SketchNodeFactory, PBSharedInstanceDesignNode {
   @override
   String CLASS_NAME = 'symbolMaster';
+  @override
+  var overrideValues;
   final Color backgroundColor;
   final bool hasBackgroundColor;
   final dynamic horizontalRulerData;

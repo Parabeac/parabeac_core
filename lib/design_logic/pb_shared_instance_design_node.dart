@@ -1,16 +1,22 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 import 'abstract_design_node_factory.dart';
 
 class PBSharedInstanceDesignNode extends DesignNode
+    with SymbolNodeMixin
     implements DesignNodeFactory {
   String symbolID;
   List parameters;
 
   PBSharedInstanceDesignNode(
       {String UUID,
+      this.overrideValues,
       String name,
       bool isVisible,
       boundaryRectangle,
@@ -34,7 +40,6 @@ class PBSharedInstanceDesignNode extends DesignNode
       int clippingMaskMode,
       userInfo,
       bool maintainScrollPosition,
-      List overrideValues,
       num scale,
       String symbolID,
       num verticalSpacing,
@@ -89,4 +94,33 @@ class PBSharedInstanceDesignNode extends DesignNode
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..parameters = json['parameters'] as List;
   }
+
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    var sym = PBSharedInstanceIntermediateNode(this, symbolID,
+        sharedParamValues: _extractParameters(),
+        currentContext: currentContext);
+    return Future.value(sym);
+  }
+
+  ///Converting the [OverridableValue] into [PBSharedParameterValue] to be processed in intermediate phase.
+  List<PBSharedParameterValue> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterValue> sharedParameters = [];
+    for (var overrideValue in overrideValues) {
+      if (!ovrNames.contains(overrideValue.overrideName)) {
+        var properties = extractParameter(overrideValue.overrideName);
+        sharedParameters.add(PBSharedParameterValue(
+            properties['type'],
+            overrideValue.value,
+            properties['uuid'],
+            overrideValue.overrideName));
+        ovrNames.add(overrideValue.overrideName);
+      }
+    }
+
+    return sharedParameters;
+  }
+
+  final List<OverridableValue> overrideValues;
 }

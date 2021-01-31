@@ -99,20 +99,23 @@ class Star implements DesignNodeFactory, DesignNode {
   String type;
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    // TODO: Ivan V
+    return null;
+    // var image = await convertImage(
+    //     UUID, boundaryRectangle.width, boundaryRectangle.height);
+
+    // return Future.value(InheritedStar(this, name,
+    //     currentContext: currentContext, image: image));
   }
 
   @override
   toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
   Map<String, dynamic> toPBDF() {
-    // TODO: implement toPBDF
     throw UnimplementedError();
   }
 }

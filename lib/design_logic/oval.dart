@@ -96,20 +96,23 @@ class Oval implements DesignNodeFactory, DesignNode {
   String type;
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    return null;
+    // TODO: IvanV
+    // var image = await convertImage(
+    //     UUID, boundaryRectangle.width, boundaryRectangle.height);
+
+    // return Future.value(InheritedOval(this, name,
+    //     currentContext: currentContext, image: image));
   }
 
   @override
   toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
   Map<String, dynamic> toPBDF() {
-    // TODO: implement toPBDF
     throw UnimplementedError();
   }
 }

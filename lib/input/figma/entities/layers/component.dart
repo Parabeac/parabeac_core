@@ -74,7 +74,8 @@ class Component extends FigmaFrame
   }
 
   // make sure only store unique UUID overrides with Map
-  List<OverridableProperty> overrideProperties;
+  @override
+  var overrideProperties;
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>

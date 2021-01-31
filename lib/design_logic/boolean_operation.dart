@@ -26,6 +26,16 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   });
 
   @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    // TODO: need IVAN V expertice here
+    // imageReference = addToImageQueue(UUID);
+
+    // return Future.value(
+    //     InheritedBitmap(this, name, currentContext: currentContext));
+    return null;
+  }
+
+  @override
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
   DesignNode fromPBDF(Map<String, dynamic> json) {
@@ -65,20 +75,12 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   String type;
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
-  }
-
-  @override
   toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
   Map<String, dynamic> toPBDF() {
-    // TODO: implement toPBDF
     throw UnimplementedError();
   }
 

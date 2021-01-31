@@ -1,6 +1,12 @@
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:uuid/uuid.dart';
 
 import 'abstract_design_node_factory.dart';
 
@@ -97,4 +103,17 @@ class Text extends DesignElement implements DesignNodeFactory, DesignNode {
       pbdfType: json['pbdfType'],
     );
   }
+
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
+      Future.value(InjectedContainer(
+        Point(boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
+        Point(boundaryRectangle.x, boundaryRectangle.y),
+        name,
+        Uuid().v4(),
+        currentContext: currentContext,
+      )..addChild(
+          InheritedText(this, name, currentContext: currentContext),
+        ));
 }

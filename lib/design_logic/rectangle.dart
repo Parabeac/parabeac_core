@@ -1,12 +1,16 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/style/border.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'abstract_design_node_factory.dart';
+import 'color.dart';
 
-class Rectangle implements DesignNodeFactory, DesignNode {
+class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
   @override
   String pbdfType = 'rectangle';
 
@@ -15,6 +19,8 @@ class Rectangle implements DesignNodeFactory, DesignNode {
   var fixedRadius;
 
   var needsConvertionToNewRoundCorners;
+
+  var points;
 
   Rectangle({
     this.fixedRadius,
@@ -114,19 +120,35 @@ class Rectangle implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+    Border border;
+    for (var b in style.borders.reversed) {
+      if (b.isEnabled) {
+        border = b;
+      }
+    }
+    return Future.value(InheritedContainer(
+      this,
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      name,
+      currentContext: currentContext,
+      borderInfo: {
+        'borderRadius':
+            style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
+        'borderColorHex': border != null ? toHex(border.color) : null,
+        'borderThickness': border != null ? border.thickness : null
+      },
+    ));
   }
 
   @override
   toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
   Map<String, dynamic> toPBDF() {
-    // TODO: implement toPBDF
     throw UnimplementedError();
   }
 }

@@ -2,16 +2,25 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'abstract_design_node_factory.dart';
 
 class PBSharedMasterDesignNode extends DesignNode
+    with SymbolNodeMixin
     implements DesignNodeFactory, GroupNode {
   String symbolID;
   List overriadableProperties;
 
+  var overrideProperties;
+
   PBSharedMasterDesignNode(
       {String UUID,
+      this.overrideProperties,
       String name,
       bool isVisible,
       boundaryRectangle,
@@ -29,7 +38,6 @@ class PBSharedMasterDesignNode extends DesignNode
       layerListExpandedType,
       pbdfType,
       presetDictionary,
-      List<OverridableProperty> overrideProperties,
       bool allowsOverrides,
       nameIsFixed,
       resizingConstraint,
@@ -57,6 +65,42 @@ class PBSharedMasterDesignNode extends DesignNode
 
   @override
   String pbdfType = 'symbol_master';
+
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    var sym_master = PBSharedMasterNode(
+      this,
+      symbolID,
+      name,
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      overridableProperties: _extractParameters(),
+      currentContext: currentContext,
+    );
+    return Future.value(sym_master);
+  }
+
+  ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
+  List<PBSharedParameterProp> _extractParameters() {
+    Set<String> ovrNames = {};
+    List<PBSharedParameterProp> sharedParameters = [];
+    for (var prop in overrideProperties) {
+      if (!ovrNames.contains(prop.overrideName)) {
+        var properties = AddMasterSymbolName(prop.overrideName, children);
+        sharedParameters.add(PBSharedParameterProp(
+            properties['name'],
+            properties['type'],
+            null,
+            prop.canOverride,
+            prop.overrideName,
+            properties['uuid'],
+            properties['default_value']));
+        ovrNames.add(prop.overrideName);
+      }
+    }
+    return sharedParameters;
+  }
 
   @override
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);

@@ -89,20 +89,21 @@ class Vector implements DesignNodeFactory, DesignNode {
   String type;
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: implement interpretNode
-    throw UnimplementedError();
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    // TODO: Ivan V
+    // imageReference = addToImageQueue(UUID);
+
+    // return Future.value(
+    //     InheritedBitmap(this, name, currentContext: currentContext));
   }
 
   @override
   toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 
   @override
   Map<String, dynamic> toPBDF() {
-    // TODO: implement toPBDF
     throw UnimplementedError();
   }
 
