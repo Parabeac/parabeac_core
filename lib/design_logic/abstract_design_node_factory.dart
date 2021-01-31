@@ -12,7 +12,7 @@ import 'pb_shared_instance_design_node.dart';
 import 'pb_shared_master_node.dart';
 import 'polygon.dart';
 import 'rectangle.dart';
-import 'start.dart';
+import 'star.dart';
 import 'text.dart';
 import 'vector.dart';
 

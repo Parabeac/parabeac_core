@@ -22,11 +22,15 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   String CLASS_NAME = 'text';
 
-  Map attributedString;
+  @override
   final bool automaticallyDrawOnUnderlyingPath;
+  @override
   final bool dontSynchroniseWithSymbol;
+  @override
   final dynamic lineSpacingBehaviour;
+  @override
   final dynamic textBehaviour;
+  @override
   final dynamic glyphBounds;
 
   @override
@@ -191,5 +195,34 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   DesignNode fromPBDF(Map<String, dynamic> json) {
     // TODO: implement fromPBDF
     throw UnimplementedError();
+  }
+
+  @override
+  var attributedString;
+
+  @override
+  void set automaticallyDrawOnUnderlyingPath(
+      _automaticallyDrawOnUnderlyingPath) {
+    // TODO: implement automaticallyDrawOnUnderlyingPath
+  }
+
+  @override
+  void set dontSynchroniseWithSymbol(_dontSynchroniseWithSymbol) {
+    // TODO: implement dontSynchroniseWithSymbol
+  }
+
+  @override
+  void set glyphBounds(_glyphBounds) {
+    // TODO: implement glyphBounds
+  }
+
+  @override
+  void set lineSpacingBehaviour(_lineSpacingBehaviour) {
+    // TODO: implement lineSpacingBehaviour
+  }
+
+  @override
+  void set textBehaviour(_textBehaviour) {
+    // TODO: implement textBehaviour
   }
 }

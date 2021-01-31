@@ -14,9 +14,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:parabeac_core/input/figma/helper/image_helper.dart'
-    as image_helper;
 
 part 'frame.g.dart';
 
@@ -182,4 +179,7 @@ class FigmaFrame extends FigmaNode
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
+
+  @override
+  var isFlowHome;
 }

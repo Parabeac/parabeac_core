@@ -114,4 +114,22 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
+
+  @override
+  var attributedString;
+
+  @override
+  var automaticallyDrawOnUnderlyingPath;
+
+  @override
+  var dontSynchroniseWithSymbol;
+
+  @override
+  var glyphBounds;
+
+  @override
+  var lineSpacingBehaviour;
+
+  @override
+  var textBehaviour;
 }

@@ -143,4 +143,7 @@ class Component extends FigmaFrame
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
+
+  @override
+  var isFlowHome;
 }

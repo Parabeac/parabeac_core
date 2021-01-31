@@ -212,4 +212,9 @@ class Artboard extends AbstractGroupLayer
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
+
+  @override
+  void set isFlowHome(_isFlowHome) {
+    // TODO: implement isFlowHome
+  }
 }

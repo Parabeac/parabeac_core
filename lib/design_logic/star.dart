@@ -1,20 +1,16 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 
 import 'abstract_design_node_factory.dart';
 
-class Polygon implements DesignNodeFactory, DesignNode {
+class Star implements DesignNodeFactory, DesignNode {
   @override
-  String pbdfType = 'polygon';
+  String pbdfType = 'star';
 
-  var boundaryRectangle;
-
-  var UUID;
-
-  Polygon({
+  Star({
     bool edited,
     bool isClosed,
     pointRadiusBehaviour,
@@ -48,12 +44,12 @@ class Polygon implements DesignNodeFactory, DesignNode {
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
   DesignNode fromPBDF(Map<String, dynamic> json) {
-    return Polygon(
+    return Star(
       edited: json['edited'] as bool,
       isClosed: json['isClosed'] as bool,
       pointRadiusBehaviour: json['pointRadiusBehaviour'],
       points: json['points'] as List,
-      UUID: json['id'] as String,
+      UUID: json['do_objectID'] as String,
       booleanOperation: json['booleanOperation'],
       exportOptions: json['exportOptions'],
       boundaryRectangle: json['absoluteBoundingBox'] == null
@@ -76,10 +72,16 @@ class Polygon implements DesignNodeFactory, DesignNode {
       clippingMaskMode: json['clippingMaskMode'],
       userInfo: json['userInfo'],
       maintainScrollPosition: json['maintainScrollPosition'],
-      type: json['type'] as String,
-      pbdfType: json['pbdfType'] as String,
+      type: json['_class'] as String,
+      pbdfType: json['pbdfType'],
     );
   }
+
+  @override
+  String UUID;
+
+  @override
+  var boundaryRectangle;
 
   @override
   bool isVisible;
