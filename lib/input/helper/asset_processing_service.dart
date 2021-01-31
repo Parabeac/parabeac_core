@@ -16,6 +16,8 @@ abstract class AssetProcessingService {
 
   static const KEY_NAME = 'STORAGE_CONNECTION_STRING';
 
+  String getImageURI(String imageName) => getContainerUri() + '/${imageName}';
+
   String getContainerUri() {
     if (Platform.environment.containsKey(KEY_NAME) && projectUUID != null) {
       var storageStringList = Platform.environment[KEY_NAME].split(';');

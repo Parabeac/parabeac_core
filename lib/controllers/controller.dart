@@ -50,12 +50,12 @@ abstract class Controller {
 
   Future<void> stopAndToJson(
       DesignProject project, AssetProcessingService apService) async {
-    var uuids = processRootNodeUUIDs(project);
+    var uuids = processRootNodeUUIDs(project, apService);
     // Process rootnode UUIDs
     await apService.processRootElements(uuids);
     project.projectName = MainInfo().projectName;
     var projectJson = project.toJson();
-    projectJson['azure_uri'] = apService.getContainerUri();
+    projectJson['azure_container_uri'] = apService.getContainerUri();
     var encodedJson = json.encode(projectJson);
     File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
         .writeAsStringSync(encodedJson);
@@ -65,11 +65,13 @@ abstract class Controller {
 
   /// Iterates through the [project] and returns a list of the UUIDs of the
   /// rootNodes
-  Map<String, Map> processRootNodeUUIDs(DesignProject project) {
+  Map<String, Map> processRootNodeUUIDs(
+      DesignProject project, AssetProcessingService apService) {
     var result = <String, Map>{};
 
     for (var page in project.pages) {
       for (var screen in page.screens) {
+        screen.imageURI = apService.getImageURI('${screen.id}.png');
         result[screen.id] = {
           'width': screen.designNode.boundaryRectangle.width,
           'height': screen.designNode.boundaryRectangle.height
