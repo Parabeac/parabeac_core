@@ -198,8 +198,12 @@ ${parser.usage}
       handleError('$path is not a file');
     }
 
+    var jsonString = await File(pbdlPath).readAsString();
+
+    var pbdf = json.decode(jsonString);
+
     DesignController().convertFile(
-      pbdlPath,
+      pbdf,
       MainInfo().outputPath + projectName,
       configurationPath,
       configurationType,
