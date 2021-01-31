@@ -101,7 +101,9 @@ class FigmaFrame extends FigmaNode
           pluginData,
           sharedPluginData,
           UUID: UUID,
-        );
+        ) {
+    pbdfType = 'group';
+  }
   @JsonKey(ignore: true)
   List points;
 

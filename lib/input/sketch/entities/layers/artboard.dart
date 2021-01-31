@@ -194,10 +194,11 @@ class Artboard extends AbstractGroupLayer
         'presetDictionary': presetDictionary,
         'visible': isVisible, // changed it was isVisible
         'style': style,
-        'pbdfType': pbdfType
+        'pbdfType': pbdfType,
       };
 
   @override
+  @JsonKey(ignore: true)
   String pbdfType = 'artboard';
 
   @override

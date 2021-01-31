@@ -76,6 +76,7 @@ class FigmaVector extends FigmaNode
           sharedPluginData,
           UUID: UUID,
         ) {
+    pbdfType = 'vector';
     log = Logger(runtimeType.toString());
   }
 

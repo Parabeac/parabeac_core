@@ -60,6 +60,7 @@ class FigmaRectangle extends FigmaVector
           styles: styles,
           fillsList: fillsList,
         ) {
+    pbdfType = 'rectangle';
     var fillsMap =
         (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
     if (fillsMap != null && fillsMap['type'] == 'IMAGE') {

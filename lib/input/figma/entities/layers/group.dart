@@ -85,6 +85,8 @@ class Group extends FigmaFrame
         ) {
     if (areAllVectors()) {
       pbdfType = 'image';
+    } else {
+      pbdfType = 'group';
     }
     log = Logger(runtimeType.toString());
   }

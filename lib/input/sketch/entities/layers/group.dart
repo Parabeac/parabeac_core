@@ -154,10 +154,11 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
         'visible': isVisible,
         'style': style,
         'children': getChildren(),
-        'pbdfType': pbdfType
+        'pbdfType': pbdfType,
       };
 
   @override
+  @JsonKey(ignore: true)
   String pbdfType = 'group';
 
   @override

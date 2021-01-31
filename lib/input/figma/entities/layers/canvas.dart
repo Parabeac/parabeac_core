@@ -21,7 +21,9 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
     this.prototypeStartNodeID,
     this.prototypeDevice,
     this.exportSettings,
-  }) : super(name, true, type, null, null);
+  }) : super(name, true, type, null, null) {
+    pbdfType = 'artboard';
+  }
   // Last two nulls are used for Figma plugins
 
   @override

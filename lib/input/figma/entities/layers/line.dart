@@ -45,7 +45,9 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    pbdfType = 'image';
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>

@@ -55,7 +55,9 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    pbdfType = 'text';
+  }
 
   @override
   @JsonKey(name: 'characters')

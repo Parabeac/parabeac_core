@@ -47,7 +47,9 @@ class FigmaRegularPolygon extends FigmaVector
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    pbdfType = 'polygon';
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>

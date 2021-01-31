@@ -155,9 +155,10 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
         'type': type,
         'visible': isVisible,
         'style': style,
-        'pbdfType': pbdfType
+        'pbdfType': pbdfType,
       };
 
   @override
+  @JsonKey(ignore: true)
   String pbdfType = 'oval';
 }

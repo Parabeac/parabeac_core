@@ -47,8 +47,7 @@ ShapeGroup _$ShapeGroupFromJson(Map<String, dynamic> json) {
   )
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
-    ..type = json['_class'] as String
-    ..pbdfType = json['pbdfType'] as String;
+    ..type = json['_class'] as String;
 }
 
 Map<String, dynamic> _$ShapeGroupToJson(ShapeGroup instance) =>
@@ -83,5 +82,4 @@ Map<String, dynamic> _$ShapeGroupToJson(ShapeGroup instance) =>
       'isVisible': instance.isVisible,
       'style': instance.style,
       'layers': instance.children,
-      'pbdfType': instance.pbdfType,
     };

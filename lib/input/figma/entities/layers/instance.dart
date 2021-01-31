@@ -73,7 +73,9 @@ class Instance extends FigmaFrame
           flow: flow,
           children: children,
           backgroundColor: backgroundColor,
-        );
+        ) {
+    pbdfType = 'symbol_instance';
+  }
 
   String componentId;
 

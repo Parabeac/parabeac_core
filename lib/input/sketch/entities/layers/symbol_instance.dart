@@ -187,10 +187,11 @@ class SymbolInstance extends SketchNode
         'visible': isVisible,
         'style': style,
         'parameters': parameters,
-        'pbdfType': pbdfType
+        'pbdfType': pbdfType,
       };
 
   @override
+  @JsonKey(ignore: true)
   String pbdfType = 'symbol_instance';
 
   @override

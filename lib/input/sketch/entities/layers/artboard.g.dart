@@ -60,8 +60,7 @@ Artboard _$ArtboardFromJson(Map<String, dynamic> json) {
   )
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
-    ..type = json['_class'] as String
-    ..pbdfType = json['pbdfType'] as String;
+    ..type = json['_class'] as String;
 }
 
 Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
@@ -105,5 +104,4 @@ Map<String, dynamic> _$ArtboardToJson(Artboard instance) => <String, dynamic>{
       'presetDictionary': instance.presetDictionary,
       'isVisible': instance.isVisible,
       'style': instance.style,
-      'pbdfType': instance.pbdfType,
     };

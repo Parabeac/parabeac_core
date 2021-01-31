@@ -60,6 +60,7 @@ class FigmaEllipse extends FigmaVector
           strokeAlign: strokeAlign,
           styles: styles,
         ) {
+    pbdfType = 'oval';
     log = Logger(runtimeType.toString());
   }
 

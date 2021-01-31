@@ -43,6 +43,7 @@ class BooleanOperation extends FigmaVector
           UUID: UUID,
         ) {
     log = Logger(runtimeType.toString());
+    pbdfType = 'boolean_operation';
   }
 
   @override

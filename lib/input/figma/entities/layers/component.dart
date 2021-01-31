@@ -69,7 +69,9 @@ class Component extends FigmaFrame
           flow: flow,
           children: children,
           backgroundColor: backgroundColor,
-        );
+        ) {
+    pbdfType = 'symbol_master';
+  }
 
   // make sure only store unique UUID overrides with Map
   List<OverridableProperty> overrideProperties;

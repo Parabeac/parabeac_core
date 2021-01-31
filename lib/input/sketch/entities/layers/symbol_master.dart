@@ -239,10 +239,11 @@ class SymbolMaster extends AbstractGroupLayer
         'style': style,
         'children': getChildren(),
         'parameters': parameters,
-        'pbdfType': pbdfType
+        'pbdfType': pbdfType,
       };
 
   @override
+  @JsonKey(ignore: true)
   String pbdfType = 'symbol_master';
 
   @override

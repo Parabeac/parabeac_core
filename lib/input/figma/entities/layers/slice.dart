@@ -42,7 +42,9 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
           type,
           pluginData,
           sharedPluginData,
-        );
+        ) {
+    pbdfType = 'image';
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>

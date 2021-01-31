@@ -50,8 +50,7 @@ SymbolInstance _$SymbolInstanceFromJson(Map<String, dynamic> json) {
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
     ..type = json['_class'] as String
-    ..parameters = json['parameters'] as List
-    ..pbdfType = json['pbdfType'] as String;
+    ..parameters = json['parameters'] as List;
 }
 
 Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
@@ -88,5 +87,4 @@ Map<String, dynamic> _$SymbolInstanceToJson(SymbolInstance instance) =>
       'isVisible': instance.isVisible,
       'style': instance.style,
       'parameters': instance.parameters,
-      'pbdfType': instance.pbdfType,
     };

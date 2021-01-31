@@ -45,7 +45,9 @@ class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    pbdfType = 'star';
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
