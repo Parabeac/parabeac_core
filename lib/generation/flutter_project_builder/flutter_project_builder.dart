@@ -7,11 +7,10 @@ import 'package:parabeac_core/generation/generators/value_objects/generation_con
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:parabeac_core/input/figma/helper/image_helper.dart'
-    as image_helper;
 
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -90,7 +89,7 @@ class FlutterProjectBuilder {
     if (MainInfo().figmaProjectID != null &&
         MainInfo().figmaProjectID.isNotEmpty) {
       log.info('Processing remaining images...');
-      await image_helper.processImageQueue();
+      await FigmaAssetProcessor().processImageQueue();
     }
 
     Process.runSync(

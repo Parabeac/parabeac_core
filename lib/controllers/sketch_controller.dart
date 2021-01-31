@@ -1,6 +1,14 @@
 import 'package:parabeac_core/controllers/controller.dart';
+import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 
 import 'package:parabeac_core/input/helper/design_project.dart';
+import 'package:parabeac_core/controllers/interpret.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
+import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
@@ -21,6 +29,7 @@ class SketchController extends Controller {
     var configType, {
     bool jsonOnly = false,
     DesignProject designProject,
+    AssetProcessingService apService,
   }) async {
     configure(configurationPath, configType);
 
@@ -36,6 +45,7 @@ class SketchController extends Controller {
       configType,
       designProject: sketchProject,
       jsonOnly: jsonOnly,
+      apService: apService,
     );
   }
 

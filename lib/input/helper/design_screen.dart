@@ -21,7 +21,7 @@ class DesignScreen implements DesignNodeFactory {
   }
 
   Map<String, dynamic> toPBDF() {
-    Map<String, dynamic> result = {};
+    var result = <String, Object>{};
     result['pbdfType'] = pbdfType;
     result['id'] = id;
     result['name'] = name;
@@ -29,6 +29,7 @@ class DesignScreen implements DesignNodeFactory {
     result['imageURI'] = imageURI;
     result['type'] = type;
     result['designNode'] = designNode.toPBDF();
+    result['azure_blob_uri'] = imageURI;
     return result;
   }
 
@@ -47,5 +48,10 @@ class DesignScreen implements DesignNodeFactory {
       screen.designNode = DesignNode.fromPBDF(json['designNode']);
     }
     return screen;
+  }
+  Map<String, Object> toJson() {
+    var result = <String, Object>{'azure_blob_uri': imageURI};
+    result.addAll(designNode.toJson());
+    return result;
   }
 }

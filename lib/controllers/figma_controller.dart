@@ -1,8 +1,12 @@
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/figma/helper/figma_project.dart';
+import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
+
+import 'interpret.dart';
 
 class FigmaController extends Controller {
   ///SERVICE
@@ -19,6 +23,7 @@ class FigmaController extends Controller {
     var configType, {
     bool jsonOnly = false,
     DesignProject designProject,
+    AssetProcessingService apService,
   }) async {
     configure(configurationPath, configType);
 
@@ -33,6 +38,7 @@ class FigmaController extends Controller {
       configType,
       designProject: figmaProject,
       jsonOnly: jsonOnly,
+      apService: apService,
     );
   }
 
