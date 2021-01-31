@@ -30,6 +30,9 @@ class DesignNode {
 
   Map<String, dynamic> toPBDF() {}
 
+  factory DesignNode.fromPBDF(Map<String, dynamic> json) =>
+      AbstractDesignNodeFactory.getDesignNode(json);
+
   factory DesignNode.fromJson(Map<String, dynamic> json) =>
       AbstractDesignNodeFactory.getDesignNode(json);
 }

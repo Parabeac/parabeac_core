@@ -1,3 +1,7 @@
+import 'package:parabeac_core/input/helper/design_page.dart';
+import 'package:parabeac_core/input/helper/design_project.dart';
+import 'package:parabeac_core/input/helper/design_screen.dart';
+
 import 'artboard.dart';
 import 'design_node.dart';
 
@@ -6,6 +10,9 @@ class AbstractDesignNodeFactory {
 
   static final List<DesignNodeFactory> _designNodes = [
     PBArtboard(),
+    DesignProject(),
+    DesignPage(),
+    DesignScreen(),
     // TODO: add classes
   ];
 
@@ -15,7 +22,7 @@ class AbstractDesignNodeFactory {
     var className = json[DESIGN_CLASS_KEY];
     if (className != null) {
       for (var designNode in _designNodes) {
-        if (designNode.type == className) {
+        if (designNode.pbdfType == className) {
           return designNode.createDesignNode(json);
         }
       }
@@ -25,6 +32,6 @@ class AbstractDesignNodeFactory {
 }
 
 abstract class DesignNodeFactory {
-  String type;
+  String pbdfType;
   DesignNode createDesignNode(Map<String, dynamic> json);
 }
