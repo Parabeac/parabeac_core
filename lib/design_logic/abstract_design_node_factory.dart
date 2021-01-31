@@ -3,17 +3,38 @@ import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/helper/design_screen.dart';
 
 import 'artboard.dart';
+import 'boolean_operation.dart';
 import 'design_node.dart';
+import 'group_node.dart';
+import 'image.dart';
+import 'oval.dart';
+import 'pb_shared_instance_design_node.dart';
+import 'pb_shared_master_node.dart';
+import 'polygon.dart';
+import 'rectangle.dart';
+import 'start.dart';
+import 'text.dart';
+import 'vector.dart';
 
 class AbstractDesignNodeFactory {
   static final String DESIGN_CLASS_KEY = 'pbdfType';
 
   static final List<DesignNodeFactory> _designNodes = [
     PBArtboard(),
+    BooleanOperation(),
+    GroupNode(),
+    Image(),
+    Oval(),
+    PBSharedInstanceDesignNode(),
+    PBSharedMasterDesignNode(),
+    Polygon(),
+    Rectangle(),
+    Star(),
+    Text(),
+    Vector(),
     DesignProject(),
     DesignPage(),
     DesignScreen(),
-    // TODO: add classes
   ];
 
   AbstractDesignNodeFactory();

@@ -1,10 +1,12 @@
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 
-abstract class Image extends DesignElement {
-  Image(
+import 'abstract_design_node_factory.dart';
+
+class Image extends DesignElement implements DesignNodeFactory {
+  Image({
     this.imageReference,
-  ) : super();
+  }) : super();
 
   String imageReference;
 

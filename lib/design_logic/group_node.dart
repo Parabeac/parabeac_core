@@ -1,9 +1,11 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 
-abstract class GroupNode {
-  GroupNode(
+import 'abstract_design_node_factory.dart';
+
+class GroupNode implements DesignNodeFactory {
+  GroupNode({
     this.children,
-  );
+  });
 
   List children;
 
