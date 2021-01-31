@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_border.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
@@ -57,7 +58,14 @@ class FigmaRectangle extends FigmaVector
           strokeAlign: strokeAlign,
           styles: styles,
           fillsList: fillsList,
-        );
+        ) {
+    pbdfType = 'rectangle';
+    var fillsMap =
+        (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
+    if (fillsMap != null && fillsMap['type'] == 'IMAGE') {
+      pbdfType = 'image';
+    }
+  }
 
   List points;
   double cornerRadius;
@@ -110,5 +118,23 @@ class FigmaRectangle extends FigmaVector
             : null
       },
     ));
+  }
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'rectangle';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
   }
 }

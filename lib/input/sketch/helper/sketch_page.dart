@@ -5,5 +5,9 @@ class SketchPage extends DesignPage {
   @override
   var log = Logger('Design Page Sketch');
 
-  SketchPage(String name, String id) : super(name, id);
+  SketchPage(String name, String id)
+      : super(
+          name: name,
+          id: id,
+        );
 }

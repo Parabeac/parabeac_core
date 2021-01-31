@@ -40,7 +40,9 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     ..UUID = json['id'] as String
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
-    ..imageReference = json['imageReference'] as String;
+    ..imageReference = json['imageReference'] as String
+    ..isFlowHome = json['isFlowHome']
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
@@ -64,9 +66,11 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'backgroundColor': instance.backgroundColor,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
+      'isFlowHome': instance.isFlowHome,
       'type': instance.type,
       'parameters': instance.parameters,
       'symbolID': instance.symbolID,
       'children': instance.children,
       'componentId': instance.componentId,
+      'pbdfType': instance.pbdfType,
     };

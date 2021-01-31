@@ -1,19 +1,28 @@
-import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 import 'abstract_design_node_factory.dart';
 
-class Image extends DesignElement implements DesignNodeFactory, DesignNode {
+class Oval implements DesignNodeFactory, DesignNode {
+  @override
+  String pbdfType = 'oval';
+
   var boundaryRectangle;
 
   var UUID;
 
-  Image({
-    this.imageReference,
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
+
+  Oval({
+    bool edited,
+    bool isClosed,
+    pointRadiusBehaviour,
+    List points,
     this.UUID,
     booleanOperation,
     exportOptions,
@@ -28,26 +37,22 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
     nameIsFixed,
     resizingConstraint,
     resizingType,
-    num rotation,
+    rotation,
     sharedStyleID,
     shouldBreakMaskChain,
     hasClippingMask,
     clippingMaskMode,
     userInfo,
     maintainScrollPosition,
+    type,
     pbdfType,
   });
-
-  String imageReference;
-
-  @override
-  String pbdfType = 'image';
-
-  @override
-  DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
-
   DesignNode fromPBDF(Map<String, dynamic> json) {
-    return Image(
+    return Oval(
+      edited: json['edited'] as bool,
+      isClosed: json['isClosed'] as bool,
+      pointRadiusBehaviour: json['pointRadiusBehaviour'],
+      points: json['points'] as List,
       UUID: json['id'] as String,
       booleanOperation: json['booleanOperation'],
       exportOptions: json['exportOptions'],
@@ -64,32 +69,50 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
       nameIsFixed: json['nameIsFixed'],
       resizingConstraint: json['resizingConstraint'],
       resizingType: json['resizingType'],
-      rotation: json['rotation'] as num,
+      rotation: json['rotation'],
       sharedStyleID: json['sharedStyleID'],
       shouldBreakMaskChain: json['shouldBreakMaskChain'],
       hasClippingMask: json['hasClippingMask'],
       clippingMaskMode: json['clippingMaskMode'],
       userInfo: json['userInfo'],
       maintainScrollPosition: json['maintainScrollPosition'],
-      pbdfType: json['pbdfType'],
-    )
-      ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
-      ..type = json['type'] as String;
+      type: json['type'] as String,
+      pbdfType: json['pbdfType'] as String,
+    );
   }
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: need IVAN V expertise here
-    // var intermediateNode;
-    // intermediateNode = PBDenyListHelper().returnDenyListNodeIfExist(this);
-    // if (intermediateNode != null) {
-    //   return intermediateNode;
-    // }
-    // intermediateNode = PBPluginListHelper().returnAllowListNodeIfExists(this);
-    // if (intermediateNode != null) {
-    //   return intermediateNode;
-    // }
+  bool isVisible;
+
+  @override
+  String name;
+
+  @override
+  String prototypeNodeUUID;
+
+  @override
+  PBStyle style;
+
+  @override
+  String type;
+
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    // TODO: IvanV
+    // var image = await convertImage(
+    //     UUID, boundaryRectangle.width, boundaryRectangle.height);
+
     return Future.value(
-        InheritedBitmap(this, name, currentContext: currentContext));
+        InheritedOval(this, name, currentContext: currentContext, image: null));
+  }
+
+  @override
+  toJson() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toPBDF() {
+    throw UnimplementedError();
   }
 }

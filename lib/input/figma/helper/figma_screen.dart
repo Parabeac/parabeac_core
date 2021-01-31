@@ -7,5 +7,9 @@ class FigmaScreen extends DesignScreen {
     DesignNode root,
     String id,
     String name,
-  ) : super(root, id, name);
+  ) : super(
+          designNode: root,
+          id: id,
+          name: name,
+        );
 }

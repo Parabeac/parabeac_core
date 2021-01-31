@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/design_controller.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
@@ -47,6 +48,11 @@ void main(List<String> args) async {
         defaultsTo: 'default:lib/configurations/configurations.json')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
+    ..addOption(
+      'pbdl-in',
+      help:
+          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+    )
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addFlag('export-pbdl',
@@ -70,6 +76,7 @@ ${parser.usage}
     exit(0);
   }
 
+  // Detect platform
   if (Platform.isMacOS || Platform.isLinux) {
     MainInfo().platform = 'UIX';
   } else if (Platform.isWindows) {
@@ -91,16 +98,16 @@ ${parser.usage}
   String projectName = argResults['project-name'];
 
   // Handle input errors
-  if (path == null &&
-      (MainInfo().figmaKey == null || MainInfo().figmaProjectID == null)) {
+  if (hasTooFewArgs(argResults)) {
     handleError(
         'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
-  } else if (path != null &&
-      (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
+  } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  } else if (path == null) {
+  } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
+  } else if (argResults['pbdl-in'] != null) {
+    designType = 'pbdl';
   }
 
   //  usage -c "default:lib/configurations/configurations.json
@@ -125,7 +132,8 @@ ${parser.usage}
 
   // Create pngs directory
 
-  await Directory('${MainInfo().outputPath}' + (jsonOnly ? '' : 'pngs'))
+  await Directory('${MainInfo().outputPath}' +
+          (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'))
       .create(recursive: true);
 
   if (designType == 'sketch') {
@@ -153,11 +161,8 @@ ${parser.usage}
       }
     }
 
-    await SketchController().convertFile(
-        path,
-        MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType,
+    SketchController().convertFile(path, MainInfo().outputPath + projectName,
+        configurationPath, configurationType,
         jsonOnly: jsonOnly);
     process?.kill();
   } else if (designType == 'xd') {
@@ -186,6 +191,25 @@ ${parser.usage}
     } else {
       log.error('File was not retrieved from Figma.');
     }
+  } else if (designType == 'pbdl') {
+    var pbdlPath = argResults['pbdl-in'];
+    var isFile = FileSystemEntity.isFileSync(pbdlPath);
+    var exists = File(pbdlPath).existsSync();
+
+    if (!isFile || !exists) {
+      handleError('$path is not a file');
+    }
+
+    var jsonString = await File(pbdlPath).readAsString();
+
+    var pbdf = json.decode(jsonString);
+
+    DesignController().convertFile(
+      pbdf,
+      MainInfo().outputPath + projectName,
+      configurationPath,
+      configurationType,
+    );
   }
   exitCode = 0;
 }
@@ -261,4 +285,26 @@ Future<String> getCleanPath(String path) async {
     result += dir + '/';
   }
   return result;
+}
+
+/// Returns true if `args` contains two or more
+/// types of intake to parabeac-core
+bool hasTooManyArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null || args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
+
+  var hasAll = hasSketch && hasFigma && hasPbdl;
+
+  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
+}
+
+/// Returns true if `args` does not contain any intake
+/// to parabeac-core
+bool hasTooFewArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null && args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
+
+  return !(hasSketch || hasFigma || hasPbdl);
 }

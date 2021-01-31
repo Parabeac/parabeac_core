@@ -41,6 +41,7 @@ class BooleanOperation extends FigmaVector
           UUID: UUID,
         ) {
     log = Logger(runtimeType.toString());
+    pbdfType = 'boolean_operation';
   }
 
   @override
@@ -61,4 +62,10 @@ class BooleanOperation extends FigmaVector
 
   @override
   String imageReference;
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'boolean_operation';
 }

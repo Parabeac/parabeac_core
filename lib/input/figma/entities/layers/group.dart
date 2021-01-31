@@ -80,6 +80,11 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
           UUID: UUID,
           backgroundColor: backgroundColor,
         ) {
+    if (areAllVectors()) {
+      pbdfType = 'image';
+    } else {
+      pbdfType = 'group';
+    }
     log = Logger(runtimeType.toString());
   }
 
@@ -130,4 +135,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
     }
     return null;
   }
+
+  @override
+  String pbdfType = 'group';
 }

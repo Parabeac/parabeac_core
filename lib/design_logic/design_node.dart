@@ -2,7 +2,9 @@ import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
-abstract class DesignNode {
+import 'abstract_design_node_factory.dart';
+
+class DesignNode {
   DesignNode(
     this.UUID,
     this.name,
@@ -13,6 +15,7 @@ abstract class DesignNode {
     this.prototypeNodeUUID,
   );
 
+  String pbdfType;
   String UUID;
   String name;
   bool isVisible;
@@ -21,7 +24,15 @@ abstract class DesignNode {
   PBStyle style;
   String prototypeNodeUUID;
 
-  toJson();
+  toJson() {}
 
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext);
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {}
+
+  Map<String, dynamic> toPBDF() {}
+
+  factory DesignNode.fromPBDF(Map<String, dynamic> json) =>
+      AbstractDesignNodeFactory.getDesignNode(json);
+
+  factory DesignNode.fromJson(Map<String, dynamic> json) =>
+      AbstractDesignNodeFactory.getDesignNode(json);
 }

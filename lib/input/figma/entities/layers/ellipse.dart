@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
@@ -57,6 +58,7 @@ class FigmaEllipse extends FigmaVector
           strokeAlign: strokeAlign,
           styles: styles,
         ) {
+    pbdfType = 'oval';
     log = Logger(runtimeType.toString());
   }
 
@@ -73,5 +75,23 @@ class FigmaEllipse extends FigmaVector
     imageReference = FigmaAssetProcessor().processImage(UUID);
     return Future.value(
         InheritedBitmap(this, name, currentContext: currentContext));
+  }
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'oval';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
   }
 }

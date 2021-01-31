@@ -35,7 +35,8 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..strokeAlign = json['strokeAlign'] as String
     ..styles = json['styles']
     ..fillsList = json['fills'] as List
-    ..imageReference = json['imageReference'] as String;
+    ..imageReference = json['imageReference'] as String
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
@@ -60,4 +61,5 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'type': instance.type,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'imageReference': instance.imageReference,
+      'pbdfType': instance.pbdfType,
     };

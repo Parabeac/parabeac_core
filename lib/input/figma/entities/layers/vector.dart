@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
@@ -73,6 +74,7 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
           sharedPluginData,
           UUID: UUID,
         ) {
+    pbdfType = 'vector';
     log = Logger(runtimeType.toString());
   }
 
@@ -94,4 +96,22 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
 
   @override
   String imageReference;
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'vector';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }
