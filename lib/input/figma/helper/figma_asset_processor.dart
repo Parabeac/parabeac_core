@@ -94,7 +94,10 @@ class FigmaAssetProcessor extends AssetProcessingService {
               }
               // TODO: Only print out when verbose flag is active
               // log.debug('File written to following path ${file.path}');
-            }).catchError((e) => log.error(e.toString()));
+            }).catchError((e) {
+              MainInfo().sentry.captureException(exception: e);
+              log.error(e.toString());
+            });
           }
         }
         return response;

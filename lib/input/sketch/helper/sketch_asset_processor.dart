@@ -57,6 +57,7 @@ class SketchAssetProcessor extends AssetProcessingService {
       }
       return response?.bodyBytes;
     } catch (e) {
+      await MainInfo().sentry.captureException(exception: e);
       log.error(e.message);
     }
     return null;
