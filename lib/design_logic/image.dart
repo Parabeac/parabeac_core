@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -78,8 +79,7 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    return null;
-    // TODO: need IVAN V expertice here
+    // TODO: need IVAN V expertise here
     // var intermediateNode;
     // intermediateNode = PBDenyListHelper().returnDenyListNodeIfExist(this);
     // if (intermediateNode != null) {
@@ -89,7 +89,7 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
     // if (intermediateNode != null) {
     //   return intermediateNode;
     // }
-    // return Future.value(
-    //     InheritedBitmap(this, name, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 }

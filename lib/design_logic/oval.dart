@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -97,13 +98,12 @@ class Oval implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    return null;
     // TODO: IvanV
     // var image = await convertImage(
     //     UUID, boundaryRectangle.width, boundaryRectangle.height);
 
-    // return Future.value(InheritedOval(this, name,
-    //     currentContext: currentContext, image: image));
+    return Future.value(
+        InheritedOval(this, name, currentContext: currentContext, image: null));
   }
 
   @override

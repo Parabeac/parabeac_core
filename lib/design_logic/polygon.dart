@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_polygon.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -102,8 +103,8 @@ class Polygon implements DesignNodeFactory, DesignNode {
     // var image = await convertImage(
     //     UUID, boundaryRectangle.width, boundaryRectangle.height);
 
-    // return Future.value(InheritedPolygon(this, name,
-    //     currentContext: currentContext, image: image));
+    return Future.value(InheritedPolygon(this, name,
+        currentContext: currentContext, image: null));
   }
 
   @override

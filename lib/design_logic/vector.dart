@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -93,8 +94,8 @@ class Vector implements DesignNodeFactory, DesignNode {
     // TODO: Ivan V
     // imageReference = addToImageQueue(UUID);
 
-    // return Future.value(
-    //     InheritedBitmap(this, name, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 
   @override
