@@ -10,13 +10,12 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   @override
   String pbdfType = 'boolean_operation';
 
-  List<DesignNode> children;
+  List<DesignNode> children = [];
 
   @override
   var boundaryRectangle;
 
   BooleanOperation({
-    List<DesignNode> this.children,
     booleanOperation,
     type,
     Frame this.boundaryRectangle,
@@ -30,11 +29,7 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
   DesignNode fromPBDF(Map<String, dynamic> json) {
-    return BooleanOperation(
-      children: (json['children'] as List)
-          ?.map((e) =>
-              e == null ? null : DesignNode.fromPBDF(e as Map<String, dynamic>))
-          ?.toList(),
+    var node = BooleanOperation(
       booleanOperation: json['booleanOperation'],
       type: json['type'],
       boundaryRectangle: json['absoluteBoundingBox'] == null
@@ -45,6 +40,13 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
       isVisible: json['visible'] as bool ?? true,
       pbdfType: json['pbdfType'] as String,
     );
+    if (json.containsKey('children')) {
+      if (json['children'] != null) {
+        node.children
+            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+      }
+    }
+    return node;
   }
 
   @override

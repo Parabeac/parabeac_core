@@ -19,7 +19,6 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
       this.isFlowHome,
       hasClickThrough,
       groupLayout,
-      List<DesignNode> this.children,
       UUID,
       booleanOperation,
       exportOptions,
@@ -49,7 +48,7 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
             prototypeNode);
 
   @override
-  List children;
+  List children = [];
 
   @override
   String pbdfType = 'artboard';
@@ -58,18 +57,14 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
   DesignNode fromPBDF(Map<String, dynamic> json) {
-    return PBArtboard(
+    var node = PBArtboard(
       backgroundColor: json['backgroundColor'] == null
           ? null
           : Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
       isFlowHome: json['isFlowHome'] as bool,
       hasClickThrough: json['hasClickThrough'],
       groupLayout: json['groupLayout'],
-      children: (json['children'] as List)
-          ?.map((e) =>
-              e == null ? null : DesignNode.fromPBDF(e as Map<String, dynamic>))
-          ?.toList(),
-      UUID: json['do_objectID'] as String,
+      UUID: json['id'] as String,
       booleanOperation: json['booleanOperation'],
       exportOptions: json['exportOptions'],
       boundaryRectangle: json['absoluteBoundingBox'] == null
@@ -101,5 +96,12 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..type = json['type'] as String;
+    if (json.containsKey('children')) {
+      if (json['children'] != null) {
+        node.children
+            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+      }
+    }
+    return node;
   }
 }

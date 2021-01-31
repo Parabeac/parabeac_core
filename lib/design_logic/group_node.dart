@@ -7,7 +7,7 @@ import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'abstract_design_node_factory.dart';
 
 class GroupNode implements DesignNodeFactory, DesignNode {
-  List children;
+  List children = [];
 
   @override
   String pbdfType = 'group';
@@ -15,7 +15,6 @@ class GroupNode implements DesignNodeFactory, DesignNode {
   GroupNode({
     bool hasClickThrough,
     groupLayout,
-    List<DesignNode> this.children,
     this.UUID,
     booleanOperation,
     exportOptions,
@@ -44,13 +43,9 @@ class GroupNode implements DesignNodeFactory, DesignNode {
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
   DesignNode fromPBDF(Map<String, dynamic> json) {
-    return GroupNode(
+    var node = GroupNode(
       hasClickThrough: json['hasClickThrough'] as bool,
       groupLayout: json['groupLayout'],
-      children: (json['children'] as List)
-          ?.map((e) =>
-              e == null ? null : DesignNode.fromJson(e as Map<String, dynamic>))
-          ?.toList(),
       UUID: json['id'] as String,
       booleanOperation: json['booleanOperation'],
       exportOptions: json['exportOptions'],
@@ -78,6 +73,13 @@ class GroupNode implements DesignNodeFactory, DesignNode {
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..type = json['type'] as String;
+    if (json.containsKey('children')) {
+      if (json['children'] != null) {
+        node.children
+            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+      }
+    }
+    return node;
   }
 
   @override
