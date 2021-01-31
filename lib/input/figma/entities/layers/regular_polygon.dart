@@ -1,5 +1,6 @@
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -58,7 +59,7 @@ class FigmaRegularPolygon extends FigmaVector
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    imageReference = addToImageQueue(UUID);
+    imageReference = FigmaAssetProcessor().processImage(UUID);
 
     return Future.value(
         InheritedBitmap(this, name, currentContext: currentContext));

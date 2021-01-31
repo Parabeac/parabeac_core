@@ -2,6 +2,7 @@ import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/pb_border.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -10,8 +11,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:parabeac_core/input/figma/helper/image_helper.dart'
-    as image_helper;
 
 import 'figma_node.dart';
 
@@ -19,7 +18,7 @@ part 'rectangle.g.dart';
 
 @JsonSerializable(nullable: true)
 class FigmaRectangle extends FigmaVector
-    with PBColorMixin, image_helper.PBImageHelperMixin
+    with PBColorMixin
     implements AbstractFigmaNodeFactory {
   @override
   String type = 'RECTANGLE';
@@ -82,7 +81,7 @@ class FigmaRectangle extends FigmaVector
     var fillsMap =
         (fillsList == null || fillsList.isEmpty) ? {} : fillsList.first;
     if (fillsMap != null && fillsMap['type'] == 'IMAGE') {
-      imageReference = addToImageQueue(UUID);
+      imageReference = FigmaAssetProcessor().processImage(UUID);
 
       return Future.value(
           InheritedBitmap(this, name, currentContext: currentContext));

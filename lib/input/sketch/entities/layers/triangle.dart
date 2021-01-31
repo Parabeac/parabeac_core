@@ -5,7 +5,7 @@ import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
-import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -117,8 +117,8 @@ class Triangle extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(
-        UUID, boundaryRectangle.width, boundaryRectangle.height);
+    var image = await SketchAssetProcessor()
+        .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
     return Future.value(InheritedTriangle(this, name,
         currentContext: currentContext, image: image));

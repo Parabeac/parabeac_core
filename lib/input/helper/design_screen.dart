@@ -1,5 +1,4 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/helper/design_page.dart';
 
 class DesignScreen {
   String id;
@@ -18,5 +17,9 @@ class DesignScreen {
     this.name,
   );
 
-  Map<String, Object> toJson() => designNode.toJson();
+  Map<String, Object> toJson() {
+    var result = <String, Object>{'azure_blob_uri': imageURI};
+    result.addAll(designNode.toJson());
+    return result;
+  }
 }

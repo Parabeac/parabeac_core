@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -8,12 +6,11 @@ import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.da
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/figma/helper/figma_project.dart';
-import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 
 import 'interpret.dart';
-import 'main_info.dart';
 
 class FigmaController extends Controller {
   ///SERVICE
@@ -34,7 +31,7 @@ class FigmaController extends Controller {
 
     /// IN CASE OF JSON ONLY
     if (jsonOnly) {
-      return stopAndToJson(figmaProject);
+      return stopAndToJson(figmaProject, FigmaAssetProcessor());
     }
 
     Interpret().init(outputPath);
@@ -80,14 +77,5 @@ class FigmaController extends Controller {
       }
     }
     return tree;
-  }
-
-  @override
-  void stopAndToJson(DesignProject project) {
-    project.projectName = MainInfo().projectName;
-    var encodedJson = json.encode(project.toJson());
-    File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
-        .writeAsStringSync(encodedJson);
-    print('Output JSON');
   }
 }

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:test/test.dart';
-import 'package:parabeac_core/input/figma/helper/image_helper.dart';
 
 void main() async {
   var process;
@@ -45,7 +45,7 @@ void main() async {
 
     test('Testing Image Conversion', () async {
       for (var uuid in uuids) {
-        var image = await convertImage(uuid, 23, 21);
+        var image = await SketchAssetProcessor().processImage(uuid, 23, 21);
         expect(image, isNot(null));
       }
     });
@@ -67,7 +67,7 @@ void main() async {
 
     test('Testing Image Conversion', () async {
       for (var uuid in uuids) {
-        var image = await convertImage(uuid, 23, 21);
+        var image = await SketchAssetProcessor().processImage(uuid, 23, 21);
         expect(image, isNot(null));
       }
     });
@@ -78,17 +78,20 @@ void main() async {
       MainInfo().figmaKey = Platform.environment['FIG_API_KEY'];
       MainInfo().figmaProjectID = 'zXXWPWb5wJXd0ImGUjEU1X';
       MainInfo().outputPath = '${Directory.current.path}/test/tmp/';
-      uuidQueue.addAll([
+      var figmaUuids = [
         '0:12', // Boolean operation
         '0:15', // Group
         '0:31', // Ellipse
         '0:57', // Rectangle
-      ]);
+      ];
+      for (var uuid in figmaUuids) {
+        FigmaAssetProcessor().processImage(uuid);
+      }
     });
 
     test('Testing Image Conversion', () async {
-      await processImageQueue();
-      for (var uuid in uuidQueue) {
+      await FigmaAssetProcessor().processImageQueue();
+      for (var uuid in FigmaAssetProcessor().uuidQueue) {
         expect(
             File('${MainInfo().outputPath}pngs/$uuid.png'.replaceAll(':', '_'))
                 .existsSync(),

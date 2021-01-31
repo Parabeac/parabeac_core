@@ -28,10 +28,10 @@ class DesignPage {
   }
 
   Map<String, Object> toJson() {
-    Map<String, Object> result = {};
+    var result = <String, Object>{};
     result['name'] = name;
     for (var screen in screens) {
-      result.addAll(screen.designNode.toJson());
+      result.addAll(screen.toJson());
     }
     return result;
   }
