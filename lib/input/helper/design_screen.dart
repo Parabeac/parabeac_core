@@ -26,7 +26,6 @@ class DesignScreen implements DesignNodeFactory {
     result['id'] = id;
     result['name'] = name;
     result['convert'] = convert;
-    result['imageURI'] = imageURI;
     result['type'] = type;
     result['designNode'] = designNode.toPBDF();
     result['azure_blob_uri'] = imageURI;

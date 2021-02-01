@@ -1,3 +1,4 @@
+import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -17,6 +18,7 @@ class DesignController extends Controller {
     var configType, {
     bool jsonOnly = false,
     DesignProject designProject,
+    AssetProcessingService apService,
   }) async {
     configure(configurationPath, configType);
 

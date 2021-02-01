@@ -35,7 +35,6 @@ class DesignPage with MapMixin implements DesignNodeFactory {
     Map<String, dynamic> result = {};
     result['pbdfType'] = pbdfType;
     result['id'] = id;
-    result['imageURI'] = imageURI;
     result['name'] = name;
     result['convert'] = convert;
     for (var screen in screens) {

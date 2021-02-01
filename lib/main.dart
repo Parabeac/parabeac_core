@@ -6,6 +6,7 @@ import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:quick_log/quick_log.dart';
@@ -161,9 +162,14 @@ ${parser.usage}
       }
     }
 
-    SketchController().convertFile(path, MainInfo().outputPath + projectName,
-        configurationPath, configurationType,
-        jsonOnly: jsonOnly);
+    SketchController().convertFile(
+      path,
+      MainInfo().outputPath + projectName,
+      configurationPath,
+      configurationType,
+      jsonOnly: jsonOnly,
+      apService: SketchAssetProcessor(),
+    );
     process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
@@ -183,11 +189,13 @@ ${parser.usage}
       FigmaAssetProcessor().projectUUID = MainInfo().figmaProjectID;
       // Starts Figma to Object
       FigmaController().convertFile(
-          jsonOfFigma,
-          MainInfo().outputPath + projectName,
-          configurationPath,
-          configurationType,
-          jsonOnly: jsonOnly);
+        jsonOfFigma,
+        MainInfo().outputPath + projectName,
+        configurationPath,
+        configurationType,
+        jsonOnly: jsonOnly,
+        apService: FigmaAssetProcessor(),
+      );
     } else {
       log.error('File was not retrieved from Figma.');
     }
