@@ -5,6 +5,7 @@ import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.da
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
@@ -94,7 +95,7 @@ abstract class Controller {
     await apService.processRootElements(uuids);
     project.projectName = MainInfo().projectName;
     var projectJson = project.toPBDF();
-    projectJson['azure_container_uri'] = apService.getContainerUri();
+    projectJson['azure_container_uri'] = AzureAssetService().getContainerUri();
     var encodedJson = json.encode(projectJson);
     File('${verifyPath(MainInfo().outputPath)}${project.projectName}.json')
         .writeAsStringSync(encodedJson);
@@ -110,7 +111,7 @@ abstract class Controller {
 
     for (var page in project.pages) {
       for (var screen in page.screens) {
-        screen.imageURI = apService.getImageURI('${screen.id}.png');
+        screen.imageURI = AzureAssetService().getImageURI('${screen.id}.png');
         result[screen.id] = {
           'width': screen.designNode.boundaryRectangle.width,
           'height': screen.designNode.boundaryRectangle.height

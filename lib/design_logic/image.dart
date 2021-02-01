@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -78,18 +82,16 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
   }
 
   @override
-  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    // TODO: need IVAN V expertise here
-    // var intermediateNode;
-    // intermediateNode = PBDenyListHelper().returnDenyListNodeIfExist(this);
-    // if (intermediateNode != null) {
-    //   return intermediateNode;
-    // }
-    // intermediateNode = PBPluginListHelper().returnAllowListNodeIfExists(this);
-    // if (intermediateNode != null) {
-    //   return intermediateNode;
-    // }
-    return Future.value(
-        InheritedBitmap(this, name, currentContext: currentContext));
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    var img = await AzureAssetService().downloadImage(UUID);
+    var file =
+        File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
+          ..createSync(recursive: true);
+    file.writeAsBytesSync(img);
+    return Future.value(InheritedBitmap(
+      this,
+      name,
+      currentContext: currentContext,
+    ));
   }
 }

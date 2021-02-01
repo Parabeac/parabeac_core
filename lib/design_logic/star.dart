@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_star.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -101,13 +102,9 @@ class Star implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    // TODO: Ivan V
-
-    // var image = await convertImage(
-    //     UUID, boundaryRectangle.width, boundaryRectangle.height);
-
+    var img = await AzureAssetService().downloadImage(UUID);
     return Future.value(
-        InheritedStar(this, name, currentContext: currentContext, image: null));
+        InheritedStar(this, name, currentContext: currentContext, image: img));
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -23,6 +24,7 @@ class DesignController extends Controller {
     configure(configurationPath, configType);
 
     var designProject = await generateDesignProject(pbdf, outputPath);
+    AzureAssetService().projectUUID = pbdf['id'];
 
     await super.convertFile(
       pbdf,

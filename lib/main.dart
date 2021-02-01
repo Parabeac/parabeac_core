@@ -6,6 +6,7 @@ import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
@@ -186,7 +187,7 @@ ${parser.usage}
         MainInfo().figmaKey);
 
     if (jsonOfFigma != null) {
-      FigmaAssetProcessor().projectUUID = MainInfo().figmaProjectID;
+      AzureAssetService().projectUUID = MainInfo().figmaProjectID;
       // Starts Figma to Object
       FigmaController().convertFile(
         jsonOfFigma,
