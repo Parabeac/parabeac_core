@@ -3,10 +3,10 @@ import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
-import 'package:parabeac_core/input/figma/helper/figma_node_tree.dart';
 import 'package:parabeac_core/input/figma/helper/figma_page.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
+import 'package:parabeac_core/input/figma/helper/figma_project.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:test/test.dart';
 
@@ -35,7 +35,7 @@ void main() {
             await FigmaController().generateFigmaTree(result, outputPath);
 
         expect(figmaNodeTree != null, true);
-        expect(figmaNodeTree is FigmaNodeTree, true);
+        expect(figmaNodeTree is FigmaProject, true);
         expect(figmaNodeTree.pages.isNotEmpty, true);
         expect(figmaNodeTree.pages[0] is FigmaPage, true);
       });
@@ -44,7 +44,7 @@ void main() {
             ids, ids.metaFileJson['pagesAndArtboards'], outputPath);
 
         expect(sketchNodeTree != null, true);
-        expect(sketchNodeTree is SketchNodeTree, true);
+        expect(sketchNodeTree is SketchProject, true);
         expect(sketchNodeTree.pages.isNotEmpty, true);
         expect(sketchNodeTree.pages[0] is SketchPage, true);
       });

@@ -6,9 +6,9 @@ import 'package:parabeac_core/input/sketch/entities/layers/artboard.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/group.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/sketch_text.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_node_tree.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_page_item.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_screen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -20,11 +20,11 @@ import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 
-class MockNodeTree extends Mock implements SketchNodeTree {}
+class MockProject extends Mock implements SketchProject {}
 
 class MockPage extends Mock implements SketchPage {}
 
-class MockPageItem extends Mock implements SketchPageItem {}
+class MockScreen extends Mock implements SketchScreen {}
 
 class MockArtboard extends Mock implements Artboard {
   @override
@@ -62,9 +62,9 @@ class MockContainer extends Mock implements SketchText {
 }
 
 void main() {
-  MockNodeTree nodeTree;
+  MockProject project;
   MockPage page;
-  MockPageItem pageItem;
+  MockScreen screen;
   MockArtboard artboard;
   MockGroup mockGroup;
   MockContainer container;
@@ -75,16 +75,16 @@ void main() {
       MainInfo().configurations = MainInfo().defaultConfigs;
       MainInfo().configurationType = 'default';
 
-      nodeTree = MockNodeTree();
+      project = MockProject();
       page = MockPage();
-      pageItem = MockPageItem();
+      screen = MockScreen();
       artboard = MockArtboard();
       mockGroup = MockGroup();
       container = MockContainer();
 
-      when(nodeTree.pages).thenReturn([page]);
-      when(page.getPageItems()).thenReturn([pageItem]);
-      when(pageItem.root).thenReturn(artboard);
+      when(project.pages).thenReturn([page]);
+      when(page.getPageItems()).thenReturn([screen]);
+      when(screen.designNode).thenReturn(artboard);
       when(artboard.children).thenReturn([mockGroup]);
 
       when(artboard.isVisible).thenReturn(true);
@@ -123,7 +123,7 @@ void main() {
     });
     test('', () async {
       var mainTree = await Interpret().interpretAndOptimize(
-        nodeTree,
+        project,
       );
       expect(mainTree != null, true);
       expect(mainTree is PBProject, true);
