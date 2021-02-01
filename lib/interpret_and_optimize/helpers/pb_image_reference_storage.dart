@@ -34,7 +34,11 @@ class ImageReferenceStorage {
       return true;
     }
     if (addReference(name, path)) {
-      File('${MainInfo().outputPath}pngs/${name}.png').writeAsBytesSync(image);
+      var imgPath = '${MainInfo().outputPath}pngs/${name}.png';
+      if (!File(imgPath).existsSync()) {
+        File(imgPath).createSync(recursive: true);
+      }
+      File(imgPath).writeAsBytesSync(image);
       return true;
     }
     return false;
