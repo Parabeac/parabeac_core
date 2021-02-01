@@ -116,6 +116,9 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
   }
 
   bool areAllVectors() {
+    if (children == null) {
+      return false;
+    }
     for (var child in children) {
       if (child is! FigmaVector) {
         return false;

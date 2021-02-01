@@ -25,9 +25,9 @@ class GroupNode implements DesignNodeFactory, DesignNode {
     isFlippedHorizontal,
     isFlippedVertical,
     isLocked,
-    isVisible,
+    this.isVisible,
     layerListExpandedType,
-    name,
+    this.name,
     nameIsFixed,
     resizingConstraint,
     resizingType,
@@ -38,7 +38,7 @@ class GroupNode implements DesignNodeFactory, DesignNode {
     clippingMaskMode,
     userInfo,
     maintainScrollPosition,
-    pbdfType,
+    this.pbdfType = 'group',
   });
 
   @override

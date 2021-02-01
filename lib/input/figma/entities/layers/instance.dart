@@ -111,7 +111,7 @@ class Instance extends FigmaFrame
   }
 
   @override
-  String FindName(String uuid, List<SketchNode> children, Type type) {
+  String FindName(String uuid, List children, Type type) {
     // TODO: implement FindName
     throw UnimplementedError();
   }

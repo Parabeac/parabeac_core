@@ -31,9 +31,9 @@ class Oval implements DesignNodeFactory, DesignNode {
     isFlippedHorizontal,
     isFlippedVertical,
     isLocked,
-    isVisible,
+    this.isVisible,
     layerListExpandedType,
-    name,
+    this.name,
     nameIsFixed,
     resizingConstraint,
     resizingType,
@@ -45,7 +45,7 @@ class Oval implements DesignNodeFactory, DesignNode {
     userInfo,
     maintainScrollPosition,
     type,
-    pbdfType,
+    this.pbdfType = 'oval',
   });
   DesignNode fromPBDF(Map<String, dynamic> json) {
     return Oval(
