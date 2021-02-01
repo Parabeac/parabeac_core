@@ -25,6 +25,7 @@ class SketchProject extends DesignProject {
   Archive _originalArchive;
   final Map _pagesAndArtboards;
   SketchProject(this._ids, this._pagesAndArtboards, this.projectName) {
+    id = _ids.documentFile['do_objectID'];
     _originalArchive = _ids.archive;
     miscPages.add(_setThirdPartySymbols());
     sharedStyles = _setSharedStyles();
