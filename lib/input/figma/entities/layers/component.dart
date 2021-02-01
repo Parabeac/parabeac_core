@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_shared_master_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
@@ -68,10 +69,13 @@ class Component extends FigmaFrame
           flow: flow,
           children: children,
           backgroundColor: backgroundColor,
-        );
+        ) {
+    pbdfType = 'symbol_master';
+  }
 
   // make sure only store unique UUID overrides with Map
-  List<OverridableProperty> overrideProperties;
+  @override
+  var overrideProperties;
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
@@ -122,4 +126,25 @@ class Component extends FigmaFrame
 
   @override
   String symbolID;
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'symbol_master';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
+
+  @override
+  var isFlowHome;
 }

@@ -145,4 +145,46 @@ class Rectangle extends AbstractShapeLayer
       },
     ));
   }
+
+  @override
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'edited': edited,
+        'isClosed': isClosed,
+        'pointRadiusBehaviour': pointRadiusBehaviour,
+        'points': points,
+        'CLASS_NAME': CLASS_NAME,
+        'fixedRadius': fixedRadius,
+        'hasConvertedToNewRoundCorners': hasConvertedToNewRoundCorners,
+        'needsConvertionToNewRoundCorners': needsConvertionToNewRoundCorners,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'pbdfType': pbdfType,
+      };
+
+  @override
+  @JsonKey(ignore: true)
+  String pbdfType = 'rectangle';
 }

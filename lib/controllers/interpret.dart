@@ -2,9 +2,9 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
-import 'package:parabeac_core/input/helper/node_tree.dart';
-import 'package:parabeac_core/input/helper/page.dart';
-import 'package:parabeac_core/input/helper/page_item.dart';
+import 'package:parabeac_core/input/helper/design_project.dart';
+import 'package:parabeac_core/input/helper/design_page.dart';
+import 'package:parabeac_core/input/helper/design_screen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -47,7 +47,7 @@ class Interpret {
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBProject> interpretAndOptimize(NodeTree tree) async {
+  Future<PBProject> interpretAndOptimize(DesignProject tree) async {
     _pb_project = PBProject(projectName, tree.sharedStyles);
 
     ///3rd Party Symbols
@@ -67,7 +67,7 @@ class Interpret {
     return _pb_project;
   }
 
-  Future<Iterable<PBIntermediateTree>> _generateGroup(Page group) async {
+  Future<Iterable<PBIntermediateTree>> _generateGroup(DesignPage group) async {
     var tempForest = <PBIntermediateTree>[];
     var pageItems = group.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
@@ -96,17 +96,17 @@ class Interpret {
     return tempForest;
   }
 
-  Future<PBIntermediateTree> _generateScreen(PageItem item) async {
+  Future<PBIntermediateTree> _generateScreen(DesignScreen item) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
 
-    var parentComponent = item.root;
+    var parentComponent = item.designNode;
 
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var intermediateTree = PBIntermediateTree(item.root.name);
+    var intermediateTree = PBIntermediateTree(item.designNode.name);
     currentContext.treeRoot = intermediateTree;
     currentContext.project = _pb_project;
     intermediateTree.rootNode = await visualGenerationService(

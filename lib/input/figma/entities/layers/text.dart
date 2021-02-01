@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
@@ -54,7 +55,9 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
-        );
+        ) {
+    pbdfType = 'text';
+  }
 
   @override
   @JsonKey(name: 'characters')
@@ -93,4 +96,40 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
         InheritedText(this, name, currentContext: currentContext),
       ));
   }
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'text';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
+
+  @override
+  var attributedString;
+
+  @override
+  var automaticallyDrawOnUnderlyingPath;
+
+  @override
+  var dontSynchroniseWithSymbol;
+
+  @override
+  var glyphBounds;
+
+  @override
+  var lineSpacingBehaviour;
+
+  @override
+  var textBehaviour;
 }

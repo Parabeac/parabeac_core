@@ -52,7 +52,7 @@ class PBVisualGenerationService implements PBGenerationService {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
 
-      if (currentNode.designNode.isVisible) {
+      if (currentNode.designNode?.isVisible ?? true) {
         PBIntermediateNode result;
         // Check semantics
         result = PBDenyListHelper()
@@ -120,7 +120,9 @@ class PBVisualGenerationService implements PBGenerationService {
       destHolder.addChild(rootIntermediateNode);
       return destHolder;
     }
-    _extractScreenSize(rootIntermediateNode);
+    if (rootIntermediateNode != null) {
+      _extractScreenSize(rootIntermediateNode);
+    }
     return rootIntermediateNode;
   }
 

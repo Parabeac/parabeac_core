@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/controllers/design_controller.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:quick_log/quick_log.dart';
@@ -46,8 +50,15 @@ void main(List<String> args) async {
         defaultsTo: 'default:lib/configurations/configurations.json')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
+    ..addOption(
+      'pbdl-in',
+      help:
+          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+    )
     ..addFlag('help',
-        help: 'Displays this help information.', abbr: 'h', negatable: false);
+        help: 'Displays this help information.', abbr: 'h', negatable: false)
+    ..addFlag('export-pbdl',
+        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.');
 
 //error handler using logger package
   void handleError(String msg) {
@@ -67,6 +78,7 @@ ${parser.usage}
     exit(0);
   }
 
+  // Detect platform
   if (Platform.isMacOS || Platform.isLinux) {
     MainInfo().platform = 'UIX';
   } else if (Platform.isWindows) {
@@ -81,22 +93,23 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
+  var jsonOnly = argResults['export-pbdl'];
 
   var configurationPath = argResults['config-path'];
   var configurationType = 'default';
   String projectName = argResults['project-name'];
 
   // Handle input errors
-  if (path == null &&
-      (MainInfo().figmaKey == null || MainInfo().figmaProjectID == null)) {
+  if (hasTooFewArgs(argResults)) {
     handleError(
         'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
-  } else if (path != null &&
-      (MainInfo().figmaKey != null || MainInfo().figmaProjectID != null)) {
+  } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  } else if (path == null) {
+  } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
+  } else if (argResults['pbdl-in'] != null) {
+    designType = 'pbdl';
   }
 
   //  usage -c "default:lib/configurations/configurations.json
@@ -120,36 +133,44 @@ ${parser.usage}
   MainInfo().projectName = projectName;
 
   // Create pngs directory
-  await Directory('${MainInfo().outputPath}pngs').create(recursive: true);
+
+  await Directory('${MainInfo().outputPath}' +
+          (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'))
+      .create(recursive: true);
 
   if (designType == 'sketch') {
-    var file = await FileSystemEntity.isFile(path);
-    var exists = await File(path).exists();
+    Process process;
+    if (!jsonOnly) {
+      var file = await FileSystemEntity.isFile(path);
+      var exists = await File(path).exists();
 
-    if (!file || !exists) {
-      handleError('$path is not a file');
-    }
-    MainInfo().sketchPath = path;
-    InputDesignService(path);
+      if (!file || !exists) {
+        handleError('$path is not a file');
+      }
+      MainInfo().sketchPath = path;
+      InputDesignService(path);
 
-    var process;
-    if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
-      process = await Process.start('npm', ['run', 'prod'],
-          workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
+      if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        process = await Process.start('npm', ['run', 'prod'],
+            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
-      await for (var event in process.stdout.transform(utf8.decoder)) {
-        if (event.toLowerCase().contains('server is listening on port')) {
-          log.fine('Successfully started Sketch Asset Converter');
-          break;
+        await for (var event in process.stdout.transform(utf8.decoder)) {
+          if (event.toLowerCase().contains('server is listening on port')) {
+            log.fine('Successfully started Sketch Asset Converter');
+            break;
+          }
         }
       }
     }
 
-    await SketchController().convertFile(
-        path,
-        MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType);
+    SketchController().convertFile(
+      path,
+      MainInfo().outputPath + projectName,
+      configurationPath,
+      configurationType,
+      jsonOnly: jsonOnly,
+      apService: SketchAssetProcessor(),
+    );
     process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
@@ -166,15 +187,38 @@ ${parser.usage}
         MainInfo().figmaKey);
 
     if (jsonOfFigma != null) {
+      AzureAssetService().projectUUID = MainInfo().figmaProjectID;
       // Starts Figma to Object
       FigmaController().convertFile(
-          jsonOfFigma,
-          MainInfo().outputPath + projectName,
-          configurationPath,
-          configurationType);
+        jsonOfFigma,
+        MainInfo().outputPath + projectName,
+        configurationPath,
+        configurationType,
+        jsonOnly: jsonOnly,
+        apService: FigmaAssetProcessor(),
+      );
     } else {
       log.error('File was not retrieved from Figma.');
     }
+  } else if (designType == 'pbdl') {
+    var pbdlPath = argResults['pbdl-in'];
+    var isFile = FileSystemEntity.isFileSync(pbdlPath);
+    var exists = File(pbdlPath).existsSync();
+
+    if (!isFile || !exists) {
+      handleError('$path is not a file');
+    }
+
+    var jsonString = await File(pbdlPath).readAsString();
+
+    var pbdf = json.decode(jsonString);
+
+    DesignController().convertFile(
+      pbdf,
+      MainInfo().outputPath + projectName,
+      configurationPath,
+      configurationType,
+    );
   }
   exitCode = 0;
 }
@@ -250,4 +294,26 @@ Future<String> getCleanPath(String path) async {
     result += dir + '/';
   }
   return result;
+}
+
+/// Returns true if `args` contains two or more
+/// types of intake to parabeac-core
+bool hasTooManyArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null || args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
+
+  var hasAll = hasSketch && hasFigma && hasPbdl;
+
+  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
+}
+
+/// Returns true if `args` does not contain any intake
+/// to parabeac-core
+bool hasTooFewArgs(ArgResults args) {
+  var hasSketch = args['path'] != null;
+  var hasFigma = args['figKey'] != null && args['fig'] != null;
+  var hasPbdl = args['pbdl-in'] != null;
+
+  return !(hasSketch || hasFigma || hasPbdl);
 }

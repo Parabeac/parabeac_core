@@ -1,23 +1,22 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/input/figma/helper/image_helper.dart'
-    as image_helper;
+
 import 'package:quick_log/quick_log.dart';
 
 part 'vector.g.dart';
 
 @JsonSerializable(nullable: true)
-class FigmaVector extends FigmaNode
-    with image_helper.PBImageHelperMixin
-    implements FigmaNodeFactory, Image {
+class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
   @JsonKey(ignore: true)
   Logger log;
   @override
@@ -75,6 +74,7 @@ class FigmaVector extends FigmaNode
           sharedPluginData,
           UUID: UUID,
         ) {
+    pbdfType = 'vector';
     log = Logger(runtimeType.toString());
   }
 
@@ -88,11 +88,30 @@ class FigmaVector extends FigmaNode
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    imageReference = addToImageQueue(UUID);
+    imageReference = FigmaAssetProcessor().processImage(UUID);
 
-    return Future.value(InheritedBitmap(this, name, currentContext: currentContext));
+    return Future.value(
+        InheritedBitmap(this, name, currentContext: currentContext));
   }
 
   @override
   String imageReference;
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'vector';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }
