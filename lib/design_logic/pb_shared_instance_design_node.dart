@@ -44,9 +44,11 @@ class PBSharedInstanceDesignNode extends DesignNode
       String symbolID,
       num verticalSpacing,
       num horizontalSpacing,
-      pbdfType})
+      this.pbdfType})
       : super(UUID, name, isVisible, boundaryRectangle, type, style,
-            prototypeNode);
+            prototypeNode) {
+    pbdfType = 'symbol_instance';
+  }
 
   @override
   String pbdfType = 'symbol_instance';

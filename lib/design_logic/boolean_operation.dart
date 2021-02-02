@@ -24,7 +24,7 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
     type,
     Frame this.boundaryRectangle,
     String UUID,
-    String name,
+    String this.name,
     bool isVisible,
     pbdfType,
   });

@@ -77,8 +77,11 @@ class GroupNode implements DesignNodeFactory, DesignNode {
       ..type = json['type'] as String;
     if (json.containsKey('children')) {
       if (json['children'] != null) {
-        node.children
-            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+        var child =
+            DesignNode.fromPBDF(json['children'] as Map<String, dynamic>);
+        if (child != null) {
+          node.children.add(child);
+        }
       }
     }
     return node;
