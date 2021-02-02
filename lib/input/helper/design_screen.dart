@@ -16,13 +16,18 @@ class DesignScreen implements DesignNodeFactory {
     DesignNode designNode,
     this.id,
     this.name,
+    this.type,
   }) {
     this.designNode = designNode;
   }
 
   Map<String, dynamic> toPBDF() {
     var result = <String, Object>{};
-    result['pbdfType'] = pbdfType;
+    if (this.type == 'symbolMaster') {
+      result['pbdfType'] = 'symbol_master';
+    } else {
+      result['pbdfType'] = pbdfType;
+    }
     result['id'] = id;
     result['name'] = name;
     result['convert'] = convert;
