@@ -79,6 +79,7 @@ class SketchProject extends DesignProject {
           layer.originalMaster,
           layer.UUID,
           '',
+          layer.originalMaster.type,
         ));
       }
       return pg;
@@ -109,6 +110,7 @@ class SketchProject extends DesignProject {
           layer,
           layer.UUID,
           layer.name,
+          layer.type,
         ));
       }
       sketchPages.add(pg);
