@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
@@ -23,6 +24,8 @@ class SymbolMaster extends AbstractGroupLayer
     implements SketchNodeFactory, PBSharedInstanceDesignNode {
   @override
   String CLASS_NAME = 'symbolMaster';
+  @override
+  var overrideValues;
   final Color backgroundColor;
   final bool hasBackgroundColor;
   final dynamic horizontalRulerData;
@@ -140,7 +143,7 @@ class SymbolMaster extends AbstractGroupLayer
             userInfo,
             style,
             maintainScrollPosition) {
-    this.name = name?.replaceAll(RegExp(r'[\d\s_\+]'), '');
+    this.name = name?.replaceAll(RegExp(r'[\s_\+]'), '');
     // ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
     // someElement/default
   }
@@ -177,19 +180,83 @@ class SymbolMaster extends AbstractGroupLayer
     return sharedParameters;
   }
 
-    @override
-    Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-      var sym_master = PBSharedMasterNode(
-        this,
-        symbolID,
-        name,
-        Point(boundaryRectangle.x, boundaryRectangle.y),
-        Point(boundaryRectangle.x + boundaryRectangle.width,
-            boundaryRectangle.y + boundaryRectangle.height),
-        overridableProperties: _extractParameters(),
-        currentContext: currentContext,
-      );
-      return Future.value(sym_master);
-    }
+  @override
+  Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
+    var sym_master = PBSharedMasterNode(
+      this,
+      symbolID,
+      name,
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      overridableProperties: _extractParameters(),
+      currentContext: currentContext,
+    );
+    return Future.value(sym_master);
   }
 
+  @override
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'hasClickThrough': hasClickThrough,
+        'groupLayout': groupLayout,
+        'CLASS_NAME': CLASS_NAME,
+        'backgroundColor': backgroundColor,
+        'hasBackgroundColor': hasBackgroundColor,
+        'horizontalRulerData': horizontalRulerData,
+        'includeBackgroundColorInExport': includeBackgroundColorInExport,
+        'includeInCloudUpload': includeInCloudUpload,
+        'isFlowHome': isFlowHome,
+        'resizesContent': resizesContent,
+        'verticalRulerData': verticalRulerData,
+        'includeBackgroundColorInInstance': includeBackgroundColorInInstance,
+        'symbolID': symbolID,
+        'changeIdentifier': changeIdentifier,
+        'allowsOverrides': allowsOverrides,
+        'overrideProperties': overrideProperties,
+        'presetDictionary': presetDictionary,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'children': getChildren(),
+        'parameters': parameters,
+        'pbdfType': pbdfType,
+      };
+
+  @override
+  @JsonKey(ignore: true)
+  String pbdfType = 'symbol_master';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
+}

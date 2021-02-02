@@ -20,7 +20,8 @@ class PBInputFormatter {
     return result;
   }
 
-  static String _removeFirstDigits(String str) => str.startsWith(RegExp(r'\d+'))
-      ? str.replaceFirstMapped(RegExp(r'\d+'), (e) => '')
-      : str;
+  static String _removeFirstDigits(String str) =>
+      str.startsWith(RegExp(r'^[\d]+'))
+          ? str.replaceFirstMapped(RegExp(r'^[\d]+'), (e) => '')
+          : str;
 }

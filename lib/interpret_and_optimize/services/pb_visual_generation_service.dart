@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/services/positional_cleansing_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -51,7 +52,7 @@ class PBVisualGenerationService implements PBGenerationService {
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
 
-      if (currentNode?.designNode?.isVisible ?? false) {
+      if (currentNode.designNode?.isVisible ?? true) {
         PBIntermediateNode result;
         // Check semantics
         result = PBDenyListHelper()
@@ -73,10 +74,11 @@ class PBVisualGenerationService implements PBGenerationService {
 
           // Interpret state management node
           if (!ignoreStates &&
-                  smHelper.isValidStateNode(result.name) &&
-                  currentNode.designNode.name !=
+              smHelper.isValidStateNode(result.name) &&
+              (currentNode.designNode.name !=
                       currentNode.convertedParent?.name ??
-              true) {
+                  true) &&
+              result is PBSharedMasterNode) {
             if (smHelper.isDefaultNode(result)) {
               smHelper.interpretStateManagementNode(result);
             } else {

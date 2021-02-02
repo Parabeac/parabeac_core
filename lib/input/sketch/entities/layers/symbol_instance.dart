@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -130,7 +131,10 @@ class SymbolInstance extends SketchNode
       if (!ovrNames.contains(overrideValue.overrideName)) {
         var properties = extractParameter(overrideValue.overrideName);
         sharedParameters.add(PBSharedParameterValue(
-            properties['type'], overrideValue.value, properties['uuid'], overrideValue.overrideName));
+            properties['type'],
+            overrideValue.value,
+            properties['uuid'],
+            overrideValue.overrideName));
         ovrNames.add(overrideValue.overrideName);
       }
     }
@@ -148,4 +152,57 @@ class SymbolInstance extends SketchNode
 
   @override
   List parameters;
+
+  @override
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'CLASS_NAME': CLASS_NAME,
+        'overrideValues': overrideValues,
+        'scale': scale,
+        'symbolID': symbolID,
+        'verticalSpacing': verticalSpacing,
+        'horizontalSpacing': horizontalSpacing,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'parameters': parameters,
+        'pbdfType': pbdfType,
+      };
+
+  @override
+  @JsonKey(ignore: true)
+  String pbdfType = 'symbol_instance';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
 }

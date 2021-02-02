@@ -50,7 +50,9 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
           type,
           pluginData,
           sharedPluginData,
-        );
+        ) {
+    pbdfType = 'image';
+  }
 
   @override
   FigmaNode createFigmaNode(Map<String, dynamic> json) =>
@@ -77,4 +79,10 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   @override
   @JsonKey(ignore: true)
   var style;
+
+  @override
+  Map<String, dynamic> toPBDF() => toJson();
+
+  @override
+  String pbdfType = 'image';
 }

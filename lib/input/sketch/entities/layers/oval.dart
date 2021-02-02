@@ -5,7 +5,7 @@ import 'package:parabeac_core/input/sketch/entities/layers/abstract_shape_layer.
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
-import 'package:parabeac_core/input/sketch/helper/svg_png_convertion.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -116,10 +116,49 @@ class Oval extends AbstractShapeLayer implements SketchNodeFactory {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var image = await convertImage(
-        UUID, boundaryRectangle.width, boundaryRectangle.height);
+    var image = await SketchAssetProcessor()
+        .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
     return Future.value(InheritedOval(this, name,
         currentContext: currentContext, image: image));
   }
+
+  @override
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'edited': edited,
+        'isClosed': isClosed,
+        'pointRadiusBehaviour': pointRadiusBehaviour,
+        'points': points,
+        'CLASS_NAME': CLASS_NAME,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'pbdfType': pbdfType,
+      };
+
+  @override
+  @JsonKey(ignore: true)
+  String pbdfType = 'oval';
 }

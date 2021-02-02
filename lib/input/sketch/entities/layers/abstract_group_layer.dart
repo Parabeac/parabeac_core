@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
@@ -64,4 +65,12 @@ abstract class AbstractGroupLayer extends SketchNode implements GroupNode {
 
   @override
   Map<String, dynamic> toJson();
+
+  Map<String, dynamic> getChildren() {
+    Map<String, dynamic> result = {};
+    for (var child in children) {
+      result.addAll((child as DesignNode).toPBDF());
+    }
+    return result;
+  }
 }

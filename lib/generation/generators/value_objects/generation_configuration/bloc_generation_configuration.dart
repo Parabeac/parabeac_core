@@ -10,7 +10,7 @@ class BLoCGenerationConfiguration extends GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     logger = Logger('BLoC');
     logger.info(
-        '\nThanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!\n');
+        'Thanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!');
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject);
     registerMiddleware(BLoCMiddleware(generationManager));

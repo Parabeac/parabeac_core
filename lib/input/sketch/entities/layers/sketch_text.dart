@@ -1,3 +1,4 @@
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -21,11 +22,15 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   String CLASS_NAME = 'text';
 
-  Map attributedString;
+  @override
   final bool automaticallyDrawOnUnderlyingPath;
+  @override
   final bool dontSynchroniseWithSymbol;
+  @override
   final dynamic lineSpacingBehaviour;
+  @override
   final dynamic textBehaviour;
+  @override
   final dynamic glyphBounds;
 
   @override
@@ -138,4 +143,86 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   @override
   @JsonKey(ignore: true)
   String content;
+
+  @override
+  Map<String, dynamic> toPBDF() => <String, dynamic>{
+        'booleanOperation': booleanOperation,
+        'exportOptions': exportOptions,
+        'flow': flow,
+        'isFixedToViewport': isFixedToViewport,
+        'isFlippedHorizontal': isFlippedHorizontal,
+        'isFlippedVertical': isFlippedVertical,
+        'isLocked': isLocked,
+        'layerListExpandedType': layerListExpandedType,
+        'name': name,
+        'nameIsFixed': nameIsFixed,
+        'resizingConstraint': resizingConstraint,
+        'resizingType': resizingType,
+        'rotation': rotation,
+        'sharedStyleID': sharedStyleID,
+        'shouldBreakMaskChain': shouldBreakMaskChain,
+        'hasClippingMask': hasClippingMask,
+        'clippingMaskMode': clippingMaskMode,
+        'userInfo': userInfo,
+        'maintainScrollPosition': maintainScrollPosition,
+        'prototypeNodeUUID': prototypeNodeUUID,
+        'CLASS_NAME': CLASS_NAME,
+        'attributedString': attributedString,
+        'automaticallyDrawOnUnderlyingPath': automaticallyDrawOnUnderlyingPath,
+        'dontSynchroniseWithSymbol': dontSynchroniseWithSymbol,
+        'lineSpacingBehaviour': lineSpacingBehaviour,
+        'textBehaviour': textBehaviour,
+        'glyphBounds': glyphBounds,
+        'absoluteBoundingBox': boundaryRectangle,
+        'id': UUID,
+        'type': type,
+        'visible': isVisible,
+        'style': style,
+        'pbdfType': pbdfType,
+      };
+
+  @override
+  @JsonKey(ignore: true)
+  String pbdfType = 'text';
+
+  @override
+  DesignNode createDesignNode(Map<String, dynamic> json) {
+    // TODO: implement createDesignNode
+    throw UnimplementedError();
+  }
+
+  @override
+  DesignNode fromPBDF(Map<String, dynamic> json) {
+    // TODO: implement fromPBDF
+    throw UnimplementedError();
+  }
+
+  @override
+  var attributedString;
+
+  @override
+  void set automaticallyDrawOnUnderlyingPath(
+      _automaticallyDrawOnUnderlyingPath) {
+    // TODO: implement automaticallyDrawOnUnderlyingPath
+  }
+
+  @override
+  void set dontSynchroniseWithSymbol(_dontSynchroniseWithSymbol) {
+    // TODO: implement dontSynchroniseWithSymbol
+  }
+
+  @override
+  void set glyphBounds(_glyphBounds) {
+    // TODO: implement glyphBounds
+  }
+
+  @override
+  void set lineSpacingBehaviour(_lineSpacingBehaviour) {
+    // TODO: implement lineSpacingBehaviour
+  }
+
+  @override
+  void set textBehaviour(_textBehaviour) {
+    // TODO: implement textBehaviour
+  }
 }

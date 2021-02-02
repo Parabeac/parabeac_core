@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
@@ -25,17 +26,23 @@ class BLoCMiddleware extends Middleware {
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
-      var genericName = node.functionCallName
+      var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
-      var variableName = node.functionCallName.snakeCase;
-      var generalName = genericName.snakeCase;
+      var importName = node.functionCallName.snakeCase;
+      var generalName = generalStateName.snakeCase;
       var parentDirectory = generalName + '_bloc';
+      var globalVariableName = node.name.snakeCase;
+      managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
+          '${generalStateName.pascalCase}Bloc()'));
 
       await managerData.replaceImport(
-          variableName, '${parentDirectory}/${generalName}_bloc.dart');
+          importName, '${parentDirectory}/${generalName}_bloc.dart');
+
+      managerData.addToDispose('${globalVariableName}.close()');
       node.generator = StringGeneratorAdapter('''
-      BlocBuilder<${genericName.pascalCase}Bloc, ${genericName.pascalCase}State>(
-      builder: (context, state) => state.widget  
+      BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
+        cubit: ${globalVariableName},
+        builder: (context, state) => state.widget  
       )
       ''');
       return node;

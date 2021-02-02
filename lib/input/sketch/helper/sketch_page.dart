@@ -1,9 +1,13 @@
-import 'package:parabeac_core/input/helper/page.dart';
+import 'package:parabeac_core/input/helper/design_page.dart';
 import 'package:quick_log/quick_log.dart';
 
-class SketchPage extends Page {
+class SketchPage extends DesignPage {
   @override
-  var log = Logger('Sketch');
+  var log = Logger('Design Page Sketch');
 
-  SketchPage(String name) : super(name);
+  SketchPage(String name, String id)
+      : super(
+          name: name,
+          id: id,
+        );
 }

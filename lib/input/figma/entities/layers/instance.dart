@@ -4,8 +4,10 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
+import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -73,7 +75,9 @@ class Instance extends FigmaFrame
           flow: flow,
           children: children,
           backgroundColor: backgroundColor,
-        );
+        ) {
+    pbdfType = 'symbol_instance';
+  }
 
   String componentId;
 
@@ -96,4 +100,33 @@ class Instance extends FigmaFrame
     );
     return Future.value(sym);
   }
+
+  @override
+  String pbdfType = 'symbol_instance';
+
+  @override
+  Map AddMasterSymbolName(String overrideName, List children) {
+    // TODO: implement AddMasterSymbolName
+    throw UnimplementedError();
+  }
+
+  @override
+  String FindName(String uuid, List children, Type type) {
+    // TODO: implement FindName
+    throw UnimplementedError();
+  }
+
+  @override
+  Map extractParameter(String overrideName) {
+    // TODO: implement extractParameter
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement overrideValues
+  List<OverridableValue> get overrideValues => throw UnimplementedError();
+
+  @override
+  // TODO: implement typeToAbbreviation
+  Map<Type, String> get typeToAbbreviation => throw UnimplementedError();
 }

@@ -21,13 +21,18 @@ mixin SymbolNodeMixin {
   };
 
   // should have been a Map<UUID, SketchNode> but iterate slowly through the list
-  String FindName(String uuid, List<SketchNode> children, Type type) {
+  String FindName(String uuid, List children, Type type) {
     for (var child in children) {
       if (child.UUID == uuid) {
-        var name = ((typeToAbbreviation[type] ?? 'un') + ' ' + (child.name ?? 'var')).camelCase;
-        return name.replaceAll(RegExp(r'[^A-Za-z0-9_]',), '');
-      }
-      else if (child is AbstractGroupLayer){
+        var name =
+            ((typeToAbbreviation[type] ?? 'un') + ' ' + (child.name ?? 'var'))
+                .camelCase;
+        return name.replaceAll(
+            RegExp(
+              r'[^A-Za-z0-9_]',
+            ),
+            '');
+      } else if (child is AbstractGroupLayer) {
         var found = FindName(uuid, child.children, type);
         if (found != null) {
           return found;
@@ -38,8 +43,7 @@ mixin SymbolNodeMixin {
     return null;
   }
 
-  Map AddMasterSymbolName(String overrideName, List children){
-
+  Map AddMasterSymbolName(String overrideName, List children) {
     var varName;
     var parmInfo = extractParameter(overrideName);
     var uuid = parmInfo['uuid'];
@@ -59,8 +63,7 @@ mixin SymbolNodeMixin {
       varName = SN_UUIDtoVarName[overrideName];
     }
 
-    return {'name': varName, 'type': parmInfo['type'], 'uuid': uuid };
-
+    return {'name': varName, 'type': parmInfo['type'], 'uuid': uuid};
   }
 
   ///Extracting the UUID of the parameter either from the [SymbolInstance]
@@ -93,6 +96,6 @@ mixin SymbolNodeMixin {
         type = String;
     }
 
-    return { 'type': type, 'uuid': uuid};
+    return {'type': type, 'uuid': uuid};
   }
 }

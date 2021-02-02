@@ -10,7 +10,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     logger = Logger('Provider');
     logger.info(
-        '\nThanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!\n');
+        'Thanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!');
     fileStructureStrategy = ProviderFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject);
     registerMiddleware(ProviderMiddleware(generationManager));
