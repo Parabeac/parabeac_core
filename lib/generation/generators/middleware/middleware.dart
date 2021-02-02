@@ -7,10 +7,7 @@ abstract class Middleware {
 
   Middleware(this.generationManager);
 
-  String getNameOfNode(PBIntermediateNode node) {
-    var name = node.name;
-    return getName(name);
-  }
+  String getNameOfNode(PBIntermediateNode node) => getName(node.name);
 
   String getName(String name) {
     var index = name.indexOf('/');

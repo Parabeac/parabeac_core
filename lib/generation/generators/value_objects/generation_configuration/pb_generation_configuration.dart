@@ -111,8 +111,12 @@ abstract class GenerationConfiguration {
         _setMainScreen(
             tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
       }
-      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
       await _iterateNode(tree.rootNode);
+      fileName = tree.rootNode?.name?.snakeCase ??
+          fileName; //fileName may have changed in _iterateNode()
+      // Refresh imports
+      fileStructureStrategy.addImportsInfo(tree);
+      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
     }
