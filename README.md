@@ -98,12 +98,30 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
 
-## Using State Management Configuration
-Coming Soon... See [here](https://dev.to/parabeac/bloc-provider-riverpod-support-parabeac-core-v1-3-29pj)!
-
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+## Using State Management Configuration
+![State Management](https://kindling-sketch.s3.amazonaws.com/PB_to_Flutter_with_State_management.png)
 
+Parabeac-Core is able to export to different state management systems such as BLoC & Provider. Every developer team creates their Flutter apps differently, we added this support to help map the conversion in a more thoughtful & custom way. See [here for the release post](https://dev.to/parabeac/bloc-provider-riverpod-support-parabeac-core-v1-3-29pj) for more details!
+
+To set the state management configuration, head over to edit `/Parabeac-Core/lib/configurations/configurations.json`. In here you'll see code like the following 
+
+``` bash
+ {
+    "default": {
+        "widgetStyle": "Material",
+        "widgetType": "Stateless",
+        "widgetSpacing": "Expanded",
+        "layoutPrecedence" : ["column", "row", "stack"]
+    },
+    "state-management" : "None"
+}
+```
+
+Here you can replace the `state-management` property to `bloc` or `provider`. Soon you can also set `riverpod`.
+
+You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
 # Running the exported code
 ### Requirements
 - Flutter
