@@ -32,7 +32,7 @@ class ProviderMiddleware extends Middleware {
           'context.watch<${getName(node.functionCallName).pascalCase}>().defaultWidget');
       managerData.addMethodVariable(watcher);
       await managerData.replaceImport(
-          watcherName, 'models/${watcherName}.dart');
+          watcherName, 'models/${getName(node.name).snakeCase}.dart');
       node.generator = StringGeneratorAdapter(watcherName);
       return node;
     }
