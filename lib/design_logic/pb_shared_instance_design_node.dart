@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
@@ -41,7 +42,7 @@ class PBSharedInstanceDesignNode extends DesignNode
       userInfo,
       bool maintainScrollPosition,
       num scale,
-      String symbolID,
+      this.symbolID,
       num verticalSpacing,
       num horizontalSpacing,
       this.pbdfType})
@@ -92,6 +93,9 @@ class PBSharedInstanceDesignNode extends DesignNode
       horizontalSpacing: (json['horizontalSpacing'] as num)?.toDouble(),
       type: json['type'] as String,
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..parameters = json['parameters'] as List;

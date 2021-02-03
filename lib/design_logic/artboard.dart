@@ -1,6 +1,7 @@
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/design_logic/rect.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -17,6 +18,9 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
   @override
   var boundaryRectangle;
   var isFlowHome;
+
+  @override
+  var style;
   PBArtboard(
       {Color this.backgroundColor,
       this.isFlowHome,
@@ -43,10 +47,10 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
       hasClippingMask,
       clippingMaskMode,
       userInfo,
-      Style style,
       maintainScrollPosition,
       prototypeNode,
-      type})
+      type,
+      this.style})
       : super(UUID, name, isVisible, boundaryRectangle, type, style,
             prototypeNode);
 
@@ -92,17 +96,23 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
       hasClippingMask: json['hasClippingMask'],
       clippingMaskMode: json['clippingMaskMode'],
       userInfo: json['userInfo'],
+      maintainScrollPosition: json['maintainScrollPosition'],
       style: json['style'] == null
           ? null
-          : Style.fromJson(json['style'] as Map<String, dynamic>),
-      maintainScrollPosition: json['maintainScrollPosition'],
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..type = json['type'] as String;
     if (json.containsKey('children')) {
       if (json['children'] != null) {
-        node.children
-            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+        for (var item in json['children']) {
+          var child = DesignNode.fromPBDF(item as Map<String, dynamic>);
+          if (child != null) {
+            node.children.add(child);
+          } else {
+            print('it the clown');
+          }
+        }
       }
     }
     return node;

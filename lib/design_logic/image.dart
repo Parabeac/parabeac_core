@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -12,16 +13,15 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'abstract_design_node_factory.dart';
 
 class Image extends DesignElement implements DesignNodeFactory, DesignNode {
-  var boundaryRectangle;
-
-  var UUID;
+  @override
+  var style;
 
   Image({
     this.imageReference,
-    this.UUID,
+    UUID,
     booleanOperation,
     exportOptions,
-    Frame this.boundaryRectangle,
+    Frame boundaryRectangle,
     isFixedToViewport,
     isFlippedHorizontal,
     isFlippedVertical,
@@ -39,8 +39,15 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
     clippingMaskMode,
     userInfo,
     maintainScrollPosition,
-    pbdfType,
-  });
+    this.pbdfType = 'image',
+    this.style,
+  }) : super(
+          UUID: UUID,
+          name: name,
+          isVisible: isVisible,
+          boundaryRectangle: boundaryRectangle,
+          style: style,
+        );
 
   String imageReference;
 
@@ -76,6 +83,9 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
       userInfo: json['userInfo'],
       maintainScrollPosition: json['maintainScrollPosition'],
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..type = json['type'] as String;

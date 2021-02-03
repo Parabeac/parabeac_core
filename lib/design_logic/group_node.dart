@@ -39,6 +39,7 @@ class GroupNode implements DesignNodeFactory, DesignNode {
     userInfo,
     maintainScrollPosition,
     this.pbdfType = 'group',
+    this.style,
   });
 
   @override
@@ -72,15 +73,19 @@ class GroupNode implements DesignNodeFactory, DesignNode {
       userInfo: json['userInfo'],
       maintainScrollPosition: json['maintainScrollPosition'],
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )
       ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
       ..type = json['type'] as String;
     if (json.containsKey('children')) {
       if (json['children'] != null) {
-        var child =
-            DesignNode.fromPBDF(json['children'] as Map<String, dynamic>);
-        if (child != null) {
-          node.children.add(child);
+        for (var item in json['children']) {
+          var child = DesignNode.fromPBDF(item as Map<String, dynamic>);
+          if (child != null) {
+            node.children.add(child);
+          }
         }
       }
     }

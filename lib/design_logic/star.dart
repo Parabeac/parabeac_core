@@ -40,6 +40,7 @@ class Star implements DesignNodeFactory, DesignNode {
     maintainScrollPosition,
     type,
     pbdfType,
+    this.style,
   });
 
   @override
@@ -76,6 +77,9 @@ class Star implements DesignNodeFactory, DesignNode {
       maintainScrollPosition: json['maintainScrollPosition'],
       type: json['_class'] as String,
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     );
   }
 

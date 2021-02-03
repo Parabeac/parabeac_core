@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
+import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -10,8 +11,9 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 import 'abstract_design_node_factory.dart';
+import 'image.dart';
 
-class Vector implements DesignNodeFactory, DesignNode {
+class Vector implements DesignNodeFactory, DesignNode, Image {
   @override
   String pbdfType = 'vector';
 
@@ -32,9 +34,9 @@ class Vector implements DesignNodeFactory, DesignNode {
   var fillsList;
 
   Vector({
-    String name,
-    bool visible,
-    String type,
+    this.name,
+    visible,
+    this.type,
     pluginData,
     sharedPluginData,
     this.layoutAlign,
@@ -46,8 +48,9 @@ class Vector implements DesignNodeFactory, DesignNode {
     this.strokeAlign,
     this.styles,
     this.fillsList,
-    String UUID,
-    pbdfType,
+    this.UUID,
+    this.pbdfType = 'vector',
+    this.style,
   });
 
   @override
@@ -72,6 +75,9 @@ class Vector implements DesignNodeFactory, DesignNode {
       fillsList: json['fills'] as List,
       UUID: json['id'] as String,
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )..type = json['type'] as String;
   }
 
@@ -97,6 +103,8 @@ class Vector implements DesignNodeFactory, DesignNode {
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var img = await AzureAssetService().downloadImage(UUID);
 
+    imageReference = AssetProcessingService.getImageName(UUID);
+
     var file =
         File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
           ..createSync(recursive: true);
@@ -117,4 +125,7 @@ class Vector implements DesignNodeFactory, DesignNode {
 
   @override
   var boundaryRectangle;
+
+  @override
+  String imageReference;
 }
