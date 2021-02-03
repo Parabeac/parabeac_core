@@ -18,7 +18,7 @@ class PBBitmapGenerator extends PBGenerator {
       PBIntermediateNode source, GeneratorContext generatorContext) {
     var buffer = StringBuffer();
     buffer.write('Image.asset(');
-    if(SN_UUIDtoVarName.containsKey('${source.UUID}_image')){
+    if (SN_UUIDtoVarName.containsKey('${source.UUID}_image')) {
       buffer.write('${SN_UUIDtoVarName[source.UUID + '_image']} ?? ');
     }
     buffer.write(
