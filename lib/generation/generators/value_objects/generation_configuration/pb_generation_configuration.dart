@@ -108,7 +108,7 @@ abstract class GenerationConfiguration {
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        _setMainScreen(
+        await _setMainScreen(
             tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
       }
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
@@ -154,10 +154,10 @@ abstract class GenerationConfiguration {
     }
   }
 
-  void _setMainScreen(InheritedScaffold node, String outputMain) {
+  void _setMainScreen(InheritedScaffold node, String outputMain) async {
     var writer = _pageWriter;
     if (writer is PBFlutterWriter) {
-      writer.writeMainScreenWithHome(
+      await writer.writeMainScreenWithHome(
           node.name,
           fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
           'screens/${outputMain}');
