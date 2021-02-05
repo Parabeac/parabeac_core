@@ -6,6 +6,7 @@ import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
+import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
