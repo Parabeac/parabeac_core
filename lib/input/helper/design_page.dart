@@ -56,7 +56,7 @@ class DesignPage implements DesignNodeFactory {
   factory DesignPage.fromPBDF(Map<String, dynamic> json) {
     var page = DesignPage(name: json['name'], id: json['id']);
     if (json.containsKey('screens')) {
-      (json['screens'] as Map)?.forEach((key, value) {
+      (json['screens'] as List)?.forEach((value) {
         if (value != null) {
           page.screens
               .add(DesignScreen.fromPBDF(value as Map<String, dynamic>));

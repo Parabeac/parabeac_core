@@ -56,7 +56,7 @@ class DesignProject implements DesignNodeFactory {
     var project =
         DesignProject(projectName: json['projectName'], id: json['id']);
     if (json.containsKey('pages')) {
-      (json['pages'] as Map)?.forEach((key, value) {
+      (json['pages'] as List)?.forEach((value) {
         if (value != null) {
           project.pages.add(DesignPage.fromPBDF(value as Map<String, dynamic>));
         }
