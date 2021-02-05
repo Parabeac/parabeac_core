@@ -3,9 +3,7 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:quick_log/quick_log.dart';
 import 'design_screen.dart';
 
-import 'map_mixin.dart';
-
-class DesignPage with MapMixin implements DesignNodeFactory {
+class DesignPage implements DesignNodeFactory {
   var log = Logger('DesignPage');
 
   String id;
@@ -37,9 +35,12 @@ class DesignPage with MapMixin implements DesignNodeFactory {
     result['id'] = id;
     result['name'] = name;
     result['convert'] = convert;
+
+    List<Map> tempScreens = [];
     for (var screen in screens) {
-      addToMap('screens', result, {screen.name: screen.toPBDF()});
+      tempScreens.add(screen.toPBDF());
     }
+    result['screens'] = tempScreens;
     return result;
   }
 
