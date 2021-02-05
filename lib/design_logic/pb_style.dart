@@ -12,6 +12,7 @@ class PBStyle {
   List<PBBorder> borders;
   PBBorderOptions borderOptions;
   PBTextStyle textStyle;
+  bool hasShadow = false;
 
   PBStyle({this.fills, this.backgroundColor});
 
@@ -24,4 +25,6 @@ class PBStyle {
       return FigmaStyle.fromJson(json);
     }
   }
+
+  toJson() {}
 }
