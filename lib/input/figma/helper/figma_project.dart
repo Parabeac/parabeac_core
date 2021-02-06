@@ -19,7 +19,11 @@ class FigmaProject extends DesignProject {
 
   FigmaPage rootScreen;
 
-  FigmaProject(this.projectName, this.figmaJson) {
+  FigmaProject(
+    this.projectName,
+    this.figmaJson, {
+    String id,
+  }) : super(id: id) {
     pages.addAll(_setConventionalPages(figmaJson['document']['children']));
   }
 
