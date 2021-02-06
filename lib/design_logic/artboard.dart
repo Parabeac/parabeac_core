@@ -109,8 +109,6 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
           var child = DesignNode.fromPBDF(item as Map<String, dynamic>);
           if (child != null) {
             node.children.add(child);
-          } else {
-            print('it the clown');
           }
         }
       }
