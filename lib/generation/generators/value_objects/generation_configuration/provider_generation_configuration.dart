@@ -1,10 +1,16 @@
 import 'package:parabeac_core/generation/generators/middleware/state_management/provider_middleware.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
 
 class ProviderGenerationConfiguration extends GenerationConfiguration {
   ProviderGenerationConfiguration();
+
+  Set registeredModels = {};
 
   @override
   Future<void> setUpConfiguration() async {
@@ -16,5 +22,45 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
     registerMiddleware(ProviderMiddleware(generationManager));
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
+  }
+
+  @override
+  Future<void> generateProject(PBProject pb_project) async {
+    await super.generateProject(pb_project);
+    if (pageWriter is PBFlutterWriter) {
+      (pageWriter as PBFlutterWriter).rewriteMainFunction(
+        fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
+        _generateMainFunction(),
+      );
+    }
+  }
+
+  ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
+  @override
+  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
+    var it = middlewares.iterator;
+    while (it.moveNext()) {
+      node = await it.current.applyMiddleware(node);
+      if (it.current is ProviderMiddleware &&
+          node is PBSharedInstanceIntermediateNode) {
+        registeredModels.add(it.current.getName(node.functionCallName));
+      }
+    }
+    return node;
+  }
+
+  String _generateMainFunction() {
+    var providers = registeredModels
+        .map((e) => 'ChangeNotifierProvider(create: (_) => $e())');
+    return '''
+    runApp(
+      MultiProvider(
+        providers: [
+          $providers
+        ],
+        child: MyApp(),
+      ),
+    );
+    ''';
   }
 }

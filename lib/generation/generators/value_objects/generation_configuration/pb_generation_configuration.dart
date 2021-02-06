@@ -23,6 +23,7 @@ abstract class GenerationConfiguration {
   Logger logger;
 
   final Set<Middleware> _middleware = {};
+  Set<Middleware> get middlewares => _middleware;
 
   ///The project that contains the node for all the pages.
   PBProject pbProject;
