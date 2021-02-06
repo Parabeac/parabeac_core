@@ -10,6 +10,9 @@ abstract class AssetProcessingService {
 
   AzureAssetService aaService = AzureAssetService();
 
+  static String getImageName(String uuid) =>
+      ('images/' + uuid + '.png').replaceAll(':', '_');
+
   Future<void> uploadToStorage(Uint8List img, String name) async {
     if (Platform.environment.containsKey(AzureAssetService.KEY_NAME) &&
         aaService.projectUUID != null) {

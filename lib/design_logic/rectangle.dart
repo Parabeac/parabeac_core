@@ -52,7 +52,7 @@ class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
     userInfo,
     maintainScrollPosition,
     this.type,
-    this.pbdfType,
+    this.pbdfType = 'rectangle',
     this.style,
   });
 

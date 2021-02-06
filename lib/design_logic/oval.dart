@@ -47,6 +47,7 @@ class Oval implements DesignNodeFactory, DesignNode {
     maintainScrollPosition,
     type,
     this.pbdfType = 'oval',
+    this.style,
   });
   DesignNode fromPBDF(Map<String, dynamic> json) {
     return Oval(
@@ -79,6 +80,9 @@ class Oval implements DesignNodeFactory, DesignNode {
       maintainScrollPosition: json['maintainScrollPosition'],
       type: json['type'] as String,
       pbdfType: json['pbdfType'] as String,
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
@@ -156,12 +157,19 @@ class PBSharedMasterDesignNode extends DesignNode
       type: json['type'] as String,
       pbdfType: json['pbdfType'],
       parameters: json['parameters'] as List,
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )..prototypeNodeUUID = json['prototypeNodeUUID'] as String;
 
     if (json.containsKey('children')) {
       if (json['children'] != null) {
-        node.children
-            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+        for (var item in json['children']) {
+          var child = DesignNode.fromPBDF(item as Map<String, dynamic>);
+          if (child != null) {
+            node.children.add(child);
+          }
+        }
       }
     }
     return node;

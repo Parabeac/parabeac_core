@@ -44,6 +44,7 @@ class Polygon implements DesignNodeFactory, DesignNode {
     maintainScrollPosition,
     type,
     pbdfType,
+    this.style,
   });
 
   @override
@@ -80,6 +81,9 @@ class Polygon implements DesignNodeFactory, DesignNode {
       maintainScrollPosition: json['maintainScrollPosition'],
       type: json['type'] as String,
       pbdfType: json['pbdfType'] as String,
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     );
   }
 
