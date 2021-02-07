@@ -6,11 +6,12 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:recase/recase.dart';
 
 class ProviderGenerationConfiguration extends GenerationConfiguration {
   ProviderGenerationConfiguration();
 
-  Set registeredModels = {};
+  Set<String> registeredModels = {};
 
   @override
   Future<void> setUpConfiguration() async {
@@ -28,9 +29,15 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   Future<void> generateProject(PBProject pb_project) async {
     await super.generateProject(pb_project);
     if (pageWriter is PBFlutterWriter) {
+      var imports = <String>['import \'package:provider/provider.dart\';'];
+      imports.addAll(registeredModels
+          .map((e) => 'import \'models/${e.snakeCase}.dart\';')
+          .toList());
+
       (pageWriter as PBFlutterWriter).rewriteMainFunction(
         fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
         _generateMainFunction(),
+        imports: imports,
       );
     }
   }

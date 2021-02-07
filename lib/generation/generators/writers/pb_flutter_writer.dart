@@ -25,10 +25,12 @@ class PBFlutterWriter implements PBPageWriter {
   }
 
   /// Function that allows the rewriting of the main() method inside main.dart
-  void rewriteMainFunction(String pathToMain, String code) {
+  void rewriteMainFunction(String pathToMain, String code,
+      {List<String> imports}) {
     var mainRead = File(pathToMain).readAsStringSync();
-    var newMain = mainRead.replaceFirst(
-        RegExp(r'void main\(\)\s*{(.*|\s*)*?}'), 'void main() {$code}');
+    var newMain = imports.join() +
+        mainRead.replaceFirst(
+            RegExp(r'void main\(\)\s*{(.*|\s*)*?}'), 'void main() {$code}');
     File(pathToMain).writeAsStringSync(newMain);
   }
 
