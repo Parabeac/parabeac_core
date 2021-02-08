@@ -25,7 +25,7 @@ class RiverpodMiddleware extends Middleware {
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      managerData.addImport('package:flutter_riverpod/all.dart');
+      managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
       watcherName = node.functionCallName.snakeCase;
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
