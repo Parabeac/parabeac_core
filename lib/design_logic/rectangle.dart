@@ -29,7 +29,7 @@ class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
     bool edited,
     bool isClosed,
     pointRadiusBehaviour,
-    List points,
+    List this.points,
     this.UUID,
     booleanOperation,
     exportOptions,
@@ -38,9 +38,9 @@ class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
     isFlippedHorizontal,
     isFlippedVertical,
     isLocked,
-    isVisible,
+    this.isVisible,
     layerListExpandedType,
-    name,
+    this.name,
     nameIsFixed,
     resizingConstraint,
     resizingType,
@@ -51,8 +51,9 @@ class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
     clippingMaskMode,
     userInfo,
     maintainScrollPosition,
-    type,
-    pbdfType,
+    this.type,
+    this.pbdfType = 'rectangle',
+    this.style,
   });
 
   @override
@@ -94,6 +95,9 @@ class Rectangle with PBColorMixin implements DesignNodeFactory, DesignNode {
       type: json['type'] as String,
       maintainScrollPosition: json['maintainScrollPosition'],
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     );
   }
 

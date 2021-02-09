@@ -1,5 +1,6 @@
 import 'package:parabeac_core/design_logic/design_element.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -11,12 +12,6 @@ import 'package:uuid/uuid.dart';
 import 'abstract_design_node_factory.dart';
 
 class Text extends DesignElement implements DesignNodeFactory, DesignNode {
-  @override
-  var boundaryRectangle;
-
-  @override
-  var UUID;
-
   var attributedString;
 
   var automaticallyDrawOnUnderlyingPath;
@@ -30,17 +25,17 @@ class Text extends DesignElement implements DesignNodeFactory, DesignNode {
   var glyphBounds;
 
   Text({
-    this.UUID,
+    UUID,
     booleanOperation,
     exportOptions,
-    Frame this.boundaryRectangle,
+    Frame boundaryRectangle,
     bool isFixedToViewport,
     bool isFlippedHorizontal,
     bool isFlippedVertical,
     bool isLocked,
     bool isVisible,
     layerListExpandedType,
-    String name,
+    name,
     bool nameIsFixed,
     resizingConstraint,
     resizingType,
@@ -57,8 +52,16 @@ class Text extends DesignElement implements DesignNodeFactory, DesignNode {
     this.textBehaviour,
     this.glyphBounds,
     type,
-    pbdfType,
-  });
+    pbdfType = 'text',
+    style,
+  }) : super(
+          UUID: UUID,
+          name: name,
+          isVisible: isVisible,
+          boundaryRectangle: boundaryRectangle,
+          type: type,
+          style: style,
+        );
 
   String content;
 
@@ -101,6 +104,9 @@ class Text extends DesignElement implements DesignNodeFactory, DesignNode {
       glyphBounds: json['glyphBounds'],
       type: json['type'] as String,
       pbdfType: json['pbdfType'],
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     );
   }
 

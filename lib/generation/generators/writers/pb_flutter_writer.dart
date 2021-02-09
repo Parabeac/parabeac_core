@@ -24,6 +24,16 @@ class PBFlutterWriter implements PBPageWriter {
     writer.writeAsStringSync(code);
   }
 
+  /// Function that allows the rewriting of the main() method inside main.dart
+  void rewriteMainFunction(String pathToMain, String code,
+      {List<String> imports}) {
+    var mainRead = File(pathToMain).readAsStringSync();
+    var newMain = imports.join() +
+        mainRead.replaceFirst(
+            RegExp(r'void main\(\)\s*{(.*|\s*)*?}'), 'void main() {$code}');
+    File(pathToMain).writeAsStringSync(newMain);
+  }
+
   /// Creates a new `main.dart` file that starts the Flutter application at
   /// `homeName` and adds the import from `main.dart` to `relativeImportPath`.
   Future<void> writeMainScreenWithHome(

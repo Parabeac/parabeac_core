@@ -37,7 +37,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
         ? null
         : Style.fromJson(json['style'] as Map<String, dynamic>),
     maintainScrollPosition: json['maintainScrollPosition'] as bool,
-    attributedString: json['attributedString'] as Map<String, dynamic>,
+    attributedString: json['attributedString'],
     automaticallyDrawOnUnderlyingPath:
         json['automaticallyDrawOnUnderlyingPath'] as bool,
     dontSynchroniseWithSymbol: json['dontSynchroniseWithSymbol'] as bool,
@@ -73,7 +73,6 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       'maintainScrollPosition': instance.maintainScrollPosition,
       'prototypeNodeUUID': instance.prototypeNodeUUID,
       'CLASS_NAME': instance.CLASS_NAME,
-      'attributedString': instance.attributedString,
       'automaticallyDrawOnUnderlyingPath':
           instance.automaticallyDrawOnUnderlyingPath,
       'dontSynchroniseWithSymbol': instance.dontSynchroniseWithSymbol,
@@ -85,4 +84,5 @@ Map<String, dynamic> _$SketchTextToJson(SketchText instance) =>
       '_class': instance.type,
       'isVisible': instance.isVisible,
       'style': instance.style,
+      'attributedString': instance.attributedString,
     };

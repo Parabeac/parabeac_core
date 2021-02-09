@@ -54,7 +54,9 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
           .contains('<middle>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => middleItem = value);
+            .then((value) {
+          middleItem = value;
+        });
       }
     }
 

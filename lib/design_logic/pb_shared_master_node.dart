@@ -1,5 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/group_node.dart';
+import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
@@ -18,50 +19,52 @@ class PBSharedMasterDesignNode extends DesignNode
 
   var overrideProperties;
 
-  PBSharedMasterDesignNode(
-      {String UUID,
-      this.overrideProperties,
-      String name,
-      bool isVisible,
-      boundaryRectangle,
-      String type,
-      style,
-      prototypeNode,
-      bool hasClickThrough,
-      groupLayout,
-      booleanOperation,
-      exportOptions,
-      isFixedToViewport,
-      isFlippedHorizontal,
-      isFlippedVertical,
-      isLocked,
-      layerListExpandedType,
-      pbdfType,
-      presetDictionary,
-      bool allowsOverrides,
-      nameIsFixed,
-      resizingConstraint,
-      resizingType,
-      horizontalRulerData,
-      bool hasBackgroundColor,
-      rotation,
-      sharedStyleID,
-      shouldBreakMaskChain,
-      hasClippingMask,
-      clippingMaskMode,
-      userInfo,
-      maintainScrollPosition,
-      bool includeBackgroundColorInExport,
-      int changeIdentifier,
-      String symbolID,
-      bool includeBackgroundColorInInstance,
-      verticalRulerData,
-      bool resizesContent,
-      bool includeInCloudUpload,
-      bool isFlowHome,
-      List parameters})
-      : super(UUID, name, isVisible, boundaryRectangle, type, style,
-            prototypeNode);
+  PBSharedMasterDesignNode({
+    String UUID,
+    this.overrideProperties,
+    String name,
+    bool isVisible,
+    boundaryRectangle,
+    String type,
+    style,
+    prototypeNode,
+    bool hasClickThrough,
+    groupLayout,
+    booleanOperation,
+    exportOptions,
+    isFixedToViewport,
+    isFlippedHorizontal,
+    isFlippedVertical,
+    isLocked,
+    layerListExpandedType,
+    this.pbdfType,
+    presetDictionary,
+    bool allowsOverrides,
+    nameIsFixed,
+    resizingConstraint,
+    resizingType,
+    horizontalRulerData,
+    bool hasBackgroundColor,
+    rotation,
+    sharedStyleID,
+    shouldBreakMaskChain,
+    hasClippingMask,
+    clippingMaskMode,
+    userInfo,
+    maintainScrollPosition,
+    bool includeBackgroundColorInExport,
+    int changeIdentifier,
+    String this.symbolID,
+    bool includeBackgroundColorInInstance,
+    verticalRulerData,
+    bool resizesContent,
+    bool includeInCloudUpload,
+    bool isFlowHome,
+    List parameters,
+  }) : super(UUID, name, isVisible, boundaryRectangle, type, style,
+            prototypeNode) {
+    pbdfType = 'symbol_master';
+  }
 
   @override
   String pbdfType = 'symbol_master';
@@ -154,12 +157,19 @@ class PBSharedMasterDesignNode extends DesignNode
       type: json['type'] as String,
       pbdfType: json['pbdfType'],
       parameters: json['parameters'] as List,
+      style: json['style'] == null
+          ? null
+          : PBStyle.fromPBDF(json['style'] as Map<String, dynamic>),
     )..prototypeNodeUUID = json['prototypeNodeUUID'] as String;
 
     if (json.containsKey('children')) {
       if (json['children'] != null) {
-        node.children
-            .add(DesignNode.fromPBDF(json['children'] as Map<String, dynamic>));
+        for (var item in json['children']) {
+          var child = DesignNode.fromPBDF(item as Map<String, dynamic>);
+          if (child != null) {
+            node.children.add(child);
+          }
+        }
       }
     }
     return node;

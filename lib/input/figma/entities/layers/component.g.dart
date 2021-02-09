@@ -26,11 +26,7 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     horizontalPadding: json['horizontalPadding'],
     verticalPadding: json['verticalPadding'],
     itemSpacing: json['itemSpacing'],
-    overrideProperties: (json['overrideProperties'] as List)
-        ?.map((e) => e == null
-            ? null
-            : OverridableProperty.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    overrideProperties: json['overrideProperties'],
     children: (json['children'] as List)
         ?.map((e) =>
             e == null ? null : FigmaNode.fromJson(e as Map<String, dynamic>))

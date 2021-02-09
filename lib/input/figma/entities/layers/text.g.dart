@@ -36,7 +36,14 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
     ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
-    ..pbdfType = json['pbdfType'] as String;
+    ..pbdfType = json['pbdfType'] as String
+    ..attributedString = json['attributedString']
+    ..automaticallyDrawOnUnderlyingPath =
+        json['automaticallyDrawOnUnderlyingPath']
+    ..dontSynchroniseWithSymbol = json['dontSynchroniseWithSymbol']
+    ..glyphBounds = json['glyphBounds']
+    ..lineSpacingBehaviour = json['lineSpacingBehaviour']
+    ..textBehaviour = json['textBehaviour'];
 }
 
 Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
@@ -62,4 +69,11 @@ Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'characterStyleOverrides': instance.characterStyleOverrides,
       'styleOverrideTable': instance.styleOverrideTable,
       'pbdfType': instance.pbdfType,
+      'attributedString': instance.attributedString,
+      'automaticallyDrawOnUnderlyingPath':
+          instance.automaticallyDrawOnUnderlyingPath,
+      'dontSynchroniseWithSymbol': instance.dontSynchroniseWithSymbol,
+      'glyphBounds': instance.glyphBounds,
+      'lineSpacingBehaviour': instance.lineSpacingBehaviour,
+      'textBehaviour': instance.textBehaviour,
     };

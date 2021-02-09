@@ -1,12 +1,10 @@
 import 'package:parabeac_core/controllers/controller.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
-import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/figma/helper/figma_project.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:quick_log/quick_log.dart';
-
-import 'interpret.dart';
 
 class FigmaController extends Controller {
   ///SERVICE
@@ -44,7 +42,11 @@ class FigmaController extends Controller {
 
   FigmaProject generateFigmaTree(var jsonFigma, var projectname) {
     try {
-      return FigmaProject(projectname, jsonFigma);
+      return FigmaProject(
+        projectname,
+        jsonFigma,
+        id: MainInfo().figmaProjectID,
+      );
     } catch (e, stackTrace) {
       print(e);
       return null;

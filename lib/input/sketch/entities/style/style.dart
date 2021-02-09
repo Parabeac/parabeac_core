@@ -51,7 +51,13 @@ class Style implements PBStyle {
     this.startMarkerType,
     this.windingRule,
     TextStyle this.textStyle,
-  });
+  }) {
+    if (shadows != null) {
+      this.shadows = null;
+      this.innerShadows = null;
+      hasShadow = true;
+    }
+  }
 
   factory Style.fromJson(Map json) => _$StyleFromJson(json);
   Map<String, dynamic> toJson() => _$StyleToJson(this);
@@ -65,4 +71,8 @@ class Style implements PBStyle {
 
   @override
   set borders(List<PBBorder> _borders) {}
+
+  @override
+  @JsonKey(ignore: true)
+  bool hasShadow;
 }
