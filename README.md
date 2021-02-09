@@ -98,8 +98,10 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
 
+
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+
 ## Using State Management Configuration
 ![State Management](https://kindling-sketch.s3.amazonaws.com/PB_to_Flutter_with_State_management.png)
 
@@ -120,6 +122,8 @@ To set the state management configuration, head over to edit `/Parabeac-Core/lib
 ```
 
 Here you can replace the `state-management` property to `bloc` or `provider`. Soon you can also set `riverpod`.
+
+You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
 
 You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
 # Running the exported code
