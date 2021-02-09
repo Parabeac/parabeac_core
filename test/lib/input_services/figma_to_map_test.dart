@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:parabeac_core/APICaller/api_call_service.dart';
+import 'package:parabeac_core/input/figma/helper/api_call_service.dart';
 import 'package:test/test.dart';
 
 void main() async {
