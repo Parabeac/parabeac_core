@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:parabeac_core/APICaller/api_call_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/input/figma/helper/api_call_service.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:quick_log/quick_log.dart';
 
