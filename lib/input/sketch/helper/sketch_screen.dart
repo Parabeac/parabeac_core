@@ -6,9 +6,11 @@ class SketchScreen extends DesignScreen {
     DesignNode root,
     String id,
     String name,
+    String type,
   ) : super(
           designNode: root,
           id: id,
           name: name,
+          type: type,
         );
 }

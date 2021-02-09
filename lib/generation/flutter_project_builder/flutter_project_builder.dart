@@ -5,6 +5,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/bloc_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/riverpod_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
@@ -30,6 +31,7 @@ class FlutterProjectBuilder {
   Map<String, GenerationConfiguration> configurations = {
     'provider': ProviderGenerationConfiguration(),
     'bloc': BLoCGenerationConfiguration(),
+    'riverpod': RiverpodGenerationConfiguration(),
     'none': StatefulGenerationConfiguration(),
   };
 

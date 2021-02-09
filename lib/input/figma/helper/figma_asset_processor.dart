@@ -19,15 +19,12 @@ class FigmaAssetProcessor extends AssetProcessingService {
 
   Logger log = Logger('Figma Image helper');
 
-  String _getImageName(String uuid) =>
-      ('images/' + uuid + '.png').replaceAll(':', '_');
-
   /// Adds [uuid] to queue to be processed as an image.
   /// Returns the formatted name of the image reference.
   @override
   String processImage(String uuid) {
     _uuidQueue.add(uuid);
-    return _getImageName(uuid);
+    return AssetProcessingService.getImageName(uuid);
   }
 
   /// Adds [uuids] to queue to be processed as an image.

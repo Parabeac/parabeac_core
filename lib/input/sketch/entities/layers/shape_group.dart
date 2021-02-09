@@ -153,7 +153,7 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         'groupLayout': groupLayout,
         'CLASS_NAME': CLASS_NAME,
         'windingRule': windingRule,
-        'absoluteBoudingBox': boundaryRectangle,
+        'absoluteBoundingBox': boundaryRectangle,
         'id': UUID,
         'type': type,
         'visible': isVisible,

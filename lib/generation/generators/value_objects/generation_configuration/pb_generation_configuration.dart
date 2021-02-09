@@ -23,6 +23,7 @@ abstract class GenerationConfiguration {
   Logger logger;
 
   final Set<Middleware> _middleware = {};
+  Set<Middleware> get middlewares => _middleware;
 
   ///The project that contains the node for all the pages.
   PBProject pbProject;
@@ -108,10 +109,11 @@ abstract class GenerationConfiguration {
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        _setMainScreen(
+        await _setMainScreen(
             tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
       }
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
+
       await _iterateNode(tree.rootNode);
 
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
@@ -153,10 +155,10 @@ abstract class GenerationConfiguration {
     }
   }
 
-  void _setMainScreen(InheritedScaffold node, String outputMain) {
+  void _setMainScreen(InheritedScaffold node, String outputMain) async {
     var writer = _pageWriter;
     if (writer is PBFlutterWriter) {
-      writer.writeMainScreenWithHome(
+      await writer.writeMainScreenWithHome(
           node.name,
           fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
           'screens/${outputMain}');

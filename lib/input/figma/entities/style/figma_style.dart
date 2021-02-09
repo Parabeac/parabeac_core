@@ -42,4 +42,8 @@ class FigmaStyle implements PBStyle {
   Map<String, dynamic> toJson() => _$FigmaStyleToJson(this);
   factory FigmaStyle.fromJson(Map<String, dynamic> json) =>
       _$FigmaStyleFromJson(json);
+
+  @override
+  @JsonKey(ignore: true)
+  bool hasShadow;
 }

@@ -68,6 +68,11 @@ SymbolMaster _$SymbolMasterFromJson(Map<String, dynamic> json) {
   )
     ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..CLASS_NAME = json['CLASS_NAME'] as String
+    ..overrideValues = (json['overrideValues'] as List)
+        ?.map((e) => e == null
+            ? null
+            : OverridableValue.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..type = json['_class'] as String
     ..parameters = json['parameters'] as List;
 }
@@ -97,6 +102,7 @@ Map<String, dynamic> _$SymbolMasterToJson(SymbolMaster instance) =>
       'hasClickThrough': instance.hasClickThrough,
       'groupLayout': instance.groupLayout,
       'CLASS_NAME': instance.CLASS_NAME,
+      'overrideValues': instance.overrideValues,
       'backgroundColor': instance.backgroundColor,
       'hasBackgroundColor': instance.hasBackgroundColor,
       'horizontalRulerData': instance.horizontalRulerData,

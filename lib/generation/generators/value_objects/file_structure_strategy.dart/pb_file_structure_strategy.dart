@@ -55,7 +55,7 @@ abstract class FileStructureStrategy {
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _pbProject.forest.forEach((dir) {
         if (dir.rootNode != null) {
-          _addImportsInfo(dir);
+          addImportsInfo(dir);
         }
       });
       Directory(_screenDirectoryPath).createSync(recursive: true);
@@ -65,24 +65,23 @@ abstract class FileStructureStrategy {
   }
 
   ///Add the import information to correctly generate them in the corresponding files.
-  void _addImportsInfo(PBIntermediateTree directory) {
-    var intermediateItem = directory;
+  void addImportsInfo(PBIntermediateTree tree) {
     // Add to cache if node is scaffold or symbol master
-    var node = intermediateItem.rootNode;
+    var node = tree.rootNode;
     var name = node?.name?.snakeCase;
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
       var path = node is PBSharedMasterNode
-          ? '${_viewDirectoryPath}${directory.name.snakeCase}/${name}.dart' // Removed .g
-          : '${_screenDirectoryPath}${directory.name.snakeCase}/${name}.dart';
+          ? '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart' // Removed .g
+          : '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart';
       PBGenCache().addToCache(uuid, path);
     } else {
       logger.warning(
-          'The following intermediateNode was missing a name: ${intermediateItem.toString()}');
+          'The following intermediateNode was missing a name: ${tree.toString()}');
     }
   }
 
-  ///Writig the code to the actual file
+  ///Writing the code to the actual file
   ///
   ///The default computation of the function will foward the `code` to the
   ///`_pageWriter`. The [PBPageWriter] will then generate the file with the code inside
