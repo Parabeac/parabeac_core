@@ -23,10 +23,11 @@ class StatefulMiddleware extends Middleware {
     if (node is PBSharedInstanceIntermediateNode) {
       managerData.addAllMethodVariable(await _getVariables(node));
       node.generator = StringGeneratorAdapter(await _generateInstance(node));
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
       return node;
     }
     var states = <PBIntermediateNode>[node];
-    var parentDirectory = node.name.snakeCase;
+    var parentDirectory = getName(node.name).snakeCase;
 
     await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
@@ -73,5 +74,13 @@ class StatefulMiddleware extends Middleware {
 
   String _generateInstance(PBSharedInstanceIntermediateNode node) {
     return node.functionCallName.snakeCase;
+  }
+
+  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+    return fileStrategy.GENERATED_PROJECT_PATH +
+        fileStrategy.RELATIVE_VIEW_PATH +
+        '${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
   }
 }
