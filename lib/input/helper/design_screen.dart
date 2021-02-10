@@ -4,7 +4,7 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 class DesignScreen implements DesignNodeFactory {
   String id;
   String name;
-  bool convert;
+  bool convert = true;
   String imageURI;
   String type;
   DesignNode designNode;
@@ -48,7 +48,7 @@ class DesignScreen implements DesignNodeFactory {
 
   factory DesignScreen.fromPBDF(Map<String, dynamic> json) {
     var screen = DesignScreen(name: json['name'], id: json['id']);
-    if (json.containsKey('designNode')) {
+    if (json.containsKey('designNode') && (json['convert'] ?? true)) {
       screen.designNode = DesignNode.fromPBDF(json['designNode']);
     }
     return screen;
