@@ -112,9 +112,9 @@ abstract class GenerationConfiguration {
         await _setMainScreen(
             tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
       }
-      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
-
       await _iterateNode(tree.rootNode);
+
+      await _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
     }
@@ -135,8 +135,8 @@ abstract class GenerationConfiguration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  void _commitImports(
-      PBIntermediateNode node, String directoryName, String fileName) {
+  Future<void> _commitImports(
+      PBIntermediateNode node, String directoryName, String fileName) async {
     var screenFilePath =
         '${pbProject.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
     var viewFilePath =
