@@ -21,8 +21,8 @@ class StatefulMiddleware extends Middleware {
         as FlutterFileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
-      managerData.addAllMethodVariable(await _getVariables(node));
-      node.generator = StringGeneratorAdapter(await _generateInstance(node));
+      managerData.addGlobalVariable(await _getVariables(node));
+      node.generator = StringGeneratorAdapter(node.name.snakeCase);
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
       return node;
     }
@@ -44,36 +44,21 @@ class StatefulMiddleware extends Middleware {
     return node;
   }
 
-  Future<List<PBVariable>> _getVariables(PBIntermediateNode node) async {
-    List<PBVariable> variables = [];
-    var symbolMaster;
-    if (node is PBSharedInstanceIntermediateNode) {
-      symbolMaster =
-          PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-    } else if (node is PBSharedMasterNode) {
-      symbolMaster = node;
-    }
-    var states = <PBIntermediateNode>[symbolMaster];
-    await symbolMaster?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      states.add(state.variation.node);
-    });
-    await states.forEach((state) {
-      var tempNode = state;
-      var tempVar = PBVariable(
-        tempNode.name.snakeCase,
-        'final ',
-        true,
-        tempNode.name == symbolMaster.name
-            ? '${tempNode.name.pascalCase}()'
-            : null,
-      );
-      variables.add(tempVar);
-    });
-    return variables;
-  }
+  Future<PBVariable> _getVariables(
+      PBSharedInstanceIntermediateNode node) async {
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
 
-  String _generateInstance(PBSharedInstanceIntermediateNode node) {
-    return node.functionCallName.snakeCase;
+    var tempVar = PBVariable(
+      node.name.snakeCase,
+      'var ',
+      true,
+      node.functionCallName == symbolMaster.name
+          ? '${symbolMaster.name.pascalCase}()'
+          : null,
+    );
+
+    return tempVar;
   }
 
   String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {

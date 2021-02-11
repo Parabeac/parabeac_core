@@ -77,9 +77,20 @@ class PBGenerationViewData {
       _globalVariables.addAll(variable);
 
   void addMethodVariable(PBVariable variable) {
-    if (!_isDataLocked && variable != null) {
+    if (!_isDataLocked && variable != null && !_contains(variable)) {
       _methodVariables.add(variable);
     }
+  }
+
+  bool _contains(PBVariable variable) {
+    var result = false;
+    _methodVariables.forEach((element) {
+      if (element.variableName == variable.variableName) {
+        result = true;
+        return result;
+      }
+    });
+    return result;
   }
 
   void addAllMethodVariable(Iterable<PBVariable> variables) {
