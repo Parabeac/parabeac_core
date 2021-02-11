@@ -81,7 +81,7 @@ class FigmaController extends Controller {
       return 0;
     });
 
-    // Within each page, ensure screens that are compnents go last
+    // Within each page, ensure screens that are components go last
     project.pages.forEach((page) {
       page.screens.sort((a, b) {
         if (a.designNode is Component) {
