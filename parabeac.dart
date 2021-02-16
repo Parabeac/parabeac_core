@@ -33,10 +33,10 @@ main(List<String> args) async {
     ..addOption(
       'pbdl-in',
       help:
-          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project. The user should specify the absolute path of the location of the PBDL JSON file following this option. Example: `dart parabeac.dart --pbdl-in /path/to/pbdl.json -o /path/to/output/dir/`',
     )
     ..addFlag('export-pbdl',
-        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.');
+        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.');
 
   argResults = parser.parse(args);
 
