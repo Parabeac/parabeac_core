@@ -36,7 +36,8 @@ main(List<String> args) async {
           'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project. The user should specify the absolute path of the location of the PBDL JSON file following this option. Example: `dart parabeac.dart --pbdl-in /path/to/pbdl.json -o /path/to/output/dir/`',
     )
     ..addFlag('export-pbdl',
-        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.');
+        help:
+            'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.');
 
   argResults = parser.parse(args);
 
@@ -55,16 +56,9 @@ ${parser.usage}
   var url = argResults['url'];
   var key = argResults['key'];
   var sKey = argResults['secret-key'];
-  var isSketchInput = satisfiesParams(argResults.arguments, [
-    ['-p', '--path']
-  ]);
-  var isFigmaInput = satisfiesParams(argResults.arguments, [
-    ['-k', '--figKey'],
-    ['-f', '--fig']
-  ]);
-  if (isSketchInput || isFigmaInput) {
-    arguments.addAll(argResults.arguments);
-  }
+
+  arguments.addAll(argResults.arguments);
+
   String _basePath;
   String _os;
 
@@ -118,9 +112,4 @@ ${parser.usage}
   await for (var event in parabeaccore.stderr.transform(utf8.decoder)) {
     print(event);
   }
-}
-
-/// Checks if `args` satisfies the required arguments, `reqArgs`.
-bool satisfiesParams(List<String> args, List<List> reqArgs) {
-  return reqArgs.every((reqArgList) => reqArgList.any(args.contains));
 }
