@@ -29,7 +29,14 @@ main(List<String> args) async {
     ..addOption('key', help: 'key for S3 bucket account', abbr: 'e')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
-    ..addOption('secret-key', help: 'S3 secret key', abbr: 's');
+    ..addOption('secret-key', help: 'S3 secret key', abbr: 's')
+    ..addOption(
+      'pbdl-in',
+      help:
+          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+    )
+    ..addFlag('export-pbdl',
+        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.');
 
   argResults = parser.parse(args);
 
