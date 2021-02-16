@@ -1,5 +1,6 @@
 import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/input/figma/entities/layers/component.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/helper/figma_project.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
@@ -28,6 +29,8 @@ class FigmaController extends Controller {
     var figmaProject = await generateFigmaTree(jsonFigma, outputPath);
 
     figmaProject = declareScaffolds(figmaProject);
+
+    _sortPages(figmaProject);
 
     await super.convertFile(
       jsonFigma,
@@ -64,5 +67,30 @@ class FigmaController extends Controller {
       }
     }
     return tree;
+  }
+
+  /// Sorts project's pages so that Components are processed last
+  void _sortPages(FigmaProject project) {
+    // Sort pages so that pages containing components are last
+    project.pages.sort((a, b) {
+      if (a.screens.any((screen) => screen.designNode is Component)) {
+        return 1;
+      } else if (b.screens.any((screen) => screen.designNode is Component)) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // Within each page, ensure screens that are components go last
+    project.pages.forEach((page) {
+      page.screens.sort((a, b) {
+        if (a.designNode is Component) {
+          return 1;
+        } else if (b.designNode is Component) {
+          return -1;
+        }
+        return 0;
+      });
+    });
   }
 }

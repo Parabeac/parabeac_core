@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_generation_manager.dart';
 import '../../pb_variable.dart';
 import '../middleware.dart';
@@ -31,8 +32,9 @@ class RiverpodMiddleware extends Middleware {
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
       managerData.addMethodVariable(watcher);
-      await managerData.replaceImport(
-          watcherName, 'models/${watcherName}.dart');
+
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+
       node.generator = StringGeneratorAdapter(getConsumer(watcherName));
       return node;
     }
@@ -85,5 +87,13 @@ class RiverpodMiddleware extends Middleware {
       },
     )
     ''';
+  }
+
+  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+    return fileStrategy.GENERATED_PROJECT_PATH +
+        fileStrategy.RELATIVE_MODEL_PATH +
+        '${getName(symbolMaster.name).snakeCase}.dart';
   }
 }
