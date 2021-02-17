@@ -4,7 +4,6 @@ import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -23,7 +22,6 @@ class ProviderMiddleware extends Middleware {
     var managerData = node.managerData;
     var fileStrategy = node.currentContext.project.fileStructureStrategy
         as ProviderFileStructureStrategy;
-    var overrideProps = <PBSharedParameterProp>[];
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -39,30 +37,11 @@ class ProviderMiddleware extends Middleware {
       return node;
     }
     watcherName = getNameOfNode(node);
-    if (node is PBSharedMasterNode) {
-      node.name = watcherName;
-      overrideProps.addAll(node.overridableProperties ?? []);
-    }
-
-    // Iterating through states
-    var stateBuffer = StringBuffer();
-    stateBuffer.write(MiddlewareUtils.generateVariable(node));
-    node.auxiliaryData.stateGraph.states.forEach((state) async {
-      var variationNode = state.variation.node;
-
-      if (variationNode is PBSharedMasterNode) {
-        overrideProps.addAll(variationNode.overridableProperties ?? []);
-      }
-
-      stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
-    });
 
     var code = MiddlewareUtils.generateChangeNotifierClass(
-      stateBuffer.toString(),
       watcherName,
       generationManager,
-      node.name.camelCase,
-      overrideProperties: overrideProps,
+      node,
     );
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
 

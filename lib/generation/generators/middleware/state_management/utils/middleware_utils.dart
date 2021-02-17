@@ -6,38 +6,73 @@ import 'package:recase/recase.dart';
 
 class MiddlewareUtils {
   static String generateChangeNotifierClass(
-    String states,
     String defaultStateName,
     PBGenerationManager manager,
-    String defaultWidgetName, {
-    List<PBSharedParameterProp> overrideProperties,
-  }) {
+    PBIntermediateNode node,
+  ) {
     var overrideVars = ''; // Variables outside of initializer
     var overrideAttr = ''; // Attributes that will be part of initializer
+    var stateInitializers = StringBuffer();
+    var stateBuffer = StringBuffer();
 
-    overrideProperties?.forEach((property) {
-      overrideVars += 'final ${property.friendlyName};';
-      overrideAttr += 'this.${property.friendlyName}, ';
+    if (node is PBSharedMasterNode &&
+        (node.overridableProperties?.isNotEmpty ?? false)) {
+      node.overridableProperties.forEach((property) {
+        overrideVars += 'final ${property.friendlyName};';
+        overrideAttr += 'this.${property.friendlyName}, ';
+      });
+      stateBuffer.write(MiddlewareUtils.generateEmptyVariable(node));
+      stateInitializers.write(
+          '${node.name.camelCase} = ${MiddlewareUtils.generateVariableBody(node)}');
+    } else {
+      stateBuffer.write(MiddlewareUtils.generateVariable(node));
+    }
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      var variationNode = state.variation.node;
+
+      if (variationNode is PBSharedMasterNode &&
+          (variationNode.overridableProperties?.isNotEmpty ?? false)) {
+        variationNode.overridableProperties.forEach((property) {
+          overrideVars += 'final ${property.friendlyName};';
+          overrideAttr += 'this.${property.friendlyName}, ';
+        });
+        stateBuffer.write(MiddlewareUtils.generateEmptyVariable(variationNode));
+        stateInitializers.write(
+            '${variationNode.name.camelCase} = ${MiddlewareUtils.generateVariableBody(variationNode)}');
+      } else {
+        stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
+      }
     });
 
     return '''
       import 'package:flutter/material.dart';
       class ${defaultStateName} extends ChangeNotifier {
-      ${states}
+      ${stateBuffer.toString()}
       ${overrideVars}
 
       Widget defaultWidget;
       ${defaultStateName}({$overrideAttr}){
-        defaultWidget = ${defaultWidgetName};
+
+        ${stateInitializers}
+
+        defaultWidget = ${node.name.camelCase};
       }
       }
       ''';
   }
 
-  static String generateVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
-        node?.generator?.generate(node ?? '',
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
-        ';';
+  static String generateVariable(PBIntermediateNode node,
+      {String type = 'var'}) {
+    return '${type} ${node.name.camelCase} = ' + generateVariableBody(node);
   }
+
+  static String generateEmptyVariable(PBIntermediateNode node,
+          {String type = 'var'}) =>
+      '${type} ${node.name.camelCase};';
+
+  static String generateVariableBody(node) =>
+      (node?.generator?.generate(node ?? '',
+              GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
+          '') +
+      ';';
 }
