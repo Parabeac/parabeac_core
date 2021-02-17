@@ -1,7 +1,9 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_generation_manager.dart';
@@ -39,43 +41,26 @@ class RiverpodMiddleware extends Middleware {
       return node;
     }
     watcherName = getNameOfNode(node);
-
     // Iterating through states
     var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node));
+    stateBuffer.write(MiddlewareUtils.generateVariable(node));
     node.auxiliaryData.stateGraph.states.forEach((state) async {
       var variationNode = state.variation.node;
 
-      stateBuffer.write(_generateProviderVariable(variationNode));
+      stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
     });
 
-    var code = _generateRiverpodClass(stateBuffer.toString(), watcherName,
-        generationManager, node.name.camelCase);
+    var code = MiddlewareUtils.generateChangeNotifierClass(
+      stateBuffer.toString(),
+      watcherName,
+      generationManager,
+      node.name.camelCase,
+      overrideProperties:
+          node is PBSharedMasterNode ? node.overridableProperties : [],
+    );
     fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
 
     return node;
-  }
-
-  String _generateRiverpodClass(String states, String defaultStateName,
-      PBGenerationManager manager, String defaultWidgetName) {
-    return '''
-      import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifier {
-      ${states}
-
-      Widget defaultWidget;
-      ${defaultStateName}(){
-        defaultWidget = ${defaultWidgetName};
-      }
-      }
-      ''';
-  }
-
-  String _generateProviderVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
-        node?.generator?.generate(node ?? '',
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
-        ';';
   }
 
   String getConsumer(String name) {
