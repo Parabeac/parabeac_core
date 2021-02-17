@@ -16,6 +16,7 @@ class PBFlexibleGenerator extends PBGenerator {
       buffer.write('Flexible(');
       buffer.write('flex: ${source.flex},');
       try {
+        source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
       } catch (e) {

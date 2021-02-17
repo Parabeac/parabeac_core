@@ -59,6 +59,7 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('),');
 
     if (source.child != null) {
+      source.child.currentContext = source.currentContext;
       buffer.write(
           'child: ${source.child.generator.generate(source.child, generatorContext)}');
     }

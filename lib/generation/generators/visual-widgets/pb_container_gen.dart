@@ -36,6 +36,7 @@ class PBContainerGenerator extends PBGenerator {
           Point(source.topLeftCorner.x, source.topLeftCorner.y);
       source.child.bottomRightCorner =
           Point(source.bottomRightCorner.x, source.bottomRightCorner.y);
+      source.child.currentContext = source.currentContext;
       var statement = source.child != null
           ? 'child: ${source.child.generator.generate(source.child, generatorContext)}'
           : '';
