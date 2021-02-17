@@ -9,7 +9,7 @@ class DesignPage implements DesignNodeFactory {
   String id;
   String imageURI;
   String name;
-  bool convert;
+  bool convert = true;
   List<DesignScreen> screens = [];
 
   DesignPage({
@@ -57,7 +57,7 @@ class DesignPage implements DesignNodeFactory {
     var page = DesignPage(name: json['name'], id: json['id']);
     if (json.containsKey('screens')) {
       (json['screens'] as List)?.forEach((value) {
-        if (value != null) {
+        if (value != null && (value['convert'] ?? true)) {
           page.screens
               .add(DesignScreen.fromPBDF(value as Map<String, dynamic>));
         }

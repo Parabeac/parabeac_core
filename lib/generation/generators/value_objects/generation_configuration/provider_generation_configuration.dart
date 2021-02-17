@@ -63,7 +63,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
     runApp(
       MultiProvider(
         providers: [
-          $providers
+          ${providers.join(', ')}
         ],
         child: MyApp(),
       ),

@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generator_adap
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
 import '../middleware.dart';
@@ -28,15 +29,12 @@ class BLoCMiddleware extends Middleware {
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
-      var importName = node.functionCallName.snakeCase;
-      var generalName = generalStateName.snakeCase;
-      var parentDirectory = generalName + '_bloc';
+
       var globalVariableName = node.name.snakeCase;
       managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
           '${generalStateName.pascalCase}Bloc()'));
 
-      await managerData.replaceImport(
-          importName, '${parentDirectory}/${generalName}_bloc.dart');
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
       managerData.addToDispose('${globalVariableName}.close()');
       node.generator = StringGeneratorAdapter('''
@@ -126,5 +124,15 @@ class BLoCMiddleware extends Middleware {
     @immutable
     abstract class ${pascalName}Event {}
     ''';
+  }
+
+  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+    var generalStateName = node.functionCallName
+        .substring(0, node.functionCallName.lastIndexOf('/'));
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+    return fileStrategy.GENERATED_PROJECT_PATH +
+        fileStrategy.RELATIVE_VIEW_PATH +
+        '${generalStateName.snakeCase}_bloc/${getName(symbolMaster.name).snakeCase}_bloc.dart';
   }
 }
