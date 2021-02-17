@@ -23,7 +23,7 @@ class ProviderMiddleware extends Middleware {
     var managerData = node.managerData;
     var fileStrategy = node.currentContext.project.fileStructureStrategy
         as ProviderFileStructureStrategy;
-
+    var overrideProps = <PBSharedParameterProp>[];
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -41,6 +41,7 @@ class ProviderMiddleware extends Middleware {
     watcherName = getNameOfNode(node);
     if (node is PBSharedMasterNode) {
       node.name = watcherName;
+      overrideProps.addAll(node.overridableProperties ?? []);
     }
 
     // Iterating through states
@@ -48,6 +49,10 @@ class ProviderMiddleware extends Middleware {
     stateBuffer.write(MiddlewareUtils.generateVariable(node));
     node.auxiliaryData.stateGraph.states.forEach((state) async {
       var variationNode = state.variation.node;
+
+      if (variationNode is PBSharedMasterNode) {
+        overrideProps.addAll(variationNode.overridableProperties ?? []);
+      }
 
       stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
     });
@@ -57,8 +62,7 @@ class ProviderMiddleware extends Middleware {
       watcherName,
       generationManager,
       node.name.camelCase,
-      overrideProperties:
-          node is PBSharedMasterNode ? node.overridableProperties : [],
+      overrideProperties: overrideProps,
     );
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
 
