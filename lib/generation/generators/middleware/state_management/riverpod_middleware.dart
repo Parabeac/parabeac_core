@@ -1,9 +1,7 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_generation_manager.dart';
@@ -24,7 +22,6 @@ class RiverpodMiddleware extends Middleware {
     var managerData = node.managerData;
     var fileStrategy = node.currentContext.project.fileStructureStrategy
         as RiverpodFileStructureStrategy;
-    var overrideProps = <PBSharedParameterProp>[];
 
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
@@ -40,29 +37,13 @@ class RiverpodMiddleware extends Middleware {
 
       node.generator = StringGeneratorAdapter(getConsumer(watcherName));
       return node;
-    } else if (node is PBSharedMasterNode) {
-      overrideProps.addAll(node.overridableProperties ?? []);
     }
     watcherName = getNameOfNode(node);
-    // Iterating through states
-    var stateBuffer = StringBuffer();
-    stateBuffer.write(MiddlewareUtils.generateVariable(node));
-    node.auxiliaryData.stateGraph.states.forEach((state) async {
-      var variationNode = state.variation.node;
-
-      if (variationNode is PBSharedMasterNode) {
-        overrideProps.addAll(variationNode.overridableProperties ?? []);
-      }
-
-      stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
-    });
 
     var code = MiddlewareUtils.generateChangeNotifierClass(
-      stateBuffer.toString(),
       watcherName,
       generationManager,
-      node.name.camelCase,
-      overrideProperties: overrideProps,
+      node,
     );
     fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
 
