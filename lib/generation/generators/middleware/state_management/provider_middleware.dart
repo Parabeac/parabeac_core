@@ -1,5 +1,5 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
@@ -45,40 +45,24 @@ class ProviderMiddleware extends Middleware {
 
     // Iterating through states
     var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node));
+    stateBuffer.write(MiddlewareUtils.generateVariable(node));
     node.auxiliaryData.stateGraph.states.forEach((state) async {
       var variationNode = state.variation.node;
 
-      stateBuffer.write(_generateProviderVariable(variationNode));
+      stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
     });
 
-    var code = _generateProviderClass(stateBuffer.toString(), watcherName,
-        generationManager, node.name.camelCase);
+    var code = MiddlewareUtils.generateChangeNotifierClass(
+      stateBuffer.toString(),
+      watcherName,
+      generationManager,
+      node.name.camelCase,
+      overrideProperties:
+          node is PBSharedMasterNode ? node.overridableProperties : [],
+    );
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
 
     return node;
-  }
-
-  String _generateProviderClass(String states, String defaultStateName,
-      PBGenerationManager manager, String defaultWidgetName) {
-    return '''
-      import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifier {
-      ${states}
-
-      Widget defaultWidget;
-      ${defaultStateName}(){
-        defaultWidget = ${defaultWidgetName};
-      }
-      }
-      ''';
-  }
-
-  String _generateProviderVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
-        node?.generator?.generate(node ?? '',
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
-        ';';
   }
 
   String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
