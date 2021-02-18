@@ -27,7 +27,7 @@ class RiverpodGenerationConfiguration extends GenerationConfiguration {
       (pageWriter as PBFlutterWriter).rewriteMainFunction(
         fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
         _generateMainFunction(),
-        imports: ["import 'package:flutter_riverpod/flutter_riverpod.dart';"],
+        imports: {"import 'package:flutter_riverpod/flutter_riverpod.dart';"},
       );
     }
   }
