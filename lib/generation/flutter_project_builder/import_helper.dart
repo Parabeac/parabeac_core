@@ -10,9 +10,11 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 class ImportHelper {
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
-  static List<String> findImports(PBIntermediateNode node, String path) {
-    List<String> imports = [];
-    if (node == null) return imports;
+  static Set<String> findImports(PBIntermediateNode node, String path) {
+    Set imports = <String>{};
+    if (node == null) {
+      return imports;
+    }
 
     String id;
     if (node is PBSharedInstanceIntermediateNode) {
@@ -49,6 +51,6 @@ class ImportHelper {
       imports.addAll(findImports(node.child, path));
     }
 
-    return imports.toSet().toList(); // Prevent repeated entries
+    return imports;
   }
 }
