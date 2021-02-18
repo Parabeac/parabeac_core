@@ -51,7 +51,7 @@ class MiddlewareUtils {
       ${overrideVars}
 
       Widget defaultWidget;
-      ${defaultStateName}(${overrideAttr.isNotEmpty ? (overrideAttr) : ''}){
+      ${defaultStateName}(${overrideAttr.isNotEmpty ? ('\{' + overrideAttr + '\}') : ''}){
 
         ${stateInitializers}
 
