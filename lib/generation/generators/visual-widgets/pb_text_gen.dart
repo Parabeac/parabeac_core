@@ -13,8 +13,13 @@ class PBTextGen extends PBGenerator with PBColorMixin {
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is InheritedText) {
+      source.currentContext.project.genProjectData
+          .addDependencies('auto_size_text', '^2.1.0');
+
+      source.managerData
+          .addImport('package:auto_size_text/auto_size_text.dart');
       var buffer = StringBuffer();
-      buffer.write('Text(\n');
+      buffer.write('AutoSizeText(\n');
       var isTextParameter = source.isTextParameter;
       if (isTextParameter) {
         var text = source.text;
@@ -27,7 +32,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
             .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
       }
       buffer.write('style: ');
-      if(SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')){
+      if (SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')) {
         buffer.write(SN_UUIDtoVarName[source.UUID + '_textStyle']);
       }
 

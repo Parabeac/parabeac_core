@@ -15,6 +15,7 @@ class PBRowGenerator extends PBLayoutGenerator {
       List<PBIntermediateNode> children = source.children;
 
       for (var child in children) {
+        child.currentContext = source.currentContext;
         buffer.write(child.generator.generate(child, generatorContext));
         var trailing_comma = (counter + 1) == children.length ? '' : ',';
         buffer.write(trailing_comma);
