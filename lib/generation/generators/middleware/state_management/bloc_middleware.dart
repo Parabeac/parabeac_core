@@ -30,8 +30,7 @@ class BLoCMiddleware extends Middleware {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
 
-      var globalVariableName = node.name.snakeCase;
-      globalVariableName = getVariableName(globalVariableName);
+      var globalVariableName = getVariableName(node.name.snakeCase);
       managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
           '${generalStateName.pascalCase}Bloc()'));
 

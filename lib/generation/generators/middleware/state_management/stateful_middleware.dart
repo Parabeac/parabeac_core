@@ -51,9 +51,7 @@ class StatefulMiddleware extends Middleware {
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
 
-    var watcherName = node.name.snakeCase;
-
-    watcherName = getVariableName(watcherName);
+    var watcherName = getVariableName(node.name.snakeCase);
 
     var tempVar = PBVariable(
       watcherName,
