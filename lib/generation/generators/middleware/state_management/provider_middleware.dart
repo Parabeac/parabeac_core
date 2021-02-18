@@ -13,14 +13,11 @@ class ProviderMiddleware extends Middleware {
   final PACKAGE_NAME = 'provider';
   final PACKAGE_VERSION = '^4.3.2+3';
 
-  static int counter = 0;
-
   ProviderMiddleware(PBGenerationManager generationManager)
       : super(generationManager);
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    counter++;
     String watcherName;
     var managerData = node.managerData;
     var fileStrategy = node.currentContext.project.fileStructureStrategy
@@ -30,7 +27,9 @@ class ProviderMiddleware extends Middleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
       var widgetName = node.functionCallName.camelCase;
-      watcherName = node.name.snakeCase + '_notifier_${counter}';
+      watcherName = node.name.snakeCase + '_notifier';
+
+      watcherName = getVariableName(watcherName);
       var watcher = PBVariable(watcherName, 'final ', true,
           'context.watch<${getName(node.functionCallName).pascalCase}>().${widgetName}');
       managerData.addMethodVariable(watcher);
