@@ -105,6 +105,7 @@ abstract class GenerationConfiguration {
     await setUpConfiguration();
     pbProject.fileStructureStrategy = fileStructureStrategy;
     for (var tree in pbProject.forest) {
+      tree.data.addImport('package:flutter/material.dart');
       _generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
       if (tree.rootNode is InheritedScaffold &&

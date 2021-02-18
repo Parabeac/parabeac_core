@@ -1,10 +1,9 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -23,7 +22,6 @@ class ProviderMiddleware extends Middleware {
     var managerData = node.managerData;
     var fileStrategy = node.currentContext.project.fileStructureStrategy
         as ProviderFileStructureStrategy;
-
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -39,46 +37,15 @@ class ProviderMiddleware extends Middleware {
       return node;
     }
     watcherName = getNameOfNode(node);
-    if (node is PBSharedMasterNode) {
-      node.name = watcherName;
-    }
 
-    // Iterating through states
-    var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node));
-    node.auxiliaryData.stateGraph.states.forEach((state) async {
-      var variationNode = state.variation.node;
-
-      stateBuffer.write(_generateProviderVariable(variationNode));
-    });
-
-    var code = _generateProviderClass(stateBuffer.toString(), watcherName,
-        generationManager, node.name.camelCase);
+    var code = MiddlewareUtils.generateChangeNotifierClass(
+      watcherName,
+      generationManager,
+      node,
+    );
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
 
     return node;
-  }
-
-  String _generateProviderClass(String states, String defaultStateName,
-      PBGenerationManager manager, String defaultWidgetName) {
-    return '''
-      import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifier {
-      ${states}
-
-      Widget defaultWidget;
-      ${defaultStateName}(){
-        defaultWidget = ${defaultWidgetName};
-      }
-      }
-      ''';
-  }
-
-  String _generateProviderVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
-        node?.generator?.generate(node ?? '',
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
-        ';';
   }
 
   String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
