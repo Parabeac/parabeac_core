@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -27,63 +27,39 @@ class RiverpodMiddleware extends Middleware {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
-      watcherName = node.functionCallName.snakeCase;
+      watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
       managerData.addMethodVariable(watcher);
+      var widgetName = node.functionCallName.camelCase;
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      node.generator = StringGeneratorAdapter(getConsumer(watcherName));
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator =
+            StringGeneratorAdapter(getConsumer(watcherName, widgetName));
+      }
       return node;
     }
     watcherName = getNameOfNode(node);
 
-    // Iterating through states
-    var stateBuffer = StringBuffer();
-    stateBuffer.write(_generateProviderVariable(node));
-    node.auxiliaryData.stateGraph.states.forEach((state) async {
-      var variationNode = state.variation.node;
-
-      stateBuffer.write(_generateProviderVariable(variationNode));
-    });
-
-    var code = _generateRiverpodClass(stateBuffer.toString(), watcherName,
-        generationManager, node.name.camelCase);
+    var code = MiddlewareUtils.generateChangeNotifierClass(
+      watcherName,
+      generationManager,
+      node,
+    );
     fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
 
     return node;
   }
 
-  String _generateRiverpodClass(String states, String defaultStateName,
-      PBGenerationManager manager, String defaultWidgetName) {
-    return '''
-      import 'package:flutter/material.dart';
-      class ${defaultStateName} extends ChangeNotifier {
-      ${states}
-
-      Widget defaultWidget;
-      ${defaultStateName}(){
-        defaultWidget = ${defaultWidgetName};
-      }
-      }
-      ''';
-  }
-
-  String _generateProviderVariable(PBIntermediateNode node) {
-    return 'var ${node.name.camelCase} = ' +
-        node?.generator?.generate(node ?? '',
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) +
-        ';';
-  }
-
-  String getConsumer(String name) {
+  String getConsumer(String name, String pointTo) {
     return '''
     Consumer(
       builder: (context, watch, child) {
         final ${name} = watch(${name}_provider); 
-        return ${name}.defaultWidget;
+        return ${name}.${pointTo};
       },
     )
     ''';
