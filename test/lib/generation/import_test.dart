@@ -47,9 +47,9 @@ void main() {
           iNodeWithImports, '/path/to/page/importer.dart');
 
       expect(imports.length, 3);
-      expect(imports[0], './importee1.dart');
-      expect(imports[1], '../importee2.dart');
-      expect(imports[2], './sub/importee3.dart');
+      expect(imports.contains('./importee1.dart'), true);
+      expect(imports.contains('../importee2.dart'), true);
+      expect(imports.contains('./sub/importee3.dart'), true);
     });
 
     test('Testing import generation when no imports are generated', () {
