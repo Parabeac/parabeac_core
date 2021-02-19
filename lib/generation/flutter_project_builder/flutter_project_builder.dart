@@ -68,16 +68,6 @@ class FlutterProjectBuilder {
       log.error(error.toString());
     }
 
-    // Add Pubspec Assets Lines.
-    var list = File('${pathToFlutterProject}pubspec.yaml').readAsLinesSync();
-    list.replaceRange(42, 44, ['  assets:', '    - assets/images/']);
-    var sink = File('${pathToFlutterProject}pubspec.yaml')
-        .openWrite(mode: FileMode.write, encoding: utf8);
-    for (var i = 0; i < list.length; i++) {
-      sink.writeln(list[i]);
-    }
-    await sink.close();
-
     await Directory('${pathToFlutterProject}assets/images')
         .create(recursive: true)
         .then((value) => {
