@@ -137,10 +137,14 @@ To set the state management configuration, head over to edit `/Parabeac-Core/lib
 
 Here you can replace the `state-management` property to `bloc`, `provider`, or `riverpod`.
 
+=======
+You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+=======
 For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) 
 
 You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
 
+=======
 # Running the exported code
 ### Requirements
 - Flutter
