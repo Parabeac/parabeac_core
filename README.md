@@ -22,6 +22,19 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
   <a href="https://github.com/Parabeac/Parabeac-Core/wiki/Setting-up-a-debug-environment">Debugging</a>
 </h3>
 
+# Table of Contents
+1. [What is Parabeac-Core](#what-is-parabeac-core)
+2. [Get Started](#get-started)
+    
+    1. [Cloning the Repo](#cloning-the-repo)
+    2. [Running the conversion](#running-the-conversion)
+    3. [Metrics](#metrics)
+    4. [Using State Management Configuration](#using-state-management-configuration)
+3. [Running the exported Code](#running-the-exported-code)
+4. [How to create & run Parabeac eggs](#how-to-create-&-run-parabeac-eggs)
+5. [How it works](#how-it-works)
+6. [How to contribute](#how-to-contribute)
+
 # What is Parabeac-Core?
 Parabeac-Core is an open-source repository that converts design files into Flutter code. The biggest challenge in code conversion is achieving quality code, but in a tool like this, there’s so much variability in what quality code should look like. So Parabeac-Core is built in a way not to promise quality code, but to be driven by the community so that you can configure & tweak to you or your teams liking. See our [Manifesto](https://github.com/Parabeac/Parabeac-Core/blob/stable/MANIFESTO.md). We welcome contributors to improve Parabeac-Core, create [Parabeac Eggs](https://github.com/Parabeac/parabeac-egg-template), & to join our [Discord](https://discord.com/invite/qUrghes) community!
 
@@ -121,9 +134,16 @@ To set the state management configuration, head over to edit `/Parabeac-Core/lib
 }
 ```
 
-Here you can replace the `state-management` property to `bloc` or `provider`. Soon you can also set `riverpod`.
+Here you can replace the `state-management` property to `bloc`, `provider`, or `riverpod`.
+
+<<<<<<< HEAD
+You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+=======
+For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) 
 
 You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+
+>>>>>>> 83dab0f... Added table of contents to readme.
 # Running the exported code
 ### Requirements
 - Flutter
@@ -177,7 +197,6 @@ In Flutter, there are only a couple ways to achieve alignment. We recognized the
 Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
 
 ![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
-
 
 # How to contribute
 Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
