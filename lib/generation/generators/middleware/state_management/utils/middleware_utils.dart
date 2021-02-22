@@ -45,7 +45,7 @@ class MiddlewareUtils {
     });
 
     return '''
-      import 'package:flutter/material.dart';
+      ${manager.generateImports()}
       class ${defaultStateName} extends ChangeNotifier {
       ${stateBuffer.toString()}
       ${overrideVars}

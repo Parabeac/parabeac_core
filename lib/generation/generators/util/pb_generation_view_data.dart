@@ -2,9 +2,9 @@ import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 
 class PBGenerationViewData {
-  final Set<PBVariable> _globalVariables = {};
-  final Set<PBVariable> _constructorVariables = {};
-  final Set<PBVariable> _methodVariables = {};
+  final Map<String, PBVariable> _globalVariables = {};
+  final Map<String, PBVariable> _constructorVariables = {};
+  final Map<String, PBVariable> _methodVariables = {};
   final Set<String> _imports = {};
   final Set<String> _toDispose = {};
   bool _isDataLocked = false;
@@ -13,20 +13,20 @@ class PBGenerationViewData {
 
   Iterator<String> get toDispose => _toDispose.iterator;
 
-  Iterator<PBVariable> get globalVariables => _globalVariables.iterator;
+  Iterator<PBVariable> get globalVariables => _globalVariables.values.iterator;
 
   Iterator<PBVariable> get constructorVariables =>
-      _constructorVariables.iterator;
+      _constructorVariables.values.iterator;
 
   ///The [PBVariable]s that need to be added in between the method definition and its return statement
-  Iterator<PBVariable> get methodVariables => _methodVariables.iterator;
+  Iterator<PBVariable> get methodVariables => _methodVariables.values.iterator;
 
   ///Imports for the current page
   Iterator<String> get imports => _imports.iterator;
 
   String get methodVariableStr {
     var buffer = StringBuffer();
-    var it = _methodVariables.iterator;
+    var it = _methodVariables.values.iterator;
     while (it.moveNext()) {
       var param = it.current;
       buffer.writeln(
@@ -53,49 +53,26 @@ class PBGenerationViewData {
   }
 
   void addConstructorVariable(PBVariable parameter) {
-    if (!_isDataLocked && parameter != null) {
-      _constructorVariables.add(parameter);
+    if (!_isDataLocked &&
+        parameter != null &&
+        !_constructorVariables.containsKey(parameter.variableName)) {
+      _constructorVariables[parameter.variableName] = parameter;
     }
   }
 
   void addGlobalVariable(PBVariable variable) {
-    if (!_isDataLocked && variable != null && globalHas(variable)) {
-      _globalVariables.add(variable);
+    if (!_isDataLocked &&
+        variable != null &&
+        !_globalVariables.containsKey(variable.variableName)) {
+      _globalVariables[variable.variableName] = variable;
     }
   }
-
-  bool globalHas(PBVariable variable) {
-    for (var v in _globalVariables) {
-      if (v.variableName == variable.variableName) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void addAllGlobalVariable(Iterable<PBVariable> variable) =>
-      _globalVariables.addAll(variable);
 
   void addMethodVariable(PBVariable variable) {
-    if (!_isDataLocked && variable != null && !_contains(variable)) {
-      _methodVariables.add(variable);
-    }
-  }
-
-  bool _contains(PBVariable variable) {
-    var result = false;
-    _methodVariables.forEach((element) {
-      if (element.variableName == variable.variableName) {
-        result = true;
-        return result;
-      }
-    });
-    return result;
-  }
-
-  void addAllMethodVariable(Iterable<PBVariable> variables) {
-    if (!_isDataLocked && variables != null) {
-      _methodVariables.addAll(variables);
+    if (!_isDataLocked &&
+        variable != null &&
+        !_methodVariables.containsKey(variable.variableName)) {
+      _methodVariables[variable.variableName] = variable;
     }
   }
 }

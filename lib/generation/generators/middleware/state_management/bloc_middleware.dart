@@ -83,8 +83,12 @@ class BLoCMiddleware extends Middleware {
     );
 
     /// Creates bloc page
+    managerData.addImport('package:meta/meta.dart');
     await fileStrategy.generatePage(
-      _createBlocPage(parentState, node.name),
+      _createBlocPage(
+        parentState,
+        node.name,
+      ),
       '${parentDirectory}/${generalName}_bloc',
       args: 'VIEW',
     );
@@ -96,11 +100,7 @@ class BLoCMiddleware extends Middleware {
     var pascalName = name.pascalCase;
     var snakeName = name.snakeCase;
     return '''
-    import 'dart:async';
-
-    import 'package:flutter_bloc/flutter_bloc.dart';
-    import 'package:meta/meta.dart';
-    import 'package:flutter/material.dart';
+    ${generationManager.generateImports()}
 
     part '${snakeName}_event.dart';
     part '${snakeName}_state.dart';
