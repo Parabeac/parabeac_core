@@ -30,19 +30,21 @@ class BLoCMiddleware extends Middleware {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
 
-      var globalVariableName = node.name.snakeCase;
+      var globalVariableName = getVariableName(node.name.snakeCase);
       managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
           '${generalStateName.pascalCase}Bloc()'));
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
       managerData.addToDispose('${globalVariableName}.close()');
-      node.generator = StringGeneratorAdapter('''
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator = StringGeneratorAdapter('''
       BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
         cubit: ${globalVariableName},
         builder: (context, state) => state.widget  
       )
       ''');
+      }
       return node;
     }
     var parentState = getNameOfNode(node);

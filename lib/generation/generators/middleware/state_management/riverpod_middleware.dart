@@ -27,15 +27,19 @@ class RiverpodMiddleware extends Middleware {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
-      watcherName = node.functionCallName.snakeCase;
+      watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
       managerData.addMethodVariable(watcher);
+      var widgetName = node.functionCallName.camelCase;
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      node.generator = StringGeneratorAdapter(getConsumer(watcherName));
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator =
+            StringGeneratorAdapter(getConsumer(watcherName, widgetName));
+      }
       return node;
     }
     watcherName = getNameOfNode(node);
@@ -50,12 +54,12 @@ class RiverpodMiddleware extends Middleware {
     return node;
   }
 
-  String getConsumer(String name) {
+  String getConsumer(String name, String pointTo) {
     return '''
     Consumer(
       builder: (context, watch, child) {
         final ${name} = watch(${name}_provider); 
-        return ${name}.defaultWidget;
+        return ${name}.${pointTo};
       },
     )
     ''';

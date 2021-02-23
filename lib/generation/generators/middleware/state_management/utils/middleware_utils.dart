@@ -5,8 +5,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:recase/recase.dart';
 
 class MiddlewareUtils {
-  static String generateChangeNotifierClass(String defaultStateName,
-      PBGenerationManager manager, PBIntermediateNode node) {
+  static String generateChangeNotifierClass(
+    String defaultStateName,
+    PBGenerationManager manager,
+    PBIntermediateNode node,
+  ) {
     var overrideVars = ''; // Variables outside of initializer
     var overrideAttr = ''; // Attributes that will be part of initializer
     var stateInitializers = StringBuffer();
