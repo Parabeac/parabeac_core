@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
@@ -31,7 +32,12 @@ class RiverpodMiddleware extends Middleware {
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
-      managerData.addMethodVariable(watcher);
+      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
+          is StatelessTemplateStrategy) {
+        managerData.addGlobalVariable(watcher);
+      } else {
+        managerData.addMethodVariable(watcher);
+      }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
