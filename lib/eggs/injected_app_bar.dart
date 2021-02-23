@@ -95,16 +95,19 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
       if (source.leadingItem != null) {
+        source.leadingItem.currentContext = source.currentContext;
         buffer.write(
             'leading: ${source.leadingItem.generator.generate(source.leadingItem, generatorContext)},');
       }
       if (source.middleItem != null) {
+        source.middleItem.currentContext = source.currentContext;
         buffer.write(
             'title: ${source.middleItem.generator.generate(source.middleItem, generatorContext)},');
       }
 
       if (source.trailingItem != null) {
         var trailingItem = '';
+        source.trailingItem.currentContext = source.currentContext;
         trailingItem =
             '${source.trailingItem.generator.generate(source.trailingItem, generatorContext)}';
         buffer.write('actions: [$trailingItem],');

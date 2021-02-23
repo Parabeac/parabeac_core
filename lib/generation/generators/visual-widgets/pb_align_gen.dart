@@ -22,6 +22,7 @@ class PBAlignGenerator extends PBGenerator {
           'alignment: Alignment(${source.alignX.toStringAsFixed(2)}, ${source.alignY.toStringAsFixed(2)}),');
 
       try {
+        source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
       } catch (e, stackTrace) {
