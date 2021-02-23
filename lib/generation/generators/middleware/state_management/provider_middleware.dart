@@ -43,7 +43,9 @@ class ProviderMiddleware extends Middleware {
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      node.generator = StringGeneratorAdapter(watcherName);
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator = StringGeneratorAdapter(watcherName);
+      }
       return node;
     }
     watcherName = getNameOfNode(node);

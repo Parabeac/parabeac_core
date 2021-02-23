@@ -104,6 +104,8 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
         this.prototypeNodeUUID = tempPrototypeID;
       }
 
+      boundaryRectangle = fitFrame();
+
       children.clear();
 
       return Future.value(
@@ -128,6 +130,27 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
       }
     }
     return true;
+  }
+
+  Frame fitFrame() {
+    var heights = [];
+    var widths = [];
+    for (var child in children) {
+      heights.add(child.boundaryRectangle.height);
+      widths.add(child.boundaryRectangle.width);
+    }
+
+    if (heights.every((element) => element == heights[0]) &&
+        widths.every((element) => element == widths[0])) {
+      return Frame(
+        height: heights[0],
+        width: widths[0],
+        x: boundaryRectangle.x,
+        y: boundaryRectangle.y,
+      );
+    } else {
+      return boundaryRectangle;
+    }
   }
 
   String childrenHavePrototypeNode() {

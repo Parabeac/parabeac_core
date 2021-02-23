@@ -88,7 +88,6 @@ class Interpret {
           log.fine(
               'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${tempTree.tree_type}\'');
 
-          tempTree.rootNode;
           tempForest.add(tempTree);
         }
       }
