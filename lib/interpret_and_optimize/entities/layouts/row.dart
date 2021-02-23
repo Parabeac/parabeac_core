@@ -27,13 +27,13 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   Map alignment = {};
 
-  @override
-  PBContext currentContext;
+  // @override
+  // PBContext currentContext;
 
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateRowLayout(String name, this.UUID, {this.currentContext})
+  PBIntermediateRowLayout(String name, this.UUID, {PBContext currentContext})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
     generator = PBRowGenerator();
     checkCrossAxisAlignment();
