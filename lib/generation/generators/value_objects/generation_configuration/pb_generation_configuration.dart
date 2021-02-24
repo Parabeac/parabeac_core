@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
@@ -138,12 +139,8 @@ abstract class GenerationConfiguration {
 
   void _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
-    var screenFilePath =
-        '${pbProject.projectName}/lib/screens/${directoryName}/${fileName.snakeCase}.dart';
-    var viewFilePath =
-        '${pbProject.projectName}/lib/view/${directoryName}/${fileName.snakeCase}.dart'; // Removed .g
-    var imports = ImportHelper.findImports(
-        node, node is InheritedScaffold ? screenFilePath : viewFilePath);
+    var nodePath = PBGenCache().getPath(node.UUID);
+    var imports = ImportHelper.findImports(node, nodePath);
     imports.forEach((import) {
       node.managerData.addImport(import);
     });
