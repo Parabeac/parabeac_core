@@ -4,4 +4,9 @@ class GeneratorContext {
   SizingValueContext sizingContext = SizingValueContext.PointValue;
 }
 
-enum SizingValueContext { PointValue, MediaQueryValue, LayoutBuilderValue }
+enum SizingValueContext {
+  PointValue,
+  MediaQueryValue,
+  LayoutBuilderValue,
+  AppBarChild,
+}

@@ -89,7 +89,7 @@ class PBAppBarGenerator extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+    generatorContext.sizingContext = SizingValueContext.AppBarChild;
     if (source is InjectedNavbar) {
       var buffer = StringBuffer();
 
@@ -97,7 +97,7 @@ class PBAppBarGenerator extends PBGenerator {
       if (source.leadingItem != null) {
         source.leadingItem.currentContext = source.currentContext;
         buffer.write(
-            'leading: ${source.leadingItem.generator.generate(source.leadingItem, generatorContext)},');
+            'leading: ${_wrapOnIconButton(source.leadingItem.generator.generate(source.leadingItem, generatorContext))}');
       }
       if (source.middleItem != null) {
         source.middleItem.currentContext = source.currentContext;
@@ -110,11 +110,22 @@ class PBAppBarGenerator extends PBGenerator {
         source.trailingItem.currentContext = source.currentContext;
         trailingItem =
             '${source.trailingItem.generator.generate(source.trailingItem, generatorContext)}';
-        buffer.write('actions: [$trailingItem],');
+        buffer.write('actions: [${_wrapOnIconButton(trailingItem)}],');
       }
 
       buffer.write(')');
       return buffer.toString();
     }
+  }
+
+  String _wrapOnIconButton(String body) {
+    return '''
+    IconButton(
+        icon: $body,
+        onPressed: () {
+            // TODO: Fill action
+            },
+            ),
+    ''';
   }
 }
