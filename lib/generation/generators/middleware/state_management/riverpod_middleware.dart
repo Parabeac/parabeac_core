@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
@@ -27,15 +28,23 @@ class RiverpodMiddleware extends Middleware {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
-      watcherName = node.functionCallName.snakeCase;
+      watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
-      managerData.addMethodVariable(watcher);
+      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
+          is StatelessTemplateStrategy) {
+        managerData.addGlobalVariable(watcher);
+      } else {
+        managerData.addMethodVariable(watcher);
+      }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      node.generator = StringGeneratorAdapter(getConsumer(watcherName));
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator = StringGeneratorAdapter(
+            getConsumer(watcherName, node.functionCallName.camelCase));
+      }
       return node;
     }
     watcherName = getNameOfNode(node);
@@ -50,12 +59,12 @@ class RiverpodMiddleware extends Middleware {
     return node;
   }
 
-  String getConsumer(String name) {
+  String getConsumer(String name, String pointTo) {
     return '''
     Consumer(
       builder: (context, watch, child) {
         final ${name} = watch(${name}_provider); 
-        return ${name}.defaultWidget;
+        return ${name}.${pointTo};
       },
     )
     ''';
