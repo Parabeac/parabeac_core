@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
@@ -139,7 +140,8 @@ abstract class GenerationConfiguration {
 
   void _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
-    var nodePath = PBGenCache().getPath(node.UUID);
+    var nodePath = PBGenCache()
+        .getPath(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
     var imports = ImportHelper.findImports(node, nodePath);
     imports.forEach((import) {
       node.managerData.addImport(import);
