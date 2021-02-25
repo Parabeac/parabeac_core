@@ -115,6 +115,7 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 
 ## Metrics
 Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+
 ## Using State Management Configuration
 ![State Management](https://kindling-sketch.s3.amazonaws.com/PB_to_Flutter_with_State_management.png)
 
