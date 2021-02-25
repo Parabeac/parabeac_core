@@ -53,6 +53,7 @@ class PBPositionedGenerator extends PBGenerator {
       }
 
       try {
+        source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
       } catch (e, stackTrace) {
