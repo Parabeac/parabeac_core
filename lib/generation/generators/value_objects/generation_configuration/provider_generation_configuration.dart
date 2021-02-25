@@ -29,7 +29,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   Future<void> generateProject(PBProject pb_project) async {
     await super.generateProject(pb_project);
     if (pageWriter is PBFlutterWriter) {
-      var imports = <String>['import \'package:provider/provider.dart\';'];
+      Set imports = <String>{'import \'package:provider/provider.dart\';'};
       imports.addAll(registeredModels
           .map((e) => 'import \'models/${e.snakeCase}.dart\';')
           .toList());
@@ -63,7 +63,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
     runApp(
       MultiProvider(
         providers: [
-          $providers
+          ${providers.join(', ')}
         ],
         child: MyApp(),
       ),

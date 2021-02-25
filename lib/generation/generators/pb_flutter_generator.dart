@@ -73,7 +73,6 @@ class PBFlutterGenerator extends PBGenerationManager {
   @override
   String generateImports() {
     var buffer = StringBuffer();
-    buffer.write('import \'package:flutter/material.dart\';\n');
     var it = data.imports;
     while (it.moveNext()) {
       buffer.write('import \'${it.current}\';\n');

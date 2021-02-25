@@ -26,7 +26,7 @@ class PBFlutterWriter implements PBPageWriter {
 
   /// Function that allows the rewriting of the main() method inside main.dart
   void rewriteMainFunction(String pathToMain, String code,
-      {List<String> imports}) {
+      {Set<String> imports}) {
     var mainRead = File(pathToMain).readAsStringSync();
     var newMain = imports.join() +
         mainRead.replaceFirst(
@@ -68,23 +68,30 @@ class MyApp extends StatelessWidget {
 
   void submitDependencies(String yamlAbsPath) async {
     var line = 0;
+    var readYaml = File(yamlAbsPath).readAsLinesSync();
     if (dependencies.isNotEmpty) {
-      var readYaml = File(yamlAbsPath).readAsLinesSync();
-
       line = readYaml.indexOf('dependencies:');
       if (line > 0) {
         dependencies.forEach((packageName, version) {
-          readYaml.insert(++line, '  ${packageName}: ${version}');
+          if (!readYaml.contains('  ${packageName}: ${version}')) {
+            readYaml.insert(++line, '  ${packageName}: ${version}');
+          }
         });
 
-        var writeYaml = File(yamlAbsPath).openWrite(mode: FileMode.write);
-
-        for (var i = 0; i < readYaml.length; ++i) {
-          writeYaml.writeln(readYaml[i]);
-        }
-        await writeYaml.flush();
         dependencies.clear(); // Clear dependencies to prevent duplicates
       }
     }
+    line = readYaml.indexOf('flutter:');
+    if (line > 0) {
+      if (!readYaml.contains('  assets:')) {
+        readYaml.insert(++line, '  assets:\n    - assets/images/');
+      }
+    }
+    var writeYaml = File(yamlAbsPath).openWrite(mode: FileMode.write);
+
+    for (var i = 0; i < readYaml.length; ++i) {
+      writeYaml.writeln(readYaml[i]);
+    }
+    await writeYaml.flush();
   }
 }

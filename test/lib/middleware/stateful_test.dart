@@ -101,12 +101,12 @@ void main() {
       expect(tempNode is PBIntermediateNode, true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_blue/some_element_blue.dart')
+                  '${testingPath}lib/view/some_element/some_element_blue.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_blue/some_element_green.dart')
+                  '${testingPath}lib/view/some_element/some_element_green.dart')
               .exists(),
           true);
     });

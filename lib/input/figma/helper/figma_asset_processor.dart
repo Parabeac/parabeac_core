@@ -64,7 +64,7 @@ class FigmaAssetProcessor extends AssetProcessingService {
     // Call Figma API to get Image link
     return Future(() async {
       var response = await APICallService.makeAPICall(
-          'https://api.figma.com/v1/images/${MainInfo().figmaProjectID}?ids=${uuids.join(',')}',
+          'https://api.figma.com/v1/images/${MainInfo().figmaProjectID}?ids=${uuids.join(',')}&use_absolute_bounds=true',
           MainInfo().figmaKey);
 
       if (response != null &&

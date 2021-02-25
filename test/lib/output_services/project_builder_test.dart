@@ -68,7 +68,8 @@ void main() {
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
 
-      when(project.projectName).thenReturn('intermediateTest');
+      when(project.projectName).thenReturn(
+          '${Directory.current.path}/test/lib/output_services/temp2/');
       when(project.forest).thenReturn([intermediateTree]);
       when(project.projectAbsPath).thenReturn(outputPath);
 
