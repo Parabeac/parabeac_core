@@ -105,11 +105,31 @@ class PBAppBarGenerator extends PBGenerator {
       source.attributes.forEach((attribute) {
         attribute.attributeNode.currentContext = source.currentContext;
         buffer.write(
-            '${attribute.attributeName}: ${attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext)}');
+            '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
       });
 
       buffer.write(')');
       return buffer.toString();
     }
+  }
+
+  String _wrapOnBrackets(String body, bool isActions, bool isLeading) {
+    if (isActions) {
+      return '[${_wrapOnIconButton(body)}]';
+    } else if (isLeading) {
+      return _wrapOnIconButton(body);
+    }
+    return '$body';
+  }
+
+  String _wrapOnIconButton(String body) {
+    return ''' 
+      IconButton(
+        icon: ${body}
+        onPressed: () {
+          // TODO: Fill action
+        }
+      )
+    ''';
   }
 }
