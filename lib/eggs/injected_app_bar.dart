@@ -30,9 +30,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
-    addAttribute(PBAttribute([], 'leading'));
-    addAttribute(PBAttribute([], 'title'));
-    addAttribute(PBAttribute([], 'actions'));
+    addAttribute(PBAttribute('leading'));
+    addAttribute(PBAttribute('title'));
+    addAttribute(PBAttribute('actions'));
   }
 
   @override

@@ -17,21 +17,14 @@ class PBAttribute {
   PBIntermediateNode get attributeNode =>
       attributeNodes.isEmpty ? null : attributeNodes.first;
 
-  /// List of services that this attribute is allowed to go through
-  List<PBServiceAttribute> serviceAttributes;
-
   /// Name of the attribute.
   /// e.g. `child` or `children`
   String attributeName;
 
   PBAttribute(
-    this.serviceAttributes,
     this.attributeName, {
     this.attributeNodes,
   }) {
     attributeNodes ??= [];
   }
 }
-
-/// Enum of supported services
-enum PBServiceAttribute { ALL, ALIGNMENT, VISUAL_GEN }

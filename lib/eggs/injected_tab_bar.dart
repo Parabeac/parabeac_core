@@ -28,7 +28,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBTabBarGenerator();
-    addAttribute(PBAttribute([], 'tabs'));
+    addAttribute(PBAttribute('tabs'));
   }
 
   @override
