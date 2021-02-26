@@ -35,6 +35,9 @@ abstract class PBIntermediateNode {
   /// Sets the `child` attribute's `attributeNode` to `element`.
   /// If a `child` attribute does not yet exist, it creates it.
   set child(PBIntermediateNode element) {
+    if (element == null) {
+      return;
+    }
     if (!hasAttribute('child')) {
       addAttribute(PBAttribute('child', attributeNodes: [element]));
     } else {
