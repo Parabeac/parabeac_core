@@ -125,7 +125,7 @@ class PBAppBarGenerator extends PBGenerator {
   String _wrapOnIconButton(String body) {
     return ''' 
       IconButton(
-        icon: ${body}
+        icon: ${body},
         onPressed: () {
           // TODO: Fill action
         }
