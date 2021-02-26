@@ -28,7 +28,7 @@ void main() {
 
     test('Checking for appbar', () {
       PBEgg pNode = helper.returnAllowListNodeIfExists(sketchNode);
-      expect(pNode.runtimeType, InjectedNavbar);
+      expect(pNode.runtimeType, InjectedAppbar);
     });
   });
 }

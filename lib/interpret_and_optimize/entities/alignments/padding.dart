@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class Padding extends PBVisualIntermediateNode {
-  var child;
+
   double left, right, top, bottom, screenWidth, screenHeight;
 
   final String UUID;

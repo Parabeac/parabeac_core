@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -24,13 +25,22 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   PrototypeNode prototypeNode;
 
-  var navbar;
-
-  var tabbar;
-
   bool isHomeScreen = false;
 
-  var body;
+  PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+
+  PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
+
+  PBIntermediateNode get tabbar =>
+      getAttributeNamed('bottomNavigationBar')?.attributeNode;
+
+  set child(PBIntermediateNode node) {
+    if (!hasAttribute('body')) {
+      addAttribute(PBAttribute([], 'body', attributeNodes: [node]));
+    } else {
+      getAttributeNamed('body').attributeNode = node;
+    }
+  }
 
   InheritedScaffold(this.originalRef,
       {Point topLeftCorner,
@@ -59,6 +69,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
     generator = PBScaffoldGenerator();
 
     auxiliaryData.color = toHex(originalRef.backgroundColor);
+
+    // Add body attribute
+    addAttribute(PBAttribute([], 'body'));
   }
 
   @override
@@ -70,21 +83,23 @@ class InheritedScaffold extends PBVisualIntermediateNode
   void addChild(PBIntermediateNode node) {
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
-        navbar = node;
+        addAttribute(PBAttribute([], 'appBar', attributeNodes: [node]));
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
-        tabbar = node;
+        addAttribute(
+            PBAttribute([], 'bottomNavigationBar', attributeNodes: [node]));
         return;
       }
     }
 
-    if (node is InjectedNavbar) {
-      navbar = node;
+    if (node is InjectedAppbar) {
+      addAttribute(PBAttribute([], 'appBar', attributeNodes: [node]));
       return;
     }
     if (node is InjectedTabBar) {
-      tabbar = node;
+      addAttribute(
+          PBAttribute([], 'bottomNavigationBar', attributeNodes: [node]));
       return;
     }
 

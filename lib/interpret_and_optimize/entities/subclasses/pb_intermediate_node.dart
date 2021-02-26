@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -19,7 +20,27 @@ abstract class PBIntermediateNode {
   PBGenerator generator;
 
   final String UUID;
-  var child;
+
+  /// Map representing the attributes of [this].
+  /// The key represents the name of the attribute, while the value
+  /// is a List<PBIntermediateNode> representing the nodes under
+  /// that attribute.
+  List<PBAttribute> _attributes;
+
+  List<PBAttribute> get attributes => _attributes;
+
+  /// Gets the [PBIntermediateNode] at attribute `child`
+  PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
+
+  /// Sets the `child` attribute's `attributeNode` to `element`.
+  /// If a `child` attribute does not yet exist, it creates it.
+  set child(PBIntermediateNode element) {
+    if (!hasAttribute('child')) {
+      addAttribute(PBAttribute([], 'child', attributeNodes: [element]));
+    } else {
+      getAttributeNamed('child').attributeNode = element;
+    }
+  }
 
   Point topLeftCorner;
   Point bottomRightCorner;
@@ -39,6 +60,7 @@ abstract class PBIntermediateNode {
   PBIntermediateNode(
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
       {this.currentContext, this.subsemantic}) {
+    _attributes = [];
     _pointCorrection();
   }
 
@@ -55,6 +77,52 @@ abstract class PBIntermediateNode {
             max(topLeftCorner.y, bottomRightCorner.y));
       }
     }
+  }
+
+  /// Returns the [PBAttribute] named `attributeName`. Returns
+  /// null if the [PBAttribute] does not exist.
+  PBAttribute getAttributeNamed(String attributeName) {
+    for (var attribute in attributes) {
+      if (attribute.attributeName == attributeName) {
+        return attribute;
+      }
+    }
+    return null;
+  }
+
+  /// Returns true if there is an attribute in the node's `attributes`
+  /// that matches `attributeName`. Returns false otherwise.
+  bool hasAttribute(String attributeName) {
+    for (var attribute in attributes) {
+      if (attribute.attributeName == attributeName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Adds the [PBAttribute] to this node's `attributes` list.
+  /// When `overwrite` is set to true, if the provided `attribute` has the same
+  /// name as another attribute in `attributes`, it will replace the old one.
+  /// Returns true if the addition was successful, false otherwise.
+  bool addAttribute(PBAttribute attribute, {bool overwrite = false}) {
+    // Iterate through the list of attributes
+    for (var i = 0; i < attributes.length; i++) {
+      var childAttr = attributes[i];
+
+      // If there is a duplicate, replace if `overwrite` is true
+      if (childAttr.attributeName == attribute.attributeName) {
+        if (overwrite) {
+          attributes[i] = attribute;
+          return true;
+        }
+        return false;
+      }
+    }
+
+    // Add attribute, no duplicate found
+    attributes.add(attribute);
+    return true;
   }
 
   /// Adds child to node.

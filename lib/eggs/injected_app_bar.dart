@@ -1,7 +1,6 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
@@ -9,11 +8,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
-class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
-  var leadingItem;
-  var middleItem;
-  var trailingItem;
+class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   PBContext currentContext;
 
   @override
@@ -21,11 +18,21 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 
   String UUID;
 
-  InjectedNavbar(
+  PBIntermediateNode get leadingItem =>
+      getAttributeNamed('leading')?.attributeNode;
+  PBIntermediateNode get middleItem =>
+      getAttributeNamed('title')?.attributeNode;
+  PBIntermediateNode get trailingItem =>
+      getAttributeNamed('actions')?.attributeNode;
+
+  InjectedAppbar(
       Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
+    addAttribute(PBAttribute([], 'leading'));
+    addAttribute(PBAttribute([], 'title'));
+    addAttribute(PBAttribute([], 'actions'));
   }
 
   @override
@@ -37,7 +44,8 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
           .contains('<leading>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => leadingItem = value);
+            .then(
+                (value) => getAttributeNamed('leading').attributeNode = value);
       }
 
       if ((node as PBInheritedIntermediate)
@@ -46,7 +54,8 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
           .contains('<trailing>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => trailingItem = value);
+            .then(
+                (value) => getAttributeNamed('actions').attributeNode = value);
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
@@ -54,9 +63,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
           .contains('<middle>')) {
         Interpret()
             .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) {
-          middleItem = value;
-        });
+            .then((value) => getAttributeNamed('title').attributeNode = value);
       }
     }
 
@@ -69,7 +76,7 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedNavbar(
+    return InjectedAppbar(
         topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
@@ -90,28 +97,16 @@ class PBAppBarGenerator extends PBGenerator {
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.PointValue;
-    if (source is InjectedNavbar) {
+    if (source is InjectedAppbar) {
       var buffer = StringBuffer();
 
       buffer.write('AppBar(');
-      if (source.leadingItem != null) {
-        source.leadingItem.currentContext = source.currentContext;
-        buffer.write(
-            'leading: ${source.leadingItem.generator.generate(source.leadingItem, generatorContext)},');
-      }
-      if (source.middleItem != null) {
-        source.middleItem.currentContext = source.currentContext;
-        buffer.write(
-            'title: ${source.middleItem.generator.generate(source.middleItem, generatorContext)},');
-      }
 
-      if (source.trailingItem != null) {
-        var trailingItem = '';
-        source.trailingItem.currentContext = source.currentContext;
-        trailingItem =
-            '${source.trailingItem.generator.generate(source.trailingItem, generatorContext)}';
-        buffer.write('actions: [$trailingItem],');
-      }
+      source.attributes.forEach((attribute) {
+        attribute.attributeNode.currentContext = source.currentContext;
+        buffer.write(
+            '${attribute.attributeName}: ${attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext)}');
+      });
 
       buffer.write(')');
       return buffer.toString();

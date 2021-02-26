@@ -39,7 +39,7 @@ class ImportHelper {
       imports.addAll(findImports(node.navbar, path));
       imports.addAll(findImports(node.tabbar, path));
       imports.addAll(findImports(node.child, path));
-    } else if (node is InjectedNavbar) {
+    } else if (node is InjectedAppbar) {
       imports.addAll(findImports(node.leadingItem, path));
       imports.addAll(findImports(node.middleItem, path));
       imports.addAll(findImports(node.trailingItem, path));
