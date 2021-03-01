@@ -28,16 +28,17 @@ class ProviderMiddleware extends Middleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
       watcherName = node.name.snakeCase + '_notifier';
+      var widgetName = node.functionCallName.camelCase;
       var watcher;
 
       if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {
         watcher = PBVariable(watcherName, 'final ', true,
-            '${getName(node.functionCallName).pascalCase}().defaultWidget');
+            '${getName(node.functionCallName).pascalCase}().${widgetName}');
         managerData.addGlobalVariable(watcher);
       } else {
         watcher = PBVariable(watcherName, 'final ', true,
-            'context.watch<${getName(node.functionCallName).pascalCase}>().defaultWidget');
+            'context.watch<${getName(node.functionCallName).pascalCase}>().${widgetName}');
         managerData.addMethodVariable(watcher);
       }
 
