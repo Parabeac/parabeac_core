@@ -25,6 +25,10 @@ class PBPaddingGen extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
+    if (generatorContext.sizingContext == SizingValueContext.AppBarChild) {
+      source.child.currentContext = source.currentContext;
+      return source.child.generator.generate(source.child, generatorContext);
+    }
     if (!(source is Padding)) {
       return '';
     }

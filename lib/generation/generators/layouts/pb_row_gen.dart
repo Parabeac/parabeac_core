@@ -22,9 +22,12 @@ class PBRowGenerator extends PBLayoutGenerator {
         counter++;
       }
 
-      return generateBodyBoilerplate(buffer.toString(),
-          layoutName: 'Row',
-          crossAxisAlignment: source.alignment['crossAxisAlignment']);
+      return generateBodyBoilerplate(
+        buffer.toString(),
+        layoutName: 'Row',
+        crossAxisAlignment: source.alignment['crossAxisAlignment'],
+        mainAxisAlignment: source.alignment['mainAxisAlignment'],
+      );
     }
   }
 }

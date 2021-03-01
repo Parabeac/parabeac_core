@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/middleware/state_management/
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
@@ -26,12 +27,20 @@ class ProviderMiddleware extends Middleware {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
+      watcherName = node.name.snakeCase + '_notifier';
       var widgetName = node.functionCallName.camelCase;
+      var watcher;
 
-      watcherName = getVariableName(node.name.snakeCase + '_notifier');
-      var watcher = PBVariable(watcherName, 'final ', true,
-          'context.watch<${getName(node.functionCallName).pascalCase}>().${widgetName}');
-      managerData.addMethodVariable(watcher);
+      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
+          is StatelessTemplateStrategy) {
+        watcher = PBVariable(watcherName, 'final ', true,
+            '${getName(node.functionCallName).pascalCase}().${widgetName}');
+        managerData.addGlobalVariable(watcher);
+      } else {
+        watcher = PBVariable(watcherName, 'final ', true,
+            'context.watch<${getName(node.functionCallName).pascalCase}>().${widgetName}');
+        managerData.addMethodVariable(watcher);
+      }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
