@@ -101,6 +101,8 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     // TODO: this is the default for now
     alignment['crossAxisAlignment'] =
         'crossAxisAlignment: CrossAxisAlignment.start,';
+    alignment['mainAxisAlignment'] =
+        'mainAxisAlignment: MainAxisAlignment.center,';
   }
 
   @override

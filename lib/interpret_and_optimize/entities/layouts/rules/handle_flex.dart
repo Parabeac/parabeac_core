@@ -61,8 +61,9 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
     if (child is! PBIntermediateRowLayout &&
         child is! PBIntermediateColumnLayout) {
       // Wrap text in container
-      if (child is! Text)
+      if (child is! Text) {
         resultingChildren.add(_putChildInFlex(isVertical, child, parentLength));
+      }
     } else {
       resultingChildren.add(child);
     }

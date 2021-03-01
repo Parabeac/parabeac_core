@@ -131,8 +131,12 @@ class PBVisualGenerationService implements PBGenerationService {
   ///We are assuming that since the [rootIntermediateNode] contains all of the nodes
   ///then it should represent the biggest screen size that encapsulates the entire UI elements.
   void _extractScreenSize(PBIntermediateNode rootIntermediateNode) {
-    if (currentContext.screenBottomRightCorner == null &&
-        currentContext.screenTopLeftCorner == null) {
+    if ((currentContext.screenBottomRightCorner == null &&
+            currentContext.screenTopLeftCorner == null) ||
+        (currentContext.screenBottomRightCorner !=
+                rootIntermediateNode.bottomRightCorner ||
+            currentContext.screenTopLeftCorner !=
+                rootIntermediateNode.bottomRightCorner)) {
       currentContext.screenBottomRightCorner =
           rootIntermediateNode.bottomRightCorner;
       currentContext.screenTopLeftCorner = rootIntermediateNode.topLeftCorner;
