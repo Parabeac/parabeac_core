@@ -27,7 +27,7 @@ class ProviderMiddleware extends Middleware {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
-      watcherName = node.name.snakeCase + '_notifier';
+      watcherName = getVariableName(node.name.snakeCase + '_notifier');
       var widgetName = node.functionCallName.camelCase;
       var watcher;
 
