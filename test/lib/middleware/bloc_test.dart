@@ -10,6 +10,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:test/test.dart';
 import 'provider_test.dart';
@@ -21,6 +22,8 @@ class MockPBIntermediateNode extends Mock implements PBIntermediateNode {}
 class MockContext extends Mock implements PBContext {}
 
 class MockProject extends Mock implements PBProject {}
+
+class MockTree extends Mock implements PBIntermediateTree {}
 
 class MockPBGenerationProjectData extends Mock
     implements PBGenerationProjectData {}
@@ -50,6 +53,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
+    var mockTree = MockTree();
 
     setUp(() async {
       /// Set up nodes
@@ -61,6 +65,7 @@ void main() {
       // 2
       when(node2.name).thenReturn('someElement/green');
       when(node2.generator).thenReturn(mockPBGenerator);
+      when(node2.currentContext).thenReturn(mockContext);
 
       /// IntermediateAuxiliaryData
       when(mockIntermediateAuxiliaryData.stateGraph)
@@ -78,6 +83,7 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
+      when(mockContext.treeRoot).thenReturn(mockTree);
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);

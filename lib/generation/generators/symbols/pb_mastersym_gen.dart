@@ -34,7 +34,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
             );
         log.error(e.toString());
       }
-
+      source.child.currentContext = source.currentContext;
       var generatedWidget =
           source.child.generator.generate(source.child, generatorContext);
       if (generatedWidget == null || generatedWidget.isEmpty) {

@@ -36,6 +36,7 @@ class StatefulMiddleware extends Middleware {
     });
 
     await states.forEach((element) async {
+      element.currentContext.treeRoot.data = node.managerData;
       await fileStrategy.generatePage(
         await generationManager.generate(element),
         '${parentDirectory}/${element.name.snakeCase}',
