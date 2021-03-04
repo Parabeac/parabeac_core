@@ -158,10 +158,10 @@ ${parser.usage}
         );
 
         if (isSACupToDate.stdout
-            .contains('Sketch Asset Converter is up to date!')) {
-          log.info(isSACupToDate.stdout);
-        } else {
+            .contains('Sketch Asset Converter is behind master.')) {
           log.warning(isSACupToDate.stdout);
+        } else {
+          log.info(isSACupToDate.stdout);
         }
 
         process = await Process.start('npm', ['run', 'prod'],
