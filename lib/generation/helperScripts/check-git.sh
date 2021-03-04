@@ -1,17 +1,31 @@
-# Script to verify that SAC is pointing to master 
+# Script to verify that SAC was pulled and pointing to master 
+
+parentCom=`git rev-parse HEAD`
 
 cd SketchAssetConverter
 
 git fetch
 
-masterCom=`git rev-parse master`
-# echo $masterCom
 currentCom=`git rev-parse HEAD`
-# echo $currentCom
+# echo $currentComi
 
-if [ $masterCom == $currentCom ]
+if [ $parentCom == $currentCom ]
 then
-    echo "Sketch Asset Converter is up to date!"
+    cd ..
+    temp=`git submodule update --init`
+    temp2=`git pull --recurse-submodules`
+    cd SketchAssetConverter
+    git fetch
+    currentCom=`git rev-parse HEAD`
+    echo "Downloading submodule SketchAssetConverter"
 else
-    echo "Sketch Asset Converter is behind master."
+    masterCom=`git rev-parse @:./SketchAssetConverter`
+    # echo $masterCom
+
+    if [ $masterCom == $currentCom ]
+    then
+        echo "Sketch Asset Converter is up to date!"
+    else
+        echo "Sketch Asset Converter is behind master."
+    fi
 fi
