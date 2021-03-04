@@ -151,6 +151,19 @@ ${parser.usage}
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        var isSACupToDate = await Process.run(
+          './lib/generation/helperScripts/check-git.sh',
+          [],
+          workingDirectory: MainInfo().cwd.path,
+        );
+
+        if (isSACupToDate.stdout
+            .contains('Sketch Asset Converter is up to date!')) {
+          log.info(isSACupToDate.stdout);
+        } else {
+          log.warning(isSACupToDate.stdout);
+        }
+
         process = await Process.start('npm', ['run', 'prod'],
             workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
