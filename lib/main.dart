@@ -152,7 +152,7 @@ ${parser.usage}
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
         var isSACupToDate = await Process.run(
-          './lib/generation/helperScripts/check-git.sh',
+          './pb-scripts/check-git.sh',
           [],
           workingDirectory: MainInfo().cwd.path,
         );
