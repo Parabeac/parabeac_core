@@ -63,7 +63,9 @@ class FigmaFrame extends FigmaNode
   @JsonKey(ignore: true)
   bool isScaffold = false;
 
-  bool isHome = false;
+  @override
+  @JsonKey(nullable: true, defaultValue: false)
+  var isFlowHome = false;
 
   FigmaFrame({
     name,
@@ -130,7 +132,7 @@ class FigmaFrame extends FigmaNode
         this,
         currentContext: currentContext,
         name: name,
-        isHomeScreen: isHome,
+        isHomeScreen: isFlowHome,
       ));
     } else {
       var tempGroup = Group(
@@ -184,7 +186,4 @@ class FigmaFrame extends FigmaNode
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
-
-  @override
-  var isFlowHome;
 }

@@ -38,9 +38,8 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
-    ..isHome = json['isHome'] as bool
+    ..isFlowHome = json['isFlowHome'] ?? false
     ..fillsList = json['fills'] as List
-    ..isFlowHome = json['isFlowHome']
     ..imageReference = json['imageReference'] as String
     ..pbdfType = json['pbdfType'] as String;
 }
@@ -67,9 +66,8 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
-      'isHome': instance.isHome,
-      'fills': instance.fillsList,
       'isFlowHome': instance.isFlowHome,
+      'fills': instance.fillsList,
       'type': instance.type,
       'imageReference': instance.imageReference,
       'pbdfType': instance.pbdfType,

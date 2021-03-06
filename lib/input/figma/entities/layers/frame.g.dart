@@ -38,11 +38,10 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     transitionEasing: json['transitionEasing'] as String,
     prototypeNodeUUID: json['transitionNodeUUID'] as String,
   )
-    ..isHome = json['isHome'] as bool
+    ..isFlowHome = json['isFlowHome'] ?? false
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
-    ..pbdfType = json['pbdfType'] as String
-    ..isFlowHome = json['isFlowHome'];
+    ..pbdfType = json['pbdfType'] as String;
 }
 
 Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
@@ -69,9 +68,8 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
       'type': instance.type,
-      'isHome': instance.isHome,
+      'isFlowHome': instance.isFlowHome,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
       'pbdfType': instance.pbdfType,
-      'isFlowHome': instance.isFlowHome,
     };

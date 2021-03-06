@@ -41,11 +41,10 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
-    ..isHome = json['isHome'] as bool
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
     ..pbdfType = json['pbdfType'] as String
-    ..isFlowHome = json['isFlowHome'];
+    ..isFlowHome = json['isFlowHome'] ?? false;
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
@@ -70,7 +69,6 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
-      'isHome': instance.isHome,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
       'type': instance.type,

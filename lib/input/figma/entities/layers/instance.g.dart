@@ -41,10 +41,9 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
-    ..isHome = json['isHome'] as bool
+    ..isFlowHome = json['isFlowHome'] ?? false
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
-    ..isFlowHome = json['isFlowHome']
     ..pbdfType = json['pbdfType'] as String;
 }
 
@@ -69,10 +68,9 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
-      'isHome': instance.isHome,
+      'isFlowHome': instance.isFlowHome,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
-      'isFlowHome': instance.isFlowHome,
       'type': instance.type,
       'parameters': instance.parameters,
       'symbolID': instance.symbolID,
