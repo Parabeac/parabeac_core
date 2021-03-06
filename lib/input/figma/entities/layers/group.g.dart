@@ -34,8 +34,11 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..isHome = json['isHome'] as bool
     ..fillsList = json['fills'] as List
     ..isFlowHome = json['isFlowHome']
     ..imageReference = json['imageReference'] as String
@@ -48,8 +51,10 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
+      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
       'absoluteBoundingBox': instance.boundaryRectangle,
-      'transitionNodeID': instance.prototypeNodeUUID,
       'children': instance.children,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
@@ -62,6 +67,7 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
+      'isHome': instance.isHome,
       'fills': instance.fillsList,
       'isFlowHome': instance.isFlowHome,
       'type': instance.type,

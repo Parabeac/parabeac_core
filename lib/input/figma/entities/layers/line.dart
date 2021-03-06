@@ -14,23 +14,26 @@ part 'line.g.dart';
 class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
   @override
   String type = 'LINE';
-  FigmaLine({
-    String name,
-    bool visible,
-    String type,
-    pluginData,
-    sharedPluginData,
-    style,
-    layoutAlign,
-    constraints,
-    Frame boundaryRectangle,
-    size,
-    fills,
-    strokes,
-    strokeWeight,
-    strokeAlign,
-    styles,
-  }) : super(
+  FigmaLine(
+      {String name,
+      bool visible,
+      String type,
+      pluginData,
+      sharedPluginData,
+      style,
+      layoutAlign,
+      constraints,
+      Frame boundaryRectangle,
+      size,
+      fills,
+      strokes,
+      strokeWeight,
+      strokeAlign,
+      styles,
+      String prototypeNodeUUID,
+      num transitionDuration,
+      String transitionEasing})
+      : super(
           name: name,
           visible: visible,
           type: type,
@@ -45,6 +48,9 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'image';
   }

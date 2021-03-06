@@ -9,7 +9,6 @@ import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/group.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -24,10 +23,6 @@ class FigmaFrame extends FigmaNode
   @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
-
-  @override
-  @JsonKey(name: 'transitionNodeID')
-  String prototypeNodeUUID;
 
   @override
   @JsonKey(ignore: true)
@@ -68,6 +63,8 @@ class FigmaFrame extends FigmaNode
   @JsonKey(ignore: true)
   bool isScaffold = false;
 
+  bool isHome = false;
+
   FigmaFrame({
     name,
     isVisible,
@@ -88,9 +85,12 @@ class FigmaFrame extends FigmaNode
     this.verticalPadding,
     this.itemSpacing,
     List<FigmaNode> this.children,
-    Flow flow,
     String UUID,
     FigmaColor this.backgroundColor,
+    String transitionNodeID,
+    num transitionDuration,
+    String transitionEasing,
+    String prototypeNodeUUID,
   }) : super(
           name,
           isVisible,
@@ -98,6 +98,9 @@ class FigmaFrame extends FigmaNode
           pluginData,
           sharedPluginData,
           UUID: UUID,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'group';
   }
@@ -127,7 +130,7 @@ class FigmaFrame extends FigmaNode
         this,
         currentContext: currentContext,
         name: name,
-        isHomeScreen: false,
+        isHomeScreen: isHome,
       ));
     } else {
       var tempGroup = Group(
@@ -149,10 +152,12 @@ class FigmaFrame extends FigmaNode
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
         itemSpacing: itemSpacing,
-        flow: null,
         children: children,
         UUID: UUID,
         backgroundColor: backgroundColor,
+        prototypeNodeUUID: prototypeNodeUUID,
+        transitionDuration: transitionDuration,
+        transitionEasing: transitionEasing,
       );
 
       return Future.value(tempGroup.interpretNode(currentContext));

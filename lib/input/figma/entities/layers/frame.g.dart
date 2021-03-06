@@ -34,8 +34,11 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
+    prototypeNodeUUID: json['transitionNodeUUID'] as String,
   )
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..isHome = json['isHome'] as bool
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
     ..pbdfType = json['pbdfType'] as String
@@ -49,8 +52,10 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
+      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
       'absoluteBoundingBox': instance.boundaryRectangle,
-      'transitionNodeID': instance.prototypeNodeUUID,
       'children': instance.children,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
@@ -64,6 +69,7 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
       'type': instance.type,
+      'isHome': instance.isHome,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
       'pbdfType': instance.pbdfType,
