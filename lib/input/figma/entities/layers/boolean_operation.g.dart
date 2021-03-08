@@ -21,6 +21,9 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
     UUID: json['id'] as String,
+    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
     ..name = json['name'] as String
     ..pluginData = json['pluginData']
@@ -28,7 +31,6 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..isVisible = json['visible'] as bool ?? true
     ..layoutAlign = json['layoutAlign'] as String
     ..constraints = json['constraints']
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..size = json['size']
     ..strokes = json['strokes']
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()
@@ -46,10 +48,12 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
+      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,
-      'transitionNodeID': instance.prototypeNodeUUID,
       'size': instance.size,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,

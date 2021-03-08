@@ -35,6 +35,9 @@ class FigmaProject extends DesignProject {
       var node = Canvas.fromJson(canvas);
 
       for (var layer in node.children) {
+        if (layer.UUID == node.prototypeStartNodeID) {
+          layer.isFlowHome = true;
+        }
         pg.addScreen(FigmaScreen(
           layer,
           layer.UUID,

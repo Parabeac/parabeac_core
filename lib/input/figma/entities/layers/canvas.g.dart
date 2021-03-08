@@ -18,13 +18,15 @@ Canvas _$CanvasFromJson(Map<String, dynamic> json) {
     prototypeStartNodeID: json['prototypeStartNodeID'],
     prototypeDevice: json['prototypeDevice'],
     exportSettings: json['exportSettings'],
+    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
     ..pluginData = json['pluginData']
     ..sharedPluginData = json['sharedPluginData']
     ..isVisible = json['visible'] as bool ?? true
     ..boundaryRectangle = json['boundaryRectangle']
-    ..prototypeNodeUUID = json['prototypeNodeUUID'] as String
     ..pbdfType = json['pbdfType'] as String;
 }
 
@@ -33,6 +35,8 @@ Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
       'type': instance.type,
       'name': instance.name,
       'children': instance.children,
@@ -41,6 +45,6 @@ Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'prototypeDevice': instance.prototypeDevice,
       'exportSettings': instance.exportSettings,
       'boundaryRectangle': instance.boundaryRectangle,
-      'prototypeNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeUUID': instance.prototypeNodeUUID,
       'pbdfType': instance.pbdfType,
     };

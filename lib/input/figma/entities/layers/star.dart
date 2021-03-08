@@ -30,6 +30,9 @@ class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
     strokeWeight,
     strokeAlign,
     styles,
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
   }) : super(
           name: name,
           visible: visible,
@@ -45,6 +48,9 @@ class FigmaStar extends FigmaVector implements AbstractFigmaNodeFactory {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'star';
   }

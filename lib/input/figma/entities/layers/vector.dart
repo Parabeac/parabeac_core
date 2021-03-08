@@ -27,10 +27,6 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
   var constraints;
 
   @override
-  @JsonKey(name: 'transitionNodeID')
-  String prototypeNodeUUID;
-
-  @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
 
@@ -66,6 +62,9 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
     this.styles,
     this.fillsList,
     String UUID,
+    num transitionDuration,
+    String transitionEasing,
+    String prototypeNodeUUID,
   }) : super(
           name,
           visible,
@@ -73,6 +72,9 @@ class FigmaVector extends FigmaNode implements FigmaNodeFactory, Image {
           pluginData,
           sharedPluginData,
           UUID: UUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
+          prototypeNodeUUID: prototypeNodeUUID,
         ) {
     pbdfType = 'vector';
     log = Logger(runtimeType.toString());

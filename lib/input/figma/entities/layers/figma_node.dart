@@ -25,6 +25,14 @@ abstract class FigmaNode implements DesignNode {
   @JsonKey(name: 'visible', defaultValue: true)
   bool isVisible;
 
+  @override
+  @JsonKey(name: 'transitionNodeUUID')
+  String prototypeNodeUUID;
+  @JsonKey(nullable: true)
+  num transitionDuration;
+  @JsonKey(nullable: true)
+  String transitionEasing;
+
   FigmaNode(
     this.name,
     this.isVisible,
@@ -32,6 +40,9 @@ abstract class FigmaNode implements DesignNode {
     this.pluginData,
     this.sharedPluginData, {
     this.UUID,
+    this.prototypeNodeUUID,
+    this.transitionDuration,
+    this.transitionEasing,
   });
   @override
   Map<String, dynamic> toJson();

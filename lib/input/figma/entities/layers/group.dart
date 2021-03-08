@@ -8,7 +8,6 @@ import 'package:parabeac_core/input/figma/entities/layers/text.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -33,53 +32,56 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
   @override
   String imageReference;
 
-  Group({
-    name,
-    isVisible,
-    type,
-    pluginData,
-    sharedPluginData,
-    Frame boundaryRectangle,
-    style,
-    fills,
-    strokes,
-    strokeWeight,
-    strokeAlign,
-    cornerRadius,
-    constraints,
-    layoutAlign,
-    size,
-    horizontalPadding,
-    verticalPadding,
-    itemSpacing,
-    Flow flow,
-    List<FigmaNode> children,
-    String UUID,
-    FigmaColor backgroundColor,
-  }) : super(
-          name: name,
-          isVisible: isVisible,
-          type: type,
-          pluginData: pluginData,
-          sharedPluginData: sharedPluginData,
-          boundaryRectangle: boundaryRectangle,
-          style: style,
-          fills: fills,
-          strokes: strokes,
-          strokeWeight: strokeWeight,
-          strokeAlign: strokeAlign,
-          cornerRadius: cornerRadius,
-          constraints: constraints,
-          layoutAlign: layoutAlign,
-          size: size,
-          horizontalPadding: horizontalPadding,
-          verticalPadding: verticalPadding,
-          itemSpacing: itemSpacing,
-          flow: flow,
-          children: children,
-          UUID: UUID,
-          backgroundColor: backgroundColor,
-        ) {
+  Group(
+      {name,
+      isVisible,
+      type,
+      pluginData,
+      sharedPluginData,
+      Frame boundaryRectangle,
+      style,
+      fills,
+      strokes,
+      strokeWeight,
+      strokeAlign,
+      cornerRadius,
+      constraints,
+      layoutAlign,
+      size,
+      horizontalPadding,
+      verticalPadding,
+      itemSpacing,
+      List<FigmaNode> children,
+      String UUID,
+      FigmaColor backgroundColor,
+      String prototypeNodeUUID,
+      num transitionDuration,
+      String transitionEasing})
+      : super(
+            name: name,
+            isVisible: isVisible,
+            type: type,
+            pluginData: pluginData,
+            sharedPluginData: sharedPluginData,
+            boundaryRectangle: boundaryRectangle,
+            style: style,
+            fills: fills,
+            strokes: strokes,
+            strokeWeight: strokeWeight,
+            strokeAlign: strokeAlign,
+            cornerRadius: cornerRadius,
+            constraints: constraints,
+            layoutAlign: layoutAlign,
+            size: size,
+            horizontalPadding: horizontalPadding,
+            verticalPadding: verticalPadding,
+            itemSpacing: itemSpacing,
+            children: children,
+            UUID: UUID,
+            backgroundColor: backgroundColor,
+            prototypeNodeUUID: prototypeNodeUUID,
+            transitionDuration: transitionDuration,
+            transitionEasing: transitionEasing) {
     if (areAllVectors()) {
       pbdfType = 'image';
     } else {

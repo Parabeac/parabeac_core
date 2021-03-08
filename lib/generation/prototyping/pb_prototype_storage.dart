@@ -28,7 +28,7 @@ class PBPrototypeStorage {
     if (_pbPrototypeInstanceNodes.containsKey(prototypeNode.UUID)) {
       return false;
     }
-    // await TODO:
+
     await PBPrototypeAggregationService()
         .analyzeIntermediateNode(prototypeNode);
     _pbPrototypeInstanceNodes['${prototypeNode.UUID}'] = prototypeNode;
