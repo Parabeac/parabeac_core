@@ -23,7 +23,7 @@ FigmaRegularPolygon _$FigmaRegularPolygonFromJson(Map<String, dynamic> json) {
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
     styles: json['styles'],
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -42,7 +42,7 @@ Map<String, dynamic> _$FigmaRegularPolygonToJson(
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'style': instance.style,

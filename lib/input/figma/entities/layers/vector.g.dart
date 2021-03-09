@@ -29,7 +29,7 @@ FigmaVector _$FigmaVectorFromJson(Map<String, dynamic> json) {
     UUID: json['id'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
   )
     ..isVisible = json['visible'] as bool ?? true
     ..imageReference = json['imageReference'] as String
@@ -43,7 +43,7 @@ Map<String, dynamic> _$FigmaVectorToJson(FigmaVector instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'style': instance.style,

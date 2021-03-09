@@ -30,7 +30,7 @@ FigmaText _$FigmaTextFromJson(Map<String, dynamic> json) {
         ?.map((e) => (e as num)?.toDouble())
         ?.toList(),
     styleOverrideTable: json['styleOverrideTable'] as Map<String, dynamic>,
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -54,7 +54,7 @@ Map<String, dynamic> _$FigmaTextToJson(FigmaText instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'layoutAlign': instance.layoutAlign,

@@ -21,7 +21,7 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
     UUID: json['id'] as String,
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -48,7 +48,7 @@ Map<String, dynamic> _$BooleanOperationToJson(BooleanOperation instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'style': instance.style,

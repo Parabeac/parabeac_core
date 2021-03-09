@@ -18,7 +18,7 @@ Canvas _$CanvasFromJson(Map<String, dynamic> json) {
     prototypeStartNodeID: json['prototypeStartNodeID'],
     prototypeDevice: json['prototypeDevice'],
     exportSettings: json['exportSettings'],
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -45,6 +45,6 @@ Map<String, dynamic> _$CanvasToJson(Canvas instance) => <String, dynamic>{
       'prototypeDevice': instance.prototypeDevice,
       'exportSettings': instance.exportSettings,
       'boundaryRectangle': instance.boundaryRectangle,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'pbdfType': instance.pbdfType,
     };

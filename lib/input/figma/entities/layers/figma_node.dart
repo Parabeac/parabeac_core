@@ -26,7 +26,7 @@ abstract class FigmaNode implements DesignNode {
   bool isVisible;
 
   @override
-  @JsonKey(name: 'transitionNodeUUID')
+  @JsonKey(name: 'transitionNodeID')
   String prototypeNodeUUID;
   @JsonKey(nullable: true)
   num transitionDuration;

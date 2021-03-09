@@ -36,7 +36,7 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
   )
     ..isFlowHome = json['isFlowHome'] ?? false
     ..fillsList = json['fills'] as List
@@ -51,7 +51,7 @@ Map<String, dynamic> _$FigmaFrameToJson(FigmaFrame instance) =>
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'absoluteBoundingBox': instance.boundaryRectangle,

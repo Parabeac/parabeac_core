@@ -36,7 +36,7 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -53,7 +53,7 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'absoluteBoundingBox': instance.boundaryRectangle,

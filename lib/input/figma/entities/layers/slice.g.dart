@@ -18,7 +18,7 @@ FigmaSlice _$FigmaSliceFromJson(Map<String, dynamic> json) {
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),
     size: json['size'],
-    prototypeNodeUUID: json['transitionNodeUUID'] as String,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
     transitionDuration: json['transitionDuration'] as num,
     transitionEasing: json['transitionEasing'] as String,
   )
@@ -33,7 +33,7 @@ Map<String, dynamic> _$FigmaSliceToJson(FigmaSlice instance) =>
       'name': instance.name,
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
-      'transitionNodeUUID': instance.prototypeNodeUUID,
+      'transitionNodeID': instance.prototypeNodeUUID,
       'transitionDuration': instance.transitionDuration,
       'transitionEasing': instance.transitionEasing,
       'type': instance.type,
