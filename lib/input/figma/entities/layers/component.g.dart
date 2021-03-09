@@ -36,13 +36,15 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
     symbolID: json['symbolID'] as String,
     overriadableProperties: json['overriadableProperties'] as List,
+    prototypeNodeUUID: json['transitionNodeID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
     ..pbdfType = json['pbdfType'] as String
-    ..isFlowHome = json['isFlowHome'];
+    ..isFlowHome = json['isFlowHome'] ?? false;
 }
 
 Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
@@ -51,8 +53,10 @@ Map<String, dynamic> _$ComponentToJson(Component instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
+      'absoluteBoundingBox': instance.boundaryRectangle,
       'children': instance.children,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,

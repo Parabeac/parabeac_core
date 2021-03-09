@@ -36,10 +36,15 @@ class BooleanOperation extends FigmaVector
     FigmaStyle style,
     Frame this.boundaryRectangle,
     String UUID,
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
   }) : super(
-          style: style,
-          UUID: UUID,
-        ) {
+            style: style,
+            UUID: UUID,
+            prototypeNodeUUID: prototypeNodeUUID,
+            transitionDuration: transitionDuration,
+            transitionEasing: transitionEasing) {
     log = Logger(runtimeType.toString());
     pbdfType = 'boolean_operation';
   }
