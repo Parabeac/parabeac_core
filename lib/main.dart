@@ -106,10 +106,6 @@ ${parser.usage}
   } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  } else if (argResults['figKey'] != null &&
-      argResults['fig'] != null &&
-      argResults['pbdl-in'] != null) {
-    designType = 'fig-pbdl';
   } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
   } else if (argResults['pbdl-in'] != null) {
@@ -178,43 +174,12 @@ ${parser.usage}
     process?.kill();
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
-  } else if (designType == 'fig-pbdl') {
-    /// ############################################# Quarantine
-    var jsonOfFigma = await APICallService.makeAPICall(
-        'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
-        MainInfo().figmaKey);
-
-    var pbdlPath = argResults['pbdl-in'];
-    var isFile = FileSystemEntity.isFileSync(pbdlPath);
-    var exists = File(pbdlPath).existsSync();
-
-    if (!isFile || !exists) {
-      handleError('$path is not a file');
-    }
-
-    var jsonString = await File(pbdlPath).readAsString();
-
-    var pbdf = json.decode(jsonString);
-
-    MainInfo().pbdf = pbdf;
-
-    if (jsonOfFigma != null) {
-      AzureAssetService().projectUUID = MainInfo().figmaProjectID;
-      // Starts Figma to Object
-      FigmaController().convertFile(
-        jsonOfFigma,
-        MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType,
-        jsonOnly: jsonOnly,
-        apService: FigmaAssetProcessor(),
-      );
-    } else {
-      log.error('File was not retrieved from Figma.');
-    }
-
-    /// ############################################# Quarantine
   } else if (designType == 'figma') {
+    if (argResults['pbdl-in'] != null) {
+      var pbdlPath = argResults['pbdl-in'];
+      var jsonString = File(pbdlPath).readAsStringSync();
+      MainInfo().pbdf = json.decode(jsonString);
+    }
     if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
       assert(false, 'Please provided a Figma API key to proceed.');
     }
