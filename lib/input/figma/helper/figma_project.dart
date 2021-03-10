@@ -34,14 +34,9 @@ class FigmaProject extends DesignProject {
       Map foundPage;
 
       // Skip current canvas if its convert property is false
-      if (MainInfo().pbdf != null) {
-        List pages = MainInfo().pbdf['pages'];
-        foundPage = pages.singleWhere(
-            (element) => element['id'] == canvas['id'],
-            orElse: () => null);
-        if (foundPage != null && !(foundPage['convert'] ?? true)) {
-          continue;
-        }
+      var pbdlPage = getPbdlPage(canvas['id']);
+      if (pbdlPage != null && !(pbdlPage['convert'] ?? true)) {
+        continue;
       }
 
       var pg = FigmaPage(canvas['name'], canvas['id']);
@@ -50,13 +45,9 @@ class FigmaProject extends DesignProject {
 
       for (var layer in node.children) {
         // Skip current screen if its convert property is false
-        if (MainInfo().pbdf != null) {
-          List screens = foundPage['screens'];
-          var foundScreen =
-              screens.singleWhere((element) => element['id'] == layer.UUID);
-          if (foundScreen != null && !(foundScreen['convert'] ?? true)) {
-            continue;
-          }
+        var pbdlScreen = getPbdlScreen(pbdlPage, layer.UUID);
+        if (pbdlScreen != null && !(pbdlScreen['convert'] ?? true)) {
+          continue;
         }
         pg.addScreen(FigmaScreen(
           layer,
