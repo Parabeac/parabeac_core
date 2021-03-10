@@ -31,8 +31,6 @@ class FigmaProject extends DesignProject {
   List<FigmaPage> _setConventionalPages(var canvasAndArtboards) {
     var figmaPages = <FigmaPage>[];
     for (var canvas in canvasAndArtboards) {
-      Map foundPage;
-
       // Skip current canvas if its convert property is false
       var pbdlPage = getPbdlPage(canvas['id']);
       if (pbdlPage != null && !(pbdlPage['convert'] ?? true)) {

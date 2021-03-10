@@ -108,6 +108,8 @@ ${parser.usage}
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
+  } else if (argResults['path'] != null) {
+    designType = 'sketch';
   } else if (argResults['pbdl-in'] != null) {
     designType = 'pbdl';
   }
@@ -139,6 +141,11 @@ ${parser.usage}
       .create(recursive: true);
 
   if (designType == 'sketch') {
+    if (argResults['pbdl-in'] != null) {
+      var pbdlPath = argResults['pbdl-in'];
+      var jsonString = File(pbdlPath).readAsStringSync();
+      MainInfo().pbdf = json.decode(jsonString);
+    }
     Process process;
     if (!jsonOnly) {
       var file = await FileSystemEntity.isFile(path);
