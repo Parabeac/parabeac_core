@@ -30,21 +30,18 @@ class FigmaProject extends DesignProject {
 
   List<FigmaPage> _setConventionalPages(var canvasAndArtboards) {
     var figmaPages = <FigmaPage>[];
-    var pageIndex;
     for (var canvas in canvasAndArtboards) {
-      var shouldSkip = false;
+      Map foundPage;
+
+      // Skip current canvas if its convert property is false
       if (MainInfo().pbdf != null) {
-        MainInfo().pbdf['pages'].forEach((page) {
-          if (page['id'] == canvas['id']) {
-            pageIndex = MainInfo().pbdf['pages'].indexOf(page);
-            if (!page['convert']) {
-              shouldSkip = true;
-            }
-          }
-        });
-      }
-      if (shouldSkip) {
-        continue;
+        List pages = MainInfo().pbdf['pages'];
+        foundPage = pages.singleWhere(
+            (element) => element['id'] == canvas['id'],
+            orElse: () => null);
+        if (foundPage != null && !(foundPage['convert'] ?? true)) {
+          continue;
+        }
       }
 
       var pg = FigmaPage(canvas['name'], canvas['id']);
@@ -52,16 +49,14 @@ class FigmaProject extends DesignProject {
       var node = Canvas.fromJson(canvas);
 
       for (var layer in node.children) {
-        var shouldSkipScreen = false;
+        // Skip current screen if its convert property is false
         if (MainInfo().pbdf != null) {
-          MainInfo().pbdf['pages'][pageIndex]['screens'].forEach((screen) {
-            if (screen['id'] == layer.UUID && !screen['convert']) {
-              shouldSkipScreen = true;
-            }
-          });
-        }
-        if (shouldSkipScreen) {
-          continue;
+          List screens = foundPage['screens'];
+          var foundScreen =
+              screens.singleWhere((element) => element['id'] == layer.UUID);
+          if (foundScreen != null && !(foundScreen['convert'] ?? true)) {
+            continue;
+          }
         }
         pg.addScreen(FigmaScreen(
           layer,
