@@ -59,13 +59,7 @@ class StatefulMiddleware extends Middleware {
       'var ',
       true,
       node.functionCallName == symbolMaster.name
-          ? '''
-          LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constrains) {
-              return ${symbolMaster.name.pascalCase}(constrains);
-            },
-          )
-          '''
+          ? wrapOnLayout('${symbolMaster.name.pascalCase}')
           : null,
     );
 
