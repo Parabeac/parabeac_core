@@ -35,4 +35,14 @@ abstract class Middleware {
       return name + '_' + (++variableNames[name]).toString();
     }
   }
+
+  String wrapOnLayout(String className) {
+    return '''
+    LayoutBuilder(builder: (context, constraints) {
+        return $className(
+          constraints,
+        );
+      })
+    ''';
+  }
 }
