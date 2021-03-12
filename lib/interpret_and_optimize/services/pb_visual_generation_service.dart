@@ -29,18 +29,30 @@ class PBVisualGenerationService implements PBGenerationService {
 
   PBStateManagementHelper smHelper;
 
+  /// Boolean that is `true` if the [VisualGenerationService]
+  /// is currently processing a state management node
+  bool _ignoreStates;
+
   /// Constructor for PBVisualGenerationService, must include the root SketchNode
-  PBVisualGenerationService(originalRoot, {this.currentContext}) {
-    _positionalCleansingService = PositionalCleansingService();
-    this.originalRoot =
-        _positionalCleansingService.eliminateOffset(originalRoot);
+  PBVisualGenerationService(originalRoot,
+      {this.currentContext, bool ignoreStates = false}) {
+    _ignoreStates = ignoreStates;
+    // Only do positional cleansing for non-state nodes, since those nodes
+    // have already been through this service
+    if (!_ignoreStates) {
+      _positionalCleansingService = PositionalCleansingService();
+      this.originalRoot =
+          _positionalCleansingService.eliminateOffset(originalRoot);
+    } else {
+      this.originalRoot = originalRoot;
+    }
+
     smHelper = PBStateManagementHelper();
   }
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateNode> getIntermediateTree(
-      {bool ignoreStates = false}) async {
+  Future<PBIntermediateNode> getIntermediateTree() async {
     if (originalRoot == null) {
       return Future.value(null);
     }
@@ -73,7 +85,7 @@ class PBVisualGenerationService implements PBGenerationService {
           }
 
           // Interpret state management node
-          if (!ignoreStates &&
+          if (!_ignoreStates &&
               smHelper.isValidStateNode(result.name) &&
               (currentNode.designNode.name !=
                       currentNode.convertedParent?.name ??

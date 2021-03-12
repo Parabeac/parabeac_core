@@ -33,6 +33,9 @@ class FigmaRegularPolygon extends FigmaVector
     strokeWeight,
     strokeAlign,
     styles,
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
   }) : super(
           name: name,
           visible: visible,
@@ -48,6 +51,9 @@ class FigmaRegularPolygon extends FigmaVector
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'polygon';
   }

@@ -25,10 +25,6 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   var constraints;
 
   @override
-  @JsonKey(name: 'transitionNodeID')
-  String prototypeNodeUUID;
-
-  @override
   @JsonKey(name: 'absoluteBoundingBox')
   var boundaryRectangle;
 
@@ -44,12 +40,18 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
     this.constraints,
     Frame this.boundaryRectangle,
     this.size,
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
   }) : super(
           name,
           visible,
           type,
           pluginData,
           sharedPluginData,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'image';
   }

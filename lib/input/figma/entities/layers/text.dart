@@ -21,26 +21,29 @@ part 'text.g.dart';
 class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
   @override
   String type = 'TEXT';
-  FigmaText({
-    String name,
-    bool visible,
-    String type,
-    pluginData,
-    sharedPluginData,
-    FigmaStyle this.style,
-    layoutAlign,
-    constraints,
-    Frame boundaryRectangle,
-    size,
-    fills,
-    strokes,
-    strokeWeight,
-    strokeAlign,
-    styles,
-    this.content,
-    this.characterStyleOverrides,
-    this.styleOverrideTable,
-  }) : super(
+  FigmaText(
+      {String name,
+      bool visible,
+      String type,
+      pluginData,
+      sharedPluginData,
+      FigmaStyle this.style,
+      layoutAlign,
+      constraints,
+      Frame boundaryRectangle,
+      size,
+      fills,
+      strokes,
+      strokeWeight,
+      strokeAlign,
+      styles,
+      this.content,
+      this.characterStyleOverrides,
+      this.styleOverrideTable,
+      String prototypeNodeUUID,
+      num transitionDuration,
+      String transitionEasing})
+      : super(
           name: name,
           visible: visible,
           type: type,
@@ -55,6 +58,9 @@ class FigmaText extends FigmaVector implements AbstractFigmaNodeFactory, Text {
           strokeWeight: strokeWeight,
           strokeAlign: strokeAlign,
           styles: styles,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'text';
   }

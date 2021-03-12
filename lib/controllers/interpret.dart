@@ -222,8 +222,9 @@ class Interpret {
     /// VisualGenerationService
     PBIntermediateNode node;
     try {
-      node = await PBVisualGenerationService(component, currentContext: context)
-          .getIntermediateTree(ignoreStates: ignoreStates);
+      node = await PBVisualGenerationService(component,
+              currentContext: context, ignoreStates: ignoreStates)
+          .getIntermediateTree();
     } catch (e, stackTrace) {
       await MainInfo().sentry.captureException(
             exception: e,
