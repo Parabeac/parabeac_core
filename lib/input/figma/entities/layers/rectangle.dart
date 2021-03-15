@@ -23,26 +23,29 @@ class FigmaRectangle extends FigmaVector
     implements AbstractFigmaNodeFactory {
   @override
   String type = 'RECTANGLE';
-  FigmaRectangle({
-    String name,
-    bool isVisible,
-    type,
-    pluginData,
-    sharedPluginData,
-    style,
-    layoutAlign,
-    constraints,
-    Frame boundaryRectangle,
-    size,
-    strokes,
-    strokeWeight,
-    strokeAlign,
-    styles,
-    this.cornerRadius,
-    this.rectangleCornerRadii,
-    this.points,
-    List fillsList,
-  }) : super(
+  FigmaRectangle(
+      {String name,
+      bool isVisible,
+      type,
+      pluginData,
+      sharedPluginData,
+      style,
+      layoutAlign,
+      constraints,
+      Frame boundaryRectangle,
+      size,
+      strokes,
+      strokeWeight,
+      strokeAlign,
+      styles,
+      this.cornerRadius,
+      this.rectangleCornerRadii,
+      this.points,
+      List fillsList,
+      String prototypeNodeUUID,
+      num transitionDuration,
+      String transitionEasing})
+      : super(
           name: name,
           visible: isVisible,
           type: type,
@@ -58,6 +61,9 @@ class FigmaRectangle extends FigmaVector
           strokeAlign: strokeAlign,
           styles: styles,
           fillsList: fillsList,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'rectangle';
     var fillsMap =

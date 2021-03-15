@@ -36,12 +36,14 @@ Instance _$InstanceFromJson(Map<String, dynamic> json) {
     backgroundColor: json['backgroundColor'] == null
         ? null
         : FigmaColor.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    prototypeNodeUUID: json['transitionNodeID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
+    ..isFlowHome = json['isFlowHome'] ?? false
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
-    ..isFlowHome = json['isFlowHome']
     ..pbdfType = json['pbdfType'] as String;
 }
 
@@ -51,8 +53,10 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
-      'absoluteBoundingBox': instance.boundaryRectangle,
       'transitionNodeID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
+      'absoluteBoundingBox': instance.boundaryRectangle,
       'strokes': instance.strokes,
       'strokeWeight': instance.strokeWeight,
       'strokeAlign': instance.strokeAlign,
@@ -64,9 +68,9 @@ Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'verticalPadding': instance.verticalPadding,
       'itemSpacing': instance.itemSpacing,
       'backgroundColor': instance.backgroundColor,
+      'isFlowHome': instance.isFlowHome,
       'fills': instance.fillsList,
       'imageReference': instance.imageReference,
-      'isFlowHome': instance.isFlowHome,
       'type': instance.type,
       'parameters': instance.parameters,
       'symbolID': instance.symbolID,

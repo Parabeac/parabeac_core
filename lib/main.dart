@@ -158,6 +158,19 @@ ${parser.usage}
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        var isSACupToDate = await Process.run(
+          './pb-scripts/check-git.sh',
+          [],
+          workingDirectory: MainInfo().cwd.path,
+        );
+
+        if (isSACupToDate.stdout
+            .contains('Sketch Asset Converter is behind master.')) {
+          log.warning(isSACupToDate.stdout);
+        } else {
+          log.info(isSACupToDate.stdout);
+        }
+
         process = await Process.start('npm', ['run', 'prod'],
             workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 

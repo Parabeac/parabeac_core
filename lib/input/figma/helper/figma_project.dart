@@ -47,6 +47,9 @@ class FigmaProject extends DesignProject {
         if (pbdlScreen != null && !(pbdlScreen['convert'] ?? true)) {
           continue;
         }
+        if (layer.UUID == node.prototypeStartNodeID) {
+          layer.isFlowHome = true;
+        }
         pg.addScreen(FigmaScreen(
           layer,
           layer.UUID,

@@ -13,6 +13,7 @@ part 'canvas.g.dart';
 class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
   @override
   String type = 'CANVAS';
+
   Canvas({
     this.name,
     this.type,
@@ -21,7 +22,19 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
     this.prototypeStartNodeID,
     this.prototypeDevice,
     this.exportSettings,
-  }) : super(name, true, type, null, null) {
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
+  }) : super(
+          name,
+          true,
+          type,
+          null,
+          null,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
+        ) {
     pbdfType = 'artboard';
   }
   // Last two nulls are used for Figma plugins

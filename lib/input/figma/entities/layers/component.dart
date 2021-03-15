@@ -5,9 +5,7 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
-import 'package:parabeac_core/input/sketch/entities/objects/override_property.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -41,12 +39,14 @@ class Component extends FigmaFrame
     horizontalPadding,
     verticalPadding,
     itemSpacing,
-    Flow flow,
     this.overrideProperties,
     List<FigmaNode> children,
     FigmaColor backgroundColor,
     this.symbolID,
     this.overriadableProperties,
+    String prototypeNodeUUID,
+    num transitionDuration,
+    String transitionEasing,
   }) : super(
           name: name,
           isVisible: isVisible,
@@ -66,9 +66,11 @@ class Component extends FigmaFrame
           horizontalPadding: horizontalPadding,
           verticalPadding: verticalPadding,
           itemSpacing: itemSpacing,
-          flow: flow,
           children: children,
           backgroundColor: backgroundColor,
+          prototypeNodeUUID: prototypeNodeUUID,
+          transitionDuration: transitionDuration,
+          transitionEasing: transitionEasing,
         ) {
     pbdfType = 'symbol_master';
   }

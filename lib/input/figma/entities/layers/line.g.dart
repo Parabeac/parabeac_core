@@ -23,10 +23,12 @@ FigmaLine _$FigmaLineFromJson(Map<String, dynamic> json) {
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
     styles: json['styles'],
+    prototypeNodeUUID: json['transitionNodeID'] as String,
+    transitionDuration: json['transitionDuration'] as num,
+    transitionEasing: json['transitionEasing'] as String,
   )
     ..UUID = json['id'] as String
     ..isVisible = json['visible'] as bool ?? true
-    ..prototypeNodeUUID = json['transitionNodeID'] as String
     ..fillsList = json['fills'] as List
     ..imageReference = json['imageReference'] as String
     ..pbdfType = json['pbdfType'] as String;
@@ -38,10 +40,12 @@ Map<String, dynamic> _$FigmaLineToJson(FigmaLine instance) => <String, dynamic>{
       'pluginData': instance.pluginData,
       'sharedPluginData': instance.sharedPluginData,
       'visible': instance.isVisible,
+      'transitionNodeID': instance.prototypeNodeUUID,
+      'transitionDuration': instance.transitionDuration,
+      'transitionEasing': instance.transitionEasing,
       'style': instance.style,
       'layoutAlign': instance.layoutAlign,
       'constraints': instance.constraints,
-      'transitionNodeID': instance.prototypeNodeUUID,
       'absoluteBoundingBox': instance.boundaryRectangle,
       'size': instance.size,
       'strokes': instance.strokes,
