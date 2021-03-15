@@ -43,6 +43,8 @@ class MainInfo {
     }
   };
 
+  Map pbdf;
+
   factory MainInfo() {
     return _singleton;
   }
