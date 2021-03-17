@@ -42,28 +42,20 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
           .originalRef
           .name
           .contains('<leading>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then(
-                (value) => getAttributeNamed('leading').attributeNode = value);
+        getAttributeNamed('leading').attributeNode = node;
       }
 
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<trailing>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then(
-                (value) => getAttributeNamed('actions').attributeNode = value);
+        getAttributeNamed('actions').attributeNode = node;
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<middle>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => getAttributeNamed('title').attributeNode = value);
+        getAttributeNamed('title').attributeNode = node;
       }
     }
 
@@ -71,7 +63,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void alignChild() {}
+  void alignChild() {
+    // TODO: handle custom align
+  }
 
   @override
   PBEgg generatePluginNode(
