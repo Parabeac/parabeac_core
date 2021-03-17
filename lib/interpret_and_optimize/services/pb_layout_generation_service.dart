@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -105,29 +106,34 @@ class PBLayoutGenerationService implements PBGenerationService {
     ///The stack is going to saving the current layer of tree along with the parent of
     ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
     ///of nodes for the current layer in the second layer.
-    var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
-    stack.add(Tuple2(null, [rootNode]));
+    var stack = <Tuple2<PBIntermediateNode, List<PBAttribute>>>[];
+    stack.add(Tuple2(null, [
+      PBAttribute('root', attributeNodes: [rootNode])
+    ]));
 
     while (stack.isNotEmpty) {
       var currentTuple = stack.removeLast();
-      currentTuple = currentTuple.withItem2(transformation(currentTuple.item2));
-      currentTuple.item2.forEach((currentNode) {
-        if (_containsChildren(currentNode)) {
-          currentNode is PBLayoutIntermediateNode
-              ? stack.add(Tuple2(currentNode, (currentNode).children))
-              : stack.add(Tuple2(currentNode, [currentNode.child]));
-        }
+      currentTuple.item2.forEach((currentAttribute) {
+        currentAttribute.attributeNodes =
+            transformation(currentAttribute.attributeNodes);
+        currentAttribute.attributeNodes.forEach((currentNode) {
+          currentNode.attributes.forEach((attribute) {
+            stack.add(Tuple2(currentNode, [
+              PBAttribute(attribute.attributeName,
+                  attributeNodes: attribute.attributeNodes)
+            ]));
+          });
+        });
       });
       var node = currentTuple.item1;
       if (node != null) {
-        node is PBLayoutIntermediateNode && node.children.isNotEmpty
-            ? node.replaceChildren(currentTuple.item2)
-            : node.child =
-                (currentTuple.item2.isNotEmpty ? currentTuple.item2[0] : null);
+        currentTuple.item2.forEach((attribute) {
+          node.addAttribute(attribute, overwrite: true);
+        });
       } else {
         ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
         ///new `rootNode`.
-        rootNode = currentTuple.item2.first;
+        rootNode = currentTuple.item2.first.attributeNode;
       }
     }
     return rootNode;
