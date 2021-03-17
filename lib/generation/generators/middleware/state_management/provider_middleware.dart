@@ -5,6 +5,7 @@ import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -56,7 +57,34 @@ class ProviderMiddleware extends Middleware {
       generationManager,
       node,
     );
+
+    var parentDirectory = getName(node.name).snakeCase;
+
+    var viewPath =
+        fileStrategy.getViewPath('${parentDirectory}/' + node.name.snakeCase);
+
+    addImportToCache(node.UUID, viewPath);
+    node.managerData
+        .addImport(PBGenCache().getRelativePath(viewPath, node.UUID));
+    code = MiddlewareUtils.generateModelChangeNotifier(
+        watcherName, generationManager, node);
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
+
+    // Generate default node's view page
+    await fileStrategy.generatePage(
+      await generationManager.generate(node),
+      '${parentDirectory}/${node.name.snakeCase}',
+      args: 'VIEW',
+    );
+
+    // Generate node's states' view pages
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) async {
+      await fileStrategy.generatePage(
+        await generationManager.generate(state.variation.node),
+        '${parentDirectory}/${state.variation.node.name.snakeCase}',
+        args: 'VIEW',
+      );
+    });
 
     return node;
   }

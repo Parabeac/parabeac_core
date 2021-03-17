@@ -1,9 +1,9 @@
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
@@ -59,7 +59,7 @@ class StatefulMiddleware extends Middleware {
       'var ',
       true,
       node.functionCallName == symbolMaster.name
-          ? wrapOnLayout('${symbolMaster.name.pascalCase}')
+          ? MiddlewareUtils.wrapOnLayout('${symbolMaster.name.pascalCase}')
           : null,
     );
 

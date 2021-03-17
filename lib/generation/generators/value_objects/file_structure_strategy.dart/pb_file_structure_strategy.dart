@@ -94,4 +94,7 @@ abstract class FileStructureStrategy {
     }
     return Future.value();
   }
+
+  String getViewPath(String fileName) =>
+      '${_viewDirectoryPath}${fileName}.dart';
 }
