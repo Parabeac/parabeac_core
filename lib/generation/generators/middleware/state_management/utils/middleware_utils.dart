@@ -71,9 +71,11 @@ class MiddlewareUtils {
       ${manager.generateImports()}
       class ${defaultStateName} extends ChangeNotifier {
 
-      Widget defaultWidget;
-      ${defaultStateName}(){
-        defaultWidget = ${MiddlewareUtils.wrapOnLayout(node.name.pascalCase)};
+      Widget currentWidget;
+      ${defaultStateName}(){}
+
+      void setCurrentWidget(Widget currentWidget) {
+        this.currentWidget = currentWidget;
       }
       }
       ''';

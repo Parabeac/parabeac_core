@@ -60,12 +60,7 @@ class ProviderMiddleware extends Middleware {
 
     var parentDirectory = getName(node.name).snakeCase;
 
-    var viewPath =
-        fileStrategy.getViewPath('${parentDirectory}/' + node.name.snakeCase);
-
-    addImportToCache(node.UUID, viewPath);
-    node.managerData
-        .addImport(PBGenCache().getRelativePath(viewPath, node.UUID));
+    // Write model class for current node
     code = MiddlewareUtils.generateModelChangeNotifier(
         watcherName, generationManager, node);
     fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
