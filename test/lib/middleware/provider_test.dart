@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:mockito/mockito.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/provider_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -10,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -41,6 +41,8 @@ class MockIntermediateState extends Mock implements IntermediateState {}
 
 class MockIntermediateVariation extends Mock implements IntermediateVariation {}
 
+class MockTree extends Mock implements PBIntermediateTree {}
+
 void main() {
   group('Middlewares Tests', () {
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
@@ -62,6 +64,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
+    var mockTree = MockTree();
 
     setUp(() async {
       /// Nodes set up
@@ -74,6 +77,7 @@ void main() {
       // 2
       when(node2.name).thenReturn('someElement/green');
       when(node2.generator).thenReturn(mockPBGenerator);
+      when(node2.currentContext).thenReturn(mockContext);
 
       /// IntermediateAuxiliaryData
       when(mockIntermediateAuxiliaryData.stateGraph)
@@ -94,6 +98,7 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
+      when(mockContext.treeRoot).thenReturn(mockTree);
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);

@@ -9,13 +9,17 @@ abstract class PBLayoutGenerator extends PBGenerator {
   String generate(PBIntermediateNode source, GeneratorContext generatorContext);
 
   String generateBodyBoilerplate(String body,
-      {String layoutName = 'Column', String crossAxisAlignment = ''}) {
+      {String layoutName = 'Column',
+      String crossAxisAlignment = '',
+      String mainAxisAlignment = ''}) {
     layoutName ??= 'Column';
     crossAxisAlignment ??= '';
+    mainAxisAlignment ??= '';
     var buffer = StringBuffer();
     layoutName[0].toUpperCase();
     buffer.write('''$layoutName(
       $crossAxisAlignment
+      $mainAxisAlignment
     children:[
       $body
     ]

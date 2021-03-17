@@ -108,6 +108,8 @@ ${parser.usage}
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   } else if (argResults['figKey'] != null && argResults['fig'] != null) {
     designType = 'figma';
+  } else if (argResults['path'] != null) {
+    designType = 'sketch';
   } else if (argResults['pbdl-in'] != null) {
     designType = 'pbdl';
   }
@@ -139,6 +141,11 @@ ${parser.usage}
       .create(recursive: true);
 
   if (designType == 'sketch') {
+    if (argResults['pbdl-in'] != null) {
+      var pbdlPath = argResults['pbdl-in'];
+      var jsonString = File(pbdlPath).readAsStringSync();
+      MainInfo().pbdf = json.decode(jsonString);
+    }
     Process process;
     if (!jsonOnly) {
       var file = await FileSystemEntity.isFile(path);
@@ -151,6 +158,19 @@ ${parser.usage}
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
+        var isSACupToDate = await Process.run(
+          './pb-scripts/check-git.sh',
+          [],
+          workingDirectory: MainInfo().cwd.path,
+        );
+
+        if (isSACupToDate.stdout
+            .contains('Sketch Asset Converter is behind master.')) {
+          log.warning(isSACupToDate.stdout);
+        } else {
+          log.info(isSACupToDate.stdout);
+        }
+
         process = await Process.start('npm', ['run', 'prod'],
             workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
 
@@ -175,6 +195,11 @@ ${parser.usage}
   } else if (designType == 'xd') {
     assert(false, 'We don\'t support Adobe XD.');
   } else if (designType == 'figma') {
+    if (argResults['pbdl-in'] != null) {
+      var pbdlPath = argResults['pbdl-in'];
+      var jsonString = File(pbdlPath).readAsStringSync();
+      MainInfo().pbdf = json.decode(jsonString);
+    }
     if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
       assert(false, 'Please provided a Figma API key to proceed.');
     }
@@ -305,7 +330,7 @@ bool hasTooManyArgs(ArgResults args) {
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
 
-  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
+  return hasAll || !(hasSketch ^ hasFigma /*^ hasPbdl*/);
 }
 
 /// Returns true if `args` does not contain any intake
