@@ -19,14 +19,21 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
     var overrideVars = '';
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
-        overrides += 'this.${prop.friendlyName}, ';
-        overrideVars += 'final ${prop.friendlyName};';
+        overrides += '${prop.friendlyName}, ';
+        overrideVars += 'var ${prop.friendlyName};';
       });
     }
+
     return '''
 ${isFirst ? _getHeader(manager) : ''}
 
 class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{
+  ${manager.generateGlobalVariables()}
+
+  ${overrideVars}
+  
+
+  ${widgetName + 'State'}(${(overrides.isNotEmpty ? '{$overrides}' : '')}){}
 
   @override
   Widget get widget => ${returnStatement};
