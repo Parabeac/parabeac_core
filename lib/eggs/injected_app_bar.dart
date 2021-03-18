@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -64,7 +65,15 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   void alignChild() {
-    // TODO: handle custom align
+    /// This align only modifies middleItem
+    var tempNode = InjectedContainer(
+      middleItem.bottomRightCorner,
+      middleItem.topLeftCorner,
+      middleItem.name,
+      middleItem.UUID,
+    )..addChild(middleItem);
+
+    getAttributeNamed('title').attributeNode = tempNode;
   }
 
   @override
