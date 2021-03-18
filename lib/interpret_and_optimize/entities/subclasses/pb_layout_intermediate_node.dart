@@ -31,6 +31,8 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   PrototypeNode prototypeNode;
 
+  Map alignment = {};
+
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
       {topLeftCorner, bottomRightCorner, this.prototypeNode})
@@ -125,4 +127,45 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///NOTE: make sure that the children that are going to be added satisfy the reles of the [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext, String name);
+
+  void checkCrossAxisAlignment() {
+    if (attributes.first.attributeNode != null) {
+      var attributesTopLeft = attributes.first.attributeNode.topLeftCorner;
+
+      var attributesBottomRight =
+          attributes.last.attributeNode.bottomRightCorner;
+
+      var leftDifference = (topLeftCorner.x - attributesTopLeft.x).abs();
+
+      var rightDifference =
+          (bottomRightCorner.x - attributesBottomRight.x).abs();
+
+      var topDifference = (topLeftCorner.y - attributesTopLeft.y).abs();
+
+      var bottomDifference =
+          (bottomRightCorner.y - attributesBottomRight.y).abs();
+
+      if (leftDifference < rightDifference) {
+        alignment['mainAxisAlignment'] =
+            'mainAxisAlignment: MainAxisAlignment.start,';
+      } else if (leftDifference > rightDifference) {
+        alignment['mainAxisAlignment'] =
+            'mainAxisAlignment: MainAxisAlignment.end,';
+      } else {
+        alignment['mainAxisAlignment'] =
+            'mainAxisAlignment: MainAxisAlignment.center,';
+      }
+
+      if (topDifference < bottomDifference) {
+        alignment['crossAxisAlignment'] =
+            'crossAxisAlignment: CrossAxisAlignment.start,';
+      } else if (topDifference > bottomDifference) {
+        alignment['crossAxisAlignment'] =
+            'crossAxisAlignment: CrossAxisAlignment.end,';
+      } else {
+        alignment['crossAxisAlignment'] =
+            'crossAxisAlignment: CrossAxisAlignment.center,';
+      }
+    }
+  }
 }

@@ -18,10 +18,10 @@ class PBColumnGenerator extends PBLayoutGenerator {
         var attributes = source.alignment;
         if (attributes != null && attributes.isNotEmpty) {
           if (attributes['crossAxisAlignment'] != null) {
-            buffer.write(attributes['crossAxisAlignment'] + ',');
+            buffer.write(attributes['crossAxisAlignment']);
           }
           if (attributes['mainAxisAlignment'] != null) {
-            buffer.write(attributes['mainAxisAlignment'] + ',');
+            buffer.write(attributes['mainAxisAlignment']);
           }
         }
         buffer.write('\nchildren: [');

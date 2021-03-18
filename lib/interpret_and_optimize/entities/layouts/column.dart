@@ -29,8 +29,6 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   PBContext currentContext;
 
-  Map alignment = {};
-
   @override
   PrototypeNode prototypeNode;
 
@@ -40,17 +38,18 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
     this.UUID,
   }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
     generator = PBColumnGenerator();
-    checkCrossAxisAlignment();
   }
 
-  checkCrossAxisAlignment() {
-    // TODO: this is the default for now
-    alignment['crossAxisAlignment'] =
-        'crossAxisAlignment: CrossAxisAlignment.start';
-  }
+  // checkCrossAxisAlignment() {
+  //   // TODO: this is the default for now
+  //   alignment['crossAxisAlignment'] =
+  //       'crossAxisAlignment: CrossAxisAlignment.start';
+  // }
 
   @override
   void alignChildren() {
+    checkCrossAxisAlignment();
+    _invertAlignment();
     if (currentContext.configuration.widgetSpacing == 'Expanded') {
       _addPerpendicularAlignment();
       _addParallelAlignment();
@@ -106,4 +105,14 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   @override
   void addChild(PBIntermediateNode node) => addChildToLayout(node);
+
+  /// Invert method for Column alignment
+  void _invertAlignment() {
+    if (alignment.isNotEmpty) {
+      var tempCrossAxis = alignment['crossAxisAlignment'];
+      var tempMainAxis = alignment['mainAxisAlignment'];
+      alignment['crossAxisAlignment'] = tempMainAxis;
+      alignment['mainAxisAlignment'] = tempCrossAxis;
+    }
+  }
 }
