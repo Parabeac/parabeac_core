@@ -1,6 +1,4 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/helper/design_page.dart';
@@ -38,7 +36,6 @@ class Interpret {
   PBProject _pb_project;
   PBSymbolLinkerService _pbSymbolLinkerService;
   PBPrototypeLinkerService _pbPrototypeLinkerService;
-  PBGenerationManager _generationManager;
 
   void init(String projectName) {
     log = Logger(runtimeType.toString());
@@ -53,40 +50,44 @@ class Interpret {
     ///3rd Party Symbols
     if (tree.miscPages != null) {
       for (var i = 0; i < tree.miscPages?.length; i++) {
-        _pb_project.forest.addAll((await _generateGroup(tree.miscPages[i])));
+        _pb_project.forest
+            .addAll((await _generateIntermediateTree(tree.miscPages[i])));
       }
     }
 
     /// Main Pages
     if (tree.pages != null) {
       for (var i = 0; i < tree.pages?.length; i++) {
-        _pb_project.forest.addAll((await _generateGroup(tree.pages[i])));
+        _pb_project.forest
+            .addAll((await _generateIntermediateTree(tree.pages[i])));
       }
     }
 
     return _pb_project;
   }
 
-  Future<Iterable<PBIntermediateTree>> _generateGroup(DesignPage group) async {
+  /// Taking a design page, returns a PBIntermediateTree verison of it
+  Future<Iterable<PBIntermediateTree>> _generateIntermediateTree(
+      DesignPage designPage) async {
     var tempForest = <PBIntermediateTree>[];
-    var pageItems = group.getPageItems();
+    var pageItems = designPage.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
-      var item = await _generateScreen(pageItems[i]);
-      if (item != null && item.rootNode != null) {
-        var tempTree = item;
-        tempTree.name = group.name;
+      var currentScreen = await _generateScreen(pageItems[i]);
+      if (currentScreen != null && currentScreen.rootNode != null) {
+        var tempTree = currentScreen;
+        tempTree.name = designPage.name;
 
-        if (item.rootNode is InheritedScaffold) {
+        if (currentScreen.rootNode is InheritedScaffold) {
           tempTree.tree_type = TREE_TYPE.SCREEN;
-        } else if (item.rootNode is PBSharedMasterNode) {
+        } else if (currentScreen.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {
           tempTree.tree_type = TREE_TYPE.MISC;
         }
 
-        if (item != null) {
+        if (currentScreen != null) {
           log.fine(
-              'Processed \'${item.name}\' in group \'${group.name}\' with item type: \'${tempTree.tree_type}\'');
+              'Processed \'${currentScreen.name}\' in group \'${designPage.name}\' with item type: \'${tempTree.tree_type}\'');
 
           tempForest.add(tempTree);
         }
@@ -95,17 +96,17 @@ class Interpret {
     return tempForest;
   }
 
-  Future<PBIntermediateTree> _generateScreen(DesignScreen item) async {
+  Future<PBIntermediateTree> _generateScreen(DesignScreen designScreen) async {
     var currentContext = PBContext(
         jsonConfigurations:
             MainInfo().configurations ?? MainInfo().defaultConfigs);
 
-    var parentComponent = item.designNode;
+    var parentComponent = designScreen.designNode;
 
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var intermediateTree = PBIntermediateTree(item.designNode.name);
+    var intermediateTree = PBIntermediateTree(designScreen.designNode.name);
     currentContext.treeRoot = intermediateTree;
     currentContext.project = _pb_project;
     intermediateTree.rootNode = await visualGenerationService(
