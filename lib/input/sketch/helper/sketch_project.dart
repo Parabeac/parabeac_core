@@ -100,12 +100,21 @@ class SketchProject extends DesignProject {
           _originalArchive.findFile('pages/${entry.key}.json').content;
       var jsonData = json.decode(utf8.decode(pageContent));
 
+      var pbdlPage = getPbdlPage(jsonData['do_objectID']);
+      if (pbdlPage != null && !(pbdlPage['convert'] ?? true)) {
+        continue;
+      }
+
       var pg = SketchPage(
           jsonData['name'], jsonData['do_objectID']); // Sketch Node Holder
       var node = Page.fromJson(jsonData); // Actual Sketch Node
 
       // Turn layers into PBNodes
       for (var layer in node.children) {
+        var pbdlScreen = getPbdlScreen(pbdlPage, layer.UUID);
+        if (pbdlScreen != null && !(pbdlScreen['convert'] ?? true)) {
+          continue;
+        }
         pg.addScreen(SketchScreen(
           layer,
           layer.UUID,

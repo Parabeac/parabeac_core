@@ -59,7 +59,7 @@ class StatefulMiddleware extends Middleware {
       'var ',
       true,
       node.functionCallName == symbolMaster.name
-          ? '${symbolMaster.name.pascalCase}()'
+          ? wrapOnLayout('${symbolMaster.name.pascalCase}')
           : null,
     );
 
