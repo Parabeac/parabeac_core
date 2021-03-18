@@ -139,81 +139,6 @@ class Interpret {
     return intermediateTree;
   }
 
-  Future<PBIntermediateNode> generateNonRootItem(DesignNode root) async {
-    var currentContext = PBContext(
-        jsonConfigurations:
-            MainInfo().configurations ?? MainInfo().defaultConfigs);
-
-    PBIntermediateNode rootNode;
-
-    /// VisualGenerationService
-    try {
-      rootNode =
-          await PBVisualGenerationService(root, currentContext: currentContext)
-              .getIntermediateTree();
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-      log.error('at PBVisualGenerationService from generateNonRootItem');
-    }
-
-    ///
-    /// pre-layout generation service for plugin nodes.
-    ///
-    PBIntermediateNode parentPreLayoutIntermediateNode;
-    try {
-      parentPreLayoutIntermediateNode =
-          PBPluginControlService(rootNode, currentContext: currentContext)
-              .convertAndModifyPluginNodeTree();
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-      log.error('at PBPluginControlService from generateNonRootItem');
-      parentPreLayoutIntermediateNode =
-          rootNode; //parentVisualIntermediateNode;
-    }
-
-    var stopwatch2 = Stopwatch()..start();
-
-    /// LayoutGenerationService
-    try {
-      parentPreLayoutIntermediateNode =
-          PBLayoutGenerationService(currentContext: currentContext)
-              .extractLayouts(parentPreLayoutIntermediateNode);
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-      log.error('at PBLayoutGenerationService from generateNonRootItem');
-    }
-    var parentAlignIntermediateNode;
-
-    /// AlignGenerationService
-    try {
-      parentAlignIntermediateNode = PBAlignGenerationService(
-              parentPreLayoutIntermediateNode,
-              currentContext: currentContext)
-          .addAlignmentToLayouts();
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-      log.error('at PBAlignGenerationService from generateNonRootItem');
-    }
-
-    return parentAlignIntermediateNode;
-  }
-
   // TODO: refactor this method and/or `getIntermediateTree`
   // to not take the [ignoreStates] variable.
   Future<PBIntermediateNode> visualGenerationService(
@@ -308,27 +233,6 @@ class Interpret {
     // print(
     //     'Align Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
     stopwatch3.stop();
-    return node;
-  }
-
-  Future<PBIntermediateNode> _visualGenerationService(
-      var component, var context, var stopwatch) async {
-    /// VisualGenerationService
-    PBIntermediateNode node;
-    try {
-      node = await PBVisualGenerationService(component, currentContext: context)
-          .getIntermediateTree();
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-    }
-    // print(
-    //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch.stop();
-    node = await _pbSymbolLinkerService.linkSymbols(node);
     return node;
   }
 }
