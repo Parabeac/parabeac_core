@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/abstract_design_node_factory.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/helper/design_page.dart';
@@ -63,5 +64,27 @@ class DesignProject implements DesignNodeFactory {
       });
     }
     return project;
+  }
+
+  /// Returns a [Map] that represents the PBDL page with ID `pageId`,
+  /// or `null` if not found.
+  Map getPbdlPage(String pageId) {
+    if (MainInfo().pbdf != null) {
+      List pages = MainInfo().pbdf['pages'];
+      return pages.singleWhere((element) => element['id'] == pageId,
+          orElse: () => null);
+    }
+    return null;
+  }
+
+  /// Returns a [Map] that represents the PBDL screen with ID `screenId`
+  /// inside `pbdlPage`'s screens property.
+  Map getPbdlScreen(Map pbdlPage, String screenId) {
+    if (MainInfo().pbdf != null) {
+      List screens = pbdlPage['screens'];
+      return screens.singleWhere((element) => element['id'] == screenId,
+          orElse: () => null);
+    }
+    return null;
   }
 }
