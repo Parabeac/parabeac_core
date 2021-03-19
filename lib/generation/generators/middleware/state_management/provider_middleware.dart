@@ -37,16 +37,41 @@ class ProviderMiddleware extends Middleware {
         watcher = PBVariable(watcherName, 'final ', true,
             '${getName(node.functionCallName).pascalCase}().${widgetName}');
         managerData.addGlobalVariable(watcher);
-      } else {
-        watcher = PBVariable(watcherName, 'final ', true,
-            'context.watch<${getName(node.functionCallName).pascalCase}>().${widgetName}');
-        managerData.addMethodVariable(watcher);
       }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
       if (node.generator is! StringGeneratorAdapter) {
-        node.generator = StringGeneratorAdapter(watcherName);
+        // Add instance import
+        PBGenCache().appendToCache(node.SYMBOL_ID,
+            getImportPath(node, fileStrategy, generateModelPath: false));
+        var modelName = getName(node.functionCallName).pascalCase;
+        var defaultWidget = node.functionCallName.pascalCase;
+        var providerWidget = '''
+        ChangeNotifierProvider(
+          create: (context) =>
+              ${modelName}(), 
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              var widget = ${defaultWidget}(constraints);
+              
+              context
+                  .read<${modelName}>()
+                  .setCurrentWidget(
+                      widget); // Setting active state
+
+              return GestureDetector(
+                onTap: () => context.read<
+                    ${modelName}>(), // TODO: add your method to change the state here
+                child: context
+                    .watch<${modelName}>()
+                    .currentWidget, 
+              );
+            },
+          ),
+        )
+        ''';
+        node.generator = StringGeneratorAdapter(providerWidget);
       }
       return node;
     }
@@ -84,11 +109,14 @@ class ProviderMiddleware extends Middleware {
     return node;
   }
 
-  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+  String getImportPath(PBSharedInstanceIntermediateNode node,
+      ProviderFileStructureStrategy fileStrategy,
+      {bool generateModelPath = true}) {
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-    return fileStrategy.GENERATED_PROJECT_PATH +
-        fileStrategy.RELATIVE_MODEL_PATH +
-        '${getName(symbolMaster.name).snakeCase}.dart';
+    var import = generateModelPath
+        ? '${fileStrategy.RELATIVE_MODEL_PATH}${getName(symbolMaster.name).snakeCase}.dart'
+        : '${fileStrategy.RELATIVE_VIEW_PATH}${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
+    return fileStrategy.GENERATED_PROJECT_PATH + import;
   }
 }

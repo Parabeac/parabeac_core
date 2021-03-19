@@ -24,7 +24,7 @@ abstract class Middleware {
       Future.value(node);
 
   void addImportToCache(String id, String path) {
-    PBGenCache().addToCache(id, path);
+    PBGenCache().setPathToCache(id, path);
   }
 
   String getVariableName(String name) {
