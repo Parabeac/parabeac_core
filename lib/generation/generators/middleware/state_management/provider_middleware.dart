@@ -77,18 +77,12 @@ class ProviderMiddleware extends Middleware {
     }
     watcherName = getNameOfNode(node);
 
-    var code = MiddlewareUtils.generateChangeNotifierClass(
-      watcherName,
-      generationManager,
-      node,
-    );
-
     var parentDirectory = getName(node.name).snakeCase;
 
     // Write model class for current node
-    code = MiddlewareUtils.generateModelChangeNotifier(
+    var code = MiddlewareUtils.generateModelChangeNotifier(
         watcherName, generationManager, node);
-    fileStrategy.writeProviderModelFile(code, getName(node.name).snakeCase);
+    fileStrategy.writeProviderModelFile(code, parentDirectory);
 
     // Generate default node's view page
     await fileStrategy.generatePage(

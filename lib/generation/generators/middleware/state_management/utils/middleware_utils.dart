@@ -67,6 +67,10 @@ class MiddlewareUtils {
     PBGenerationManager manager,
     PBIntermediateNode node,
   ) {
+    // Pass down manager data to states
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      state.variation.node.currentContext.treeRoot.data = node.managerData;
+    });
     return '''
       ${manager.generateImports()}
       class ${defaultStateName} extends ChangeNotifier {
