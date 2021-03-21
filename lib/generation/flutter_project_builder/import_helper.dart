@@ -27,7 +27,9 @@ class ImportHelper {
 
     var nodePaths = PBGenCache().getPaths(id);
     // Make sure nodePath exists and is not the same as path (importing yourself)
-    if (nodePaths != null && nodePaths.isNotEmpty) {
+    if (nodePaths != null &&
+        nodePaths.isNotEmpty &&
+        !nodePaths.any((element) => element == path)) {
       var paths = PBGenCache().getRelativePath(path, id);
       paths.forEach(imports.add);
     }
