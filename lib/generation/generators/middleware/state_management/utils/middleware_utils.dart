@@ -62,6 +62,29 @@ class MiddlewareUtils {
       ''';
   }
 
+  static String generateModelChangeNotifier(
+    String defaultStateName,
+    PBGenerationManager manager,
+    PBIntermediateNode node,
+  ) {
+    // Pass down manager data to states
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      state.variation.node.currentContext.treeRoot.data = node.managerData;
+    });
+    return '''
+      ${manager.generateImports()}
+      class ${defaultStateName} extends ChangeNotifier {
+
+      Widget currentWidget;
+      ${defaultStateName}(){}
+
+      void setCurrentWidget(Widget currentWidget) {
+        this.currentWidget = currentWidget;
+      }
+      }
+      ''';
+  }
+
   static String generateVariable(PBIntermediateNode node,
       {String type = 'var'}) {
     return '${type} ${node.name.camelCase} = ' + generateVariableBody(node);
@@ -76,4 +99,14 @@ class MiddlewareUtils {
               GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
           '') +
       ';';
+
+  static String wrapOnLayout(String className) {
+    return '''
+    LayoutBuilder(builder: (context, constraints) {
+        return $className(
+          constraints,
+        );
+      })
+    ''';
+  }
 }
