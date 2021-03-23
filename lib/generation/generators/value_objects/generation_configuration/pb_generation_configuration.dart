@@ -140,12 +140,13 @@ abstract class GenerationConfiguration {
 
   void _commitImports(
       PBIntermediateNode node, String directoryName, String fileName) {
-    var nodePath = PBGenCache()
-        .getPath(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
-    var imports = ImportHelper.findImports(node, nodePath);
-    imports.forEach((import) {
-      node.managerData.addImport(import);
-    });
+    var nodePaths = PBGenCache()
+        .getPaths(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
+    var imports = <String>{};
+    // Fetch imports for each path
+    nodePaths.forEach(
+        (path) => imports.addAll(ImportHelper.findImports(node, path)));
+    imports.forEach(node.managerData.addImport);
   }
 
   Future<void> _commitDependencies(String projectName) async {

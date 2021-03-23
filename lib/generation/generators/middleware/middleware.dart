@@ -24,7 +24,7 @@ abstract class Middleware {
       Future.value(node);
 
   void addImportToCache(String id, String path) {
-    PBGenCache().addToCache(id, path);
+    PBGenCache().setPathToCache(id, path);
   }
 
   String getVariableName(String name) {
@@ -34,15 +34,5 @@ abstract class Middleware {
     } else {
       return name + '_' + (++variableNames[name]).toString();
     }
-  }
-
-  String wrapOnLayout(String className) {
-    return '''
-    LayoutBuilder(builder: (context, constraints) {
-        return $className(
-          constraints,
-        );
-      })
-    ''';
   }
 }

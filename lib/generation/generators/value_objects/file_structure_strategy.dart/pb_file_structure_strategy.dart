@@ -74,7 +74,7 @@ abstract class FileStructureStrategy {
       var path = node is PBSharedMasterNode
           ? '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart' // Removed .g
           : '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart';
-      PBGenCache().addToCache(uuid, path);
+      PBGenCache().setPathToCache(uuid, path);
     } else {
       logger.warning(
           'The following intermediateNode was missing a name: ${tree.toString()}');
@@ -94,4 +94,7 @@ abstract class FileStructureStrategy {
     }
     return Future.value();
   }
+
+  String getViewPath(String fileName) =>
+      '${_viewDirectoryPath}${fileName}.dart';
 }
