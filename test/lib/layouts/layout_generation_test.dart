@@ -2,6 +2,7 @@ import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -62,6 +63,14 @@ void main() {
       when(tempGroup.name).thenReturn('testTempGroup');
       when(tempGroup.currentContext).thenReturn(currentContext);
       when(tempGroup.originalRef).thenReturn({});
+      when(tempGroup.attributes).thenReturn([
+        PBAttribute('children', attributeNodes: [
+          leftItem,
+          rightItem,
+        ])
+      ]);
+      // Added children here because getter is not called during testing
+      // due to being Mock
       when(tempGroup.children).thenReturn([
         leftItem,
         rightItem,

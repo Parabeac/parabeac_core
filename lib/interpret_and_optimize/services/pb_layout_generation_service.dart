@@ -116,8 +116,8 @@ class PBLayoutGenerationService implements PBGenerationService {
       currentTuple.item2.forEach((currentAttribute) {
         currentAttribute.attributeNodes =
             transformation(currentAttribute.attributeNodes);
-        currentAttribute.attributeNodes.forEach((currentNode) {
-          currentNode.attributes.forEach((attribute) {
+        currentAttribute?.attributeNodes?.forEach((currentNode) {
+          currentNode?.attributes?.forEach((attribute) {
             stack.add(Tuple2(currentNode, [
               PBAttribute(attribute.attributeName,
                   attributeNodes: attribute.attributeNodes)
