@@ -105,7 +105,9 @@ class FlutterProjectBuilder {
     }
 
     // generate shared Styles if any found
-    if (mainTree.sharedStyles != null && mainTree.sharedStyles.isNotEmpty) {
+    if (mainTree.sharedStyles != null &&
+        mainTree.sharedStyles.isNotEmpty &&
+        !MainInfo().noStyles) {
       await Directory('${pathToFlutterProject}lib/document/')
           .create(recursive: true)
           .then((value) {
