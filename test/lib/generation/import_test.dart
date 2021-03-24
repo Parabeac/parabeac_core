@@ -36,11 +36,11 @@ void main() {
 
     test('Testing import generation when imports are generated', () {
       //Add symbol in the same folder as importer
-      genCache.addToCache(importee1.UUID, '/path/to/page/importee1.dart');
+      genCache.setPathToCache(importee1.UUID, '/path/to/page/importee1.dart');
       //Add symbol located a directory above importer
-      genCache.addToCache(importee2.UUID, '/path/to/importee2.dart');
+      genCache.setPathToCache(importee2.UUID, '/path/to/importee2.dart');
       //Add symbol located a directory below importer
-      genCache.addToCache(importee3.UUID, '/path/to/page/sub/importee3.dart');
+      genCache.setPathToCache(importee3.UUID, '/path/to/page/sub/importee3.dart');
 
       // Find the imports of importer.dart
       var imports = ImportHelper.findImports(

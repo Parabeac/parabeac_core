@@ -22,7 +22,7 @@ abstract class PBGenerationManager {
 
   String generate(PBIntermediateNode rootNode);
 
-  String getPath(String uuid) => PBGenCache().getPath(uuid);
+  Set<String> getPaths(String uuid) => PBGenCache().getPaths(uuid);
 
   String generateImports();
 
