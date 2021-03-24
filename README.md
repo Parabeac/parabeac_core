@@ -9,11 +9,11 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
-  <a href="https://discord.gg/qUrghes">Community</a>
+<a href="https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide">Contribute</a>
+  <span> · </span>
+  <a href="https://discord.gg/qUrghes">Discord Community</a>
   <span> · </span>
   <a href="https://docs.parabeac.com/parabeac-designers/getting-started">Designer Protocol</a>
-  <span> · </span>
-  <a href="https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide">Contribute</a>
   <span> · </span>
   <a href="https://github.com/Parabeac/Parabeac-Core/wiki/Setting-up-a-debug-environment">Debugging</a>
 </h3>
