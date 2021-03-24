@@ -50,11 +50,6 @@ void main() {
 
       tempGroup = TempGroupMock();
 
-      tempGroup.addAttribute(PBAttribute('children'));
-
-      tempGroup.attributes
-          .add(PBAttribute('children', attributeNodes: [leftItem, rightItem]));
-
       when(leftItem.topLeftCorner).thenReturn(Point(0, 0));
       when(leftItem.bottomRightCorner).thenReturn(Point(100, 100));
       when(leftItem.UUID).thenReturn('UUIDleftItem');
