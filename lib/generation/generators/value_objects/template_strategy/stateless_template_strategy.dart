@@ -26,7 +26,7 @@ ${manager.generateImports()}
 class ${widgetName.pascalCase} extends StatelessWidget{
   ${node is PBSharedMasterNode ? 'final constraints;' : ''}
   ${overrideVars.isNotEmpty ? overrideVars : ''}
-  const ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
+  ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
   ${manager.generateGlobalVariables()}
 
   @override

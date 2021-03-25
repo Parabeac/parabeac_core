@@ -36,7 +36,9 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('constraints,');
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
-          case PBSharedParameterValue:
+          case PBSharedInstanceIntermediateNode:
+ //           buffer.write(
+ //               '${param.name}: ${pbspv.overrideName}(constraints),');
             //PBSharedParameterValue pbspv = param;
             //switch (pbpsv.)
             // TODO, maybe this points to static instances? Like Styles.g.dart that will be eventually generated,
