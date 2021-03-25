@@ -137,9 +137,9 @@ To set the state management configuration, head over to edit `/Parabeac-Core/lib
 
 Here you can replace the `state-management` property to `bloc`, `provider`, or `riverpod`.
 
-For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) 
+For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) or see [here](https://github.com/Parabeac/Parabeac-Core/wiki/State-Management-basics) to understand how to set up your design file. 
 
-You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+If we don't support your state management system, you can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this, we're here to help! :)
 
 # How to contribute
 Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
