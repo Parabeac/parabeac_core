@@ -182,8 +182,3 @@ The Parabeac Design Protocol helps designers define UI/UX elements within Design
 * **Naming Semantics**: Naming semantics are what trigger eggs.
 * **Symbols**: Symbols define reusable items so that developers can reuse the code generated.
 * **Describing States**: By using the naming convention of seperating the name of the element and the name of the state that the element is in like the following, `nameOfElement/default` & `nameOfElement/onClicked` you can describe different states which are exported to the state management system the development team configured.
-
-# Upcoming & Known Issues
-
- - Plugin Duplication in the Plugin Service
- - Egg Marketplace
