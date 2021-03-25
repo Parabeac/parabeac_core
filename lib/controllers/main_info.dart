@@ -34,7 +34,7 @@ class MainInfo {
   String figmaProjectID;
 
   /// False to create styles document
-  bool noStyles;
+  bool exportStyles;
 
   Map defaultConfigs = {
     'default': {

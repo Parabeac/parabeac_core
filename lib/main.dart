@@ -59,8 +59,8 @@ void main(List<String> args) async {
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addFlag('export-pbdl',
         help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
-    ..addFlag('no-styles',
-        help: 'If this flag is set, it will not output styles document');
+    ..addFlag('include-styles',
+        help: 'If this flag is set, it will output styles document');
 
 //error handler using logger package
   void handleError(String msg) {
@@ -95,7 +95,7 @@ ${parser.usage}
   MainInfo().figmaProjectID = argResults['fig'];
 
   var designType = 'sketch';
-  MainInfo().noStyles = argResults['no-styles'];
+  MainInfo().exportStyles = argResults['include-styles'];
   var jsonOnly = argResults['export-pbdl'];
 
   var configurationPath = argResults['config-path'];
