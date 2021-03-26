@@ -19,21 +19,6 @@ class PBMasterSymbolGenerator extends PBGenerator {
       if (source.child == null) {
         return '';
       }
-      var name;
-      try {
-        //Remove any special characters and leading numbers from the method name
-        name = source.name
-            .replaceAll(RegExp(r'[^\w]+'), '')
-            .replaceFirst(RegExp(r'^[\d]+'), '');
-        //Make first letter of method name capitalized
-        name = name[0].toLowerCase() + name.substring(1);
-      } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
-        log.error(e.toString());
-      }
       source.child.currentContext = source.currentContext;
       // see if widget itself is overridden, need to pass
       var generatedWidget =

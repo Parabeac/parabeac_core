@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -9,9 +10,14 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:quick_log/quick_log.dart';
 
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
+
+  ///SERVICE
+  var log = Logger('PBSharedMasterNode');
+
   @override
   final originalRef;
 
@@ -39,6 +45,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   List<PBSharedParameterProp> overridableProperties;
 
+  String friendlyName;
+
   PBSharedMasterNode(
     this.originalRef,
     this.SYMBOL_ID,
@@ -49,6 +57,24 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     PBContext currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: originalRef.UUID ?? '') {
+
+    try {
+      //Remove any special characters and leading numbers from the method name
+      friendlyName = name
+          .replaceAll(RegExp(r'[^\w]+'), '')
+          .replaceAll(RegExp(r'/'), '')
+          .replaceFirst(RegExp(r'^[\d]+'), '');
+      //Make first letter of method name capitalized
+      friendlyName = friendlyName[0].toUpperCase() + friendlyName.substring(1);
+    } catch (e, stackTrace) {
+      MainInfo().sentry.captureException(
+        exception: e,
+        stackTrace: stackTrace,
+      );
+      log.error(e.toString());
+    }
+    ;
+
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
