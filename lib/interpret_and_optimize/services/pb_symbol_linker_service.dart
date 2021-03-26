@@ -15,7 +15,7 @@ class PBSymbolLinkerService {
     _aggregationService = PBSharedInterAggregationService();
   }
 
-// /Linking [PBSharedMasterNode] and [PBSharedInsstanceIntermediateNode] together; linking its
+// /Linking [PBSharedMasterNode] and [PBSharedInstanceIntermediateNode] together; linking its
 // /parameter and values.
   Future<PBIntermediateNode> linkSymbols(PBIntermediateNode rootNode) async{
     if(rootNode == null){

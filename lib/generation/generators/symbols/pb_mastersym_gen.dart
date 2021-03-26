@@ -13,28 +13,14 @@ class PBMasterSymbolGenerator extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext ??= SizingValueContext.LayoutBuilderValue;
+    generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
       if (source.child == null) {
         return '';
       }
-      var name;
-      try {
-        //Remove any special characters and leading numbers from the method name
-        name = source.name
-            .replaceAll(RegExp(r'[^\w]+'), '')
-            .replaceFirst(RegExp(r'^[\d]+'), '');
-        //Make first letter of method name capitalized
-        name = name[0].toLowerCase() + name.substring(1);
-      } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
-        log.error(e.toString());
-      }
       source.child.currentContext = source.currentContext;
+      // see if widget itself is overridden, need to pass
       var generatedWidget =
           source.child.generator.generate(source.child, generatorContext);
       if (generatedWidget == null || generatedWidget.isEmpty) {

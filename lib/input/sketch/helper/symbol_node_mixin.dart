@@ -17,7 +17,7 @@ mixin SymbolNodeMixin {
     String: 'str',
     Style: 'sty',
     InheritedBitmap: 'bm',
-    PBSharedParameterValue: 'sv',
+    PBSharedInstanceIntermediateNode: 'sv',
   };
 
   // should have been a Map<UUID, SketchNode> but iterate slowly through the list
@@ -81,7 +81,7 @@ mixin SymbolNodeMixin {
         type = String;
         break;
       case 'symbolID':
-        type = PBSharedParameterValue;
+        type = PBSharedInstanceIntermediateNode;
         break;
       case 'image':
         type = InheritedBitmap;

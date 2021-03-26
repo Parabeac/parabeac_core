@@ -37,7 +37,9 @@ main(List<String> args) async {
     )
     ..addFlag('export-pbdl',
         help:
-            'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.');
+            'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.')
+    ..addFlag('include-styles',
+        help: 'If this flag is set, it will output styles document');
 
   argResults = parser.parse(args);
 
