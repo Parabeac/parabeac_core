@@ -33,6 +33,9 @@ class MainInfo {
   /// Project ID on Figma
   String figmaProjectID;
 
+  /// False to create styles document
+  bool exportStyles;
+
   Map defaultConfigs = {
     'default': {
       'widgetStyle': 'Material',
