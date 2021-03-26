@@ -144,16 +144,6 @@ If we don't support your state management system, you can learn how to easily cr
 # How to contribute
 Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
 
-# How to contribute
-
-The success of Parabeac-Core relies on community, and there are many ways to be apart of it.
-
-# How to contribute
-Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
-
-# How to contribute
-
-The success of Parabeac-Core relies on community, and there are many ways to be apart of it.
 
 # Running the exported code
 ### Requirements
