@@ -33,7 +33,7 @@ class MainInfo {
   /// Project ID on Figma
   String figmaProjectID;
 
-  /// False to create styles document
+  /// Boolean that indicates whether a `styles` document is created.
   bool exportStyles;
 
   Map defaultConfigs = {
