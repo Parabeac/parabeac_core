@@ -11,7 +11,7 @@ class PBSharedInterAggregationService {
   static final PBSharedInterAggregationService _singleInstance =
       PBSharedInterAggregationService._internal();
 
-  ///These are [PBSharedInstaceIntermediateNode] that have not found their [PBSharedMasterNode]; they are
+  ///These are [PBSharedInstanceIntermediateNode] that have not found their [PBSharedMasterNode]; they are
   ///waiting to see their [PBSharedMasterNode] in order to populate their attributes.
   List<PBSharedInstanceIntermediateNode> _unregSymQueue;
   Iterable<PBSharedInstanceIntermediateNode> get unregSymQueue =>
@@ -55,7 +55,7 @@ class PBSharedInterAggregationService {
         .removeWhere((prop) => prop == null || prop.value == null);
   }
 
-  ///Its going to check the [PBSharedInstanceIntermediateNode]s and the [PBSharedMasterNode]s that are comming through
+  ///Its going to check the [PBSharedInstanceIntermediateNode]s and the [PBSharedMasterNode]s that are coming through
   ///the [PBSymbolStorage]. To see if we can find the [PBSharedMasterNode] that belongs to the [PBSharedInstanceIntermediateNode]
   ///that do not have their values solved.
   void analyzeSharedNode(dynamic node) {

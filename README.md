@@ -6,57 +6,57 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 
 <a href="https://www.producthunt.com/posts/parabeac?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-parabeac" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=238516&theme=light" alt="Parabeac - Open-source design to Flutter converter | Product Hunt Embed" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
 
-![google.com](https://img.shields.io/badge/license-MIT-blue.svg) [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Parabeac](https://circleci.com/gh/Parabeac/Parabeac-Core.svg?style=shield&circle-token=387c418592b3a47f3bb58caed7ff7d92afb8dd2e)](https://app.circleci.com/pipelines/github/Parabeac) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md)
+[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
-  <a href="https://docs.parabeac.com/parabeac-designers/getting-started">Designer Protocol</a>
-    <span> · </span>
-  <a href="https://docs.parabeac.com/parabeac-developers/getting-started">Understanding the code export</a>
- <span> · </span>
-  <a href="https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide">Contribute</a>
- <span> · </span>
-  <a href="https://discord.gg/qUrghes">Community</a>
+<a href="https://github.com/Parabeac/Parabeac-Core/wiki/Getting-Started-Contributor-Guide">Contribute</a>
   <span> · </span>
-  <a href="https://dev.to/parabeac">Dev.to</a>
-    <span> · </span>
+  <a href="https://discord.gg/qUrghes">Discord Community</a>
+  <span> · </span>
+  <a href="https://docs.parabeac.com/parabeac-designers/getting-started">Designer Protocol</a>
+  <span> · </span>
   <a href="https://github.com/Parabeac/Parabeac-Core/wiki/Setting-up-a-debug-environment">Debugging</a>
 </h3>
 
 # Table of Contents
-1. [What is Parabeac-Core](#what-is-parabeac-core)
+1. [Why are we here?](#what-is-parabeac-core)
 2. [Get Started](#get-started)
     
     1. [Cloning the Repo](#cloning-the-repo)
     2. [Running the conversion](#running-the-conversion)
     3. [Metrics](#metrics)
     4. [Using State Management Configuration](#using-state-management-configuration)
-3. [Running the exported Code](#running-the-exported-code)
-4. [How to create & run Parabeac eggs](#how-to-create-&-run-parabeac-eggs)
-5. [How it works](#how-it-works)
-6. [How to contribute](#how-to-contribute)
+3. [How to contribute](#how-to-contribute)
+4. [Running the exported Code](#running-the-exported-code)
+5. [How to create & run Parabeac eggs](#how-to-create-&-run-parabeac-eggs)
+6. [How it works](#how-it-works)
+  
 
-# What is Parabeac-Core?
-Parabeac-Core is an open-source repository that converts design files into Flutter code. The biggest challenge in code conversion is achieving quality code, but in a tool like this, there’s so much variability in what quality code should look like. So Parabeac-Core is built in a way not to promise quality code, but to be driven by the community so that you can configure & tweak to you or your teams liking. See our [Manifesto](https://github.com/Parabeac/Parabeac-Core/blob/stable/MANIFESTO.md). We welcome contributors to improve Parabeac-Core, create [Parabeac Eggs](https://github.com/Parabeac/parabeac-egg-template), & to join our [Discord](https://discord.com/invite/qUrghes) community!
+# Why are we here?
+The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. And as design iteration becomes more critical in the execution of app development, this problem is only going to get worse. We believe we can fix it. What if designers had a tool to automatically convert their design files into high quality code? That is exactly what we are creating with Parabeac-Core. With the push of a button, Parabeac-Core could interpret design files and produce high quality Flutter code. 
+
+Our goal is to create a tool that passes a modern Turing Test: automatic code generation so good that it is indistinguishable from code written by human developers. Pretty cool, right? We welcome all designers & developers to join our community!
+
 
 # Get Started
 
 If you have any trouble with getting Parabeac-Core running, check out this video! [![Parabeac-Core Getting Started](https://img.youtube.com/vi/e4CJgPMNCyo/0.jpg)](https://www.youtube.com/watch?v=e4CJgPMNCyo&feature=youtu.be)
 
-Development on Windows is possible, too. However, [this requires some setup](WINDOWS_SETUP.md).
+Development on Windows [requires some extra setup](WINDOWS_SETUP.md).
 
-Parabeac-Core now supports both [Figma](https://www.figma.com/) and [Sketch](https://www.sketch.com)! We have plans to expand in the future as Parabeac-Core is built to support more platforms by design. 
+Parabeac-Core currently supports [Figma](https://www.figma.com/) and [Sketch](https://www.sketch.com). Be sure to follow the [designer protocol](https://docs.parabeac.com/parabeac-designers/getting-started) to achieve the highest quality output.
 
 ### Dependencies
 
  - [Dart](https://dart.dev/get-dart)
  - [Flutter](https://flutter.dev/docs/get-started/install)
  - [node.js](https://nodejs.org/en/download/)
- - MacOS + Xcode or Android Studio
 
-Need a file to test with? Feel free to download one of our sample design files below (Make sure to duplicate the Design to your account if you're using Figma):
+Feel free to download one of our sample design files below.
 * [Sketch](https://drive.google.com/file/d/10ZdTTUCFLrGJ-1oVmapWoH5HCe87Sz4e/view?usp=sharing)
+  * The Sketch API is only available on MacOS, conversions will be missing images if you run on non-MacOS systems.
 * [Figma](https://www.figma.com/file/cmaAGe2hwCp7A5pmEQ2C80/parabeac_demo_fig) 
-
+  * You will need to duplicate the Design to your account if you're using Figma
 ## Cloning the Repo
 Because parabeac-core contains the Sketch-Asset-Converter submodule, it is easier to clone the repo using the following command:
 ```
@@ -114,7 +114,7 @@ Since Figma operates from a cloud native approach we use the Figma File ID and a
 4. Create a new Personal Access Token with the name Parabeac, you should then be prompted with your new API Key. Make sure to copy this as you wont be able to access it again after you click confirm. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```
 
 ## Metrics
-Parabeac-core keeps track of how many times it is run. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+Parabeac-Core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
 
 ## Using State Management Configuration
 ![State Management](https://kindling-sketch.s3.amazonaws.com/PB_to_Flutter_with_State_management.png)
@@ -140,6 +140,13 @@ Here you can replace the `state-management` property to `bloc`, `provider`, or `
 For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) 
 
 You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+
+# How to contribute
+Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
+
+# How to contribute
+
+The success of Parabeac-Core relies on community, and there are many ways to be apart of it.
 
 # Running the exported code
 ### Requirements
@@ -171,32 +178,10 @@ Parabeac-Core is essentially broken up into 3 pieces which you can see in the li
 ![Parabeac High Level Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-high-level-animation2.gif)
 
 ## [Parabeac Design Protocol](https://docs.parabeac.com/)
-Parabeac Design Protocol is our way of helping define UI/UX elements within Design Files for cleaner and more succinct code conversion. By adding naming-semantics to elements, symbols, and layer names to the design file, Parabeac-Core is able to identify specific UI elements & override interpretation & generation with a specific implementation.
-
-## [Visual Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Visual-Generation-Service)
-These are mostly built by a one to one relationship from the Parabeac Design Language into Parabeac Intermediate Nodes. For example, a rectangle in the design language will simply convert to an `InheritedContainer`.
-
-![Parabeac Visual Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-visual-generation-service.gif)
-
-## [Layout Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Layout-Generation-Service)
-This service is a bit more interesting, as we break down each group of nodes to be laid out by the layout service. The service takes the first 2 nodes compares them & generates a layout, we grab the next node, compare it to the layout & then the leaves if needed to and continuously traverse the rest of the layer into the laid out tree that we construct.
-
-![Parabeac Layout Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-layout-generation-service.gif)
-
-
-## [Alignment Generation Service](https://github.com/Parabeac/parabeac-core/wiki/Alignment-Generation-Service)
-In Flutter, there are only a couple ways to achieve alignment. We recognized the following as the most common:
-* Flex-based layouts
-* Padding/margin
-* Positioning (Stacks)
-* Alignment (Container/Single Child/Visual Node)
-
-Depending on the type of layout to add alignment to we have various services to take the nodes in and apply the alignment information needed.
-
-![Parabeac Alignment Generation Service Animation](https://kindling-sketch.s3.amazonaws.com/parabeac-alignment-generation-service2.gif)
-
-# How to contribute
-Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
+The Parabeac Design Protocol helps designers define UI/UX elements within Design Files for cleaner and more succinct code conversion. We go in depth on the [design protocol](https://docs.parabeac.com/) but the following are things available to improve the conversion. 
+* **Naming Semantics**: Naming semantics are what trigger eggs.
+* **Symbols**: Symbols define reusable items so that developers can reuse the code generated.
+* **Describing States**: By using the naming convention of seperating the name of the element and the name of the state that the element is in like the following, `nameOfElement/default` & `nameOfElement/onClicked` you can describe different states which are exported to the state management system the development team configured.
 
 # Upcoming & Known Issues
 

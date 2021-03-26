@@ -42,7 +42,7 @@ class PBSymbolStorage {
     return true;
   }
 
-  ///Add [PBSharedMasterNode] tointo the storage, return `true` if added else
+  ///Add [PBSharedMasterNode] into the storage, return `true` if added else
   ///`false` if it exists.
   Future<bool> addSharedMasterNode(PBSharedMasterNode masterNode) async {
     if (_pbSharedMasterNodes.containsKey(masterNode.UUID)) {
@@ -53,7 +53,7 @@ class PBSymbolStorage {
     return true;
   }
 
-  ///Getting the symbol instace that contains the specific
+  ///Getting the symbol instance that contains the specific
   PBIntermediateNode getSymbolInstance(String id) {
     return _pbSharedInstanceNodes[id];
   }
