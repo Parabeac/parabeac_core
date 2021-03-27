@@ -27,15 +27,27 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         log.error(' Could not find master name on: $source');
         return 'Container(/** This Symbol was not found **/)';
       }
+
+      var overrideProp = generatorContext?.overridableProperties?.firstWhere(
+          (element) => element.UUID == source.UUID,
+          orElse: () => null);
+
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
       var buffer = StringBuffer();
+
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
+
+      if (overrideProp != null) {
+        buffer.write('${overrideProp.friendlyName} ?? ');
+      }
+
       buffer.write(method_signature);
       buffer.write('(');
       buffer.write('constraints,');
+
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
