@@ -16,6 +16,8 @@ class PBMasterSymbolGenerator extends PBGenerator {
     generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
+      generatorContext.overridableProperties =
+          source.overridableProperties ?? [];
       if (source.child == null) {
         return '';
       }
@@ -23,6 +25,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
       // see if widget itself is overridden, need to pass
       var generatedWidget =
           source.child.generator.generate(source.child, generatorContext);
+
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }

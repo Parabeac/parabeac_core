@@ -1,7 +1,11 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+
 /// This class is responsible for sharing contextual data needed throughout the generation process. Generators will pass this information to it's children.
 class GeneratorContext {
-  GeneratorContext({this.sizingContext});
   SizingValueContext sizingContext = SizingValueContext.PointValue;
+  List<PBSharedParameterProp> overridableProperties = [];
+
+  GeneratorContext({this.sizingContext, this.overridableProperties});
 }
 
 enum SizingValueContext {
