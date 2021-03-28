@@ -28,9 +28,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         return 'Container(/** This Symbol was not found **/)';
       }
 
-      var overrideProp = generatorContext?.overridableProperties?.firstWhere(
-          (element) => element.UUID == source.UUID,
-          orElse: () => null);
+      var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
 
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
@@ -41,7 +39,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('    return ');
 
       if (overrideProp != null) {
-        buffer.write('${overrideProp.friendlyName} ?? ');
+        buffer.write('${overrideProp} ?? ');
       }
 
       buffer.write(method_signature);

@@ -1,4 +1,3 @@
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
