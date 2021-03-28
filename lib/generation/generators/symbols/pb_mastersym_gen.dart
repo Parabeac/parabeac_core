@@ -15,8 +15,6 @@ class PBMasterSymbolGenerator extends PBGenerator {
     generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
-      generatorContext.overridableProperties =
-          source.overridableProperties ?? [];
       if (source.child == null) {
         return '';
       }
