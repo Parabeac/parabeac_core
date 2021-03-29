@@ -1,4 +1,3 @@
-import 'package:parabeac_core/eggs/injected_back_arrow.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
@@ -16,7 +15,7 @@ class PBPluginListHelper {
     allowListNames = {
       '<tabbar>': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
-      '<navbar>': InjectedNavbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
+      '<navbar>': InjectedAppbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
           currentContext: context),
       '<tab>': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),

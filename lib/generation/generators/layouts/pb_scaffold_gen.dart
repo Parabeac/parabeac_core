@@ -12,6 +12,10 @@ class PBScaffoldGenerator extends PBGenerator {
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
+    var appBar = source.getAttributeNamed('appBar')?.attributeNode;
+    var body = source.getAttributeNamed('body')?.attributeNode;
+    var bottomNavBar =
+        source.getAttributeNamed('bottomNavigationBar')?.attributeNode;
     if (source is InheritedScaffold) {
       var buffer = StringBuffer();
       buffer.write('Scaffold(\n');
@@ -20,30 +24,28 @@ class PBScaffoldGenerator extends PBGenerator {
         var str = PBColorGenHelper().generate(source, generatorContext);
         buffer.write(str);
       }
-      if (source.navbar != null) {
+      if (appBar != null) {
         buffer.write('appBar: ');
         var newGeneratorContext =
             GeneratorContext(sizingContext: SizingValueContext.PointValue);
-        var appbar = source.navbar.generator
-            .generate(source.navbar, newGeneratorContext);
+        var appbarStr = appBar.generator.generate(appBar, newGeneratorContext);
 
-        buffer.write('$appbar,\n');
+        buffer.write('$appbarStr,\n');
       }
-      if (source.tabbar != null) {
+      if (bottomNavBar != null) {
         buffer.write('bottomNavigationBar: ');
         var newGeneratorContext =
             GeneratorContext(sizingContext: SizingValueContext.PointValue);
-        var navigationBar = source.tabbar.generator
-            .generate(source.tabbar, newGeneratorContext);
+        var navigationBar =
+            bottomNavBar.generator.generate(bottomNavBar, newGeneratorContext);
         buffer.write('$navigationBar, \n');
       }
 
-      if (source.child != null) {
+      if (body != null) {
         // hack to pass screen width and height to the child
         buffer.write('body: ');
-        var body =
-            source.child.generator.generate(source.child, generatorContext);
-        buffer.write('$body, \n');
+        var bodyStr = body.generator.generate(body, generatorContext);
+        buffer.write('$bodyStr, \n');
       }
       buffer.write(')');
       return buffer.toString();

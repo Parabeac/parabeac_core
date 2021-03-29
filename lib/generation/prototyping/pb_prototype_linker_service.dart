@@ -33,36 +33,9 @@ class PBPrototypeLinkerService {
 
     while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
-      if (currentNode is PBLayoutIntermediateNode) {
-        currentNode.children.forEach(stack.add);
-      } else if (currentNode is PBVisualIntermediateNode &&
-          currentNode.child != null) {
-        stack.add(currentNode.child);
-      } else if (currentNode is PBInjectedNode && currentNode.child != null) {
-        stack.add(currentNode.child);
-      }
-      if (currentNode is InheritedScaffold) {
-        if (currentNode.navbar != null) {
-          stack.add(currentNode.navbar);
-        }
-        if (currentNode.tabbar != null) {
-          stack.add(currentNode.tabbar);
-        }
-      }
-      // TODO: This should be replaced for something more optimal
-      if (currentNode is InjectedNavbar) {
-        if (currentNode.leadingItem != null) {
-          stack.add(currentNode.leadingItem);
-        }
-        if (currentNode.middleItem != null) {
-          stack.add(currentNode.middleItem);
-        }
-        if (currentNode.trailingItem != null) {
-          stack.add(currentNode.trailingItem);
-        }
-      } else if (currentNode is InjectedTabBar) {
-        currentNode.tabs.forEach((tab) => stack.add(tab));
-      }
+      currentNode.attributes.forEach((attribute) {
+        attribute.attributeNodes.forEach(stack.add);
+      });
       if (currentNode is InheritedScaffold) {
         await _prototypeStorage.addPageNode(currentNode);
       } else if (currentNode is PBInheritedIntermediate &&

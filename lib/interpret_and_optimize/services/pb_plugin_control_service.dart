@@ -64,10 +64,12 @@ class PBPluginControlService implements PBGenerationService {
         }
 
         /// Add next depth layer to queue.
-        if (currentIntermediateNode is PBVisualIntermediateNode) {
+        if (currentIntermediateNode is PBVisualIntermediateNode &&
+            currentIntermediateNode.child != null) {
           queue.add(LayerTuple(
               [currentIntermediateNode.child], currentIntermediateNode));
-        } else if (currentIntermediateNode is PBLayoutIntermediateNode) {
+        } else if (currentIntermediateNode is PBLayoutIntermediateNode &&
+            currentIntermediateNode.children != null) {
           queue.add(LayerTuple(
               currentIntermediateNode.children.cast<PBIntermediateNode>(),
               currentIntermediateNode));

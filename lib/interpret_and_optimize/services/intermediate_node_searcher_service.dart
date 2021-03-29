@@ -47,11 +47,14 @@ class PBIntermediateNodeSearcherService {
     while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
       if (currentNode is InheritedScaffold) {
-        if (currentNode.tabbar != null && currentNode.tabbar.tabs.isNotEmpty) {
-          for (var i = 0; i < currentNode.tabbar.tabs.length; i++) {
-            var child = currentNode.tabbar.tabs[i];
+        var tabbar =
+            currentNode.getAttributeNamed('bottomNavigationBar')?.attributeNode;
+        var tabs = tabbar?.getAttributeNamed('tabs')?.attributeNodes;
+        if (tabbar != null && tabs?.isNotEmpty ?? false) {
+          for (var i = 0; i < tabs.length; i++) {
+            var child = tabs[i];
             if (child.UUID == uuid) {
-              currentNode.tabbar.tabs[i].child = candidate;
+              tabs[i].child = candidate;
               return true;
             }
             stack.add(child);
