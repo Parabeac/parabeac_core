@@ -19,41 +19,49 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   var log = Logger('Symbol Instance Generator');
 
   @override
-  String generate(PBIntermediateNode source,
-      GeneratorContext generatorContext) {
+  String generate(
+      PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
-      var method_signature = source.functionCallName;
+      var method_signature = source.functionCallName.pascalCase;
       if (method_signature == null) {
         log.error(' Could not find master name on: $source');
         return 'Container(/** This Symbol was not found **/)';
       }
+
+      var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
+
       method_signature = PBInputFormatter.formatLabel(method_signature,
           destroy_digits: false, space_to_underscore: false, isTitle: false);
-      method_signature = method_signature.pascalCase;
       var buffer = StringBuffer();
+
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
+
+      if (overrideProp != null) {
+        buffer.write('${overrideProp} ?? ');
+      }
+
       buffer.write(method_signature);
       buffer.write('(');
       buffer.write('constraints,');
+
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
             buffer.write('${param.name}: ');
-            buffer.write(genSymbolInstance(param.UUID, param.value, source.overrideValues));
+            buffer.write(genSymbolInstance(
+                param.UUID, param.value, source.overrideValues));
             break;
           case InheritedBitmap:
             buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
             break;
           case TextStyle:
-          // hack to include import
+            // hack to include import
             source.generator.manager.data.addImport(
-                'package:${MainInfo()
-                    .projectName}/document/shared_props.g.dart');
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
             buffer.write(
-                '${param.name}: ${SharedStyle_UUIDToName[param.value] ??
-                    "TextStyle()"},');
+                '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
             break;
           default:
             buffer.write('${param.name}: \"${param.value}\",');
@@ -68,24 +76,27 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write(')');
       return buffer.toString();
     }
+    return '';
   }
 
   String genSymbolInstance(String overrideUUID, String UUID,
       List<PBSymbolInstanceOverridableValue> overrideValues,
-      { int depth = 1 }) {
+      {int depth = 1}) {
     var masterSymbol = PBSymbolStorage().getSharedMasterNodeBySymbolID(UUID);
-    assert(masterSymbol !=
-        null, 'Could not find master symbol with UUID: ${UUID}');
+    assert(masterSymbol != null,
+        'Could not find master symbol with UUID: ${UUID}');
     var buffer = StringBuffer();
     buffer.write('${masterSymbol.friendlyName}(constraints, ');
     for (var ovrValue in overrideValues) {
       var ovrUUIDStrings = ovrValue.UUID.split('/');
-      if ((ovrUUIDStrings.length == depth + 1) && (ovrUUIDStrings[depth-1] == overrideUUID)) {
+      if ((ovrUUIDStrings.length == depth + 1) &&
+          (ovrUUIDStrings[depth - 1] == overrideUUID)) {
         var ovrUUID = ovrUUIDStrings[depth];
         switch (ovrValue.type) {
           case PBSharedInstanceIntermediateNode:
-            buffer.write(
-                genSymbolInstance(ovrValue.value, ovrUUID, overrideValues, depth: depth + 1));
+            buffer.write(genSymbolInstance(
+                ovrValue.value, ovrUUID, overrideValues,
+                depth: depth + 1));
             break;
           case InheritedBitmap:
             var name = SN_UUIDtoVarName[ovrUUID + '_image'];
@@ -93,8 +104,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             var name = SN_UUIDtoVarName[ovrUUID + '_textStyle'];
-            buffer.write('${name}: ${SharedStyle_UUIDToName[ovrValue.value] ??
-                "TextStyle()"},');
+            buffer.write(
+                '${name}: ${SharedStyle_UUIDToName[ovrValue.value] ?? "TextStyle()"},');
             break;
           default:
             var name = SN_UUIDtoVarName[ovrUUID];
