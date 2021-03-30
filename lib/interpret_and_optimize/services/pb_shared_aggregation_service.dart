@@ -43,8 +43,9 @@ class PBSharedInterAggregationService {
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
     for (var prop in sharedMasterNode.overridableProperties) {
+      var targetUUID = _findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, prop?.UUID);
+          rootChildNode, targetUUID);
       if (prop.type == PBSharedInstanceIntermediateNode) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
@@ -85,7 +86,8 @@ class PBSharedInterAggregationService {
           instanceIntermediateNode.sharedParamValues.map((v) {
         for (var symParam in masterNode.overridableProperties) {
           if (symParam.propertyName == v.overrideName) {
-            return PBSharedParameterValue(symParam.type, v.value, symParam.UUID, symParam.propertyName);
+            return PBSharedParameterValue(
+                symParam.type, v.value, symParam.UUID, symParam.propertyName);
           }
         }
         return null;
@@ -100,4 +102,13 @@ class PBSharedInterAggregationService {
 
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
+
+  /// Method that splits `target` according to `delimeter`
+  /// and returns the last entry in the list.
+  String _findLastOf(String target, String delimeter) {
+    if (target == null || delimeter == null) {
+      return '';
+    }
+    return target.split(delimeter).last;
+  }
 }
