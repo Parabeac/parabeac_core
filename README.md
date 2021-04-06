@@ -2,7 +2,7 @@
 
 ![Parabeac Logo](https://kindling-sketch.s3.amazonaws.com/1*_cqBeo8Gw2eAxdJOZ7TmmA.png)
 
-Parabeac-Core is an open-source repository that converts design files into Flutter code.
+Parabeac-Core converts design files into Flutter code driven by open-source & community.
 
 <a href="https://www.producthunt.com/posts/parabeac?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-parabeac" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=238516&theme=light" alt="Parabeac - Open-source design to Flutter converter | Product Hunt Embed" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
 
@@ -19,7 +19,7 @@ Parabeac-Core is an open-source repository that converts design files into Flutt
 </h3>
 
 # Table of Contents
-1. [Why are we here?](#what-is-parabeac-core)
+1. [Why are we here?](#why-are-we-here)
 2. [Get Started](#get-started)
     
     1. [Cloning the Repo](#cloning-the-repo)
@@ -137,16 +137,13 @@ To set the state management configuration, head over to edit `/Parabeac-Core/lib
 
 Here you can replace the `state-management` property to `bloc`, `provider`, or `riverpod`.
 
-For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) 
+For sample Sketch and Figma files you can use to test state management, please see [Get Started](#get-started) or see [here](https://github.com/Parabeac/Parabeac-Core/wiki/State-Management-basics) to understand how to set up your design file. 
 
-You can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this and if you need any help!
+If we don't support your state management system, you can learn how to easily create your own state management configuration in the [wiki](https://github.com/Parabeac/Parabeac-Core/wiki/How-to-Create-a-State-Management-Configuration), let us know if you're thinking about doing this, we're here to help! :)
 
 # How to contribute
 Welcome! The best way to contribute to Parabeac is through pull requests, filing issues on Github, writing documentation & helping others in our Discord community. We are an early project, but like many other projects, helping with bugs that others have filed on Stack Overflow is extremely helpful. We recommend filing bugs & feature requests on the Github issue tracker. For more details make sure to check out our [wiki](https://github.com/Parabeac/Parabeac-Core/wiki).
 
-# How to contribute
-
-The success of Parabeac-Core relies on community, and there are many ways to be apart of it.
 
 # Running the exported code
 ### Requirements
@@ -182,8 +179,3 @@ The Parabeac Design Protocol helps designers define UI/UX elements within Design
 * **Naming Semantics**: Naming semantics are what trigger eggs.
 * **Symbols**: Symbols define reusable items so that developers can reuse the code generated.
 * **Describing States**: By using the naming convention of seperating the name of the element and the name of the state that the element is in like the following, `nameOfElement/default` & `nameOfElement/onClicked` you can describe different states which are exported to the state management system the development team configured.
-
-# Upcoming & Known Issues
-
- - Plugin Duplication in the Plugin Service
- - Egg Marketplace
