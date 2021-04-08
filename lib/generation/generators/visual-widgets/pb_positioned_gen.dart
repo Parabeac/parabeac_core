@@ -1,7 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
@@ -26,7 +25,8 @@ class PBPositionedGenerator extends PBGenerator {
       var right = source.right;
 
       // TODO: this should be for all widgets once LayoutBuilder and constraints are used
-      if (source.generator.templateStrategy is StatelessTemplateStrategy) {
+      if (generatorContext.sizingContext ==
+          SizingValueContext.LayoutBuilderValue) {
         if (source.currentContext?.screenTopLeftCorner?.x != null &&
             source.currentContext?.screenBottomRightCorner?.x != null) {
           var screenWidth = ((source.currentContext?.screenTopLeftCorner?.x) -
