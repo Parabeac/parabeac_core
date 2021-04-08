@@ -9,7 +9,6 @@ class InjectedPositioned extends PBIntermediateNode
   final PositioningHolder positionedHolder;
 
   PBContext currentContext;
-  var child;
 
   final String UUID;
 

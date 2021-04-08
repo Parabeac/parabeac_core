@@ -25,8 +25,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   final String UUID;
 
-  Map alignment = {};
-
   // @override
   // PBContext currentContext;
 
@@ -36,7 +34,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   PBIntermediateRowLayout(String name, this.UUID, {PBContext currentContext})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
     generator = PBRowGenerator();
-    checkCrossAxisAlignment();
   }
 
   @override
@@ -44,6 +41,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   @override
   void alignChildren() {
+    checkCrossAxisAlignment();
     if (currentContext.configuration.widgetSpacing == 'Expanded') {
       _addPerpendicularAlignment();
       _addParallelAlignment();
@@ -95,14 +93,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;
-  }
-
-  checkCrossAxisAlignment() {
-    // TODO: this is the default for now
-    alignment['crossAxisAlignment'] =
-        'crossAxisAlignment: CrossAxisAlignment.start,';
-    alignment['mainAxisAlignment'] =
-        'mainAxisAlignment: MainAxisAlignment.center,';
   }
 
   @override

@@ -39,46 +39,17 @@ class PBAlignGenerationService implements PBGenerationService {
       var currentLayer = queue.removeAt(0);
 
       for (var currentIntermediateNode in currentLayer.nodeLayer) {
-        if (currentIntermediateNode is PBVisualIntermediateNode &&
-            currentIntermediateNode.child != null &&
-            currentIntermediateNode.child is PBVisualIntermediateNode) {
+        if (currentIntermediateNode is PBVisualIntermediateNode) {
           currentIntermediateNode.alignChild();
         } else if (currentIntermediateNode is PBLayoutIntermediateNode) {
           currentIntermediateNode.alignChildren();
         }
 
-        /// Add next depth layer to queue.
-        if (currentIntermediateNode is InjectedPositioned ||
-            currentIntermediateNode is PBDestHolder) {
-          if (currentIntermediateNode.child.child == null) {
-            continue;
-          }
-          // Skip Align
-          queue.add(LayerTuple([currentIntermediateNode.child.child],
-              currentIntermediateNode.child));
-        } else if (currentIntermediateNode is PBVisualIntermediateNode) {
-          if (currentIntermediateNode.child == null) {
-            continue;
-          }
-          queue.add(LayerTuple(
-              [currentIntermediateNode.child], currentIntermediateNode));
-        } else if (currentIntermediateNode is PBLayoutIntermediateNode) {
-          queue.add(LayerTuple(
-              currentIntermediateNode.children?.cast<PBIntermediateNode>(),
-              currentIntermediateNode));
-        } else if (currentIntermediateNode
-            is PBSharedInstanceIntermediateNode) {
-          if (currentIntermediateNode.child == null) {
-            continue;
-          }
-          queue.add(LayerTuple(
-              [currentIntermediateNode.child], currentIntermediateNode));
-          // Do not align Instance Nodes
-//          continue;
-        } else {
-          log.warning(
-              'We don\'t support class type ${currentIntermediateNode.runtimeType} for adding to the queue.');
-        }
+        currentIntermediateNode.attributes.forEach((attribute) {
+          attribute.attributeNodes.forEach((node) {
+            queue.add(LayerTuple([node], currentIntermediateNode));
+          });
+        });
       }
     }
     return originalRoot;

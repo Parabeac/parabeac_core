@@ -11,7 +11,7 @@ import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var figmaFileID = 'https://api.figma.com/v1/files/zXXWPWb5wJXd0ImGUjEU1X';
+  var figmaFileID = 'https://api.figma.com/v1/files/cmaAGe2hwCp7A5pmEQ2C80';
   var figmaAPIKey = Platform.environment['FIG_API_KEY'];
   group(
     'Input to PBDL test',

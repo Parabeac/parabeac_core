@@ -16,5 +16,6 @@ class PBSpacerGenerator extends PBGenerator {
       buffer.write(')');
       return buffer.toString();
     }
+    return '';
   }
 }

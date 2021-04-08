@@ -83,10 +83,12 @@ class InheritedContainer extends PBVisualIntermediateNode
   /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
   @override
   void alignChild() {
-    var align =
-        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-    align.addChild(child);
-    align.alignChild();
-    child = align;
+    if (child != null) {
+      var align =
+          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
+      align.addChild(child);
+      align.alignChild();
+      child = align;
+    }
   }
 }

@@ -5,7 +5,6 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class Flexible extends PBVisualIntermediateNode {
   int flex;
-  var child;
 
   @override
   var currentContext;
@@ -19,7 +18,7 @@ class Flexible extends PBVisualIntermediateNode {
   Flexible(
     this.UUID, {
     this.currentContext,
-    this.child,
+    child,
     this.flex,
     this.topLeftCorner,
     this.bottomRightCorner,
@@ -31,6 +30,7 @@ class Flexible extends PBVisualIntermediateNode {
           UUID: UUID,
         ) {
     generator = PBFlexibleGenerator();
+    this.child = child;
   }
 
   Point topLeftCorner;

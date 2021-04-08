@@ -2,6 +2,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
@@ -16,7 +17,8 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   final String UUID;
   PBContext currentContext;
   String semanticName = '<tabbar>';
-  List<Tab> tabs = [];
+
+  List<PBIntermediateNode> get tabs => getAttributeNamed('tabs').attributeNodes;
 
   InjectedTabBar(
     Point topLeftCorner,
@@ -26,6 +28,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
     this.currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBTabBarGenerator();
+    addAttribute(PBAttribute('tabs'));
   }
 
   @override
@@ -35,13 +38,13 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
           .originalRef
           .name
           .contains('<tab>')) {
-        assert(node is! Tab, 'I wrote something wrong here: IvanH');
-        tabs.add(node);
+        assert(node is! Tab, 'node should be a Tab');
+        getAttributeNamed('tabs').attributeNodes.add(node);
       }
     }
 
     if (node is Tab) {
-      tabs.add(node);
+      getAttributeNamed('tabs').attributeNodes.add(node);
     }
   }
 
@@ -73,15 +76,16 @@ class PBTabBarGenerator extends PBGenerator {
       PBIntermediateNode source, GeneratorContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
+      var tabs = source.tabs;
+
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
       buffer.write('type: BottomNavigationBarType.fixed,');
       try {
         buffer.write('items:[');
-        for (var i = 0; i < source.tabs.length; i++) {
+        for (var i = 0; i < tabs.length; i++) {
           buffer.write('BottomNavigationBarItem(');
-          var res = source.tabs[i].child.generator
-              .generate(source.tabs[i].child, generatorContext);
+          var res = manager.generate(tabs[i].child);
           buffer.write('icon: $res,');
           buffer.write('title: Text(""),');
           buffer.write('),');

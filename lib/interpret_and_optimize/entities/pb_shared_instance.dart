@@ -72,11 +72,13 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
-    var align =
-        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-    align.addChild(child);
-    align.alignChild();
-    child = align;
+    if (child != null) {
+      var align =
+          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
+      align.addChild(child);
+      align.alignChild();
+      child = align;
+    }
   }
 }
 

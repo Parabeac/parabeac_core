@@ -1,19 +1,17 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
-class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
-  var leadingItem;
-  var middleItem;
-  var trailingItem;
+class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   PBContext currentContext;
 
   @override
@@ -21,11 +19,21 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
 
   String UUID;
 
-  InjectedNavbar(
+  PBIntermediateNode get leadingItem =>
+      getAttributeNamed('leading')?.attributeNode;
+  PBIntermediateNode get middleItem =>
+      getAttributeNamed('title')?.attributeNode;
+  PBIntermediateNode get trailingItem =>
+      getAttributeNamed('actions')?.attributeNode;
+
+  InjectedAppbar(
       Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
+    addAttribute(PBAttribute('leading'));
+    addAttribute(PBAttribute('title'));
+    addAttribute(PBAttribute('actions'));
   }
 
   @override
@@ -35,28 +43,20 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
           .originalRef
           .name
           .contains('<leading>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => leadingItem = value);
+        getAttributeNamed('leading').attributeNode = node;
       }
 
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<trailing>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) => trailingItem = value);
+        getAttributeNamed('actions').attributeNode = node;
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<middle>')) {
-        Interpret()
-            .generateNonRootItem((node as PBInheritedIntermediate).originalRef)
-            .then((value) {
-          middleItem = value;
-        });
+        getAttributeNamed('title').attributeNode = node;
       }
     }
 
@@ -64,12 +64,22 @@ class InjectedNavbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void alignChild() {}
+  void alignChild() {
+    /// This align only modifies middleItem
+    var tempNode = InjectedContainer(
+      middleItem.bottomRightCorner,
+      middleItem.topLeftCorner,
+      middleItem.name,
+      middleItem.UUID,
+    )..addChild(middleItem);
+
+    getAttributeNamed('title').attributeNode = tempNode;
+  }
 
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedNavbar(
+    return InjectedAppbar(
         topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
@@ -89,43 +99,40 @@ class PBAppBarGenerator extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.AppBarChild;
-    if (source is InjectedNavbar) {
+    generatorContext.sizingContext = SizingValueContext.PointValue;
+    if (source is InjectedAppbar) {
       var buffer = StringBuffer();
 
       buffer.write('AppBar(');
-      if (source.leadingItem != null) {
-        source.leadingItem.currentContext = source.currentContext;
-        buffer.write(
-            'leading: ${_wrapOnIconButton(source.leadingItem.generator.generate(source.leadingItem, generatorContext))}');
-      }
-      if (source.middleItem != null) {
-        source.middleItem.currentContext = source.currentContext;
-        buffer.write(
-            'title: ${source.middleItem.generator.generate(source.middleItem, generatorContext)},');
-      }
 
-      if (source.trailingItem != null) {
-        var trailingItem = '';
-        source.trailingItem.currentContext = source.currentContext;
-        trailingItem =
-            '${source.trailingItem.generator.generate(source.trailingItem, generatorContext)}';
-        buffer.write('actions: [${_wrapOnIconButton(trailingItem)}],');
-      }
+      source.attributes.forEach((attribute) {
+        attribute.attributeNode.currentContext = source.currentContext;
+        buffer.write(
+            '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
+      });
 
       buffer.write(')');
       return buffer.toString();
     }
   }
 
+  String _wrapOnBrackets(String body, bool isActions, bool isLeading) {
+    if (isActions) {
+      return '[${_wrapOnIconButton(body)}]';
+    } else if (isLeading) {
+      return _wrapOnIconButton(body);
+    }
+    return '$body';
+  }
+
   String _wrapOnIconButton(String body) {
-    return '''
-    IconButton(
-        icon: $body,
+    return ''' 
+      IconButton(
+        icon: ${body},
         onPressed: () {
-            // TODO: Fill action
-            },
-            ),
+          // TODO: Fill action
+        }
+      )
     ''';
   }
 }
