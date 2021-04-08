@@ -21,8 +21,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   @override
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
-    if (source is PBSharedInstanceIntermediateNode && source.foundMaster) {
-      var method_signature = source.functionCallName.pascalCase;
+    if (source is PBSharedInstanceIntermediateNode) {
+      var method_signature = source.functionCallName?.pascalCase;
       if (method_signature == null) {
         log.error(' Could not find master name on: $source');
         return 'Container(/** This Symbol was not found **/)';
