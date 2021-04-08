@@ -33,6 +33,9 @@ class PBPrototypeLinkerService {
 
     while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
+      if (currentNode == null) {
+        continue;
+      }
       currentNode.attributes.forEach((attribute) {
         attribute.attributeNodes.forEach(stack.add);
       });
