@@ -48,8 +48,8 @@ class PBPositionedGenerator extends PBGenerator {
         }
       }
 
-      buffer.write('left: $multStringH$left, right: $multStringH$right,');
-      buffer.write('top: $multStringV$top, bottom: $multStringV$bottom,');
+      buffer.write('left: $multStringH${left.toStringAsFixed(3)}, right: $multStringH${right.toStringAsFixed(3)},');
+      buffer.write('top: $multStringV${top.toStringAsFixed(3)}, bottom: $multStringV${bottom.toStringAsFixed(3)},');
 
       try {
         source.child.currentContext = source.currentContext;
