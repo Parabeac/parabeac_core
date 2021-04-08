@@ -36,9 +36,6 @@ class PBAlignGenerationService implements PBGenerationService {
     var queue = <LayerTuple>[];
     queue.add(LayerTuple([originalRoot], null));
     while (queue.isNotEmpty) {
-      if (queue.isEmpty) {
-        continue;
-      }
       var currentLayer = queue.removeAt(0);
 
       for (var currentIntermediateNode in currentLayer.nodeLayer) {
@@ -46,6 +43,9 @@ class PBAlignGenerationService implements PBGenerationService {
           currentIntermediateNode.alignChild();
         } else if (currentIntermediateNode is PBLayoutIntermediateNode) {
           currentIntermediateNode.alignChildren();
+        }
+        if (currentIntermediateNode == null) {
+          continue;
         }
 
         currentIntermediateNode.attributes.forEach((attribute) {
