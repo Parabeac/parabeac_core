@@ -17,10 +17,13 @@ class PBPositionedGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Positioned(');
 
-      var hAlignValue = source.horizontalAlignValue;
-      var vAlignValue = source.verticalAlignValue;
       var multStringH = '';
       var multStringV = '';
+
+      var top = source.top;
+      var bottom = source.bottom;
+      var left = source.left;
+      var right = source.right;
 
       // TODO: this should be for all widgets once LayoutBuilder and constraints are used
       if (source.generator.templateStrategy is StatelessTemplateStrategy) {
@@ -30,7 +33,8 @@ class PBPositionedGenerator extends PBGenerator {
                   (source.currentContext?.screenBottomRightCorner?.x))
               .abs();
           multStringH = 'constraints.maxWidth * ';
-          hAlignValue = hAlignValue / screenWidth;
+          left = source.left / screenWidth;
+          right = source.right / screenWidth;
         }
 
         if (source.currentContext?.screenTopLeftCorner?.y != null &&
@@ -39,14 +43,13 @@ class PBPositionedGenerator extends PBGenerator {
                   (source.currentContext.screenBottomRightCorner.y))
               .abs();
           multStringV = 'constraints.maxHeight * ';
-          vAlignValue = vAlignValue / screenHeight;
+          top = source.top / screenHeight;
+          bottom = source.bottom / screenHeight;
         }
       }
 
-      buffer.write(
-          'right: ${multStringH}${source.right}, left: $multStringH${source.left},');
-      buffer.write(
-          'top: $multStringV${source.top}, bottom: $multStringV${source.bottom},');
+      buffer.write('left: $multStringH$left, right: $multStringH$right,');
+      buffer.write('top: $multStringV$top, bottom: $multStringV$bottom,');
 
       try {
         source.child.currentContext = source.currentContext;

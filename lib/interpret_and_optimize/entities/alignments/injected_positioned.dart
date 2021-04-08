@@ -6,28 +6,25 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
-  final PositioningHolder positionedHolder;
-
   PBContext currentContext;
 
   final String UUID;
 
-  double horizontalAlignValue, verticalAlignValue;
-  String horizontalAlignType, verticalAlignType;
+  double top, bottom, left, right;
 
-  double top, bottom, left, right = 0;
-
-  InjectedPositioned(this.UUID, {this.positionedHolder, this.currentContext})
-      : super(Point(0, 0), Point(0, 0), UUID, '',
+  InjectedPositioned(
+    this.UUID, {
+    this.top,
+    this.bottom,
+    this.left,
+    this.right,
+    this.currentContext,
+  }) : super(Point(0, 0), Point(0, 0), UUID, '',
             currentContext: currentContext) {
-    top = positionedHolder.top;
-    bottom = positionedHolder.bottom;
-    left = positionedHolder.left;
-    right = positionedHolder.right;
-    horizontalAlignType = positionedHolder.h_type.toString()?.split('.')[1];
-    verticalAlignType = positionedHolder.v_type.toString()?.split('.')[1];
-    horizontalAlignValue = positionedHolder.h_value;
-    verticalAlignValue = positionedHolder.v_value;
+    top ??= 0;
+    bottom ??= 0;
+    left ??= 0;
+    right ??= 0;
     generator = PBPositionedGenerator();
   }
 
@@ -38,19 +35,3 @@ class InjectedPositioned extends PBIntermediateNode
     child = node;
   }
 }
-
-/// A object to help us communicate positioning type & value.
-class PositioningHolder {
-  double top;
-  double bottom;
-  double left;
-  double right;
-  HorizontalAlignType h_type;
-  double h_value;
-  VerticalAlignType v_type;
-  double v_value;
-}
-
-enum HorizontalAlignType { left, right }
-
-enum VerticalAlignType { top, bottom }
