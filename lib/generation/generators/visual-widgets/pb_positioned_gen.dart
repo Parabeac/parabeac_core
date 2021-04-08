@@ -43,14 +43,10 @@ class PBPositionedGenerator extends PBGenerator {
         }
       }
 
-      if (source.horizontalAlignValue != null) {
-        buffer.write(
-            '${source.horizontalAlignType}: ${multStringH}${hAlignValue},');
-      }
-      if (source.verticalAlignValue != null) {
-        buffer.write(
-            '${source.verticalAlignType} :${multStringV}${vAlignValue},');
-      }
+      buffer.write(
+          'right: ${multStringH}${source.right}, left: $multStringH${source.left},');
+      buffer.write(
+          'top: $multStringV${source.top}, bottom: $multStringV${source.bottom},');
 
       try {
         source.child.currentContext = source.currentContext;

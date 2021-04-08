@@ -15,9 +15,15 @@ class InjectedPositioned extends PBIntermediateNode
   double horizontalAlignValue, verticalAlignValue;
   String horizontalAlignType, verticalAlignType;
 
+  double top, bottom, left, right = 0;
+
   InjectedPositioned(this.UUID, {this.positionedHolder, this.currentContext})
       : super(Point(0, 0), Point(0, 0), UUID, '',
             currentContext: currentContext) {
+    top = positionedHolder.top;
+    bottom = positionedHolder.bottom;
+    left = positionedHolder.left;
+    right = positionedHolder.right;
     horizontalAlignType = positionedHolder.h_type.toString()?.split('.')[1];
     verticalAlignType = positionedHolder.v_type.toString()?.split('.')[1];
     horizontalAlignValue = positionedHolder.h_value;
@@ -35,6 +41,10 @@ class InjectedPositioned extends PBIntermediateNode
 
 /// A object to help us communicate positioning type & value.
 class PositioningHolder {
+  double top;
+  double bottom;
+  double left;
+  double right;
   HorizontalAlignType h_type;
   double h_value;
   VerticalAlignType v_type;

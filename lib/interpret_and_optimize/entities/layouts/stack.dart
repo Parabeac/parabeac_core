@@ -64,6 +64,12 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
           positionedHolder.v_type == VerticalAlignType.top
               ? child.topLeftCorner.y - topLeftCorner.y
               : bottomRightCorner.y - child.bottomRightCorner.y;
+              
+      positionedHolder.top = child.topLeftCorner.y - topLeftCorner.y;
+      positionedHolder.bottom = bottomRightCorner.y - child.bottomRightCorner.y;
+
+      positionedHolder.left = child.topLeftCorner.x - topLeftCorner.x;
+      positionedHolder.right = bottomRightCorner.x - child.bottomRightCorner.x;
 
       alignedChildren.add(InjectedPositioned(Uuid().v4(),
           positionedHolder: positionedHolder, currentContext: currentContext)
