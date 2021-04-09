@@ -55,10 +55,12 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
       alignedChildren.add(InjectedPositioned(
         Uuid().v4(),
-        top: top,
-        bottom: bottom,
-        left: left,
-        right: right,
+        valueHolder: PositionedValueHolder(
+          top: top,
+          bottom: bottom,
+          left: left,
+          right: right,
+        ),
         currentContext: currentContext,
       )..addChild(child));
     }

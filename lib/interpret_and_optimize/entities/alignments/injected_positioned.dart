@@ -10,21 +10,14 @@ class InjectedPositioned extends PBIntermediateNode
 
   final String UUID;
 
-  double top, bottom, left, right;
+  final PositionedValueHolder valueHolder;
 
   InjectedPositioned(
     this.UUID, {
-    this.top,
-    this.bottom,
-    this.left,
-    this.right,
+    this.valueHolder,
     this.currentContext,
   }) : super(Point(0, 0), Point(0, 0), UUID, '',
             currentContext: currentContext) {
-    top ??= 0;
-    bottom ??= 0;
-    left ??= 0;
-    right ??= 0;
     generator = PBPositionedGenerator();
   }
 
@@ -33,5 +26,25 @@ class InjectedPositioned extends PBIntermediateNode
     assert(child == null,
         'Tried assigning multiple children to class [InjectedPositioned]');
     child = node;
+  }
+}
+
+/// Class to help us communicate and manipulate positioning values.
+class PositionedValueHolder {
+  double top;
+  double bottom;
+  double left;
+  double right;
+
+  PositionedValueHolder({
+    this.top,
+    this.bottom,
+    this.left,
+    this.right,
+  }) {
+    top ??= 0;
+    bottom ??= 0;
+    left ??= 0;
+    right ??= 0;
   }
 }

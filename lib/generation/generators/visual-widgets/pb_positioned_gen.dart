@@ -19,37 +19,29 @@ class PBPositionedGenerator extends PBGenerator {
       var multStringH = '';
       var multStringV = '';
 
-      var top = source.top;
-      var bottom = source.bottom;
-      var left = source.left;
-      var right = source.right;
+      var valueHolder = PositionedValueHolder(
+        top: source.valueHolder.top,
+        bottom: source.valueHolder.bottom,
+        left: source.valueHolder.left,
+        right: source.valueHolder.right,
+      );
 
-      // TODO: this should be for all widgets once LayoutBuilder and constraints are used
       if (generatorContext.sizingContext ==
+          SizingValueContext.MediaQueryValue) {
+        multStringH = 'MediaQuery.of(context).size.width * ';
+        multStringV = 'MediaQuery.of(context).size.height *';
+        _calculateRelativeValues(source, valueHolder);
+      } else if (generatorContext.sizingContext ==
           SizingValueContext.LayoutBuilderValue) {
-        if (source.currentContext?.screenTopLeftCorner?.x != null &&
-            source.currentContext?.screenBottomRightCorner?.x != null) {
-          var screenWidth = ((source.currentContext?.screenTopLeftCorner?.x) -
-                  (source.currentContext?.screenBottomRightCorner?.x))
-              .abs();
-          multStringH = 'constraints.maxWidth * ';
-          left = source.left / screenWidth;
-          right = source.right / screenWidth;
-        }
-
-        if (source.currentContext?.screenTopLeftCorner?.y != null &&
-            source.currentContext?.screenBottomRightCorner?.y != null) {
-          var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
-                  (source.currentContext.screenBottomRightCorner.y))
-              .abs();
-          multStringV = 'constraints.maxHeight * ';
-          top = source.top / screenHeight;
-          bottom = source.bottom / screenHeight;
-        }
+        _calculateRelativeValues(source, valueHolder);
+        multStringH = 'constraints.maxWidth * ';
+        multStringV = 'constraints.maxHeight * ';
       }
 
-      buffer.write('left: $multStringH${left.toStringAsFixed(3)}, right: $multStringH${right.toStringAsFixed(3)},');
-      buffer.write('top: $multStringV${top.toStringAsFixed(3)}, bottom: $multStringV${bottom.toStringAsFixed(3)},');
+      buffer.write(
+          'left: $multStringH${valueHolder.left.toStringAsFixed(3)}, right: $multStringH${valueHolder.right.toStringAsFixed(3)},');
+      buffer.write(
+          'top: $multStringV${valueHolder.top.toStringAsFixed(3)}, bottom: $multStringV${valueHolder.bottom.toStringAsFixed(3)},');
 
       try {
         source.child.currentContext = source.currentContext;
@@ -65,6 +57,27 @@ class PBPositionedGenerator extends PBGenerator {
 
       buffer.write(')');
       return buffer.toString();
+    }
+  }
+
+  void _calculateRelativeValues(
+      InjectedPositioned source, PositionedValueHolder holder) {
+    if (source.currentContext?.screenTopLeftCorner?.x != null &&
+        source.currentContext?.screenBottomRightCorner?.x != null) {
+      var screenWidth = ((source.currentContext?.screenTopLeftCorner?.x) -
+              (source.currentContext?.screenBottomRightCorner?.x))
+          .abs();
+      holder.left = source.valueHolder.left / screenWidth;
+      holder.right = source.valueHolder.right / screenWidth;
+    }
+
+    if (source.currentContext?.screenTopLeftCorner?.y != null &&
+        source.currentContext?.screenBottomRightCorner?.y != null) {
+      var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
+              (source.currentContext.screenBottomRightCorner.y))
+          .abs();
+      holder.top = source.valueHolder.top / screenHeight;
+      holder.bottom = source.valueHolder.bottom / screenHeight;
     }
   }
 }
