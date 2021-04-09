@@ -49,6 +49,9 @@ class InheritedText extends PBVisualIntermediateNode
     generator = PBTextGen();
 
     text = (originalRef as Text).content;
+    if (text.contains('\$')) {
+      text = _sanitizeText(text);
+    }
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
     auxiliaryData.color = toHex(originalRef.style.textStyle.fontColor);
     fontName = originalRef.style.textStyle.fontDescriptor.fontName;
@@ -66,6 +69,10 @@ class InheritedText extends PBVisualIntermediateNode
     } else if (alignmenttype == 3) {
       textAlignment = 'justify';
     }
+  }
+
+  String _sanitizeText(String text) {
+    return text.replaceAll('\$', '\\\$');
   }
 
   @override
