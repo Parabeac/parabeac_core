@@ -9,7 +9,7 @@ abstract class TemplateStrategy {
       {var args});
   String retrieveNodeName(var node) {
     var formatter = (name) => PBInputFormatter.formatLabel(name,
-        isTitle: true, space_to_underscore: false);
+        isTitle: true, spaceToUnderscore: false);
     var widgetName;
     if (node is PBIntermediateNode) {
       widgetName = formatter(node.name);
