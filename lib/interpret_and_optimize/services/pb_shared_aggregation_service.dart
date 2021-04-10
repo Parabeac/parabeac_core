@@ -49,8 +49,10 @@ class PBSharedInterAggregationService {
     for (var prop in sharedMasterNode.overridableProperties) {
       var targetUUID = _findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, targetUUID);
-      if (prop.type == PBSharedInstanceIntermediateNode) {
+          rootChildNode, prop?.UUID);
+      if (prop.value == null) {
+        log.warning('UUID: ${prop.UUID} not found in searchNodeByUUID');
+      } else if (prop.type == PBSharedInstanceIntermediateNode) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
