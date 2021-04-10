@@ -1,12 +1,16 @@
+
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
+import 'package:quick_log/quick_log.dart';
 
 class PBSharedInterAggregationService {
   PBSymbolStorage _symbolStorage;
+
+  var log = Logger('PBSharedInterAggregationService');
 
   static final PBSharedInterAggregationService _singleInstance =
       PBSharedInterAggregationService._internal();
@@ -45,7 +49,9 @@ class PBSharedInterAggregationService {
     for (var prop in sharedMasterNode.overridableProperties) {
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
           rootChildNode, prop?.UUID);
-      if (prop.type == PBSharedInstanceIntermediateNode) {
+      if (prop.value == null) {
+        log.warning('UUID: ${prop.UUID} not found in searchNodeByUUID');
+      } else if (prop.type == PBSharedInstanceIntermediateNode) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
