@@ -1,4 +1,3 @@
-
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -18,6 +17,7 @@ class PBSharedInterAggregationService {
   ///These are [PBSharedInstanceIntermediateNode] that have not found their [PBSharedMasterNode]; they are
   ///waiting to see their [PBSharedMasterNode] in order to populate their attributes.
   List<PBSharedInstanceIntermediateNode> _unregSymQueue;
+
   Iterable<PBSharedInstanceIntermediateNode> get unregSymQueue =>
       _unregSymQueue;
 
@@ -49,10 +49,12 @@ class PBSharedInterAggregationService {
     for (var prop in sharedMasterNode.overridableProperties) {
       var targetUUID = _findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, prop?.UUID);
+          rootChildNode, targetUUID);
       if (prop.value == null) {
-        log.warning('UUID: ${prop.UUID} not found in searchNodeByUUID');
-      } else if (prop.type == PBSharedInstanceIntermediateNode) {
+        // add Designer Warning here, not even sure if this is the designers fault or not
+        // log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
+      }
+      if ((prop.value != null) && (prop.type == PBSharedInstanceIntermediateNode)) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);

@@ -50,9 +50,12 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
-            buffer.write('${param.name}: ');
-            buffer.write(genSymbolInstance(
-                param.UUID, param.value, source.overrideValues));
+            String siString = genSymbolInstance(
+                param.UUID, param.value, source.overrideValues);
+            if (siString != '') {
+              buffer.write('${param.name}: ');
+              buffer.write(siString);
+            }
             break;
           case InheritedBitmap:
             buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
@@ -83,6 +86,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String genSymbolInstance(String overrideUUID, String UUID,
       List<PBSymbolInstanceOverridableValue> overrideValues,
       {int depth = 1}) {
+
+    if ((UUID == null) || (UUID == '')) {
+      return '';
+    }
+
     var masterSymbol;
     var nodeFound = PBSymbolStorage().getAllSymbolById(UUID);
     if (nodeFound is PBSharedMasterNode) {
@@ -95,6 +103,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       // Try to find master by looking for the master's SYMBOL_ID
       masterSymbol = PBSymbolStorage().getSharedMasterNodeBySymbolID(UUID);
     }
+    // file could have override names that don't exist?  That's really odd, but we have a file that does that.
+    if (masterSymbol == null) {
+        return '';
+    }
+
     assert(masterSymbol != null,
         'Could not find master symbol with UUID: ${UUID}');
     var buffer = StringBuffer();
