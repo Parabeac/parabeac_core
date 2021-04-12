@@ -94,12 +94,18 @@ void main() {
           mainTree: project,
           pageWriter: PBFlutterWriter());
     });
-    test('', () async {
-      /// Check that the Dart file was created
-      /// It should be a file named `testingPage`
-      /// Stafefulwidget with a Scaffold and a Container
-      await projectBuilder.convertToFlutterProject();
-    });
+    test(
+      '',
+      () async {
+        /// Check that the Dart file was created
+        /// It should be a file named `testingPage`
+        /// Stafefulwidget with a Scaffold and a Container
+        await projectBuilder.convertToFlutterProject();
+      },
+      timeout: Timeout(
+        Duration(minutes: 1),
+      ),
+    );
     tearDownAll(() {
       Process.runSync('rm', ['-rf', '$outputPath']);
     });

@@ -3,7 +3,7 @@ import 'package:parabeac_core/input/figma/helper/api_call_service.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  var figmaFileID = 'https://api.figma.com/v1/files/zXXWPWb5wJXd0ImGUjEU1X';
+  var figmaFileID = 'https://api.figma.com/v1/files/cmaAGe2hwCp7A5pmEQ2C80';
   var figmaAPIKey = Platform.environment['FIG_API_KEY'];
   group(
     'Checking that Figma is getting interpreted as a Map',

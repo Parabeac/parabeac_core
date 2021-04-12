@@ -24,7 +24,7 @@ void main() {
       lineShelf = await readYaml.indexOf('  shelf_proxy: ^0.1.0+7');
       expect(lineHttp >= 0, true);
       expect(lineShelf >= 0, true);
-    });
+    }, timeout: Timeout(Duration(minutes: 1)));
     tearDownAll(() {
       Process.runSync('rm', ['-r', 'tmptst'],
           workingDirectory:

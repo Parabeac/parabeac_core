@@ -63,41 +63,46 @@ class FigmaAssetProcessor extends AssetProcessingService {
       {bool writeAsFile = true}) async {
     // Call Figma API to get Image link
     return Future(() async {
-      var response = await APICallService.makeAPICall(
-          'https://api.figma.com/v1/images/${MainInfo().figmaProjectID}?ids=${uuids.join(',')}&use_absolute_bounds=true',
-          MainInfo().figmaKey);
+      List<List<String>> uuidsChunks = _listToChunks(uuids, 50);
 
-      if (response != null &&
-          response.containsKey('images') &&
-          response['images'] != null &&
-          response['images'].values.isNotEmpty) {
-        Map images = response['images'];
-        // Download the images
-        for (var entry in images.entries) {
-          if (entry?.value != null && entry?.value?.isNotEmpty) {
-            response = await http.get(entry.value).then((imageRes) async {
-              // Check if the request was successful
-              if (imageRes == null || imageRes.statusCode != 200) {
-                log.error('Image ${entry.key} was not processed correctly');
-              }
+      for (var list in uuidsChunks) {
+        var response = await APICallService.makeAPICall(
+            'https://api.figma.com/v1/images/${MainInfo().figmaProjectID}?ids=${list.join(',')}&use_absolute_bounds=true',
+            MainInfo().figmaKey);
 
-              if (writeAsFile) {
-                var file = File('${MainInfo().outputPath}pngs/${entry.key}.png'
-                    .replaceAll(':', '_'))
-                  ..createSync(recursive: true);
-                file.writeAsBytesSync(imageRes.bodyBytes);
-              } else {
-                await super.uploadToStorage(imageRes.bodyBytes, entry.key);
-              }
-              // TODO: Only print out when verbose flag is active
-              // log.debug('File written to following path ${file.path}');
-            }).catchError((e) {
-              MainInfo().sentry.captureException(exception: e);
-              log.error(e.toString());
-            });
+        if (response != null &&
+            response.containsKey('images') &&
+            response['images'] != null &&
+            response['images'].values.isNotEmpty) {
+          Map images = response['images'];
+          // Download the images
+          for (var entry in images.entries) {
+            if (entry?.value != null && entry?.value?.isNotEmpty) {
+              response = await http.get(entry.value).then((imageRes) async {
+                // Check if the request was successful
+                if (imageRes == null || imageRes.statusCode != 200) {
+                  log.error('Image ${entry.key} was not processed correctly');
+                }
+
+                if (writeAsFile) {
+                  var file = File(
+                      '${MainInfo().outputPath}pngs/${entry.key}.png'
+                          .replaceAll(':', '_'))
+                    ..createSync(recursive: true);
+                  file.writeAsBytesSync(imageRes.bodyBytes);
+                } else {
+                  await super.uploadToStorage(imageRes.bodyBytes, entry.key);
+                }
+                // TODO: Only print out when verbose flag is active
+                // log.debug('File written to following path ${file.path}');
+              }).catchError((e) {
+                MainInfo().sentry.captureException(exception: e);
+                log.error(e.toString());
+              });
+            }
           }
+          return response;
         }
-        return response;
       }
     });
   }
@@ -106,5 +111,25 @@ class FigmaAssetProcessor extends AssetProcessingService {
   Future<void> processRootElements(Map uuids) async {
     _addImagesToQueue(uuids.keys.toList());
     await processImageQueue(writeAsFile: false);
+  }
+
+  List _listToChunks(List currentList, int chuckSize) {
+    var temp = <String>[];
+    var counter = 0;
+    // ignore: omit_local_variable_types
+    List<List<String>> listOnChunks =
+        currentList.fold<List<List<String>>>([], (newList, i) {
+      counter++;
+      if (temp.length < chuckSize) {
+        temp.add(i);
+      }
+      if (temp.length >= chuckSize || currentList.length == counter) {
+        var newValue = List<String>.from(temp);
+        newList.add(newValue);
+        temp.clear();
+      }
+      return newList;
+    });
+    return listOnChunks;
   }
 }

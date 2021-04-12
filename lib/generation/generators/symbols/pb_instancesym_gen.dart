@@ -23,7 +23,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
-      var method_signature = source.functionCallName.pascalCase;
+      var method_signature = source.functionCallName?.pascalCase;
       if (method_signature == null) {
         log.error(' Could not find master name on: $source');
         return 'Container(/** This Symbol was not found **/)';
@@ -32,7 +32,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
 
       method_signature = PBInputFormatter.formatLabel(method_signature,
-          destroy_digits: false, space_to_underscore: false, isTitle: false);
+          destroy_digits: false, space_to_underscore: false, isTitle: true);
       var buffer = StringBuffer();
 
       buffer.write('LayoutBuilder( \n');
@@ -50,9 +50,12 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
-            buffer.write('${param.name}: ');
-            buffer.write(genSymbolInstance(
-                param.UUID, param.value, source.overrideValues));
+            String siString = genSymbolInstance(
+                param.UUID, param.value, source.overrideValues);
+            if (siString != '') {
+              buffer.write('${param.name}: ');
+              buffer.write(siString);
+            }
             break;
           case InheritedBitmap:
             buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
@@ -83,6 +86,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String genSymbolInstance(String overrideUUID, String UUID,
       List<PBSymbolInstanceOverridableValue> overrideValues,
       {int depth = 1}) {
+
+    if ((UUID == null) || (UUID == '')) {
+      return '';
+    }
+
     var masterSymbol;
     var nodeFound = PBSymbolStorage().getAllSymbolById(UUID);
     if (nodeFound is PBSharedMasterNode) {
@@ -95,6 +103,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       // Try to find master by looking for the master's SYMBOL_ID
       masterSymbol = PBSymbolStorage().getSharedMasterNodeBySymbolID(UUID);
     }
+    // file could have override names that don't exist?  That's really odd, but we have a file that does that.
+    if (masterSymbol == null) {
+        return '';
+    }
+
     assert(masterSymbol != null,
         'Could not find master symbol with UUID: ${UUID}');
     var buffer = StringBuffer();
