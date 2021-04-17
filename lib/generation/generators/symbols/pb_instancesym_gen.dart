@@ -32,7 +32,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
 
       method_signature = PBInputFormatter.formatLabel(method_signature,
-          destroy_digits: false, space_to_underscore: false, isTitle: true);
+          destroyDigits: false, spaceToUnderscore: false, isTitle: true);
       var buffer = StringBuffer();
 
       buffer.write('LayoutBuilder( \n');

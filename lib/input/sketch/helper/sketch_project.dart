@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/sketch/entities/documents/document.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/page.dart';
@@ -10,6 +11,7 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:recase/recase.dart';
 
 class SketchProject extends DesignProject {
   @override
@@ -44,6 +46,7 @@ class SketchProject extends DesignProject {
         var LayerStyles = doc.layerStyles['objects'] ?? [];
         for (var sharedStyle in LayerStyles) {
           var layerStyle = SharedStyle.fromJson(sharedStyle);
+          layerStyle.name = PBInputFormatter.formatVariable(layerStyle.name);
           sharedStyles.add(layerStyle);
         }
       }
@@ -53,6 +56,8 @@ class SketchProject extends DesignProject {
 
         for (var sharedStyle in LayerTextStyles) {
           var layerTextStyle = SharedStyle.fromJson(sharedStyle);
+          layerTextStyle.name =
+              PBInputFormatter.formatVariable(layerTextStyle.name.camelCase);
           sharedStyles.add(layerTextStyle);
         }
       }

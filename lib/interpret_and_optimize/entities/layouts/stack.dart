@@ -38,36 +38,31 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   void alignChildren() {
     var alignedChildren = <PBIntermediateNode>[];
     for (var child in children) {
-      var positionedHolder = PositioningHolder();
-
       if (child.topLeftCorner == topLeftCorner &&
           child.bottomRightCorner == bottomRightCorner) {
         //if they are the same size then there is no need for adjusting.
         alignedChildren.add(child);
         continue;
       }
-      positionedHolder.h_type =
-          (child.topLeftCorner.x - topLeftCorner.x).abs() <=
-                  (bottomRightCorner.x - child.bottomRightCorner.x).abs()
-              ? HorizontalAlignType.left
-              : HorizontalAlignType.right;
-      positionedHolder.h_value =
-          positionedHolder.h_type == HorizontalAlignType.left
-              ? child.topLeftCorner.x - topLeftCorner.x
-              : bottomRightCorner.x - child.bottomRightCorner.x;
-      positionedHolder.v_type =
-          (child.topLeftCorner.y - topLeftCorner.y).abs() <=
-                  (bottomRightCorner.y - child.bottomRightCorner.y).abs()
-              ? VerticalAlignType.top
-              : VerticalAlignType.bottom;
-      positionedHolder.v_value =
-          positionedHolder.v_type == VerticalAlignType.top
-              ? child.topLeftCorner.y - topLeftCorner.y
-              : bottomRightCorner.y - child.bottomRightCorner.y;
 
-      alignedChildren.add(InjectedPositioned(Uuid().v4(),
-          positionedHolder: positionedHolder, currentContext: currentContext)
-        ..addChild(child));
+      double top, bottom, left, right;
+
+      top = child.topLeftCorner.y - topLeftCorner.y;
+      bottom = bottomRightCorner.y - child.bottomRightCorner.y;
+
+      left = child.topLeftCorner.x - topLeftCorner.x;
+      right = bottomRightCorner.x - child.bottomRightCorner.x;
+
+      alignedChildren.add(InjectedPositioned(
+        Uuid().v4(),
+        valueHolder: PositionedValueHolder(
+          top: top,
+          bottom: bottom,
+          left: left,
+          right: right,
+        ),
+        currentContext: currentContext,
+      )..addChild(child));
     }
     replaceChildren(alignedChildren);
   }
