@@ -44,6 +44,9 @@ class PBAlignGenerationService implements PBGenerationService {
         } else if (currentIntermediateNode is PBLayoutIntermediateNode) {
           currentIntermediateNode.alignChildren();
         }
+        if (currentIntermediateNode == null) {
+          continue;
+        }
 
         currentIntermediateNode.attributes.forEach((attribute) {
           attribute.attributeNodes.forEach((node) {

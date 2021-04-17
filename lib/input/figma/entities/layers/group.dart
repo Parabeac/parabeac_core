@@ -106,7 +106,9 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
         this.prototypeNodeUUID = tempPrototypeID;
       }
 
-      boundaryRectangle = fitFrame();
+      if (children != null && children.isNotEmpty) {
+        boundaryRectangle = fitFrame();
+      }
 
       children.clear();
 
