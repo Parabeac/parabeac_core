@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
@@ -8,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.d
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:quick_log/quick_log.dart';
@@ -51,7 +53,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
             String siString = genSymbolInstance(
-                param.UUID, param.value, source.overrideValues);
+                param.UUID,
+                param.value,
+                source.overrideValues,
+                source.managerData
+            );
             if (siString != '') {
               buffer.write('${param.name}: ');
               buffer.write(siString);
@@ -83,12 +89,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     return '';
   }
 
-  String genSymbolInstance(String overrideUUID, String UUID,
-      List<PBSymbolInstanceOverridableValue> overrideValues,
-      {int depth = 1}) {
-    if ((UUID == null) || (UUID == '')) {
-      return '';
-    }
+  PBSharedMasterNode getMasterSymbol(String UUID) {
 
     var masterSymbol;
     var nodeFound = PBSymbolStorage().getAllSymbolById(UUID);
@@ -102,13 +103,35 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       // Try to find master by looking for the master's SYMBOL_ID
       masterSymbol = PBSymbolStorage().getSharedMasterNodeBySymbolID(UUID);
     }
+
+    return masterSymbol;
+
+  }
+
+  String genSymbolInstance(String overrideUUID, String UUID,
+      List<PBSymbolInstanceOverridableValue> overrideValues,
+      PBGenerationViewData managerData,
+      {int depth = 1}) {
+
+    if ((UUID == null) || (UUID == '')) {
+      return '';
+    }
+
+    var masterSymbol = getMasterSymbol(UUID);
+
     // file could have override names that don't exist?  That's really odd, but we have a file that does that.
     if (masterSymbol == null) {
       return '';
     }
 
-    assert(masterSymbol != null,
-        'Could not find master symbol with UUID: ${UUID}');
+    // include import
+    Set<String> path = PBGenCache().getPaths(masterSymbol.SYMBOL_ID);
+    if (path.isEmpty) {
+      log.warning("Can't find path for Master Symbol with UUID: ${UUID}");
+    } else {
+      managerData.addImport(path.first);
+    }
+
     var buffer = StringBuffer();
     buffer.write('${masterSymbol.friendlyName}(constraints, ');
     for (var ovrValue in overrideValues) {
@@ -120,7 +143,9 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           case PBSharedInstanceIntermediateNode:
             buffer.write(genSymbolInstance(
                 ovrValue.value, ovrUUID, overrideValues,
+                managerData,
                 depth: depth + 1));
+
             break;
           case InheritedBitmap:
             var name = SN_UUIDtoVarName[ovrUUID + '_image'];

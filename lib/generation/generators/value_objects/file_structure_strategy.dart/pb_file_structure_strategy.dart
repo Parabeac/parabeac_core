@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
@@ -55,7 +57,7 @@ abstract class FileStructureStrategy {
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _pbProject.forest.forEach((dir) {
         if (dir.rootNode != null) {
-          addImportsInfo(dir);
+          addImportsInfo(dir, dir.rootNode);
         }
       });
       Directory(_screenDirectoryPath).createSync(recursive: true);
@@ -65,19 +67,26 @@ abstract class FileStructureStrategy {
   }
 
   ///Add the import information to correctly generate them in the corresponding files.
-  void addImportsInfo(PBIntermediateTree tree) {
+  void addImportsInfo(PBIntermediateTree tree, PBIntermediateNode node) {
     // Add to cache if node is scaffold or symbol master
-    var node = tree.rootNode;
     var name = node?.name?.snakeCase;
+
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
-      var path = node is PBSharedMasterNode
-          ? '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart' // Removed .g
-          : '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart';
-      PBGenCache().setPathToCache(uuid, path);
+      switch (node.runtimeType) {
+        case PBSharedMasterNode:
+          PBGenCache().setPathToCache(uuid, '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart');
+          break;
+        case InheritedScaffold:
+          PBGenCache().setPathToCache(uuid, '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart');
+          break;
+      }
     } else {
       logger.warning(
-          'The following intermediateNode was missing a name: ${tree.toString()}');
+          'The following intermediateNode was missing a name: ${node.toString()}');
+    }
+    if (node.child != null) {
+     addImportsInfo(tree, node.child);
     }
   }
 

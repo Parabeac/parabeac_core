@@ -95,7 +95,7 @@ class PBVisualGenerationService implements PBGenerationService {
               smHelper.interpretStateManagementNode(result);
             } else {
               smHelper.interpretStateManagementNode(result);
-              continue;
+              //continue;
             }
           }
 
