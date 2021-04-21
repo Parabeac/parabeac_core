@@ -1,8 +1,10 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 
 class PBIntermediateNodeSearcherService {
   ///Searching for a [PBIntermediateNode] by their unique identifier. If no [PBIntermediateNode] is found
@@ -27,6 +29,13 @@ class PBIntermediateNodeSearcherService {
 
       if (currentNode is PBInheritedIntermediate && currentNode.UUID == uuid) {
         return currentNode;
+      } else if (currentNode is PBSharedInstanceIntermediateNode) {
+        // Traverse intermediate node to find UUID
+        var master = PBSymbolStorage()
+            .getSharedMasterNodeBySymbolID(currentNode.SYMBOL_ID);
+        if (master != null) {
+          stack.add(master);
+        }
       }
     }
     return null;

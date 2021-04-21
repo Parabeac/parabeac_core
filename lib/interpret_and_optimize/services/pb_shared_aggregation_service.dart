@@ -4,9 +4,12 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
+import 'package:quick_log/quick_log.dart';
 
 class PBSharedInterAggregationService {
   PBSymbolStorage _symbolStorage;
+
+  var log = Logger('PBSharedInterAggregationService');
 
   static final PBSharedInterAggregationService _singleInstance =
       PBSharedInterAggregationService._internal();
@@ -14,6 +17,7 @@ class PBSharedInterAggregationService {
   ///These are [PBSharedInstanceIntermediateNode] that have not found their [PBSharedMasterNode]; they are
   ///waiting to see their [PBSharedMasterNode] in order to populate their attributes.
   List<PBSharedInstanceIntermediateNode> _unregSymQueue;
+
   Iterable<PBSharedInstanceIntermediateNode> get unregSymQueue =>
       _unregSymQueue;
 
@@ -43,9 +47,14 @@ class PBSharedInterAggregationService {
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
     for (var prop in sharedMasterNode.overridableProperties) {
+      var targetUUID = _findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, prop?.UUID);
-      if (prop.type == PBSharedInstanceIntermediateNode) {
+          rootChildNode, targetUUID);
+      if (prop.value == null) {
+        // add Designer Warning here, not even sure if this is the designers fault or not
+        log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
+      }
+      if ((prop.value != null) && (prop.type == PBSharedInstanceIntermediateNode)) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
@@ -85,7 +94,8 @@ class PBSharedInterAggregationService {
           instanceIntermediateNode.sharedParamValues.map((v) {
         for (var symParam in masterNode.overridableProperties) {
           if (symParam.propertyName == v.overrideName) {
-            return PBSharedParameterValue(symParam.type, v.value, symParam.UUID, symParam.propertyName);
+            return PBSharedParameterValue(
+                symParam.type, v.value, symParam.UUID, symParam.propertyName);
           }
         }
         return null;
@@ -100,4 +110,13 @@ class PBSharedInterAggregationService {
 
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
+
+  /// Method that splits `target` according to `delimeter`
+  /// and returns the last entry in the list.
+  String _findLastOf(String target, String delimeter) {
+    if (target == null || delimeter == null) {
+      return '';
+    }
+    return target.split(delimeter).last;
+  }
 }
