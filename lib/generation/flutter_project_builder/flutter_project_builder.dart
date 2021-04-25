@@ -108,11 +108,12 @@ class FlutterProjectBuilder {
     if (mainTree.sharedStyles != null &&
         mainTree.sharedStyles.isNotEmpty &&
         MainInfo().exportStyles) {
-      await Directory('${pathToFlutterProject}lib/document/')
-          .create(recursive: true)
-          .then((value) {
+      try {
+        Directory('${pathToFlutterProject}lib/document/')
+            .createSync(recursive: true);
         var s = File('${pathToFlutterProject}lib/document/shared_props.g.dart')
             .openWrite(mode: FileMode.write, encoding: utf8);
+
         s.write('''import 'dart:ui';
               import 'package:flutter/material.dart';
               
@@ -120,10 +121,10 @@ class FlutterProjectBuilder {
         for (var sharedStyle in mainTree.sharedStyles) {
           s.write(sharedStyle.generate() + '\n');
         }
-        s.close();
-      }).catchError((e) {
+        await s.close();
+      } catch (e) {
         log.error(e.toString());
-      });
+      }
     }
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
     await generationConfiguration.generateProject(mainTree);

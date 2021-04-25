@@ -33,7 +33,7 @@ class PBInputFormatter {
     var result = input;
     // TODO: set a temporal name
     result = (result.isEmpty) ? 'tempName' : result;
-    result = _removeFirstDigits(result);
+    result = removeFirstDigits(result);
     result = result.trim();
     var spaceChar = (spaceToUnderscore) ? '_' : '';
     result = result.replaceAll(r'[\s\./_+?]+', spaceChar);
@@ -43,7 +43,7 @@ class PBInputFormatter {
     return result;
   }
 
-  static String _removeFirstDigits(String str) =>
+  static String removeFirstDigits(String str) =>
       str.startsWith(RegExp(r'^[\d]+'))
           ? str.replaceFirstMapped(RegExp(r'^[\d]+'), (e) => '')
           : str;
