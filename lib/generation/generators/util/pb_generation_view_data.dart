@@ -9,6 +9,9 @@ class PBGenerationViewData {
   final Set<String> _toDispose = {};
   bool _isDataLocked = false;
 
+  PLATFORM platform;
+  ORIENTATION orientation;
+
   PBGenerationViewData();
 
   Iterator<String> get toDispose => _toDispose.iterator;
@@ -75,4 +78,15 @@ class PBGenerationViewData {
       _methodVariables[variable.variableName] = variable;
     }
   }
+}
+
+enum PLATFORM {
+  DESKTOP,
+  MOBILE,
+  TABLET,
+}
+
+enum ORIENTATION {
+  HORIZONTAL,
+  VERTICAL,
 }

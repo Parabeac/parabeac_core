@@ -1,4 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/controllers/utils/interpret_utils.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/helper/design_page.dart';
@@ -20,7 +22,7 @@ import 'package:quick_log/quick_log.dart';
 
 import 'main_info.dart';
 
-class Interpret {
+class Interpret with InterpretUtils {
   var log = Logger('Interpret');
 
   Interpret._internal();
@@ -77,8 +79,13 @@ class Interpret {
         var tempTree = currentScreen;
         tempTree.name = designPage.name;
 
+        tempTree.data = PBGenerationViewData();
         if (currentScreen.rootNode is InheritedScaffold) {
-          tempTree.tree_type = TREE_TYPE.SCREEN;
+          tempTree.data.platform = extractPlatform(designPage.name);
+
+          tempTree.data.orientation = extractOrientation(
+              tempTree.rootNode.bottomRightCorner,
+              tempTree.rootNode.topLeftCorner);
         } else if (currentScreen.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {

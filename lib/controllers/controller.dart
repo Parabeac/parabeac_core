@@ -36,8 +36,6 @@ abstract class Controller {
 
     var pbProject = await Interpret().interpretAndOptimize(designProject);
 
-    pbProject.forest.forEach((tree) => tree.data = PBGenerationViewData());
-
     await PreGenerationService(
       projectName: projectPath,
       mainTree: pbProject,
