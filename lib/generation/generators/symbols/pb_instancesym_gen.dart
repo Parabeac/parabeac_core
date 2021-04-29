@@ -62,7 +62,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             // hack to include import
-            source.generator.manager.data.addImport(
+            source.currentContext.treeRoot.data.addImport(
                 'package:${MainInfo().projectName}/document/shared_props.g.dart');
             buffer.write(
                 '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
@@ -86,7 +86,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String genSymbolInstance(String overrideUUID, String UUID,
       List<PBSymbolInstanceOverridableValue> overrideValues,
       {int depth = 1}) {
-
     if ((UUID == null) || (UUID == '')) {
       return '';
     }
@@ -105,7 +104,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     }
     // file could have override names that don't exist?  That's really odd, but we have a file that does that.
     if (masterSymbol == null) {
-        return '';
+      return '';
     }
 
     assert(masterSymbol != null,

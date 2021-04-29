@@ -26,7 +26,7 @@ class SharedStyle with PBColorMixin {
     this.name,
     this.style,
   }) {
-    name = name.pascalCase;
+    name = name.camelCase;
     SharedStyle_UUIDToName[UUID] = name.replaceAll(RegExp(r'[^A-Za-z0-9_]',), '');
   }
 
