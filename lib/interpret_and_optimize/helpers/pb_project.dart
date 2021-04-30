@@ -60,6 +60,5 @@ class PBProject {
         nameCounter = 1;
       }
     }
-    print('hello');
   }
 }
