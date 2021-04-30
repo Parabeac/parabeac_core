@@ -65,6 +65,8 @@ class Interpret {
       }
     }
 
+    _pb_project.cleanTreeParity();
+
     return _pb_project;
   }
 
@@ -81,7 +83,8 @@ class Interpret {
 
         tempTree.data = PBGenerationViewData();
         if (currentScreen.rootNode is InheritedScaffold) {
-          PBPlatformOrientationLinkerService().addOrientationPlatformInformation(tempTree);
+          PBPlatformOrientationLinkerService()
+              .addOrientationPlatformInformation(tempTree);
         } else if (currentScreen.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {
