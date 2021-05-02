@@ -10,9 +10,9 @@ class WriteScreenCommand implements FileStructureCommand {
 
   WriteScreenCommand(this.name, this.relativePath, this.data);
 
-  /// Writes a file containing [data] to [path] with [name] as its filename.
+  /// Writes a screen file containing [data] to [path] with [name] as its filename.
   ///
-  /// Returns path to screen that was created.
+  /// Returns path to the file that was created.
   @override
   Future<String> write(FileStructureStrategy strategy) {
     var absPath =
