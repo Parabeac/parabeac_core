@@ -3,15 +3,12 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 
 class AddDependencyCommand implements FileStructureCommand {
   String package;
-  String type;
-  String value;
+  String version;
 
-  AddDependencyCommand(this.package, this.type, this.value);
+  AddDependencyCommand(this.package, this.version);
 
   @override
   Future<void> write(FileStructureStrategy strategy) {
-    
-    // TODO: implement write
-    throw UnimplementedError();
+    strategy.pageWriter.addDependency(package, version);
   }
 }
