@@ -24,6 +24,17 @@ class PBFlutterWriter implements PBPageWriter {
     writer.writeAsStringSync(code);
   }
 
+  /// Appends [code] to the end of file located at [fileAbsPath].
+  ///
+  /// Does nothing if the file at [fileAbsPath] does not exist.
+  @override
+  void append(String code, String fileAbsPath) {
+    var file = File(fileAbsPath);
+    if (file.existsSync()) {
+      file.writeAsStringSync(code, mode: FileMode.append);
+    }
+  }
+
   /// Function that allows the rewriting of the main() method inside main.dart
   void rewriteMainFunction(String pathToMain, String code,
       {Set<String> imports}) {
