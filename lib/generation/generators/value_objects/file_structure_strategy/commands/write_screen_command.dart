@@ -3,14 +3,21 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 
 class WriteScreenCommand implements FileStructureCommand {
   String name;
-  String path;
-  String value;
+  String relativePath;
+  String data;
 
-  WriteScreenCommand(this.name, this.path, this.value);
+  final SCREEN_PATH = 'lib/modules';
 
+  WriteScreenCommand(this.name, this.relativePath, this.data);
+
+  /// Writes a file containing [data] to [path] with [name] as its filename.
+  ///
+  /// Returns path to screen that was created.
   @override
   Future<String> write(FileStructureStrategy strategy) {
-    // TODO: implement write
-    throw UnimplementedError();
+    var absPath =
+        '${strategy.GENERATED_PROJECT_PATH}/$SCREEN_PATH/$relativePath/$name';
+    strategy.pageWriter.write(data, absPath);
+    return Future.value(absPath);
   }
 }
