@@ -5,14 +5,14 @@ class AddConstantCommand implements FileStructureCommand {
   String name;
   String type;
   String value;
+  final String CONST_PATH = 'lib/constants/constants.dart';
 
   AddConstantCommand(this.name, this.type, this.value);
 
   @override
   Future<void> write(FileStructureStrategy strategy) {
-    var constantStr = 'const $type $name = $value';
-    var path = '${strategy.GENERATED_PROJECT_PATH}/${strategy.RELATIVE_CONSTANT_PATH}/constants.dart';
-    //TODO: validate adding a method to pageWriter to `append` to a file rather than completely overwriting it.
+    var constantStr = 'const $type $name = $value;';
+    var path = '${strategy.GENERATED_PROJECT_PATH}/${CONST_PATH}';
     strategy.pageWriter.write(constantStr, path);
   }
 }
