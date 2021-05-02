@@ -21,6 +21,10 @@ abstract class FileStructureStrategy {
   ///The path of where all the screens are going to be generated.
   final RELATIVE_SCREEN_PATH = 'lib/screens/';
 
+  /// Path where all files containing constants will be generated
+  final RELATIVE_CONSTANT_PATH =
+      'lib/constants/'; //TODO: validate adding this new path
+
   Logger logger;
 
   ///Path of where the project is generated
