@@ -26,12 +26,14 @@ class PBFlutterWriter implements PBPageWriter {
 
   /// Appends [code] to the end of file located at [fileAbsPath].
   ///
-  /// Does nothing if the file at [fileAbsPath] does not exist.
+  /// Creates the file if the file at [fileAbsPath] does not exist.
   @override
   void append(String code, String fileAbsPath) {
     var file = File(fileAbsPath);
     if (file.existsSync()) {
       file.writeAsStringSync(code, mode: FileMode.append);
+    } else {
+      write(code, fileAbsPath);
     }
   }
 
