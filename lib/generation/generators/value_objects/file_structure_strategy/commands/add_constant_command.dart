@@ -12,7 +12,7 @@ class AddConstantCommand implements FileStructureCommand {
   @override
   Future<void> write(FileStructureStrategy strategy) {
     var constantStr = 'const $type $name = $value;';
-    var path = '${strategy.GENERATED_PROJECT_PATH}/${CONST_PATH}';
+    var path = '${strategy.GENERATED_PROJECT_PATH}${CONST_PATH}';
     strategy.pageWriter.write(constantStr, path);
   }
 }

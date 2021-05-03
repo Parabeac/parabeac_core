@@ -16,7 +16,7 @@ class WriteScreenCommand implements FileStructureCommand {
   @override
   Future<String> write(FileStructureStrategy strategy) {
     var absPath =
-        '${strategy.GENERATED_PROJECT_PATH}/$SCREEN_PATH/$relativePath/$name';
+        '${strategy.GENERATED_PROJECT_PATH}$SCREEN_PATH/$relativePath/$name';
     strategy.pageWriter.write(data, absPath);
     return Future.value(absPath);
   }

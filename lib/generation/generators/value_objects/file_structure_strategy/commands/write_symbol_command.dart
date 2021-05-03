@@ -13,7 +13,7 @@ class WriteSymbolCommand implements FileStructureCommand {
   /// Returns path to the file that was created.
   @override
   Future<String> write(FileStructureStrategy strategy) {
-    var absPath = '${strategy.GENERATED_PROJECT_PATH}/$SYMBOL_PATH/$name';
+    var absPath = '${strategy.GENERATED_PROJECT_PATH}$SYMBOL_PATH/$name';
     strategy.pageWriter.write(data, absPath);
     return Future.value(absPath);
   }
