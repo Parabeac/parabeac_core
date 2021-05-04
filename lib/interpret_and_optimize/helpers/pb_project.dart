@@ -47,18 +47,15 @@ class PBProject {
           nameCounter++;
           nextCounter++;
         } else {
-          currentCounter++;
-          if (currentCounter >= nextCounter) {
-            nextCounter++;
-          }
-        }
-      } else {
-        currentCounter++;
-        if (currentCounter >= nextCounter) {
+          currentCounter = nextCounter;
           nextCounter++;
         }
+      } else {
+        currentCounter = nextCounter;
+        nextCounter++;
         nameCounter = 1;
       }
     }
+    print('stop');
   }
 }
