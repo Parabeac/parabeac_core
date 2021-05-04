@@ -12,13 +12,14 @@ class MockFSStrategy extends Mock implements FileStructureStrategy {}
 void main() {
   final path = '${Directory.current.path}/test/lib/generation/commands/';
   group('Add Constant Command', () {
-    var strategy = MockFSStrategy();
+    var strategy;
     FileStructureCommand const1;
     FileStructureCommand const2;
     setUp(() {
       // Create temporary directory to output files
       Process.runSync('mkdir', ['tmptst'], workingDirectory: path);
 
+      strategy = MockFSStrategy();
       const1 = AddConstantCommand('c1', 'String', '\'test\'');
       const2 = AddConstantCommand('c2', 'int', '20');
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst/');
