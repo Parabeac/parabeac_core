@@ -22,8 +22,8 @@ void main() {
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
 
-    test('Testing adding a dependency', () {
-      command.write(strategy);
+    test('Testing adding a dependency', () async {
+      await command.write(strategy);
       var dependencies = strategy.pageWriter.dependencies;
       expect(dependencies.isNotEmpty, true);
       expect(dependencies.containsKey('auto_size_text'), true);

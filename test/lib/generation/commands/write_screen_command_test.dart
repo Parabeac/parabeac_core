@@ -47,10 +47,14 @@ void main() {
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
 
-    test('Testing writing a screen', () {
+    test('Testing writing a screen', () async {
       var screenPath = '${path}tmptst/lib/modules/screens/test_screen.dart';
       var screenFile = File(screenPath);
-      command.write(strategy);
+      var commandPath = await command.write(strategy);
+
+      // The return of WriteScreenCommand is `String`
+      // ignore: unrelated_type_equality_checks
+      expect(screenPath == commandPath, true);
       expect(screenFile.existsSync(), true);
       expect(screenFile.readAsStringSync().contains(screenData), true);
     });

@@ -25,10 +25,10 @@ void main() {
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst/');
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
-    test('Testing Adding Constants To Project', () {
+    test('Testing Adding Constants To Project', () async {
       final constPath = '${path}tmptst/lib/constants/constants.dart';
-      const1.write(strategy);
-      const2.write(strategy);
+      await const1.write(strategy);
+      await const2.write(strategy);
       expect(File(constPath).existsSync(), true);
       var constFile = File(constPath).readAsStringSync();
       expect(constFile.contains('const String c1 = \'test\''), true);
