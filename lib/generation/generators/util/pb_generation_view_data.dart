@@ -1,6 +1,6 @@
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 
 class PBGenerationViewData {
   final Map<String, PBVariable> _globalVariables = {};
