@@ -65,8 +65,6 @@ class Interpret {
       }
     }
 
-    _pb_project.cleanTreeParity();
-
     return _pb_project;
   }
 

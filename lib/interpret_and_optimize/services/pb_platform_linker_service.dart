@@ -13,6 +13,9 @@ class PBPlatformOrientationLinkerService {
 
   final Map<String, List<PBIntermediateTree>> _map = {};
 
+  /// Map that shows how many trees with the same name `key` exist.
+  final Map<String, int> _mapCounter = {};
+
   /// Set of all platforms in the project
   final Set<PLATFORM> _platforms = {};
 
@@ -49,11 +52,28 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    // TODO: check if we have exact trees (equal orientation and platform)
     if (_map.containsKey(tree.name)) {
+      // Check if we have exact trees (same orientation and platform)
+      var trees = _map[tree.name];
+      for (var currTree in trees) {
+        var treeName = tree.rootNode.name;
+        var iterTreeName = currTree.rootNode.name;
+        if (treeName == iterTreeName &&
+            tree.data.orientation == currTree.data.orientation &&
+            tree.data.platform == currTree.data.platform) {
+          // Rename the tree if both trees have the same orientation and platform
+          tree.rootNode.name = treeName + '_${_mapCounter[tree.rootNode.name]}';
+          _mapCounter[treeName]++;
+        }
+      }
+
       _map[tree.name].add(tree);
+      if (!_mapCounter.containsKey(tree.rootNode.name)) {
+        _mapCounter[tree.rootNode.name] = 1;
+      }
     } else {
       _map[tree.name] = [tree];
+      _mapCounter[tree.rootNode.name] = 1;
     }
   }
 
