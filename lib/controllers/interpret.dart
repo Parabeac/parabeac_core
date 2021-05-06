@@ -13,7 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
@@ -81,7 +81,8 @@ class Interpret {
 
         tempTree.data = PBGenerationViewData();
         if (currentScreen.rootNode is InheritedScaffold) {
-          PBPlatformOrientationLinkerService().addOrientationPlatformInformation(tempTree);
+          PBPlatformOrientationLinkerService()
+              .addOrientationPlatformInformation(tempTree);
         } else if (currentScreen.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {

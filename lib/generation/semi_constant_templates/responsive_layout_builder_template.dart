@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/semi_constant_templates/semi_constant_template.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 
 class ResponsiveLayoutBuilderTemplate implements SemiConstantTemplate {
   @override
