@@ -1,19 +1,26 @@
 import 'dart:collection';
 
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/semi_constant_templates/semi_constant_template.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 
-class ResponsiveLayoutBuilderTemplate implements SemiConstantTemplate {
+class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
+  final PATH_TO_RESPONSIVE_LAYOUT =
+      'lib/widgets/responsive_layout_builder.dart';
+
   @override
-  String generateTemplate() {
+  Future write(FileStructureStrategy strategy) async {
+    var absPath =
+        '${strategy.GENERATED_PROJECT_PATH}$PATH_TO_RESPONSIVE_LAYOUT';
+
     var platforms = PBPlatformOrientationLinkerService()
         .platforms
         .map((platform) => platform.toString().split('.').last.toLowerCase());
     var widgetVars = _generatePlatformWidgets(platforms);
     var widgetInit = _generatePlatformInitializers(platforms);
     var breakpointChecks = _generateBreakpointStatements(platforms);
-    return '''
+    var template = '''
     class ResponsiveLayoutBuilder extends StatelessWidget {
       ${widgetVars}
 
@@ -36,6 +43,8 @@ class ResponsiveLayoutBuilderTemplate implements SemiConstantTemplate {
       }
     }
     ''';
+
+    super.writeDataToFile(template, absPath);
   }
 
   String _generatePlatformWidgets(List<String> platforms) {

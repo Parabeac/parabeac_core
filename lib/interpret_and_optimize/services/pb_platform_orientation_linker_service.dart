@@ -1,4 +1,3 @@
-import 'package:parabeac_core/generation/semi_constant_templates/responsive_layout_builder_template.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/generation/semi_constant_templates/orientation_builder_template.dart';
@@ -43,8 +42,7 @@ class PBPlatformOrientationLinkerService {
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
-      tree.rootNode.currentContext.project.genProjectData
-          .addTemplate(ResponsiveLayoutBuilderTemplate());
+      // TODO: call ResponsiveLayoutBuilderCommand
     }
 
     addToMap(tree);
