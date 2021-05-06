@@ -20,13 +20,19 @@ class PBSizeHelper extends PBAttributesHelper {
     var body = source.size ?? {};
     double height = body['height'];
     double width = body['width'];
+
     //Add relative sizing if the widget has context
-    var screenWidth = ((source.currentContext.screenTopLeftCorner.x) -
-            (source.currentContext.screenBottomRightCorner.x))
-        .abs();
-    var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
-            (source.currentContext.screenBottomRightCorner.y))
-        .abs();
+    var screenWidth;
+    var screenHeight;
+    if (source.currentContext.screenTopLeftCorner != null &&
+        source.currentContext.screenBottomRightCorner != null) {
+      screenWidth = ((source.currentContext.screenTopLeftCorner.x) -
+              (source.currentContext.screenBottomRightCorner.x))
+          .abs();
+      screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
+              (source.currentContext.screenBottomRightCorner.y))
+          .abs();
+    }
 
     height = (height != null && screenHeight != null && screenHeight > 0.0)
         ? height / screenHeight
