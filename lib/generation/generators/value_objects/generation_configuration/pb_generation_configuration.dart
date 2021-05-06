@@ -42,11 +42,6 @@ abstract class GenerationConfiguration {
 
   set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
 
-  GenerationConfiguration() {
-    logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
-  }
-
   PBGenerationManager get generationManager => _generationManager;
   set generationManager(PBGenerationManager manager) =>
       _generationManager = manager;
@@ -56,6 +51,11 @@ abstract class GenerationConfiguration {
 
   /// List of observers that will be notified when a new command is added.
   final commandObservers = <CommandInvoker>[];
+
+  GenerationConfiguration() {
+    logger = Logger(runtimeType.toString());
+    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
+  }
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
@@ -138,6 +138,7 @@ abstract class GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, _pageWriter, pbProject);
+    commandObservers.add(fileStructureStrategy);
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
