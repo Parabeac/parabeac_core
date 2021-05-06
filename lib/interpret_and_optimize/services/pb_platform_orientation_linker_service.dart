@@ -1,6 +1,5 @@
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:parabeac_core/generation/semi_constant_templates/orientation_builder_template.dart';
 
 class PBPlatformOrientationLinkerService {
   static final PBPlatformOrientationLinkerService _pbPlatformLinkerService =
@@ -36,13 +35,12 @@ class PBPlatformOrientationLinkerService {
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
     if (hasMultipleOrientations()) {
-      tree.rootNode.currentContext.project.genProjectData
-          .addTemplate(OrientationBuilderTemplate());
+      // TODO: call OrientationBuilderCommand and notify observers
     }
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
-      // TODO: call ResponsiveLayoutBuilderCommand
+      // TODO: call ResponsiveLayoutBuilderCommand and notify observers
     }
 
     addToMap(tree);
