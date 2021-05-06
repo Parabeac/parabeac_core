@@ -81,7 +81,9 @@ class Interpret {
 
         tempTree.data = PBGenerationViewData();
         if (currentScreen.rootNode is InheritedScaffold) {
-          PBPlatformOrientationLinkerService().addOrientationPlatformInformation(tempTree);
+          tempTree.tree_type = TREE_TYPE.SCREEN;
+          PBPlatformOrientationLinkerService()
+              .addOrientationPlatformInformation(tempTree);
         } else if (currentScreen.rootNode is PBSharedMasterNode) {
           tempTree.tree_type = TREE_TYPE.VIEW;
         } else {
