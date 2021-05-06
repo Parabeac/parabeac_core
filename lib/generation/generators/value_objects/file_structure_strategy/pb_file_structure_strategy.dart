@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
@@ -11,7 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 ///
 ///For example, in the provider strategy, there would be a directory for the models and the providers,
 ///while something like BLoC will assign a directory to a single
-abstract class FileStructureStrategy {
+abstract class FileStructureStrategy implements CommandInvoker {
   ///The path of where all the views are going to be generated.
   ///
   ///The views is anything that is not a screen, for example, symbol masters
@@ -97,4 +99,9 @@ abstract class FileStructureStrategy {
 
   String getViewPath(String fileName) =>
       '${_viewDirectoryPath}${fileName}.dart';
+
+  @override
+  void commandCreated(FileStructureCommand command) {
+    command.write(this);
+  }
 }

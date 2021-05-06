@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -52,6 +53,9 @@ abstract class GenerationConfiguration {
 
   final Map<String, String> _dependencies = {};
   Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
+
+  /// List of observers that will be notified when a new command is added.
+  final commandObservers = <CommandInvoker>[];
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
