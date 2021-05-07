@@ -139,6 +139,13 @@ abstract class GenerationConfiguration {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, _pageWriter, pbProject);
     commandObservers.add(fileStructureStrategy);
+
+    // Execute command queue
+    var queue = pbProject.genProjectData.commandQueue;
+    while (queue.isNotEmpty) {
+      var command = queue.removeLast();
+      commandObservers.forEach((observer) => observer.commandCreated(command));
+    }
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }

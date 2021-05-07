@@ -1,3 +1,5 @@
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -35,12 +37,14 @@ class PBPlatformOrientationLinkerService {
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
     if (hasMultipleOrientations()) {
-      // TODO: call OrientationBuilderCommand and notify observers
+      tree.rootNode.currentContext.project.genProjectData.commandQueue
+          .add(OrientationBuilderCommand());
     }
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
-      // TODO: call ResponsiveLayoutBuilderCommand and notify observers
+      tree.rootNode.currentContext.project.genProjectData.commandQueue
+          .add(ResponsiveLayoutBuilderCommand());
     }
 
     addToMap(tree);
