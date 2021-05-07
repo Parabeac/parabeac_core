@@ -1,12 +1,12 @@
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
-class WriteSymbolCommand implements FileStructureCommand {
+/// Command that writes a `symbol` to the project.
+class WriteSymbolCommand extends NodeFileStructureCommand {
   String name;
-  String data;
   final String SYMBOL_PATH = 'lib/widgets';
 
-  WriteSymbolCommand(this.name, this.data);
+  WriteSymbolCommand(this.name, String code) : super(code);
 
   /// Writes a symbol file containing [data] with [name] as its filename.
   ///
@@ -14,7 +14,7 @@ class WriteSymbolCommand implements FileStructureCommand {
   @override
   Future<String> write(FileStructureStrategy strategy) {
     var absPath = '${strategy.GENERATED_PROJECT_PATH}$SYMBOL_PATH/$name';
-    strategy.pageWriter.write(data, absPath);
+    writeDataToFile(code, absPath);
     return Future.value(absPath);
   }
 }
