@@ -1,5 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/abstract_sketch_node_factory.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -144,9 +145,10 @@ class SymbolMaster extends AbstractGroupLayer
             userInfo,
             style,
             maintainScrollPosition) {
-    this.name = name?.replaceAll(RegExp(r'[\s_\+]'), '');
-    // ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
-    // someElement/default
+    if (name != null) {
+      this.name = name?.replaceAll(RegExp(r'[\s_\+]'), '');
+      this.name = PBInputFormatter.removeFirstDigits(name);
+    }
   }
 
   @override
@@ -260,5 +262,4 @@ class SymbolMaster extends AbstractGroupLayer
     // TODO: implement fromPBDF
     throw UnimplementedError();
   }
-
 }
