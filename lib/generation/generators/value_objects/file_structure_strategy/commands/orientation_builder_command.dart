@@ -1,9 +1,15 @@
-import 'package:parabeac_core/generation/semi_constant_templates/semi_constant_template.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
-class OrientationBuilderTemplate implements SemiConstantTemplate {
+class OrientationBuilderCommand extends FileStructureCommand {
+  final PATH_TO_ORIENTATION_BUILDER =
+      'lib/widgets/responsive_orientation_builder.dart';
+
   @override
-  String generateTemplate() {
-    return ''' 
+  Future write(FileStructureStrategy strategy) {
+    var fileAbsPath =
+        '${strategy.GENERATED_PROJECT_PATH}$PATH_TO_ORIENTATION_BUILDER';
+    var template = ''' 
       import 'package:flutter/material.dart';
 
       class ResponsiveOrientationBuilder extends StatelessWidget {
@@ -44,5 +50,7 @@ class OrientationBuilderTemplate implements SemiConstantTemplate {
       }
 
     ''';
+
+    super.writeDataToFile(template, fileAbsPath);
   }
 }
