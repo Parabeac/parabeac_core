@@ -5,5 +5,10 @@
     "widgetSpacing": "Expanded",
     "layoutPrecedence": ["column", "row", "stack"]
   },
-  "state-management": "none"
+  "state-management": "none",
+  "breakpoints": {
+    "mobile": 360,
+    "tablet": 600,
+    "desktop": 1280
+  }
 }
