@@ -21,12 +21,15 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
 
     switch (platform) {
       case PLATFORM.DESKTOP:
+        fileName = fileName.replaceAll('.dart', '_desktop.dart');
         path += 'lib/screens/$folderName/desktop/$fileName';
         break;
       case PLATFORM.MOBILE:
+        fileName = fileName.replaceAll('.dart', '_mobile.dart');
         path += 'lib/screens/$folderName/mobile/$fileName';
         break;
       case PLATFORM.TABLET:
+        fileName = fileName.replaceAll('.dart', '_tablet.dart');
         path += 'lib/screens/$folderName/tablet/$fileName';
         break;
     }
