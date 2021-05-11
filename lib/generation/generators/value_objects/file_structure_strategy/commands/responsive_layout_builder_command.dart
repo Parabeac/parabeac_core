@@ -65,9 +65,11 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
       return 'if(${platforms[0]} != null){return ${platforms[0]}Widget;}';
     }
     // Get breakpoints from configurations and sort by value
-    Map<String, int> breakpoints = MainInfo().configurations['breakpoints'];
+    var breakpoints = MainInfo().configurations['breakpoints'];
     if (breakpoints == null) {
+      // TODO: Handle breakpoints being null
       breakpoints = {};
+      breakpoints['mobile'] = 300;
       breakpoints['tablet'] = 600;
       breakpoints['desktop'] = 1280;
     }
