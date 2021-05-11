@@ -6,7 +6,7 @@ class WriteScreenCommand extends NodeFileStructureCommand {
   String name;
   String relativePath;
 
-  final SCREEN_PATH = 'lib/modules';
+  final SCREEN_PATH = 'lib/screens';
 
   WriteScreenCommand(this.name, this.relativePath, String code) : super(code);
 
