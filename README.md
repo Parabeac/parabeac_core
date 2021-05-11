@@ -40,7 +40,8 @@ Our goal is to create a tool that passes a modern Turing Test: automatic code ge
 
 # Get Started
 
-If you have any trouble with getting Parabeac-Core running, check out this video! [![Parabeac-Core Getting Started](https://img.youtube.com/vi/e4CJgPMNCyo/0.jpg)](https://www.youtube.com/watch?v=e4CJgPMNCyo&feature=youtu.be)
+If you have any trouble with getting Parabeac-Core running you can watch our [macOS](https://www.youtube.com/watch?v=QGC1BAdjEc0&t=10s) or [Windows tutorial here](https://www.youtube.com/watch?v=Pr52-9Ni4Ds&t=2s)! 
+[![Parabeac-Core Getting Started macOS](https://i9.ytimg.com/vi/Pr52-9Ni4Ds/mq2.jpg?sqp=CPCC64QG&rs=AOn4CLA3y0VXCz729PZ-fXxnVNIR8pTVMQ)](https://www.youtube.com/watch?v=QGC1BAdjEc0&t=10s)
 
 Development on Windows [requires some extra setup](WINDOWS_SETUP.md).
 
