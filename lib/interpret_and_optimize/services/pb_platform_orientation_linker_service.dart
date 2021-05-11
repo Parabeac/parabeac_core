@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -52,9 +53,9 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    if (_map.containsKey(tree.name)) {
+    if (_map.containsKey(tree.rootNode.name)) {
       // Check if we have exact trees (same orientation and platform)
-      var trees = _map[tree.name];
+      var trees = _map[tree.rootNode.name];
       for (var currTree in trees) {
         var treeName = tree.rootNode.name;
         var iterTreeName = currTree.rootNode.name;
@@ -67,12 +68,12 @@ class PBPlatformOrientationLinkerService {
         }
       }
 
-      _map[tree.name].add(tree);
+      _map[tree.rootNode.name].add(tree);
       if (!_mapCounter.containsKey(tree.rootNode.name)) {
         _mapCounter[tree.rootNode.name] = 1;
       }
     } else {
-      _map[tree.name] = [tree];
+      _map[tree.rootNode.name] = [tree];
       _mapCounter[tree.rootNode.name] = 1;
     }
   }
@@ -132,6 +133,56 @@ class PBPlatformOrientationLinkerService {
 
   /// Returns orientations of the project
   Set<ORIENTATION> get orientations => _orientations;
+
+  Map<String, Map<String, List<String>>> getWhoNeedsAbstractInstance() {
+    var result = <String, Map<String, List<String>>>{};
+    _map.forEach((key, value) {
+      if (value.length > 1) {
+        result[key] = _getPlatformAndOrientation(value);
+      }
+    });
+    return result;
+  }
+
+  Map<String, List<String>> _getPlatformAndOrientation(
+      List<PBIntermediateTree> list) {
+    var result = <String, List<String>>{};
+    list.forEach((value) {
+      var platform = _getPlatformString(value);
+      var orientation = _getOrientationString(value);
+      if (result.containsKey(platform)) {
+        result[platform].add(orientation);
+      } else {
+        result[platform] = [];
+        result[platform].add(orientation);
+      }
+    });
+    return result;
+  }
+
+  String _getOrientationString(PBIntermediateTree tree) {
+    switch (tree.data.orientation) {
+      case ORIENTATION.HORIZONTAL:
+        return 'horizontal';
+      case ORIENTATION.VERTICAL:
+        return 'vertical';
+      default:
+        return 'noOrientationDetected';
+    }
+  }
+
+  String _getPlatformString(PBIntermediateTree tree) {
+    switch (tree.data.platform) {
+      case PLATFORM.DESKTOP:
+        return 'desktop';
+      case PLATFORM.MOBILE:
+        return 'mobile';
+      case PLATFORM.TABLET:
+        return 'tablet';
+      default:
+        return 'noPlatformDetected';
+    }
+  }
 
   /// Extracts and returns platform of the screen.
   ///
