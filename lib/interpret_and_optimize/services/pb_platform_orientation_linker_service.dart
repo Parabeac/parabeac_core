@@ -52,11 +52,12 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    if (_map.containsKey(tree.name)) {
+    var key = tree.rootNode.name;
+    if (_map.containsKey(key)) {
       // Check if we have exact trees (same orientation and platform)
-      var trees = _map[tree.name];
+      var trees = _map[key];
       for (var currTree in trees) {
-        var treeName = tree.rootNode.name;
+        var treeName = key;
         var iterTreeName = currTree.rootNode.name;
         if (treeName == iterTreeName &&
             tree.data.orientation == currTree.data.orientation &&
@@ -67,13 +68,13 @@ class PBPlatformOrientationLinkerService {
         }
       }
 
-      _map[tree.name].add(tree);
-      if (!_mapCounter.containsKey(tree.rootNode.name)) {
-        _mapCounter[tree.rootNode.name] = 1;
+      _map[key].add(tree);
+      if (!_mapCounter.containsKey(key)) {
+        _mapCounter[key] = 1;
       }
     } else {
-      _map[tree.name] = [tree];
-      _mapCounter[tree.rootNode.name] = 1;
+      _map[key] = [tree];
+      _mapCounter[key] = 1;
     }
   }
 
@@ -132,6 +133,15 @@ class PBPlatformOrientationLinkerService {
 
   /// Returns orientations of the project
   Set<ORIENTATION> get orientations => _orientations;
+
+  /// Returns `true` if screen with `name` has more than one platform.
+  /// Returns `false` otherwise.
+  bool screenHasMultiplePlatforms(String name) =>
+      _map.containsKey(name) && _map[name].length > 1;
+
+  /// Removes the `PLATFORM.` prefix from platform and returns the stripped platform.
+  String stripPlatform(PLATFORM platform) =>
+      platform.toString().toLowerCase().replaceFirst('platform.', '');
 
   /// Extracts and returns platform of the screen.
   ///
