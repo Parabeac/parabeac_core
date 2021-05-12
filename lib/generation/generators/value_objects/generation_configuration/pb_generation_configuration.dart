@@ -126,10 +126,8 @@ abstract class GenerationConfiguration {
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        var platformFolder = tree.rootNode.managerData.platform
-            .toString()
-            .toLowerCase()
-            .replaceFirst('platform.', '');
+        var platformFolder =
+            poLinker.stripPlatform(tree.rootNode.managerData.platform);
         await _generateNode(
             tree.rootNode, '${fileName}/$platformFolder/$fileName');
       } else {
