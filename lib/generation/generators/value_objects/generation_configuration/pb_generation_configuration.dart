@@ -17,6 +17,7 @@ import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
@@ -107,6 +108,7 @@ abstract class GenerationConfiguration {
   ///generates the Project based on the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
     pbProject = pb_project;
+    var poLinker = PBPlatformOrientationLinkerService();
 
     await setUpConfiguration();
     pbProject.fileStructureStrategy = fileStructureStrategy;
@@ -123,7 +125,17 @@ abstract class GenerationConfiguration {
 
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
-      await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
+      if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+        var platformFolder = tree.rootNode.managerData.platform
+            .toString()
+            .toLowerCase()
+            .replaceFirst('platform.', '');
+        await _generateNode(
+            tree.rootNode, '${fileName}/$platformFolder/$fileName');
+      } else {
+        await _generateNode(
+            tree.rootNode, '${tree.name.snakeCase}/${fileName}');
+      }
     }
     await _commitDependencies(pb_project.projectName);
   }
