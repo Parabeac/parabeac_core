@@ -2,6 +2,9 @@ import 'package:parabeac_core/generation/flutter_project_builder/import_helper.d
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/export_platform_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -17,10 +20,11 @@ import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
-abstract class GenerationConfiguration {
+abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
 
   Logger logger;
@@ -184,9 +188,37 @@ abstract class GenerationConfiguration {
       /// we can ignore them here
       /// TODO: change it
     } else {
-      await pbProject.fileStructureStrategy.generatePage(
-          await _generationManager.generate(node), filename,
-          args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+      var fileName = node?.name?.snakeCase ?? 'no_name_found';
+      if (node.currentContext.treeRoot.data.platform == null) {
+        // TODO: remove commented code
+        //if WriteSymbolCommand works, needs extensive testing
+        // await pbProject.fileStructureStrategy.generatePage(
+        //     await _generationManager.generate(node), filename,
+        //     args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
+
+        node.currentContext.project.genProjectData.commandQueue
+            .add(WriteSymbolCommand(
+          '$fileName.dart',
+          _generationManager.generate(node),
+        ));
+      } else {
+        var completeFileName = fileName + getPlatformOrientationName(node);
+        node.currentContext.project.genProjectData.commandQueue
+            .add(ExportPlatformCommand(
+          node.currentContext.treeRoot.data.platform,
+          fileName,
+          '$completeFileName.dart',
+          await _generationManager.generate(node),
+        ));
+      }
     }
+  }
+
+  Future<void> generatePlataformAndOrientationInstance(PBProject mainTree) {
+    var currentMap =
+        PBPlatformOrientationLinkerService().getWhoNeedsAbstractInstance();
+    currentMap.forEach((screenName, platformsMap) {
+      generatePlatformInstance(platformsMap, screenName, mainTree);
+    });
   }
 }
