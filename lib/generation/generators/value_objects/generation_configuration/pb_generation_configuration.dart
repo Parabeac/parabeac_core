@@ -116,23 +116,27 @@ abstract class GenerationConfiguration {
       tree.data.addImport('package:flutter/material.dart');
       _generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
+
+      // Relative path to the file to create
+      var relPath = '${tree.name.snakeCase}/$fileName';
+      // Change relative path if current tree is part of multi-platform setup
+      if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+        var platformFolder =
+            poLinker.stripPlatform(tree.rootNode.managerData.platform);
+        relPath = '${fileName}/$platformFolder/$fileName';
+      }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(
-            tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
+        await _setMainScreen(tree.rootNode, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
 
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        var platformFolder =
-            poLinker.stripPlatform(tree.rootNode.managerData.platform);
-        await _generateNode(
-            tree.rootNode, '${fileName}/$platformFolder/$fileName');
+        await _generateNode(tree.rootNode, '$relPath');
       } else {
-        await _generateNode(
-            tree.rootNode, '${tree.name.snakeCase}/${fileName}');
+        await _generateNode(tree.rootNode, '$relPath');
       }
     }
     await _commitDependencies(pb_project.projectName);
