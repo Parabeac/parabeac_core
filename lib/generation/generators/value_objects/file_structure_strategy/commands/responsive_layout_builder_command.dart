@@ -21,7 +21,9 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     var widgetVars = _generatePlatformWidgets(platforms);
     var widgetInit = _generatePlatformInitializers(platforms);
     var breakpointChecks = _generateBreakpointStatements(platforms);
+    //TODO: use imports system to import material. See updated orientation builder command
     var template = '''
+    import 'package:flutter/material.dart';
     class ResponsiveLayoutBuilder extends StatelessWidget {
       ${widgetVars}
 
