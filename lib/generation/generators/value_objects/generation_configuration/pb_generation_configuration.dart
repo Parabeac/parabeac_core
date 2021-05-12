@@ -2,6 +2,10 @@ import 'package:parabeac_core/generation/flutter_project_builder/import_helper.d
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/export_platform_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -21,7 +25,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orient
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
-abstract class GenerationConfiguration {
+abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
 
   Logger logger;
@@ -134,9 +138,26 @@ abstract class GenerationConfiguration {
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        await _generateNode(tree.rootNode, '$relPath');
+        tree.rootNode.currentContext.project.genProjectData.commandQueue
+            .add(ExportPlatformCommand(
+          tree.rootNode.currentContext.treeRoot.data.platform,
+          '$fileName',
+          '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
+          await _generationManager.generate(tree.rootNode),
+        ));
+      } else if (tree.rootNode is InheritedScaffold) {
+        tree.rootNode.currentContext.project.genProjectData.commandQueue
+            .add(WriteScreenCommand(
+          '$fileName.dart',
+          '${tree.name}',
+          await _generationManager.generate(tree.rootNode),
+        ));
       } else {
-        await _generateNode(tree.rootNode, '$relPath');
+        tree.rootNode.currentContext.project.genProjectData.commandQueue
+            .add(WriteSymbolCommand(
+          '$fileName.dart',
+          await _generationManager.generate(tree.rootNode),
+        ));
       }
     }
     await _commitDependencies(pb_project.projectName);
@@ -192,15 +213,11 @@ abstract class GenerationConfiguration {
     }
   }
 
-  Future<void> _generateNode(PBIntermediateNode node, String filename) async {
-    if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-      /// Since these nodes are being processed on the middlewares
-      /// we can ignore them here
-      /// TODO: change it
-    } else {
-      await pbProject.fileStructureStrategy.generatePage(
-          await _generationManager.generate(node), filename,
-          args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
-    }
+  Future<void> generatePlatformAndOrientationInstance(PBProject mainTree) {
+    var currentMap =
+        PBPlatformOrientationLinkerService().getWhoNeedsAbstractInstance();
+    currentMap.forEach((screenName, platformsMap) {
+      generatePlatformInstance(platformsMap, screenName, mainTree);
+    });
   }
 }

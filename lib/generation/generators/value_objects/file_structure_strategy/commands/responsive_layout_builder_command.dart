@@ -68,6 +68,13 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     }
     // Get breakpoints from configurations and sort by value
     var breakpoints = MainInfo().configurations['breakpoints'];
+    if (breakpoints == null) {
+      // TODO: Handle breakpoints being null
+      breakpoints = {};
+      breakpoints['mobile'] = 300;
+      breakpoints['tablet'] = 600;
+      breakpoints['desktop'] = 1280;
+    }
     var sortedMap = SplayTreeMap<String, int>.from(
         breakpoints, (a, b) => breakpoints[a].compareTo(breakpoints[b]));
 
