@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
@@ -68,6 +69,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
 
   ///Add the import information to correctly generate them in the corresponding files.
   void addImportsInfo(PBIntermediateTree tree) {
+    var poLinker = PBPlatformOrientationLinkerService();
     // Add to cache if node is scaffold or symbol master
     var node = tree.rootNode;
     var name = node?.name?.snakeCase;
@@ -76,6 +78,10 @@ abstract class FileStructureStrategy implements CommandInvoker {
       var path = node is PBSharedMasterNode
           ? '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart' // Removed .g
           : '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart';
+      if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+        path =
+            '${_screenDirectoryPath}$name/${poLinker.stripPlatform(tree.rootNode.managerData.platform)}/$name.dart';
+      }
       PBGenCache().setPathToCache(uuid, path);
     } else {
       logger.warning(
