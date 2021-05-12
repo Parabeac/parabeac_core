@@ -1,5 +1,7 @@
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
 
 mixin PBPlatformOrientationGeneration {
@@ -72,5 +74,24 @@ mixin PBPlatformOrientationGeneration {
       }
     }
     ''';
+  }
+
+  String getPlatformOrientationName(PBIntermediateNode node) {
+    var result = '';
+    var map = PBPlatformOrientationLinkerService()
+        .getPlatformOrientationData(node.name);
+
+    if (map.length > 1) {
+      var platform = PBPlatformOrientationLinkerService()
+          .getPlatformString(node.currentContext.treeRoot);
+      result += '_$platform';
+    }
+    if (map[node.currentContext.treeRoot.data.platform].length > 1) {
+      var orientation = PBPlatformOrientationLinkerService()
+          .getOrientationString(node.currentContext.treeRoot);
+      result += '_$orientation';
+    }
+
+    return result;
   }
 }
