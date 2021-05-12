@@ -100,7 +100,7 @@ class PBPlatformOrientationLinkerService {
   /// }
   Map<PLATFORM, Map<ORIENTATION, PBIntermediateTree>>
       getPlatformOrientationData(String name) {
-    var result = {};
+    var result = <PLATFORM, Map<ORIENTATION, PBIntermediateTree>>{};
     if (_map.containsKey(name)) {
       var screens = _map[name];
 
@@ -148,8 +148,8 @@ class PBPlatformOrientationLinkerService {
       List<PBIntermediateTree> list) {
     var result = <String, List<String>>{};
     list.forEach((value) {
-      var platform = _getPlatformString(value);
-      var orientation = _getOrientationString(value);
+      var platform = getPlatformString(value);
+      var orientation = getOrientationString(value);
       if (result.containsKey(platform)) {
         result[platform].add(orientation);
       } else {
@@ -160,7 +160,7 @@ class PBPlatformOrientationLinkerService {
     return result;
   }
 
-  String _getOrientationString(PBIntermediateTree tree) {
+  String getOrientationString(PBIntermediateTree tree) {
     switch (tree.data.orientation) {
       case ORIENTATION.HORIZONTAL:
         return 'horizontal';
@@ -171,7 +171,7 @@ class PBPlatformOrientationLinkerService {
     }
   }
 
-  String _getPlatformString(PBIntermediateTree tree) {
+  String getPlatformString(PBIntermediateTree tree) {
     switch (tree.data.platform) {
       case PLATFORM.DESKTOP:
         return 'desktop';
