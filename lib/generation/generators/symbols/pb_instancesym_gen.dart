@@ -62,7 +62,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             // hack to include import
-            source.currentContext.treeRoot.data.addImport(
+            source.currentContext.tree.data.addImport(
                 'package:${MainInfo().projectName}/document/shared_props.g.dart');
             buffer.write(
                 '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');

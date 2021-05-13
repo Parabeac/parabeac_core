@@ -60,7 +60,7 @@ class BLoCMiddleware extends Middleware {
 
     var isFirst = true;
     await states.forEach((element) {
-      element.currentContext.treeRoot.data = node.managerData;
+      element.currentContext.tree.data = node.managerData;
       element.generator.templateStrategy = BLoCStateTemplateStrategy(
         isFirst: isFirst,
         abstractClassName: parentState,

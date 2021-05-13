@@ -35,7 +35,7 @@ class ProviderMiddleware extends Middleware {
       var widgetName = node.functionCallName.camelCase;
       var watcher;
 
-      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
+      if (node.currentContext.tree.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {
         watcher = PBVariable(watcherName, 'final ', true,
             '${getName(node.functionCallName).pascalCase}().${widgetName}');

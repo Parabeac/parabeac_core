@@ -107,7 +107,7 @@ class Interpret {
 
     /// VisualGenerationService
     var intermediateTree = PBIntermediateTree(designScreen.designNode.name);
-    currentContext.treeRoot = intermediateTree;
+    currentContext.tree = intermediateTree;
     currentContext.project = _pb_project;
     intermediateTree.rootNode = await visualGenerationService(
         parentComponent, currentContext, stopwatch);

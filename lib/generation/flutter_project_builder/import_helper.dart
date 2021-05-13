@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
@@ -55,5 +57,77 @@ class ImportHelper {
     }
 
     return imports;
+  }
+}
+
+///Iterating through the screens in a manner where, the screens that are
+///dependent are processed first.
+class IntermediateTopoIterator<E extends PBIntermediateNode>
+    implements Iterator<E> {
+  List<PBIntermediateNode> nodes;
+
+  E _currentElement;
+
+  @override
+  E get current => _currentElement;
+
+  IntermediateTopoIterator(this.nodes) {
+    nodes = topologicalSort(nodes);
+    if (nodes.isNotEmpty) {
+      _currentElement = nodes.removeAt(0);
+    }
+  }
+
+  HashMap<PBIntermediateNode, int> _inDegrees(List<E> screens) {
+    var inDegree = HashMap<E, int>();
+    screens.forEach((screen) {
+      inDegree.putIfAbsent(screen, () => 0);
+      screen.dependentOn.forEach((dependent) {
+        inDegree.update(dependent, (value) => value + 1, ifAbsent: () => 1);
+      });
+    });
+    return inDegree;
+  }
+
+  ///Performing topological sort in the on the screens that were received.
+  List<E> topologicalSort(List<E> items) {
+    var ordered = [];
+    var noInDegrees = <PBScreen>{};
+    var inDegrees = _inDegrees(items);
+
+    inDegrees.forEach((key, value) {
+      if (value == 0) {
+        noInDegrees.add(key);
+      }
+    });
+
+    while (noInDegrees.isNotEmpty) {
+      var vertex = noInDegrees.first;
+      noInDegrees.remove(vertex);
+      ordered.add(vertex);
+
+      vertex.dependentOn.forEach((dependent) {
+        inDegrees[dependent] = inDegrees[dependent] - 1;
+        if (inDegrees[dependent] == 0) {
+          noInDegrees.add(dependent);
+        }
+      });
+    }
+
+    if (_detectCycle(inDegrees)) {}
+    return ordered;
+  }
+
+  bool _detectCycle(HashMap<E, int> inDegrees) {
+    return inDegrees.values.where((element) => element > 0).isNotEmpty;
+  }
+
+  @override
+  bool moveNext() {
+    if (screens.isNotEmpty && _currentElement != null) {
+      _currentElement = screens.removeAt(0);
+      return true;
+    }
+    return false;
   }
 }

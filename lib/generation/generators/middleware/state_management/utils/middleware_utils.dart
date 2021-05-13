@@ -28,7 +28,7 @@ class MiddlewareUtils {
       stateBuffer.write(MiddlewareUtils.generateVariable(node));
     }
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.treeRoot.data = node.managerData;
+      state.variation.node.currentContext.tree.data = node.managerData;
       var variationNode = state.variation.node;
 
       if (variationNode is PBSharedMasterNode &&
@@ -69,7 +69,7 @@ class MiddlewareUtils {
   ) {
     // Pass down manager data to states
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.treeRoot.data = node.managerData;
+      state.variation.node.currentContext.tree.data = node.managerData;
     });
     return '''
       ${manager.generateImports()}

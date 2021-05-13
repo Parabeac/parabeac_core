@@ -98,7 +98,7 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.treeRoot).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(mockTree);
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
