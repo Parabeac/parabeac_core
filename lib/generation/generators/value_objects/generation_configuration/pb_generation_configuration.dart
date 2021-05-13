@@ -1,13 +1,14 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -41,17 +42,20 @@ abstract class GenerationConfiguration {
 
   set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
 
-  GenerationConfiguration() {
-    logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
-  }
-
   PBGenerationManager get generationManager => _generationManager;
   set generationManager(PBGenerationManager manager) =>
       _generationManager = manager;
 
   final Map<String, String> _dependencies = {};
   Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
+
+  /// List of observers that will be notified when a new command is added.
+  final commandObservers = <CommandInvoker>[];
+
+  GenerationConfiguration() {
+    logger = Logger(runtimeType.toString());
+    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
+  }
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
@@ -134,6 +138,14 @@ abstract class GenerationConfiguration {
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, _pageWriter, pbProject);
+    commandObservers.add(fileStructureStrategy);
+
+    // Execute command queue
+    var queue = pbProject.genProjectData.commandQueue;
+    while (queue.isNotEmpty) {
+      var command = queue.removeLast();
+      commandObservers.forEach((observer) => observer.commandCreated(command));
+    }
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }

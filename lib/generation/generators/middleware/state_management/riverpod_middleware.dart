@@ -1,5 +1,5 @@
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';

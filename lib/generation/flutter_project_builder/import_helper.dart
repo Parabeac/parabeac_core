@@ -6,14 +6,17 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
 
-class ImportHelper {
+class ImportHelper implements FileWriterObserver {
+  Map<String, String> imports = {};
+
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
   static Set<String> findImports(PBIntermediateNode node, String path) {
-    Set imports = <String>{};
+    Set currentImports = <String>{};
     if (node == null) {
-      return imports;
+      return currentImports;
     }
 
     String id;
@@ -31,29 +34,34 @@ class ImportHelper {
         nodePaths.isNotEmpty &&
         !nodePaths.any((element) => element == path)) {
       var paths = PBGenCache().getRelativePath(path, id);
-      paths.forEach(imports.add);
+      paths.forEach(currentImports.add);
     }
 
     // Recurse through child/children and add to imports
     if (node is PBLayoutIntermediateNode) {
       node.children
-          .forEach((child) => imports.addAll(findImports(child, path)));
+          .forEach((child) => currentImports.addAll(findImports(child, path)));
     } else if (node is InheritedScaffold) {
-      imports.addAll(findImports(node.navbar, path));
-      imports.addAll(findImports(node.tabbar, path));
-      imports.addAll(findImports(node.child, path));
+      currentImports.addAll(findImports(node.navbar, path));
+      currentImports.addAll(findImports(node.tabbar, path));
+      currentImports.addAll(findImports(node.child, path));
     } else if (node is InjectedAppbar) {
-      imports.addAll(findImports(node.leadingItem, path));
-      imports.addAll(findImports(node.middleItem, path));
-      imports.addAll(findImports(node.trailingItem, path));
+      currentImports.addAll(findImports(node.leadingItem, path));
+      currentImports.addAll(findImports(node.middleItem, path));
+      currentImports.addAll(findImports(node.trailingItem, path));
     } else if (node is InjectedTabBar) {
       for (var tab in node.tabs) {
-        imports.addAll(findImports(tab, path));
+        currentImports.addAll(findImports(tab, path));
       }
     } else {
-      imports.addAll(findImports(node.child, path));
+      currentImports.addAll(findImports(node.child, path));
     }
 
-    return imports;
+    return currentImports;
+  }
+
+  @override
+  void fileCreated(String filePath, String fileUUID) {
+    imports[fileUUID] = filePath;
   }
 }
