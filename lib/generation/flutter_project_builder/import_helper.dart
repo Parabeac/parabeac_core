@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class ImportHelper {
   /// Traverse the [node] tree, check if any nodes need importing,
@@ -62,27 +63,27 @@ class ImportHelper {
 
 ///Iterating through the screens in a manner where, the screens that are
 ///dependent are processed first.
-class IntermediateTopoIterator<E extends PBIntermediateNode>
+class IntermediateTopoIterator<E extends PBIntermediateTree>
     implements Iterator<E> {
-  List<PBIntermediateNode> nodes;
+  List<E> trees;
 
   E _currentElement;
 
   @override
   E get current => _currentElement;
 
-  IntermediateTopoIterator(this.nodes) {
-    nodes = topologicalSort(nodes);
-    if (nodes.isNotEmpty) {
-      _currentElement = nodes.removeAt(0);
+  IntermediateTopoIterator(this.trees) {
+    trees = topologicalSort(trees);
+    if (trees.isNotEmpty) {
+      _currentElement = trees[0];
     }
   }
 
-  HashMap<PBIntermediateNode, int> _inDegrees(List<E> screens) {
+  HashMap<E, int> _inDegrees(List<PBIntermediateTree> trees) {
     var inDegree = HashMap<E, int>();
-    screens.forEach((screen) {
-      inDegree.putIfAbsent(screen, () => 0);
-      screen.dependentOn.forEach((dependent) {
+    trees.forEach((tree) {
+      inDegree.putIfAbsent(tree, () => 0);
+      tree.dependentsOn.forEach((dependent) {
         inDegree.update(dependent, (value) => value + 1, ifAbsent: () => 1);
       });
     });
@@ -91,8 +92,8 @@ class IntermediateTopoIterator<E extends PBIntermediateNode>
 
   ///Performing topological sort in the on the screens that were received.
   List<E> topologicalSort(List<E> items) {
-    var ordered = [];
-    var noInDegrees = <PBScreen>{};
+    var ordered = <E>[];
+    var noInDegrees = <E>{};
     var inDegrees = _inDegrees(items);
 
     inDegrees.forEach((key, value) {
@@ -106,7 +107,7 @@ class IntermediateTopoIterator<E extends PBIntermediateNode>
       noInDegrees.remove(vertex);
       ordered.add(vertex);
 
-      vertex.dependentOn.forEach((dependent) {
+      vertex.dependentsOn.forEach((dependent) {
         inDegrees[dependent] = inDegrees[dependent] - 1;
         if (inDegrees[dependent] == 0) {
           noInDegrees.add(dependent);
@@ -124,8 +125,8 @@ class IntermediateTopoIterator<E extends PBIntermediateNode>
 
   @override
   bool moveNext() {
-    if (screens.isNotEmpty && _currentElement != null) {
-      _currentElement = screens.removeAt(0);
+    if (trees.isNotEmpty) {
+      _currentElement = trees.removeAt(0);
       return true;
     }
     return false;

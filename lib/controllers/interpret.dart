@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -97,9 +98,8 @@ class Interpret {
   }
 
   Future<PBIntermediateTree> _generateScreen(DesignScreen designScreen) async {
-    var currentContext = PBContext(
-        jsonConfigurations:
-            MainInfo().configurations ?? MainInfo().defaultConfigs);
+    var currentContext =
+        PBContext(PBConfiguration.fromJson(MainInfo().configurations));
 
     var parentComponent = designScreen.designNode;
 

@@ -16,7 +16,7 @@ class MainInfo {
 
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
-  Map configurations;
+  Map<String, dynamic> configurations;
 
   // the type of configuration you want to set, 'default' is default type.
   String configurationType;
@@ -36,14 +36,12 @@ class MainInfo {
   /// Boolean that indicates whether a `styles` document is created.
   bool exportStyles;
 
-  Map defaultConfigs = {
-    'default': {
-      'widgetStyle': 'Material',
-      'widgetType': 'Stateless',
-      'widgetSpacing': 'Expanded',
-      'layoutPrecedence': ['columns', 'rows', 'stack'],
-      'state-management': 'None'
-    }
+  Map<String, dynamic> defaultConfigs = {
+    'widgetStyle': 'Material',
+    'widgetType': 'Stateless',
+    'widgetSpacing': 'Expanded',
+    'layoutPrecedence': ['columns', 'rows', 'stack'],
+    'state-management': 'None'
   };
 
   Map pbdf;
