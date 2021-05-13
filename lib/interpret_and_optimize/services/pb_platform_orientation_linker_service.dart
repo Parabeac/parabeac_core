@@ -1,3 +1,5 @@
+import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -45,6 +47,7 @@ class PBPlatformOrientationLinkerService {
     if (hasMultiplePlatforms()) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(ResponsiveLayoutBuilderCommand());
+      _addBreakpoints(tree);
     }
 
     addToMap(tree);
@@ -198,6 +201,17 @@ class PBPlatformOrientationLinkerService {
     }
 
     return ORIENTATION.VERTICAL;
+  }
+
+  void _addBreakpoints(PBIntermediateTree tree) {
+    if (MainInfo().configurations.containsKey('breakpoints')) {
+      Map<String, num> bp = MainInfo().configurations['breakpoints'];
+      bp.forEach((key, value) {
+        var cmd = AddConstantCommand(key, 'num', value.toString());
+        tree.rootNode.currentContext.project.genProjectData.commandQueue
+            .add(cmd);
+      });
+    }
   }
 }
 
