@@ -1,5 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:test/test.dart';
@@ -15,6 +16,8 @@ void main() {
   /// Three intermediateNodes that will generate import
   var importee1, importee2, importee3;
   var genCache;
+
+  PBIntermediateTree tree0, tree1, tree2;
   group('Import test', () {
     setUp(() {
       iNodeWithImports = NodeMock();
@@ -23,6 +26,10 @@ void main() {
       importee2 = NodeMock();
       importee3 = NodeMock();
       genCache = PBGenCache();
+
+      tree0 = PBIntermediateTree('Tree0');
+      tree1 = PBIntermediateTree('Tree1');
+      tree2 = PBIntermediateTree('Tree2');
 
       when(iNodeWithImports.UUID).thenReturn('00-00-00');
       when(iNodeWithoutImports.UUID).thenReturn('00-01-00');
@@ -45,12 +52,31 @@ void main() {
       ///     t0
       ///   /   \
       /// t1      t2
-      var tree0 = PBIntermediateTree('Tree0');
-      var tree1 = PBIntermediateTree('Tree1');
-      var tree2 = PBIntermediateTree('Tree2');
-
       tree1.dependentsOn.add(tree0);
       tree0.dependentsOn.add(tree2);
+      pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
+
+      var dependencyIterator =
+          IntermediateTopoIterator<PBIntermediateTree>(pbIntermeidateTrees);
+      var correctOrder = [tree1, tree0, tree2].iterator;
+      while (dependencyIterator.moveNext() && correctOrder.moveNext()) {
+        expect(dependencyIterator.current == correctOrder.current, true);
+      }
+    });
+
+    test('Testing cycles in the list [PBIntermediateTree] are processed', () {
+      ///[PBIntermediateTree]s that are going to be generated. The treees inside of the list
+      ///are dependent on each other, therefore, to ensure import availability, trees need to
+      ///be written in a certain manner.
+      var pbIntermeidateTrees = <PBIntermediateTree>[];
+
+      /// a cycle between all three [PBIntermediateTree]s
+      ///     t0
+      ///   /   \
+      /// t1---->t2
+      tree1.dependentsOn.add(tree0);
+      tree0.dependentsOn.add(tree2);
+      tree2.dependentsOn.add(tree2);
       pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
 
       var dependencyIterator =

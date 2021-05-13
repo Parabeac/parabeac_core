@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
@@ -8,7 +6,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class ImportHelper {
   /// Traverse the [node] tree, check if any nodes need importing,
@@ -58,77 +55,5 @@ class ImportHelper {
     }
 
     return imports;
-  }
-}
-
-///Iterating through the screens in a manner where, the screens that are
-///dependent are processed first.
-class IntermediateTopoIterator<E extends PBIntermediateTree>
-    implements Iterator<E> {
-  List<E> trees;
-
-  E _currentElement;
-
-  @override
-  E get current => _currentElement;
-
-  IntermediateTopoIterator(this.trees) {
-    trees = topologicalSort(trees);
-    if (trees.isNotEmpty) {
-      _currentElement = trees[0];
-    }
-  }
-
-  HashMap<E, int> _inDegrees(List<PBIntermediateTree> trees) {
-    var inDegree = HashMap<E, int>();
-    trees.forEach((tree) {
-      inDegree.putIfAbsent(tree, () => 0);
-      tree.dependentsOn.forEach((dependent) {
-        inDegree.update(dependent, (value) => value + 1, ifAbsent: () => 1);
-      });
-    });
-    return inDegree;
-  }
-
-  ///Performing topological sort in the on the screens that were received.
-  List<E> topologicalSort(List<E> items) {
-    var ordered = <E>[];
-    var noInDegrees = <E>{};
-    var inDegrees = _inDegrees(items);
-
-    inDegrees.forEach((key, value) {
-      if (value == 0) {
-        noInDegrees.add(key);
-      }
-    });
-
-    while (noInDegrees.isNotEmpty) {
-      var vertex = noInDegrees.first;
-      noInDegrees.remove(vertex);
-      ordered.add(vertex);
-
-      vertex.dependentsOn.forEach((dependent) {
-        inDegrees[dependent] = inDegrees[dependent] - 1;
-        if (inDegrees[dependent] == 0) {
-          noInDegrees.add(dependent);
-        }
-      });
-    }
-
-    if (_detectCycle(inDegrees)) {}
-    return ordered;
-  }
-
-  bool _detectCycle(HashMap<E, int> inDegrees) {
-    return inDegrees.values.where((element) => element > 0).isNotEmpty;
-  }
-
-  @override
-  bool moveNext() {
-    if (trees.isNotEmpty) {
-      _currentElement = trees.removeAt(0);
-      return true;
-    }
-    return false;
   }
 }
