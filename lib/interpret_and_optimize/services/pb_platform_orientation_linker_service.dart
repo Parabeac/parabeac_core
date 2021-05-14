@@ -207,7 +207,7 @@ class PBPlatformOrientationLinkerService {
     if (MainInfo().configurations.containsKey('breakpoints')) {
       Map<String, num> bp = MainInfo().configurations['breakpoints'].cast<String, num>();
       bp.forEach((key, value) {
-        var cmd = AddConstantCommand(key, 'num', value.toString());
+        var cmd = AddConstantCommand(key + 'Breakpoint', 'num', value.toString());
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(cmd);
       });
