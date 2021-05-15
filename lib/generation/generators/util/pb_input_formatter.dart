@@ -15,7 +15,9 @@ class PBInputFormatter {
         spaceToUnderscore: spaceToUnderscore, destroyDigits: destroyDigits);
 
     (isTitle)
-        ? result = result.replaceRange(0, 1, result[0].toUpperCase())
+        ? result = result.camelCase
+            .replaceAll('_', '')
+            .replaceRange(0, 1, result[0].toUpperCase())
         : result = result.toLowerCase();
     return result;
   }
