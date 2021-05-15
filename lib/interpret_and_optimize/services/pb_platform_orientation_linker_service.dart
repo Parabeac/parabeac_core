@@ -55,7 +55,7 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    var key = tree.rootNode.name;
+    var key = tree.identifier;
     if (_map.containsKey(key)) {
       // Check if we have exact trees (same orientation and platform)
       var trees = _map[key];
@@ -205,7 +205,8 @@ class PBPlatformOrientationLinkerService {
 
   void _addBreakpoints(PBIntermediateTree tree) {
     if (MainInfo().configurations.containsKey('breakpoints')) {
-      Map<String, num> bp = MainInfo().configurations['breakpoints'].cast<String, num>();
+      Map<String, num> bp =
+          MainInfo().configurations['breakpoints'].cast<String, num>();
       bp.forEach((key, value) {
         var cmd = AddConstantCommand(key, 'num', value.toString());
         tree.rootNode.currentContext.project.genProjectData.commandQueue

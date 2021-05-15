@@ -138,11 +138,12 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+        getPlatformOrientationName(tree.rootNode);
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(ExportPlatformCommand(
           tree.rootNode.currentContext.treeRoot.data.platform,
           '$fileName',
-          '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
+          '${tree.rootNode.name.snakeCase}.dart',
           await _generationManager.generate(tree.rootNode),
         ));
       } else if (tree.rootNode is InheritedScaffold) {

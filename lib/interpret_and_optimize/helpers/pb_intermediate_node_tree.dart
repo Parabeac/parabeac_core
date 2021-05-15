@@ -9,8 +9,16 @@ enum TREE_TYPE {
 
 class PBIntermediateTree {
   PBGenerationViewData data;
-  PBIntermediateNode rootNode;
+  PBIntermediateNode _rootNode;
+  set rootNode(PBIntermediateNode rootNode) {
+    _rootNode = rootNode;
+    identifier = rootNode?.name ?? name;
+  }
+
+  PBIntermediateNode get rootNode => _rootNode;
+
   String name;
+  String identifier;
   PBIntermediateTree(this.name);
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
 }
