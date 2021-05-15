@@ -8,7 +8,7 @@ class AddDependencyCommand extends FileStructureCommand {
   final _PUBSPEC_YAML_NAME = 'pubspec.yaml';
 
   ///assets yaml decleration
-  final String _ASSET_DECLERATION = '  assets:\n    - assets/images/';
+  final String _ASSET_DECLERATION = '\t\t- assets/images/';
 
   /// Name of the [package]
   String package;
