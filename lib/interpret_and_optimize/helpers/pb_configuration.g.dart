@@ -10,10 +10,10 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
   return PBConfiguration(
     json['widgetStyle'] as String ?? 'Material',
     json['widgetType'] as String ?? 'Stateless',
-    json['widgetSpacing'] as String ?? 'Expandeds',
+    json['widgetSpacing'] as String ?? 'Expanded',
     json['stateManagement'] as String ?? 'None',
     (json['layoutPrecedence'] as List)?.map((e) => e as String)?.toList() ??
-        ['column', 'row', 'stacl'],
+        ['column', 'row', 'stack'],
   )..configurations = json['configurations'] as Map<String, dynamic>;
 }
 

@@ -1,3 +1,4 @@
+import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
@@ -16,8 +17,8 @@ class WriteScreenCommand extends NodeFileStructureCommand {
   @override
   Future<String> write(FileStructureStrategy strategy) {
     var absPath =
-        '${strategy.GENERATED_PROJECT_PATH}$SCREEN_PATH/$relativePath/$name';
-    writeDataToFile(code, absPath);
-    return Future.value(absPath);
+        p.join(strategy.GENERATED_PROJECT_PATH, SCREEN_PATH, relativePath);
+    strategy.writeDataToFile(code, absPath, name);
+    return Future.value(p.join(absPath, name));
   }
 }

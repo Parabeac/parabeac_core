@@ -24,5 +24,6 @@ class PBProject {
       {FileStructureStrategy fileStructureStrategy}) {
     _genProjectData = PBGenerationProjectData();
     _fileStructureStrategy = fileStructureStrategy;
+    _genProjectData = PBGenerationProjectData();
   }
 }

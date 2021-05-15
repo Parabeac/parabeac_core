@@ -6,14 +6,11 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 
 class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
-  final PATH_TO_RESPONSIVE_LAYOUT =
-      'lib/widgets/responsive_layout_builder.dart';
+  final DIR_TO_RESPONSIVE_LAYOUT = 'lib/widgets/';
+  final NAME_TO_RESPONSIVE_LAYOUT = 'responsive_layout_builder.dart';
 
   @override
   Future write(FileStructureStrategy strategy) async {
-    var absPath =
-        '${strategy.GENERATED_PROJECT_PATH}$PATH_TO_RESPONSIVE_LAYOUT';
-
     var platforms = PBPlatformOrientationLinkerService()
         .platforms
         .map((platform) => platform.toString().split('.').last.toLowerCase());
@@ -22,12 +19,12 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     var breakpointChecks = _generateBreakpointStatements(platforms);
     var template = '''
     class ResponsiveLayoutBuilder extends StatelessWidget {
-      ${widgetVars}
+      $widgetVars
 
       const ResponsiveLayoutBuilder(
         {
           Key key,
-          ${widgetInit}
+          $widgetInit
         }
       );
 
@@ -36,7 +33,7 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
         return LayoutBuilder(
           builder: (context, constraints) {
             var width = constraints.maxWidth;
-            ${breakpointChecks}
+            $breakpointChecks
             return Container();
           },
         );
@@ -44,7 +41,8 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     }
     ''';
 
-    super.writeDataToFile(template, absPath);
+    strategy.writeDataToFile(
+        template, DIR_TO_RESPONSIVE_LAYOUT, NAME_TO_RESPONSIVE_LAYOUT);
   }
 
   String _generatePlatformWidgets(List<String> platforms) {

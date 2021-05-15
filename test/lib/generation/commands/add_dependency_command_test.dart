@@ -9,16 +9,31 @@ import 'package:test/test.dart';
 
 class MockFSStrategy extends Mock implements FileStructureStrategy {}
 
+class MockCommand extends Mock implements AddDependencyCommand {}
+
+class MockFile extends Mock implements File {}
+
 void main() {
   final path = '${Directory.current.path}/test/lib/generation/commands/';
   group('Add Dependency Command', () {
-    FileStructureCommand command;
+    AddDependencyCommand command;
     FileStructureStrategy strategy;
+    List<String> yamlFileContents;
+    File yamlFile;
 
     setUp(() {
-      command = AddDependencyCommand('auto_size_text', '^2.1.0');
+      yamlFile = MockFile();
+      command = MockCommand();
       strategy = MockFSStrategy();
-      when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst/');
+      yamlFileContents = <String>['dependencies:', 'flutter:', '  assets:'];
+
+      when(command.package).thenReturn('auto_size_text');
+      when(command.version).thenReturn('^2.1.0');
+      when(command.yamlFile).thenReturn(yamlFile);
+
+      when(yamlFile.readAsLinesSync()).thenReturn(yamlFileContents);
+      when(command.writeDataToFile('', '')).thenReturn(null);
+      when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst');
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
 

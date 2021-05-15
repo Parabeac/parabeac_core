@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -71,6 +72,7 @@ void main() {
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
       when(project.forest).thenReturn([intermediateTree]);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
       when(project.projectAbsPath).thenReturn(outputPath);
 
       when(scaffold.child).thenReturn(container);
