@@ -1,7 +1,9 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -44,7 +46,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The properties that could be be overridable on a [PBSharedMasterNode]
 
   List<PBSharedParameterProp> overridableProperties;
-
+  Map<String, PBSharedParameterProp> overridePropMap = {};
   String friendlyName;
 
   PBSharedMasterNode(
@@ -93,7 +95,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             p.UUID,
             p.canOverride,
             p.propertyName,
-            /* Removed Parameter Defintion as it was accepting JSON?*/
+            /* Removed Parameter Definition as it was accepting JSON?*/
             null, // TODO: @Eddie
             currentContext.screenTopLeftCorner.x,
             currentContext.screenTopLeftCorner.y,
@@ -102,6 +104,11 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             context: currentContext))
         .toList()
           ..removeWhere((p) => p == null || p.parameterDefinition == null);
+
+    // create quick lookup map for overridable properties by UUID
+    for (var override in overridableProperties) {
+      overridePropMap[override.UUID] = override;
+    }
   }
 
   @override
@@ -132,7 +139,7 @@ class PBSharedParameterProp {
   dynamic get initialValue => _initialValue;
 
   final String _friendlyName;
-  String get friendlyName => _friendlyName;
+  String get friendlyName => _friendlyName ?? SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ?? 'noname';
 
   PBSharedParameterProp(this._friendlyName, this._type, this.value,
       this._canOverride, this._propertyName, this._UUID, this._initialValue);
