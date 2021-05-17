@@ -7,16 +7,14 @@ import 'package:recase/recase.dart';
 mixin PBPlatformOrientationGeneration {
   void generatePlatformInstance(Map<String, List<String>> platformsMap,
       String screenName, PBProject mainTree) {
-    platformsMap.forEach((platform, screens) {
-      var formatedName = screenName.snakeCase.toLowerCase();
-      if (platformsMap.length > 1) {
-        mainTree.genProjectData.commandQueue.add(WriteScreenCommand(
-          formatedName + '_platform_builder.dart',
-          formatedName,
-          _getPlatformInstance(platformsMap, screenName),
-        ));
-      }
-    });
+    var formatedName = screenName.snakeCase.toLowerCase();
+    if (platformsMap.length > 1) {
+      mainTree.genProjectData.commandQueue.add(WriteScreenCommand(
+        formatedName + '_platform_builder.dart',
+        formatedName,
+        _getPlatformInstance(platformsMap, screenName),
+      ));
+    }
   }
 
   String _getPlatformInstance(
@@ -63,12 +61,12 @@ mixin PBPlatformOrientationGeneration {
 
     if (map.length > 1) {
       var platform = PBPlatformOrientationLinkerService()
-          .stripPlatform(node.currentContext.treeRoot.data.platform);
+          .stripPlatform(node.currentContext.tree.data.platform);
       node.name += '_$platform';
     }
-    if (map[node.currentContext.treeRoot.data.platform].length > 1) {
+    if (map[node.currentContext.tree.data.platform].length > 1) {
       var orientation = PBPlatformOrientationLinkerService()
-          .stripOrientation(node.currentContext.treeRoot.data.orientation);
+          .stripOrientation(node.currentContext.tree.data.orientation);
       node.name += '_$orientation';
     }
   }

@@ -12,7 +12,7 @@ class PBRowGenerator extends PBLayoutGenerator {
     if (source is PBIntermediateRowLayout) {
       var buffer = StringBuffer();
       var counter = 0;
-      List<PBIntermediateNode> children = source.children;
+      var children = source.children;
 
       for (var child in children) {
         child.currentContext = source.currentContext;

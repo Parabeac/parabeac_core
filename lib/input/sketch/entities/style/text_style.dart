@@ -15,6 +15,7 @@ class TextStyle implements PBTextStyle {
   @override
   @JsonKey(ignore: true)
   PBFontDescriptor fontDescriptor;
+  @override
   @JsonKey(ignore: true)
   PBParagraphStyle paragraphStyle;
   @JsonKey(ignore: true)
@@ -97,6 +98,7 @@ class TextStyle implements PBTextStyle {
 
   factory TextStyle.fromJson(Map<String, dynamic> json) =>
       _$TextStyleFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$TextStyleToJson(this);
 
   @override

@@ -52,9 +52,10 @@ class PBSharedInterAggregationService {
           rootChildNode, targetUUID);
       if (prop.value == null) {
         // add Designer Warning here, not even sure if this is the designers fault or not
-        log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
+        log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
-      if ((prop.value != null) && (prop.type == PBSharedInstanceIntermediateNode)) {
+      if ((prop.value != null) &&
+          (prop.type == PBSharedInstanceIntermediateNode)) {
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
@@ -101,6 +102,9 @@ class PBSharedInterAggregationService {
         return null;
       }).toList()
             ..removeWhere((v) => v == null || v.value == null);
+
+      instanceIntermediateNode.currentContext
+          .addDependent(masterNode.currentContext.tree);
 
       ///Get the attributes of the [masterNode] to the [instanceIntermediateNode] here ([instanceIntermediateNode] attributes)
       instanceIntermediateNode.functionCallName = masterNode.name;

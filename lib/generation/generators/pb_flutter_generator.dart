@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -8,7 +9,8 @@ import 'package:quick_log/quick_log.dart';
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
-  PBFlutterGenerator({PBGenerationViewData data}) : super(data: data) {
+  PBFlutterGenerator(ImportHelper importHelper, {PBGenerationViewData data})
+      : super(importHelper, data: data) {
     body = StringBuffer();
   }
 
@@ -81,6 +83,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   /// Generates the dispose method
+  @override
   String generateDispose() {
     var buffer = StringBuffer();
     var it = data.toDispose;
@@ -105,7 +108,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     }
     rootNode.generator.manager = this;
     if (rootNode.generator == null) {
-      log.error('Generator not registered for ${rootNode}');
+      log.error('Generator not registered for $rootNode');
     }
     return rootNode.generator?.templateStrategy?.generateTemplate(
             rootNode,

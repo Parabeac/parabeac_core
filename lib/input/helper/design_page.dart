@@ -30,13 +30,13 @@ class DesignPage implements DesignNodeFactory {
 
   /// Parabeac Design File
   Map<String, dynamic> toPBDF() {
-    Map<String, dynamic> result = {};
+    var result = <String, dynamic>{};
     result['pbdfType'] = pbdfType;
     result['id'] = id;
     result['name'] = name;
     result['convert'] = convert;
 
-    List<Map> tempScreens = [];
+    var tempScreens = <Map>[];
     for (var screen in screens) {
       tempScreens.add(screen.toPBDF());
     }

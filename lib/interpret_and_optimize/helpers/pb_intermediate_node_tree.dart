@@ -19,6 +19,11 @@ class PBIntermediateTree {
 
   String name;
   String identifier;
-  PBIntermediateTree(this.name);
+
+  List<PBIntermediateTree> dependentsOn;
+
+  PBIntermediateTree(this.name) {
+    dependentsOn = [];
+  }
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
 }

@@ -15,20 +15,20 @@ class StatefulTemplateStrategy extends TemplateStrategy {
     return '''
 ${manager.generateImports()}
 
-class ${widgetName} extends StatefulWidget{
-  const ${widgetName}() : super();
+class $widgetName extends StatefulWidget{
+  const $widgetName() : super();
   @override
-  _${widgetName} createState() => _${widgetName}();
+  _$widgetName createState() => _$widgetName();
 }
 
-class _${widgetName} extends State<${widgetName}>{
+class _$widgetName extends State<$widgetName>{
   ${manager.generateGlobalVariables()}
   _${manager.generateConstructor(constructorName)}
 
   @override
   Widget build(BuildContext context){
     ${manager.data.methodVariableStr}
-    return ${returnStatement};
+    return $returnStatement;
   }
 
   ${manager.generateDispose()}

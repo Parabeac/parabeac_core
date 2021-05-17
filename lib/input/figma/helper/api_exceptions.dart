@@ -2,6 +2,7 @@ class APIException implements Exception {
   final _message;
   final _prefix;
   APIException([this._message, this._prefix]);
+  @override
   String toString() {
     return "$_prefix$_message";
   }
@@ -9,17 +10,17 @@ class APIException implements Exception {
 
 class FetchDataException extends APIException {
   FetchDataException([String message])
-      : super(message, "Error During Communication: ");
+      : super(message, 'Error During Communication: ');
 }
 
 class BadRequestException extends APIException {
-  BadRequestException([message]) : super(message, "Invalid Request: ");
+  BadRequestException([message]) : super(message, 'Invalid Request: ');
 }
 
 class UnauthorisedException extends APIException {
-  UnauthorisedException([message]) : super(message, "Unauthorised: ");
+  UnauthorisedException([message]) : super(message, 'Unauthorised: ');
 }
 
 class InvalidInputException extends APIException {
-  InvalidInputException([String message]) : super(message, "Invalid Input: ");
+  InvalidInputException([String message]) : super(message, 'Invalid Input: ');
 }

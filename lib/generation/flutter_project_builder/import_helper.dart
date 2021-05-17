@@ -9,7 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
 
 class ImportHelper implements FileWriterObserver {
-  Map<String, String> imports = {};
+  final Map<String, String> imports = {};
 
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
@@ -60,8 +60,15 @@ class ImportHelper implements FileWriterObserver {
     return currentImports;
   }
 
+  void addImport(String import, String UUID){
+    if(import != null && UUID != null){
+      imports[UUID] = import;
+    }
+  }
   @override
   void fileCreated(String filePath, String fileUUID) {
-    imports[fileUUID] = filePath;
+    if(filePath != null && fileUUID != null){
+         imports[fileUUID] = filePath;
+    }
   }
 }

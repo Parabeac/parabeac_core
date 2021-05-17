@@ -21,7 +21,7 @@ class PBPrototypeGenerator extends PBGenerator {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ${name}()),
+          MaterialPageRoute(builder: (context) => $name()),
         );
       },
       child: ${source.child.generator.generate(source.child, generatorContext)},

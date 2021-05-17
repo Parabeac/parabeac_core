@@ -26,6 +26,7 @@ class Rectangle extends AbstractShapeLayer
   final double fixedRadius;
   final bool hasConvertedToNewRoundCorners;
   final bool needsConvertionToNewRoundCorners;
+  @override
   @JsonKey(name: 'frame')
   var boundaryRectangle;
   @override
@@ -41,13 +42,13 @@ class Rectangle extends AbstractShapeLayer
   Style _style;
 
   @override
-  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+  set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
   bool get isVisible => _isVisible;
 
   @override
-  void set style(_style) => this._style = _style;
+  set style(_style) => this._style = _style;
 
   @override
   Style get style => _style;

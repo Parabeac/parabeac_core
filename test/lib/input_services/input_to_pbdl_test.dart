@@ -32,7 +32,7 @@ void main() {
       });
       test('Figma Test', () async {
         var figmaNodeTree =
-            await FigmaController().generateFigmaTree(result, outputPath);
+            FigmaController().generateFigmaTree(result, outputPath);
 
         expect(figmaNodeTree != null, true);
         expect(figmaNodeTree is FigmaProject, true);
@@ -51,7 +51,7 @@ void main() {
       tearDownAll(() {
         Process.runSync(
             '${Directory.current.path}/lib/generation/helperScripts/shell-proxy.sh',
-            ['rm -rf ${outputPath}']);
+            ['rm -rf $outputPath']);
       });
     },
     skip: !Platform.environment.containsKey('FIG_API_KEY'),

@@ -12,8 +12,10 @@ class Polygon implements DesignNodeFactory, DesignNode {
   @override
   String pbdfType = 'polygon';
 
+  @override
   var boundaryRectangle;
 
+  @override
   var UUID;
 
   Polygon({

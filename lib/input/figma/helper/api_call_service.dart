@@ -72,20 +72,20 @@ class APICallService {
         // log.debug('API call went successfully : ${status}');
         break;
       case 400:
-        log.error('BadRequestException : ${status}');
+        log.error('BadRequestException : $status');
         throw BadRequestException();
         break;
       case 401:
       case 403:
-        log.error('UnauthorizedException : ${status}');
+        log.error('UnauthorizedException : $status');
         throw UnauthorisedException();
         break;
       case 500:
       default:
         log.error(
-            'Error occured while Communication with Server with StatusCode : ${status}');
+            'Error occured while Communication with Server with StatusCode : $status');
         throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${status}');
+            'Error occured while Communication with Server with StatusCode : $status');
         break;
     }
   }

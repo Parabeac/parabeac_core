@@ -10,7 +10,7 @@ class PBGenCache {
 
   /// Cache where the key is the doObjectId and the value is the paths associated
   /// to the doObjectId
-  Map<String, Set<String>> _cache = {};
+  final Map<String, Set<String>> _cache = {};
 
   /// Associates `path` to `doObjectId` in this cache.
   void setPathToCache(String doObjectId, String path) {
@@ -44,7 +44,7 @@ class PBGenCache {
 
     for (var targetPath in targetPaths) {
       // Tokenize [filePath] and the path to the file of [doObjectId]
-      List<String> filePathTokens = filePath.split('/')
+      var filePathTokens = filePath.split('/')
         ..removeLast()
         ..removeAt(0);
       if (targetPath == filePath) {
@@ -65,23 +65,23 @@ class PBGenCache {
       }
       // Case for when backtracking is not needed to get to [targetPath]
       else if (filePathTokens.isEmpty) {
-        String result = './';
-        for (String folder in targetPathTokens) {
+        var result = './';
+        for (var folder in targetPathTokens) {
           result = '$result$folder/';
         }
         paths.add('$result$targetFileName');
       }
       // Case for when backtracking is needed to get to [targetPath]
       else {
-        String result = '';
+        var result = '';
 
         // Backtrack
-        for (int i = 0; i < filePathTokens.length; i++) {
+        for (var i = 0; i < filePathTokens.length; i++) {
           result = '$result../';
         }
 
         // Add necessary folders
-        for (int i = 0; i < targetPathTokens.length; i++) {
+        for (var i = 0; i < targetPathTokens.length; i++) {
           result = '$result${targetPathTokens[i]}/';
         }
         paths.add('$result$targetFileName');

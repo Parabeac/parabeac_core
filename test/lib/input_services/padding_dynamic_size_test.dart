@@ -1,4 +1,5 @@
 import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -20,7 +21,8 @@ void main() {
       currentContext = ContextMock();
       when(currentContext.screenTopLeftCorner).thenReturn(Point(215, -295));
       when(currentContext.screenBottomRightCorner).thenReturn(Point(590, 955));
-      when(currentContext.generationManager).thenReturn(PBFlutterGenerator());
+      when(currentContext.generationManager)
+          .thenReturn(PBFlutterGenerator(ImportHelper()));
 
       currentChild = NodeMock();
       when(currentChild.currentContext).thenReturn(currentContext);

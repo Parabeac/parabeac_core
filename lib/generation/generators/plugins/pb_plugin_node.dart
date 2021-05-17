@@ -8,6 +8,7 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
   String semanticName;
 
+  @override
   final String UUID;
 
   PBEgg(Point topLeftCorner, Point bottomRightCorner, PBContext currentContext,
@@ -25,5 +26,6 @@ abstract class PBEgg extends PBVisualIntermediateNode {
 
   void extractInformation(DesignNode incomingNode);
 
+  @override
   void addChild(PBIntermediateNode node);
 }

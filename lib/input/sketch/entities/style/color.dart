@@ -7,10 +7,12 @@ part 'color.g.dart';
 class Color implements PBColor {
   @JsonKey(name: '_class')
   final String classField;
+  @override
   double alpha, blue, green, red;
 
   Color({this.alpha, this.blue, this.classField, this.green, this.red});
 
   factory Color.fromJson(Map json) => _$ColorFromJson(json);
+  @override
   Map toJson() => _$ColorToJson(this);
 }

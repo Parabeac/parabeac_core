@@ -63,6 +63,7 @@ class PBArtboard extends DesignNode implements GroupNode, DesignNodeFactory {
   @override
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
+  @override
   DesignNode fromPBDF(Map<String, dynamic> json) {
     var node = PBArtboard(
       backgroundColor: json['backgroundColor'] == null

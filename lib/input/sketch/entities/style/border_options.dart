@@ -22,5 +22,6 @@ class BorderOptions implements PBBorderOptions {
   );
 
   factory BorderOptions.fromJson(Map json) => _$BorderOptionsFromJson(json);
+  @override
   Map toJson() => _$BorderOptionsToJson(this);
 }

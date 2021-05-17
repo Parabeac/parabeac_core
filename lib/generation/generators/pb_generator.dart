@@ -18,8 +18,7 @@ abstract class PBGenerator {
   set templateStrategy(TemplateStrategy strategy) =>
       _templateStrategy = strategy;
 
-  PBGenerationManager _manager =
-      PBFlutterGenerator(data: PBGenerationViewData());
+  PBGenerationManager _manager;
   set manager(PBGenerationManager generationManager) =>
       _manager = generationManager;
   PBGenerationManager get manager => _manager;

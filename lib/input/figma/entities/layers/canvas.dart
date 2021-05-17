@@ -56,6 +56,7 @@ class Canvas extends FigmaNode implements FigmaNodeFactory, GroupNode {
   Canvas createSketchNode(Map<String, dynamic> json) => Canvas.fromJson(json);
   factory Canvas.fromJson(Map<String, dynamic> json) => _$CanvasFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$CanvasToJson(this);
 
   @override

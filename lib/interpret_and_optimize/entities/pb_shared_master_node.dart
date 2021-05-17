@@ -14,7 +14,6 @@ import 'package:quick_log/quick_log.dart';
 
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
-
   ///SERVICE
   var log = Logger('PBSharedMasterNode');
 
@@ -57,7 +56,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     PBContext currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: originalRef.UUID ?? '') {
-
     try {
       //Remove any special characters and leading numbers from the method name
       friendlyName = name
@@ -68,9 +66,9 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
       friendlyName = friendlyName[0].toUpperCase() + friendlyName.substring(1);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
-        exception: e,
-        stackTrace: stackTrace,
-      );
+            exception: e,
+            stackTrace: stackTrace,
+          );
       log.error(e.toString());
     }
     ;
@@ -94,7 +92,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             p.canOverride,
             p.propertyName,
             /* Removed Parameter Defintion as it was accepting JSON?*/
-            null, // TODO: @Eddie
+            null,
             currentContext.screenTopLeftCorner.x,
             currentContext.screenTopLeftCorner.y,
             currentContext.screenBottomRightCorner.x,

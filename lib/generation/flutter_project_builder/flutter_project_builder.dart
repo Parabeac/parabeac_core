@@ -40,7 +40,7 @@ class FlutterProjectBuilder {
   PBPageWriter pageWriter;
 
   FlutterProjectBuilder({this.projectName, this.mainTree, this.pageWriter}) {
-    pathToFlutterProject = '${projectName}/';
+    pathToFlutterProject = '$projectName/';
     generationConfiguration = configurations[MainInfo()
             .configurations['state-management']
             .toString()

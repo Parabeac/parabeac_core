@@ -30,13 +30,13 @@ ${isFirst ? _getHeader(manager) : ''}
 class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{
   ${manager.generateGlobalVariables()}
 
-  ${overrideVars}
+  $overrideVars
   
 
   ${widgetName + 'State'}(${(overrides.isNotEmpty ? '{$overrides}' : '')}){}
 
   @override
-  Widget get widget => ${returnStatement};
+  Widget get widget => $returnStatement;
 
 }''';
   }
