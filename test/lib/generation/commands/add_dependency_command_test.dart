@@ -38,5 +38,9 @@ flutter:
       expect(fileStr.contains('auto_size_text: ^2.1.0'), true);
       expect(fileStr.contains('- assets/images/'), true);
     });
+
+    tearDownAll(() {
+      Process.runSync('rm', ['-r', 'tmptst'], workingDirectory: path);
+    });
   });
 }
