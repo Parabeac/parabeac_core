@@ -82,7 +82,7 @@ abstract class Controller {
     if (path.endsWith('/')) {
       return path;
     } else {
-      return '${path}/';
+      return '$path/';
     }
   }
 

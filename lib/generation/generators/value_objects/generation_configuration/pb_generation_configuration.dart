@@ -127,11 +127,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         var platformFolder =
             poLinker.stripPlatform(tree.rootNode.managerData.platform);
-        relPath = '${fileName}/$platformFolder/$fileName';
+        relPath = '$fileName/$platformFolder/$fileName';
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(tree.rootNode, '$relPath.dart');
+        _setMainScreen(tree.rootNode, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
 
@@ -143,20 +143,20 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
           '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
-          await _generationManager.generate(tree.rootNode),
+          _generationManager.generate(tree.rootNode),
         ));
       } else if (tree.rootNode is InheritedScaffold) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteScreenCommand(
           '$fileName.dart',
           '${tree.name}',
-          await _generationManager.generate(tree.rootNode),
+          _generationManager.generate(tree.rootNode),
         ));
       } else {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteSymbolCommand(
           '$fileName.dart',
-          await _generationManager.generate(tree.rootNode),
+          _generationManager.generate(tree.rootNode),
         ));
       }
     }
@@ -209,7 +209,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       await writer.writeMainScreenWithHome(
           node.name,
           fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
-          'screens/${outputMain}');
+          'screens/$outputMain');
     }
   }
 

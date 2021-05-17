@@ -32,14 +32,14 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   @override
   void alignChildren() {
-    assert(false, 'Attempted to align children on class type [${runtimeType}]');
+    assert(false, 'Attempted to align children on class type [$runtimeType]');
     return null;
   }
 
   @override
   bool satisfyRules(
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
-    assert(false, 'Attempted to satisfyRules for class type [${runtimeType}]');
+    assert(false, 'Attempted to satisfyRules for class type [$runtimeType]');
     return null;
   }
 
@@ -47,7 +47,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
     assert(
-        false, 'Attempted to generateLayout for class type [${runtimeType}]');
+        false, 'Attempted to generateLayout for class type [$runtimeType]');
     return null;
   }
 }

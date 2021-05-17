@@ -32,6 +32,7 @@ class FigmaTextStyle implements PBTextStyle {
     this.paragraphStyle,
   });
 
+  @override
   Map<String, dynamic> toJson() => _$FigmaTextStyleToJson(this);
   factory FigmaTextStyle.fromJson(Map<String, dynamic> json) =>
       _$FigmaTextStyleFromJson(json);

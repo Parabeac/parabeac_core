@@ -35,5 +35,6 @@ class Fill implements PBFill {
       this.patternTileScale});
 
   factory Fill.fromJson(Map json) => _$FillFromJson(json);
+  @override
   Map toJson() => _$FillToJson(this);
 }

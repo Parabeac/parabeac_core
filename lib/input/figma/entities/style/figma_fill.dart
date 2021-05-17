@@ -14,6 +14,7 @@ class FigmaFill implements PBFill {
   @override
   bool isEnabled;
 
+  @override
   Map<String, dynamic> toJson() => _$FigmaFillToJson(this);
   factory FigmaFill.fromJson(Map<String, dynamic> json) =>
       _$FigmaFillFromJson(json);

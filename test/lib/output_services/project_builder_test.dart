@@ -101,7 +101,7 @@ void main() {
       await fss.setUpDirectories();
       when(project.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = await FlutterProjectBuilder(
+      projectBuilder = FlutterProjectBuilder(
           projectName: outputPath,
           mainTree: project,
           pageWriter: PBFlutterWriter());

@@ -31,14 +31,15 @@ class FigmaStyle implements PBStyle {
     FigmaTextStyle this.textStyle,
     FigmaBorderOptions this.borderOptions,
   }) {
-    if (this.fills == null) {
-      this.fills = [];
+    if (fills == null) {
+      fills = [];
     }
   }
 
   @override
   PBBorderOptions borderOptions;
 
+  @override
   Map<String, dynamic> toJson() => _$FigmaStyleToJson(this);
   factory FigmaStyle.fromJson(Map<String, dynamic> json) =>
       _$FigmaStyleFromJson(json);

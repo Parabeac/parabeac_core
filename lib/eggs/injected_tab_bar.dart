@@ -14,8 +14,11 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
+  @override
   final String UUID;
+  @override
   PBContext currentContext;
+  @override
   String semanticName = '<tabbar>';
 
   List<PBIntermediateNode> get tabs => getAttributeNamed('tabs').attributeNodes;

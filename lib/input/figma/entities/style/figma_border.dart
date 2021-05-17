@@ -23,6 +23,7 @@ class FigmaBorder implements PBBorder {
     this.thickness,
   });
 
+  @override
   Map<String, dynamic> toJson() => _$FigmaBorderToJson(this);
   factory FigmaBorder.fromJson(Map<String, dynamic> json) =>
       _$FigmaBorderFromJson(json);

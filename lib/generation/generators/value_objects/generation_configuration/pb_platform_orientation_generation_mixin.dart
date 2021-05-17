@@ -53,7 +53,7 @@ mixin PBPlatformOrientationGeneration {
       Map<String, List<String>> platformsMap, String className) {
     var result = '';
     platformsMap.forEach((platform, value) {
-      result += '${platform}Widget: ${className}_${platform}(),';
+      result += '${platform}Widget: ${className}_$platform(),';
     });
     return result;
   }
@@ -81,11 +81,6 @@ mixin PBPlatformOrientationGeneration {
     var map = PBPlatformOrientationLinkerService()
         .getPlatformOrientationData(node.name);
 
-    // if (map.length > 1) {
-    //   var platform = PBPlatformOrientationLinkerService()
-    //       .stripPlatform(node.currentContext.treeRoot.data.platform);
-    //   result += '_$platform';
-    // }
     if (map[node.currentContext.tree.data.platform].length > 1) {
       var orientation = PBPlatformOrientationLinkerService()
           .stripOrientation(node.currentContext.tree.data.orientation);

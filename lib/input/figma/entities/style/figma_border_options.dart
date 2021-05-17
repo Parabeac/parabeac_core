@@ -26,6 +26,7 @@ class FigmaBorderOptions implements PBBorderOptions {
     this.lineJoinStyle,
   );
 
+  @override
   Map<String, dynamic> toJson() => _$FigmaBorderOptionsToJson(this);
 
   factory FigmaBorderOptions.fromJson(Map<String, dynamic> json) =>

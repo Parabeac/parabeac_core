@@ -19,7 +19,7 @@ class AzureAssetService {
 
   static const KEY_NAME = 'STORAGE_CONNECTION_STRING';
 
-  String getImageURI(String imageName) => getContainerUri() + '/${imageName}';
+  String getImageURI(String imageName) => getContainerUri() + '/$imageName';
 
   String getContainerUri() {
     if (Platform.environment.containsKey(KEY_NAME) && projectUUID != null) {
@@ -27,7 +27,7 @@ class AzureAssetService {
       var protocol = storageStringList[0].split('=')[1];
       var accName = storageStringList[1].split('=')[1];
       var suffix = storageStringList.last.split('=')[1];
-      return '${protocol}://${accName}.blob.${suffix}/${projectUUID}';
+      return '$protocol://$accName.blob.$suffix/$projectUUID';
     }
     return '';
   }
@@ -39,10 +39,10 @@ class AzureAssetService {
     var uri, headers;
     // Request
     if (queryParams == null) {
-      uri = storage.uri(path: '${path}');
+      uri = storage.uri(path: '$path');
       headers = {'x-ms-blob-type': 'BlockBlob'};
     } else {
-      uri = storage.uri(path: '${path}', queryParameters: queryParams);
+      uri = storage.uri(path: '$path', queryParameters: queryParams);
     }
 
     var request = http.Request('PUT', uri);
@@ -58,16 +58,16 @@ class AzureAssetService {
 
   Future<http.StreamedResponse> createContainer(
           String container, Uint8List bodyBytes) async =>
-      await _putRequestBlob('/${container}', bodyBytes,
+      await _putRequestBlob('/$container', bodyBytes,
           queryParams: {'restype': 'container'});
 
   Future<http.StreamedResponse> putBlob(
           String container, String filename, Uint8List bodyBytes) async =>
-      await _putRequestBlob('/${container}/${filename}', bodyBytes);
+      await _putRequestBlob('/$container/$filename', bodyBytes);
 
   Future<Uint8List> downloadImage(String uuid) async {
     var storage = AzureStorage.parse(Platform.environment[KEY_NAME]);
-    var uri = storage.uri(path: '/${projectUUID}/${uuid}.png');
+    var uri = storage.uri(path: '/$projectUUID/$uuid.png');
 
     var request = http.Request('GET', uri);
     storage.sign(request);

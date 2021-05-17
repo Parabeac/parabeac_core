@@ -12,11 +12,13 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
+  @override
   PBContext currentContext;
 
   @override
   String semanticName = '<navbar>';
 
+  @override
   String UUID;
 
   PBIntermediateNode get leadingItem =>
@@ -128,7 +130,7 @@ class PBAppBarGenerator extends PBGenerator {
   String _wrapOnIconButton(String body) {
     return ''' 
       IconButton(
-        icon: ${body},
+        icon: $body,
         onPressed: () {
           // TODO: Fill action
         }

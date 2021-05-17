@@ -52,7 +52,7 @@ class PBSharedInterAggregationService {
           rootChildNode, targetUUID);
       if (prop.value == null) {
         // add Designer Warning here, not even sure if this is the designers fault or not
-        log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
+        log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
       if ((prop.value != null) &&
           (prop.type == PBSharedInstanceIntermediateNode)) {

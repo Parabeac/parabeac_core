@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ${homeName}(),
+      home: $homeName(),
     );
   }
 }''');
@@ -86,8 +86,8 @@ class MyApp extends StatelessWidget {
       line = readYaml.indexOf('dependencies:');
       if (line > 0) {
         dependencies.forEach((packageName, version) {
-          if (!readYaml.contains('  ${packageName}: ${version}')) {
-            readYaml.insert(++line, '  ${packageName}: ${version}');
+          if (!readYaml.contains('  $packageName: $version')) {
+            readYaml.insert(++line, '  $packageName: $version');
           }
         });
 

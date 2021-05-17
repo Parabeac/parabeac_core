@@ -40,7 +40,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('    return ');
 
       if (overrideProp != null) {
-        buffer.write('${overrideProp} ?? ');
+        buffer.write('$overrideProp ?? ');
       }
 
       buffer.write(method_signature);
@@ -50,7 +50,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
-            String siString = genSymbolInstance(
+            var siString = genSymbolInstance(
                 param.UUID, param.value, source.overrideValues);
             if (siString != '') {
               buffer.write('${param.name}: ');
@@ -108,7 +108,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     }
 
     assert(masterSymbol != null,
-        'Could not find master symbol with UUID: ${UUID}');
+        'Could not find master symbol with UUID: $UUID');
     var buffer = StringBuffer();
     buffer.write('${masterSymbol.friendlyName}(constraints, ');
     for (var ovrValue in overrideValues) {
@@ -124,16 +124,16 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case InheritedBitmap:
             var name = SN_UUIDtoVarName[ovrUUID + '_image'];
-            buffer.write('${name}: \"assets/${ovrValue.value["_ref"]}\",');
+            buffer.write('$name: \"assets/${ovrValue.value["_ref"]}\",');
             break;
           case TextStyle:
             var name = SN_UUIDtoVarName[ovrUUID + '_textStyle'];
             buffer.write(
-                '${name}: ${SharedStyle_UUIDToName[ovrValue.value] ?? "TextStyle()"},');
+                '$name: ${SharedStyle_UUIDToName[ovrValue.value] ?? "TextStyle()"},');
             break;
           default:
             var name = SN_UUIDtoVarName[ovrUUID];
-            buffer.write('${name}: \"${ovrValue.value}\",');
+            buffer.write('$name: \"${ovrValue.value}\",');
             break;
         }
       }

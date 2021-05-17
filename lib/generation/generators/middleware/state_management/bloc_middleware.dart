@@ -36,11 +36,11 @@ class BLoCMiddleware extends Middleware {
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      managerData.addToDispose('${globalVariableName}.close()');
+      managerData.addToDispose('$globalVariableName.close()');
       if (node.generator is! StringGeneratorAdapter) {
         node.generator = StringGeneratorAdapter('''
       BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
-        cubit: ${globalVariableName},
+        cubit: $globalVariableName,
         builder: (context, state) => state.widget  
       )
       ''');
@@ -54,12 +54,12 @@ class BLoCMiddleware extends Middleware {
 
     var stateBuffer = StringBuffer();
 
-    await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
     });
 
     var isFirst = true;
-    await states.forEach((element) {
+    states.forEach((element) {
       element.currentContext.tree.data = node.managerData;
       element.generator.templateStrategy = BLoCStateTemplateStrategy(
         isFirst: isFirst,
@@ -72,14 +72,14 @@ class BLoCMiddleware extends Middleware {
     /// Creates state page
     await fileStrategy.generatePage(
       stateBuffer.toString(),
-      '${parentDirectory}/${generalName}_state',
+      '$parentDirectory/${generalName}_state',
       args: 'VIEW',
     );
 
     /// Creates event page
     await fileStrategy.generatePage(
       _createEventPage(parentState),
-      '${parentDirectory}/${generalName}_event',
+      '$parentDirectory/${generalName}_event',
       args: 'VIEW',
     );
 
@@ -90,7 +90,7 @@ class BLoCMiddleware extends Middleware {
         parentState,
         node.name,
       ),
-      '${parentDirectory}/${generalName}_bloc',
+      '$parentDirectory/${generalName}_bloc',
       args: 'VIEW',
     );
 

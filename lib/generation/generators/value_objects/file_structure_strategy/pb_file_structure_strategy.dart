@@ -70,8 +70,8 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
     if (!isSetUp) {
-      _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
-      _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
+      _screenDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_SCREEN_PATH';
+      _viewDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_VIEW_PATH';
       _pbProject.forest.forEach((dir) {
         if (dir.rootNode != null) {
           addImportsInfo(dir);
@@ -92,11 +92,11 @@ abstract class FileStructureStrategy implements CommandInvoker {
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
       var path = node is PBSharedMasterNode
-          ? '${_viewDirectoryPath}${tree.name.snakeCase}/${name}.dart' // Removed .g
-          : '${_screenDirectoryPath}${tree.name.snakeCase}/${name}.dart';
+          ? '$_viewDirectoryPath${tree.name.snakeCase}/$name.dart' // Removed .g
+          : '$_screenDirectoryPath${tree.name.snakeCase}/$name.dart';
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         path =
-            '${_screenDirectoryPath}$name/${poLinker.stripPlatform(tree.rootNode.managerData.platform)}/$name.dart';
+            '$_screenDirectoryPath$name/${poLinker.stripPlatform(tree.rootNode.managerData.platform)}/$name.dart';
       }
       PBGenCache().setPathToCache(uuid, path);
     } else {
@@ -112,15 +112,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
   Future<void> generatePage(String code, String fileName, {var args}) {
     if (args is String) {
       var path = args == 'SCREEN'
-          ? '${_screenDirectoryPath}${fileName}.dart'
-          : '${_viewDirectoryPath}${fileName}.dart'; // Removed .g
+          ? '$_screenDirectoryPath$fileName.dart'
+          : '$_viewDirectoryPath$fileName.dart'; // Removed .g
       pageWriter.write(code, path);
     }
     return Future.value();
   }
 
   String getViewPath(String fileName) =>
-      '${_viewDirectoryPath}${fileName}.dart';
+      '$_viewDirectoryPath$fileName.dart';
 
   @override
   void commandCreated(FileStructureCommand command) {

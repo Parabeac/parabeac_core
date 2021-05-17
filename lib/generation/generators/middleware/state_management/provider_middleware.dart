@@ -38,7 +38,7 @@ class ProviderMiddleware extends Middleware {
       if (node.currentContext.tree.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {
         watcher = PBVariable(watcherName, 'final ', true,
-            '${getName(node.functionCallName).pascalCase}().${widgetName}');
+            '${getName(node.functionCallName).pascalCase}().$widgetName');
         managerData.addGlobalVariable(watcher);
       }
 
@@ -52,21 +52,21 @@ class ProviderMiddleware extends Middleware {
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
-              ${modelName}(), 
+              $modelName(), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = ${defaultWidget}(constraints);
+              var widget = $defaultWidget(constraints);
               
               context
-                  .read<${modelName}>()
+                  .read<$modelName>()
                   .setCurrentWidget(
                       widget); // Setting active state
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>(), // TODO: add your method to change the state here
+                    $modelName>(), // TODO: add your method to change the state here
                 child: context
-                    .watch<${modelName}>()
+                    .watch<$modelName>()
                     .currentWidget, 
               );
             },
@@ -92,16 +92,16 @@ class ProviderMiddleware extends Middleware {
 
     // Generate default node's view page
     await fileStrategy.generatePage(
-      await generationManager.generate(node),
-      '${parentDirectory}/${node.name.snakeCase}',
+      generationManager.generate(node),
+      '$parentDirectory/${node.name.snakeCase}',
       args: 'VIEW',
     );
 
     // Generate node's states' view pages
     node.auxiliaryData?.stateGraph?.states?.forEach((state) async {
       await fileStrategy.generatePage(
-        await generationManager.generate(state.variation.node),
-        '${parentDirectory}/${state.variation.node.name.snakeCase}',
+        generationManager.generate(state.variation.node),
+        '$parentDirectory/${state.variation.node.name.snakeCase}',
         args: 'VIEW',
       );
     });

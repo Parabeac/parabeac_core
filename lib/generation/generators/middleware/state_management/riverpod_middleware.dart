@@ -63,8 +63,8 @@ class RiverpodMiddleware extends Middleware {
     return '''
     Consumer(
       builder: (context, watch, child) {
-        final ${name} = watch(${name}_provider); 
-        return ${name}.${pointTo};
+        final $name = watch(${name}_provider); 
+        return $name.$pointTo;
       },
     )
     ''';

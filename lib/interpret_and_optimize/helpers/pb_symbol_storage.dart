@@ -37,7 +37,7 @@ class PBSymbolStorage {
     if (_pbSharedInstanceNodes.containsKey(symbolInstance.UUID)) {
       return false;
     }
-    await PBSharedInterAggregationService().analyzeSharedNode(symbolInstance);
+    PBSharedInterAggregationService().analyzeSharedNode(symbolInstance);
     _pbSharedInstanceNodes['${symbolInstance.UUID}'] = symbolInstance;
     return true;
   }
@@ -48,7 +48,7 @@ class PBSymbolStorage {
     if (_pbSharedMasterNodes.containsKey(masterNode.UUID)) {
       return false;
     }
-    await PBSharedInterAggregationService().analyzeSharedNode(masterNode);
+    PBSharedInterAggregationService().analyzeSharedNode(masterNode);
     _pbSharedMasterNodes['${masterNode.UUID}'] = masterNode;
     return true;
   }
@@ -76,12 +76,10 @@ class PBSymbolStorage {
     return node;
   }
 
-  /**
-   * Removes the symbol with given [id].
-   * 
-   * Returns [true] if the object was successfuly removed,
-   * [false] if the object did not exist.
-   */
+  /// Removes the symbol with given [id].
+  /// 
+  /// Returns [true] if the object was successfuly removed,
+  /// [false] if the object did not exist.
   bool removeSymbolWithId(String id) {
     return (_pbSharedMasterNodes.remove(id) != null);
   }

@@ -31,7 +31,7 @@ class ${widgetName.pascalCase} extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return ${returnStatement};
+    return $returnStatement;
   }
 }''';
   }

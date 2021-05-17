@@ -81,6 +81,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   }
 
   /// Generates the dispose method
+  @override
   String generateDispose() {
     var buffer = StringBuffer();
     var it = data.toDispose;
@@ -105,7 +106,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     }
     rootNode.generator.manager = this;
     if (rootNode.generator == null) {
-      log.error('Generator not registered for ${rootNode}');
+      log.error('Generator not registered for $rootNode');
     }
     return rootNode.generator?.templateStrategy?.generateTemplate(
             rootNode,

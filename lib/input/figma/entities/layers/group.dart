@@ -103,7 +103,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
       var tempPrototypeID = childrenHavePrototypeNode();
       if (tempPrototypeID != null) {
-        this.prototypeNodeUUID = tempPrototypeID;
+        prototypeNodeUUID = tempPrototypeID;
       }
 
       if (children != null && children.isNotEmpty) {

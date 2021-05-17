@@ -56,6 +56,7 @@ class Vector implements DesignNodeFactory, DesignNode, Image {
   @override
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
+  @override
   DesignNode fromPBDF(Map<String, dynamic> json) {
     return Vector(
       name: json['name'] as String,
@@ -106,7 +107,7 @@ class Vector implements DesignNodeFactory, DesignNode, Image {
     imageReference = AssetProcessingService.getImageName(UUID);
 
     var file =
-        File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
+        File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
           ..createSync(recursive: true);
     file.writeAsBytesSync(img);
     return Future.value(

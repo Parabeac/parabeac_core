@@ -12,8 +12,10 @@ class Oval implements DesignNodeFactory, DesignNode {
   @override
   String pbdfType = 'oval';
 
+  @override
   var boundaryRectangle;
 
+  @override
   var UUID;
 
   @override

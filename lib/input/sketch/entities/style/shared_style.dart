@@ -39,7 +39,7 @@ class SharedStyle with PBColorMixin {
       if (style.textStyle != null) {
         var source = style.textStyle;
         var fontDescriptor = source.fontDescriptor as FontDescriptor;
-        buffer.write('TextStyle ${name} = TextStyle(\n');
+        buffer.write('TextStyle $name = TextStyle(\n');
         if (fontDescriptor.fontName != null) {
           buffer.write('fontFamily: \'${source.fontDescriptor.fontName}\',\n');
         }
@@ -63,9 +63,9 @@ class SharedStyle with PBColorMixin {
           var color = toHex(source.fontColor);
           var defColor = findDefaultColor(color);
           if (defColor == null) {
-            buffer.write('color: Color(${color}),');
+            buffer.write('color: Color($color),');
           } else {
-            buffer.write('color: ${defColor},');
+            buffer.write('color: $defColor,');
           }
         }
 

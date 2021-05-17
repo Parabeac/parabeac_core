@@ -30,11 +30,11 @@ class ImageReferenceStorage {
         addReference(name,
             '${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')) {
       File('${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
-          .copySync('${MainInfo().outputPath}pngs/${name}.png');
+          .copySync('${MainInfo().outputPath}pngs/$name.png');
       return true;
     }
     if (addReference(name, path)) {
-      var imgPath = '${MainInfo().outputPath}pngs/${name}.png';
+      var imgPath = '${MainInfo().outputPath}pngs/$name.png';
       if (!File(imgPath).existsSync()) {
         File(imgPath).createSync(recursive: true);
       }

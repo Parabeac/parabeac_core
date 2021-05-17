@@ -67,7 +67,7 @@ abstract class AbstractGroupLayer extends SketchNode implements GroupNode {
   Map<String, dynamic> toJson();
 
   List<Map> getChildren() {
-    List<Map> result = [];
+    var result = <Map>[];
     for (var child in children) {
       result.add((child as DesignNode).toPBDF());
     }
