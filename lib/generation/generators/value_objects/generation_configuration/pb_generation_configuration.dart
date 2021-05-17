@@ -149,7 +149,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteScreenCommand(
           '$fileName.dart',
-          '${tree.name}',
+          '${tree.name.snakeCase}',
           await _generationManager.generate(tree.rootNode),
         ));
       } else {
