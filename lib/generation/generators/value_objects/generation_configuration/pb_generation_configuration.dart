@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/export_platform_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
@@ -14,11 +15,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
@@ -39,17 +38,12 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   ///The manager in charge of the independent [PBGenerator]s by providing an interface for adding imports, global variables, etc.
   ///
   ///The default [PBGenerationManager] will be [PBFlutterGenerator]
-  PBGenerationManager _generationManager;
+  PBGenerationManager generationManager;
+
+  ImportHelper _importProcessor;
 
   /// PageWriter to be used for generation
-  PBPageWriter _pageWriter = PBFlutterWriter(); // Default to Flutter
-  PBPageWriter get pageWriter => _pageWriter;
-
-  set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
-
-  PBGenerationManager get generationManager => _generationManager;
-  set generationManager(PBGenerationManager manager) =>
-      _generationManager = manager;
+  PBPageWriter pageWriter = PBFlutterWriter(); // Default to Flutter
 
   final Map<String, String> _dependencies = {};
   Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
@@ -59,7 +53,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
+    _importProcessor ??= ImportHelper();
+    generationManager ??=
+        PBFlutterGenerator(_importProcessor, data: PBGenerationViewData());
   }
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
@@ -116,9 +112,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
     await setUpConfiguration();
     pbProject.fileStructureStrategy = fileStructureStrategy;
-    for (var tree in pbProject.forest) {
+    var trees = IntermediateTopoIterator(pbProject.forest);
+    while (trees.moveNext()) {
+      var tree = trees.current;
       tree.data.addImport('package:flutter/material.dart');
-      _generationManager.data = tree.data;
+      generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
 
       // Relative path to the file to create
@@ -135,7 +133,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       await _iterateNode(tree.rootNode);
 
-      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
+      // _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
@@ -143,20 +141,20 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
           '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
-          _generationManager.generate(tree.rootNode),
+          generationManager.generate(tree.rootNode),
         ));
       } else if (tree.rootNode is InheritedScaffold) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteScreenCommand(
           '$fileName.dart',
           '${tree.name}',
-          _generationManager.generate(tree.rootNode),
+          generationManager.generate(tree.rootNode),
         ));
       } else {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteSymbolCommand(
           '$fileName.dart',
-          _generationManager.generate(tree.rootNode),
+          generationManager.generate(tree.rootNode),
         ));
       }
     }
@@ -165,14 +163,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
   void registerMiddleware(Middleware middleware) {
     if (middleware != null) {
-      middleware.generationManager = _generationManager;
+      middleware.generationManager = generationManager;
       _middleware.add(middleware);
     }
   }
 
   Future<void> setUpConfiguration() async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        pbProject.projectAbsPath, _pageWriter, pbProject);
+        pbProject.projectAbsPath, pageWriter, pbProject);
     commandObservers.add(fileStructureStrategy);
 
     // Execute command queue
@@ -185,26 +183,27 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  void _commitImports(
-      PBIntermediateNode node, String directoryName, String fileName) {
-    var nodePaths = PBGenCache()
-        .getPaths(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
-    var imports = <String>{};
-    // Fetch imports for each path
-    nodePaths.forEach(
-        (path) => imports.addAll(ImportHelper.findImports(node, path)));
-    imports.forEach(node.managerData.addImport);
-  }
+  //TODO delete
+  // void _commitImports(
+  //     PBIntermediateNode node, String directoryName, String fileName) {
+  //   var nodePaths = PBGenCache()
+  //       .getPaths(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
+  //   var imports = <String>{};
+  //   // Fetch imports for each path
+  //   nodePaths.forEach(
+  //       (path) => imports.addAll(ImportHelper.findImports(node, path)));
+  //   imports.forEach(node.managerData.addImport);
+  // }
 
   Future<void> _commitDependencies(String projectName) async {
-    var writer = _pageWriter;
+    var writer = pageWriter;
     if (writer is PBFlutterWriter) {
       writer.submitDependencies(projectName + '/pubspec.yaml');
     }
   }
 
   void _setMainScreen(InheritedScaffold node, String outputMain) async {
-    var writer = _pageWriter;
+    var writer = pageWriter;
     if (writer is PBFlutterWriter) {
       await writer.writeMainScreenWithHome(
           node.name,

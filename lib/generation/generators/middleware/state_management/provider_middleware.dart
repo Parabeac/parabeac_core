@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
@@ -82,7 +83,7 @@ class ProviderMiddleware extends Middleware {
     var parentDirectory = getName(node.name).snakeCase;
 
     // Generate model's imports
-    var modelGenerator = PBFlutterGenerator(
+    var modelGenerator = PBFlutterGenerator(ImportHelper(),
         data: PBGenerationViewData()
           ..addImport('package:flutter/material.dart'));
     // Write model class for current node

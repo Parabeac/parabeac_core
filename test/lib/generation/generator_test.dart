@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
@@ -82,7 +83,7 @@ void main() {
 
       when(mockInheritedText.text).thenReturn('Test Text');
 
-      mockManager = PBFlutterGenerator();
+      mockManager = PBFlutterGenerator(ImportHelper());
       mockGenerator = PBContainerGenerator();
 
       mockGenerator.manager = mockManager;
