@@ -15,8 +15,13 @@ class WriteScreenCommand extends NodeFileStructureCommand {
   /// Returns path to the file that was created.
   @override
   Future<String> write(FileStructureStrategy strategy) {
-    var absPath =
-        '${strategy.GENERATED_PROJECT_PATH}$SCREEN_PATH/$relativePath/$name';
+    var absPath;
+    if (relativePath.isEmpty) {
+      absPath = '${strategy.GENERATED_PROJECT_PATH}$SCREEN_PATH/$name';
+    } else {
+      absPath =
+          '${strategy.GENERATED_PROJECT_PATH}$SCREEN_PATH/$relativePath/$name';
+    }
     writeDataToFile(code, absPath);
     return Future.value(absPath);
   }
