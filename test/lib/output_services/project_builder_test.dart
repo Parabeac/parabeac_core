@@ -10,6 +10,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -25,6 +26,8 @@ class MockContainer extends Mock implements InheritedContainer {}
 class MockProject extends Mock implements PBProject {}
 
 class MockData extends Mock implements IntermediateAuxiliaryData {}
+
+class MockContext extends Mock implements PBContext {}
 
 void main() {
   group('Project Builder Test', () {
@@ -49,6 +52,8 @@ void main() {
 
     FileStructureStrategy fss;
 
+    MockContext context;
+
     setUp(() async {
       MainInfo().cwd = Directory.current;
       MainInfo().outputPath =
@@ -59,6 +64,7 @@ void main() {
       scaffold = MockScaffold();
       container = MockContainer();
       mockData = MockData();
+      context = MockContext();
 
       containerGenerator = PBContainerGenerator();
       scaffoldGenerator = PBScaffoldGenerator();
@@ -74,6 +80,9 @@ void main() {
       when(project.forest).thenReturn([intermediateTree]);
       when(project.genProjectData).thenReturn(PBGenerationProjectData());
       when(project.projectAbsPath).thenReturn(outputPath);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
+
+      when(context.project).thenReturn(project);
 
       when(scaffold.child).thenReturn(container);
       when(scaffold.isHomeScreen).thenReturn(false);
@@ -81,6 +90,7 @@ void main() {
       when(scaffold.name).thenReturn('testingPage');
       when(scaffold.managerData).thenReturn(PBGenerationViewData());
       when(scaffold.auxiliaryData).thenReturn(mockData);
+      when(scaffold.currentContext).thenReturn(context);
 
       when(container.generator).thenReturn(containerGenerator);
       when(container.auxiliaryData).thenReturn(mockData);

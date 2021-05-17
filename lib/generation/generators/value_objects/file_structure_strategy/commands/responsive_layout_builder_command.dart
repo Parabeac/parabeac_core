@@ -13,11 +13,14 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
   Future write(FileStructureStrategy strategy) async {
     var platforms = PBPlatformOrientationLinkerService()
         .platforms
-        .map((platform) => platform.toString().split('.').last.toLowerCase());
+        .map((platform) => platform.toString().split('.').last.toLowerCase())
+        .toList();
     var widgetVars = _generatePlatformWidgets(platforms);
     var widgetInit = _generatePlatformInitializers(platforms);
     var breakpointChecks = _generateBreakpointStatements(platforms);
+    //TODO: use imports system to import material. See updated orientation builder command
     var template = '''
+    import 'package:flutter/material.dart';
     class ResponsiveLayoutBuilder extends StatelessWidget {
       $widgetVars
 
@@ -62,12 +65,19 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
       return 'if(${platforms[0]} != null){return ${platforms[0]}Widget;}';
     }
     // Get breakpoints from configurations and sort by value
-    Map<String, int> breakpoints = MainInfo().configurations['breakpoints'];
+    var breakpoints = MainInfo().configurations['breakpoints'];
+    if (breakpoints == null) {
+      // TODO: Handle breakpoints being null
+      breakpoints = {};
+      breakpoints['mobile'] = 300;
+      breakpoints['tablet'] = 600;
+      breakpoints['desktop'] = 1280;
+    }
     var sortedMap = SplayTreeMap<String, int>.from(
         breakpoints, (a, b) => breakpoints[a].compareTo(breakpoints[b]));
 
     var result = '';
-    for (var i; i < platforms.length; i++) {
+    for (var i = 0; i < platforms.length; i++) {
       var platform = platforms[i];
       if (sortedMap.containsKey(platform)) {
         if (i == platforms.length - 1) {

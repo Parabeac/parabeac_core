@@ -55,11 +55,12 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    if (_map.containsKey(tree.name)) {
+    var key = tree.rootNode.name;
+    if (_map.containsKey(key)) {
       // Check if we have exact trees (same orientation and platform)
-      var trees = _map[tree.name];
+      var trees = _map[key];
       for (var currTree in trees) {
-        var treeName = tree.rootNode.name;
+        var treeName = key;
         var iterTreeName = currTree.rootNode.name;
         if (treeName == iterTreeName &&
             tree.data.orientation == currTree.data.orientation &&
@@ -70,13 +71,13 @@ class PBPlatformOrientationLinkerService {
         }
       }
 
-      _map[tree.name].add(tree);
-      if (!_mapCounter.containsKey(tree.rootNode.name)) {
-        _mapCounter[tree.rootNode.name] = 1;
+      _map[key].add(tree);
+      if (!_mapCounter.containsKey(key)) {
+        _mapCounter[key] = 1;
       }
     } else {
-      _map[tree.name] = [tree];
-      _mapCounter[tree.rootNode.name] = 1;
+      _map[key] = [tree];
+      _mapCounter[key] = 1;
     }
   }
 
@@ -102,7 +103,7 @@ class PBPlatformOrientationLinkerService {
   /// }
   Map<PLATFORM, Map<ORIENTATION, PBIntermediateTree>>
       getPlatformOrientationData(String name) {
-    var result = {};
+    var result = <PLATFORM, Map<ORIENTATION, PBIntermediateTree>>{};
     if (_map.containsKey(name)) {
       var screens = _map[name];
 
@@ -136,6 +137,45 @@ class PBPlatformOrientationLinkerService {
   /// Returns orientations of the project
   Set<ORIENTATION> get orientations => _orientations;
 
+  /// Returns `true` if screen with `name` has more than one platform.
+  /// Returns `false` otherwise.
+  bool screenHasMultiplePlatforms(String name) =>
+      _map.containsKey(name) && _map[name].length > 1;
+
+  /// Removes the `PLATFORM.` prefix from `platform` and returns the stripped platform.
+  String stripPlatform(PLATFORM platform) =>
+      platform.toString().toLowerCase().replaceFirst('platform.', '');
+
+  /// Removes the `ORIENTATION.` prefix from `orientation` and returns the stripped orientation.
+  String stripOrientation(ORIENTATION orientation) =>
+      orientation.toString().toLowerCase().replaceFirst('orientation.', '');
+
+  Map<String, Map<String, List<String>>> getWhoNeedsAbstractInstance() {
+    var result = <String, Map<String, List<String>>>{};
+    _map.forEach((key, value) {
+      if (value.length > 1) {
+        result[key] = _getPlatformAndOrientation(value);
+      }
+    });
+    return result;
+  }
+
+  Map<String, List<String>> _getPlatformAndOrientation(
+      List<PBIntermediateTree> list) {
+    var result = <String, List<String>>{};
+    list.forEach((value) {
+      var platform = stripPlatform(value.data.platform);
+      var orientation = stripOrientation(value.data.orientation);
+      if (result.containsKey(platform)) {
+        result[platform].add(orientation);
+      } else {
+        result[platform] = [];
+        result[platform].add(orientation);
+      }
+    });
+    return result;
+  }
+
   /// Extracts and returns platform of the screen.
   ///
   /// Defaults to PLATFORM.MOBILE if no platform is given.
@@ -165,7 +205,7 @@ class PBPlatformOrientationLinkerService {
 
   void _addBreakpoints(PBIntermediateTree tree) {
     if (MainInfo().configurations.containsKey('breakpoints')) {
-      Map<String, num> bp = MainInfo().configurations['breakpoints'];
+      Map<String, num> bp = MainInfo().configurations['breakpoints'].cast<String, num>();
       bp.forEach((key, value) {
         var cmd = AddConstantCommand(key, 'num', value.toString());
         tree.rootNode.currentContext.project.genProjectData.commandQueue
