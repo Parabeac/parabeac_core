@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
+import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -48,11 +49,11 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write(method_signature);
       buffer.write('(');
       buffer.write('constraints,');
-
+      
       for (var param in source.sharedParamValues ?? []) {
         switch (param.type) {
           case PBSharedInstanceIntermediateNode:
-            String siString = genSymbolInstance(
+            var siString = genSymbolInstance(
                 param.UUID,
                 param.value,
                 source.overrideValues,
@@ -71,11 +72,20 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             source.currentContext.treeRoot.data.addImport(
                 'package:${MainInfo().projectName}/document/shared_props.g.dart');
             buffer.write(
-                '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
+                '${param.name}: ${SharedStyle_UUIDToName[param.value]}.textStyle,');
             break;
-          default:
+          case Style:
+            // hack to include import
+            source.currentContext.treeRoot.data.addImport(
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            buffer.write(
+                '${param.name}: ${SharedStyle_UUIDToName[param.value]},');
+            break;
+          case String:
             buffer.write('${param.name}: \"${param.value}\",');
             break;
+          default:
+            log.info('Unknown type ${param.type.toString()} in parameter values for symbol instance.\n');
         }
       }
       // end of return function();
@@ -124,13 +134,10 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       return '';
     }
 
-    // include import
-    Set<String> path = PBGenCache().getPaths(masterSymbol.SYMBOL_ID);
-    if (path.isEmpty) {
-      log.warning("Can't find path for Master Symbol with UUID: ${UUID}");
-    } else {
-      managerData.addImport(path.first);
-    }
+
+    var fileName = masterSymbol.name.snakeCase;
+    managerData.addImport(
+        'package:${MainInfo().projectName}/view/symbols/${fileName}.dart');
 
     var buffer = StringBuffer();
     buffer.write('${masterSymbol.friendlyName}(constraints, ');
@@ -145,21 +152,28 @@ class PBSymbolInstanceGenerator extends PBGenerator {
                 ovrValue.value, ovrUUID, overrideValues,
                 managerData,
                 depth: depth + 1));
-
             break;
           case InheritedBitmap:
             var name = SN_UUIDtoVarName[ovrUUID + '_image'];
-            buffer.write('${name}: \"assets/${ovrValue.value["_ref"]}\",');
+            buffer.write('$name: \"assets/${ovrValue.value["_ref"]}\",');
             break;
           case TextStyle:
             var name = SN_UUIDtoVarName[ovrUUID + '_textStyle'];
             buffer.write(
-                '${name}: ${SharedStyle_UUIDToName[ovrValue.value] ?? "TextStyle()"},');
+                '$name: ${SharedStyle_UUIDToName[ovrValue.value]}.textStyle,');
+            break;
+          case Style:
+            //var name = SN_UUIDtoVarName[ovrUUID + '_layerStyle'];
+            //buffer.write(
+            //    'layerStyle: ${SharedStyle_UUIDToName[ovrValue.value]},');
+            break;
+          case String:
+            var name = SN_UUIDtoVarName[ovrUUID + '_stringValue'] ;
+            buffer.write('$name: \"${ovrValue.value}\",');
             break;
           default:
-            var name = SN_UUIDtoVarName[ovrUUID];
-            buffer.write('${name}: \"${ovrValue.value}\",');
-            break;
+            log.info('Unknown type ${ovrValue.type.toString()} in override values for symbol instance.\n');
+
         }
       }
     }

@@ -45,13 +45,19 @@ class InheritedContainer extends PBVisualIntermediateNode
       'height': originalRef.boundaryRectangle.height,
     };
 
+    // have to save this in case it is overridden
+    auxiliaryData.style = originalRef.style;
+
     if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
       for (var fill in originalRef.style.fills) {
         if (fill.isEnabled) {
           auxiliaryData.color = toHex(fill.color);
+          // use the first one found.
+          break;
         }
       }
     }
+
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;

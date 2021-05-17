@@ -12,7 +12,8 @@ class Fill implements PBFill {
   final String classField;
   @override
   bool isEnabled;
-  final int fillType;
+  @override
+  int fillType;
   @override
   PBColor color;
   final ContextSettings contextSettings;
