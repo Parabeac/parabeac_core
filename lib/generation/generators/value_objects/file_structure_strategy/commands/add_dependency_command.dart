@@ -23,7 +23,7 @@ class AddDependencyCommand extends FileStructureCommand {
     }
 
     var line = readYaml.indexOf('dependencies:');
-    readYaml.insert(++line, '$package: $version');
+    readYaml.insert(++line, '\t$package: $version');
 
     // TODO: we may want to move this to a separate Command to ensure it only gets called once.
     line = readYaml.indexOf('flutter:');
@@ -32,7 +32,11 @@ class AddDependencyCommand extends FileStructureCommand {
         readYaml.insert(++line, '  assets:\n    - assets/images/');
       }
     }
+    var buffer = StringBuffer();
 
-    writeDataToFile(readYaml.toString(), yamlAbsPath);
+    for (var line in readYaml) {
+      buffer.writeln(line);
+    }
+    writeDataToFile(buffer.toString(), yamlAbsPath);
   }
 }

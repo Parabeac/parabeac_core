@@ -41,14 +41,14 @@ void main() {
     FileStructureStrategy strategy;
 
     setUp(() {
-      command = WriteScreenCommand('test_screen.dart', 'screens', screenData);
+      command = WriteScreenCommand('test_screen.dart', '', screenData);
       strategy = MockFSStrategy();
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst/');
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
 
     test('Testing writing a screen', () async {
-      var screenPath = '${path}tmptst/lib/modules/screens/test_screen.dart';
+      var screenPath = '${path}tmptst/lib/screens/test_screen.dart';
       var screenFile = File(screenPath);
       var commandPath = await command.write(strategy);
 

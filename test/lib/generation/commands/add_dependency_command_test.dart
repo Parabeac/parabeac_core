@@ -16,18 +16,31 @@ void main() {
     FileStructureStrategy strategy;
 
     setUp(() {
+      /// Create sample YAML file
+      var yaml = File('${path}tmptst/pubspec.yaml');
+      yaml.createSync(recursive: true);
+      yaml.writeAsStringSync('''
+dependencies:
+  json_serializable: ^3.5.0
+
+flutter:
+      ''');
+
       command = AddDependencyCommand('auto_size_text', '^2.1.0');
       strategy = MockFSStrategy();
-      when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst/');
+      when(strategy.GENERATED_PROJECT_PATH).thenReturn('${path}tmptst');
       when(strategy.pageWriter).thenReturn(PBFlutterWriter());
     });
 
     test('Testing adding a dependency', () async {
       await command.write(strategy);
-      var dependencies = strategy.pageWriter.dependencies;
-      expect(dependencies.isNotEmpty, true);
-      expect(dependencies.containsKey('auto_size_text'), true);
-      expect(dependencies['auto_size_text'], '^2.1.0');
+      var fileStr = File('${path}tmptst/pubspec.yaml').readAsStringSync();
+      expect(fileStr.contains('auto_size_text: ^2.1.0'), true);
+      expect(fileStr.contains('- assets/images/'), true);
+    });
+
+    tearDownAll(() {
+      Process.runSync('rm', ['-r', 'tmptst'], workingDirectory: path);
     });
   });
 }
