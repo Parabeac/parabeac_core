@@ -218,6 +218,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         PBPlatformOrientationLinkerService().getWhoNeedsAbstractInstance();
 
     currentMap.forEach((screenName, platformsMap) {
+      // TODO: get imports from `_importProcessor`
+      // using the UUID extracted from `getPlatformOrientationData`
       var temp = PBPlatformOrientationLinkerService()
           .getPlatformOrientationData(screenName);
 
