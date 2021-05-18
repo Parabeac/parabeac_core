@@ -1,14 +1,13 @@
+import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
 class OrientationBuilderCommand extends FileStructureCommand {
-  final PATH_TO_ORIENTATION_BUILDER =
-      'lib/widgets/responsive_orientation_builder.dart';
+  final DIR_TO_ORIENTATION_BUILDER = 'lib/widgets/';
+  final NAME_TO_ORIENTAION_BUILDER = 'responsive_orientation_builder.dart';
 
   @override
   Future write(FileStructureStrategy strategy) {
-    var fileAbsPath =
-        '${strategy.GENERATED_PROJECT_PATH}$PATH_TO_ORIENTATION_BUILDER';
     var template = ''' 
       import 'package:flutter/material.dart';
 
@@ -51,6 +50,9 @@ class OrientationBuilderCommand extends FileStructureCommand {
 
     ''';
 
-    super.writeDataToFile(template, fileAbsPath);
+    strategy.writeDataToFile(
+        template,
+        p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
+        NAME_TO_ORIENTAION_BUILDER);
   }
 }

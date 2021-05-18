@@ -8,14 +8,17 @@ class Padding extends PBVisualIntermediateNode {
 
   double left, right, top, bottom, screenWidth, screenHeight;
 
+  @override
   final String UUID;
   Map padding;
 
   @override
   PBContext currentContext;
 
+  @override
   Point topLeftCorner;
 
+  @override
   Point bottomRightCorner;
 
   Padding(this.UUID,

@@ -24,7 +24,7 @@ abstract class AssetProcessingService {
       );
       var blob = await aaService.putBlob(
         aaService.projectUUID,
-        '${name}.png',
+        '$name.png',
         img,
       );
       await cont.stream.drain();

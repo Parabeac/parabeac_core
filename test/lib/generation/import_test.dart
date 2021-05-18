@@ -1,6 +1,8 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:test/test.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -14,6 +16,8 @@ void main() {
   /// Three intermediateNodes that will generate import
   var importee1, importee2, importee3;
   var genCache;
+
+  PBIntermediateTree tree0, tree1, tree2;
   group('Import test', () {
     setUp(() {
       iNodeWithImports = NodeMock();
@@ -22,6 +26,10 @@ void main() {
       importee2 = NodeMock();
       importee3 = NodeMock();
       genCache = PBGenCache();
+
+      tree0 = PBIntermediateTree('Tree0');
+      tree1 = PBIntermediateTree('Tree1');
+      tree2 = PBIntermediateTree('Tree2');
 
       when(iNodeWithImports.UUID).thenReturn('00-00-00');
       when(iNodeWithoutImports.UUID).thenReturn('00-01-00');
@@ -34,13 +42,59 @@ void main() {
       when(importee2.child).thenReturn(importee3);
     });
 
+    test('Testing how [PBIntermediateTree] are processed.', () {
+      ///[PBIntermediateTree]s that are going to be generated. The treees inside of the list
+      ///are dependent on each other, therefore, to ensure import availability, trees need to
+      ///be written in a certain manner.
+      var pbIntermeidateTrees = <PBIntermediateTree>[];
+
+      /// `tree1` is going to depend on `tree0` and `tree0` depends on `tree2`.
+      ///     t0
+      ///   /   \
+      /// t1      t2
+      tree1.dependentsOn.add(tree0);
+      tree0.dependentsOn.add(tree2);
+      pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
+
+      var dependencyIterator =
+          IntermediateTopoIterator<PBIntermediateTree>(pbIntermeidateTrees);
+      var correctOrder = [tree1, tree0, tree2].iterator;
+      while (dependencyIterator.moveNext() && correctOrder.moveNext()) {
+        expect(dependencyIterator.current == correctOrder.current, true);
+      }
+    });
+
+    test('Testing cycles in the list [PBIntermediateTree] are processed', () {
+      ///[PBIntermediateTree]s that are going to be generated. The treees inside of the list
+      ///are dependent on each other, therefore, to ensure import availability, trees need to
+      ///be written in a certain manner.
+      var pbIntermeidateTrees = <PBIntermediateTree>[];
+
+      /// a cycle between all three [PBIntermediateTree]s
+      ///     t0
+      ///   /   \
+      /// t1---->t2
+      tree1.dependentsOn.add(tree0);
+      tree0.dependentsOn.add(tree2);
+      tree2.dependentsOn.add(tree2);
+      pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
+
+      var dependencyIterator =
+          IntermediateTopoIterator<PBIntermediateTree>(pbIntermeidateTrees);
+      var correctOrder = [tree1, tree0, tree2].iterator;
+      while (dependencyIterator.moveNext() && correctOrder.moveNext()) {
+        expect(dependencyIterator.current == correctOrder.current, true);
+      }
+    });
+
     test('Testing import generation when imports are generated', () {
       //Add symbol in the same folder as importer
       genCache.setPathToCache(importee1.UUID, '/path/to/page/importee1.dart');
       //Add symbol located a directory above importer
       genCache.setPathToCache(importee2.UUID, '/path/to/importee2.dart');
       //Add symbol located a directory below importer
-      genCache.setPathToCache(importee3.UUID, '/path/to/page/sub/importee3.dart');
+      genCache.setPathToCache(
+          importee3.UUID, '/path/to/page/sub/importee3.dart');
 
       // Find the imports of importer.dart
       var imports = ImportHelper.findImports(

@@ -6,8 +6,10 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
+  @override
   PBContext currentContext;
 
+  @override
   final String UUID;
 
   final PositionedValueHolder valueHolder;

@@ -9,6 +9,7 @@ class Flexible extends PBVisualIntermediateNode {
   @override
   var currentContext;
 
+  @override
   final String UUID;
 
   @override
@@ -33,8 +34,10 @@ class Flexible extends PBVisualIntermediateNode {
     this.child = child;
   }
 
+  @override
   Point topLeftCorner;
 
+  @override
   Point bottomRightCorner;
 
   @override

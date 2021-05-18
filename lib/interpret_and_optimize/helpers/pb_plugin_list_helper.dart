@@ -58,7 +58,7 @@ class PBPluginListHelper {
   /// Returns the PluginNode associated if it exists.
   PBEgg returnAllowListNodeIfExists(DesignNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
-    for (String key in allowListNames.keys) {
+    for (var key in allowListNames.keys) {
       if (node.name.contains(key)) {
         return allowListNames[key].generatePluginNode(
             Point(node.boundaryRectangle.x, node.boundaryRectangle.y),

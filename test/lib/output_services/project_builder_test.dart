@@ -74,10 +74,12 @@ void main() {
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
+      when(intermediateTree.dependentsOn).thenReturn([]);
 
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
       when(project.forest).thenReturn([intermediateTree]);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
       when(project.projectAbsPath).thenReturn(outputPath);
       when(project.genProjectData).thenReturn(PBGenerationProjectData());
 
@@ -100,7 +102,7 @@ void main() {
       await fss.setUpDirectories();
       when(project.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = await FlutterProjectBuilder(
+      projectBuilder = FlutterProjectBuilder(
           projectName: outputPath,
           mainTree: project,
           pageWriter: PBFlutterWriter());

@@ -18,13 +18,13 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       getAttributeNamed('children')?.attributeNodes;
 
   ///The rules of the layout. MAKE SURE TO REGISTER THEIR CUSTOM RULES
-  List<LayoutRule> _layoutRules = [];
+  final List<LayoutRule> _layoutRules;
 
   ///Getting the rules of the layout
   List<LayoutRule> get rules => List.from(_layoutRules);
 
   ///Exceptions to the rules of the layout. MAKE SURE TO REGISTER THEIR CUSTOM EXCEPTIONS
-  List<LayoutException> _exceptions = [];
+  final List<LayoutException> _exceptions;
 
   ///Getting the exceptions of the rules.
   List<LayoutException> get exceptions => List.from(_exceptions);

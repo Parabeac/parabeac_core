@@ -28,7 +28,7 @@ class MiddlewareUtils {
       stateBuffer.write(MiddlewareUtils.generateVariable(node));
     }
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.treeRoot.data = node.managerData;
+      state.variation.node.currentContext.tree.data = node.managerData;
       var variationNode = state.variation.node;
 
       if (variationNode is PBSharedMasterNode &&
@@ -47,14 +47,14 @@ class MiddlewareUtils {
 
     return '''
       ${manager.generateImports()}
-      class ${defaultStateName} extends ChangeNotifier {
+      class $defaultStateName extends ChangeNotifier {
       ${stateBuffer.toString()}
-      ${overrideVars}
+      $overrideVars
 
       Widget defaultWidget;
-      ${defaultStateName}(${overrideAttr.isNotEmpty ? ('\{' + overrideAttr + '\}') : ''}){
+      $defaultStateName(${overrideAttr.isNotEmpty ? ('\{' + overrideAttr + '\}') : ''}){
 
-        ${stateInitializers}
+        $stateInitializers
 
         defaultWidget = ${node.name.camelCase};
       }
@@ -69,14 +69,14 @@ class MiddlewareUtils {
   ) {
     // Pass down manager data to states
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.treeRoot.data = node.managerData;
+      state.variation.node.currentContext.tree.data = node.managerData;
     });
     return '''
       ${manager.generateImports()}
-      class ${defaultStateName} extends ChangeNotifier {
+      class $defaultStateName extends ChangeNotifier {
 
       Widget currentWidget;
-      ${defaultStateName}(){}
+      $defaultStateName(){}
 
       void setCurrentWidget(Widget currentWidget) {
         this.currentWidget = currentWidget;
@@ -87,12 +87,12 @@ class MiddlewareUtils {
 
   static String generateVariable(PBIntermediateNode node,
       {String type = 'var'}) {
-    return '${type} ${node.name.camelCase} = ' + generateVariableBody(node);
+    return '$type ${node.name.camelCase} = ' + generateVariableBody(node);
   }
 
   static String generateEmptyVariable(PBIntermediateNode node,
           {String type = 'var'}) =>
-      '${type} ${node.name.camelCase};';
+      '$type ${node.name.camelCase};';
 
   static String generateVariableBody(node) =>
       (node?.generator?.generate(node ?? '',

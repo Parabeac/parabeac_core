@@ -23,10 +23,10 @@ class DesignController extends Controller {
   }) async {
     configure(configurationPath, configType);
 
-    var designProject = await generateDesignProject(pbdf, outputPath);
+    var designProject = generateDesignProject(pbdf, outputPath);
     AzureAssetService().projectUUID = pbdf['id'];
 
-    await super.convertFile(
+    super.convertFile(
       pbdf,
       outputPath,
       configurationPath,

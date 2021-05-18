@@ -22,15 +22,15 @@ class StatefulMiddleware extends Middleware {
     var states = <PBIntermediateNode>[node];
     var parentDirectory = getName(node.name).snakeCase;
 
-    await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
     });
 
-    await states.forEach((element) async {
-      element.currentContext.treeRoot.data = node.managerData;
+    states.forEach((element) async {
+      element.currentContext.tree.data = node.managerData;
       await fileStrategy.generatePage(
-        await generationManager.generate(element),
-        '${parentDirectory}/${element.name.snakeCase}',
+        generationManager.generate(element),
+        '$parentDirectory/${element.name.snakeCase}',
         args: 'VIEW',
       );
     });

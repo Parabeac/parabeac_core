@@ -18,6 +18,7 @@ class FigmaEllipse extends FigmaVector
     implements AbstractFigmaNodeFactory, Image {
   @override
   String imageReference;
+  @override
   @JsonKey(ignore: true)
   Logger log;
 

@@ -27,6 +27,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   bool isHomeScreen = false;
 
+  @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
@@ -34,6 +35,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   PBIntermediateNode get tabbar =>
       getAttributeNamed('bottomNavigationBar')?.attributeNode;
 
+  @override
   set child(PBIntermediateNode node) {
     if (!hasAttribute('body')) {
       addAttribute(PBAttribute('body', attributeNodes: [node]));

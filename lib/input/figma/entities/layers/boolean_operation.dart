@@ -17,6 +17,7 @@ part 'boolean_operation.g.dart';
 @JsonSerializable(nullable: true)
 class BooleanOperation extends FigmaVector
     implements FigmaNodeFactory, GroupNode, Image {
+  @override
   @JsonKey(ignore: true)
   Logger log;
   @override

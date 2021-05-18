@@ -39,7 +39,7 @@ class SketchProject extends DesignProject {
 
   List<SharedStyle> _setSharedStyles() {
     try {
-      List<SharedStyle> sharedStyles = [];
+      var sharedStyles = <SharedStyle>[];
       var jsonData = _ids.documentFile;
       var doc = Document.fromJson(jsonData);
       if (doc.layerStyles != null) {

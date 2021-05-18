@@ -88,8 +88,8 @@ class Component extends FigmaFrame
   Map<String, dynamic> toJson() => _$ComponentToJson(this);
 
   List<PBSharedParameterProp> _extractParameters() {
-    Set<String> ovrNames = {};
-    List<PBSharedParameterProp> sharedParameters = [];
+    var ovrNames = <String>{};
+    var sharedParameters = <PBSharedParameterProp>[];
     overrideProperties ??= [];
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {

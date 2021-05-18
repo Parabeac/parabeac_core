@@ -10,7 +10,10 @@ enum TREE_TYPE {
 class PBIntermediateTree {
   PBGenerationViewData data;
   PBIntermediateNode rootNode;
+  List<PBIntermediateTree> dependentsOn;
   String name;
-  PBIntermediateTree(this.name);
+  PBIntermediateTree(this.name) {
+    dependentsOn = [];
+  }
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
 }

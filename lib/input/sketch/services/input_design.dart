@@ -49,7 +49,7 @@ class InputDesignService {
       if (file.isFile && fileName.contains(IMAGE_DIR_NAME)) {
         final data = file.content as List<int>;
         final name = fileName.replaceAll(IMAGE_DIR_NAME, '');
-        File('${MainInfo().outputPath}pngs/${name}').writeAsBytesSync(data);
+        File('${MainInfo().outputPath}pngs/$name').writeAsBytesSync(data);
       }
     }
   }

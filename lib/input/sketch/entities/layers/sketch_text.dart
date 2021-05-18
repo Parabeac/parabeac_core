@@ -49,13 +49,13 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   Style _style;
 
   @override
-  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+  set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
   bool get isVisible => _isVisible;
 
   @override
-  void set style(_style) => this._style = _style;
+  set style(_style) => this._style = _style;
 
   @override
   Style get style => _style;
@@ -201,28 +201,28 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   var attributedString;
 
   @override
-  void set automaticallyDrawOnUnderlyingPath(
+  set automaticallyDrawOnUnderlyingPath(
       _automaticallyDrawOnUnderlyingPath) {
     // TODO: implement automaticallyDrawOnUnderlyingPath
   }
 
   @override
-  void set dontSynchroniseWithSymbol(_dontSynchroniseWithSymbol) {
+  set dontSynchroniseWithSymbol(_dontSynchroniseWithSymbol) {
     // TODO: implement dontSynchroniseWithSymbol
   }
 
   @override
-  void set glyphBounds(_glyphBounds) {
+  set glyphBounds(_glyphBounds) {
     // TODO: implement glyphBounds
   }
 
   @override
-  void set lineSpacingBehaviour(_lineSpacingBehaviour) {
+  set lineSpacingBehaviour(_lineSpacingBehaviour) {
     // TODO: implement lineSpacingBehaviour
   }
 
   @override
-  void set textBehaviour(_textBehaviour) {
+  set textBehaviour(_textBehaviour) {
     // TODO: implement textBehaviour
   }
 }

@@ -32,7 +32,7 @@ class RiverpodMiddleware extends Middleware {
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
 
-      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
+      if (node.currentContext.tree.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {
         managerData.addGlobalVariable(watcher);
       } else {
@@ -63,8 +63,8 @@ class RiverpodMiddleware extends Middleware {
     return '''
     Consumer(
       builder: (context, watch, child) {
-        final ${name} = watch(${name}_provider); 
-        return ${name}.${pointTo};
+        final $name = watch(${name}_provider); 
+        return $name.$pointTo;
       },
     )
     ''';

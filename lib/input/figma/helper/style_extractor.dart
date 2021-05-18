@@ -34,7 +34,7 @@ class StyleExtractor {
         textStyle = _getTextStyle(json);
       }
 
-      List<FigmaBorder> borders = [];
+      var borders = <FigmaBorder>[];
 
       var strokes = json['strokes'];
 
@@ -62,7 +62,7 @@ class StyleExtractor {
 
       borders.add(figmaBorder);
 
-      List<FigmaFill> fills = [];
+      var fills = <FigmaFill>[];
 
       var fill = FigmaFill(
         _getColor(json['fills'].isNotEmpty ? json['fills'][0]['color'] : null),
