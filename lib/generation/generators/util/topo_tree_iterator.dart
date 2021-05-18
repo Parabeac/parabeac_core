@@ -27,13 +27,15 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
     }
   }
 
-  HashMap<E, int> _inDegrees(List<PBIntermediateTree> trees) {
+  HashMap<E, int> _inDegrees(List<PBIntermediateTree> items) {
     var inDegree = HashMap<E, int>();
-    trees.forEach((tree) {
+    items.forEach((tree) {
       inDegree.putIfAbsent(tree, () => 0);
-      tree.dependentsOn.forEach((dependent) {
-        inDegree.update(dependent, (value) => value + 1, ifAbsent: () => 1);
-      });
+      var dependentOnIterator = tree.dependentOn;
+      while (dependentOnIterator.moveNext()) {
+        inDegree.update(dependentOnIterator.current, (value) => value + 1,
+            ifAbsent: () => 1);
+      }
     });
     return inDegree;
   }
@@ -54,13 +56,13 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
       var vertex = noInDegrees.first;
       noInDegrees.remove(vertex);
       ordered.add(vertex);
-
-      vertex.dependentsOn.forEach((dependent) {
-        inDegrees[dependent] = inDegrees[dependent] - 1;
-        if (inDegrees[dependent] == 0) {
-          noInDegrees.add(dependent);
+      var it = vertex.dependentOn;
+      while (it.moveNext()) {
+        inDegrees[it.current] = inDegrees[it.current] - 1;
+        if (inDegrees[it.current] == 0) {
+          noInDegrees.add(it.current);
         }
-      });
+      }
     }
 
     if (_detectCycle(inDegrees)) {}

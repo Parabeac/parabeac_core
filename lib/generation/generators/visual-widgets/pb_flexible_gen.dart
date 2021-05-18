@@ -1,7 +1,7 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/flexible.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBFlexibleGenerator extends PBGenerator {
@@ -10,7 +10,7 @@ class PBFlexibleGenerator extends PBGenerator {
 
   @override
   String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+      PBIntermediateNode source, PBContext generatorContext) {
     if (source is Flexible) {
       var buffer = StringBuffer();
       buffer.write('Flexible(');

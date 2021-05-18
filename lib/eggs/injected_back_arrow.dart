@@ -1,5 +1,4 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
@@ -46,8 +45,7 @@ class PBBackArrowGenerator extends PBGenerator {
   PBBackArrowGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is InjectedBackArrow) {
       return 'BackButton()';
     }

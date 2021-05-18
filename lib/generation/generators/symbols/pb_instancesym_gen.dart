@@ -1,4 +1,3 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
@@ -8,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.d
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:quick_log/quick_log.dart';
@@ -20,8 +20,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   var log = Logger('Symbol Instance Generator');
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
       var method_signature = source.functionCallName?.pascalCase;
       if (method_signature == null) {
@@ -107,8 +106,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       return '';
     }
 
-    assert(masterSymbol != null,
-        'Could not find master symbol with UUID: $UUID');
+    assert(
+        masterSymbol != null, 'Could not find master symbol with UUID: $UUID');
     var buffer = StringBuffer();
     buffer.write('${masterSymbol.friendlyName}(constraints, ');
     for (var ovrValue in overrideValues) {

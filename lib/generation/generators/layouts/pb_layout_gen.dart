@@ -1,12 +1,12 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 abstract class PBLayoutGenerator extends PBGenerator {
   PBLayoutGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source, GeneratorContext generatorContext);
+  String generate(PBIntermediateNode source, PBContext generatorContext);
 
   String generateBodyBoilerplate(String body,
       {String layoutName = 'Column',
