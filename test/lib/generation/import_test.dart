@@ -49,11 +49,11 @@ void main() {
       var pbIntermeidateTrees = <PBIntermediateTree>[];
 
       /// `tree1` is going to depend on `tree0` and `tree0` depends on `tree2`.
-      ///     t0
+      ///    ?t0?
       ///   /   \
       /// t1      t2
-      tree1.dependentsOn.add(tree0);
-      tree0.dependentsOn.add(tree2);
+      tree1.addDependent(tree0);
+      tree0.addDependent(tree2);
       pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
 
       var dependencyIterator =
@@ -73,10 +73,10 @@ void main() {
       /// a cycle between all three [PBIntermediateTree]s
       ///     t0
       ///   /   \
-      /// t1---->t2
-      tree1.dependentsOn.add(tree0);
-      tree0.dependentsOn.add(tree2);
-      tree2.dependentsOn.add(tree2);
+      /// t1----?t2
+      tree1.addDependent(tree0);
+      tree0.addDependent(tree2);
+      tree2.addDependent(tree2);
       pbIntermeidateTrees.addAll([tree0, tree2, tree1]);
 
       var dependencyIterator =

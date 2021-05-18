@@ -8,12 +8,28 @@ enum TREE_TYPE {
 }
 
 class PBIntermediateTree {
+  TREE_TYPE tree_type = TREE_TYPE.SCREEN;
   PBGenerationViewData data;
   PBIntermediateNode rootNode;
-  List<PBIntermediateTree> dependentsOn;
+
+  /// List of [PBIntermediteTree]s that `this` depends on.
+  ///
+  /// In other words, `this` can not be generated until its [dependentsOn]s are generated.
+  Set<PBIntermediateTree> _dependentsOn;
+  Iterator<PBIntermediateTree> get dependentOn =>
+      _dependentsOn.where((depedent) => depedent != null).iterator;
+
   String name;
   PBIntermediateTree(this.name) {
-    dependentsOn = [];
+    _dependentsOn = {};
   }
-  TREE_TYPE tree_type = TREE_TYPE.SCREEN;
+
+  /// Adding [PBIntermediateTree] as a dependecy.
+  ///
+  /// The [dependent] or its [dependent.rootNode] can not be `null`
+  void addDependent(PBIntermediateTree dependent) {
+    if (dependent != null && dependent.rootNode != null) {
+      _dependentsOn.add(dependent);
+    }
+  }
 }

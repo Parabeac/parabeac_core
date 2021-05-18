@@ -113,8 +113,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     await setUpConfiguration();
     pbProject.fileStructureStrategy = fileStructureStrategy;
     var trees = IntermediateTopoIterator(pbProject.forest);
+
     while (trees.moveNext()) {
       var tree = trees.current;
+      tree.rootNode.currentContext.generationManager = generationManager;
+
       tree.data.addImport('package:flutter/material.dart');
       generationManager.data = tree.data;
       var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
@@ -172,6 +175,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject);
     commandObservers.add(fileStructureStrategy);
+    fileStructureStrategy.addFileObserver(_importProcessor);
 
     // Execute command queue
     var queue = pbProject.genProjectData.commandQueue;
@@ -182,18 +186,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
-
-  //TODO delete
-  // void _commitImports(
-  //     PBIntermediateNode node, String directoryName, String fileName) {
-  //   var nodePaths = PBGenCache()
-  //       .getPaths(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
-  //   var imports = <String>{};
-  //   // Fetch imports for each path
-  //   nodePaths.forEach(
-  //       (path) => imports.addAll(ImportHelper.findImports(node, path)));
-  //   imports.forEach(node.managerData.addImport);
-  // }
 
   Future<void> _commitDependencies(String projectName) async {
     var writer = pageWriter;

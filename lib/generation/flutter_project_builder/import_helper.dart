@@ -60,15 +60,22 @@ class ImportHelper implements FileWriterObserver {
     return currentImports;
   }
 
-  void addImport(String import, String UUID){
-    if(import != null && UUID != null){
+  String getImport(String UUID) {
+    if (imports.containsKey(UUID)) {
+      return imports[UUID];
+    }
+  }
+
+  void addImport(String import, String UUID) {
+    if (import != null && UUID != null) {
       imports[UUID] = import;
     }
   }
+
   @override
   void fileCreated(String filePath, String fileUUID) {
-    if(filePath != null && fileUUID != null){
-         imports[fileUUID] = filePath;
+    if (filePath != null && fileUUID != null) {
+      imports[fileUUID] = filePath;
     }
   }
 }

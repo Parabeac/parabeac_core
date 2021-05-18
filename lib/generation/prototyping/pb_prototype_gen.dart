@@ -1,8 +1,8 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBPrototypeGenerator extends PBGenerator {
   PrototypeNode prototypeNode;
@@ -13,8 +13,7 @@ class PBPrototypeGenerator extends PBGenerator {
   }
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     var name = _storage.getPageNodeById(prototypeNode.destinationUUID)?.name;
     if (name != null && name.isNotEmpty) {
       return '''GestureDetector(
