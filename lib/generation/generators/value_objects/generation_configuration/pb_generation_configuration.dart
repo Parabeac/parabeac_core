@@ -153,11 +153,13 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           await _generationManager.generate(tree.rootNode),
         ));
       } else {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(WriteSymbolCommand(
-          '$fileName.dart',
-          await _generationManager.generate(tree.rootNode),
-        ));
+        tree.rootNode.currentContext.project.genProjectData.commandQueue.add(
+          WriteSymbolCommand(
+            '$fileName.dart',
+            await _generationManager.generate(tree.rootNode),
+            relativePath: tree.name.snakeCase + '/',
+          ),
+        );
       }
     }
     await _commitDependencies(pb_project.projectName);
