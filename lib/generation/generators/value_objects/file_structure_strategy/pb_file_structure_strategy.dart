@@ -19,7 +19,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  final RELATIVE_VIEW_PATH = 'lib/view/';
+  final RELATIVE_VIEW_PATH = 'lib/widgets/';
 
   ///The path of where all the screens are going to be generated.
   final RELATIVE_SCREEN_PATH = 'lib/screens/';
