@@ -19,9 +19,9 @@ class PBContext {
 
   PBContext(this.configuration, {this.tree});
 
-  void addDependent(PBIntermediateTree dependet) {
-    if (dependet != null) {
-      tree.addDependent(dependet);
+  void addDependent(PBIntermediateTree dependent) {
+    if (dependent != null) {
+      tree.addDependent(dependent);
     }
   }
 }
