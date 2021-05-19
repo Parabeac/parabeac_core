@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -74,10 +75,13 @@ void main() {
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
+      when(intermediateTree.dependentOn)
+          .thenReturn(HasNextIterator(null) as Iterator<PBIntermediateTree>);
 
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
       when(project.forest).thenReturn([intermediateTree]);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
       when(project.projectAbsPath).thenReturn(outputPath);
       when(project.genProjectData).thenReturn(PBGenerationProjectData());
 
@@ -100,7 +104,7 @@ void main() {
       await fss.setUpDirectories();
       when(project.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = await FlutterProjectBuilder(
+      projectBuilder = FlutterProjectBuilder(
           projectName: outputPath,
           mainTree: project,
           pageWriter: PBFlutterWriter());

@@ -32,5 +32,6 @@ class Border implements PBBorder{
       this.thickness});
 
   factory Border.fromJson(Map json) => _$BorderFromJson(json);
+  @override
   Map toJson() => _$BorderToJson(this);
 }

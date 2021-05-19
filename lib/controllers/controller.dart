@@ -1,6 +1,5 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
-import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
 import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
@@ -82,7 +81,7 @@ abstract class Controller {
     if (path.endsWith('/')) {
       return path;
     } else {
-      return '${path}/';
+      return '$path/';
     }
   }
 

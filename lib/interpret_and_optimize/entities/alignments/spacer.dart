@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class Spacer extends PBVisualIntermediateNode {
   int flex;
+  @override
   final String UUID;
 
   @override

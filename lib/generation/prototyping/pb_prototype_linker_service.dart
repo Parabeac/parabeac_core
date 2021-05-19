@@ -50,19 +50,19 @@ class PBPrototypeLinkerService {
               .prototypeNode
               .destinationUUID
               .isNotEmpty) {
-        await addAndPopulatePrototypeNode(currentNode, rootNode);
+        addAndPopulatePrototypeNode(currentNode, rootNode);
       } else if (currentNode is PBLayoutIntermediateNode &&
           currentNode.prototypeNode?.destinationUUID != null &&
           currentNode.prototypeNode.destinationUUID.isNotEmpty) {
-        await addAndPopulatePrototypeNode(currentNode, rootNode);
+        addAndPopulatePrototypeNode(currentNode, rootNode);
       } else if (currentNode is InjectedContainer &&
           currentNode.prototypeNode?.destinationUUID != null &&
           currentNode.prototypeNode.destinationUUID.isNotEmpty) {
-        await addAndPopulatePrototypeNode(currentNode, rootNode);
+        addAndPopulatePrototypeNode(currentNode, rootNode);
       } else if (currentNode is Tab &&
           currentNode.prototypeNode?.destinationUUID != null &&
           currentNode.prototypeNode.destinationUUID.isNotEmpty) {
-        await addAndPopulatePrototypeNode(currentNode, rootNode);
+        addAndPopulatePrototypeNode(currentNode, rootNode);
       }
     }
     return rootNode;

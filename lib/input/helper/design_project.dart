@@ -28,8 +28,8 @@ class DesignProject implements DesignNodeFactory {
     result['pbdfType'] = pbdfType;
     result['id'] = id;
 
-    List<Map> tmpPages = [];
-    List<Map> tmpMiscPages = [];
+    var tmpPages = <Map>[];
+    var tmpMiscPages = <Map>[];
     for (var page in pages) {
       tmpPages.add(page.toPBDF());
     }

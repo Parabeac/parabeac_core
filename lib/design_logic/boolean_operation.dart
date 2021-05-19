@@ -24,7 +24,7 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
     type,
     Frame this.boundaryRectangle,
     String UUID,
-    String this.name,
+    this.name,
     bool isVisible,
     pbdfType,
   });
@@ -33,7 +33,7 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var img = await AzureAssetService().downloadImage(UUID);
     var file =
-        File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
+        File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
           ..createSync(recursive: true);
     file.writeAsBytesSync(img);
 

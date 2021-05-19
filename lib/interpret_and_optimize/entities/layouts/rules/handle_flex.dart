@@ -30,8 +30,8 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
   // This list will store the final wrapped children
   var resultingChildren = <PBIntermediateNode>[];
 
-  for (int i = 0; i < children.length; i++) {
-    PBIntermediateNode child = children[i];
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
 
     // Handle spacer of middle child
     if (i > 0) {

@@ -31,7 +31,9 @@ class Style implements PBStyle {
   final List<Border> borders;
   final ColorControls colorControls;
   final ContextSettings contextSettings;
+  @override
   List<PBFill> fills, innerShadows, shadows;
+  @override
   @JsonKey(nullable: true)
   PBTextStyle textStyle;
 
@@ -53,13 +55,14 @@ class Style implements PBStyle {
     TextStyle this.textStyle,
   }) {
     if (shadows != null) {
-      this.shadows = null;
-      this.innerShadows = null;
+      shadows = null;
+      innerShadows = null;
       hasShadow = true;
     }
   }
 
   factory Style.fromJson(Map json) => _$StyleFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$StyleToJson(this);
 
   @override

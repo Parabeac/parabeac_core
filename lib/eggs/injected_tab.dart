@@ -1,6 +1,4 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
@@ -95,8 +93,7 @@ class PBTabGenerator extends PBGenerator {
   PBTabGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is Tab) {
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBarItem(');

@@ -111,8 +111,8 @@ class PBSharedInstanceDesignNode extends DesignNode
 
   ///Converting the [OverridableValue] into [PBSharedParameterValue] to be processed in intermediate phase.
   List<PBSharedParameterValue> _extractParameters() {
-    Set<String> ovrNames = {};
-    List<PBSharedParameterValue> sharedParameters = [];
+    var ovrNames = <String>{};
+    var sharedParameters = <PBSharedParameterValue>[];
     for (var overrideValue in overrideValues) {
       if (!ovrNames.contains(overrideValue.overrideName)) {
         var properties = extractParameter(overrideValue.overrideName);

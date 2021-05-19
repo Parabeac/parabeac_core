@@ -45,6 +45,7 @@ class Artboard extends AbstractGroupLayer
   String UUID;
 
   final bool hasBackgroundColor;
+  @override
   final bool isFlowHome;
   final bool resizesContent;
   final dynamic presetDictionary;
@@ -54,13 +55,13 @@ class Artboard extends AbstractGroupLayer
   Style _style;
 
   @override
-  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+  set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
   bool get isVisible => _isVisible;
 
   @override
-  void set style(_style) => this._style = _style;
+  set style(_style) => this._style = _style;
 
   @override
   Style get style => _style;
@@ -214,7 +215,7 @@ class Artboard extends AbstractGroupLayer
   }
 
   @override
-  void set isFlowHome(_isFlowHome) {
+  set isFlowHome(_isFlowHome) {
     // TODO: implement isFlowHome
   }
 }

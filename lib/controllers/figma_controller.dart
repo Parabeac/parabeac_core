@@ -26,13 +26,13 @@ class FigmaController extends Controller {
   }) async {
     configure(configurationPath, configType);
 
-    var figmaProject = await generateFigmaTree(jsonFigma, outputPath);
+    var figmaProject = generateFigmaTree(jsonFigma, outputPath);
 
     figmaProject = declareScaffolds(figmaProject);
 
     _sortPages(figmaProject);
 
-    await super.convertFile(
+    super.convertFile(
       jsonFigma,
       outputPath,
       configurationPath,

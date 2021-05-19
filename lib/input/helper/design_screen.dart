@@ -23,7 +23,7 @@ class DesignScreen implements DesignNodeFactory {
 
   Map<String, dynamic> toPBDF() {
     var result = <String, Object>{};
-    if (this.type == 'symbolMaster') {
+    if (type == 'symbolMaster') {
       result['pbdfType'] = 'symbol_master';
     } else {
       result['pbdfType'] = pbdfType;

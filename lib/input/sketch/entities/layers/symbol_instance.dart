@@ -22,6 +22,7 @@ class SymbolInstance extends SketchNode
     implements SketchNodeFactory, PBSharedInstanceDesignNode {
   @override
   String CLASS_NAME = 'symbolInstance';
+  @override
   final List<OverridableValue> overrideValues;
   final double scale;
   @override
@@ -46,13 +47,13 @@ class SymbolInstance extends SketchNode
   Style _style;
 
   @override
-  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+  set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
   bool get isVisible => _isVisible;
 
   @override
-  void set style(_style) => this._style = _style;
+  set style(_style) => this._style = _style;
 
   @override
   Style get style => _style;
@@ -125,8 +126,8 @@ class SymbolInstance extends SketchNode
 
   ///Converting the [OverridableValue] into [PBSharedParameterValue] to be processed in intermediate phase.
   List<PBSharedParameterValue> _extractParameters() {
-    Set<String> ovrNames = {};
-    List<PBSharedParameterValue> sharedParameters = [];
+    var ovrNames = <String>{};
+    var sharedParameters = <PBSharedParameterValue>[];
     for (var overrideValue in overrideValues) {
       if (!ovrNames.contains(overrideValue.overrideName)) {
         var properties = extractParameter(overrideValue.overrideName);

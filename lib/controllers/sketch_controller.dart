@@ -34,7 +34,7 @@ class SketchController extends Controller {
 
     AzureAssetService().projectUUID = sketchProject.id;
 
-    await super.convertFile(
+    super.convertFile(
       fileAbsPath,
       projectPath,
       configurationPath,

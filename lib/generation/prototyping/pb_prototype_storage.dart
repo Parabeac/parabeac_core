@@ -29,7 +29,7 @@ class PBPrototypeStorage {
       return false;
     }
 
-    await PBPrototypeAggregationService()
+    PBPrototypeAggregationService()
         .analyzeIntermediateNode(prototypeNode);
     _pbPrototypeInstanceNodes['${prototypeNode.UUID}'] = prototypeNode;
     return true;

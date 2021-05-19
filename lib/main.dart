@@ -271,7 +271,7 @@ Future<void> checkConfigFile() async {
     MainInfo().deviceId = configMap['device_id'];
   }
 
-  await addToAmplitude();
+  addToAmplitude();
 }
 
 /// Gets the homepath of the user according to their OS

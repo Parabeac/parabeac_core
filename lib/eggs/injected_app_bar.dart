@@ -1,6 +1,4 @@
-import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -12,11 +10,13 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
+  @override
   PBContext currentContext;
 
   @override
   String semanticName = '<navbar>';
 
+  @override
   String UUID;
 
   PBIntermediateNode get leadingItem =>
@@ -97,8 +97,7 @@ class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();
@@ -128,7 +127,7 @@ class PBAppBarGenerator extends PBGenerator {
   String _wrapOnIconButton(String body) {
     return ''' 
       IconButton(
-        icon: ${body},
+        icon: $body,
         onPressed: () {
           // TODO: Fill action
         }

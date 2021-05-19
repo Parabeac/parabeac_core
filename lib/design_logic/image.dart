@@ -96,7 +96,7 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
     try {
       var img = await AzureAssetService().downloadImage(UUID);
       var file =
-          File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
+          File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
             ..createSync(recursive: true);
       file.writeAsBytesSync(img);
       return Future.value(InheritedBitmap(
@@ -109,7 +109,7 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
               '${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
           .readAsBytesSync();
       var file =
-          File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
+          File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
             ..createSync(recursive: true);
       file.writeAsBytesSync(img);
       return Future.value(InheritedBitmap(

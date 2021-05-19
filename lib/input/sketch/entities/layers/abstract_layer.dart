@@ -27,8 +27,10 @@ abstract class SketchNode implements DesignNode {
   final bool isFlippedHorizontal;
   final bool isFlippedVertical;
   final bool isLocked;
+  @override
   final bool isVisible;
   final dynamic layerListExpandedType;
+  @override
   String name;
   final bool nameIsFixed;
   final dynamic resizingConstraint;
@@ -39,6 +41,7 @@ abstract class SketchNode implements DesignNode {
   final bool hasClippingMask;
   final int clippingMaskMode;
   final dynamic userInfo;
+  @override
   final Style style;
   final bool maintainScrollPosition;
 
@@ -52,7 +55,7 @@ abstract class SketchNode implements DesignNode {
       this.booleanOperation,
       this.exportOptions,
       Frame this.boundaryRectangle,
-      Flow this.flow,
+      this.flow,
       this.isFixedToViewport,
       this.isFlippedHorizontal,
       this.isFlippedVertical,

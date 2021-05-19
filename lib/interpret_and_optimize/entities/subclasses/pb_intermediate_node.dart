@@ -50,7 +50,7 @@ abstract class PBIntermediateNode {
 
   PBContext currentContext;
 
-  PBGenerationViewData get managerData => currentContext.treeRoot.data;
+  PBGenerationViewData get managerData => currentContext.tree.data;
 
   Map size;
 

@@ -1,14 +1,14 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 
 class StatelessTemplateStrategy extends TemplateStrategy {
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      GeneratorContext generatorContext,
+      PBContext generatorContext,
       {args}) {
     var widgetName = node.name;
     var returnStatement = node.generator.generate(node, generatorContext);
@@ -31,7 +31,7 @@ class ${widgetName.pascalCase} extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return ${returnStatement};
+    return $returnStatement;
   }
 }''';
   }

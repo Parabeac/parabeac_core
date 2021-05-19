@@ -1,3 +1,4 @@
+import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
@@ -16,12 +17,12 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   Future<String> write(FileStructureStrategy strategy) {
     var absPath;
     if (relativePath.isEmpty) {
-      absPath = '${strategy.GENERATED_PROJECT_PATH}$SYMBOL_PATH/$name';
+      absPath = p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH);
     } else {
       absPath =
-          '${strategy.GENERATED_PROJECT_PATH}$SYMBOL_PATH/$relativePath$name';
+          p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH, relativePath);
     }
-    writeDataToFile(code, absPath);
-    return Future.value(absPath);
+    strategy.writeDataToFile(code, absPath, name);
+    return Future.value(p.join(absPath, name));
   }
 }

@@ -60,13 +60,13 @@ class SymbolMaster extends AbstractGroupLayer
   Style _style;
 
   @override
-  void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
+  set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
   @override
   bool get isVisible => _isVisible;
 
   @override
-  void set style(_style) => this._style = _style;
+  set style(_style) => this._style = _style;
 
   @override
   Style get style => _style;
@@ -164,8 +164,8 @@ class SymbolMaster extends AbstractGroupLayer
 
   ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
   List<PBSharedParameterProp> _extractParameters() {
-    Set<String> ovrNames = {};
-    List<PBSharedParameterProp> sharedParameters = [];
+    var ovrNames = <String>{};
+    var sharedParameters = <PBSharedParameterProp>[];
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {
         var properties = AddMasterSymbolName(prop.overrideName, children);

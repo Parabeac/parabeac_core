@@ -54,7 +54,7 @@ class PBSharedMasterDesignNode extends DesignNode
     maintainScrollPosition,
     bool includeBackgroundColorInExport,
     int changeIdentifier,
-    String this.symbolID,
+    this.symbolID,
     bool includeBackgroundColorInInstance,
     verticalRulerData,
     bool resizesContent,
@@ -86,8 +86,8 @@ class PBSharedMasterDesignNode extends DesignNode
 
   ///Converting the [OverridableProperty] into [PBSharedParameterProp] to be processed in intermediate phase.
   List<PBSharedParameterProp> _extractParameters() {
-    Set<String> ovrNames = {};
-    List<PBSharedParameterProp> sharedParameters = [];
+    var ovrNames = <String>{};
+    var sharedParameters = <PBSharedParameterProp>[];
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {
         var properties = AddMasterSymbolName(prop.overrideName, children);
@@ -108,6 +108,7 @@ class PBSharedMasterDesignNode extends DesignNode
   @override
   DesignNode createDesignNode(Map<String, dynamic> json) => fromPBDF(json);
 
+  @override
   DesignNode fromPBDF(Map<String, dynamic> json) {
     var node = PBSharedMasterDesignNode(
       hasClickThrough: json['hasClickThrough'] as bool,

@@ -13,8 +13,8 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
   ProviderFileStructureStrategy(
       String genProjectPath, PBPageWriter pageWriter, PBProject pbProject)
       : super(genProjectPath, pageWriter, pbProject) {
-    _providersPath = '${genProjectPath}${RELATIVE_PROVIDER_PATH}';
-    _modelsPath = '${genProjectPath}${RELATIVE_MODEL_PATH}';
+    _providersPath = '$genProjectPath$RELATIVE_PROVIDER_PATH';
+    _modelsPath = '$genProjectPath$RELATIVE_MODEL_PATH';
   }
 
   @override
@@ -34,6 +34,6 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
   void writeProviderModelFile(String code, String fileName) {
     super
         .pageWriter
-        .write(code, '${_modelsPath}${fileName}.dart'); // Removed .g
+        .write(code, '$_modelsPath$fileName.dart'); // Removed .g
   }
 }
