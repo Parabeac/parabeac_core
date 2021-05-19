@@ -23,6 +23,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -210,15 +211,31 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         PBPlatformOrientationLinkerService().getWhoNeedsAbstractInstance();
 
     currentMap.forEach((screenName, platformsMap) {
-      // TODO: get imports from `_importProcessor`
-      // using the UUID extracted from `getPlatformOrientationData`
-      var temp = PBPlatformOrientationLinkerService()
-          .getPlatformOrientationData(screenName);
+      var rawImports = getPlatformImports(screenName);
 
-      print('hello');
-      generatePlatformInstance(platformsMap, screenName, mainTree);
+      var newCommand = generatePlatformInstance(
+          platformsMap, screenName, mainTree, rawImports);
 
+      if (newCommand != null) {
+        commandObservers
+            .forEach((observer) => observer.commandCreated(newCommand));
+      }
       _importProcessor;
     });
+  }
+
+  Set<String> getPlatformImports(String screenName) {
+    var platformOrientationMap = PBPlatformOrientationLinkerService()
+        .getPlatformOrientationData(screenName);
+    var imports = <String>{};
+    platformOrientationMap.forEach((key, map) {
+      map.forEach((key, tree) {
+        imports.add(_importProcessor.getImport(
+            p.basenameWithoutExtension(tree.rootNode.name.snakeCase)));
+      });
+    });
+    // TODO: add import to responsive layout builder
+
+    return imports;
   }
 }

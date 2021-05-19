@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'package:path/path.dart' as p;
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -45,7 +45,10 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     ''';
 
     strategy.writeDataToFile(
-        template, DIR_TO_RESPONSIVE_LAYOUT, NAME_TO_RESPONSIVE_LAYOUT);
+      template,
+      p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_RESPONSIVE_LAYOUT),
+      NAME_TO_RESPONSIVE_LAYOUT,
+    );
   }
 
   String _generatePlatformWidgets(List<String> platforms) {

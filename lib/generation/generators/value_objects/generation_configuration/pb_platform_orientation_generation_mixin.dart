@@ -1,29 +1,46 @@
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 mixin PBPlatformOrientationGeneration {
-  void generatePlatformInstance(Map<String, List<String>> platformsMap,
-      String screenName, PBProject mainTree) {
+  NodeFileStructureCommand generatePlatformInstance(
+      Map<String, List<String>> platformsMap,
+      String screenName,
+      PBProject mainTree,
+      Set<String> rawImports) {
     var formatedName = screenName.snakeCase.toLowerCase();
+    var cookedImports = _cookImports(
+        rawImports,
+        p.join(
+          mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH +
+              WriteScreenCommand.SCREEN_PATH +
+              '/$formatedName' +
+              '/${formatedName}_platform_builder.dart',
+        ));
+
     if (platformsMap.length > 1) {
-      mainTree.genProjectData.commandQueue.add(WriteScreenCommand(
+      return WriteScreenCommand(
         formatedName + '_platform_builder.dart',
         formatedName,
-        _getPlatformInstance(platformsMap, screenName),
-      ));
+        _getPlatformInstance(platformsMap, screenName, cookedImports),
+      );
+    } else {
+      return null;
     }
   }
 
-  String _getPlatformInstance(
-      Map<String, List<String>> platformsMap, String screenName) {
+  String _getPlatformInstance(Map<String, List<String>> platformsMap,
+      String screenName, Set<String> cookedImports) {
     var className = screenName.pascalCase;
-    // TODO: add dynamic imports
     return '''
     import 'package:flutter/material.dart';
     import '../../widgets/responsive_layout_builder.dart';
+    ${_serveImports(cookedImports)}
 
     class ${className}PlatformBuilder extends StatelessWidget {
       @override
@@ -69,5 +86,21 @@ mixin PBPlatformOrientationGeneration {
           .stripOrientation(node.currentContext.tree.data.orientation);
       node.name += '_$orientation';
     }
+  }
+
+  Set<String> _cookImports(Set<String> rawImports, String possiblePath) {
+    var result = <String>{};
+    rawImports.forEach((import) {
+      result.add(PBGenCache().getRelativePathFromPaths(possiblePath, import));
+    });
+    return result;
+  }
+
+  String _serveImports(Set<String> cookedImports) {
+    var result = '';
+    cookedImports.forEach((import) {
+      result += 'import \'${import}\';\n';
+    });
+    return result;
   }
 }

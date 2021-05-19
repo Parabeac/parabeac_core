@@ -21,7 +21,7 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
     var path = p.join(
       strategy.GENERATED_PROJECT_PATH,
       'lib/screens/$folderName/',
-      platform.toString().toLowerCase(),
+      platform.toString().toLowerCase().replaceAll('platform.', ''),
     );
     strategy.writeDataToFile(code, path, fileName);
   }
