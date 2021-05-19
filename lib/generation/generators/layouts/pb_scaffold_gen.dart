@@ -1,16 +1,15 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateful_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBScaffoldGenerator extends PBGenerator {
   PBScaffoldGenerator() : super(strategy: StatefulTemplateStrategy());
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
     var appBar = source.getAttributeNamed('appBar')?.attributeNode;
     var body = source.getAttributeNamed('body')?.attributeNode;
@@ -26,18 +25,16 @@ class PBScaffoldGenerator extends PBGenerator {
       }
       if (appBar != null) {
         buffer.write('appBar: ');
-        var newGeneratorContext =
-            GeneratorContext(sizingContext: SizingValueContext.PointValue);
-        var appbarStr = appBar.generator.generate(appBar, newGeneratorContext);
+        generatorContext.sizingContext = SizingValueContext.PointValue;
+        var appbarStr = appBar.generator.generate(appBar, generatorContext);
 
         buffer.write('$appbarStr,\n');
       }
       if (bottomNavBar != null) {
         buffer.write('bottomNavigationBar: ');
-        var newGeneratorContext =
-            GeneratorContext(sizingContext: SizingValueContext.PointValue);
+        generatorContext.sizingContext = SizingValueContext.PointValue;
         var navigationBar =
-            bottomNavBar.generator.generate(bottomNavBar, newGeneratorContext);
+            bottomNavBar.generator.generate(bottomNavBar, generatorContext);
         buffer.write('$navigationBar, \n');
       }
 

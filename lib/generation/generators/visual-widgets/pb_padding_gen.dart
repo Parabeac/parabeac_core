@@ -1,9 +1,9 @@
 import 'dart:mirrors';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import '../pb_generator.dart';
 
 class PBPaddingGen extends PBGenerator {
@@ -23,8 +23,7 @@ class PBPaddingGen extends PBGenerator {
   }
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (generatorContext.sizingContext == SizingValueContext.AppBarChild) {
       source.child.currentContext = source.currentContext;
       return source.child.generator.generate(source.child, generatorContext);

@@ -1,8 +1,8 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 
 class BLoCStateTemplateStrategy extends TemplateStrategy {
@@ -11,7 +11,7 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
   BLoCStateTemplateStrategy({this.isFirst, this.abstractClassName});
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      GeneratorContext generatorContext,
+      PBContext generatorContext,
       {args}) {
     var widgetName = retrieveNodeName(node);
     var returnStatement = node.generator.generate(node, generatorContext);

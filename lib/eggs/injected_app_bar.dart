@@ -1,6 +1,4 @@
-import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -99,8 +97,7 @@ class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();

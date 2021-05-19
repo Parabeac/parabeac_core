@@ -1,9 +1,9 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_box_decoration_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class PBContainerGenerator extends PBGenerator {
@@ -12,8 +12,7 @@ class PBContainerGenerator extends PBGenerator {
   PBContainerGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     var buffer = StringBuffer();
     buffer.write('Container(');
 
