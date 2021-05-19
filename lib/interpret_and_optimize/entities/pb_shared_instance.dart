@@ -38,8 +38,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   PrototypeNode prototypeNode;
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
-
-  Map<String, PBSymbolInstanceOverridableValue> sharedValuesMap = {};
+  // quick lookup based on UUID_type
+  Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
   PBSharedInstanceIntermediateNode(
     this.originalRef,
@@ -65,14 +65,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     generator = PBSymbolInstanceGenerator();
 
     overrideValues = sharedParamValues
-        .map((v) => PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type))
+        .map((v) {
+          var symOvrValue = PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type);
+          overrideValuesMap[v.overrideName] = symOvrValue;
+          return symOvrValue; })
         .toList()
           ..removeWhere((v) => v == null || v.value == null);
-
-    //for (var sharedParam in sharedParamValues) {
-    //  sharedValuesMap[sharedParam.overrideName] = sharedParam;
-    //}
-
   }
 
   @override

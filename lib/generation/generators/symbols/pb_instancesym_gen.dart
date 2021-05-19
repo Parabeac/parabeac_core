@@ -49,45 +49,48 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write(method_signature);
       buffer.write('(');
       buffer.write('constraints,');
-      
-      for (var param in source.sharedParamValues ?? []) {
-        switch (param.type) {
-          case PBSharedInstanceIntermediateNode:
-            var siString = genSymbolInstance(
-                param.UUID,
-                param.value,
-                source.overrideValues,
-                source.managerData
-            );
-            if (siString != '') {
-              buffer.write('${param.name}: ');
-              buffer.write(siString);
-            }
-            break;
-          case InheritedBitmap:
-            buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
-            break;
-          case TextStyle:
-            // hack to include import
-            source.currentContext.treeRoot.data.addImport(
-                'package:${MainInfo().projectName}/document/shared_props.g.dart');
-            buffer.write(
-                '${param.name}: ${SharedStyle_UUIDToName[param.value]}.textStyle,');
-            break;
-          case Style:
-            // hack to include import
-            source.currentContext.treeRoot.data.addImport(
-                'package:${MainInfo().projectName}/document/shared_props.g.dart');
-            buffer.write(
-                '${param.name}: ${SharedStyle_UUIDToName[param.value]},');
-            break;
-          case String:
-            buffer.write('${param.name}: \"${param.value}\",');
-            break;
-          default:
-            log.info('Unknown type ${param.type.toString()} in parameter values for symbol instance.\n');
+
+      // need to iterate through master symbol parametersDefsMap to pass parent variables down to children
+      var masterSymbol = getMasterSymbol(source.UUID);
+      masterSymbol.parametersDefsMap.forEach((overrideName, smParameter) {
+        var ovrValue = '';
+        if (source.overrideValuesMap.containsKey(overrideName)) {
+          var param = source.overrideValuesMap[overrideName];
+          switch (param.type) {
+            case PBSharedInstanceIntermediateNode:
+              ovrValue = genSymbolInstance(
+                  param.UUID,
+                  param.value,
+                  source.overrideValues,
+                  source.managerData
+              );
+              break;
+            case InheritedBitmap:
+              ovrValue = '\"assets/${param.value["_ref"]}\",';
+              break;
+            case TextStyle:
+              // hack to include import
+              source.currentContext.treeRoot.data.addImport(
+                  'package:${MainInfo().projectName}/document/shared_props.g.dart');
+              ovrValue = '${SharedStyle_UUIDToName[param.value]}.textStyle,';
+              break;
+            case Style:
+              // hack to include import
+              source.currentContext.treeRoot.data.addImport(
+                  'package:${MainInfo().projectName}/document/shared_props.g.dart');
+              ovrValue = '${SharedStyle_UUIDToName[param.value]},';
+              break;
+            case String:
+              ovrValue = '\"${param.value}\",';
+              break;
+            default:
+              log.info('Unknown type ${param.type.toString()} in parameter values for symbol instance.\n');
+          }
+          var friendlyName = SN_UUIDtoVarName[PBInputFormatter.findLastOf(smParameter.propertyName, '/')];
+          buffer.write('$friendlyName: $ovrValue');
         }
-      }
+      });
+
       // end of return function();
       buffer.write(');\n');
       // end of builder: (context, constraints) {

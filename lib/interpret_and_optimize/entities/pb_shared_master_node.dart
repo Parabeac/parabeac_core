@@ -30,6 +30,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   final String SYMBOL_ID;
 
   List<PBSymbolMasterParameter> parametersDefinition;
+  Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
@@ -46,7 +47,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The properties that could be be overridable on a [PBSharedMasterNode]
 
   List<PBSharedParameterProp> overridableProperties;
-  Map<String, PBSharedParameterProp> overridePropMap = {};
   String friendlyName;
 
   PBSharedMasterNode(
@@ -89,7 +89,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
     parametersDefinition = overridableProperties
-        .map((p) => PBSymbolMasterParameter(
+        .map((p) {
+            var PBSymMasterP = PBSymbolMasterParameter(
             p._friendlyName,
             p.type,
             p.UUID,
@@ -101,14 +102,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             currentContext.screenTopLeftCorner.y,
             currentContext.screenBottomRightCorner.x,
             currentContext.screenBottomRightCorner.y,
-            context: currentContext))
+            context: currentContext);
+            parametersDefsMap[p.propertyName] = PBSymMasterP;
+            return PBSymMasterP; })
         .toList()
           ..removeWhere((p) => p == null || p.parameterDefinition == null);
 
-    // create quick lookup map for overridable properties by UUID
-    for (var override in overridableProperties) {
-      overridePropMap[override.UUID] = override;
-    }
   }
 
   @override
