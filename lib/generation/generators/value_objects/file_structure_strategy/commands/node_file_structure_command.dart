@@ -3,5 +3,5 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 /// Class that relies on `code` to implement its `write` method.
 abstract class NodeFileStructureCommand extends FileStructureCommand {
   String code;
-  NodeFileStructureCommand(this.code);
+  NodeFileStructureCommand(String UUID, this.code) : super(UUID);
 }

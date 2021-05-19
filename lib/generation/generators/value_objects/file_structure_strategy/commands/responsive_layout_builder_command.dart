@@ -9,6 +9,8 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
   final DIR_TO_RESPONSIVE_LAYOUT = 'lib/widgets/';
   final NAME_TO_RESPONSIVE_LAYOUT = 'responsive_layout_builder.dart';
 
+  ResponsiveLayoutBuilderCommand(String UUID) : super(UUID);
+
   @override
   Future write(FileStructureStrategy strategy) async {
     var platforms = PBPlatformOrientationLinkerService()
