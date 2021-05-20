@@ -3,8 +3,9 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
 class OrientationBuilderCommand extends FileStructureCommand {
-  final DIR_TO_ORIENTATION_BUILDER = 'lib/widgets/';
-  final NAME_TO_ORIENTAION_BUILDER = 'responsive_orientation_builder.dart';
+  static final DIR_TO_ORIENTATION_BUILDER = 'lib/widgets/';
+  static final NAME_TO_ORIENTAION_BUILDER =
+      'responsive_orientation_builder.dart';
 
   OrientationBuilderCommand(String UUID) : super(UUID);
 
@@ -53,8 +54,10 @@ class OrientationBuilderCommand extends FileStructureCommand {
     ''';
 
     strategy.writeDataToFile(
-        template,
-        p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
-        NAME_TO_ORIENTAION_BUILDER);
+      template,
+      p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
+      NAME_TO_ORIENTAION_BUILDER,
+      UUID: UUID,
+    );
   }
 }

@@ -14,9 +14,7 @@ class PBInputFormatter {
     var result = _formatStr(input,
         spaceToUnderscore: spaceToUnderscore, destroyDigits: destroyDigits);
 
-    (isTitle)
-        ? result = result.replaceRange(0, 1, result[0].toUpperCase())
-        : result = result.toLowerCase();
+    (isTitle) ? result = result.pascalCase : result = result.toLowerCase();
     return result;
   }
 

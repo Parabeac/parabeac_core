@@ -55,7 +55,7 @@ class PBPlatformOrientationLinkerService {
 
   /// Adds [tree] to the storage
   void addToMap(PBIntermediateTree tree) {
-    var key = tree.rootNode.name;
+    var key = tree.identifier;
     if (_map.containsKey(key)) {
       // Check if we have exact trees (same orientation and platform)
       var trees = _map[key];

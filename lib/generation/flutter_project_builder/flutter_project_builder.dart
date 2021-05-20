@@ -127,9 +127,10 @@ class FlutterProjectBuilder {
       }
     }
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
+
+    await generationConfiguration.generateProject(mainTree);
     await generationConfiguration
         .generatePlatformAndOrientationInstance(mainTree);
-    await generationConfiguration.generateProject(mainTree);
 
     var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
     var s = File('${pathToFlutterProject}lib/main.dart')
