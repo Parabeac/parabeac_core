@@ -3,6 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
+import 'package:uuid/uuid.dart';
 
 mixin PBPlatformOrientationGeneration {
   void generatePlatformInstance(Map<String, List<String>> platformsMap,
@@ -14,6 +15,7 @@ mixin PBPlatformOrientationGeneration {
       }
       if (platformsMap.length > 1) {
         mainTree.genProjectData.commandQueue.add(WriteScreenCommand(
+          Uuid().v4(),
           formatedName + '_platform_builder.dart',
           formatedName,
           _getPlatformInstance(platformsMap, screenName),
@@ -25,6 +27,7 @@ mixin PBPlatformOrientationGeneration {
   void _generateOrientationInstance(String screenName, PBProject mainTree) {
     var formatedName = screenName.snakeCase.toLowerCase();
     mainTree.genProjectData.commandQueue.add(WriteScreenCommand(
+      Uuid().v4(),
       formatedName + '_orientation_builder.dart',
       formatedName,
       _getOrientationInstance(screenName),

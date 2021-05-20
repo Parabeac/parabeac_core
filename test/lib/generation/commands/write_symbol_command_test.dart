@@ -31,7 +31,7 @@ void main() {
     FileStructureStrategy strategy;
 
     setUp(() {
-      command = WriteSymbolCommand('test_symbol.dart', symData);
+      command = WriteSymbolCommand('UUID', 'test_symbol.dart', symData);
       strategy = MockFSStrategy();
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('temp/');
     });

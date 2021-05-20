@@ -19,8 +19,8 @@ void main() {
 
     setUp(() {
       strategy = MockFSStrategy();
-      const1 = AddConstantCommand(const1V[0], const1V[1], const1V[2]);
-      const2 = AddConstantCommand(const2V[0], const2V[1], const2V[2]);
+      const1 = AddConstantCommand('UUID', const1V[0], const1V[1], const1V[2]);
+      const2 = AddConstantCommand('UUID', const2V[0], const2V[1], const2V[2]);
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('temp/');
     });
     test('Testing Adding Constants To Project', () async {
