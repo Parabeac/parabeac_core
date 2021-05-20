@@ -19,7 +19,7 @@ void main() {
     setUp(() {
       package = 'auto_size_text';
       version = '^2.1.0';
-      command = AddDependencyCommand(package, version);
+      command = AddDependencyCommand('UUID', package, version);
       strategy = MockFSStrategy();
     });
 

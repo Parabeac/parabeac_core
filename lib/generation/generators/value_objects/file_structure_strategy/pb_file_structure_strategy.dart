@@ -43,7 +43,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///A good example of an observer is the [ImportHelper], which keeps track
   ///of the files relative location to handle their imports.
-  final List<FileWriterObserver> _fileObservers = [];
+  final List<FileWriterObserver> fileObservers = [];
 
   ///Indicator that signals if the required directories are constructed.
   ///
@@ -60,7 +60,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
 
   void addFileObserver(FileWriterObserver observer) {
     if (observer != null) {
-      _fileObservers.add(observer);
+      fileObservers.add(observer);
     }
   }
 
@@ -119,8 +119,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
     return Future.value();
   }
 
-  String getViewPath(String fileName) =>
-      '$_viewDirectoryPath$fileName.dart';
+  String getViewPath(String fileName) => '$_viewDirectoryPath$fileName.dart';
 
   @override
   void commandCreated(FileStructureCommand command) {
@@ -139,11 +138,11 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// [FileWriterObserver]s are going to be notfied of the new created file.
   void writeDataToFile(String data, String directory, String name,
       {String UUID}) {
-    var file = _getFile(directory, name);
+    var file = getFile(directory, name);
     file.createSync(recursive: true);
     file.writeAsStringSync(data);
 
-    _fileObservers.forEach((observer) => observer.fileCreated(
+    fileObservers.forEach((observer) => observer.fileCreated(
         file.path, UUID ?? p.basenameWithoutExtension(file.path)));
   }
 
@@ -156,7 +155,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// [ModFile] function is found, its going to append the information at the end of the lines
   void appendDataToFile(ModFile modFile, String directory, String name,
       {String UUID, bool createFileIfNotFound = true}) {
-    var file = _getFile(directory, name);
+    var file = getFile(directory, name);
     if (file.existsSync()) {
       var fileLines = file.readAsLinesSync();
       var modLines = modFile(fileLines);
@@ -169,7 +168,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
     }
   }
 
-  File _getFile(String directory, String name) => File(p.join(directory, name));
+  File getFile(String directory, String name) => File(p.join(directory, name));
 }
 
 /// [Function] that returns the modified [lines] that should make the new data.

@@ -141,6 +141,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(ExportPlatformCommand(
+          tree.UUID,
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
           '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
@@ -149,6 +150,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       } else if (tree.rootNode is InheritedScaffold) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(WriteScreenCommand(
+          tree.UUID,
           '$fileName.dart',
           '${tree.name.snakeCase}',
           generationManager.generate(tree.rootNode),
@@ -156,6 +158,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       } else {
         tree.rootNode.currentContext.project.genProjectData.commandQueue.add(
           WriteSymbolCommand(
+            tree.UUID,
             '$fileName.dart',
             generationManager.generate(tree.rootNode),
             relativePath: tree.name.snakeCase + '/',

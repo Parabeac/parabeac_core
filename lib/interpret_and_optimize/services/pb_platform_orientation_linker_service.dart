@@ -40,13 +40,13 @@ class PBPlatformOrientationLinkerService {
     // if there are more than 1 orientation on the project
     if (hasMultipleOrientations()) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
-          .add(OrientationBuilderCommand());
+          .add(OrientationBuilderCommand(tree.UUID));
     }
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
-          .add(ResponsiveLayoutBuilderCommand());
+          .add(ResponsiveLayoutBuilderCommand(tree.UUID));
       _addBreakpoints(tree);
     }
 
@@ -205,9 +205,11 @@ class PBPlatformOrientationLinkerService {
 
   void _addBreakpoints(PBIntermediateTree tree) {
     if (MainInfo().configurations.containsKey('breakpoints')) {
-      Map<String, num> bp = MainInfo().configurations['breakpoints'].cast<String, num>();
+      Map<String, num> bp =
+          MainInfo().configurations['breakpoints'].cast<String, num>();
       bp.forEach((key, value) {
-        var cmd = AddConstantCommand(key + 'Breakpoint', 'num', value.toString());
+        var cmd = AddConstantCommand(
+            tree.UUID, key + 'Breakpoint', 'num', value.toString());
         tree.rootNode.currentContext.project.genProjectData.commandQueue
             .add(cmd);
       });

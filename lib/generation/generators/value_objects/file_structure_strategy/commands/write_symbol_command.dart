@@ -8,7 +8,8 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   final String SYMBOL_PATH = 'lib/widgets';
   String relativePath;
 
-  WriteSymbolCommand(this.name, String code, {this.relativePath}) : super(code);
+  WriteSymbolCommand(String UUID, this.name, String code, {this.relativePath})
+      : super(UUID, code);
 
   /// Writes a symbol file containing [data] with [name] as its filename.
   ///
