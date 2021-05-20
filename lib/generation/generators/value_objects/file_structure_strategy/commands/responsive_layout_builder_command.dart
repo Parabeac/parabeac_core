@@ -6,8 +6,8 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 
 class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
-  final DIR_TO_RESPONSIVE_LAYOUT = 'lib/widgets/';
-  final NAME_TO_RESPONSIVE_LAYOUT = 'responsive_layout_builder.dart';
+  static final DIR_TO_RESPONSIVE_LAYOUT = 'lib/widgets/';
+  static final NAME_TO_RESPONSIVE_LAYOUT = 'responsive_layout_builder.dart';
 
   ResponsiveLayoutBuilderCommand(String UUID) : super(UUID);
 
