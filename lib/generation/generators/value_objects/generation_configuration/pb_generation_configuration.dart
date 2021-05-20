@@ -4,6 +4,8 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_view_data
 import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/export_platform_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
@@ -23,6 +25,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -214,6 +217,17 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
     currentMap.forEach((screenName, platformsMap) {
       var rawImports = getPlatformImports(screenName);
+
+      rawImports.add(p.join(
+        mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH +
+            OrientationBuilderCommand.DIR_TO_ORIENTATION_BUILDER +
+            OrientationBuilderCommand.NAME_TO_ORIENTAION_BUILDER,
+      ));
+      rawImports.add(p.join(
+        mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH +
+            ResponsiveLayoutBuilderCommand.DIR_TO_RESPONSIVE_LAYOUT +
+            ResponsiveLayoutBuilderCommand.NAME_TO_RESPONSIVE_LAYOUT,
+      ));
 
       var newCommand = generatePlatformInstance(
           platformsMap, screenName, mainTree, rawImports);

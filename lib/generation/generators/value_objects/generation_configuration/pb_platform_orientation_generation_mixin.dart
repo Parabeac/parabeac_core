@@ -40,7 +40,6 @@ mixin PBPlatformOrientationGeneration {
     var className = screenName.pascalCase;
     return '''
     import 'package:flutter/material.dart';
-    import '../../widgets/responsive_layout_builder.dart';
     ${_serveImports(cookedImports)}
 
     class ${className}PlatformBuilder extends StatelessWidget {
