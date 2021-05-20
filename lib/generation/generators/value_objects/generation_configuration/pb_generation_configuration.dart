@@ -20,6 +20,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -140,58 +141,71 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       await _iterateNode(tree.rootNode);
 
-      if (_importProcessor.imports.isNotEmpty) {
-        _traverseTreeForImports(tree);
-      }
-
-      // _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
-
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         getPlatformOrientationName(tree.rootNode);
-        commandObservers.forEach(
-          (observer) => ExportPlatformCommand(
-            tree.UUID,
-            tree.rootNode.currentContext.tree.data.platform,
-            '$fileName',
-            '${tree.rootNode.name.snakeCase}.dart',
-            generationManager.generate(tree.rootNode),
-          ),
+        var command = ExportPlatformCommand(
+          tree.UUID,
+          tree.rootNode.currentContext.tree.data.platform,
+          '$fileName',
+          '${tree.rootNode.name.snakeCase}.dart',
+          generationManager.generate(tree.rootNode),
         );
+
+        if (_importProcessor.imports.isNotEmpty) {
+          _traverseTreeForImports(tree,
+              '${pbProject.projectAbsPath}${command.WIDGET_PATH}/$fileName.dart');
+        }
+        commandObservers
+            .forEach((observer) => observer.commandCreated(command));
       } else if (tree.rootNode is InheritedScaffold) {
+        var command = WriteScreenCommand(
+          tree.UUID,
+          '$fileName.dart',
+          '${tree.name.snakeCase}',
+          generationManager.generate(tree.rootNode),
+        );
+
+        if (_importProcessor.imports.isNotEmpty) {
+          var treePath =
+              '${pbProject.projectAbsPath}${WriteScreenCommand.SCREEN_PATH}/$fileName.dart';
+          _traverseTreeForImports(tree, treePath);
+        }
+
         commandObservers.forEach(
-          (observer) => observer.commandCreated(
-            WriteScreenCommand(
-              tree.UUID,
-              '$fileName.dart',
-              '${tree.name.snakeCase}',
-              generationManager.generate(tree.rootNode),
-            ),
-          ),
+          (observer) => observer.commandCreated(command),
         );
       } else {
+        var command = WriteSymbolCommand(
+          tree.UUID,
+          '$fileName.dart',
+          generationManager.generate(tree.rootNode),
+          relativePath: tree.name.snakeCase + '/',
+        );
+
+        if (_importProcessor.imports.isNotEmpty) {
+          var treePath =
+              '${pbProject.projectAbsPath}${command.SYMBOL_PATH}/${command.relativePath}$fileName.dart';
+          _traverseTreeForImports(tree, treePath);
+        }
+
         commandObservers.forEach(
-          (observer) => observer.commandCreated(
-            WriteSymbolCommand(
-              tree.UUID,
-              '$fileName.dart',
-              generationManager.generate(tree.rootNode),
-              relativePath: tree.name.snakeCase + '/',
-            ),
-          ),
+          (observer) => observer.commandCreated(command),
         );
       }
     }
     await _commitDependencies(pb_project.projectName);
   }
 
-  void _traverseTreeForImports(PBIntermediateTree tree) {
+  void _traverseTreeForImports(PBIntermediateTree tree, String treeAbsPath) {
     var iter = tree.dependentOn;
 
     if (iter.moveNext()) {
       var dependency = iter.current;
       for (var key in _importProcessor.imports.keys) {
         if (key == dependency.UUID) {
-          tree.rootNode.managerData.addImport(_importProcessor.imports[key]);
+          var relativePath = PBGenCache().getRelativePathFromPaths(
+              treeAbsPath, _importProcessor.imports[key]);
+          tree.rootNode.managerData.addImport(relativePath);
         }
       }
     }
