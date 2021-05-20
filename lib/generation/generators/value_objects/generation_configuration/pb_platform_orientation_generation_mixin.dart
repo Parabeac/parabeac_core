@@ -92,7 +92,9 @@ mixin PBPlatformOrientationGeneration {
   Set<String> _cookImports(Set<String> rawImports, String possiblePath) {
     var result = <String>{};
     rawImports.forEach((import) {
-      result.add(PBGenCache().getRelativePathFromPaths(possiblePath, import));
+      if (possiblePath != null && import != null) {
+        result.add(PBGenCache().getRelativePathFromPaths(possiblePath, import));
+      }
     });
     return result;
   }
