@@ -43,10 +43,9 @@ class PBGenCache {
     }
 
     for (var targetPath in targetPaths) {
-      if (targetPath == filePath) {
-        continue;
+      if (targetPath != filePath) {
+        paths.add(getRelativePathFromPaths(filePath, targetPath));
       }
-      paths.add(getRelativePathFromPaths(filePath, targetPath));
     }
     return paths;
   }

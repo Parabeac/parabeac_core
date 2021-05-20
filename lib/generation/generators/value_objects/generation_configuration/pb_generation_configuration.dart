@@ -147,7 +147,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
           '${tree.rootNode.name.snakeCase}.dart',
-          await generationManager.generate(tree.rootNode),
+          generationManager.generate(tree.rootNode),
         ));
       } else if (tree.rootNode is InheritedScaffold) {
         tree.rootNode.currentContext.project.genProjectData.commandQueue
