@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
+import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as p;
 
 mixin PBPlatformOrientationGeneration {
@@ -22,9 +23,9 @@ mixin PBPlatformOrientationGeneration {
               '/$formatedName' +
               '/${formatedName}_platform_builder.dart',
         ));
-
     if (platformsMap.length > 1) {
       return WriteScreenCommand(
+        Uuid().v4(),
         formatedName + '_platform_builder.dart',
         formatedName,
         _getPlatformInstance(platformsMap, screenName, cookedImports),

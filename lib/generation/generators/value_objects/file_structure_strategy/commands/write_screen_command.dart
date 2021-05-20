@@ -9,7 +9,8 @@ class WriteScreenCommand extends NodeFileStructureCommand {
 
   static final SCREEN_PATH = 'lib/screens';
 
-  WriteScreenCommand(this.name, this.relativePath, String code) : super(code);
+  WriteScreenCommand(String UUID, this.name, this.relativePath, String code)
+      : super(UUID, code);
 
   /// Writes a screen file containing [code] to [path] with [name] as its filename.
   ///

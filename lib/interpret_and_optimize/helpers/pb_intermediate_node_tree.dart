@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:uuid/uuid.dart';
 
 enum TREE_TYPE {
   MISC,
@@ -8,6 +9,9 @@ enum TREE_TYPE {
 }
 
 class PBIntermediateTree {
+  String _UUID;
+  String get UUID => _UUID;
+
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
   PBGenerationViewData data;
   PBIntermediateNode _rootNode;
@@ -32,6 +36,7 @@ class PBIntermediateTree {
 
   PBIntermediateTree(this.name) {
     _dependentsOn = {};
+    _UUID = Uuid().v4();
   }
 
   /// Adding [PBIntermediateTree] as a dependecy.

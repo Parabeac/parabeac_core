@@ -40,7 +40,7 @@ void main() {
     FileStructureStrategy strategy;
 
     setUp(() {
-      command = WriteScreenCommand('test_screen.dart', '', screenData);
+      command = WriteScreenCommand('UUID', 'test_screen.dart', '', screenData);
       strategy = MockFSStrategy();
       when(strategy.GENERATED_PROJECT_PATH).thenReturn('temp/');
     });
