@@ -50,6 +50,7 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
       template,
       p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_RESPONSIVE_LAYOUT),
       NAME_TO_RESPONSIVE_LAYOUT,
+      UUID: UUID,
     );
   }
 

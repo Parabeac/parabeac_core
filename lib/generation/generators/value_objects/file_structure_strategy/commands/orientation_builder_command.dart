@@ -53,8 +53,10 @@ class OrientationBuilderCommand extends FileStructureCommand {
     ''';
 
     strategy.writeDataToFile(
-        template,
-        p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
-        NAME_TO_ORIENTAION_BUILDER);
+      template,
+      p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
+      NAME_TO_ORIENTAION_BUILDER,
+      UUID: UUID,
+    );
   }
 }

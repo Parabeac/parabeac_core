@@ -24,6 +24,6 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
       'lib/screens/$folderName/',
       platform.toString().toLowerCase().replaceAll('platform.', ''),
     );
-    strategy.writeDataToFile(code, path, fileName);
+    strategy.writeDataToFile(code, path, fileName, UUID: UUID);
   }
 }
