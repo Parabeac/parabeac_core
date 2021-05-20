@@ -23,7 +23,7 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
       absPath =
           p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH, relativePath);
     }
-    strategy.writeDataToFile(code, absPath, name);
+    strategy.writeDataToFile(code, absPath, name, UUID: UUID);
     return Future.value(p.join(absPath, name));
   }
 }
