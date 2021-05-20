@@ -7,7 +7,7 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   String name;
   final String SYMBOL_PATH = 'lib/widgets';
 
-  WriteSymbolCommand(this.name, String code) : super(code);
+  WriteSymbolCommand(String UUID, this.name, String code) : super(UUID, code);
 
   /// Writes a symbol file containing [data] with [name] as its filename.
   ///
@@ -15,7 +15,12 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   @override
   Future<String> write(FileStructureStrategy strategy) {
     var absPath = p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH);
-    strategy.writeDataToFile(code, absPath, name);
+    strategy.writeDataToFile(
+      code,
+      absPath,
+      name,
+      UUID: UUID,
+    );
     return Future.value(p.join(absPath, name));
   }
 }

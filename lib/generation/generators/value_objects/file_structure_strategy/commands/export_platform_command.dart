@@ -10,11 +10,12 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
   String folderName;
 
   ExportPlatformCommand(
+    String UUID,
     this.platform,
     this.folderName,
     this.fileName,
     String code,
-  ) : super(code);
+  ) : super(UUID, code);
 
   @override
   Future write(FileStructureStrategy strategy) async {
@@ -23,6 +24,6 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
       'lib/screens/$folderName/',
       platform.toString().toLowerCase(),
     );
-    strategy.writeDataToFile(code, path, fileName);
+    strategy.writeDataToFile(code, path, fileName, UUID: UUID);
   }
 }
