@@ -23,7 +23,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
-import 'package:path/path.dart' as p;
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -223,7 +222,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         commandObservers
             .forEach((observer) => observer.commandCreated(newCommand));
       }
-      _importProcessor;
     });
   }
 
@@ -233,8 +231,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
       map.forEach((key, tree) {
-        imports.add(_importProcessor.getImport(
-            p.basenameWithoutExtension(tree.rootNode.name.snakeCase)));
+        imports.add(_importProcessor.getImport(tree.UUID));
       });
     });
     // TODO: add import to responsive layout builder
