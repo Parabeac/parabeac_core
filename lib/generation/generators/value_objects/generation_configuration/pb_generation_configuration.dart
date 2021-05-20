@@ -18,6 +18,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
@@ -136,37 +137,62 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       await _iterateNode(tree.rootNode);
 
+      if (_importProcessor.imports.isNotEmpty) {
+        _traverseTreeForImports(tree);
+      }
+
       // _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(ExportPlatformCommand(
-          tree.UUID,
-          tree.rootNode.currentContext.tree.data.platform,
-          '$fileName',
-          '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
-          generationManager.generate(tree.rootNode),
-        ));
+        commandObservers.forEach(
+          (observer) => observer.commandCreated(
+            ExportPlatformCommand(
+              tree.UUID,
+              tree.rootNode.currentContext.tree.data.platform,
+              '$fileName',
+              '$fileName${getPlatformOrientationName(tree.rootNode)}.dart',
+              generationManager.generate(tree.rootNode),
+            ),
+          ),
+        );
       } else if (tree.rootNode is InheritedScaffold) {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(WriteScreenCommand(
-          tree.UUID,
-          '$fileName.dart',
-          '${tree.name.snakeCase}',
-          generationManager.generate(tree.rootNode),
-        ));
+        commandObservers.forEach(
+          (observer) => observer.commandCreated(
+            WriteScreenCommand(
+              tree.UUID,
+              '$fileName.dart',
+              '${tree.name.snakeCase}',
+              generationManager.generate(tree.rootNode),
+            ),
+          ),
+        );
       } else {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue.add(
-          WriteSymbolCommand(
-            tree.UUID,
-            '$fileName.dart',
-            generationManager.generate(tree.rootNode),
-            relativePath: tree.name.snakeCase + '/',
+        commandObservers.forEach(
+          (observer) => observer.commandCreated(
+            WriteSymbolCommand(
+              tree.UUID,
+              '$fileName.dart',
+              generationManager.generate(tree.rootNode),
+              relativePath: tree.name.snakeCase + '/',
+            ),
           ),
         );
       }
     }
     await _commitDependencies(pb_project.projectName);
+  }
+
+  void _traverseTreeForImports(PBIntermediateTree tree) {
+    var iter = tree.dependentOn;
+
+    if (iter.moveNext()) {
+      var dependency = iter.current;
+      for (var key in _importProcessor.imports.keys) {
+        if (key == dependency.UUID) {
+          tree.rootNode.managerData.addImport(_importProcessor.imports[key]);
+        }
+      }
+    }
   }
 
   void registerMiddleware(Middleware middleware) {
