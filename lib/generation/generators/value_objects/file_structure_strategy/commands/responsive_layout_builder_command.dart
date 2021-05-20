@@ -47,7 +47,11 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     ''';
 
     strategy.writeDataToFile(
-        template, DIR_TO_RESPONSIVE_LAYOUT, NAME_TO_RESPONSIVE_LAYOUT);
+      template,
+      DIR_TO_RESPONSIVE_LAYOUT,
+      NAME_TO_RESPONSIVE_LAYOUT,
+      UUID: UUID,
+    );
   }
 
   String _generatePlatformWidgets(List<String> platforms) {

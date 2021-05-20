@@ -19,7 +19,12 @@ class WriteScreenCommand extends NodeFileStructureCommand {
   Future<String> write(FileStructureStrategy strategy) {
     var absPath =
         p.join(strategy.GENERATED_PROJECT_PATH, SCREEN_PATH, relativePath);
-    strategy.writeDataToFile(code, absPath, name);
+    strategy.writeDataToFile(
+      code,
+      absPath,
+      name,
+      UUID: UUID,
+    );
     return Future.value(p.join(absPath, name));
   }
 }
