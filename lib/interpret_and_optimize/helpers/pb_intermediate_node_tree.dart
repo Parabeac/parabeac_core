@@ -14,7 +14,13 @@ class PBIntermediateTree {
 
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
   PBGenerationViewData data;
-  PBIntermediateNode rootNode;
+  PBIntermediateNode _rootNode;
+  set rootNode(PBIntermediateNode rootNode) {
+    _rootNode = rootNode;
+    identifier = rootNode?.name ?? name;
+  }
+
+  PBIntermediateNode get rootNode => _rootNode;
 
   /// List of [PBIntermediteTree]s that `this` depends on.
   ///
@@ -24,6 +30,10 @@ class PBIntermediateTree {
       _dependentsOn.where((depedent) => depedent != null).iterator;
 
   String name;
+  String identifier;
+
+  List<PBIntermediateTree> dependentsOn;
+
   PBIntermediateTree(this.name) {
     _dependentsOn = {};
     _UUID = Uuid().v4();
