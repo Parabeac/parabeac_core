@@ -18,10 +18,10 @@ mixin PBPlatformOrientationGeneration {
     var cookedImports = _cookImports(
         rawImports,
         p.join(
-          mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH +
-              WriteScreenCommand.SCREEN_PATH +
-              '/$formatedName' +
-              '/${formatedName}_platform_builder.dart',
+          mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH,
+          WriteScreenCommand.SCREEN_PATH,
+          '/$formatedName',
+          '/${formatedName}_platform_builder.dart',
         ));
     if (platformsMap.length > 1) {
       return WriteScreenCommand(
@@ -66,7 +66,7 @@ mixin PBPlatformOrientationGeneration {
         ),
         ''';
       } else {
-        result += '${platform}Widget: ${nameWithPlatform}(),';
+        result += '${platform}Widget: $nameWithPlatform(),';
       }
     });
     return result;
@@ -101,7 +101,7 @@ mixin PBPlatformOrientationGeneration {
   String _serveImports(Set<String> cookedImports) {
     var result = '';
     cookedImports.forEach((import) {
-      result += 'import \'${import}\';\n';
+      result += 'import \'$import\';\n';
     });
     return result;
   }

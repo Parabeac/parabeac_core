@@ -1,14 +1,16 @@
 {
-  "default": {
-    "widgetStyle": "Material",
-    "widgetType": "Stateless",
-    "widgetSpacing": "Expanded",
-    "layoutPrecedence": ["column", "row", "stack"]
-  },
-  "state-management": "none",
-  "breakpoints": {
-    "mobile": 360,
-    "tablet": 600,
-    "desktop": 1280
-  }
+   "widgetStyle": "Material",
+   "widgetType": "Stateless",
+   "widgetSpacing": "Expanded",
+   "layoutPrecedence": [
+      "column",
+      "row",
+      "stack"
+   ],
+   "state-management": "none",
+   "breakpoints": {
+      "mobile": 360,
+      "tablet": 600,
+      "desktop": 1280
+   }
 }
