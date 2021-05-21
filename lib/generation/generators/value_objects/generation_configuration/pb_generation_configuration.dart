@@ -135,16 +135,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        _setMainScreen(tree.rootNode, '$relPath.dart');
+        await _setMainScreen(tree.rootNode, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
 
       // _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
 
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        getPlatformOrientationName(tree.rootNode);
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(ExportPlatformCommand(
+        fileStructureStrategy.commandCreated(ExportPlatformCommand(
           tree.UUID,
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
@@ -152,16 +150,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           generationManager.generate(tree.rootNode),
         ));
       } else if (tree.rootNode is InheritedScaffold) {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(WriteScreenCommand(
+        fileStructureStrategy.commandCreated(WriteScreenCommand(
           tree.UUID,
           '$fileName.dart',
           '${tree.name}',
           generationManager.generate(tree.rootNode),
         ));
       } else {
-        tree.rootNode.currentContext.project.genProjectData.commandQueue
-            .add(WriteSymbolCommand(
+        fileStructureStrategy.commandCreated(WriteSymbolCommand(
           tree.UUID,
           '$fileName.dart',
           generationManager.generate(tree.rootNode),
@@ -201,12 +197,12 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  void _setMainScreen(InheritedScaffold node, String outputMain) async {
+  Future<void> _setMainScreen(InheritedScaffold node, String outputMain) async {
     var writer = pageWriter;
     if (writer is PBFlutterWriter) {
       await writer.writeMainScreenWithHome(
           node.name,
-          fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
+          p.join(fileStructureStrategy.GENERATED_PROJECT_PATH, 'lib/main.dart'),
           'screens/$outputMain');
     }
   }
