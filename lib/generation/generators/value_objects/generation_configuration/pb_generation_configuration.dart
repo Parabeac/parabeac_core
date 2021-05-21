@@ -152,8 +152,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         );
 
         if (_importProcessor.imports.isNotEmpty) {
-          _traverseTreeForImports(tree,
-              '${pbProject.projectAbsPath}${command.WIDGET_PATH}/$fileName.dart');
+          var treePath = p.join(
+              pbProject.projectAbsPath, command.WIDGET_PATH, '$fileName.dart');
+          _traverseTreeForImports(tree, treePath);
         }
         commandObservers
             .forEach((observer) => observer.commandCreated(command));
@@ -166,8 +167,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         );
 
         if (_importProcessor.imports.isNotEmpty) {
-          var treePath =
-              '${pbProject.projectAbsPath}${WriteScreenCommand.SCREEN_PATH}/$fileName.dart';
+          var treePath = p.join(pbProject.projectAbsPath,
+              WriteScreenCommand.SCREEN_PATH, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
 
@@ -183,8 +184,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         );
 
         if (_importProcessor.imports.isNotEmpty) {
-          var treePath =
-              '${pbProject.projectAbsPath}${command.SYMBOL_PATH}/${command.relativePath}$fileName.dart';
+          var treePath = p.join(pbProject.projectAbsPath, command.SYMBOL_PATH,
+              command.relativePath, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
 
@@ -196,6 +197,10 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     await _commitDependencies(pb_project.projectName);
   }
 
+  /// Method that traverses `tree`'s dependencies and looks for an import path from
+  /// [ImportHelper].
+  /// 
+  /// If an import path is found, it will be added to the `tree`'s data.
   void _traverseTreeForImports(PBIntermediateTree tree, String treeAbsPath) {
     var iter = tree.dependentOn;
 
@@ -207,6 +212,23 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
               treeAbsPath, _importProcessor.imports[key]);
           tree.rootNode.managerData.addImport(relativePath);
         }
+      }
+    }
+
+    var stack = <PBIntermediateNode>[tree.rootNode];
+    while (stack.isNotEmpty) {
+      var currentNode = stack.removeLast();
+
+      for (var key in _importProcessor.imports.keys) {
+        if (key == currentNode.UUID) {
+          var relativePath = PBGenCache().getRelativePathFromPaths(
+              treeAbsPath, _importProcessor.imports[key]);
+          tree.rootNode.managerData.addImport(relativePath);
+        }
+      }
+
+      for (var attr in currentNode.attributes) {
+        stack.add(attr.attributeNode);
       }
     }
   }
