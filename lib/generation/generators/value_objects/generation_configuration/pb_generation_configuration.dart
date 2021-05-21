@@ -23,6 +23,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -132,7 +133,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        _setMainScreen(tree.rootNode, '$relPath.dart');
+        await _setMainScreen(tree.rootNode, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
 
@@ -191,12 +192,12 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  void _setMainScreen(InheritedScaffold node, String outputMain) async {
+  Future<void> _setMainScreen(InheritedScaffold node, String outputMain) async {
     var writer = pageWriter;
     if (writer is PBFlutterWriter) {
       await writer.writeMainScreenWithHome(
           node.name,
-          fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
+          p.join(fileStructureStrategy.GENERATED_PROJECT_PATH, 'lib/main.dart'),
           'screens/$outputMain');
     }
   }

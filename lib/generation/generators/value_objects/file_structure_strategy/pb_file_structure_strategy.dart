@@ -119,8 +119,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
     return Future.value();
   }
 
-  String getViewPath(String fileName) =>
-      '$_viewDirectoryPath$fileName.dart';
+  String getViewPath(String fileName) => '$_viewDirectoryPath$fileName.dart';
 
   @override
   void commandCreated(FileStructureCommand command) {
@@ -137,8 +136,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// be used.
   ///
   /// [FileWriterObserver]s are going to be notfied of the new created file.
-  void writeDataToFile(String data, String directory, String name,
-      {String UUID}) {
+  void writeDataToFile(
+    String data,
+    String directory,
+    String name, {
+    String UUID,
+  }) {
     var file = _getFile(directory, name);
     file.createSync(recursive: true);
     file.writeAsStringSync(data);
