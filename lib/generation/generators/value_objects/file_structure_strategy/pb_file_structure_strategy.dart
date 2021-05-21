@@ -161,10 +161,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
       var modLines = modFile(fileLines);
 
       if (fileLines != modLines) {
-        file.writeAsStringSync(modFile(fileLines).toString());
+        var buffer = StringBuffer();
+        modLines.forEach(buffer.writeln);
+        file.writeAsStringSync(buffer.toString());
       }
     } else if (createFileIfNotFound) {
-      writeDataToFile(modFile([]).toString(), directory, name, UUID: UUID);
+      var modLines = modFile([]);
+      var buffer = StringBuffer();
+      modLines.forEach(buffer.writeln);
+      writeDataToFile(buffer.toString(), directory, name, UUID: UUID);
     }
   }
 

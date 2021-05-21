@@ -20,8 +20,8 @@ mixin PBPlatformOrientationGeneration {
         p.join(
           mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH,
           WriteScreenCommand.SCREEN_PATH,
-          '/$formatedName',
-          '/${formatedName}_platform_builder.dart',
+          formatedName,
+          '${formatedName}_platform_builder.dart',
         ));
     if (platformsMap.length > 1) {
       return WriteScreenCommand(
