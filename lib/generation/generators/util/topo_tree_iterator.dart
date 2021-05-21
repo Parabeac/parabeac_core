@@ -5,12 +5,16 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 ///Iterating through the screens in a manner where, the screens that are
 ///dependent are processed first.
 ///
+///  Make sure there are no cycles in the graph. "In a dependency graph,
+///  the cycles of dependencies (also called circular dependencies) lead to a situation in which no valid evaluation order exists,
+///  because none of the objects in the cycle may be evaluated first."
+///  * If cycles are detected in the list, then a [CyclicDependencyError] is going to be thrown.
+///
 ///For example, assyme we have the following dependency graph:
-///     t0
-///   /   \
-/// t1      t2
 /// `tree1` is going to depend on `tree0` and `tree0` depends on `tree2`.
-/// We should traverse the graph first processing `t1`, then `t0`, and finally `t2`.
+///   t1 --> t0 --> t2
+/// The correct order should be: `[t2, t0, t1]`,
+/// because t2 has dependets, therefore, it needs to be processed first.
 class IntermediateTopoIterator<E extends PBIntermediateTree>
     implements Iterator<E> {
   List<E> trees;
@@ -24,6 +28,7 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
     trees = topologicalSort(trees);
     if (trees.isNotEmpty) {
       _currentElement = trees[0];
+      trees = List.from(trees.reversed);
     }
   }
 
@@ -65,7 +70,9 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
       }
     }
 
-    if (_detectCycle(inDegrees)) {}
+    if (_detectCycle(inDegrees)) {
+      throw CyclicDependencyError(trees);
+    }
     return ordered;
   }
 
@@ -80,5 +87,19 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
       return true;
     }
     return false;
+  }
+}
+
+/// Error thrown when there is a cycle in the dependency graph of [PBIntermediateTree]
+class CyclicDependencyError extends Error {
+  List items;
+  CyclicDependencyError([this.items]);
+  @override
+  String toString() {
+    var message = 'Cycle Detected on Graph';
+    if (items != null) {
+      message += '. Graph: ${items.toString()}';
+    }
+    return message;
   }
 }

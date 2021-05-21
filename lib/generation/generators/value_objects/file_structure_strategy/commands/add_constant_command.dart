@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
@@ -12,7 +11,8 @@ class AddConstantCommand extends FileStructureCommand {
   final String CONST_DIR_PATH = 'lib/constants/';
   final String CONST_FILE_NAME = 'constants.dart';
 
-  AddConstantCommand(this.name, this.type, this.value);
+  AddConstantCommand(String UUID, this.name, this.type, this.value)
+      : super(UUID);
 
   /// Adds a constant containing `type`, `name` and `value` to `constants.dart` file
   @override

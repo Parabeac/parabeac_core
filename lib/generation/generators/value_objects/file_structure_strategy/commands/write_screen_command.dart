@@ -9,7 +9,8 @@ class WriteScreenCommand extends NodeFileStructureCommand {
 
   final SCREEN_PATH = 'lib/screens';
 
-  WriteScreenCommand(this.name, this.relativePath, String code) : super(code);
+  WriteScreenCommand(String UUID, this.name, this.relativePath, String code)
+      : super(UUID, code);
 
   /// Writes a screen file containing [code] to [path] with [name] as its filename.
   ///
@@ -18,7 +19,12 @@ class WriteScreenCommand extends NodeFileStructureCommand {
   Future<String> write(FileStructureStrategy strategy) {
     var absPath =
         p.join(strategy.GENERATED_PROJECT_PATH, SCREEN_PATH, relativePath);
-    strategy.writeDataToFile(code, absPath, name);
+    strategy.writeDataToFile(
+      code,
+      absPath,
+      name,
+      UUID: UUID,
+    );
     return Future.value(p.join(absPath, name));
   }
 }

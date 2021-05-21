@@ -14,7 +14,7 @@ class AddDependencyCommand extends FileStructureCommand {
   /// The version of [package]
   String version;
 
-  AddDependencyCommand(this.package, this.version);
+  AddDependencyCommand(String UUID, this.package, this.version) : super(UUID);
 
   /// Appends `package` and `version` to `pubspec.yaml` dependencies.
   @override
