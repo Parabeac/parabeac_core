@@ -74,17 +74,21 @@ mixin PBPlatformOrientationGeneration {
 
   void getPlatformOrientationName(PBIntermediateNode node) {
     var map = PBPlatformOrientationLinkerService()
-        .getPlatformOrientationData(node.name);
+        .getPlatformOrientationData(node.currentContext.tree.identifier);
 
     if (map.length > 1) {
       var platform = PBPlatformOrientationLinkerService()
           .stripPlatform(node.currentContext.tree.data.platform);
-      node.name += '_$platform';
+      if (!node.name.contains('_$platform')) {
+        node.name += '_$platform';
+      }
     }
     if (map[node.currentContext.tree.data.platform].length > 1) {
       var orientation = PBPlatformOrientationLinkerService()
           .stripOrientation(node.currentContext.tree.data.orientation);
-      node.name += '_$orientation';
+      if (!node.name.contains('_$orientation')) {
+        node.name += '_$orientation';
+      }
     }
   }
 

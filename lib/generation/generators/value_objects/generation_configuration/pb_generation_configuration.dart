@@ -125,23 +125,23 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
       tree.data.addImport('package:flutter/material.dart');
       generationManager.data = tree.data;
-      var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
+      var fileName = tree.identifier?.snakeCase ?? 'no_name_found';
 
       // Relative path to the file to create
       var relPath = '${tree.name.snakeCase}/$fileName';
       // Change relative path if current tree is part of multi-platform setup
-      if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+      if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
         var platformFolder =
             poLinker.stripPlatform(tree.rootNode.managerData.platform);
         relPath = '$fileName/$platformFolder/$fileName';
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(tree.rootNode, '$relPath.dart');
+        await _setMainScreen(tree, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
 
-      if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
+      if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
         getPlatformOrientationName(tree.rootNode);
         var command = ExportPlatformCommand(
           tree.UUID,
@@ -199,7 +199,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
   /// Method that traverses `tree`'s dependencies and looks for an import path from
   /// [ImportHelper].
-  /// 
+  ///
   /// If an import path is found, it will be added to the `tree`'s data.
   void _traverseTreeForImports(PBIntermediateTree tree, String treeAbsPath) {
     var iter = tree.dependentOn;
@@ -263,14 +263,32 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  Future<void> _setMainScreen(InheritedScaffold node, String outputMain) async {
+  Future<void> _setMainScreen(
+      PBIntermediateTree tree, String outputMain) async {
     var writer = pageWriter;
+    var nodeInfo = _determineNode(tree, outputMain);
     if (writer is PBFlutterWriter) {
       await writer.writeMainScreenWithHome(
-          node.name,
+          nodeInfo[0],
           p.join(fileStructureStrategy.GENERATED_PROJECT_PATH, 'lib/main.dart'),
-          'screens/$outputMain');
+          'screens/${nodeInfo[1]}');
     }
+  }
+
+  List<String> _determineNode(PBIntermediateTree tree, String outputMain) {
+    var rootName = tree.rootNode.name;
+    if (rootName.contains('_')) {
+      rootName = rootName.split('_')[0].pascalCase;
+    }
+    var currentMap = PBPlatformOrientationLinkerService()
+        .getPlatformOrientationData(rootName);
+    var className = [rootName.pascalCase, ''];
+    if (currentMap.length > 1) {
+      className[0] += 'PlatformBuilder';
+      className[1] =
+          rootName.snakeCase + '/${rootName.snakeCase}_platform_builder.dart';
+    }
+    return className;
   }
 
   Future<void> generatePlatformAndOrientationInstance(PBProject mainTree) {
