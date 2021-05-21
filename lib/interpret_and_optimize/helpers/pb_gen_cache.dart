@@ -43,50 +43,54 @@ class PBGenCache {
     }
 
     for (var targetPath in targetPaths) {
-      // Tokenize [filePath] and the path to the file of [doObjectId]
-      var filePathTokens = filePath.split('/')
-        ..removeLast()
-        ..removeAt(0);
-      if (targetPath == filePath) {
-        continue;
-      }
-      var targetPathTokens = targetPath.split('/')..removeAt(0);
-      var targetFileName = targetPathTokens.removeLast();
-      // Get rid of paths that are the same
-      while (min(filePathTokens.length, targetPathTokens.length) != 0 &&
-          filePathTokens[0] == targetPathTokens[0]) {
-        filePathTokens.removeAt(0);
-        targetPathTokens.removeAt(0);
-      }
-
-      // Case for when files are in the same folder
-      if (filePathTokens.isEmpty && targetPathTokens.isEmpty) {
-        paths.add('./$targetFileName');
-      }
-      // Case for when backtracking is not needed to get to [targetPath]
-      else if (filePathTokens.isEmpty) {
-        var result = './';
-        for (var folder in targetPathTokens) {
-          result = '$result$folder/';
-        }
-        paths.add('$result$targetFileName');
-      }
-      // Case for when backtracking is needed to get to [targetPath]
-      else {
-        var result = '';
-
-        // Backtrack
-        for (var i = 0; i < filePathTokens.length; i++) {
-          result = '$result../';
-        }
-
-        // Add necessary folders
-        for (var i = 0; i < targetPathTokens.length; i++) {
-          result = '$result${targetPathTokens[i]}/';
-        }
-        paths.add('$result$targetFileName');
+      if (targetPath != filePath) {
+        paths.add(getRelativePathFromPaths(filePath, targetPath));
       }
     }
     return paths;
+  }
+
+  String getRelativePathFromPaths(String filePath, String targetPath) {
+    // Tokenize [filePath] and the path to the file of [doObjectId]
+    var filePathTokens = filePath.split('/')
+      ..removeLast()
+      ..removeAt(0);
+
+    var targetPathTokens = targetPath.split('/')..removeAt(0);
+    var targetFileName = targetPathTokens.removeLast();
+    // Get rid of paths that are the same
+    while (min(filePathTokens.length, targetPathTokens.length) != 0 &&
+        filePathTokens[0] == targetPathTokens[0]) {
+      filePathTokens.removeAt(0);
+      targetPathTokens.removeAt(0);
+    }
+
+    // Case for when files are in the same folder
+    if (filePathTokens.isEmpty && targetPathTokens.isEmpty) {
+      return './$targetFileName';
+    }
+    // Case for when backtracking is not needed to get to [targetPath]
+    else if (filePathTokens.isEmpty) {
+      var result = './';
+      for (var folder in targetPathTokens) {
+        result = '$result$folder/';
+      }
+      return '$result$targetFileName';
+    }
+    // Case for when backtracking is needed to get to [targetPath]
+    else {
+      var result = '';
+
+      // Backtrack
+      for (var i = 0; i < filePathTokens.length; i++) {
+        result = '$result../';
+      }
+
+      // Add necessary folders
+      for (var i = 0; i < targetPathTokens.length; i++) {
+        result = '$result${targetPathTokens[i]}/';
+      }
+      return '$result$targetFileName';
+    }
   }
 }
