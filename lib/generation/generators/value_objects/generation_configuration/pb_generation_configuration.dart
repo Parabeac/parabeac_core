@@ -214,23 +214,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         }
       }
     }
-
-    var stack = <PBIntermediateNode>[tree.rootNode];
-    while (stack.isNotEmpty) {
-      var currentNode = stack.removeLast();
-
-      for (var key in _importProcessor.imports.keys) {
-        if (key == currentNode.UUID) {
-          var relativePath = PBGenCache().getRelativePathFromPaths(
-              treeAbsPath, _importProcessor.imports[key]);
-          tree.rootNode.managerData.addImport(relativePath);
-        }
-      }
-
-      for (var attr in currentNode.attributes) {
-        stack.add(attr.attributeNode);
-      }
-    }
   }
 
   void registerMiddleware(Middleware middleware) {
