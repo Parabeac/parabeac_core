@@ -7,7 +7,7 @@
       "row",
       "stack"
    ],
-   "state-management": "provider",
+   "state-management": "none",
    "breakpoints": {
       "mobile": 360,
       "tablet": 600,

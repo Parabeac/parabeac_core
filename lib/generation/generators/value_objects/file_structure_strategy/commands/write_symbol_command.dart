@@ -6,21 +6,24 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 class WriteSymbolCommand extends NodeFileStructureCommand {
   String name;
   final String SYMBOL_PATH = 'lib/widgets';
+  String relativePath;
 
-  WriteSymbolCommand(String UUID, this.name, String code) : super(UUID, code);
+  WriteSymbolCommand(String UUID, this.name, String code, {this.relativePath})
+      : super(UUID, code);
 
   /// Writes a symbol file containing [data] with [name] as its filename.
   ///
   /// Returns path to the file that was created.
   @override
   Future<String> write(FileStructureStrategy strategy) {
-    var absPath = p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH);
-    strategy.writeDataToFile(
-      code,
-      absPath,
-      name,
-      UUID: UUID,
-    );
+    var absPath;
+    if (relativePath.isEmpty) {
+      absPath = p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH);
+    } else {
+      absPath =
+          p.join(strategy.GENERATED_PROJECT_PATH, SYMBOL_PATH, relativePath);
+    }
+    strategy.writeDataToFile(code, absPath, name, UUID: UUID);
     return Future.value(p.join(absPath, name));
   }
 }

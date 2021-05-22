@@ -22,7 +22,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  final RELATIVE_VIEW_PATH = 'lib/view/';
+  final RELATIVE_VIEW_PATH = 'lib/widgets/';
 
   ///The path of where all the screens are going to be generated.
   final RELATIVE_SCREEN_PATH = 'lib/screens/';
@@ -161,10 +161,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
       var modLines = modFile(fileLines);
 
       if (fileLines != modLines) {
-        file.writeAsStringSync(modFile(fileLines).toString());
+        var buffer = StringBuffer();
+        modLines.forEach(buffer.writeln);
+        file.writeAsStringSync(buffer.toString());
       }
     } else if (createFileIfNotFound) {
-      writeDataToFile(modFile([]).toString(), directory, name, UUID: UUID);
+      var modLines = modFile([]);
+      var buffer = StringBuffer();
+      modLines.forEach(buffer.writeln);
+      writeDataToFile(buffer.toString(), directory, name, UUID: UUID);
     }
   }
 

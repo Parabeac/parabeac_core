@@ -23,6 +23,7 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     //TODO: use imports system to import material. See updated orientation builder command
     var template = '''
     import 'package:flutter/material.dart';
+    import '../constants/constants.dart';
     class ResponsiveLayoutBuilder extends StatelessWidget {
       $widgetVars
 
