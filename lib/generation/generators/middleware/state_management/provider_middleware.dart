@@ -39,7 +39,7 @@ class ProviderMiddleware extends Middleware {
           is StatelessTemplateStrategy) {
         watcher = PBVariable(watcherName, 'final ', true,
             '${getName(node.functionCallName).pascalCase}().${widgetName}');
-        managerData.addGlobalVariable(watcher);
+        //managerData.addGlobalVariable(watcher);
       }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
@@ -55,7 +55,7 @@ class ProviderMiddleware extends Middleware {
               ${modelName}(), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = ${defaultWidget}(constraints);
+              var widget = ${MiddlewareUtils.generateVariableBody(node)};
               
               context
                   .read<${modelName}>()
@@ -64,7 +64,7 @@ class ProviderMiddleware extends Middleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>(), // TODO: add your method to change the state here
+                    ${modelName}>().OnGesture(),
                 child: context
                     .watch<${modelName}>()
                     .currentWidget, 
