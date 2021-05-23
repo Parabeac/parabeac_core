@@ -140,10 +140,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         await _setMainScreen(tree, '$relPath.dart');
       }
       await _iterateNode(tree.rootNode);
+      var command;
 
       if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
         getPlatformOrientationName(tree.rootNode);
-        var command = ExportPlatformCommand(
+        command = ExportPlatformCommand(
           tree.UUID,
           tree.rootNode.currentContext.tree.data.platform,
           '$fileName',
@@ -156,10 +157,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
               pbProject.projectAbsPath, command.WIDGET_PATH, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
-        commandObservers
-            .forEach((observer) => observer.commandCreated(command));
       } else if (tree.rootNode is InheritedScaffold) {
-        var command = WriteScreenCommand(
+        command = WriteScreenCommand(
           tree.UUID,
           '$fileName.dart',
           '${tree.name.snakeCase}',
@@ -171,12 +170,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
               WriteScreenCommand.SCREEN_PATH, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
-
-        commandObservers.forEach(
-          (observer) => observer.commandCreated(command),
-        );
       } else {
-        var command = WriteSymbolCommand(
+        command = WriteSymbolCommand(
           tree.UUID,
           '$fileName.dart',
           generationManager.generate(tree.rootNode),
@@ -188,11 +183,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
               command.relativePath, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
-
-        commandObservers.forEach(
-          (observer) => observer.commandCreated(command),
-        );
       }
+      fileStructureStrategy.commandCreated(command);
     }
     await _commitDependencies(pb_project.projectName);
   }
