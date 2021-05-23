@@ -8,6 +8,8 @@ class PBGenerationViewData {
   final Set<String> _imports = {};
   final Set<String> _toDispose = {};
   bool _isDataLocked = false;
+  bool hasParams = false;
+
 
   PBGenerationViewData();
 

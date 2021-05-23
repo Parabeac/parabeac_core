@@ -12,7 +12,9 @@ class StatelessTemplateStrategy extends TemplateStrategy {
       GeneratorContext generatorContext,
       {args}) {
     var widgetName = node.name;
+    node.managerData.hasParams = true;
     var returnStatement = node.generator.generate(node, generatorContext);
+    node.managerData.hasParams = false;
     var overrides = '';
     var overrideVars = '';
 

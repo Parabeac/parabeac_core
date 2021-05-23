@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:recase/recase.dart';
@@ -26,73 +27,21 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String generate(
       PBIntermediateNode source, GeneratorContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
-      var method_signature = source.functionCallName?.pascalCase;
-      if (method_signature == null) {
-        log.error(' Could not find master name on: $source');
-        return 'Container(/** This Symbol was not found **/)';
-      }
-
-      var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
-
-      method_signature = PBInputFormatter.formatLabel(method_signature,
-          destroyDigits: false, spaceToUnderscore: false, isTitle: true);
       var buffer = StringBuffer();
-
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
 
-      if (overrideProp != null) {
-        buffer.write('${overrideProp} ?? ');
-      }
+      // If storage found an instance, get its master
+      var masterSymbol =
+          PBSymbolStorage().getSharedMasterNodeBySymbolID(source.SYMBOL_ID);
 
-      buffer.write(method_signature);
-      buffer.write('(');
-      buffer.write('constraints,');
+      // recursively generate Symbol Instance constructors with overrides
+      buffer.write(genSymbolInstance(source.UUID, source.overrideValuesMap,
+          masterSymbol.parametersDefsMap, source.managerData));
 
-      // need to iterate through master symbol parametersDefsMap to pass parent variables down to children
-      var masterSymbol = getMasterSymbol(source.UUID);
-      masterSymbol.parametersDefsMap.forEach((overrideName, smParameter) {
-        var ovrValue = '';
-        if (source.overrideValuesMap.containsKey(overrideName)) {
-          var param = source.overrideValuesMap[overrideName];
-          switch (param.type) {
-            case PBSharedInstanceIntermediateNode:
-              ovrValue = genSymbolInstance(
-                  param.UUID,
-                  param.value,
-                  source.overrideValues,
-                  source.managerData
-              );
-              break;
-            case InheritedBitmap:
-              ovrValue = '\"assets/${param.value["_ref"]}\",';
-              break;
-            case TextStyle:
-              // hack to include import
-              source.currentContext.treeRoot.data.addImport(
-                  'package:${MainInfo().projectName}/document/shared_props.g.dart');
-              ovrValue = '${SharedStyle_UUIDToName[param.value]}.textStyle,';
-              break;
-            case Style:
-              // hack to include import
-              source.currentContext.treeRoot.data.addImport(
-                  'package:${MainInfo().projectName}/document/shared_props.g.dart');
-              ovrValue = '${SharedStyle_UUIDToName[param.value]},';
-              break;
-            case String:
-              ovrValue = '\"${param.value}\",';
-              break;
-            default:
-              log.info('Unknown type ${param.type.toString()} in parameter values for symbol instance.\n');
-          }
-          var friendlyName = SN_UUIDtoVarName[PBInputFormatter.findLastOf(smParameter.propertyName, '/')];
-          buffer.write('$friendlyName: $ovrValue');
-        }
-      });
-
-      // end of return function();
-      buffer.write(');\n');
+      // end of return <genSymbolInstance>();
+      buffer.write(';\n');
       // end of builder: (context, constraints) {
       buffer.write('}\n');
       // end of LayoutBuilder()
@@ -103,7 +52,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   }
 
   PBSharedMasterNode getMasterSymbol(String UUID) {
-
     var masterSymbol;
     var nodeFound = PBSymbolStorage().getAllSymbolById(UUID);
     if (nodeFound is PBSharedMasterNode) {
@@ -118,69 +66,114 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     }
 
     return masterSymbol;
-
   }
 
-  String genSymbolInstance(String overrideUUID, String UUID,
-      List<PBSymbolInstanceOverridableValue> overrideValues,
+  String genSymbolInstance(
+      String UUID,
+      Map<String, PBSymbolInstanceOverridableValue> mapOverrideValues,
+      Map<String, PBSymbolMasterParameter> mapParameterValues,
       PBGenerationViewData managerData,
-      {int depth = 1}) {
-
+      { bool topLevel = true,
+        String UUIDPath = ''}) {
     if ((UUID == null) || (UUID == '')) {
       return '';
     }
 
+    var buffer = StringBuffer();
     var masterSymbol = getMasterSymbol(UUID);
 
     // file could have override names that don't exist?  That's really odd, but we have a file that does that.
     if (masterSymbol == null) {
-      return '';
+      log.error(' Could not find master symbol for UUID:: $UUID');
+      return 'Container(/** This Symbol was not found **/)});';
     }
 
+    var symName = masterSymbol.name;
+    if (symName == null) {
+      log.error(' Could not find master name on: $masterSymbol');
+      return 'Container(/** This Symbol was not found **/)});';
+    }
 
-    var fileName = masterSymbol.name.snakeCase;
-    managerData.addImport(
-        'package:${MainInfo().projectName}/view/symbols/${fileName}.dart');
+    symName = PBInputFormatter.formatLabel(symName,
+        destroyDigits: false, spaceToUnderscore: false, isTitle: true);
 
-    var buffer = StringBuffer();
-    buffer.write('${masterSymbol.friendlyName}(constraints, ');
-    for (var ovrValue in overrideValues) {
-      var ovrUUIDStrings = ovrValue.UUID.split('/');
-      if ((ovrUUIDStrings.length == depth + 1) &&
-          (ovrUUIDStrings[depth - 1] == overrideUUID)) {
-        var ovrUUID = ovrUUIDStrings[depth];
-        switch (ovrValue.type) {
+    // don't include ourselves only child symbols
+    if (!topLevel) {
+      managerData.addImport(
+          'package:${MainInfo().projectName}/view/symbols/${symName.snakeCase}.dart');
+    }
+
+    // if this symbol is overridable, then put variable name + null check
+    var overrideProp = SN_UUIDtoVarName[UUID + '_symbolID'];
+    if (overrideProp != null) {
+      buffer.write('$overrideProp ?? ');
+    }
+
+    buffer.write(symName.pascalCase);
+    buffer.write('(\n');
+    buffer.write('constraints,\n');
+
+    // need to iterate through master symbol parametersDefsMap to pass parent variables down to children
+
+    masterSymbol.parametersDefsMap.forEach((overrideName, smParameter) {
+      var ovrValue = '';
+      overrideName = UUIDPath + overrideName;
+      if (mapOverrideValues.containsKey(overrideName)) {
+        var param = mapOverrideValues[overrideName];
+        switch (param.type) {
           case PBSharedInstanceIntermediateNode:
-            buffer.write(genSymbolInstance(
-                ovrValue.value, ovrUUID, overrideValues,
-                managerData,
-                depth: depth + 1));
+            ovrValue = genSymbolInstance(
+              param.value,
+              mapOverrideValues,
+              mapParameterValues,
+              managerData,
+              topLevel: false,
+              UUIDPath: '$UUIDPath${param.UUID}/',
+            );
             break;
           case InheritedBitmap:
-            var name = SN_UUIDtoVarName[ovrUUID + '_image'];
-            buffer.write('$name: \"assets/${ovrValue.value["_ref"]}\",');
+            ovrValue = '\"assets/${param.value["_ref"]}\"';
             break;
           case TextStyle:
-            var name = SN_UUIDtoVarName[ovrUUID + '_textStyle'];
-            buffer.write(
-                '$name: ${SharedStyle_UUIDToName[ovrValue.value]}.textStyle,');
+            // hack to include import
+            managerData.addImport(
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            ovrValue = '${SharedStyle_UUIDToName[param.value]}.textStyle';
             break;
           case Style:
-            //var name = SN_UUIDtoVarName[ovrUUID + '_layerStyle'];
-            //buffer.write(
-            //    'layerStyle: ${SharedStyle_UUIDToName[ovrValue.value]},');
+            // hack to include import
+            managerData.addImport(
+                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            ovrValue = '${SharedStyle_UUIDToName[param.value]}';
             break;
           case String:
-            var name = SN_UUIDtoVarName[ovrUUID + '_stringValue'] ;
-            buffer.write('$name: \"${ovrValue.value}\",');
+            ovrValue = '\"${param.value}\"';
             break;
           default:
-            log.info('Unknown type ${ovrValue.type.toString()} in override values for symbol instance.\n');
-
+            log.info(
+                'Unknown type ${param.type.toString()} in parameter values for symbol instance.\n');
         }
       }
-    }
-    buffer.write('),');
+      // get parameter name to pass to widget constructor
+      var friendlyName = SN_UUIDtoVarName[
+          PBInputFormatter.findLastOf(smParameter.propertyName, '/')];
+      var paramName = '';
+      // check if parent widget has parameter to pass down to children
+      if (managerData.hasParams &&
+          mapParameterValues.containsKey(smParameter.propertyName)) {
+        // yes, so pass down with optional null check
+        paramName = friendlyName;
+        if (ovrValue != '') {
+          paramName += ' ?? ';
+        }
+      }
+      if ((ovrValue != '') || (paramName != '')) {
+        buffer.write('$friendlyName: $paramName$ovrValue,\n');
+      }
+    });
+
+    buffer.write(')\n');
+
     return buffer.toString();
   }
 }

@@ -15,7 +15,9 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
       GeneratorContext generatorContext,
       {args}) {
     var widgetName = retrieveNodeName(node);
+    node.managerData.hasParams = true;
     var returnStatement = node.generator.generate(node, generatorContext);
+    node.managerData.hasParams = false;
     var overrides = '';
     var overrideVars = '';
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
