@@ -38,13 +38,13 @@ class PBPlatformOrientationLinkerService {
 
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
-    if (hasMultipleOrientations()) {
+    if (platforms.length == 2) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(OrientationBuilderCommand(tree.UUID));
     }
     // Add responsive layout builder template to the project
-    // if there are more than 1 plataform on the project
-    if (hasMultiplePlatforms()) {
+    // if there are more than 1 platform on the project
+    if (platforms.length == 2) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(ResponsiveLayoutBuilderCommand(tree.UUID));
       _addBreakpoints(tree);
