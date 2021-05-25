@@ -37,9 +37,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   final Set<Middleware> _middleware = {};
   Set<Middleware> get middlewares => _middleware;
 
-  ///The project that contains the node for all the pages.
-  PBProject pbProject;
-
   ///The manager in charge of the independent [PBGenerator]s by providing an interface for adding imports, global variables, etc.
   ///
   ///The default [PBGenerationManager] will be [PBFlutterGenerator]
@@ -110,14 +107,13 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     return node;
   }
 
-  ///generates the Project based on the [pb_project]
+  ///Generates the [PBIntermediateTree]s within the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
-    pbProject = pb_project;
     var poLinker = PBPlatformOrientationLinkerService();
 
-    await setUpConfiguration();
-    pbProject.fileStructureStrategy = fileStructureStrategy;
-    var trees = IntermediateTopoIterator(pbProject.forest);
+    await setUpConfiguration(pb_project);
+    pb_project.fileStructureStrategy = fileStructureStrategy;
+    var trees = IntermediateTopoIterator(pb_project.forest);
 
     while (trees.moveNext()) {
       var tree = trees.current;
@@ -154,7 +150,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
         if (_importProcessor.imports.isNotEmpty) {
           var treePath = p.join(
-              pbProject.projectAbsPath, command.WIDGET_PATH, '$fileName.dart');
+              pb_project.projectAbsPath, command.WIDGET_PATH, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
       } else if (tree.rootNode is InheritedScaffold) {
@@ -166,7 +162,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         );
 
         if (_importProcessor.imports.isNotEmpty) {
-          var treePath = p.join(pbProject.projectAbsPath,
+          var treePath = p.join(pb_project.projectAbsPath,
               WriteScreenCommand.SCREEN_PATH, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
@@ -179,7 +175,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         );
 
         if (_importProcessor.imports.isNotEmpty) {
-          var treePath = p.join(pbProject.projectAbsPath, command.SYMBOL_PATH,
+          var treePath = p.join(pb_project.projectAbsPath, command.SYMBOL_PATH,
               command.relativePath, '$fileName.dart');
           _traverseTreeForImports(tree, treePath);
         }
@@ -215,7 +211,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  Future<void> setUpConfiguration() async {
+  ///Configure the required classes for the [PBGenerationConfiguration]
+  Future<void> setUpConfiguration(PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject);
     commandObservers.add(fileStructureStrategy);

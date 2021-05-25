@@ -14,7 +14,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   Set<String> registeredModels = {};
 
   @override
-  Future<void> setUpConfiguration() async {
+  Future<void> setUpConfiguration(pbProject) async {
     logger = Logger('Provider');
     logger.info(
         'Thanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!');

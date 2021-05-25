@@ -9,7 +9,7 @@ class RiverpodGenerationConfiguration extends GenerationConfiguration {
   RiverpodGenerationConfiguration();
 
   @override
-  Future<void> setUpConfiguration() async {
+  Future<void> setUpConfiguration(pbProject) async {
     logger = Logger('Riverpod');
     logger.info(
         'Thanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!');
