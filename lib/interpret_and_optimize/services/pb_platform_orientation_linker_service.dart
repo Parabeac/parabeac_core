@@ -41,7 +41,7 @@ class PBPlatformOrientationLinkerService {
 
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
-    if (platforms.length == 2) {
+    if (orientations.length == 2) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(OrientationBuilderCommand(tree.UUID));
     }
