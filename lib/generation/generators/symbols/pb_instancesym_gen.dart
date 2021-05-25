@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -97,11 +98,14 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     symName = PBInputFormatter.formatLabel(symName,
         destroyDigits: false, spaceToUnderscore: false, isTitle: true);
 
-    // don't include ourselves only child symbols
-    if (!topLevel) {
-      managerData.addImport(
-          'package:${MainInfo().projectName}/view/symbols/${symName.snakeCase}.dart');
+    var path = 'symbols';
+    if (masterSymbol.name.contains('/')) {
+      path = ImportHelper
+          .getName(masterSymbol.name)
+          .snakeCase;
     }
+    managerData.addImport(
+        'package:${MainInfo().projectName}/view/$path/${symName.snakeCase}.dart');
 
     // if this symbol is overridable, then put variable name + null check
     var overrideProp = SN_UUIDtoVarName[UUID + '_symbolID'];

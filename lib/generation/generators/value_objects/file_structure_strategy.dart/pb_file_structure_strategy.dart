@@ -56,8 +56,11 @@ abstract class FileStructureStrategy {
       _screenDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_SCREEN_PATH}';
       _viewDirectoryPath = '${GENERATED_PROJECT_PATH}${RELATIVE_VIEW_PATH}';
       _pbProject.forest.forEach((dir) {
-        if (dir.rootNode != null) {
-          addImportsInfo(dir, dir.rootNode);
+        var rootNode = dir.rootNode;
+        if (rootNode != null) {
+          addImportsInfo(dir, rootNode);
+//          if (rootNode.)
+
         }
       });
       Directory(_screenDirectoryPath).createSync(recursive: true);

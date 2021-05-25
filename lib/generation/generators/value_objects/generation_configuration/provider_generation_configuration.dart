@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/provider_middleware.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
@@ -50,7 +51,7 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
       node = await it.current.applyMiddleware(node);
       if (it.current is ProviderMiddleware &&
           node is PBSharedInstanceIntermediateNode) {
-        registeredModels.add(it.current.getName(node.functionCallName));
+        registeredModels.add(ImportHelper.getName(node.functionCallName));
       }
     }
     return node;
