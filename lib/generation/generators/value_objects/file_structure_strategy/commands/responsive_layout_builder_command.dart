@@ -78,13 +78,11 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
       breakpoints['tablet'] = 600;
       breakpoints['desktop'] = 1280;
     }
-    var sortedMap = SplayTreeMap<String, int>.from(
-        breakpoints, (a, b) => breakpoints[a].compareTo(breakpoints[b]));
 
     var result = '';
     for (var i = 0; i < platforms.length; i++) {
       var platform = platforms[i];
-      if (sortedMap.containsKey(platform)) {
+      if (breakpoints.containsKey(platform)) {
         if (i == platforms.length - 1) {
           result += 'if(${platform}Widget != null){return ${platform}Widget;}';
         } else {
