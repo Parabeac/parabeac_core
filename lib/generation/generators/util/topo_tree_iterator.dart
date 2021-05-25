@@ -32,6 +32,10 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
     }
   }
 
+  ///Calculating the in-degrees that are comming in to a [PBIntermediateTree].
+  ///
+  ///Its traversing each of the [PBIntermediateTree] in the [items], documenting
+  ///that the in-degrees of each of the nodes.
   HashMap<E, int> _inDegrees(List<PBIntermediateTree> items) {
     var inDegree = HashMap<E, int>();
     items.forEach((tree) {
