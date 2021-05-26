@@ -12,29 +12,38 @@ import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart'
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:tuple/tuple.dart';
 
 ///Responsible for creating a particular file structure depending in the structure
 ///
 ///For example, in the provider strategy, there would be a directory for the models and the providers,
-///while something like BLoC will assign a directory to a single
+///while something like BLoC will assign a directory to a single.
+///
+/// The [FileStructureStrategy] can also perform a dry run of the all the [writeDataToFile] calls
+/// that are going to be performed. This is useful for notifying the [FileWriterObserver]s of new files that
+/// are being written into the file system without actually writing them into the system. The main purpose
+/// of this functionality is mimicking the file creation to observers like the [ImportHelper] can record all of the imports.
 abstract class FileStructureStrategy implements CommandInvoker {
-  ///The path of where all the views are going to be generated.
+  final Logger logger = Logger('FileStructureStrategy');
+
+  ///The `default` path of where all the views are going to be generated.
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
   final RELATIVE_VIEW_PATH = 'lib/widgets/';
 
-  ///The path of where all the screens are going to be generated.
+  ///The `default` path of where all the screens are going to be generated.
   final RELATIVE_SCREEN_PATH = 'lib/screens/';
-
-  Logger logger;
 
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
 
+  @Deprecated(
+      'Each of the methods should be receiving its own [PBProject] instance.')
   final PBProject _pbProject;
 
-  ///The page writer used to generated the actual files.
+  @Deprecated(
+      'We are now using the [FileStructureCommands] instead of the page Writter')
   final PBPageWriter _pageWriter;
   PBPageWriter get pageWriter => _pageWriter;
 
@@ -50,12 +59,33 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///Before generating any files, the caller must call the [setUpDirectories]
   bool isSetUp = false;
 
+  /// The flag indicates when the [writeDataToFile] is going to mimic the creation
+  /// of the files.
+  ///
+  /// If [_inDryRunMode] is `true`, then any file creation is going to be simulated and remain on
+  /// hold on the [_dryRunMethodCalls] list. If you are running the [FileStructureStrategy] [_inDryRunMode], then
+  /// make sure to run [writeDryRunCommands] at the end to execute all the recored [writeDataToFile] calls.
+  bool _inDryRunMode = false;
+  set inDryRunMode(bool dryRun) => _inDryRunMode = dryRun;
+
+  /// The flag, if `true`, notifies all the [FileWriterObserver]s twice when a file is created (assuming that its running in [_inDryRunMode]).
+  ///
+  /// If you want to only notify the [FileWriterObserver]s when the actual file is created, then
+  /// [_dryRunModeNotify] flag should be `false`
+  bool _dryRunModeNotify;
+  set dryRunModeNotify(bool notify) => _dryRunModeNotify = notify;
+
+  List<Tuple4> _dryRunMethodCalls;
+
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
   FileStructureStrategy(
-      this.GENERATED_PROJECT_PATH, this._pageWriter, this._pbProject) {
-    logger = Logger(runtimeType.toString());
+    this.GENERATED_PROJECT_PATH,
+    this._pageWriter,
+    this._pbProject,
+  ) {
+    _dryRunMethodCalls = [];
   }
 
   void addFileObserver(FileWriterObserver observer) {
@@ -70,8 +100,9 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
     if (!isSetUp) {
-      _screenDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_SCREEN_PATH';
-      _viewDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_VIEW_PATH';
+      _screenDirectoryPath =
+          p.join(GENERATED_PROJECT_PATH, RELATIVE_SCREEN_PATH);
+      _viewDirectoryPath = p.join(GENERATED_PROJECT_PATH, RELATIVE_VIEW_PATH);
       _pbProject.forest.forEach((dir) {
         if (dir.rootNode != null) {
           addImportsInfo(dir);
@@ -92,12 +123,13 @@ abstract class FileStructureStrategy implements CommandInvoker {
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
       var path = node is PBSharedMasterNode
-          ? '$_viewDirectoryPath${tree.name.snakeCase}/$name.dart' // Removed .g
-          : '$_screenDirectoryPath${tree.name.snakeCase}/$name.dart';
+          ? p.join(_viewDirectoryPath, tree.name.snakeCase, name)
+          : p.join(_screenDirectoryPath, tree.name.snakeCase, name);
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        path =
-            '$_screenDirectoryPath$name/${poLinker.stripPlatform(tree.rootNode.managerData.platform)}/$name.dart';
+        path = p.join(_screenDirectoryPath, name,
+            poLinker.stripPlatform(tree.rootNode.managerData.platform), name);
       }
+      path = p.setExtension(path, '.dart');
       PBGenCache().setPathToCache(uuid, path);
     } else {
       logger.warning(
@@ -112,19 +144,30 @@ abstract class FileStructureStrategy implements CommandInvoker {
   Future<void> generatePage(String code, String fileName, {var args}) {
     if (args is String) {
       var path = args == 'SCREEN'
-          ? '$_screenDirectoryPath$fileName.dart'
-          : '$_viewDirectoryPath$fileName.dart'; // Removed .g
-      pageWriter.write(code, path);
+          ? p.join(_screenDirectoryPath, fileName)
+          : p.join(_viewDirectoryPath, fileName);
+      pageWriter.write(code, p.setExtension(path, '.dart'));
     }
     return Future.value();
   }
 
-  String getViewPath(String fileName) => '$_viewDirectoryPath$fileName.dart';
+  String getViewPath(String fileName) =>
+      p.setExtension(p.join(_viewDirectoryPath, fileName), '.dart');
 
   @override
   void commandCreated(FileStructureCommand command) {
     command.write(this);
   }
+
+  ///Going to run any [writeDataToFile] calls that just executed in [_inDryRunMode].
+  void writeDryRunCommands() {
+    _dryRunMethodCalls.forEach((funcParams) => writeDataToFile(
+        funcParams.item1, funcParams.item2, funcParams.item3,
+        UUID: funcParams.item4));
+    _dryRunMethodCalls.clear();
+  }
+
+  void clearDryRunCommands() => _dryRunMethodCalls.clear();
 
   /// Writing [data] into [directory] with the file [name]
   ///
@@ -139,11 +182,20 @@ abstract class FileStructureStrategy implements CommandInvoker {
   void writeDataToFile(String data, String directory, String name,
       {String UUID}) {
     var file = getFile(directory, name);
-    file.createSync(recursive: true);
-    file.writeAsStringSync(data);
 
-    fileObservers.forEach((observer) => observer.fileCreated(
-        file.path, UUID ?? p.basenameWithoutExtension(file.path)));
+    if (_inDryRunMode) {
+      _dryRunMethodCalls.add(Tuple4(data, directory, name, UUID));
+      if (_dryRunModeNotify) {
+        fileObservers.forEach((observer) => observer.fileCreated(
+            file.path, UUID ?? p.basenameWithoutExtension(file.path)));
+      }
+    } else {
+      file.createSync(recursive: true);
+      file.writeAsStringSync(data);
+
+      fileObservers.forEach((observer) => observer.fileCreated(
+          file.path, UUID ?? p.basenameWithoutExtension(file.path)));
+    }
   }
 
   /// Appends [data] into [directory] with the file [name]

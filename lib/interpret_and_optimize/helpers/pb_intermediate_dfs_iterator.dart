@@ -21,7 +21,7 @@ class IntermediateDFSIterator<E extends TraversableNode>
   bool moveNext() {
     if (_stack.isNotEmpty) {
       _currentElement = _stack.removeAt(0);
-      _stack.addAll((_currentElement.children ?? []).cast<E>());
+      _stack.addAll((_currentElement?.children ?? []).cast<E>());
       return true;
     }
     return false;

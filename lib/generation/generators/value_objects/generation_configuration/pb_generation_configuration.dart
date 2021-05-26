@@ -69,15 +69,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     return node;
   }
 
-  Future<PBIntermediateNode> conditionsToApplyMiddleware(
-      PBIntermediateNode node) async {
-    if ((node is PBSharedInstanceIntermediateNode && _isMasterState(node)) ||
-        (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false)) {
-      return await applyMiddleware(node);
-    }
-    return node;
-  }
-
   bool _isMasterState(PBSharedInstanceIntermediateNode node) {
     if (node.isMasterState) {
       return true;
@@ -87,25 +78,15 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     return symbolMaster?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;
   }
 
-  Future<PBIntermediateNode> _applyMiddlewareToNode(
-      PBIntermediateNode node) async {
-    var stack = <PBIntermediateNode>[node];
-    while (stack.isNotEmpty) {
-      var currentNode = stack.removeLast();
-
-      /// Add all children to the stack
-      if (currentNode.child != null) {
-        stack.add(currentNode.child);
-      } else if (currentNode is PBLayoutIntermediateNode) {
-        currentNode.children.forEach((node) {
-          stack.add(node);
-        });
+  ///Applying the registered [Middleware] to all the [PBIntermediateNode]s within the [PBIntermediateTree]
+  Future<PBIntermediateTree> _applyMiddleware(PBIntermediateTree tree) async {
+    for (var node in tree) {
+      if ((node is PBSharedInstanceIntermediateNode && _isMasterState(node)) ||
+          (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false)) {
+        await applyMiddleware(node);
       }
-
-      /// Apply incoming function to all nodes
-      await conditionsToApplyMiddleware(currentNode);
     }
-    return node;
+    return tree;
   }
 
   ///Generates the [PBIntermediateTree]s within the [pb_project]
@@ -125,18 +106,19 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       var fileName = tree.identifier?.snakeCase ?? 'no_name_found';
 
       // Relative path to the file to create
-      var relPath = '${tree.name.snakeCase}/$fileName';
+      var relPath = p.join(tree.name.snakeCase, '$fileName.dart');
+
       // Change relative path if current tree is part of multi-platform setup
       if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
         var platformFolder =
             poLinker.stripPlatform(tree.rootNode.managerData.platform);
-        relPath = '$fileName/$platformFolder/$fileName';
+        relPath = p.join(fileName, platformFolder, '$fileName');
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(tree, '$relPath.dart');
+        await _setMainScreen(tree, relPath);
       }
-      await _applyMiddlewareToNode(tree.rootNode);
+      await _applyMiddleware(tree);
       var command;
 
       if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
@@ -172,7 +154,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           tree.UUID,
           '$fileName.dart',
           generationManager.generate(tree.rootNode),
-          relativePath: tree.name.snakeCase + '/',
+          relativePath: '${tree.name.snakeCase}/',
         );
 
         if (_importProcessor.imports.isNotEmpty) {
