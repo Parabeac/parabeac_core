@@ -152,7 +152,7 @@ abstract class GenerationConfiguration {
   Future<void> _commitDependencies(String projectName) async {
     var writer = _pageWriter;
     if (writer is PBFlutterWriter) {
-      writer.submitDependencies(projectName + '/pubspec.yaml');
+      await writer.submitDependencies(projectName + '/pubspec.yaml');
     }
   }
 

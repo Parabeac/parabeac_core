@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/pb_font_descriptor.dart';
 import 'package:parabeac_core/design_logic/pb_paragraph_style.dart';
 import 'package:parabeac_core/design_logic/pb_text_style.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/input/sketch/entities/style/color.dart';
 import 'package:parabeac_core/input/sketch/entities/style/font_descriptor.dart';
 import 'package:parabeac_core/input/sketch/entities/style/paragraph_style.dart';
@@ -79,17 +80,18 @@ class TextStyle implements PBTextStyle {
 
     //Find if text has special weight
     for (var s in STYLES) {
+      var fd = fontDescriptor as FontDescriptor;
       if (fontDescriptor.fontName.contains(s)) {
         // this is really a mapping of style to weight
-        (fontDescriptor as FontDescriptor).fontWeight =
+        fd.fontWeight =
             fontInfo[s]['fontWeight'];
         // this is only normal, italic style
-        (fontDescriptor as FontDescriptor).fontStyle = fontInfo[s]['fontStyle'];
+        fd.fontStyle = fontInfo[s]['fontStyle'];
         // this is really fontFamily with removal of -XXX font type name suffix
-        (fontDescriptor as FontDescriptor).fontName =
-            fontDescriptor.fontName.replaceFirst('-$s', '');
-        (fontDescriptor as FontDescriptor).letterSpacing =
+        fd.fontFamily = fd.fontName.replaceFirst('-$s', '');
+        fd.letterSpacing =
             rawEncodedAttributes['kerning'] ?? 0.0;
+        PBFlutterWriter().addFont(fd);
         break;
       }
     }
