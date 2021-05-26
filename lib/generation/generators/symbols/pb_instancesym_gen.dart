@@ -89,7 +89,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       return 'Container(/** This Symbol was not found **/)});';
     }
 
-    var symName = masterSymbol.name;
+    var symName = masterSymbol.name.snakeCase;
     if (symName == null) {
       log.error(' Could not find master name on: $masterSymbol');
       return 'Container(/** This Symbol was not found **/)});';
