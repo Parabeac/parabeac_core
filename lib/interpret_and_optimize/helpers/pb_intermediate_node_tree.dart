@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:uuid/uuid.dart';
 
 enum TREE_TYPE {
@@ -8,7 +9,7 @@ enum TREE_TYPE {
   VIEW,
 }
 
-class PBIntermediateTree {
+class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   String _UUID;
   String get UUID => _UUID;
 
@@ -47,4 +48,17 @@ class PBIntermediateTree {
       _dependentsOn.add(dependent);
     }
   }
+
+  @override
+  Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
+}
+
+/// By extending the class, any node could be used in any iterator to traverse its
+/// internals.
+///
+/// In the example of the [PBIntermediateNode], you can traverse the [PBIntermediateNode]s
+/// children by using the [IntermediateDFSIterator]. Furthermore, this allows the
+/// [PBIntermediateTree] to traverse through its nodes, leveraging the dart methods.
+abstract class TraversableNode<E> {
+  List<E> children;
 }

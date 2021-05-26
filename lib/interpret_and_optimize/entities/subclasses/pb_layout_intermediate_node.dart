@@ -15,6 +15,7 @@ import 'package:uuid/uuid.dart';
 abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     implements PBInjectedIntermediate, PrototypeEnable {
   ///Getting the children
+  @override
   List<PBIntermediateNode> get children =>
       getAttributeNamed('children')?.attributeNodes;
 

@@ -87,7 +87,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     return symbolMaster?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;
   }
 
-  Future<PBIntermediateNode> _iterateNode(PBIntermediateNode node) async {
+  Future<PBIntermediateNode> _applyMiddlewareToNode(
+      PBIntermediateNode node) async {
     var stack = <PBIntermediateNode>[node];
     while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
@@ -135,7 +136,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
         await _setMainScreen(tree, '$relPath.dart');
       }
-      await _iterateNode(tree.rootNode);
+      await _applyMiddlewareToNode(tree.rootNode);
       var command;
 
       if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {

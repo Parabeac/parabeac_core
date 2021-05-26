@@ -27,8 +27,8 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
   IntermediateTopoIterator(this.trees) {
     trees = topologicalSort(trees);
     if (trees.isNotEmpty) {
-      _currentElement = trees[0];
       trees = List.from(trees.reversed);
+      _currentElement = trees[0];
     }
   }
 
