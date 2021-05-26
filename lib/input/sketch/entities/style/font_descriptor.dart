@@ -9,8 +9,6 @@ class FontDescriptor implements PBFontDescriptor {
   Map<String, dynamic> rawAttributes;
   @override
   @JsonKey(ignore: true)
-  String fontFamily;
-  @JsonKey(ignore: true)
   String fontName;
   @override
   @JsonKey(ignore: true)

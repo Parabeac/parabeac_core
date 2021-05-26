@@ -25,7 +25,7 @@ class InheritedText extends PBVisualIntermediateNode
 
   String text;
   num fontSize;
-  String fontFamily;
+  String fontName;
   String fontWeight; // one of the w100-w900 weights
   String fontStyle; // normal, or italic
   String textAlignment;
@@ -54,7 +54,7 @@ class InheritedText extends PBVisualIntermediateNode
     }
     fontSize = originalRef.style.textStyle.fontDescriptor.fontSize;
     auxiliaryData.color = toHex(originalRef.style.textStyle.fontColor);
-    fontFamily = originalRef.style.textStyle.fontDescriptor.fontFamily;
+    fontName = originalRef.style.textStyle.fontDescriptor.fontName;
     fontWeight = originalRef.style.textStyle.fontDescriptor.fontWeight;
     fontStyle = originalRef.style.textStyle.fontDescriptor.fontStyle;
     letterSpacing = originalRef.style.textStyle.fontDescriptor.letterSpacing;

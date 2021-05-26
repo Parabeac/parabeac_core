@@ -94,8 +94,8 @@ class SharedStyle with PBColorMixin {
         var ts = style.textStyle;
         var fd = ts.fontDescriptor as FontDescriptor;
         buffer.write('TextStyle(\n');
-        if (fd.fontFamily != null) {
-          buffer.write('fontFamily: \'${fd.fontFamily}\',\n');
+        if (fd.fontName != null) {
+          buffer.write('fontFamily: \'${fd.fontName}\',\n');
         }
         if (fd.fontSize != null) {
           buffer.write('fontSize: ${fd.fontSize.toString()},\n');

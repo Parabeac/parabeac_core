@@ -36,8 +36,8 @@ class PBTextGen extends PBGenerator with PBColorMixin {
       }
 
       buffer.write('TextStyle(\n');
-      if (source.fontFamily != null) {
-        buffer.write('fontFamily: \'${source.fontFamily}\',\n');
+      if (source.fontName != null) {
+        buffer.write('fontFamily: \'${source.fontName}\',\n');
       }
       if (source.fontSize != null) {
         buffer.write('fontSize: ${source.fontSize.toString()},\n');
