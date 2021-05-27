@@ -157,9 +157,9 @@ class FlutterProjectBuilder {
 
     log.info(
       Process.runSync(
-              'dartfmt',
+              'dart',
               [
-                '-w',
+                'format',
                 '${pathToFlutterProject}bin',
                 '${pathToFlutterProject}lib',
                 '${pathToFlutterProject}test'
