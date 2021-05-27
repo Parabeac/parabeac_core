@@ -20,7 +20,6 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     var widgetVars = _generatePlatformWidgets(platforms);
     var widgetInit = _generatePlatformInitializers(platforms);
     var breakpointChecks = _generateBreakpointStatements(platforms);
-    //TODO: use imports system to import material. See updated orientation builder command
     var template = '''
     import 'package:flutter/material.dart';
     import '../constants/constants.dart';
@@ -74,19 +73,16 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
     // Get breakpoints from configurations and sort by value
     var breakpoints = MainInfo().configurations['breakpoints'];
     if (breakpoints == null) {
-      // TODO: Handle breakpoints being null
       breakpoints = {};
       breakpoints['mobile'] = 300;
       breakpoints['tablet'] = 600;
       breakpoints['desktop'] = 1280;
     }
-    var sortedMap = SplayTreeMap<String, int>.from(
-        breakpoints, (a, b) => breakpoints[a].compareTo(breakpoints[b]));
 
     var result = '';
     for (var i = 0; i < platforms.length; i++) {
       var platform = platforms[i];
-      if (sortedMap.containsKey(platform)) {
+      if (breakpoints.containsKey(platform)) {
         if (i == platforms.length - 1) {
           result += 'if(${platform}Widget != null){return ${platform}Widget;}';
         } else {

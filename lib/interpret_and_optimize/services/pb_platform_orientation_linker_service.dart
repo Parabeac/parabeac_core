@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
@@ -19,7 +21,8 @@ class PBPlatformOrientationLinkerService {
   final Map<String, int> _mapCounter = {};
 
   /// Set of all platforms in the project
-  final Set<PLATFORM> _platforms = {};
+  final SplayTreeSet<PLATFORM> _platforms =
+      SplayTreeSet((a, b) => a.index.compareTo(b.index));
 
   /// Set of all orientations in the project
   final Set<ORIENTATION> _orientations = {};
@@ -38,13 +41,13 @@ class PBPlatformOrientationLinkerService {
 
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
-    if (hasMultipleOrientations()) {
+    if (orientations.length == 2) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(OrientationBuilderCommand(tree.UUID));
     }
     // Add responsive layout builder template to the project
-    // if there are more than 1 plataform on the project
-    if (hasMultiplePlatforms()) {
+    // if there are more than 1 platform on the project
+    if (platforms.length == 2) {
       tree.rootNode.currentContext.project.genProjectData.commandQueue
           .add(ResponsiveLayoutBuilderCommand(tree.UUID));
       _addBreakpoints(tree);
@@ -217,10 +220,13 @@ class PBPlatformOrientationLinkerService {
   }
 }
 
+/// Enum of supported platforms.
+///
+/// The order of this enum is important, and goes from smallest value to greatest.
 enum PLATFORM {
-  DESKTOP,
   MOBILE,
   TABLET,
+  DESKTOP,
 }
 
 enum ORIENTATION {
