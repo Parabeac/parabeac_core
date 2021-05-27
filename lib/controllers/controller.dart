@@ -1,8 +1,6 @@
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
-import 'package:parabeac_core/generation/generators/writers/pb_traversal_adapter_writer.dart';
-import 'package:parabeac_core/generation/pre-generation/pre_generation_service.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
@@ -10,6 +8,7 @@ import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'main_info.dart';
+import 'package:path/path.dart' as p;
 
 abstract class Controller {
   ///SERVICE
@@ -33,21 +32,11 @@ abstract class Controller {
 
     Interpret().init(projectPath);
 
-    var pbProject = await Interpret().interpretAndOptimize(designProject);
-
-    await PreGenerationService(
-      projectName: projectPath,
-      mainTree: pbProject,
-      pageWriter: PBTraversalAdapterWriter(),
-    ).convertToFlutterProject();
-
-    //Making the data immutable for writing into the file
-    pbProject.forest.forEach((tree) => tree.data.lockData());
+    var pbProject = await Interpret().interpretAndOptimize(
+        designProject, p.basenameWithoutExtension(projectPath), projectPath);
 
     var fpb = FlutterProjectBuilder(
-        projectName: projectPath,
-        mainTree: pbProject,
-        pageWriter: PBFlutterWriter());
+        project: pbProject, pageWriter: PBFlutterWriter());
 
     await fpb.convertToFlutterProject();
   }

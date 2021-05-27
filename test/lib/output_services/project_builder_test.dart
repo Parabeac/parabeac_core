@@ -105,9 +105,7 @@ void main() {
       when(project.fileStructureStrategy).thenReturn(fss);
 
       projectBuilder = FlutterProjectBuilder(
-          projectName: outputPath,
-          mainTree: project,
-          pageWriter: PBFlutterWriter());
+          project: project, pageWriter: PBFlutterWriter());
     });
     test(
       '',

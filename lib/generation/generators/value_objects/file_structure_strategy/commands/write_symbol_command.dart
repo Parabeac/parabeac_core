@@ -5,7 +5,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 /// Command that writes a `symbol` to the project.
 class WriteSymbolCommand extends NodeFileStructureCommand {
   String name;
-  final String SYMBOL_PATH = 'lib/widgets';
+  static final String SYMBOL_PATH = 'lib/widgets';
   String relativePath;
 
   WriteSymbolCommand(String UUID, this.name, String code, {this.relativePath})

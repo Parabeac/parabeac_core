@@ -42,13 +42,13 @@ class Interpret {
 
   void init(String projectName) {
     log = Logger(runtimeType.toString());
-    this.projectName = projectName;
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBProject> interpretAndOptimize(DesignProject tree) async {
-    _pb_project = PBProject(projectName, tree.sharedStyles);
+  Future<PBProject> interpretAndOptimize(
+      DesignProject tree, String projectName, String projectPath) async {
+    _pb_project = PBProject(projectName, projectPath, tree.sharedStyles);
 
     ///3rd Party Symbols
     if (tree.miscPages != null) {

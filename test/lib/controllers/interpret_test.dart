@@ -16,7 +16,8 @@ void main() {
   });
 
   test('Should return a PBIntermediateTree from a SketchNodeTree', () {
-    var intermediateTree = interpret.interpretAndOptimize(MockSketchProject());
+    var intermediateTree =
+        interpret.interpretAndOptimize(MockSketchProject(), '', '');
     expect(intermediateTree, isNotNull);
   });
 

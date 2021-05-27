@@ -4,8 +4,8 @@ import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class PBProject {
-  String projectName;
-  String projectAbsPath;
+  final String projectName;
+  final String projectAbsPath;
   List<PBIntermediateTree> forest = [];
   List<SharedStyle> sharedStyles = [];
   FileStructureStrategy _fileStructureStrategy;
@@ -20,7 +20,7 @@ class PBProject {
 
   FileStructureStrategy get fileStructureStrategy => _fileStructureStrategy;
 
-  PBProject(this.projectName, this.sharedStyles,
+  PBProject(this.projectName, this.projectAbsPath, this.sharedStyles,
       {FileStructureStrategy fileStructureStrategy}) {
     _genProjectData = PBGenerationProjectData();
     _fileStructureStrategy = fileStructureStrategy;

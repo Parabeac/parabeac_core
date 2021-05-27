@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/bloc_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
@@ -16,8 +18,7 @@ import 'package:quick_log/quick_log.dart';
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
 class FlutterProjectBuilder {
-  String projectName;
-  PBProject mainTree;
+  PBProject project;
 
   var log = Logger('Project Builder');
 
@@ -39,21 +40,19 @@ class FlutterProjectBuilder {
 
   PBPageWriter pageWriter;
 
-  FlutterProjectBuilder({this.projectName, this.mainTree, this.pageWriter}) {
-    pathToFlutterProject = '$projectName/';
+  FlutterProjectBuilder({this.project, this.pageWriter}) {
     generationConfiguration = configurations[MainInfo()
             .configurations['state-management']
             .toString()
             .toLowerCase()] ??
         DEFAULT_CONFIGURATION;
     generationConfiguration.pageWriter = pageWriter;
-    mainTree.projectName = projectName;
-    mainTree.projectAbsPath = pathToFlutterProject;
   }
 
   Future<void> convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      var createResult = Process.runSync('flutter', ['create', '$projectName'],
+      var createResult = Process.runSync(
+          'flutter', ['create', '${project.projectName}'],
           workingDirectory: MainInfo().outputPath);
       if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
         log.error(createResult.stderr);
@@ -105,8 +104,8 @@ class FlutterProjectBuilder {
     }
 
     // generate shared Styles if any found
-    if (mainTree.sharedStyles != null &&
-        mainTree.sharedStyles.isNotEmpty &&
+    if (project.sharedStyles != null &&
+        project.sharedStyles.isNotEmpty &&
         MainInfo().exportStyles) {
       try {
         Directory('${pathToFlutterProject}lib/document/')
@@ -114,11 +113,11 @@ class FlutterProjectBuilder {
         var s = File('${pathToFlutterProject}lib/document/shared_props.g.dart')
             .openWrite(mode: FileMode.write, encoding: utf8);
 
-        s.write('''import 'dart:ui';
-              import 'package:flutter/material.dart';
-              
+        s.write('''${FlutterImport('dart:ui', null)}
+              ${FlutterImport('flutter/material.dart', null)}
+
               ''');
-        for (var sharedStyle in mainTree.sharedStyles) {
+        for (var sharedStyle in project.sharedStyles) {
           s.write(sharedStyle.generate() + '\n');
         }
         await s.close();
@@ -128,9 +127,9 @@ class FlutterProjectBuilder {
     }
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
 
-    await generationConfiguration.generateProject(mainTree);
+    await generationConfiguration.generateProject(project);
     await generationConfiguration
-        .generatePlatformAndOrientationInstance(mainTree);
+        .generatePlatformAndOrientationInstance(project);
 
     var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
     var s = File('${pathToFlutterProject}lib/main.dart')

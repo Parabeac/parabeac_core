@@ -122,9 +122,8 @@ void main() {
       ));
     });
     test('', () async {
-      var mainTree = await Interpret().interpretAndOptimize(
-        project,
-      );
+      var mainTree = await Interpret()
+          .interpretAndOptimize(project, 'projectName', 'projectPath');
       expect(mainTree != null, true);
       expect(mainTree is PBProject, true);
       expect(mainTree.forest.first.rootNode is InheritedScaffold, true);
