@@ -18,11 +18,15 @@ class PBMasterSymbolGenerator extends PBGenerator {
       if (source.child == null) {
         return '';
       }
+      // override styles if need be.
+      generatorContext.masterNode = source;
+
       source.child.currentContext = source.currentContext;
       // see if widget itself is overridden, need to pass
       var generatedWidget =
           source.child.generator.generate(source.child, generatorContext);
 
+      generatorContext.masterNode = null;
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }

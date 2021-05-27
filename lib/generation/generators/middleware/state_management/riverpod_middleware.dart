@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -30,7 +31,7 @@ class RiverpodMiddleware extends Middleware {
       managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
       watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
-          'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
+          'ChangeNotifierProvider((ref) => ${ImportHelper.getName(node.functionCallName).pascalCase}())');
 
       if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {
@@ -54,7 +55,7 @@ class RiverpodMiddleware extends Middleware {
       generationManager,
       node,
     );
-    fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
+    fileStrategy.writeRiverpodModelFile(code, ImportHelper.getName(node.name).snakeCase);
 
     return node;
   }
@@ -75,6 +76,6 @@ class RiverpodMiddleware extends Middleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return fileStrategy.GENERATED_PROJECT_PATH +
         fileStrategy.RELATIVE_MODEL_PATH +
-        '${getName(symbolMaster.name).snakeCase}.dart';
+        '${ImportHelper.getName(symbolMaster.name).snakeCase}.dart';
   }
 }

@@ -26,6 +26,9 @@ class SketchProject extends DesignProject {
   final InputDesignService _ids;
   Archive _originalArchive;
   final Map _pagesAndArtboards;
+  // Map to prevent name collisions
+  Map<String, int> layerNames = {};
+
   SketchProject(this._ids, this._pagesAndArtboards, this.projectName) {
     id = _ids.documentFile['do_objectID'];
     _originalArchive = _ids.archive;
@@ -46,7 +49,7 @@ class SketchProject extends DesignProject {
         var LayerStyles = doc.layerStyles['objects'] ?? [];
         for (var sharedStyle in LayerStyles) {
           var layerStyle = SharedStyle.fromJson(sharedStyle);
-          layerStyle.name = PBInputFormatter.formatVariable(layerStyle.name);
+          layerStyle.name = GetUniqueLayerName(layerStyle.name.camelCase);
           sharedStyles.add(layerStyle);
         }
       }
@@ -56,8 +59,7 @@ class SketchProject extends DesignProject {
 
         for (var sharedStyle in LayerTextStyles) {
           var layerTextStyle = SharedStyle.fromJson(sharedStyle);
-          layerTextStyle.name =
-              PBInputFormatter.formatVariable(layerTextStyle.name.camelCase);
+          layerTextStyle.name = GetUniqueLayerName(layerTextStyle.name.camelCase);
           sharedStyles.add(layerTextStyle);
         }
       }
@@ -131,4 +133,18 @@ class SketchProject extends DesignProject {
     }
     return sketchPages;
   }
+
+  String GetUniqueLayerName(String layerStyleName) {
+    var name = PBInputFormatter.formatVariable(layerStyleName);
+    var count = 0;
+    if (layerNames.containsKey(name)) {
+      count = layerNames[name] + 1;
+      name += count.toString();
+    }
+
+    layerNames[name] = count;
+
+    return name;
+  }
+
 }
