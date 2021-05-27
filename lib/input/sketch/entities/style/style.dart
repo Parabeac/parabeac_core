@@ -31,6 +31,7 @@ class Style implements PBStyle {
   final List<Border> borders;
   final ColorControls colorControls;
   final ContextSettings contextSettings;
+  @override
   List<PBFill> fills, innerShadows, shadows;
   @JsonKey(nullable: true)
   PBTextStyle textStyle;
@@ -51,11 +52,19 @@ class Style implements PBStyle {
     this.startMarkerType,
     this.windingRule,
     TextStyle this.textStyle,
+    this.backgroundColor,
+    this.hasShadow,
   }) {
     if (shadows != null) {
-      this.shadows = null;
+      //this.shadows = null;
       this.innerShadows = null;
       hasShadow = true;
+    }
+    // TODO: add rectangle fill types, for now just copy the fill[0] to the background color
+    if (fills.length >= 1) {
+      if (fills[0].isEnabled && (fills[0].fillType == 0)) {
+        backgroundColor = fills[0].color;
+      }
     }
   }
 

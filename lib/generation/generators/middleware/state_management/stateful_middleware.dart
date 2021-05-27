@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
@@ -20,7 +21,7 @@ class StatefulMiddleware extends Middleware {
       return node;
     }
     var states = <PBIntermediateNode>[node];
-    var parentDirectory = getName(node.name).snakeCase;
+    var parentDirectory = ImportHelper.getName(node.name).snakeCase;
 
     await node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
@@ -43,6 +44,6 @@ class StatefulMiddleware extends Middleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return fileStrategy.GENERATED_PROJECT_PATH +
         fileStrategy.RELATIVE_VIEW_PATH +
-        '${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
+        '${ImportHelper.getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
   }
 }

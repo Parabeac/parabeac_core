@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
@@ -36,15 +37,14 @@ class ProviderMiddleware extends Middleware {
           getImportPath(node, fileStrategy, generateModelPath: false));
 
       if (node.generator is! StringGeneratorAdapter) {
-        var modelName = getName(node.functionCallName).pascalCase;
-        var defaultWidget = node.functionCallName.pascalCase;
+        var modelName = ImportHelper.getName(node.functionCallName).pascalCase;
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
               ${modelName}(), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = ${defaultWidget}(constraints);
+              var widget = ${MiddlewareUtils.generateVariableBody(node)};
               
               context
                   .read<${modelName}>()
@@ -53,7 +53,7 @@ class ProviderMiddleware extends Middleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>(), // TODO: add your method to change the state here
+                    ${modelName}>().onGesture(),
                 child: Consumer<$modelName>(
                   builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentWidget
                 ),
@@ -68,7 +68,7 @@ class ProviderMiddleware extends Middleware {
     }
     watcherName = getNameOfNode(node);
 
-    var parentDirectory = getName(node.name).snakeCase;
+    var parentDirectory = ImportHelper.getName(node.name).snakeCase;
 
     // Generate model's imports
     var modelGenerator = PBFlutterGenerator(
@@ -104,8 +104,8 @@ class ProviderMiddleware extends Middleware {
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     var import = generateModelPath
-        ? '${fileStrategy.RELATIVE_MODEL_PATH}${getName(symbolMaster.name).snakeCase}.dart'
-        : '${fileStrategy.RELATIVE_VIEW_PATH}${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
+        ? '${fileStrategy.RELATIVE_MODEL_PATH}${ImportHelper.getName(symbolMaster.name).snakeCase}.dart'
+        : '${fileStrategy.RELATIVE_VIEW_PATH}${ImportHelper.getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
     return fileStrategy.GENERATED_PROJECT_PATH + import;
   }
 }

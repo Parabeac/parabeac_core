@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
@@ -43,26 +44,28 @@ mixin SymbolNodeMixin {
     return null;
   }
 
-  Map AddMasterSymbolName(String overrideName, List children) {
+  Map AddMasterSymbolOverrideName(String overrideName, List children) {
     var varName;
     var parmInfo = extractParameter(overrideName);
     var uuid = parmInfo['uuid'];
 
-    var nodeName = FindName(uuid, children, parmInfo['type']) ?? 'var';
-    // only increase count, make new varName if unique UUID
-    if (!SN_UUIDtoVarName.containsKey(overrideName)) {
-      var count = varNameCount[nodeName] ?? 0;
-      varName = nodeName;
-      varNameCount[nodeName] = count + 1;
-      // first one doesn't have appended number
-      if (count > 0) {
-        varName += count.toString();
+    var nodeName = FindName(uuid, children, parmInfo['type']);
+    // only add names of our direct descendants
+    if (nodeName != null) {
+      // only increase count, make new varName if unique UUID
+      if (!SN_UUIDtoVarName.containsKey(overrideName)) {
+        var count = varNameCount[nodeName] ?? 0;
+        varName = nodeName;
+        varNameCount[nodeName] = count + 1;
+        // first one doesn't have appended number
+        if (count > 0) {
+          varName += count.toString();
+        }
+        SN_UUIDtoVarName[overrideName] = varName;
+      } else {
+        varName = SN_UUIDtoVarName[overrideName];
       }
-      SN_UUIDtoVarName[overrideName] = varName;
-    } else {
-      varName = SN_UUIDtoVarName[overrideName];
     }
-
     return {'name': varName, 'type': parmInfo['type'], 'uuid': uuid};
   }
 
@@ -89,7 +92,7 @@ mixin SymbolNodeMixin {
       case 'textStyle':
         type = TextStyle;
         break;
-      case 'style':
+      case 'layerStyle':
         type = Style;
         break;
       default:
