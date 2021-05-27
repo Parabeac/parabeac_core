@@ -48,7 +48,7 @@ class PBPaddingGen extends PBGenerator {
       }
       if (value != null) {
         buffer.write(
-            '$position: ${relativePadding(source.generator.templateStrategy, isVertical, value)},');
+            '$position: ${relativePadding(source.currentContext.treeRoot.rootNode.generator.templateStrategy, isVertical, value)},');
       }
     }
 
@@ -56,7 +56,7 @@ class PBPaddingGen extends PBGenerator {
       var value = reflectedPadding.getField(Symbol(position)).reflectee;
       if (value != null) {
         buffer.write(
-            '$position: ${relativePadding(source.generator.templateStrategy, true, value)},');
+            '$position: ${relativePadding(source.currentContext.treeRoot.rootNode.generator.templateStrategy, true, value)},');
       }
     }
 
