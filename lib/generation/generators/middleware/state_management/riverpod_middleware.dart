@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -27,7 +28,8 @@ class RiverpodMiddleware extends Middleware {
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
+      managerData.addImport(
+          FlutterImport('flutter_riverpod.dart', 'flutter_riverpod'));
       watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
           'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');

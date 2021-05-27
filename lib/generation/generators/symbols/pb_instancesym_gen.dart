@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
@@ -61,8 +62,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
             break;
           case TextStyle:
             // hack to include import
-            source.currentContext.tree.data.addImport(
-                'package:${MainInfo().projectName}/document/shared_props.g.dart');
+            source.currentContext.tree.data.addImport(FlutterImport(
+                '/document/shared_props.g.dart', MainInfo().projectName));
             buffer.write(
                 '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
             break;

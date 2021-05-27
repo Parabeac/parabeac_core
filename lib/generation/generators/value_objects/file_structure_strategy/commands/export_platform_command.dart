@@ -8,7 +8,7 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
   PLATFORM platform;
   String fileName;
   String folderName;
-  final String WIDGET_PATH = 'lib/screens';
+  static final String WIDGET_PATH = 'lib/screens';
 
   ExportPlatformCommand(
     String UUID,

@@ -1,3 +1,5 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -105,7 +107,7 @@ mixin PBPlatformOrientationGeneration {
   String _serveImports(Set<String> cookedImports) {
     var result = '';
     cookedImports.forEach((import) {
-      result += 'import \'$import\';\n';
+      result += FlutterImport(import).toString();
     });
     return result;
   }

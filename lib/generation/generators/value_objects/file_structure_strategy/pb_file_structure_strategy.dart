@@ -12,17 +12,12 @@ import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart'
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:tuple/tuple.dart';
 
 ///Responsible for creating a particular file structure depending in the structure
 ///
 ///For example, in the provider strategy, there would be a directory for the models and the providers,
 ///while something like BLoC will assign a directory to a single.
 ///
-/// The [FileStructureStrategy] can also perform a dry run of the all the [writeDataToFile] calls
-/// that are going to be performed. This is useful for notifying the [FileWriterObserver]s of new files that
-/// are being written into the file system without actually writing them into the system. The main purpose
-/// of this functionality is mimicking the file creation to observers like the [ImportHelper] can record all of the imports.
 abstract class FileStructureStrategy implements CommandInvoker {
   final Logger logger = Logger('FileStructureStrategy');
 
@@ -30,10 +25,10 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  final RELATIVE_VIEW_PATH = 'lib/widgets/';
+  static final RELATIVE_VIEW_PATH = 'lib/widgets/';
 
   ///The `default` path of where all the screens are going to be generated.
-  final RELATIVE_SCREEN_PATH = 'lib/screens/';
+  static final RELATIVE_SCREEN_PATH = 'lib/screens/';
 
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
@@ -59,24 +54,6 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///Before generating any files, the caller must call the [setUpDirectories]
   bool isSetUp = false;
 
-  /// The flag indicates when the [writeDataToFile] is going to mimic the creation
-  /// of the files.
-  ///
-  /// If [_inDryRunMode] is `true`, then any file creation is going to be simulated and remain on
-  /// hold on the [_dryRunMethodCalls] list. If you are running the [FileStructureStrategy] [_inDryRunMode], then
-  /// make sure to run [writeDryRunCommands] at the end to execute all the recored [writeDataToFile] calls.
-  bool _inDryRunMode = false;
-  set inDryRunMode(bool dryRun) => _inDryRunMode = dryRun;
-
-  /// The flag, if `true`, notifies all the [FileWriterObserver]s twice when a file is created (assuming that its running in [_inDryRunMode]).
-  ///
-  /// If you want to only notify the [FileWriterObserver]s when the actual file is created, then
-  /// [_dryRunModeNotify] flag should be `false`
-  bool _dryRunModeNotify;
-  set dryRunModeNotify(bool notify) => _dryRunModeNotify = notify;
-
-  List<Tuple4> _dryRunMethodCalls;
-
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
@@ -84,9 +61,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
     this.GENERATED_PROJECT_PATH,
     this._pageWriter,
     this._pbProject,
-  ) {
-    _dryRunMethodCalls = [];
-  }
+  );
 
   void addFileObserver(FileWriterObserver observer) {
     if (observer != null) {
@@ -137,6 +112,8 @@ abstract class FileStructureStrategy implements CommandInvoker {
     }
   }
 
+  @Deprecated('Please use the method [writeDataToFile] to write into the files')
+
   ///Writing the code to the actual file
   ///
   ///The default computation of the function will foward the `code` to the
@@ -159,16 +136,6 @@ abstract class FileStructureStrategy implements CommandInvoker {
     command.write(this);
   }
 
-  ///Going to run any [writeDataToFile] calls that just executed in [_inDryRunMode].
-  void writeDryRunCommands() {
-    _dryRunMethodCalls.forEach((funcParams) => writeDataToFile(
-        funcParams.item1, funcParams.item2, funcParams.item3,
-        UUID: funcParams.item4));
-    _dryRunMethodCalls.clear();
-  }
-
-  void clearDryRunCommands() => _dryRunMethodCalls.clear();
-
   /// Writing [data] into [directory] with the file [name]
   ///
   /// The [name] parameter should include the name of the file and the
@@ -183,19 +150,11 @@ abstract class FileStructureStrategy implements CommandInvoker {
       {String UUID}) {
     var file = getFile(directory, name);
 
-    if (_inDryRunMode) {
-      _dryRunMethodCalls.add(Tuple4(data, directory, name, UUID));
-      if (_dryRunModeNotify) {
-        fileObservers.forEach((observer) => observer.fileCreated(
-            file.path, UUID ?? p.basenameWithoutExtension(file.path)));
-      }
-    } else {
-      file.createSync(recursive: true);
-      file.writeAsStringSync(data);
+    file.createSync(recursive: true);
+    file.writeAsStringSync(data);
 
-      fileObservers.forEach((observer) => observer.fileCreated(
-          file.path, UUID ?? p.basenameWithoutExtension(file.path)));
-    }
+    fileObservers.forEach((observer) => observer.fileCreated(
+        file.path, UUID ?? p.basenameWithoutExtension(file.path)));
   }
 
   /// Appends [data] into [directory] with the file [name]

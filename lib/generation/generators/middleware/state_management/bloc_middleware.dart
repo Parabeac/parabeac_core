@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -21,7 +22,7 @@ class BLoCMiddleware extends Middleware {
     var managerData = node.managerData;
     node.currentContext.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-    managerData.addImport('package:flutter_bloc/flutter_bloc.dart');
+    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
     var fileStrategy = node.currentContext.project.fileStructureStrategy
         as FlutterFileStructureStrategy;
 
@@ -84,7 +85,7 @@ class BLoCMiddleware extends Middleware {
     );
 
     /// Creates bloc page
-    managerData.addImport('package:meta/meta.dart');
+    managerData.addImport(FlutterImport('meta.dart', 'meta'));
     await fileStrategy.generatePage(
       _createBlocPage(
         parentState,

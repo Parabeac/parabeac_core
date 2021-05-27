@@ -1,4 +1,5 @@
 import 'package:parabeac_core/design_logic/color.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
@@ -15,7 +16,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
           .addDependencies('auto_size_text', '^2.1.0');
 
       source.managerData
-          .addImport('package:auto_size_text/auto_size_text.dart');
+          .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
       var buffer = StringBuffer();
       buffer.write('AutoSizeText(\n');
       var isTextParameter = source.isTextParameter;

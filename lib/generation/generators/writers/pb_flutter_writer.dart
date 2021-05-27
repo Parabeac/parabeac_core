@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 
 ///Responsible for writing code into files in the desired folder structure
@@ -39,7 +40,7 @@ class PBFlutterWriter implements PBPageWriter {
 
   /// Function that allows the rewriting of the main() method inside main.dart
   void rewriteMainFunction(String pathToMain, String code,
-      {Set<String> imports}) {
+      {Set<FlutterImport> imports}) {
     var mainRead = File(pathToMain).readAsStringSync();
     var newMain = imports.join() +
         mainRead.replaceFirst(

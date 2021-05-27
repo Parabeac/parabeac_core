@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/riverpod_middleware.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
@@ -27,7 +28,7 @@ class RiverpodGenerationConfiguration extends GenerationConfiguration {
       (pageWriter as PBFlutterWriter).rewriteMainFunction(
         fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
         _generateMainFunction(),
-        imports: {"import 'package:flutter_riverpod/flutter_riverpod.dart';"},
+        imports: {FlutterImport('flutter_riverpod.dart', 'flutter_riverpod')},
       );
     }
   }
