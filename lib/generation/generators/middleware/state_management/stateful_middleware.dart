@@ -1,10 +1,12 @@
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 class StatefulMiddleware extends Middleware {
   StatefulMiddleware(PBGenerationManager generationManager)
@@ -38,11 +40,15 @@ class StatefulMiddleware extends Middleware {
     return node;
   }
 
-  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+  String getImportPath(PBSharedInstanceIntermediateNode node,
+      FileStructureStrategy fileStrategy) {
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-    return fileStrategy.GENERATED_PROJECT_PATH +
-        fileStrategy.RELATIVE_VIEW_PATH +
-        '${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
+    var path = p.join(
+        fileStrategy.GENERATED_PROJECT_PATH,
+        FileStructureStrategy.RELATIVE_VIEW_PATH,
+        getName(symbolMaster.name).snakeCase,
+        node.functionCallName.snakeCase);
+    return p.setExtension(path, '.dart');
   }
 }

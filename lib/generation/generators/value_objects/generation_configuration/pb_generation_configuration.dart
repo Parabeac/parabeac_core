@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/entry_file_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/export_platform_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
@@ -29,6 +30,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orient
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -117,7 +119,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(tree, relPath);
+        await _setMainScreen(tree, relPath, project.projectName);
       }
       await _applyMiddleware(tree);
 
@@ -133,8 +135,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     configDryRun(pb_project);
     pb_project.fileStructureStrategy = fileStructureStrategy;
     await generateTrees(pb_project.forest, pb_project);
-    // var dryRunCommands =
-    //     (fileStructureStrategy as DryRunFileStructureStrategy).dryRunCommands;
 
     ///After the dry run is complete, then we are able to create the actual files.
     await setUpConfiguration(pb_project);
@@ -205,7 +205,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     var iter = tree.dependentOn;
     var addImport = tree.rootNode.managerData.addImport;
 
-    if (iter.moveNext()) {
+    while (iter.moveNext()) {
       var dependency = iter.current;
       var import = _importProcessor.getImport(dependency.UUID);
       if (import != null) {
@@ -264,15 +264,13 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   }
 
   Future<void> _setMainScreen(
-      PBIntermediateTree tree, String outputMain) async {
-    var writer = pageWriter;
+      PBIntermediateTree tree, String outputMain, String packageName) async {
     var nodeInfo = _determineNode(tree, outputMain);
-    if (writer is PBFlutterWriter) {
-      await writer.writeMainScreenWithHome(
-          nodeInfo[0],
-          p.join(fileStructureStrategy.GENERATED_PROJECT_PATH, 'lib/main.dart'),
-          'screens/${nodeInfo[1]}');
-    }
+    fileStructureStrategy.commandCreated(EntryFileCommand('main_file',
+        entryScreenName: nodeInfo[0],
+        entryScreenImport:
+            FlutterImport(_importProcessor.getImport(tree.UUID), packageName)
+                .toString()));
   }
 
   List<String> _determineNode(PBIntermediateTree tree, String outputMain) {

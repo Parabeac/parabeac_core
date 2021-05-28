@@ -51,11 +51,11 @@ class PBFlutterWriter implements PBPageWriter {
   /// Creates a new `main.dart` file that starts the Flutter application at
   /// `homeName` and adds the import from `main.dart` to `relativeImportPath`.
   Future<void> writeMainScreenWithHome(
-      String homeName, String pathToMain, String relativeImportPath) async {
+      String homeName, String pathToMain, FlutterImport import) async {
     var mainFile = File(pathToMain).openWrite(mode: FileMode.writeOnly);
     mainFile.write('''
 import 'package:flutter/material.dart';
-import '$relativeImportPath';
+import '${import.toString()}';
 
 void main() {
     runApp(MyApp());

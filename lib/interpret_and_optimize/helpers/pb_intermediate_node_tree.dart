@@ -27,8 +27,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   ///
   /// In other words, `this` can not be generated until its [dependentsOn]s are generated.
   Set<PBIntermediateTree> _dependentsOn;
-  Iterator<PBIntermediateTree> get dependentOn =>
-      _dependentsOn.where((depedent) => depedent != null).iterator;
+  Iterator<PBIntermediateTree> get dependentOn => _dependentsOn.iterator;
 
   String name;
   String identifier;
