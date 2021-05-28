@@ -2,10 +2,8 @@ import 'package:parabeac_core/generation/flutter_project_builder/import_helper.d
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/provider_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
@@ -33,15 +31,6 @@ class ProviderMiddleware extends Middleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport('package:provider/provider.dart');
       watcherName = getVariableName(node.name.snakeCase + '_notifier');
-      var widgetName = node.functionCallName.camelCase;
-      var watcher;
-
-      if (node.currentContext.treeRoot.rootNode.generator.templateStrategy
-          is StatelessTemplateStrategy) {
-        watcher = PBVariable(watcherName, 'final ', true,
-            '${ImportHelper.getName(node.functionCallName).pascalCase}().${widgetName}');
-        //managerData.addGlobalVariable(watcher);
-      }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
       PBGenCache().appendToCache(node.SYMBOL_ID,
@@ -49,7 +38,6 @@ class ProviderMiddleware extends Middleware {
 
       if (node.generator is! StringGeneratorAdapter) {
         var modelName = ImportHelper.getName(node.functionCallName).pascalCase;
-        var defaultWidget = node.functionCallName.pascalCase;
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
@@ -65,10 +53,10 @@ class ProviderMiddleware extends Middleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>().OnGesture(),
-                child: context
-                    .watch<${modelName}>()
-                    .currentWidget, 
+                    ${modelName}>().onGesture(),
+                child: Consumer<$modelName>(
+                  builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentWidget
+                ),
               );
             },
           ),

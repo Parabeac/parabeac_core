@@ -61,7 +61,7 @@ class Style implements PBStyle {
       hasShadow = true;
     }
     // TODO: add rectangle fill types, for now just copy the fill[0] to the background color
-    if (fills.length >= 1) {
+    if (fills != null && fills.isNotEmpty) {
       if (fills[0].isEnabled && (fills[0].fillType == 0)) {
         backgroundColor = fills[0].color;
       }
