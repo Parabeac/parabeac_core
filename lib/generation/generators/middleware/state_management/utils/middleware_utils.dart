@@ -81,7 +81,7 @@ class MiddlewareUtils {
       ${defaultStateName}(){}
 
       // default provider event handler for gestures.
-      void onGesture() {
+      void OnGesture() {
       }
       
       void setCurrentWidget(Widget currentWidget) {
