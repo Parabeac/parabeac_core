@@ -124,7 +124,9 @@ class ShapeGroup extends AbstractGroupLayer implements SketchNodeFactory {
         .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
     return InheritedShapeGroup(this, name,
-        currentContext: currentContext, image: image);
+        currentContext: currentContext,
+        image: image,
+        constraints: resizingConstraint);
   }
 
   @override

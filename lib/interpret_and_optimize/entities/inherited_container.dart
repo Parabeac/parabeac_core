@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -21,18 +22,16 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   bool isBackgroundVisible = true;
 
-  InheritedContainer(
-    this.originalRef,
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    String name, {
-    double alignX,
-    double alignY,
-    PBContext currentContext,
-    Map borderInfo,
-    this.isBackgroundVisible = true,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '') {
+  InheritedContainer(this.originalRef, Point topLeftCorner,
+      Point bottomRightCorner, String name,
+      {double alignX,
+      double alignY,
+      PBContext currentContext,
+      Map borderInfo,
+      this.isBackgroundVisible = true,
+      PBDLConstraints constraints})
+      : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: originalRef.UUID ?? '', constraints: constraints) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }

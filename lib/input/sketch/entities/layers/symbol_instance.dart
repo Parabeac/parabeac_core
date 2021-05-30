@@ -145,9 +145,13 @@ class SymbolInstance extends SketchNode
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    var sym = PBSharedInstanceIntermediateNode(this, symbolID,
-        sharedParamValues: _extractParameters(),
-        currentContext: currentContext);
+    var sym = PBSharedInstanceIntermediateNode(
+      this,
+      symbolID,
+      sharedParamValues: _extractParameters(),
+      currentContext: currentContext,
+      constraints: resizingConstraint,
+    );
     return Future.value(sym);
   }
 

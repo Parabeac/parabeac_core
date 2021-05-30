@@ -119,7 +119,9 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
         .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
     return Future.value(InheritedShapePath(this, name,
-        currentContext: currentContext, image: image));
+        currentContext: currentContext,
+        image: image,
+        constraints: resizingConstraint));
   }
 
   @override

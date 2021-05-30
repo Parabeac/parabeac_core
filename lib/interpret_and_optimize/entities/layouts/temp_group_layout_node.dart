@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 /// A temporary node that must be removed
@@ -16,7 +17,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   String get UUID => originalRef.UUID;
 
   TempGroupLayoutNode(this.originalRef, PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner})
+      {topLeftCorner, bottomRightCorner, PBDLConstraints constraints})
       : super([], [], currentContext, name) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
@@ -46,8 +47,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    assert(
-        false, 'Attempted to generateLayout for class type [$runtimeType]');
+    assert(false, 'Attempted to generateLayout for class type [$runtimeType]');
     return null;
   }
 }

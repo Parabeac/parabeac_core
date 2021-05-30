@@ -119,8 +119,13 @@ class Star extends AbstractShapeLayer implements SketchNodeFactory {
     var image = await SketchAssetProcessor()
         .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
-    return Future.value(InheritedStar(this, name,
-        currentContext: currentContext, image: image));
+    return Future.value(InheritedStar(
+      this,
+      name,
+      currentContext: currentContext,
+      image: image,
+      constraints: resizingConstraint,
+    ));
   }
 
   @override

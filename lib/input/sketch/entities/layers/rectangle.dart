@@ -144,6 +144,7 @@ class Rectangle extends AbstractShapeLayer
         'borderColorHex': border != null ? toHex(border.color) : null,
         'borderThickness': border != null ? border.thickness : null
       },
+      constraints: resizingConstraint,
     ));
   }
 

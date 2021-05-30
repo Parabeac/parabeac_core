@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -20,6 +21,8 @@ abstract class PBIntermediateNode {
   PBGenerator generator;
 
   final String UUID;
+
+  PBDLConstraints constraints;
 
   /// Map representing the attributes of [this].
   /// The key represents the name of the attribute, while the value
@@ -62,7 +65,7 @@ abstract class PBIntermediateNode {
 
   PBIntermediateNode(
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
-      {this.currentContext, this.subsemantic}) {
+      {this.currentContext, this.subsemantic, this.constraints}) {
     _attributes = [];
     _pointCorrection();
   }

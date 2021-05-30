@@ -136,6 +136,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         name,
         Uuid().v4(),
         currentContext: currentContext,
+        constraints: resizingConstraint,
       )..addChild(
           InheritedText(this, name, currentContext: currentContext),
         ));
@@ -201,8 +202,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   var attributedString;
 
   @override
-  set automaticallyDrawOnUnderlyingPath(
-      _automaticallyDrawOnUnderlyingPath) {
+  set automaticallyDrawOnUnderlyingPath(_automaticallyDrawOnUnderlyingPath) {
     // TODO: implement automaticallyDrawOnUnderlyingPath
   }
 
