@@ -9,7 +9,7 @@ class PBSymbolInstanceOverridableValue {
   final String UUID;
   final dynamic value;
 
-  String get friendlyName => SN_UUIDtoVarName[PBInputFormatter.findLastOf(UUID, '/')] ?? 'noname';
+  String get friendlyName => SN_UUIDtoVarName[UUID] ?? 'noname';
 
   PBSymbolInstanceOverridableValue(this.UUID, this.value, this.type);
 

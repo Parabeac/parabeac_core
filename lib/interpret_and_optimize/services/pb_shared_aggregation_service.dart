@@ -47,22 +47,33 @@ class PBSharedInterAggregationService {
   ///are going to look for its [PBSharedParameterValue] if it does not have one.
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
+
+    // first fill in any Shared Instances before we can check our overridable properties are in the tree
     for (var prop in sharedMasterNode.overridableProperties) {
-      var targetUUID = PBInputFormatter.findLastOf(prop?.UUID, '/');
+      var targetUUID = prop?.UUID;
+      if (prop.type == PBSharedInstanceIntermediateNode) {
+        prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
+            rootChildNode, targetUUID);
+        if (prop.value != null) {
+          ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
+          ///then its going gather the information of its [PBSharedMasterNode].
+          gatherSharedValues(prop.value);
+        }
+      }
+    }
+
+    for (var prop in sharedMasterNode.overridableProperties) {
+      var targetUUID = prop?.UUID;
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
           rootChildNode, targetUUID);
       if (prop.value == null) {
         // add Designer Warning here, not even sure if this is the designers fault or not
         log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
       }
-      if ((prop.value != null) && (prop.type == PBSharedInstanceIntermediateNode)) {
-        ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
-        ///then its going gather the information of its [PBSharedMasterNode].
-        gatherSharedValues(prop.value);
-      }
     }
-    sharedMasterNode.overridableProperties
-        .removeWhere((prop) => prop == null || prop.value == null);
+
+    //sharedMasterNode.overridableProperties
+    //    .removeWhere((prop) => prop == null || prop.value == null);
   }
 
   ///Its going to check the [PBSharedInstanceIntermediateNode]s and the [PBSharedMasterNode]s that are coming through
