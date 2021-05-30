@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/value_objects/template_strat
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 
 class StatelessTemplateStrategy extends TemplateStrategy {
@@ -18,6 +19,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
     var overrides = '';
     var overrideVars = '';
 
+    print('${PBSymbolStorage().sharedMasterNodes.length}');
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
         overrides += 'this.${prop.friendlyName}, ';

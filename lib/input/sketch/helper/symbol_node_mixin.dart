@@ -2,10 +2,13 @@ import 'dart:core';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
+import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 
 // both need to be global because a symbol instance could have multiple master symbols with name conflicts
@@ -21,22 +24,52 @@ mixin SymbolNodeMixin {
     PBSharedInstanceIntermediateNode: 'sv',
   };
 
+  String GetUniqueVarName(String overrideName, String friendlyName) {
+    String varName;
+
+    // only increase count, make new varName if unique UUID
+    if (!SN_UUIDtoVarName.containsKey(overrideName)) {
+      var count = varNameCount[friendlyName] ?? 0;
+      varName = friendlyName;
+      varNameCount[friendlyName] = count + 1;
+      // first one doesn't have appended number
+      if (count > 0) {
+        varName += count.toString();
+      }
+      SN_UUIDtoVarName[overrideName] = varName;
+    } else {
+      varName = SN_UUIDtoVarName[overrideName];
+    }
+
+    return varName;
+  }
+
+  String MakeFriendlyName(String inName, Type type) {
+    var name = ((typeToAbbreviation[type] ?? 'un') + ' ' + (inName ?? 'var'))
+        .camelCase;
+    return name.replaceAll(
+        RegExp(
+          r'[^A-Za-z0-9_]',
+        ),
+        '');
+  }
   // should have been a Map<UUID, SketchNode> but iterate slowly through the list
   String FindName(String uuid, List children, Type type) {
     for (var child in children) {
       if (child.UUID == uuid) {
-        var name =
-            ((typeToAbbreviation[type] ?? 'un') + ' ' + (child.name ?? 'var'))
-                .camelCase;
-        return name.replaceAll(
-            RegExp(
-              r'[^A-Za-z0-9_]',
-            ),
-            '');
+        return MakeFriendlyName(child.name, type);
       } else if (child is AbstractGroupLayer) {
         var found = FindName(uuid, child.children, type);
         if (found != null) {
           return found;
+        }
+      } else if (child is SymbolInstance) {
+        var masterSymbol = SymbolMaster.SN_SymbolMasters[child.symbolID];
+        if (masterSymbol != null) {
+          var found = FindName(uuid, masterSymbol.children, type);
+          if (found != null) {
+            return found;
+          }
         }
       }
     }
@@ -47,24 +80,11 @@ mixin SymbolNodeMixin {
   Map AddMasterSymbolOverrideName(String overrideName, List children) {
     var varName;
     var parmInfo = extractParameter(overrideName);
-    var uuid = parmInfo['uuid'];
+    var uuid = PBInputFormatter.findLastOf(parmInfo['uuid'], '/');
 
     var nodeName = FindName(uuid, children, parmInfo['type']);
-    // only add names of our direct descendants
     if (nodeName != null) {
-      // only increase count, make new varName if unique UUID
-      if (!SN_UUIDtoVarName.containsKey(overrideName)) {
-        var count = varNameCount[nodeName] ?? 0;
-        varName = nodeName;
-        varNameCount[nodeName] = count + 1;
-        // first one doesn't have appended number
-        if (count > 0) {
-          varName += count.toString();
-        }
-        SN_UUIDtoVarName[overrideName] = varName;
-      } else {
-        varName = SN_UUIDtoVarName[overrideName];
-      }
+      varName = GetUniqueVarName(overrideName, nodeName);
     }
     return {'name': varName, 'type': parmInfo['type'], 'uuid': uuid};
   }
