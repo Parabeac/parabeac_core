@@ -77,16 +77,18 @@ class MiddlewareUtils {
       ${manager.generateImports()}
       class ${defaultStateName} extends ChangeNotifier {
 
-      Widget currentWidget;
-      ${defaultStateName}(){}
-
-      // default provider event handler for gestures.
-      void OnGesture() {
-      }
+        LayoutBuilder currentLayout;
+        final String widgetName;
+        ${defaultStateName}(this.widgetName);
+  
+        // default provider event handler for gestures.
+        void OnGesture() {
+        }
+        
+        void setCurrentLayout(LayoutBuilder layout) {
+          currentLayout = layout;
+        }
       
-      void setCurrentWidget(Widget currentWidget) {
-        this.currentWidget = currentWidget;
-      }
       }
       ''';
   }
