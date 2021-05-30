@@ -28,8 +28,11 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
   }
 
   void writeProviderModelFile(String code, String fileName) {
-    super
-        .pageWriter
-        .write(code, '${_modelsPath}${fileName}.dart'); // Removed .g
+
+    if (!File('$_modelsPath$fileName.dart').existsSync()) {
+      super
+          .pageWriter
+          .write(code, '$_modelsPath$fileName.dart'); // Removed .g
+    }
   }
 }
