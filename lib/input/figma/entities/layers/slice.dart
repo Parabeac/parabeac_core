@@ -1,5 +1,7 @@
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -22,7 +24,7 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
 
   String layoutAlign;
 
-  var constraints;
+  FigmaConstraints constraints;
 
   @override
   @JsonKey(name: 'absoluteBoundingBox')
@@ -67,12 +69,14 @@ class FigmaSlice extends FigmaNode implements FigmaNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
     return Future.value(InheritedContainer(
-        this,
-        Point(boundaryRectangle.x, boundaryRectangle.y),
-        Point(boundaryRectangle.x + boundaryRectangle.width,
-            boundaryRectangle.y + boundaryRectangle.height),
-        name,
-        currentContext: currentContext));
+      this,
+      Point(boundaryRectangle.x, boundaryRectangle.y),
+      Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      name,
+      currentContext: currentContext,
+      constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+    ));
   }
 
   @override

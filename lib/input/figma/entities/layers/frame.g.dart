@@ -20,7 +20,10 @@ FigmaFrame _$FigmaFrameFromJson(Map<String, dynamic> json) {
     strokeWeight: (json['strokeWeight'] as num)?.toDouble(),
     strokeAlign: json['strokeAlign'] as String,
     cornerRadius: (json['cornerRadius'] as num)?.toDouble(),
-    constraints: json['constraints'],
+    constraints: json['constraints'] == null
+        ? null
+        : FigmaConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>),
     layoutAlign: json['layoutAlign'] as String,
     size: json['size'],
     horizontalPadding: (json['horizontalPadding'] as num)?.toDouble(),

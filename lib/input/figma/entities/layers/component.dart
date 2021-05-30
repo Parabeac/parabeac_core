@@ -5,6 +5,8 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -33,7 +35,7 @@ class Component extends FigmaFrame
     strokeWeight,
     strokeAlign,
     cornerRadius,
-    constraints,
+    FigmaConstraints constraints,
     layoutAlign,
     size,
     horizontalPadding,

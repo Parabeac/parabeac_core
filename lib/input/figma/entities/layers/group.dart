@@ -7,7 +7,9 @@ import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/layers/text.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
@@ -45,7 +47,7 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
       strokeWeight,
       strokeAlign,
       cornerRadius,
-      constraints,
+      FigmaConstraints constraints,
       layoutAlign,
       size,
       horizontalPadding,
@@ -112,13 +114,22 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
       children.clear();
 
-      return Future.value(
-          InheritedBitmap(this, name, currentContext: currentContext));
+      return Future.value(InheritedBitmap(
+        this,
+        name,
+        currentContext: currentContext,
+        constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+      ));
     }
-    return Future.value(TempGroupLayoutNode(this, currentContext, name,
-        topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
-        bottomRightCorner: Point(boundaryRectangle.x + boundaryRectangle.width,
-            boundaryRectangle.y + boundaryRectangle.height)));
+    return Future.value(TempGroupLayoutNode(
+      this,
+      currentContext,
+      name,
+      topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
+      bottomRightCorner: Point(boundaryRectangle.x + boundaryRectangle.width,
+          boundaryRectangle.y + boundaryRectangle.height),
+      constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+    ));
   }
 
   bool areAllVectors() {
