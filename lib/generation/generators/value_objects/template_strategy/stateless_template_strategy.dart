@@ -19,7 +19,6 @@ class StatelessTemplateStrategy extends TemplateStrategy {
     var overrides = '';
     var overrideVars = '';
 
-    print('${PBSymbolStorage().sharedMasterNodes.length}');
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
         overrides += 'this.${prop.friendlyName}, ';
