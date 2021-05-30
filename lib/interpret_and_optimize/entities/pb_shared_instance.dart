@@ -102,7 +102,7 @@ class PBSharedParameterValue {
   final String _overrideName;
   String get overrideName => _overrideName;
 
-  String get name => SN_UUIDtoVarName[PBInputFormatter.findLastOf(_overrideName, '/')];
+  String get friendlyName => SN_UUIDtoVarName[_overrideName];
 
   PBSharedParameterValue(
     this._type,

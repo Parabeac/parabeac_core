@@ -112,6 +112,18 @@ class Instance extends FigmaFrame
   }
 
   @override
+  String MakeFriendlyName(String inName, Type type) {
+    // TODO: implement AddMasterSymbolOverrideName
+    throw UnimplementedError();
+  }
+
+  @override
+  String GetUniqueVarName(String overrideName, String friendlyName) {
+    // TODO: implement AddMasterSymbolOverrideName
+    throw UnimplementedError();
+  }
+
+  @override
   String FindName(String uuid, List children, Type type) {
     // TODO: implement FindName
     throw UnimplementedError();

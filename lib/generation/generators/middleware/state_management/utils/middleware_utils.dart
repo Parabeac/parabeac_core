@@ -100,11 +100,15 @@ class MiddlewareUtils {
           {String type = 'var'}) =>
       '${type} ${node.name.camelCase};';
 
-  static String generateVariableBody(node) =>
-      (node?.generator?.generate(node ?? '',
-              GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
-          '') +
-      ';';
+  static String generateVariableBody(node) {
+    node?.managerData?.hasParams = true;
+    String genCode = (node?.generator?.generate(node ?? '',
+        GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
+        '') +
+        ';';
+    node?.managerData?.hasParams = false;
+    return genCode;
+  }
 
   static String wrapOnLayout(String className) {
     return '''

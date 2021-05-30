@@ -11,7 +11,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.d
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
@@ -33,8 +32,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
 
-      // If storage found an instance, get its master
-      var masterSymbol =
+      // If we are processing master symbol generation grab the master, else grab gab the master of ourselves
+      var masterSymbol = generatorContext.masterNode ??
           PBSymbolStorage().getSharedMasterNodeBySymbolID(source.SYMBOL_ID);
 
       // recursively generate Symbol Instance constructors with overrides
@@ -74,8 +73,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       Map<String, PBSymbolInstanceOverridableValue> mapOverrideValues,
       Map<String, PBSymbolMasterParameter> mapParameterValues,
       PBGenerationViewData managerData,
-      { bool topLevel = true,
-        String UUIDPath = ''}) {
+      { String UUIDPath = ''}) {
     if ((UUID == null) || (UUID == '')) {
       return '';
     }
@@ -121,7 +119,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
     masterSymbol.parametersDefsMap.forEach((overrideName, smParameter) {
       var ovrValue = '';
-      overrideName = UUIDPath + overrideName;
       if (mapOverrideValues.containsKey(overrideName)) {
         var param = mapOverrideValues[overrideName];
         switch (param.type) {
@@ -131,7 +128,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
               mapOverrideValues,
               mapParameterValues,
               managerData,
-              topLevel: false,
               UUIDPath: '$UUIDPath${param.UUID}/',
             );
             break;
@@ -159,20 +155,21 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         }
       }
       // get parameter name to pass to widget constructor
-      var friendlyName = SN_UUIDtoVarName[
-          PBInputFormatter.findLastOf(smParameter.propertyName, '/')];
+      var widgetParamName = SN_UUIDtoVarName[PBInputFormatter.findLastOf(smParameter.propertyName, '/')];
+      // our parent widget parameter name, defaults to blank no such parameter.
       var paramName = '';
       // check if parent widget has parameter to pass down to children
+      var paramPropertyName = '$UUIDPath$UUID/${smParameter.propertyName}';
       if (managerData.hasParams &&
-          mapParameterValues.containsKey(smParameter.propertyName)) {
+          mapParameterValues.containsKey(paramPropertyName)) {
         // yes, so pass down with optional null check
-        paramName = friendlyName;
+        paramName = SN_UUIDtoVarName[paramPropertyName];
         if (ovrValue != '') {
           paramName += ' ?? ';
         }
       }
       if ((ovrValue != '') || (paramName != '')) {
-        buffer.write('$friendlyName: $paramName$ovrValue,\n');
+        buffer.write('$widgetParamName: $paramName$ovrValue,\n');
       }
     });
 
