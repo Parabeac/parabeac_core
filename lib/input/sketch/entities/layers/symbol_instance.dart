@@ -6,6 +6,7 @@ import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -150,7 +151,7 @@ class SymbolInstance extends SketchNode
       symbolID,
       sharedParamValues: _extractParameters(),
       currentContext: currentContext,
-      constraints: resizingConstraint,
+      constraints: convertSketchConstraintToPBDLConstraint(resizingConstraint),
     );
     return Future.value(sym);
   }

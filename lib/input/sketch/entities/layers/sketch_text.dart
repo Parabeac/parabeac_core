@@ -5,6 +5,7 @@ import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -74,7 +75,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       layerListExpandedType,
       String name,
       bool nameIsFixed,
-      resizingConstraint,
+      int resizingConstraint,
       resizingType,
       double rotation,
       sharedStyleID,
@@ -136,7 +137,8 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         name,
         Uuid().v4(),
         currentContext: currentContext,
-        constraints: resizingConstraint,
+        constraints:
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
       )..addChild(
           InheritedText(this, name, currentContext: currentContext),
         ));

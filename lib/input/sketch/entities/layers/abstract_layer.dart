@@ -33,7 +33,7 @@ abstract class SketchNode implements DesignNode {
   @override
   String name;
   final bool nameIsFixed;
-  final dynamic resizingConstraint;
+  final int resizingConstraint;
   final dynamic resizingType;
   final num rotation;
   final dynamic sharedStyleID;
