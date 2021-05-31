@@ -24,13 +24,13 @@ class EntryFileCommand extends NodeFileStructureCommand {
   /// The code of the main() method inside [mainFileName]
   final String mainCode;
 
-  EntryFileCommand(String UUID,
+  EntryFileCommand(
       {this.mainFileName = 'main',
       this.entryScreenName,
       this.entryScreenImport,
       this.projectName = 'Parabeac-Core Generated Project',
       this.mainCode = 'runApp(MyApp());'})
-      : super(UUID, '''
+      : super('ENTRY_FILE', '''
 import 'package:flutter/material.dart';
 $entryScreenImport
 

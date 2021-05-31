@@ -7,9 +7,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
+import 'package:path/path.dart' as p;
 
 class ImportHelper implements FileWriterObserver {
-  final Map<String, String> imports = {};
+  final Map<String, Set<String>> imports = {};
+  final List<String> _importBaseNames = [];
 
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
@@ -60,23 +62,43 @@ class ImportHelper implements FileWriterObserver {
     return currentImports;
   }
 
-  String getImport(String UUID) {
+  List<String> getImport(String UUID) {
     if (imports.containsKey(UUID)) {
-      return imports[UUID];
+      return imports[UUID].toList();
     }
     return null;
   }
 
+  List getFormattedImports(String UUID,
+      {dynamic Function(String import) importMapper}) {
+    importMapper ??= (String path) => path;
+    return getImport(UUID)?.map(importMapper)?.toList() ?? [];
+  }
+
+  /// Looks that we are not tracking the file in the imports by comparing the
+  /// [import]s basename with the collection of [_importBaseNames].
+  bool containsBaseName(String import) {
+    return _importBaseNames.contains(p.basename(import));
+  }
+
+  /// Adding [import] to the [imports], allowing other callers to lookup their dependencies using
+  /// their [UUID].
+  ///
+  /// Multiple [import]s could be added under the same [UUID]. This is to allow the
+  /// callers of [addImport] to add additional imports for other packages or files that are
+  /// certain to be required. The only contrain is that the [import] basename need to be
+  /// unique across all [imports], if its not, its not going to be added to the [imports]. For example,
+  /// when we [addImport] `<path>/example.dart`, then `<another-path>/example.dart`, only
+  /// the `<path>/example.dart` is going to be recorded in [imports].
   void addImport(String import, String UUID) {
-    if (import != null && UUID != null) {
-      imports[UUID] = import;
+    if (import != null && UUID != null && !containsBaseName(import)) {
+      imports[UUID] ??= {};
+      imports[UUID].add(import);
+      _importBaseNames.add(p.basename(import));
     }
   }
 
   @override
-  void fileCreated(String filePath, String fileUUID) {
-    if (filePath != null && fileUUID != null) {
-      imports[fileUUID] = filePath;
-    }
-  }
+  void fileCreated(String filePath, String fileUUID) =>
+      addImport(filePath, fileUUID);
 }

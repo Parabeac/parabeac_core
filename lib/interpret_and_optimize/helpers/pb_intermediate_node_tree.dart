@@ -14,25 +14,41 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   String get UUID => _UUID;
 
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
-  PBGenerationViewData data;
-  PBIntermediateNode _rootNode;
-  set rootNode(PBIntermediateNode rootNode) {
-    _rootNode = rootNode;
-    identifier = rootNode?.name ?? name;
+
+  /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
+  /// if a change is made and [lockData] is `true`, the change is going to be ignored.
+  ///
+  /// This is a workaround to process where the data needs to be analyzed without any modification done to it.
+  /// Furthermore, this is a workaround to the unability of creating a copy of the [PBIntermediateTree] to prevent
+  /// the modifications to the object (https://github.com/dart-lang/sdk/issues/3367). As a result, the [lockData] flag
+  /// has to be used to prevent those modification in phases where the data needs to be analyzed but unmodified.
+  bool lockData = false;
+
+  PBGenerationViewData _data;
+  PBGenerationViewData get data => _data;
+  set data(PBGenerationViewData viewData) {
+    if (!lockData) {
+      _data = viewData;
+    }
   }
 
+  PBIntermediateNode _rootNode;
   PBIntermediateNode get rootNode => _rootNode;
+  set rootNode(PBIntermediateNode rootNode) {
+    if (!lockData) {
+      _rootNode = rootNode;
+      identifier = rootNode?.name ?? name;
+    }
+  }
 
   /// List of [PBIntermediteTree]s that `this` depends on.
   ///
   /// In other words, `this` can not be generated until its [dependentsOn]s are generated.
   Set<PBIntermediateTree> _dependentsOn;
-  Iterator<PBIntermediateTree> get dependentOn => _dependentsOn.iterator;
+  Iterator<PBIntermediateTree> get dependentsOn => _dependentsOn.iterator;
 
   String name;
   String identifier;
-
-  List<PBIntermediateTree> dependentsOn;
 
   PBIntermediateTree(this.name) {
     _dependentsOn = {};
@@ -43,7 +59,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   ///
   /// The [dependent] or its [dependent.rootNode] can not be `null`
   void addDependent(PBIntermediateTree dependent) {
-    if (dependent != null) {
+    if (dependent != null && !lockData) {
       _dependentsOn.add(dependent);
     }
   }
