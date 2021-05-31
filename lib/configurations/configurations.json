@@ -5,5 +5,5 @@
     "widgetSpacing": "Expanded",
     "layoutPrecedence": ["column", "row", "stack"]
   },
-  "state-management": "provider"
+  "state-management": "none"
 }
