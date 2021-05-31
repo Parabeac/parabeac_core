@@ -1,6 +1,9 @@
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/riverpod_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -15,15 +18,16 @@ class RiverpodMiddleware extends Middleware {
   final PACKAGE_NAME = 'flutter_riverpod';
   final PACKAGE_VERSION = '^0.12.1';
 
-  RiverpodMiddleware(PBGenerationManager generationManager)
-      : super(generationManager);
+  RiverpodMiddleware(PBGenerationManager generationManager,
+      RiverpodGenerationConfiguration configuration)
+      : super(generationManager, configuration);
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     String watcherName;
     var managerData = node.managerData;
-    var fileStrategy = node.currentContext.project.fileStructureStrategy
-        as RiverpodFileStructureStrategy;
+    var fileStrategy =
+        configuration.fileStructureStrategy as RiverpodFileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
@@ -47,7 +51,7 @@ class RiverpodMiddleware extends Middleware {
         node.generator = StringGeneratorAdapter(
             getConsumer(watcherName, node.functionCallName.camelCase));
       }
-      return node;
+      return handleNode(node);
     }
     watcherName = getNameOfNode(node);
 
@@ -56,9 +60,11 @@ class RiverpodMiddleware extends Middleware {
       generationManager,
       node,
     );
-    fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        node.currentContext.tree.UUID, getName(node.name).snakeCase, code,
+        symbolPath: fileStrategy.RELATIVE_MODEL_PATH));
 
-    return node;
+    return handleNode(node);
   }
 
   String getConsumer(String name, String pointTo) {

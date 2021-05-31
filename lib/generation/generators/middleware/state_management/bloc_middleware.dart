@@ -1,6 +1,9 @@
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -9,13 +12,15 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.d
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
 import '../middleware.dart';
+import 'package:path/path.dart' as p;
 
 class BLoCMiddleware extends Middleware {
   final PACKAGE_NAME = 'flutter_bloc';
   final PACKAGE_VERSION = '^6.1.1';
 
-  BLoCMiddleware(PBGenerationManager generationManager)
-      : super(generationManager);
+  BLoCMiddleware(PBGenerationManager generationManager,
+      GenerationConfiguration configuration)
+      : super(generationManager, configuration);
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
@@ -46,7 +51,7 @@ class BLoCMiddleware extends Middleware {
       )
       ''');
       }
-      return node;
+      return handleNode(node);
     }
     var parentState = getNameOfNode(node);
     var generalName = parentState.snakeCase;
@@ -71,31 +76,37 @@ class BLoCMiddleware extends Middleware {
     });
 
     /// Creates state page
-    await fileStrategy.generatePage(
-      stateBuffer.toString(),
-      '$parentDirectory/${generalName}_state',
-      args: 'VIEW',
-    );
+    fileStrategy.commandCreated(WriteSymbolCommand(
+
+        /// modified the [UUID] to prevent adding import because the state is
+        /// using `part of` syntax already when importing the bloc
+        'STATE${node.currentContext.tree.UUID}',
+        '${generalName}_state',
+        stateBuffer.toString(),
+        relativePath: parentDirectory));
 
     /// Creates event page
-    await fileStrategy.generatePage(
-      _createEventPage(parentState),
-      '$parentDirectory/${generalName}_event',
-      args: 'VIEW',
-    );
+    fileStrategy.commandCreated(WriteSymbolCommand(
+
+        /// modified the [UUID] to prevent adding import because the event is
+        /// using `part of` syntax already when importing the bloc
+        'EVENT${node.currentContext.tree.UUID}',
+        '${generalName}_event',
+        _createEventPage(parentState),
+        relativePath: parentDirectory));
 
     /// Creates bloc page
     managerData.addImport(FlutterImport('meta.dart', 'meta'));
-    await fileStrategy.generatePage(
-      _createBlocPage(
-        parentState,
-        node.name,
-      ),
-      '$parentDirectory/${generalName}_bloc',
-      args: 'VIEW',
-    );
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        node.currentContext.tree.UUID,
+        '${generalName}_bloc',
+        _createBlocPage(
+          parentState,
+          node.name,
+        ),
+        relativePath: parentDirectory));
 
-    return node;
+    return handleNode(null);
   }
 
   String _createBlocPage(String name, String initialStateName) {
@@ -130,13 +141,17 @@ class BLoCMiddleware extends Middleware {
     ''';
   }
 
-  String getImportPath(PBSharedInstanceIntermediateNode node, fileStrategy) {
+  String getImportPath(PBSharedInstanceIntermediateNode node,
+      FileStructureStrategy fileStrategy) {
     var generalStateName = node.functionCallName
         .substring(0, node.functionCallName.lastIndexOf('/'));
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-    return fileStrategy.GENERATED_PROJECT_PATH +
-        fileStrategy.RELATIVE_VIEW_PATH +
-        '${generalStateName.snakeCase}_bloc/${getName(symbolMaster.name).snakeCase}_bloc.dart';
+    return p.join(
+      fileStrategy.GENERATED_PROJECT_PATH,
+      FileStructureStrategy.RELATIVE_VIEW_PATH,
+      '${generalStateName.snakeCase}_bloc',
+      '${getName(symbolMaster.name).snakeCase}_bloc',
+    );
   }
 }

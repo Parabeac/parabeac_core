@@ -62,8 +62,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Future write(FileStructureStrategy strategy) {
-    strategy.writeDataToFile(code, strategy.GENERATED_PROJECT_PATH,
-        p.setExtension(p.join('lib', mainFileName), '.dart'),
+    strategy.writeDataToFile(
+        code, strategy.GENERATED_PROJECT_PATH, p.join('lib', mainFileName),
         UUID: UUID);
   }
 }

@@ -22,8 +22,6 @@ class FlutterProjectBuilder {
 
   var log = Logger('Project Builder');
 
-  final String SYMBOL_DIR_NAME = 'symbols';
-
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.

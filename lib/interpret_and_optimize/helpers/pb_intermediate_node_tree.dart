@@ -43,7 +43,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   ///
   /// The [dependent] or its [dependent.rootNode] can not be `null`
   void addDependent(PBIntermediateTree dependent) {
-    if (dependent != null && dependent.rootNode != null) {
+    if (dependent != null) {
       _dependentsOn.add(dependent);
     }
   }

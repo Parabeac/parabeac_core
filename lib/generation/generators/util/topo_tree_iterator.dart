@@ -40,7 +40,7 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
     var inDegree = HashMap<E, int>();
     items.forEach((tree) {
       inDegree.putIfAbsent(tree, () => 0);
-      var dependentOnIterator = tree.dependentOn;
+      var dependentOnIterator = tree.dependentsOn;
       while (dependentOnIterator.moveNext()) {
         inDegree.update(dependentOnIterator.current, (value) => value + 1,
             ifAbsent: () => 1);
@@ -65,7 +65,7 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
       var vertex = noInDegrees.first;
       noInDegrees.remove(vertex);
       ordered.add(vertex);
-      var it = vertex.dependentOn;
+      var it = vertex.dependentsOn;
       while (it.moveNext()) {
         inDegrees[it.current] = inDegrees[it.current] - 1;
         if (inDegrees[it.current] == 0) {

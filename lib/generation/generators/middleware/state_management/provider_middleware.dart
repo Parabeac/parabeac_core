@@ -5,8 +5,11 @@ import 'package:parabeac_core/generation/generators/middleware/state_management/
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/entry_file_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
@@ -22,15 +25,16 @@ class ProviderMiddleware extends Middleware {
   final PACKAGE_NAME = 'provider';
   final PACKAGE_VERSION = '^4.3.2+3';
 
-  ProviderMiddleware(PBGenerationManager generationManager)
-      : super(generationManager);
+  ProviderMiddleware(PBGenerationManager generationManager,
+      ProviderGenerationConfiguration configuration)
+      : super(generationManager, configuration);
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
     String watcherName;
     var managerData = node.managerData;
-    var fileStrategy = node.currentContext.project.fileStructureStrategy
-        as ProviderFileStructureStrategy;
+    var fileStrategy =
+        configuration.fileStructureStrategy as ProviderFileStructureStrategy;
     if (node is PBSharedInstanceIntermediateNode) {
       node.currentContext.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -79,7 +83,8 @@ class ProviderMiddleware extends Middleware {
         ''';
         node.generator = StringGeneratorAdapter(providerWidget);
       }
-      return node;
+
+      return handleNode(node);
     }
     watcherName = getNameOfNode(node);
 
@@ -92,25 +97,36 @@ class ProviderMiddleware extends Middleware {
     // Write model class for current node
     var code = MiddlewareUtils.generateModelChangeNotifier(
         watcherName, modelGenerator, node);
-    fileStrategy.writeProviderModelFile(code, parentDirectory);
 
-    // Generate default node's view page
-    await fileStrategy.generatePage(
-      generationManager.generate(node),
-      p.join(parentDirectory, node.name.snakeCase),
-      args: 'VIEW',
-    );
+    [
+      /// This generated the `changeNotifier` that goes under the [fileStrategy.RELATIVE_MODEL_PATH]
+      WriteSymbolCommand(
+        node.currentContext.tree.UUID,
+        parentDirectory,
+        code,
+        symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
+      ),
+      // Generate default node's view page
+      WriteSymbolCommand(node.currentContext.tree.UUID, node.name.snakeCase,
+          generationManager.generate(node),
+          relativePath: parentDirectory),
+    ].forEach(fileStrategy.commandCreated);
+
+    (configuration as ProviderGenerationConfiguration)
+        .registeredModels
+        .add(watcherName);
 
     // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) async {
-      await fileStrategy.generatePage(
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        state.variation.node.currentContext.tree.UUID,
+        state.variation.node.name.snakeCase,
         generationManager.generate(state.variation.node),
-        p.join(parentDirectory, state.variation.node.name.snakeCase),
-        args: 'VIEW',
-      );
+        relativePath: parentDirectory,
+      ));
     });
 
-    return node;
+    return handleNode(null);
   }
 
   String getImportPath(PBSharedInstanceIntermediateNode node,
@@ -118,9 +134,14 @@ class ProviderMiddleware extends Middleware {
       {bool generateModelPath = true}) {
     var symbolMaster =
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+
     var import = generateModelPath
-        ? '${fileStrategy.RELATIVE_MODEL_PATH}${getName(symbolMaster.name).snakeCase}.dart'
-        : '${FileStructureStrategy.RELATIVE_VIEW_PATH}${getName(symbolMaster.name).snakeCase}/${node.functionCallName.snakeCase}.dart';
-    return fileStrategy.GENERATED_PROJECT_PATH + import;
+        ? p.join(fileStrategy.RELATIVE_MODEL_PATH,
+            getName(symbolMaster.name).snakeCase)
+        : p.join(
+            FileStructureStrategy.RELATIVE_VIEW_PATH,
+            getName(symbolMaster.name).snakeCase,
+            node.functionCallName.snakeCase);
+    return p.join(fileStrategy.GENERATED_PROJECT_PATH, import);
   }
 }

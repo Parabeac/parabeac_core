@@ -54,6 +54,17 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///Before generating any files, the caller must call the [setUpDirectories]
   bool isSetUp = false;
 
+  /// By the [FileStructureStrategy] being in [dryRunMode], the [FileStructureStrategy] is not
+  /// going to create anyFiles.
+  ///
+  /// Primarly, this mode is to notify the [fileObservers] of a "file creation", without performing
+  /// the actual creation. A good example of this comes with the [ImportHelper], this oberserver will
+  /// be documenting the files that are being created as imports to be used later.
+  bool dryRunMode = false;
+
+  /// Notifies the [fileObserver] of when a file supposed to be created.
+  bool notifyObserverInDryRun = true;
+
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
@@ -104,7 +115,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
         path = p.join(_screenDirectoryPath, name,
             poLinker.stripPlatform(tree.rootNode.managerData.platform), name);
       }
-      path = p.setExtension(path, '.dart');
+
       PBGenCache().setPathToCache(uuid, path);
     } else {
       logger.warning(
@@ -147,14 +158,20 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   /// [FileWriterObserver]s are going to be notfied of the new created file.
   void writeDataToFile(String data, String directory, String name,
-      {String UUID}) {
-    var file = getFile(directory, name);
+      {String UUID, String ext = '.dart'}) {
+    var file = getFile(directory, p.setExtension(name, ext));
 
-    file.createSync(recursive: true);
-    file.writeAsStringSync(data);
+    if (!dryRunMode) {
+      file.createSync(recursive: true);
+      file.writeAsStringSync(data);
+      _notifyObservers(file.path, UUID);
+    } else if (notifyObserverInDryRun) {
+      _notifyObservers(file.path, UUID);
+    }
+  }
 
-    fileObservers.forEach((observer) => observer.fileCreated(
-        file.path, UUID ?? p.basenameWithoutExtension(file.path)));
+  void _notifyObservers(String path, String UUID) {
+    fileObservers.forEach((observer) => observer.fileCreated(path, UUID));
   }
 
   /// Appends [data] into [directory] with the file [name]
@@ -165,7 +182,8 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// appends the information only if that information does not exist in the file. If no
   /// [ModFile] function is found, its going to append the information at the end of the lines
   void appendDataToFile(ModFile modFile, String directory, String name,
-      {String UUID, bool createFileIfNotFound = true}) {
+      {String UUID, bool createFileIfNotFound = true, String ext = '.dart'}) {
+    name = p.setExtension(name, ext);
     var file = getFile(directory, name);
     if (file.existsSync()) {
       var fileLines = file.readAsLinesSync();

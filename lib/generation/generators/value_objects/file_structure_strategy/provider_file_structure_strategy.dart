@@ -31,8 +31,4 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
     Directory(_providersPath).createSync(recursive: true);
     Directory(_modelsPath).createSync(recursive: true);
   }
-
-  void writeProviderModelFile(String code, String fileName) {
-    super.pageWriter.write(code, '$_modelsPath$fileName.dart'); // Removed .g
-  }
 }
