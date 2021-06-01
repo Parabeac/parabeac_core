@@ -47,8 +47,9 @@ void main() {
 
     test('Testing writing a screen', () async {
       await command.write(strategy);
-      var verification =
-          verify(strategy.writeDataToFile(captureAny, any, captureAny));
+      var verification = verify(strategy.writeDataToFile(
+          captureAny, any, captureAny,
+          UUID: anyNamed('UUID')));
 
       /// Make sure we are writting to the file using the strategy
       expect(verification.captured.first, screenData);
