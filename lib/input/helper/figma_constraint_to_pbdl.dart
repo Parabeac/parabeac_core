@@ -25,19 +25,19 @@ PBDLConstraints _convertFigmaConstraint(FigmaConstraintType figmaConstraintType,
   } else if (figmaConstraintType == FigmaConstraintType.TOP) {
     constraints.pinTop = true;
     constraints.pinBottom = false;
-    constraints.fixedHeight = false;
+    constraints.fixedHeight = true;
   } else if (figmaConstraintType == FigmaConstraintType.LEFT) {
     constraints.pinLeft = true;
     constraints.pinRight = false;
-    constraints.fixedWidth = false;
+    constraints.fixedWidth = true;
   } else if (figmaConstraintType == FigmaConstraintType.RIGHT) {
     constraints.pinLeft = false;
     constraints.pinRight = true;
-    constraints.fixedWidth = false;
+    constraints.fixedWidth = true;
   } else if (figmaConstraintType == FigmaConstraintType.BOTTOM) {
     constraints.pinTop = false;
     constraints.pinBottom = true;
-    constraints.fixedHeight = false;
+    constraints.fixedHeight = true;
   } else if (figmaConstraintType == FigmaConstraintType.CENTER) {
     if (isVertical) {
       constraints.pinTop = false;
