@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as p;
+
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
@@ -22,28 +24,15 @@ class FlutterProjectBuilder {
 
   var log = Logger('Project Builder');
 
+  PBPageWriter pageWriter;
+
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
-  Map<String, GenerationConfiguration> configurations = {
-    'provider': ProviderGenerationConfiguration(),
-    'bloc': BLoCGenerationConfiguration(),
-    'riverpod': RiverpodGenerationConfiguration(),
-    'none': StatefulGenerationConfiguration(),
-  };
-
-  final DEFAULT_CONFIGURATION = StatefulGenerationConfiguration();
-
-  PBPageWriter pageWriter;
-
-  FlutterProjectBuilder({this.project, this.pageWriter}) {
-    generationConfiguration = configurations[MainInfo()
-            .configurations['state-management']
-            .toString()
-            .toLowerCase()] ??
-        DEFAULT_CONFIGURATION;
+  FlutterProjectBuilder(this.generationConfiguration,
+      {this.project, this.pageWriter}) {
     generationConfiguration.pageWriter = pageWriter;
   }
 
@@ -65,7 +54,7 @@ class FlutterProjectBuilder {
       log.error(error.toString());
     }
 
-    await Directory('${pathToFlutterProject}assets/images')
+    await Directory(p.join(pathToFlutterProject, 'assets/images'))
         .create(recursive: true)
         .then((value) => {
               // print(value),
@@ -128,14 +117,6 @@ class FlutterProjectBuilder {
     await generationConfiguration.generateProject(project);
     await generationConfiguration
         .generatePlatformAndOrientationInstance(project);
-
-    var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
-    var s = File('${pathToFlutterProject}lib/main.dart')
-        .openWrite(mode: FileMode.write, encoding: utf8);
-    for (var i = 0; i < l.length; i++) {
-      s.writeln(l[i]);
-    }
-    await s.close();
 
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',

@@ -14,7 +14,8 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     json['stateManagement'] as String ?? 'None',
     (json['layoutPrecedence'] as List)?.map((e) => e as String)?.toList() ??
         ['column', 'row', 'stack'],
-  )..configurations = json['configurations'] as Map<String, dynamic>;
+    json['breakpoints'] as Map<String, dynamic>,
+  );
 }
 
 Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
@@ -24,5 +25,5 @@ Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
       'widgetSpacing': instance.widgetSpacing,
       'stateManagement': instance.stateManagement,
       'layoutPrecedence': instance.layoutPrecedence,
-      'configurations': instance.configurations,
+      'breakpoints': instance.breakpoints,
     };

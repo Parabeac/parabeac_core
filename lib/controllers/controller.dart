@@ -4,11 +4,11 @@ import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.da
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:quick_log/quick_log.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'main_info.dart';
-import 'package:path/path.dart' as p;
 
 abstract class Controller {
   ///SERVICE
@@ -19,8 +19,7 @@ abstract class Controller {
   void convertFile(
     var fileAbsPath,
     var projectPath,
-    var configurationPath,
-    var configType, {
+    PBConfiguration configuration, {
     bool jsonOnly = false,
     DesignProject designProject,
     AssetProcessingService apService,
@@ -30,38 +29,17 @@ abstract class Controller {
       return stopAndToJson(designProject, apService);
     }
 
-    Interpret().init(projectPath);
+    Interpret().init(projectPath, configuration);
 
     var pbProject = await Interpret().interpretAndOptimize(
-        designProject, p.basenameWithoutExtension(projectPath), projectPath);
+        designProject, configuration.projectName, configuration.genProjectPath);
 
     var fpb = FlutterProjectBuilder(
-        project: pbProject, pageWriter: PBFlutterWriter());
+        MainInfo().configuration.generationConfiguration,
+        project: pbProject,
+        pageWriter: PBFlutterWriter());
 
     await fpb.convertToFlutterProject();
-  }
-
-  void configure(var configurationPath, var configType) async {
-    Map configurations;
-    try {
-      if (configurationPath == null || configurationPath.isEmpty) {
-        configurations = MainInfo().defaultConfigs;
-      } else {
-        configurations =
-            json.decode(File(configurationPath).readAsStringSync());
-      }
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-    }
-
-    ///SET CONFIGURATION
-    // Setting configurations globally
-    MainInfo().configurations = configurations;
-    MainInfo().configurationType = configType;
   }
 
   /// Method that returns the given path and ensures

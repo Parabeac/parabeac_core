@@ -72,7 +72,7 @@ void main() {
     setUp(() {
       Interpret().init(
           '${Directory.current.path}/test/lib/interpret_and_optimize/services');
-      MainInfo().configurations = MainInfo().defaultConfigs;
+
       MainInfo().configurationType = 'default';
 
       project = MockProject();

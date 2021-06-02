@@ -39,8 +39,10 @@ class Interpret {
   PBProject _pb_project;
   PBSymbolLinkerService _pbSymbolLinkerService;
   PBPrototypeLinkerService _pbPrototypeLinkerService;
+  PBConfiguration configuration;
 
-  void init(String projectName) {
+  void init(String projectName, configuration) {
+    this.configuration ??= configuration;
     log = Logger(runtimeType.toString());
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
     _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
@@ -103,8 +105,7 @@ class Interpret {
   }
 
   Future<PBIntermediateTree> _generateScreen(DesignScreen designScreen) async {
-    var currentContext =
-        PBContext(PBConfiguration.fromJson(MainInfo().configurations));
+    var currentContext = PBContext(configuration);
 
     var parentComponent = designScreen.designNode;
 

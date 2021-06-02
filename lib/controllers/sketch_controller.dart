@@ -19,14 +19,11 @@ class SketchController extends Controller {
   void convertFile(
     var fileAbsPath,
     var projectPath,
-    var configurationPath,
-    var configType, {
+    configuration, {
     bool jsonOnly = false,
     DesignProject designProject,
     AssetProcessingService apService,
   }) async {
-    configure(configurationPath, configType);
-
     ///INTAKE
     var ids = InputDesignService(fileAbsPath, jsonOnly: jsonOnly);
     var sketchProject = generateSketchNodeTree(
@@ -37,8 +34,7 @@ class SketchController extends Controller {
     super.convertFile(
       fileAbsPath,
       projectPath,
-      configurationPath,
-      configType,
+      configuration,
       designProject: sketchProject,
       jsonOnly: jsonOnly,
       apService: apService,
