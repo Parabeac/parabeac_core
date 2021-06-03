@@ -39,7 +39,7 @@ class PBConfiguration {
   @JsonKey(defaultValue: 'Expanded')
   final String widgetSpacing;
 
-  @JsonKey(defaultValue: 'None')
+  @JsonKey(defaultValue: 'None', name: 'state-management')
   final String stateManagement;
 
   @JsonKey(defaultValue: ['column', 'row', 'stack'])
