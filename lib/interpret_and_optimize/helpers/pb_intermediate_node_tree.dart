@@ -1,6 +1,9 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
+import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
 
 enum TREE_TYPE {
@@ -13,7 +16,9 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   String _UUID;
   String get UUID => _UUID;
 
-  TREE_TYPE tree_type = TREE_TYPE.SCREEN;
+  /// The [TREE_TYPE] of the [PBIntermediateTree].
+  TREE_TYPE _tree_type = TREE_TYPE.SCREEN;
+  TREE_TYPE get tree_type => _tree_type;
 
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.
@@ -37,7 +42,15 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   set rootNode(PBIntermediateNode rootNode) {
     if (!lockData) {
       _rootNode = rootNode;
-      identifier = rootNode?.name ?? name;
+      _identifier ??= rootNode?.name ?? name;
+
+      if (rootNode is InheritedScaffold) {
+        _tree_type = TREE_TYPE.SCREEN;
+      } else if (rootNode is PBSharedMasterNode) {
+        _tree_type = TREE_TYPE.VIEW;
+      } else {
+        _tree_type = TREE_TYPE.MISC;
+      }
     }
   }
 
@@ -47,10 +60,25 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   Set<PBIntermediateTree> _dependentsOn;
   Iterator<PBIntermediateTree> get dependentsOn => _dependentsOn.iterator;
 
-  String name;
-  String identifier;
+  /// The [name] of the original [DesignPage] that the [PBIntermediateTree] belongs to.
+  String _name;
+  String get name => _name;
+  set name(String name) {
+    if (!lockData) {
+      _name = name;
+    }
+  }
 
-  PBIntermediateTree(this.name) {
+  /// [identifier] represents the name of an actual tree or the [DesignScreen],
+  /// while [name] originally represented the [name] of a [DesignPage].
+  ///
+  /// This primarly is used to group all [DesignScreen]s independent of their [UUID],
+  /// platform or orientation. The [identifier] is just going to be set once, its going
+  /// to be the [name] of the [rootNode].
+  String _identifier;
+  String get identifier => _identifier?.snakeCase ?? 'no_name_found';
+
+  PBIntermediateTree(this._name) {
     _dependentsOn = {};
     _UUID = Uuid().v4();
   }
@@ -63,6 +91,13 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
       _dependentsOn.add(dependent);
     }
   }
+
+  /// Checks if the [PBIntermediateTree] is a [TREE_TYPE.SCREEN],
+  /// meaning that the [rootNode] is of type [InheritedScaffold]
+  bool isScreen() => tree_type == TREE_TYPE.SCREEN;
+
+  bool isHomeScreen() =>
+      isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
 
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);

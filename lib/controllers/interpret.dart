@@ -77,27 +77,21 @@ class Interpret {
     var tempForest = <PBIntermediateTree>[];
     var pageItems = designPage.getPageItems();
     for (var i = 0; i < pageItems.length; i++) {
-      var currentScreen = await _generateScreen(pageItems[i]);
-      if (currentScreen != null && currentScreen.rootNode != null) {
-        var tempTree = currentScreen;
-        tempTree.name = designPage.name;
+      var tree = await _generateScreen(pageItems[i]);
+      if (tree != null && tree.rootNode != null) {
+        tree.name = designPage.name;
 
-        tempTree.data = PBGenerationViewData();
-        if (currentScreen.rootNode is InheritedScaffold) {
-          tempTree.tree_type = TREE_TYPE.SCREEN;
+        tree.data = PBGenerationViewData();
+        if (tree.isScreen()) {
           PBPlatformOrientationLinkerService()
-              .addOrientationPlatformInformation(tempTree);
-        } else if (currentScreen.rootNode is PBSharedMasterNode) {
-          tempTree.tree_type = TREE_TYPE.VIEW;
-        } else {
-          tempTree.tree_type = TREE_TYPE.MISC;
+              .addOrientationPlatformInformation(tree);
         }
 
-        if (currentScreen != null) {
+        if (tree != null) {
           log.fine(
-              'Processed \'${currentScreen.name}\' in group \'${designPage.name}\' with item type: \'${tempTree.tree_type}\'');
+              'Processed \'${tree.name}\' in group \'${designPage.name}\' with item type: \'${tree.tree_type}\'');
 
-          tempForest.add(tempTree);
+          tempForest.add(tree);
         }
       }
     }

@@ -1,10 +1,9 @@
-import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
@@ -14,13 +13,13 @@ mixin PBPlatformOrientationGeneration {
   NodeFileStructureCommand generatePlatformInstance(
       Map<String, List<String>> platformsMap,
       String screenName,
-      PBProject mainTree,
+      FileStructureStrategy strategy,
       Set<String> rawImports) {
     var formatedName = screenName.snakeCase.toLowerCase();
     var cookedImports = _cookImports(
         rawImports,
         p.join(
-          mainTree.fileStructureStrategy.GENERATED_PROJECT_PATH,
+          strategy.GENERATED_PROJECT_PATH,
           WriteScreenCommand.SCREEN_PATH,
           formatedName,
           '${formatedName}_platform_builder.dart',

@@ -16,24 +16,26 @@ class StatefulMiddleware extends Middleware {
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    var fileStrategy = configuration.fileStructureStrategy;
+    if (containsState(node) || containsMasterState(node)) {
+      var fileStrategy = configuration.fileStructureStrategy;
 
-    if (node is PBSharedInstanceIntermediateNode) {
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-      return handleNode(node);
-    }
-    var parentDirectory = getName(node.name).snakeCase;
+      if (node is PBSharedInstanceIntermediateNode) {
+        addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+        return handleNode(node);
+      }
+      var parentDirectory = getName(node.name).snakeCase;
 
-    fileStrategy.commandCreated(WriteSymbolCommand(
-        node.UUID, parentDirectory, generationManager.generate(node)));
-
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.tree.data = node.managerData;
       fileStrategy.commandCreated(WriteSymbolCommand(
-          state.variation.node.currentContext.tree.UUID,
-          state.variation.node.name.snakeCase,
-          generationManager.generate(state.variation.node)));
-    });
+          node.UUID, parentDirectory, generationManager.generate(node)));
+
+      node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+        state.variation.node.currentContext.tree.data = node.managerData;
+        fileStrategy.commandCreated(WriteSymbolCommand(
+            state.variation.node.currentContext.tree.UUID,
+            state.variation.node.name.snakeCase,
+            generationManager.generate(state.variation.node)));
+      });
+    }
 
     return handleNode(node);
   }

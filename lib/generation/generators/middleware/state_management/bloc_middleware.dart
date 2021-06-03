@@ -24,89 +24,91 @@ class BLoCMiddleware extends Middleware {
 
   @override
   Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    var managerData = node.managerData;
-    node.currentContext.project.genProjectData
-        .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
-    var fileStrategy = node.currentContext.project.fileStructureStrategy
-        as FlutterFileStructureStrategy;
+    if (containsState(node) || containsMasterState(node)) {
+      var managerData = node.managerData;
+      node.currentContext.project.genProjectData
+          .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+      managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+      var fileStrategy = node.currentContext.project.fileStructureStrategy
+          as FlutterFileStructureStrategy;
 
-    /// Incase of SymbolInstance
-    if (node is PBSharedInstanceIntermediateNode) {
-      var generalStateName = node.functionCallName
-          .substring(0, node.functionCallName.lastIndexOf('/'));
+      /// Incase of SymbolInstance
+      if (node is PBSharedInstanceIntermediateNode) {
+        var generalStateName = node.functionCallName
+            .substring(0, node.functionCallName.lastIndexOf('/'));
 
-      var globalVariableName = getVariableName(node.name.snakeCase);
-      managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
-          '${generalStateName.pascalCase}Bloc()'));
+        var globalVariableName = getVariableName(node.name.snakeCase);
+        managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ',
+            true, '${generalStateName.pascalCase}Bloc()'));
 
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+        addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
 
-      managerData.addToDispose('$globalVariableName.close()');
-      if (node.generator is! StringGeneratorAdapter) {
-        node.generator = StringGeneratorAdapter('''
+        managerData.addToDispose('$globalVariableName.close()');
+        if (node.generator is! StringGeneratorAdapter) {
+          node.generator = StringGeneratorAdapter('''
       BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
         cubit: $globalVariableName,
         builder: (context, state) => state.widget  
       )
       ''');
+        }
+        return handleNode(node);
       }
-      return handleNode(node);
+      var parentState = getNameOfNode(node);
+      var generalName = parentState.snakeCase;
+      var parentDirectory = generalName + '_bloc';
+      var states = <PBIntermediateNode>[node];
+
+      var stateBuffer = StringBuffer();
+
+      node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+        states.add(state.variation.node);
+      });
+
+      var isFirst = true;
+      states.forEach((element) {
+        element.currentContext.tree.data = node.managerData;
+        element.generator.templateStrategy = BLoCStateTemplateStrategy(
+          isFirst: isFirst,
+          abstractClassName: parentState,
+        );
+        stateBuffer.write(generationManager.generate(element));
+        isFirst = false;
+      });
+
+      /// Creates state page
+      fileStrategy.commandCreated(WriteSymbolCommand(
+
+          /// modified the [UUID] to prevent adding import because the state is
+          /// using `part of` syntax already when importing the bloc
+          'STATE${node.currentContext.tree.UUID}',
+          '${generalName}_state',
+          stateBuffer.toString(),
+          relativePath: parentDirectory));
+
+      /// Creates event page
+      fileStrategy.commandCreated(WriteSymbolCommand(
+
+          /// modified the [UUID] to prevent adding import because the event is
+          /// using `part of` syntax already when importing the bloc
+          'EVENT${node.currentContext.tree.UUID}',
+          '${generalName}_event',
+          _createEventPage(parentState),
+          relativePath: parentDirectory));
+
+      /// Creates bloc page
+      managerData.addImport(FlutterImport('meta.dart', 'meta'));
+      fileStrategy.commandCreated(WriteSymbolCommand(
+          node.currentContext.tree.UUID,
+          '${generalName}_bloc',
+          _createBlocPage(
+            parentState,
+            node.name,
+          ),
+          relativePath: parentDirectory));
+
+      return handleNode(null);
     }
-    var parentState = getNameOfNode(node);
-    var generalName = parentState.snakeCase;
-    var parentDirectory = generalName + '_bloc';
-    var states = <PBIntermediateNode>[node];
-
-    var stateBuffer = StringBuffer();
-
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      states.add(state.variation.node);
-    });
-
-    var isFirst = true;
-    states.forEach((element) {
-      element.currentContext.tree.data = node.managerData;
-      element.generator.templateStrategy = BLoCStateTemplateStrategy(
-        isFirst: isFirst,
-        abstractClassName: parentState,
-      );
-      stateBuffer.write(generationManager.generate(element));
-      isFirst = false;
-    });
-
-    /// Creates state page
-    fileStrategy.commandCreated(WriteSymbolCommand(
-
-        /// modified the [UUID] to prevent adding import because the state is
-        /// using `part of` syntax already when importing the bloc
-        'STATE${node.currentContext.tree.UUID}',
-        '${generalName}_state',
-        stateBuffer.toString(),
-        relativePath: parentDirectory));
-
-    /// Creates event page
-    fileStrategy.commandCreated(WriteSymbolCommand(
-
-        /// modified the [UUID] to prevent adding import because the event is
-        /// using `part of` syntax already when importing the bloc
-        'EVENT${node.currentContext.tree.UUID}',
-        '${generalName}_event',
-        _createEventPage(parentState),
-        relativePath: parentDirectory));
-
-    /// Creates bloc page
-    managerData.addImport(FlutterImport('meta.dart', 'meta'));
-    fileStrategy.commandCreated(WriteSymbolCommand(
-        node.currentContext.tree.UUID,
-        '${generalName}_bloc',
-        _createBlocPage(
-          parentState,
-          node.name,
-        ),
-        relativePath: parentDirectory));
-
-    return handleNode(null);
   }
 
   String _createBlocPage(String name, String initialStateName) {
