@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -136,6 +137,6 @@ class BLoCMiddleware extends Middleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return fileStrategy.GENERATED_PROJECT_PATH +
         fileStrategy.RELATIVE_VIEW_PATH +
-        '${generalStateName.snakeCase}_bloc/${getName(symbolMaster.name).snakeCase}_bloc.dart';
+        '${generalStateName.snakeCase}_bloc/${ImportHelper.getName(symbolMaster.name).snakeCase}_bloc.dart';
   }
 }

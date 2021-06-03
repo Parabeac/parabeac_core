@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -47,7 +48,7 @@ class PBSharedInterAggregationService {
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
     for (var prop in sharedMasterNode.overridableProperties) {
-      var targetUUID = _findLastOf(prop?.UUID, '/');
+      var targetUUID = PBInputFormatter.findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
           rootChildNode, targetUUID);
       if (prop.value == null) {
@@ -115,12 +116,4 @@ class PBSharedInterAggregationService {
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
 
-  /// Method that splits `target` according to `delimeter`
-  /// and returns the last entry in the list.
-  String _findLastOf(String target, String delimeter) {
-    if (target == null || delimeter == null) {
-      return '';
-    }
-    return target.split(delimeter).last;
-  }
 }

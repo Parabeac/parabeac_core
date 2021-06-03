@@ -12,8 +12,6 @@ import 'package:parabeac_core/input/sketch/entities/style/context_settings.dart'
 import 'package:parabeac_core/input/sketch/entities/style/fill.dart';
 import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
 import 'package:parabeac_core/input/sketch/entities/style/blur.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 part 'style.g.dart';
 
 @JsonSerializable(nullable: true)
@@ -53,11 +51,19 @@ class Style implements PBStyle {
     this.startMarkerType,
     this.windingRule,
     TextStyle this.textStyle,
+    this.backgroundColor,
+    this.hasShadow,
   }) {
     if (shadows != null) {
       shadows = null;
       innerShadows = null;
       hasShadow = true;
+    }
+    // TODO: add rectangle fill types, for now just copy the fill[0] to the background color
+    if (fills != null && fills.isNotEmpty) {
+      if (fills[0].isEnabled && (fills[0].fillType == 0)) {
+        backgroundColor = fills[0].color;
+      }
     }
   }
 

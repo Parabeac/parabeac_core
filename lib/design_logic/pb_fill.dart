@@ -3,7 +3,9 @@ import 'package:parabeac_core/design_logic/color.dart';
 abstract class PBFill {
   PBColor color;
   bool isEnabled;
-  PBFill(this.color, [this.isEnabled = true]);
+  int fillType;
+
+  PBFill(this.color, this.fillType, [this.isEnabled = true]);
 
   toJson();
 }

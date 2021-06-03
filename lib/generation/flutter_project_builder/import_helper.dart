@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
+import 'package:recase/recase.dart';
 
 class ImportHelper implements FileWriterObserver {
   final Map<String, String> imports = {};
@@ -78,5 +79,13 @@ class ImportHelper implements FileWriterObserver {
     if (filePath != null && fileUUID != null) {
       imports[fileUUID] = filePath;
     }
+  }
+
+  static String getName(String name) {
+    var index = name.indexOf('/');
+    // Remove everything after the /. So if the name is SignUpButton/Default, we end up with SignUpButton as the name we produce.
+    return index < 0
+        ? name
+        : name.replaceRange(index, name.length, '').pascalCase;
   }
 }
