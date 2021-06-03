@@ -109,6 +109,7 @@ class BLoCMiddleware extends Middleware {
 
       return handleNode(null);
     }
+    return handleNode(node);
   }
 
   String _createBlocPage(String name, String initialStateName) {
