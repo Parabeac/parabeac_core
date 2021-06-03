@@ -102,22 +102,23 @@ void main() {
     });
 
     test('BLoC Strategy Test', () async {
+      var relativeViewPath = mockFileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_bloc.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_bloc.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_event.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_event.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_state.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_state.dart')
               .exists(),
           true);
     });
