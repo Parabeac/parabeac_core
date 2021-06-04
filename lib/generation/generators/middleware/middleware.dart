@@ -1,12 +1,11 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/util/stateful_nodes_mixin.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:recase/recase.dart';
 
-abstract class Middleware with StatefulNodeMixin {
+abstract class Middleware {
   static var variableNames = {};
 
   /// Using chain of reponsibility to handle the incoming nodes in the generation phase, [nextMiddleware]

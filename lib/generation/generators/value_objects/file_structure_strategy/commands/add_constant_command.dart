@@ -26,9 +26,10 @@ class AddConstantCommand extends FileStructureCommand {
 
   List<String> _addConstant(List<String> lines) {
     var constStr = 'const $type $name = $value;';
-    if (!lines.contains(constStr)) {
-      lines.add(constStr);
+    var result = List<String>.from(lines);
+    if (!result.contains(constStr)) {
+      result.add(constStr);
     }
-    return lines;
+    return result;
   }
 }

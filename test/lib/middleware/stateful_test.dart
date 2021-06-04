@@ -102,17 +102,18 @@ void main() {
     });
 
     test('Stateful Strategy Test', () async {
+      var relativeViewPath = mockFileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(node);
       expect(tempNode is PBIntermediateNode, true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element/some_element_blue.dart')
+                  '${testingPath}${relativeViewPath}some_element/some_element_blue.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element/some_element_green.dart')
+                  '${testingPath}${relativeViewPath}some_element/some_element_green.dart')
               .exists(),
           true);
     });

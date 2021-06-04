@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -76,7 +75,7 @@ void main() {
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
       when(intermediateTree.dependentOn)
-          .thenReturn(HasNextIterator(null) as Iterator<PBIntermediateTree>);
+          .thenReturn(<PBIntermediateTree>[].iterator);
 
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
