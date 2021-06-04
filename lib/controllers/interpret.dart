@@ -41,7 +41,7 @@ class Interpret {
   PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBConfiguration configuration;
 
-  void init(String projectName, configuration) {
+  void init(String projectName, PBConfiguration configuration) {
     this.configuration ??= configuration;
     log = Logger(runtimeType.toString());
     _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
