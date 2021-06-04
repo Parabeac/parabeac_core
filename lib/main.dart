@@ -130,10 +130,9 @@ ${parser.usage}
   MainInfo().configuration = configuration;
 
   // Create pngs directory
-
-  await Directory('${MainInfo().outputPath}' +
-          (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'))
-      .create(recursive: true);
+  var pngsPath = p.join(MainInfo().outputPath,
+      (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'));
+  await Directory(pngsPath).create(recursive: true);
 
   if (designType == 'sketch') {
     if (argResults['pbdl-in'] != null) {

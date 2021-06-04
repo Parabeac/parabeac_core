@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_element.dart';
@@ -93,11 +94,11 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
+    var pngsPath =
+        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
     try {
       var img = await AzureAssetService().downloadImage(UUID);
-      var file =
-          File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
-            ..createSync(recursive: true);
+      var file = File(pngsPath)..createSync(recursive: true);
       file.writeAsBytesSync(img);
       return Future.value(InheritedBitmap(
         this,
@@ -105,12 +106,10 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
         currentContext: currentContext,
       ));
     } catch (e) {
-      var img = File(
-              '${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
-          .readAsBytesSync();
-      var file =
-          File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
-            ..createSync(recursive: true);
+      var errPath = p.join(MainInfo().cwd?.path, 'lib', 'input', 'assets',
+          'image-conversion-error.png');
+      var img = File(errPath).readAsBytesSync();
+      var file = File(pngsPath)..createSync(recursive: true);
       file.writeAsBytesSync(img);
       return Future.value(InheritedBitmap(
         this,

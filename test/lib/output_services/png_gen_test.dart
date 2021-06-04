@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
@@ -93,7 +94,8 @@ void main() async {
       await FigmaAssetProcessor().processImageQueue();
       for (var uuid in FigmaAssetProcessor().uuidQueue) {
         expect(
-            File('${MainInfo().outputPath}pngs/$uuid.png'.replaceAll(':', '_'))
+            File(p.join(MainInfo().outputPath, 'pngs',
+                    '$uuid.png'.replaceAll(':', '_')))
                 .existsSync(),
             true);
       }

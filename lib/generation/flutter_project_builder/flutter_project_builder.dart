@@ -70,10 +70,11 @@ class FlutterProjectBuilder {
       await FigmaAssetProcessor().processImageQueue();
     }
 
+    var pngsPath = p.join(MainInfo().outputPath, 'pngs', '*');
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
         [
-          'mv ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
+          'mv $pngsPath ${pathToFlutterProject}assets/images/'
         ],
         runInShell: true,
         environment: Platform.environment,

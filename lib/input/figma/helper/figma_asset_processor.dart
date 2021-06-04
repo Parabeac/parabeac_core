@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:http/http.dart' as http;
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -85,10 +86,9 @@ class FigmaAssetProcessor extends AssetProcessingService {
                 }
 
                 if (writeAsFile) {
-                  var file = File(
-                      '${MainInfo().outputPath}pngs/${entry.key}.png'
-                          .replaceAll(':', '_'))
-                    ..createSync(recursive: true);
+                  var pngsPath = p.join(MainInfo().outputPath, 'pngs',
+                      '${entry.key}.png'.replaceAll(':', '_'));
+                  var file = File(pngsPath)..createSync(recursive: true);
                   file.writeAsBytesSync(imageRes.bodyBytes);
                 } else {
                   await super.uploadToStorage(imageRes.bodyBytes, entry.key);
