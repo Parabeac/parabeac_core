@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/util/stateful_nodes_mixin.da
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:recase/recase.dart';
 
 abstract class Middleware with StatefulNodeMixin {
@@ -28,13 +29,13 @@ abstract class Middleware with StatefulNodeMixin {
   }
 
   /// Applying the [Middleware] logic to the [node]; modifying it or even eliminating it by returning `null`.
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) =>
-      handleNode(node);
+  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree) =>
+      handleTree(tree);
 
-  Future<PBIntermediateNode> handleNode(PBIntermediateNode node) {
+  Future<PBIntermediateTree> handleTree(PBIntermediateTree tree) {
     return nextMiddleware == null
-        ? Future.value(node)
-        : nextMiddleware.applyMiddleware(node);
+        ? Future.value(tree)
+        : nextMiddleware.applyMiddleware(tree);
   }
 
   void addImportToCache(String id, String path) {

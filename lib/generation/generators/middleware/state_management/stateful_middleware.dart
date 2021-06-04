@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -9,36 +9,10 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.d
 import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
 
-class StatefulMiddleware extends Middleware {
+class StatefulMiddleware extends StateManagementMiddleware {
   StatefulMiddleware(PBGenerationManager generationManager,
       GenerationConfiguration configuration)
       : super(generationManager, configuration);
-
-  @override
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    if (containsState(node) || containsMasterState(node)) {
-      var fileStrategy = configuration.fileStructureStrategy;
-
-      if (node is PBSharedInstanceIntermediateNode) {
-        addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-        return handleNode(node);
-      }
-      var parentDirectory = getName(node.name).snakeCase;
-
-      fileStrategy.commandCreated(WriteSymbolCommand(
-          node.UUID, parentDirectory, generationManager.generate(node)));
-
-      node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-        state.variation.node.currentContext.tree.data = node.managerData;
-        fileStrategy.commandCreated(WriteSymbolCommand(
-            state.variation.node.currentContext.tree.UUID,
-            state.variation.node.name.snakeCase,
-            generationManager.generate(state.variation.node)));
-      });
-    }
-
-    return handleNode(node);
-  }
 
   String getImportPath(PBSharedInstanceIntermediateNode node,
       FileStructureStrategy fileStrategy) {
@@ -50,5 +24,28 @@ class StatefulMiddleware extends Middleware {
         getName(symbolMaster.name).snakeCase,
         node.functionCallName.snakeCase);
     return path;
+  }
+
+  @override
+  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node) {
+    var fileStrategy = configuration.fileStructureStrategy;
+
+    if (node is PBSharedInstanceIntermediateNode) {
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+      return Future.value(node);
+    }
+    var parentDirectory = getName(node.name).snakeCase;
+
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        node.UUID, parentDirectory, generationManager.generate(node)));
+
+    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      state.variation.node.currentContext.tree.data = node.managerData;
+      fileStrategy.commandCreated(WriteSymbolCommand(
+          state.variation.node.currentContext.tree.UUID,
+          state.variation.node.name.snakeCase,
+          generationManager.generate(state.variation.node)));
+    });
+    return Future.value(null);
   }
 }

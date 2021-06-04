@@ -1,6 +1,6 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
-import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
@@ -20,7 +20,7 @@ import 'package:path/path.dart' as p;
 
 import '../../pb_flutter_generator.dart';
 
-class ProviderMiddleware extends Middleware {
+class ProviderMiddleware extends StateManagementMiddleware {
   final PACKAGE_NAME = 'provider';
   final PACKAGE_VERSION = '^4.3.2+3';
 
@@ -28,36 +28,51 @@ class ProviderMiddleware extends Middleware {
       ProviderGenerationConfiguration configuration)
       : super(generationManager, configuration);
 
+  String getImportPath(PBSharedInstanceIntermediateNode node,
+      ProviderFileStructureStrategy fileStrategy,
+      {bool generateModelPath = true}) {
+    var symbolMaster =
+        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+
+    var import = generateModelPath
+        ? p.join(fileStrategy.RELATIVE_MODEL_PATH,
+            getName(symbolMaster.name).snakeCase)
+        : p.join(
+            FileStructureStrategy.RELATIVE_VIEW_PATH,
+            getName(symbolMaster.name).snakeCase,
+            node.functionCallName.snakeCase);
+    return p.join(fileStrategy.GENERATED_PROJECT_PATH, import);
+  }
+
   @override
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    if (containsState(node) || containsMasterState(node)) {
-      String watcherName;
-      var managerData = node.managerData;
-      var fileStrategy =
-          configuration.fileStructureStrategy as ProviderFileStructureStrategy;
-      if (node is PBSharedInstanceIntermediateNode) {
-        node.currentContext.project.genProjectData
-            .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-        managerData.addImport(FlutterImport('provider.dart', 'provider'));
-        watcherName = getVariableName(node.name.snakeCase + '_notifier');
-        var widgetName = node.functionCallName.camelCase;
-        var watcher;
+  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node) {
+    String watcherName;
+    var managerData = node.managerData;
+    var fileStrategy =
+        configuration.fileStructureStrategy as ProviderFileStructureStrategy;
+    if (node is PBSharedInstanceIntermediateNode) {
+      node.currentContext.project.genProjectData
+          .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+      managerData.addImport(FlutterImport('provider.dart', 'provider'));
+      watcherName = getVariableName(node.name.snakeCase + '_notifier');
+      var widgetName = node.functionCallName.camelCase;
+      var watcher;
 
-        if (node.currentContext.tree.rootNode.generator.templateStrategy
-            is StatelessTemplateStrategy) {
-          watcher = PBVariable(watcherName, 'final ', true,
-              '${getName(node.functionCallName).pascalCase}().$widgetName');
-          managerData.addGlobalVariable(watcher);
-        }
+      if (node.currentContext.tree.rootNode.generator.templateStrategy
+          is StatelessTemplateStrategy) {
+        watcher = PBVariable(watcherName, 'final ', true,
+            '${getName(node.functionCallName).pascalCase}().$widgetName');
+        managerData.addGlobalVariable(watcher);
+      }
 
-        addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-        PBGenCache().appendToCache(node.SYMBOL_ID,
-            getImportPath(node, fileStrategy, generateModelPath: false));
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+      PBGenCache().appendToCache(node.SYMBOL_ID,
+          getImportPath(node, fileStrategy, generateModelPath: false));
 
-        if (node.generator is! StringGeneratorAdapter) {
-          var modelName = getName(node.functionCallName).pascalCase;
-          var defaultWidget = node.functionCallName.pascalCase;
-          var providerWidget = '''
+      if (node.generator is! StringGeneratorAdapter) {
+        var modelName = getName(node.functionCallName).pascalCase;
+        var defaultWidget = node.functionCallName.pascalCase;
+        var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
               $modelName(), 
@@ -81,69 +96,51 @@ class ProviderMiddleware extends Middleware {
           ),
         )
         ''';
-          node.generator = StringGeneratorAdapter(providerWidget);
-        }
-
-        return handleNode(node);
+        node.generator = StringGeneratorAdapter(providerWidget);
       }
-      watcherName = getNameOfNode(node);
 
-      var parentDirectory = getName(node.name).snakeCase;
-
-      // Generate model's imports
-      var modelGenerator = PBFlutterGenerator(ImportHelper(),
-          data: PBGenerationViewData()
-            ..addImport(FlutterImport('material.dart', 'flutter')));
-      // Write model class for current node
-      var code = MiddlewareUtils.generateModelChangeNotifier(
-          watcherName, modelGenerator, node);
-
-      [
-        /// This generated the `changeNotifier` that goes under the [fileStrategy.RELATIVE_MODEL_PATH]
-        WriteSymbolCommand(
-          node.currentContext.tree.UUID,
-          parentDirectory,
-          code,
-          symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
-        ),
-        // Generate default node's view page
-        WriteSymbolCommand(node.currentContext.tree.UUID, node.name.snakeCase,
-            generationManager.generate(node),
-            relativePath: parentDirectory),
-      ].forEach(fileStrategy.commandCreated);
-
-      (configuration as ProviderGenerationConfiguration)
-          .registeredModels
-          .add(watcherName);
-
-      // Generate node's states' view pages
-      node.auxiliaryData?.stateGraph?.states?.forEach((state) {
-        fileStrategy.commandCreated(WriteSymbolCommand(
-          state.variation.node.currentContext.tree.UUID,
-          state.variation.node.name.snakeCase,
-          generationManager.generate(state.variation.node),
-          relativePath: parentDirectory,
-        ));
-      });
-
-      return handleNode(null);
+      return Future.value(node);
     }
-    return handleNode(node);
-  }
+    watcherName = getNameOfNode(node);
 
-  String getImportPath(PBSharedInstanceIntermediateNode node,
-      ProviderFileStructureStrategy fileStrategy,
-      {bool generateModelPath = true}) {
-    var symbolMaster =
-        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+    var parentDirectory = getName(node.name).snakeCase;
 
-    var import = generateModelPath
-        ? p.join(fileStrategy.RELATIVE_MODEL_PATH,
-            getName(symbolMaster.name).snakeCase)
-        : p.join(
-            FileStructureStrategy.RELATIVE_VIEW_PATH,
-            getName(symbolMaster.name).snakeCase,
-            node.functionCallName.snakeCase);
-    return p.join(fileStrategy.GENERATED_PROJECT_PATH, import);
+    // Generate model's imports
+    var modelGenerator = PBFlutterGenerator(ImportHelper(),
+        data: PBGenerationViewData()
+          ..addImport(FlutterImport('material.dart', 'flutter')));
+    // Write model class for current node
+    var code = MiddlewareUtils.generateModelChangeNotifier(
+        watcherName, modelGenerator, node);
+
+    [
+      /// This generated the `changeNotifier` that goes under the [fileStrategy.RELATIVE_MODEL_PATH]
+      WriteSymbolCommand(
+        node.currentContext.tree.UUID,
+        parentDirectory,
+        code,
+        symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
+      ),
+      // Generate default node's view page
+      WriteSymbolCommand(node.currentContext.tree.UUID, node.name.snakeCase,
+          generationManager.generate(node),
+          relativePath: parentDirectory),
+    ].forEach(fileStrategy.commandCreated);
+
+    (configuration as ProviderGenerationConfiguration)
+        .registeredModels
+        .add(watcherName);
+
+    // Generate node's states' view pages
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        state.variation.node.currentContext.tree.UUID,
+        state.variation.node.name.snakeCase,
+        generationManager.generate(state.variation.node),
+        relativePath: parentDirectory,
+      ));
+    });
+
+    return Future.value(null);
   }
 }

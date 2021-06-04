@@ -41,7 +41,7 @@ class MiddlewareUtils {
         stateInitializers.write(
             '${variationNode.name.camelCase} = ${MiddlewareUtils.generateVariableBody(variationNode)}');
       } else {
-        stateBuffer.write(MiddlewareUtils.generateVariable(variationNode));
+        stateBuffer.writeln(MiddlewareUtils.generateVariable(variationNode));
       }
     });
 
@@ -87,7 +87,7 @@ class MiddlewareUtils {
 
   static String generateVariable(PBIntermediateNode node,
       {String type = 'var'}) {
-    return '$type ${node.name.camelCase} = ${generateVariableBody(node)}';
+    return '$type ${node.name.camelCase} = ${generateVariableBody(node)};';
   }
 
   static String generateEmptyVariable(PBIntermediateNode node,

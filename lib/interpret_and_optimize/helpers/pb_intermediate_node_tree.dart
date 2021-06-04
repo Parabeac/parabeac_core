@@ -42,7 +42,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   set rootNode(PBIntermediateNode rootNode) {
     if (!lockData) {
       _rootNode = rootNode;
-      _identifier ??= rootNode?.name ?? name;
+      _identifier ??= rootNode?.name?.snakeCase ?? name.snakeCase;
 
       if (rootNode is InheritedScaffold) {
         _tree_type = TREE_TYPE.SCREEN;
@@ -62,7 +62,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
 
   /// The [name] of the original [DesignPage] that the [PBIntermediateTree] belongs to.
   String _name;
-  String get name => _name;
+  String get name => _name.snakeCase;
   set name(String name) {
     if (!lockData) {
       _name = name;
