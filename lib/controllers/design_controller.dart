@@ -15,22 +15,18 @@ class DesignController extends Controller {
   void convertFile(
     var pbdf,
     var outputPath,
-    var configurationPath,
-    var configType, {
+    configuration, {
     bool jsonOnly = false,
     DesignProject designProject,
     AssetProcessingService apService,
   }) async {
-    configure(configurationPath, configType);
-
     var designProject = generateDesignProject(pbdf, outputPath);
     AzureAssetService().projectUUID = pbdf['id'];
 
     super.convertFile(
       pbdf,
       outputPath,
-      configurationPath,
-      configType,
+      configuration,
       designProject: designProject,
       jsonOnly: jsonOnly,
     );

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:sentry/sentry.dart';
 
 class MainInfo {
@@ -16,7 +17,7 @@ class MainInfo {
 
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
-  Map<String, dynamic> configurations;
+  PBConfiguration configuration;
 
   // the type of configuration you want to set, 'default' is default type.
   String configurationType;
@@ -35,14 +36,6 @@ class MainInfo {
 
   /// Boolean that indicates whether a `styles` document is created.
   bool exportStyles;
-
-  Map<String, dynamic> defaultConfigs = {
-    'widgetStyle': 'Material',
-    'widgetType': 'Stateless',
-    'widgetSpacing': 'Expanded',
-    'layoutPrecedence': ['columns', 'rows', 'stack'],
-    'state-management': 'None'
-  };
 
   Map pbdf;
 

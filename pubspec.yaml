@@ -21,7 +21,7 @@ dependencies:
   recase: "^3.0.0"
   tuple: ^1.0.3
   azblob: ^1.0.3
-#  path: ^1.6.0
+  path: ^1.6.0
 
 dev_dependencies:
   pedantic: ^1.8.0

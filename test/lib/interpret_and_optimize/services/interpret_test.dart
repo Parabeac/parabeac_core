@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_containe
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -71,8 +72,10 @@ void main() {
   group('Interpret test', () {
     setUp(() {
       Interpret().init(
-          '${Directory.current.path}/test/lib/interpret_and_optimize/services');
-      MainInfo().configurations = MainInfo().defaultConfigs;
+        '${Directory.current.path}/test/lib/interpret_and_optimize/services',
+        PBConfiguration.genericConfiguration(),
+      );
+
       MainInfo().configurationType = 'default';
 
       project = MockProject();
@@ -122,9 +125,8 @@ void main() {
       ));
     });
     test('', () async {
-      var mainTree = await Interpret().interpretAndOptimize(
-        project,
-      );
+      var mainTree = await Interpret()
+          .interpretAndOptimize(project, 'projectName', 'projectPath');
       expect(mainTree != null, true);
       expect(mainTree is PBProject, true);
       expect(mainTree.forest.first.rootNode is InheritedScaffold, true);

@@ -9,6 +9,7 @@ import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/services/input_design.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
@@ -17,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
 import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
+import 'package:path/path.dart' as p;
 
 ArgResults argResults;
 
@@ -47,7 +49,8 @@ void main(List<String> args) async {
     ..addOption('config-path',
         help: 'Path of the configuration file',
         abbr: 'c',
-        defaultsTo: 'default:lib/configurations/configurations.json')
+        defaultsTo:
+            '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
     ..addOption(
@@ -80,14 +83,12 @@ ${parser.usage}
     exit(0);
   }
 
+  var configuration =
+      generateConfiguration(p.normalize(argResults['config-path']));
+
   // Detect platform
-  if (Platform.isMacOS || Platform.isLinux) {
-    MainInfo().platform = 'UIX';
-  } else if (Platform.isWindows) {
-    MainInfo().platform = 'WIN';
-  } else {
-    MainInfo().platform = 'OTH';
-  }
+  MainInfo().platform = Platform.operatingSystem;
+  configuration.platform = Platform.operatingSystem;
 
   String path = argResults['path'];
 
@@ -98,8 +99,8 @@ ${parser.usage}
   MainInfo().exportStyles = argResults['include-styles'];
   var jsonOnly = argResults['export-pbdl'];
 
-  var configurationPath = argResults['config-path'];
-  var configurationType = 'default';
+  // var configurationPath = argResults['config-path'];
+  // var configurationType = 'default';
   String projectName = argResults['project-name'];
 
   // Handle input errors
@@ -117,31 +118,21 @@ ${parser.usage}
     designType = 'pbdl';
   }
 
-  //  usage -c "default:lib/configurations/configurations.json
-  var configSet = configurationPath.split(':');
-  if (configSet.isNotEmpty) {
-    configurationType = configSet[0];
-  }
-  if (configSet.length >= 2) {
-    // handle configurations
-    configurationPath = configSet[1];
-  }
-
   // Populate `MainInfo()`
-  MainInfo().outputPath = argResults['out'];
+
   // If outputPath is empty, assume we are outputting to design file path
-  MainInfo().outputPath ??= await getCleanPath(path ?? Directory.current.path);
-  if (!MainInfo().outputPath.endsWith('/')) {
-    MainInfo().outputPath += '/';
-  }
+  MainInfo().outputPath = (p.absolute(
+      p.normalize(argResults['out'] ?? p.dirname(path ?? Directory.current))));
+  configuration.outputDirPath = MainInfo().outputPath;
 
   MainInfo().projectName = projectName;
+  configuration.projectName = projectName;
+  MainInfo().configuration = configuration;
 
   // Create pngs directory
-
-  await Directory('${MainInfo().outputPath}' +
-          (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'))
-      .create(recursive: true);
+  var pngsPath = p.join(MainInfo().outputPath,
+      (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'));
+  await Directory(pngsPath).create(recursive: true);
 
   if (designType == 'sketch') {
     if (argResults['pbdl-in'] != null) {
@@ -157,7 +148,7 @@ ${parser.usage}
       if (!file || !exists) {
         handleError('$path is not a file');
       }
-      MainInfo().sketchPath = path;
+      MainInfo().sketchPath = p.normalize(p.absolute(path));
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
@@ -189,8 +180,7 @@ ${parser.usage}
     SketchController().convertFile(
       path,
       MainInfo().outputPath + projectName,
-      configurationPath,
-      configurationType,
+      configuration,
       jsonOnly: jsonOnly,
       apService: SketchAssetProcessor(),
     );
@@ -220,8 +210,7 @@ ${parser.usage}
       FigmaController().convertFile(
         jsonOfFigma,
         MainInfo().outputPath + projectName,
-        configurationPath,
-        configurationType,
+        configuration,
         jsonOnly: jsonOnly,
         apService: FigmaAssetProcessor(),
       );
@@ -244,8 +233,7 @@ ${parser.usage}
     DesignController().convertFile(
       pbdf,
       MainInfo().outputPath + projectName,
-      configurationPath,
-      configurationType,
+      configuration,
     );
   }
   exitCode = 0;
@@ -272,6 +260,24 @@ Future<void> checkConfigFile() async {
   }
 
   addToAmplitude();
+}
+
+/// Generating the [PBConfiguration] based in the configuration file in [path]
+PBConfiguration generateConfiguration(String path) {
+  var configuration;
+  try {
+    ///SET CONFIGURATION
+    // Setting configurations globally
+    configuration =
+        PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
+  } catch (e, stackTrace) {
+    MainInfo().sentry.captureException(
+          exception: e,
+          stackTrace: stackTrace,
+        );
+  }
+  configuration ??= PBConfiguration.genericConfiguration();
+  return configuration;
 }
 
 /// Gets the homepath of the user according to their OS
@@ -307,21 +313,6 @@ void addToAmplitude() async {
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: body,
   );
-}
-
-Future<String> getCleanPath(String path) async {
-  if (path == null || path.isEmpty) {
-    return '';
-  }
-  var list = path.split('/');
-  if (!await Directory(path).exists()) {
-    list.removeLast();
-  }
-  var result = '';
-  for (var dir in list) {
-    result += dir + '/';
-  }
-  return result;
 }
 
 /// Returns true if `args` contains two or more

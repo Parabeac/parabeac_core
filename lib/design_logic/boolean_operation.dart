@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
@@ -32,9 +33,9 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var img = await AzureAssetService().downloadImage(UUID);
-    var file =
-        File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
-          ..createSync(recursive: true);
+    var path =
+        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
+    var file = File(path)..createSync(recursive: true);
     file.writeAsBytesSync(img);
 
     return Future.value(InheritedBitmap(

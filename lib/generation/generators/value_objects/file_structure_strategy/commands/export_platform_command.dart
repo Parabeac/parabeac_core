@@ -8,7 +8,7 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
   PLATFORM platform;
   String fileName;
   String folderName;
-  final String WIDGET_PATH = 'lib/screens';
+  static final String WIDGET_PATH = 'lib/screens';
 
   ExportPlatformCommand(
     String UUID,
@@ -22,7 +22,8 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
   Future write(FileStructureStrategy strategy) async {
     var path = p.join(
       strategy.GENERATED_PROJECT_PATH,
-      '$WIDGET_PATH/$folderName/',
+      WIDGET_PATH,
+      folderName,
       platform.toString().toLowerCase().replaceAll('platform.', ''),
     );
     strategy.writeDataToFile(code, path, fileName, UUID: UUID);

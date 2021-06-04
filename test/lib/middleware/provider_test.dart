@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -45,9 +46,11 @@ class MockTree extends Mock implements PBIntermediateTree {}
 
 void main() {
   group('Middlewares Tests', () {
+    var config = ProviderGenerationConfiguration();
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
-    var providerMiddleware = ProviderMiddleware(mockPBGenerationManager);
+    var providerMiddleware =
+        ProviderMiddleware(mockPBGenerationManager, config);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -103,7 +106,7 @@ void main() {
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(mockProject.fileStructureStrategy)
+      when(config.fileStructureStrategy)
           .thenReturn(providerFileStructureStrategy);
 
       /// PBGenerationManager
@@ -115,7 +118,7 @@ void main() {
 
     test('Provider Strategy Test', () async {
       await providerFileStructureStrategy.setUpDirectories();
-      var tempNode = await providerMiddleware.applyMiddleware(node);
+      var tempNode = await providerMiddleware.applyMiddleware(mockTree);
       expect(tempNode is PBIntermediateNode, true);
       expect(await File('${testingPath}lib/models/some_element.dart').exists(),
           true);

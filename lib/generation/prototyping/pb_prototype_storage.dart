@@ -29,7 +29,7 @@ class PBPrototypeStorage {
       return false;
     }
 
-    PBPrototypeAggregationService()
+    await PBPrototypeAggregationService()
         .analyzeIntermediateNode(prototypeNode);
     _pbPrototypeInstanceNodes['${prototypeNode.UUID}'] = prototypeNode;
     return true;
@@ -39,7 +39,7 @@ class PBPrototypeStorage {
     if (_pbPages.containsKey(pageNode.UUID)) {
       return false;
     }
-    // await TODO:
+    await PBPrototypeAggregationService().analyzeIntermediateNode(pageNode);
     _pbPages['${pageNode.UUID}'] = pageNode;
     return true;
   }

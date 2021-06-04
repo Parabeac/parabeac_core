@@ -16,25 +16,29 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 ///Responsible for creating a particular file structure depending in the structure
 ///
 ///For example, in the provider strategy, there would be a directory for the models and the providers,
-///while something like BLoC will assign a directory to a single
+///while something like BLoC will assign a directory to a single.
+///
 abstract class FileStructureStrategy implements CommandInvoker {
-  ///The path of where all the views are going to be generated.
+  final Logger logger = Logger('FileStructureStrategy');
+
+  ///The `default` path of where all the views are going to be generated.
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  final RELATIVE_VIEW_PATH = 'lib/widgets/';
+  static final RELATIVE_VIEW_PATH = 'lib/widgets/';
 
-  ///The path of where all the screens are going to be generated.
-  final RELATIVE_SCREEN_PATH = 'lib/screens/';
-
-  Logger logger;
+  ///The `default` path of where all the screens are going to be generated.
+  static final RELATIVE_SCREEN_PATH = 'lib/screens/';
 
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
 
+  @Deprecated(
+      'Each of the methods should be receiving its own [PBProject] instance.')
   final PBProject _pbProject;
 
-  ///The page writer used to generated the actual files.
+  @Deprecated(
+      'We are now using the [FileStructureCommands] instead of the page Writter')
   final PBPageWriter _pageWriter;
   PBPageWriter get pageWriter => _pageWriter;
 
@@ -50,13 +54,25 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///Before generating any files, the caller must call the [setUpDirectories]
   bool isSetUp = false;
 
+  /// By the [FileStructureStrategy] being in [dryRunMode], the [FileStructureStrategy] is not
+  /// going to create anyFiles.
+  ///
+  /// Primarly, this mode is to notify the [fileObservers] of a "file creation", without performing
+  /// the actual creation. A good example of this comes with the [ImportHelper], this oberserver will
+  /// be documenting the files that are being created as imports to be used later.
+  bool dryRunMode = false;
+
+  /// Notifies the [fileObserver] of when a file supposed to be created.
+  bool notifyObserverInDryRun = true;
+
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
   FileStructureStrategy(
-      this.GENERATED_PROJECT_PATH, this._pageWriter, this._pbProject) {
-    logger = Logger(runtimeType.toString());
-  }
+    this.GENERATED_PROJECT_PATH,
+    this._pageWriter,
+    this._pbProject,
+  );
 
   void addFileObserver(FileWriterObserver observer) {
     if (observer != null) {
@@ -70,8 +86,9 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
     if (!isSetUp) {
-      _screenDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_SCREEN_PATH';
-      _viewDirectoryPath = '$GENERATED_PROJECT_PATH$RELATIVE_VIEW_PATH';
+      _screenDirectoryPath =
+          p.join(GENERATED_PROJECT_PATH, RELATIVE_SCREEN_PATH);
+      _viewDirectoryPath = p.join(GENERATED_PROJECT_PATH, RELATIVE_VIEW_PATH);
       _pbProject.forest.forEach((dir) {
         if (dir.rootNode != null) {
           addImportsInfo(dir);
@@ -92,18 +109,21 @@ abstract class FileStructureStrategy implements CommandInvoker {
     if (name != null) {
       var uuid = node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID;
       var path = node is PBSharedMasterNode
-          ? '$_viewDirectoryPath${tree.name.snakeCase}/$name.dart' // Removed .g
-          : '$_screenDirectoryPath${tree.name.snakeCase}/$name.dart';
+          ? p.join(_viewDirectoryPath, tree.name.snakeCase, name)
+          : p.join(_screenDirectoryPath, tree.name.snakeCase, name);
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
-        path =
-            '$_screenDirectoryPath$name/${poLinker.stripPlatform(tree.rootNode.managerData.platform)}/$name.dart';
+        path = p.join(_screenDirectoryPath, name,
+            poLinker.stripPlatform(tree.rootNode.managerData.platform), name);
       }
+
       PBGenCache().setPathToCache(uuid, path);
     } else {
       logger.warning(
           'The following intermediateNode was missing a name: ${tree.toString()}');
     }
   }
+
+  @Deprecated('Please use the method [writeDataToFile] to write into the files')
 
   ///Writing the code to the actual file
   ///
@@ -112,14 +132,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
   Future<void> generatePage(String code, String fileName, {var args}) {
     if (args is String) {
       var path = args == 'SCREEN'
-          ? '$_screenDirectoryPath$fileName.dart'
-          : '$_viewDirectoryPath$fileName.dart'; // Removed .g
-      pageWriter.write(code, path);
+          ? p.join(_screenDirectoryPath, fileName)
+          : p.join(_viewDirectoryPath, fileName);
+      pageWriter.write(code, p.setExtension(path, '.dart'));
     }
     return Future.value();
   }
 
-  String getViewPath(String fileName) => '$_viewDirectoryPath$fileName.dart';
+  String getViewPath(String fileName) =>
+      p.setExtension(p.join(_viewDirectoryPath, fileName), '.dart');
 
   @override
   void commandCreated(FileStructureCommand command) {
@@ -137,13 +158,20 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   /// [FileWriterObserver]s are going to be notfied of the new created file.
   void writeDataToFile(String data, String directory, String name,
-      {String UUID}) {
-    var file = getFile(directory, name);
-    file.createSync(recursive: true);
-    file.writeAsStringSync(data);
+      {String UUID, String ext = '.dart'}) {
+    var file = getFile(directory, p.setExtension(name, ext));
 
-    fileObservers.forEach((observer) => observer.fileCreated(
-        file.path, UUID ?? p.basenameWithoutExtension(file.path)));
+    if (!dryRunMode) {
+      file.createSync(recursive: true);
+      file.writeAsStringSync(data);
+      _notifyObservers(file.path, UUID);
+    } else if (notifyObserverInDryRun) {
+      _notifyObservers(file.path, UUID);
+    }
+  }
+
+  void _notifyObservers(String path, String UUID) {
+    fileObservers.forEach((observer) => observer.fileCreated(path, UUID));
   }
 
   /// Appends [data] into [directory] with the file [name]
@@ -154,13 +182,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// appends the information only if that information does not exist in the file. If no
   /// [ModFile] function is found, its going to append the information at the end of the lines
   void appendDataToFile(ModFile modFile, String directory, String name,
-      {String UUID, bool createFileIfNotFound = true}) {
+      {String UUID, bool createFileIfNotFound = true, String ext = '.dart'}) {
+    name = p.setExtension(name, ext);
     var file = getFile(directory, name);
     if (file.existsSync()) {
       var fileLines = file.readAsLinesSync();
+      var length = fileLines.length;
       var modLines = modFile(fileLines);
 
-      if (fileLines != modLines) {
+      if (modLines.length != length) {
         var buffer = StringBuffer();
         modLines.forEach(buffer.writeln);
         file.writeAsStringSync(buffer.toString());

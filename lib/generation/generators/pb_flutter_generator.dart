@@ -77,7 +77,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     var buffer = StringBuffer();
     var it = data.imports;
     while (it.moveNext()) {
-      buffer.write('import \'${it.current}\';\n');
+      buffer.write(it.current.toString());
     }
     return buffer.toString();
   }

@@ -27,16 +27,20 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
   IntermediateTopoIterator(this.trees) {
     trees = topologicalSort(trees);
     if (trees.isNotEmpty) {
-      _currentElement = trees[0];
       trees = List.from(trees.reversed);
+      _currentElement = trees[0];
     }
   }
 
+  ///Calculating the in-degrees that are comming in to a [PBIntermediateTree].
+  ///
+  ///Its traversing each of the [PBIntermediateTree] in the [items], documenting
+  ///that the in-degrees of each of the nodes.
   HashMap<E, int> _inDegrees(List<PBIntermediateTree> items) {
     var inDegree = HashMap<E, int>();
     items.forEach((tree) {
       inDegree.putIfAbsent(tree, () => 0);
-      var dependentOnIterator = tree.dependentOn;
+      var dependentOnIterator = tree.dependentsOn;
       while (dependentOnIterator.moveNext()) {
         inDegree.update(dependentOnIterator.current, (value) => value + 1,
             ifAbsent: () => 1);
@@ -61,7 +65,7 @@ class IntermediateTopoIterator<E extends PBIntermediateTree>
       var vertex = noInDegrees.first;
       noInDegrees.remove(vertex);
       ordered.add(vertex);
-      var it = vertex.dependentOn;
+      var it = vertex.dependentsOn;
       while (it.moveNext()) {
         inDegrees[it.current] = inDegrees[it.current] - 1;
         if (inDegrees[it.current] == 0) {
