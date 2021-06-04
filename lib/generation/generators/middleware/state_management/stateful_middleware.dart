@@ -34,10 +34,11 @@ class StatefulMiddleware extends StateManagementMiddleware {
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
       return Future.value(node);
     }
-    var parentDirectory = getName(node.name).snakeCase;
 
     fileStrategy.commandCreated(WriteSymbolCommand(
-        node.UUID, parentDirectory, generationManager.generate(node)));
+        node.currentContext.tree.UUID,
+        node.name.snakeCase,
+        generationManager.generate(node)));
 
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       state.variation.node.currentContext.tree.data = node.managerData;
