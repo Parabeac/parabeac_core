@@ -148,7 +148,7 @@ ${parser.usage}
       if (!file || !exists) {
         handleError('$path is not a file');
       }
-      MainInfo().sketchPath = path;
+      MainInfo().sketchPath = p.normalize(p.absolute(path));
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
