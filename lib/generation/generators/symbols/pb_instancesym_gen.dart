@@ -97,14 +97,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     symName = PBInputFormatter.formatLabel(symName,
         destroyDigits: false, spaceToUnderscore: false, isTitle: true);
 
-    var path = 'symbols';
-    if (masterSymbol.name.contains('/')) {
-      path = ImportHelper.getName(masterSymbol.name).snakeCase;
-    }
-
-    managerData.addImport(FlutterImport(
-        'view/$path/${symName.snakeCase}.dart', MainInfo().projectName));
-
     // if this symbol is overridable, then put variable name + null check
     var overrideProp = SN_UUIDtoVarName[UUID + '_symbolID'];
     if (overrideProp != null) {

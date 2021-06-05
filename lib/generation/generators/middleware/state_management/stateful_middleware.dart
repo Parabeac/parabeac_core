@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
@@ -21,7 +22,7 @@ class StatefulMiddleware extends StateManagementMiddleware {
     var path = p.join(
         fileStrategy.GENERATED_PROJECT_PATH,
         FileStructureStrategy.RELATIVE_VIEW_PATH,
-        getName(symbolMaster.name).snakeCase,
+        ImportHelper.getName(symbolMaster.name).snakeCase,
         node.functionCallName.snakeCase);
     return path;
   }

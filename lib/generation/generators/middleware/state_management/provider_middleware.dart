@@ -34,10 +34,10 @@ class ProviderMiddleware extends StateManagementMiddleware {
 
     var import = generateModelPath
         ? p.join(fileStrategy.RELATIVE_MODEL_PATH,
-            getName(symbolMaster.name).snakeCase)
+            ImportHelper.getName(symbolMaster.name).snakeCase)
         : p.join(
             FileStructureStrategy.RELATIVE_VIEW_PATH,
-            getName(symbolMaster.name).snakeCase,
+            ImportHelper.getName(symbolMaster.name).snakeCase,
             node.functionCallName.snakeCase);
     return p.join(fileStrategy.GENERATED_PROJECT_PATH, import);
   }

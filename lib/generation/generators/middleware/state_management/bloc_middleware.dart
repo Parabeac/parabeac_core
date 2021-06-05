@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
@@ -64,7 +65,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
       fileStrategy.GENERATED_PROJECT_PATH,
       FileStructureStrategy.RELATIVE_VIEW_PATH,
       '${generalStateName.snakeCase}_bloc',
-      '${getName(symbolMaster.name).snakeCase}_bloc',
+      '${ImportHelper.getName(symbolMaster.name).snakeCase}_bloc',
     );
   }
 

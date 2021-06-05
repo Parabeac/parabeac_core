@@ -38,7 +38,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return fileStrategy.GENERATED_PROJECT_PATH +
         fileStrategy.RELATIVE_MODEL_PATH +
-        '${getName(symbolMaster.name).snakeCase}.dart';
+        '${ImportHelper.getName(symbolMaster.name).snakeCase}.dart';
   }
 
   @override
@@ -80,7 +80,9 @@ class RiverpodMiddleware extends StateManagementMiddleware {
       node,
     );
     fileStrategy.commandCreated(WriteSymbolCommand(
-        node.currentContext.tree.UUID, getName(node.name).snakeCase, code,
+        node.currentContext.tree.UUID,
+        ImportHelper.getName(node.name).snakeCase,
+        code,
         symbolPath: fileStrategy.RELATIVE_MODEL_PATH));
     return Future.value(null);
   }
