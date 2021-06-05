@@ -37,26 +37,5 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
                 '.dart'),
             pb_project.projectName))
         .toList());
-
-    (pageWriter as PBFlutterWriter).rewriteMainFunction(
-      p.join(fileStructureStrategy.GENERATED_PROJECT_PATH, 'lib/main.dart'),
-      _generateMainFunction(),
-      imports: imports,
-    );
-  }
-
-  String _generateMainFunction() {
-    var providers = registeredModels
-        .map((e) => 'ChangeNotifierProvider(create: (_) => $e())');
-    return '''
-    runApp(
-      MultiProvider(
-        providers: [
-          ${providers.join(', ')}
-        ],
-        child: MyApp(),
-      ),
-    );
-    ''';
   }
 }

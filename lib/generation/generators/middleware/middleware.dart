@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -17,15 +18,7 @@ abstract class Middleware {
 
   Middleware(this.generationManager, this.configuration, {this.nextMiddleware});
 
-  String getNameOfNode(PBIntermediateNode node) => getName(node.name);
-
-  String getName(String name) {
-    var index = name.indexOf('/');
-    // Remove everything after the /. So if the name is SignUpButton/Default, we end up with SignUpButton as the name we produce.
-    return index < 0
-        ? name
-        : name.replaceRange(index, name.length, '').pascalCase;
-  }
+  String getNameOfNode(PBIntermediateNode node) => ImportHelper.getName(node.name);
 
   /// Applying the [Middleware] logic to the [node]; modifying it or even eliminating it by returning `null`.
   Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree) =>

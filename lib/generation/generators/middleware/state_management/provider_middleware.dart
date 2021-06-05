@@ -3,13 +3,11 @@ import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
-import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
@@ -55,30 +53,20 @@ class ProviderMiddleware extends StateManagementMiddleware {
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport(FlutterImport('provider.dart', 'provider'));
       watcherName = getVariableName(node.name.snakeCase + '_notifier');
-      var widgetName = node.functionCallName.camelCase;
-      var watcher;
-
-      if (node.currentContext.tree.rootNode.generator.templateStrategy
-          is StatelessTemplateStrategy) {
-        watcher = PBVariable(watcherName, 'final ', true,
-            '${getName(node.functionCallName).pascalCase}().$widgetName');
-        managerData.addGlobalVariable(watcher);
-      }
 
       addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
       PBGenCache().appendToCache(node.SYMBOL_ID,
           getImportPath(node, fileStrategy, generateModelPath: false));
 
       if (node.generator is! StringGeneratorAdapter) {
-        var modelName = getName(node.functionCallName).pascalCase;
-        var defaultWidget = node.functionCallName.pascalCase;
+        var modelName = ImportHelper.getName(node.functionCallName).pascalCase;
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
               $modelName(), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = $defaultWidget(constraints);
+              var widget = ${MiddlewareUtils.generateVariableBody(node)};
               
               context
                   .read<$modelName>()
@@ -87,10 +75,10 @@ class ProviderMiddleware extends StateManagementMiddleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    $modelName>(), // TODO: add your method to change the state here
-                child: context
-                    .watch<$modelName>()
-                    .currentWidget, 
+                    ${modelName}>().onGesture(),
+                child: Consumer<$modelName>(
+                  builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentWidget
+                ),
               );
             },
           ),
@@ -103,7 +91,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
     }
     watcherName = getNameOfNode(node);
 
-    var parentDirectory = getName(node.name).snakeCase;
+    var parentDirectory = ImportHelper.getName(node.name).snakeCase;
 
     // Generate model's imports
     var modelGenerator = PBFlutterGenerator(ImportHelper(),

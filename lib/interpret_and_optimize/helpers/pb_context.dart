@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -11,6 +12,7 @@ class PBContext {
   PBIntermediateTree tree;
   PBProject project;
   SizingValueContext sizingContext = SizingValueContext.PointValue;
+  PBSharedMasterNode masterNode;
 
   ///TODO: This is going to change to the [GenerationConfiguration].
   PBGenerationManager generationManager;

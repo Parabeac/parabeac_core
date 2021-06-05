@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
@@ -54,7 +55,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
           FlutterImport('flutter_riverpod.dart', 'flutter_riverpod'));
       watcherName = getVariableName(node.functionCallName.snakeCase);
       var watcher = PBVariable(watcherName + '_provider', 'final ', true,
-          'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
+          'ChangeNotifierProvider((ref) => ${ImportHelper.getName(node.functionCallName).pascalCase}())');
 
       if (node.currentContext.tree.rootNode.generator.templateStrategy
           is StatelessTemplateStrategy) {

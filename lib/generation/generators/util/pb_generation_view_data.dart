@@ -10,6 +10,8 @@ class PBGenerationViewData {
   final Set<FlutterImport> _imports = {};
   final Set<String> _toDispose = {};
   bool _isDataLocked = false;
+  bool hasParams = false;
+
 
   PLATFORM platform;
   ORIENTATION orientation;

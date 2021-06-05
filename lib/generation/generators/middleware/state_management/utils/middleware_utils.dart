@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
+import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -17,9 +18,9 @@ class MiddlewareUtils {
 
     if (node is PBSharedMasterNode &&
         (node.overridableProperties?.isNotEmpty ?? false)) {
-      node.overridableProperties.forEach((property) {
-        overrideVars += 'final ${property.friendlyName};';
-        overrideAttr += 'this.${property.friendlyName}, ';
+      node.overridableProperties.forEach((prop) {
+        overrideVars += 'final ${prop.friendlyName};';
+        overrideAttr += 'this.${prop.friendlyName}, ';
       });
       stateBuffer.write(MiddlewareUtils.generateEmptyVariable(node));
       stateInitializers.write(
@@ -33,9 +34,10 @@ class MiddlewareUtils {
 
       if (variationNode is PBSharedMasterNode &&
           (variationNode.overridableProperties?.isNotEmpty ?? false)) {
-        variationNode.overridableProperties.forEach((property) {
-          overrideVars += 'final ${property.friendlyName};';
-          overrideAttr += 'this.${property.friendlyName}, ';
+        variationNode.overridableProperties.forEach((prop) {
+          var friendlyName = SN_UUIDtoVarName[prop.propertyName] ?? 'NOTFOUND';
+          overrideVars += 'final $friendlyName;';
+          overrideAttr += 'this.$friendlyName, ';
         });
         stateBuffer.write(MiddlewareUtils.generateEmptyVariable(variationNode));
         stateInitializers.write(
@@ -78,6 +80,10 @@ class MiddlewareUtils {
       Widget currentWidget;
       $defaultStateName(){}
 
+      // default provider event handler for gestures.
+      void onGesture() {
+      }
+      
       void setCurrentWidget(Widget currentWidget) {
         this.currentWidget = currentWidget;
       }

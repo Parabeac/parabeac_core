@@ -90,7 +90,7 @@ class PBSharedMasterDesignNode extends DesignNode
     var sharedParameters = <PBSharedParameterProp>[];
     for (var prop in overrideProperties) {
       if (!ovrNames.contains(prop.overrideName)) {
-        var properties = AddMasterSymbolName(prop.overrideName, children);
+        var properties = AddMasterSymbolOverrideName(prop.overrideName, children);
         sharedParameters.add(PBSharedParameterProp(
             properties['name'],
             properties['type'],

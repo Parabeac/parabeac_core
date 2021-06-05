@@ -98,6 +98,9 @@ class FlutterProjectBuilder {
       try {
         Directory('${pathToFlutterProject}lib/document/')
             .createSync(recursive: true);
+
+        WriteStyleClasses();
+
         var s = File('${pathToFlutterProject}lib/document/shared_props.g.dart')
             .openWrite(mode: FileMode.write, encoding: utf8);
 
@@ -136,9 +139,9 @@ class FlutterProjectBuilder {
 
     log.info(
       Process.runSync(
-              'dartfmt',
+              'dart',
               [
-                '-w',
+                'format',
                 '${pathToFlutterProject}bin',
                 '${pathToFlutterProject}lib',
                 '${pathToFlutterProject}test'
@@ -147,4 +150,49 @@ class FlutterProjectBuilder {
           .stdout,
     );
   }
+}
+
+void WriteStyleClasses()
+{
+  var s = File('${pathToFlutterProject}lib/document/Styles.g.dart')
+      .openWrite(mode: FileMode.write, encoding: utf8);
+  s.write('''
+import 'dart:ui';
+import 'package:flutter/material.dart';
+
+class SK_Fill {
+  Color color;
+  bool isEnabled;
+  SK_Fill(this.color, [this.isEnabled = true]);
+}
+
+class SK_Border {
+  bool isEnabled;
+  double fillType;
+  Color color;
+  double thickness;
+  SK_Border(this.isEnabled, this.fillType, this.color, this.thickness);
+}
+
+class SK_BorderOptions {
+  bool isEnabled;
+  List dashPattern;
+  int lineCapStyle;
+  int lineJoinStyle;
+  SK_BorderOptions(this.isEnabled, this.dashPattern, this.lineCapStyle, this.lineJoinStyle);
+}
+
+class SK_Style {
+  Color backgroundColor;
+  List<SK_Fill> fills;
+  List<SK_Border> borders;
+  SK_BorderOptions borderOptions;
+  TextStyle textStyle;
+  bool hasShadow;
+  SK_Style(this.backgroundColor, this.fills, this.borders, this.borderOptions,this.textStyle, [this.hasShadow = false]);
+}
+''');
+
+  s.close();
+
 }
