@@ -153,6 +153,6 @@ class BLoCMiddleware extends StateManagementMiddleware {
         ),
         relativePath: parentDirectory));
 
-    return Future.value(node);
+    return Future.value(null);
   }
 }

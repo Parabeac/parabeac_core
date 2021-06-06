@@ -129,6 +129,6 @@ class ProviderMiddleware extends StateManagementMiddleware {
       ));
     });
 
-    return Future.value(node);
+    return Future.value(null);
   }
 }

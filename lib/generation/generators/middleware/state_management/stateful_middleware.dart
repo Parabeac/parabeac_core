@@ -48,6 +48,6 @@ class StatefulMiddleware extends StateManagementMiddleware {
           state.variation.node.name.snakeCase,
           generationManager.generate(state.variation.node)));
     });
-    return Future.value(node);
+    return Future.value(null);
   }
 }
