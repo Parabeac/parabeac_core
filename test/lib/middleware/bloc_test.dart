@@ -25,8 +25,6 @@ class MockContext extends Mock implements PBContext {}
 
 class MockProject extends Mock implements PBProject {}
 
-class MockTree extends Mock implements PBIntermediateTree {}
-
 class MockPBGenerationProjectData extends Mock
     implements PBGenerationProjectData {}
 
@@ -34,12 +32,14 @@ class MockPBGenerationViewData extends Mock implements PBGenerationViewData {}
 
 class MockPBGenerator extends Mock implements PBGenerator {}
 
+class MockConfig extends Mock implements BLoCGenerationConfiguration {}
+
 void main() {
   group('Middlewares Tests', () {
-    var genConfig = BLoCGenerationConfiguration();
+    var mockConfig = MockConfig();
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
-    var bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager, genConfig);
+    var bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager, mockConfig);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -56,7 +56,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var mockTree = MockTree();
+    var tree = PBIntermediateTree('tree');
 
     setUp(() async {
       /// Set up nodes
@@ -86,12 +86,15 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.tree).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(tree);
+
+      // Tree
+      tree.rootNode = node;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(genConfig.fileStructureStrategy)
+      when(mockConfig.fileStructureStrategy)
           .thenReturn(mockFileStructureStrategy);
 
       /// PBGenerationManager
@@ -107,8 +110,8 @@ void main() {
     test('BLoC Strategy Test', () async {
       var relativeViewPath = FileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
-      var tempNode = await bLoCMiddleware.applyMiddleware(mockTree);
-      expect(tempNode is PBIntermediateNode, true);
+      var tempNode = await bLoCMiddleware.applyMiddleware(tree);
+      expect(tempNode is PBIntermediateTree, true);
       expect(
           await File(
                   '${testingPath}${relativeViewPath}some_element_bloc/some_element_bloc.dart')
