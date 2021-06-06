@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_middleware.dart';
@@ -8,7 +9,7 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_project_d
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -32,14 +33,15 @@ class MockPBGenerationViewData extends Mock implements PBGenerationViewData {}
 
 class MockPBGenerator extends Mock implements PBGenerator {}
 
-class MockTree extends Mock implements PBIntermediateTree {}
+class MockConfig extends Mock implements ProviderGenerationConfiguration {}
 
 void main() {
   group('Middlewares Tests', () {
-    var config = StatefulGenerationConfiguration();
+    var mockConfig = MockConfig();
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
-    var bLoCMiddleware = StatefulMiddleware(mockPBGenerationManager, config);
+    var bLoCMiddleware =
+        StatefulMiddleware(mockPBGenerationManager, mockConfig);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -56,7 +58,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var mockTree = MockTree();
+    var tree = PBIntermediateTree('test');
 
     setUp(() async {
       /// Set up nodes
@@ -86,12 +88,18 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.tree).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(tree);
+
+      // Tree
+      tree.rootNode = node;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(config.fileStructureStrategy).thenReturn(mockFileStructureStrategy);
+
+      // Configuration
+      when(mockConfig.fileStructureStrategy)
+          .thenReturn(mockFileStructureStrategy);
 
       /// PBGenerationManager
       when(mockPBGenerationManager.generate(node)).thenReturn('codeForBlue\n');
@@ -106,16 +114,16 @@ void main() {
     test('Stateful Strategy Test', () async {
       var relativeViewPath = FileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
-      var tempNode = await bLoCMiddleware.applyMiddleware(mockTree);
-      expect(tempNode is PBIntermediateNode, true);
+      var tempNode = await bLoCMiddleware.applyMiddleware(tree);
+      expect(tempNode is PBIntermediateTree, true);
       expect(
-          await File(
-                  '${testingPath}${relativeViewPath}some_element/some_element_blue.dart')
+          await File(p.join(
+                  testingPath, relativeViewPath, 'some_element_blue.dart'))
               .exists(),
           true);
       expect(
-          await File(
-                  '${testingPath}${relativeViewPath}some_element/some_element_green.dart')
+          await File(p.join(
+                  testingPath, relativeViewPath, 'some_element_green.dart'))
               .exists(),
           true);
     });
