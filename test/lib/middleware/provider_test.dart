@@ -44,13 +44,15 @@ class MockIntermediateVariation extends Mock implements IntermediateVariation {}
 
 class MockTree extends Mock implements PBIntermediateTree {}
 
+class MockConfig extends Mock implements ProviderGenerationConfiguration {}
+
 void main() {
   group('Middlewares Tests', () {
-    var config = ProviderGenerationConfiguration();
+    var mockConfig = MockConfig();
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
     var providerMiddleware =
-        ProviderMiddleware(mockPBGenerationManager, config);
+        ProviderMiddleware(mockPBGenerationManager, mockConfig);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -68,6 +70,7 @@ void main() {
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
     var mockTree = MockTree();
+    var tree = PBIntermediateTree('test');
 
     setUp(() async {
       /// Nodes set up
@@ -103,11 +106,19 @@ void main() {
       when(mockContext.project).thenReturn(mockProject);
       when(mockContext.tree).thenReturn(mockTree);
 
+      // Tree
+      when(mockTree.rootNode).thenReturn(node);
+      when(mockTree.iterator).thenReturn([node].iterator);
+      tree.rootNode = node;
+
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(config.fileStructureStrategy)
+
+      // Configuration
+      when(mockConfig.fileStructureStrategy)
           .thenReturn(providerFileStructureStrategy);
+      when(mockConfig.registeredModels).thenReturn({});
 
       /// PBGenerationManager
       when(mockPBGenerationManager.generate(any)).thenReturn('code');
@@ -118,8 +129,8 @@ void main() {
 
     test('Provider Strategy Test', () async {
       await providerFileStructureStrategy.setUpDirectories();
-      var tempNode = await providerMiddleware.applyMiddleware(mockTree);
-      expect(tempNode is PBIntermediateNode, true);
+      var tempNode = await providerMiddleware.applyMiddleware(tree);
+      expect(tempNode is PBIntermediateTree, true);
       expect(await File('${testingPath}lib/models/some_element.dart').exists(),
           true);
     });
