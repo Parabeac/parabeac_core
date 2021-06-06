@@ -42,8 +42,6 @@ class MockIntermediateState extends Mock implements IntermediateState {}
 
 class MockIntermediateVariation extends Mock implements IntermediateVariation {}
 
-class MockTree extends Mock implements PBIntermediateTree {}
-
 class MockConfig extends Mock implements ProviderGenerationConfiguration {}
 
 void main() {
@@ -69,7 +67,6 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var mockTree = MockTree();
     var tree = PBIntermediateTree('test');
 
     setUp(() async {
@@ -104,11 +101,9 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.tree).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(tree);
 
       // Tree
-      when(mockTree.rootNode).thenReturn(node);
-      when(mockTree.iterator).thenReturn([node].iterator);
       tree.rootNode = node;
 
       /// Project
