@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:path/path.dart' as p;
-
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/stateful_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
@@ -8,9 +5,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
-import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -35,10 +30,11 @@ class MockPBGenerator extends Mock implements PBGenerator {}
 
 class MockConfig extends Mock implements ProviderGenerationConfiguration {}
 
+class MockFileStrategy extends Mock implements FlutterFileStructureStrategy {}
+
 void main() {
   group('Middlewares Tests', () {
     var mockConfig = MockConfig();
-    var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
     var bLoCMiddleware =
         StatefulMiddleware(mockPBGenerationManager, mockConfig);
@@ -49,11 +45,7 @@ void main() {
     var mockPBGenerationProjectData = MockPBGenerationProjectData();
     var mockPBGenerationViewData = MockPBGenerationViewData();
     var mockPBGenerator = MockPBGenerator();
-    var mockFileStructureStrategy = FlutterFileStructureStrategy(
-      testingPath,
-      PBFlutterWriter(),
-      mockProject,
-    );
+    var mockFileStructureStrategy = MockFileStrategy();
     var mockIntermediateAuxiliaryData = MockIntermediateAuxiliaryData();
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
@@ -112,24 +104,15 @@ void main() {
     });
 
     test('Stateful Strategy Test', () async {
-      var relativeViewPath = FileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
       var tempNode = await bLoCMiddleware.applyMiddleware(tree);
-      expect(tempNode is PBIntermediateTree, true);
-      expect(
-          await File(p.join(
-                  testingPath, relativeViewPath, 'some_element_blue.dart'))
-              .exists(),
-          true);
-      expect(
-          await File(p.join(
-                  testingPath, relativeViewPath, 'some_element_green.dart'))
-              .exists(),
-          true);
-    });
+      expect(tempNode, isNull);
 
-    tearDownAll(() {
-      Process.runSync('rm', ['-rf', '${testingPath}lib']);
+      var verification =
+          verify(mockFileStructureStrategy.commandCreated(captureAny));
+
+      expect(verification.captured[0].fileName, contains('blue'));
+      expect(verification.captured[1].fileName, contains('green'));
     });
   });
 }
