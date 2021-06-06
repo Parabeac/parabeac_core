@@ -6,7 +6,7 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_project_d
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -29,6 +29,8 @@ class MockProject extends Mock implements PBProject {}
 class MockData extends Mock implements IntermediateAuxiliaryData {}
 
 class MockContext extends Mock implements PBContext {}
+
+class MockConfig extends Mock implements GenerationConfiguration {}
 
 void main() {
   group('Project Builder Test', () {
@@ -56,7 +58,7 @@ void main() {
     MockContext context;
 
     setUp(() async {
-      var config = StatefulGenerationConfiguration();
+      var mockConfig = MockConfig();
       MainInfo().cwd = Directory.current;
       MainInfo().outputPath =
           '${Directory.current.path}/test/lib/output_services/';
@@ -101,9 +103,9 @@ void main() {
       fss =
           FlutterFileStructureStrategy(outputPath, PBFlutterWriter(), project);
       await fss.setUpDirectories();
-      when(config.fileStructureStrategy).thenReturn(fss);
+      when(mockConfig.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = FlutterProjectBuilder(config,
+      projectBuilder = FlutterProjectBuilder(mockConfig,
           project: project, pageWriter: PBFlutterWriter());
     });
     test(

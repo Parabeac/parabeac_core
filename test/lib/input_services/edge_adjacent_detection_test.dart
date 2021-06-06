@@ -1,4 +1,5 @@
 import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -26,6 +27,7 @@ void main() {
     setUp(() {
       sketchNode = ShapePathMock();
       context = ContextMock();
+      MainInfo().outputPath = '';
 
       when(sketchNode.points).thenReturn([
         {
