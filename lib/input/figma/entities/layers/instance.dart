@@ -109,8 +109,8 @@ class Instance extends FigmaFrame
   String pbdfType = 'symbol_instance';
 
   @override
-  Map AddMasterSymbolName(String overrideName, List children) {
-    // TODO: implement AddMasterSymbolName
+  Map AddMasterSymbolOverrideName(String overrideName, List children) {
+    // TODO: implement AddMasterSymbolOverrideName
     throw UnimplementedError();
   }
 

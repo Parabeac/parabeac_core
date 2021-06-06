@@ -1,5 +1,10 @@
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
+import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/riverpod_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -7,57 +12,15 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_generation_manager.dart';
 import '../../pb_variable.dart';
-import '../middleware.dart';
 import 'package:recase/recase.dart';
 
-class RiverpodMiddleware extends Middleware {
+class RiverpodMiddleware extends StateManagementMiddleware {
   final PACKAGE_NAME = 'flutter_riverpod';
   final PACKAGE_VERSION = '^0.12.1';
 
-  RiverpodMiddleware(PBGenerationManager generationManager)
-      : super(generationManager);
-
-  @override
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    String watcherName;
-    var managerData = node.managerData;
-    var fileStrategy = node.currentContext.project.fileStructureStrategy
-        as RiverpodFileStructureStrategy;
-
-    if (node is PBSharedInstanceIntermediateNode) {
-      node.currentContext.project.genProjectData
-          .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-      managerData.addImport('package:flutter_riverpod/flutter_riverpod.dart');
-      watcherName = getVariableName(node.functionCallName.snakeCase);
-      var watcher = PBVariable(watcherName + '_provider', 'final ', true,
-          'ChangeNotifierProvider((ref) => ${getName(node.functionCallName).pascalCase}())');
-
-      if (node.currentContext.tree.rootNode.generator.templateStrategy
-          is StatelessTemplateStrategy) {
-        managerData.addGlobalVariable(watcher);
-      } else {
-        managerData.addMethodVariable(watcher);
-      }
-
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-
-      if (node.generator is! StringGeneratorAdapter) {
-        node.generator = StringGeneratorAdapter(
-            getConsumer(watcherName, node.functionCallName.camelCase));
-      }
-      return node;
-    }
-    watcherName = getNameOfNode(node);
-
-    var code = MiddlewareUtils.generateChangeNotifierClass(
-      watcherName,
-      generationManager,
-      node,
-    );
-    fileStrategy.writeRiverpodModelFile(code, getName(node.name).snakeCase);
-
-    return node;
-  }
+  RiverpodMiddleware(PBGenerationManager generationManager,
+      RiverpodGenerationConfiguration configuration)
+      : super(generationManager, configuration);
 
   String getConsumer(String name, String pointTo) {
     return '''
@@ -75,6 +38,52 @@ class RiverpodMiddleware extends Middleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return fileStrategy.GENERATED_PROJECT_PATH +
         fileStrategy.RELATIVE_MODEL_PATH +
-        '${getName(symbolMaster.name).snakeCase}.dart';
+        '${ImportHelper.getName(symbolMaster.name).snakeCase}.dart';
+  }
+
+  @override
+  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node) {
+    String watcherName;
+    var managerData = node.managerData;
+    var fileStrategy =
+        configuration.fileStructureStrategy as RiverpodFileStructureStrategy;
+
+    if (node is PBSharedInstanceIntermediateNode) {
+      node.currentContext.project.genProjectData
+          .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+      managerData.addImport(
+          FlutterImport('flutter_riverpod.dart', 'flutter_riverpod'));
+      watcherName = getVariableName(node.functionCallName.snakeCase);
+      var watcher = PBVariable(watcherName + '_provider', 'final ', true,
+          'ChangeNotifierProvider((ref) => ${ImportHelper.getName(node.functionCallName).pascalCase}())');
+
+      if (node.currentContext.tree.rootNode.generator.templateStrategy
+          is StatelessTemplateStrategy) {
+        managerData.addGlobalVariable(watcher);
+      } else {
+        managerData.addMethodVariable(watcher);
+      }
+
+      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+
+      if (node.generator is! StringGeneratorAdapter) {
+        node.generator = StringGeneratorAdapter(
+            getConsumer(watcherName, node.functionCallName.camelCase));
+      }
+      return Future.value(node);
+    }
+    watcherName = getNameOfNode(node);
+
+    var code = MiddlewareUtils.generateChangeNotifierClass(
+      watcherName,
+      generationManager,
+      node,
+    );
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        node.currentContext.tree.UUID,
+        ImportHelper.getName(node.name).snakeCase,
+        code,
+        symbolPath: fileStrategy.RELATIVE_MODEL_PATH));
+    return Future.value(null);
   }
 }

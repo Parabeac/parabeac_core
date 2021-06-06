@@ -1,5 +1,6 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -37,7 +38,9 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @override
   PrototypeNode prototypeNode;
 
-  List overrideValues;
+  List<PBSymbolInstanceOverridableValue> overrideValues;
+  // quick lookup based on UUID_type
+  Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
   PBSharedInstanceIntermediateNode(this.originalRef, this.SYMBOL_ID,
       {this.sharedParamValues,
@@ -63,7 +66,10 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     generator = PBSymbolInstanceGenerator();
 
     overrideValues = sharedParamValues
-        .map((v) => PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type))
+        .map((v) {
+          var symOvrValue = PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type);
+          overrideValuesMap[v.overrideName] = symOvrValue;
+          return symOvrValue; })
         .toList()
           ..removeWhere((v) => v == null || v.value == null);
   }
@@ -97,7 +103,7 @@ class PBSharedParameterValue {
   final String _overrideName;
   String get overrideName => _overrideName;
 
-  String get name => SN_UUIDtoVarName[_overrideName];
+  String get name => SN_UUIDtoVarName[PBInputFormatter.findLastOf(_overrideName, '/')];
 
   PBSharedParameterValue(
     this._type,

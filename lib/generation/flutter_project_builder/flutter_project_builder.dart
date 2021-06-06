@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as p;
+
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/bloc_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
@@ -16,44 +20,26 @@ import 'package:quick_log/quick_log.dart';
 String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
 class FlutterProjectBuilder {
-  String projectName;
-  PBProject mainTree;
+  PBProject project;
 
   var log = Logger('Project Builder');
 
-  final String SYMBOL_DIR_NAME = 'symbols';
+  PBPageWriter pageWriter;
 
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
-  Map<String, GenerationConfiguration> configurations = {
-    'provider': ProviderGenerationConfiguration(),
-    'bloc': BLoCGenerationConfiguration(),
-    'riverpod': RiverpodGenerationConfiguration(),
-    'none': StatefulGenerationConfiguration(),
-  };
-
-  final DEFAULT_CONFIGURATION = StatefulGenerationConfiguration();
-
-  PBPageWriter pageWriter;
-
-  FlutterProjectBuilder({this.projectName, this.mainTree, this.pageWriter}) {
-    pathToFlutterProject = '$projectName/';
-    generationConfiguration = configurations[MainInfo()
-            .configurations['state-management']
-            .toString()
-            .toLowerCase()] ??
-        DEFAULT_CONFIGURATION;
+  FlutterProjectBuilder(this.generationConfiguration,
+      {this.project, this.pageWriter}) {
     generationConfiguration.pageWriter = pageWriter;
-    mainTree.projectName = projectName;
-    mainTree.projectAbsPath = pathToFlutterProject;
   }
 
   Future<void> convertToFlutterProject({List<ArchiveFile> rawImages}) async {
     try {
-      var createResult = Process.runSync('flutter', ['create', '$projectName'],
+      var createResult = Process.runSync(
+          'flutter', ['create', '${project.projectName}'],
           workingDirectory: MainInfo().outputPath);
       if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
         log.error(createResult.stderr);
@@ -68,7 +54,7 @@ class FlutterProjectBuilder {
       log.error(error.toString());
     }
 
-    await Directory('${pathToFlutterProject}assets/images')
+    await Directory(p.join(pathToFlutterProject, 'assets/images'))
         .create(recursive: true)
         .then((value) => {
               // print(value),
@@ -84,10 +70,11 @@ class FlutterProjectBuilder {
       await FigmaAssetProcessor().processImageQueue();
     }
 
+    var pngsPath = p.join(MainInfo().outputPath, 'pngs', '*');
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
         [
-          'mv ${MainInfo().outputPath}/pngs/* ${pathToFlutterProject}assets/images/'
+          'mv $pngsPath ${pathToFlutterProject}assets/images/'
         ],
         runInShell: true,
         environment: Platform.environment,
@@ -105,20 +92,23 @@ class FlutterProjectBuilder {
     }
 
     // generate shared Styles if any found
-    if (mainTree.sharedStyles != null &&
-        mainTree.sharedStyles.isNotEmpty &&
+    if (project.sharedStyles != null &&
+        project.sharedStyles.isNotEmpty &&
         MainInfo().exportStyles) {
       try {
         Directory('${pathToFlutterProject}lib/document/')
             .createSync(recursive: true);
+
+        WriteStyleClasses();
+
         var s = File('${pathToFlutterProject}lib/document/shared_props.g.dart')
             .openWrite(mode: FileMode.write, encoding: utf8);
 
-        s.write('''import 'dart:ui';
-              import 'package:flutter/material.dart';
-              
+        s.write('''${FlutterImport('dart:ui', null)}
+              ${FlutterImport('flutter/material.dart', null)}
+
               ''');
-        for (var sharedStyle in mainTree.sharedStyles) {
+        for (var sharedStyle in project.sharedStyles) {
           s.write(sharedStyle.generate() + '\n');
         }
         await s.close();
@@ -128,17 +118,9 @@ class FlutterProjectBuilder {
     }
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
 
-    await generationConfiguration.generateProject(mainTree);
+    await generationConfiguration.generateProject(project);
     await generationConfiguration
-        .generatePlatformAndOrientationInstance(mainTree);
-
-    var l = File('${pathToFlutterProject}lib/main.dart').readAsLinesSync();
-    var s = File('${pathToFlutterProject}lib/main.dart')
-        .openWrite(mode: FileMode.write, encoding: utf8);
-    for (var i = 0; i < l.length; i++) {
-      s.writeln(l[i]);
-    }
-    await s.close();
+        .generatePlatformAndOrientationInstance(project);
 
     Process.runSync(
         '${MainInfo().cwd.path}/lib/generation/helperScripts/shell-proxy.sh',
@@ -157,9 +139,9 @@ class FlutterProjectBuilder {
 
     log.info(
       Process.runSync(
-              'dartfmt',
+              'dart',
               [
-                '-w',
+                'format',
                 '${pathToFlutterProject}bin',
                 '${pathToFlutterProject}lib',
                 '${pathToFlutterProject}test'
@@ -168,4 +150,49 @@ class FlutterProjectBuilder {
           .stdout,
     );
   }
+}
+
+void WriteStyleClasses()
+{
+  var s = File('${pathToFlutterProject}lib/document/Styles.g.dart')
+      .openWrite(mode: FileMode.write, encoding: utf8);
+  s.write('''
+import 'dart:ui';
+import 'package:flutter/material.dart';
+
+class SK_Fill {
+  Color color;
+  bool isEnabled;
+  SK_Fill(this.color, [this.isEnabled = true]);
+}
+
+class SK_Border {
+  bool isEnabled;
+  double fillType;
+  Color color;
+  double thickness;
+  SK_Border(this.isEnabled, this.fillType, this.color, this.thickness);
+}
+
+class SK_BorderOptions {
+  bool isEnabled;
+  List dashPattern;
+  int lineCapStyle;
+  int lineJoinStyle;
+  SK_BorderOptions(this.isEnabled, this.dashPattern, this.lineCapStyle, this.lineJoinStyle);
+}
+
+class SK_Style {
+  Color backgroundColor;
+  List<SK_Fill> fills;
+  List<SK_Border> borders;
+  SK_BorderOptions borderOptions;
+  TextStyle textStyle;
+  bool hasShadow;
+  SK_Style(this.backgroundColor, this.fills, this.borders, this.borderOptions,this.textStyle, [this.hasShadow = false]);
+}
+''');
+
+  s.close();
+
 }

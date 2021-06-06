@@ -96,7 +96,8 @@ void main() {
       _fileStructureStrategy = FileStructureStrategyMock();
       importHelper = ImportHelper();
 
-      when(_fileStructureStrategy.writeDataToFile(any, any, any))
+      when(_fileStructureStrategy.writeDataToFile(any, any, any,
+              UUID: anyNamed('UUID')))
           .thenAnswer((invocation) {
         var dir = invocation.positionalArguments[1];
         var name = invocation.positionalArguments[2];
@@ -109,11 +110,11 @@ void main() {
       });
       when(_fileStructureStrategy.GENERATED_PROJECT_PATH).thenReturn(genPath);
     });
-    test('Testing import generation when imports are generated', () {
+    test('Testing import generation when imports are generated', () async {
       var command = WriteScreenCommand(
           'UUID', 'some_dart_page.dart', 'homescreen/', 'dummy code');
-      command.write(_fileStructureStrategy);
-      expect(importHelper.getImport('UUID'), completePath);
+      await command.write(_fileStructureStrategy);
+      expect(importHelper.getImport('UUID').first, completePath);
     });
   });
 }

@@ -4,7 +4,4 @@ import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.da
 class PBGenerationProjectData {
   void addDependencies(String packageName, String version) =>
       PBFlutterWriter().addDependency(packageName, version);
-
-  /// Queue where commands can be placed for later execution
-  final List<FileStructureCommand> commandQueue = [];
 }

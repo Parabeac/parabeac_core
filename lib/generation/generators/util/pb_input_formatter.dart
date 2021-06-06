@@ -45,4 +45,13 @@ class PBInputFormatter {
       str.startsWith(RegExp(r'^[\d]+'))
           ? str.replaceFirstMapped(RegExp(r'^[\d]+'), (e) => '')
           : str;
+
+  /// Method that splits `target` according to `delimeter`
+  /// and returns the last entry in the list.
+  static String findLastOf(String target, String delimeter) {
+    if (target == null || delimeter == null) {
+      return '';
+    }
+    return target.split(delimeter).last;
+  }
 }

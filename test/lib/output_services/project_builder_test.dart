@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -7,6 +6,7 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_project_d
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -29,6 +29,8 @@ class MockProject extends Mock implements PBProject {}
 class MockData extends Mock implements IntermediateAuxiliaryData {}
 
 class MockContext extends Mock implements PBContext {}
+
+class MockConfig extends Mock implements GenerationConfiguration {}
 
 void main() {
   group('Project Builder Test', () {
@@ -56,6 +58,7 @@ void main() {
     MockContext context;
 
     setUp(() async {
+      var mockConfig = MockConfig();
       MainInfo().cwd = Directory.current;
       MainInfo().outputPath =
           '${Directory.current.path}/test/lib/output_services/';
@@ -70,13 +73,11 @@ void main() {
       containerGenerator = PBContainerGenerator();
       scaffoldGenerator = PBScaffoldGenerator();
 
-      MainInfo().configurations = {'state-management': 'none'};
-
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
       when(intermediateTree.data).thenReturn(PBGenerationViewData());
-      when(intermediateTree.dependentOn)
-          .thenReturn(HasNextIterator(null) as Iterator<PBIntermediateTree>);
+      when(intermediateTree.dependentsOn)
+          .thenReturn(<PBIntermediateTree>[].iterator);
 
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
@@ -102,12 +103,10 @@ void main() {
       fss =
           FlutterFileStructureStrategy(outputPath, PBFlutterWriter(), project);
       await fss.setUpDirectories();
-      when(project.fileStructureStrategy).thenReturn(fss);
+      when(mockConfig.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = FlutterProjectBuilder(
-          projectName: outputPath,
-          mainTree: project,
-          pageWriter: PBFlutterWriter());
+      projectBuilder = FlutterProjectBuilder(mockConfig,
+          project: project, pageWriter: PBFlutterWriter());
     });
     test(
       '',

@@ -7,6 +7,8 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/bloc_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -23,8 +25,6 @@ class MockContext extends Mock implements PBContext {}
 
 class MockProject extends Mock implements PBProject {}
 
-class MockTree extends Mock implements PBIntermediateTree {}
-
 class MockPBGenerationProjectData extends Mock
     implements PBGenerationProjectData {}
 
@@ -32,11 +32,14 @@ class MockPBGenerationViewData extends Mock implements PBGenerationViewData {}
 
 class MockPBGenerator extends Mock implements PBGenerator {}
 
+class MockConfig extends Mock implements BLoCGenerationConfiguration {}
+
 void main() {
   group('Middlewares Tests', () {
+    var mockConfig = MockConfig();
     var testingPath = '${Directory.current.path}/test/lib/middleware/';
     var mockPBGenerationManager = MockPBGenerationManager();
-    var bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager);
+    var bLoCMiddleware = BLoCMiddleware(mockPBGenerationManager, mockConfig);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -53,7 +56,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var mockTree = MockTree();
+    var tree = PBIntermediateTree('tree');
 
     setUp(() async {
       /// Set up nodes
@@ -83,12 +86,15 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.tree).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(tree);
+
+      // Tree
+      tree.rootNode = node;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(mockProject.fileStructureStrategy)
+      when(mockConfig.fileStructureStrategy)
           .thenReturn(mockFileStructureStrategy);
 
       /// PBGenerationManager
@@ -102,22 +108,23 @@ void main() {
     });
 
     test('BLoC Strategy Test', () async {
+      var relativeViewPath = FileStructureStrategy.RELATIVE_VIEW_PATH;
       await mockFileStructureStrategy.setUpDirectories();
-      var tempNode = await bLoCMiddleware.applyMiddleware(node);
-      expect(tempNode is PBIntermediateNode, true);
+      var tempNode = await bLoCMiddleware.applyMiddleware(tree);
+      expect(tempNode is PBIntermediateTree, true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_bloc.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_bloc.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_event.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_event.dart')
               .exists(),
           true);
       expect(
           await File(
-                  '${testingPath}lib/view/some_element_bloc/some_element_state.dart')
+                  '${testingPath}${relativeViewPath}some_element_bloc/some_element_state.dart')
               .exists(),
           true);
     });

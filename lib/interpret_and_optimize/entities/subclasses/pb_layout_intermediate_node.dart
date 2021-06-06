@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
@@ -12,8 +13,9 @@ import 'package:uuid/uuid.dart';
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.
 /// Superclass: PBIntermediateNode
 abstract class PBLayoutIntermediateNode extends PBIntermediateNode
-    implements PBInjectedIntermediate {
+    implements PBInjectedIntermediate, PrototypeEnable {
   ///Getting the children
+  @override
   List<PBIntermediateNode> get children =>
       getAttributeNamed('children')?.attributeNodes;
 
@@ -29,6 +31,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Getting the exceptions of the rules.
   List<LayoutException> get exceptions => List.from(_exceptions);
 
+  @override
   PrototypeNode prototypeNode;
 
   Map alignment = {};

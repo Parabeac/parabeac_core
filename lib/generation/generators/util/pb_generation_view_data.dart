@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_variable.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
@@ -6,9 +7,11 @@ class PBGenerationViewData {
   final Map<String, PBVariable> _globalVariables = {};
   final Map<String, PBVariable> _constructorVariables = {};
   final Map<String, PBVariable> _methodVariables = {};
-  final Set<String> _imports = {};
+  final Set<FlutterImport> _imports = {};
   final Set<String> _toDispose = {};
   bool _isDataLocked = false;
+  bool hasParams = false;
+
 
   PLATFORM platform;
   ORIENTATION orientation;
@@ -26,7 +29,7 @@ class PBGenerationViewData {
   Iterator<PBVariable> get methodVariables => _methodVariables.values.iterator;
 
   ///Imports for the current page
-  Iterator<String> get imports => _imports.iterator;
+  Iterator<FlutterImport> get imports => _imports.iterator;
 
   String get methodVariableStr {
     var buffer = StringBuffer();
@@ -50,8 +53,8 @@ class PBGenerationViewData {
     }
   }
 
-  void addImport(String import) {
-    if (!_isDataLocked && import != null && import.isNotEmpty) {
+  void addImport(FlutterImport import) {
+    if (!_isDataLocked && import != null) {
       _imports.add(import);
     }
   }

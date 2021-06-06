@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
@@ -106,9 +107,9 @@ class Vector implements DesignNodeFactory, DesignNode, Image {
 
     imageReference = AssetProcessingService.getImageName(UUID);
 
-    var file =
-        File('${MainInfo().outputPath}pngs/$UUID.png'.replaceAll(':', '_'))
-          ..createSync(recursive: true);
+    var pngsPath =
+        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
+    var file = File(pngsPath)..createSync(recursive: true);
     file.writeAsBytesSync(img);
     return Future.value(
         InheritedBitmap(this, name, currentContext: currentContext));

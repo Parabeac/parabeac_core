@@ -18,14 +18,11 @@ class FigmaController extends Controller {
   void convertFile(
     var jsonFigma,
     var outputPath,
-    var configurationPath,
-    var configType, {
+    var configuration, {
     bool jsonOnly = false,
     DesignProject designProject,
     AssetProcessingService apService,
   }) async {
-    configure(configurationPath, configType);
-
     var figmaProject = generateFigmaTree(jsonFigma, outputPath);
 
     figmaProject = declareScaffolds(figmaProject);
@@ -35,8 +32,7 @@ class FigmaController extends Controller {
     super.convertFile(
       jsonFigma,
       outputPath,
-      configurationPath,
-      configType,
+      configuration,
       designProject: figmaProject,
       jsonOnly: jsonOnly,
       apService: apService,

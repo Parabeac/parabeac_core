@@ -4,6 +4,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_page.dart';
 import 'package:path/path.dart';
 import 'package:archive/archive.dart';
+import 'package:path/path.dart' as p;
 
 /// Takes Initial Design File and puts it into a tree in object format.
 /// Currently only supports Sketch Files
@@ -43,13 +44,14 @@ class InputDesignService {
   ///Getting the images in the sketch file and adding them to the png folder.
   void setImageDir() {
     ///Creating the pngs folder, if it's already not there.
-    Directory('${MainInfo().outputPath}pngs').createSync(recursive: true);
+    var pngsPath = p.join(MainInfo().outputPath, 'pngs');
+    Directory(pngsPath).createSync(recursive: true);
     for (final file in archive) {
       final fileName = file.name;
       if (file.isFile && fileName.contains(IMAGE_DIR_NAME)) {
         final data = file.content as List<int>;
         final name = fileName.replaceAll(IMAGE_DIR_NAME, '');
-        File('${MainInfo().outputPath}pngs/$name').writeAsBytesSync(data);
+        File(p.join(pngsPath, name)).writeAsBytesSync(data);
       }
     }
   }

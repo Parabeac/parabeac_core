@@ -1,6 +1,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:test/test.dart';
 
 class MockSketchProject extends Mock implements SketchProject {}
@@ -10,13 +11,13 @@ void main() {
   test('Interpret should instantiate', () {
     var nameOfProject = 'test Project';
     interpret = Interpret();
-    interpret.init(nameOfProject);
+    interpret.init(nameOfProject, PBConfiguration.genericConfiguration());
     expect(interpret, isNotNull);
-    expect(interpret.projectName, nameOfProject);
   });
 
   test('Should return a PBIntermediateTree from a SketchNodeTree', () {
-    var intermediateTree = interpret.interpretAndOptimize(MockSketchProject());
+    var intermediateTree =
+        interpret.interpretAndOptimize(MockSketchProject(), '', '');
     expect(intermediateTree, isNotNull);
   });
 

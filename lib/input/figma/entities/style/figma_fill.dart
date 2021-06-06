@@ -9,6 +9,9 @@ class FigmaFill implements PBFill {
   @override
   PBColor color;
 
+  @override
+  int fillType;
+
   FigmaFill(FigmaColor this.color, [this.isEnabled = true]);
 
   @override
