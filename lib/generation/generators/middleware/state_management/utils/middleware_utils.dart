@@ -102,7 +102,7 @@ class MiddlewareUtils {
 
   static String generateVariableBody(PBIntermediateNode node) {
     node.currentContext.sizingContext = SizingValueContext.PointValue;
-    (node?.generator?.generate(node ?? '', node.currentContext) ?? '') + ';';
+    return (node?.generator?.generate(node ?? '', node.currentContext) ?? '');
   }
 
   static String wrapOnLayout(String className) {
