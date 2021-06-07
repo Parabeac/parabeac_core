@@ -37,6 +37,7 @@ abstract class Controller {
     var fpb = FlutterProjectBuilder(
         MainInfo().configuration.generationConfiguration,
         project: pbProject,
+        genProjectAbsPath: configuration.genProjectPath,
         pageWriter: PBFlutterWriter());
 
     await fpb.convertToFlutterProject();

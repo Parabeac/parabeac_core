@@ -106,7 +106,9 @@ void main() {
       when(mockConfig.fileStructureStrategy).thenReturn(fss);
 
       projectBuilder = FlutterProjectBuilder(mockConfig,
-          project: project, pageWriter: PBFlutterWriter());
+          genProjectAbsPath: Directory.current.path,
+          project: project,
+          pageWriter: PBFlutterWriter());
     });
     test(
       '',
