@@ -114,7 +114,7 @@ void main() {
       var command = WriteScreenCommand(
           'UUID', 'some_dart_page.dart', 'homescreen/', 'dummy code');
       await command.write(_fileStructureStrategy);
-      expect(importHelper.getImport('UUID'), completePath);
+      expect(importHelper.getImport('UUID').first, completePath);
     });
   });
 }

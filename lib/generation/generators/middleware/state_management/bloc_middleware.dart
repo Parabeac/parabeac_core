@@ -75,8 +75,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
     node.currentContext.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
     managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
-    var fileStrategy = node.currentContext.project.fileStructureStrategy
-        as FlutterFileStructureStrategy;
+    var fileStrategy =
+        configuration.fileStructureStrategy as FlutterFileStructureStrategy;
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {

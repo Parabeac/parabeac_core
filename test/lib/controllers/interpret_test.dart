@@ -13,7 +13,6 @@ void main() {
     interpret = Interpret();
     interpret.init(nameOfProject, PBConfiguration.genericConfiguration());
     expect(interpret, isNotNull);
-    expect(interpret.projectName, nameOfProject);
   });
 
   test('Should return a PBIntermediateTree from a SketchNodeTree', () {

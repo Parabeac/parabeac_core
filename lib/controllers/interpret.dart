@@ -4,9 +4,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/helper/design_page.dart';
 import 'package:parabeac_core/input/helper/design_screen.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -18,7 +16,6 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orient
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
-import 'package:meta/meta.dart';
 import 'package:quick_log/quick_log.dart';
 
 import 'main_info.dart';
@@ -34,8 +31,6 @@ class Interpret {
     return _interpret;
   }
 
-  @visibleForTesting
-  String projectName;
   PBProject _pb_project;
   PBSymbolLinkerService _pbSymbolLinkerService;
   PBPrototypeLinkerService _pbPrototypeLinkerService;

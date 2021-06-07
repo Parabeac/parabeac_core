@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/provider_middleware.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
@@ -7,7 +6,6 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_project_d
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
-import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -42,15 +40,18 @@ class MockIntermediateState extends Mock implements IntermediateState {}
 
 class MockIntermediateVariation extends Mock implements IntermediateVariation {}
 
-class MockTree extends Mock implements PBIntermediateTree {}
+class MockConfig extends Mock implements ProviderGenerationConfiguration {}
+
+class MockFileStrategy extends Mock implements ProviderFileStructureStrategy {}
 
 void main() {
+  final modelPath = 'lib/models/';
+  final viewPath = 'lib/widgets';
   group('Middlewares Tests', () {
-    var config = ProviderGenerationConfiguration();
-    var testingPath = '${Directory.current.path}/test/lib/middleware/';
+    var mockConfig = MockConfig();
     var mockPBGenerationManager = MockPBGenerationManager();
     var providerMiddleware =
-        ProviderMiddleware(mockPBGenerationManager, config);
+        ProviderMiddleware(mockPBGenerationManager, mockConfig);
     var node = MockPBIntermediateNode();
     var node2 = MockPBIntermediateNode();
     var mockContext = MockContext();
@@ -58,16 +59,13 @@ void main() {
     var mockPBGenerationProjectData = MockPBGenerationProjectData();
     var mockPBGenerationViewData = MockPBGenerationViewData();
     var mockPBGenerator = MockPBGenerator();
-    var providerFileStructureStrategy = ProviderFileStructureStrategy(
-      testingPath,
-      PBFlutterWriter(),
-      mockProject,
-    );
+    var providerFileStructureStrategy = MockFileStrategy();
+
     var mockIntermediateAuxiliaryData = MockIntermediateAuxiliaryData();
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var mockTree = MockTree();
+    var tree = PBIntermediateTree('test');
 
     setUp(() async {
       /// Nodes set up
@@ -101,31 +99,43 @@ void main() {
 
       /// Context
       when(mockContext.project).thenReturn(mockProject);
-      when(mockContext.tree).thenReturn(mockTree);
+      when(mockContext.tree).thenReturn(tree);
+
+      // Tree
+      tree.rootNode = node;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
       when(mockProject.forest).thenReturn([]);
-      when(config.fileStructureStrategy)
+
+      // Configuration
+      when(mockConfig.fileStructureStrategy)
           .thenReturn(providerFileStructureStrategy);
+      when(mockConfig.registeredModels).thenReturn({});
 
       /// PBGenerationManager
       when(mockPBGenerationManager.generate(any)).thenReturn('code');
 
       /// PBGenerationProjectData
       when(mockPBGenerationProjectData.addDependencies('', '')).thenReturn('');
+
+      // FileStructureStrategy
+      when(providerFileStructureStrategy.RELATIVE_MODEL_PATH)
+          .thenReturn(modelPath);
     });
 
     test('Provider Strategy Test', () async {
       await providerFileStructureStrategy.setUpDirectories();
-      var tempNode = await providerMiddleware.applyMiddleware(mockTree);
-      expect(tempNode is PBIntermediateNode, true);
-      expect(await File('${testingPath}lib/models/some_element.dart').exists(),
-          true);
-    });
+      var tempNode = await providerMiddleware.applyMiddleware(tree);
+      expect(tempNode, isNull);
+      var verification =
+          verify(providerFileStructureStrategy.commandCreated(captureAny));
 
-    tearDownAll(() {
-      Process.runSync('rm', ['-rf', '${testingPath}lib']);
+      expect(verification.callCount, 3);
+
+      expect(verification.captured[0].symbolPath, contains(modelPath));
+      expect(verification.captured[1].symbolPath, contains(viewPath));
+      expect(verification.captured[2].symbolPath, contains(viewPath));
     });
   });
 }
