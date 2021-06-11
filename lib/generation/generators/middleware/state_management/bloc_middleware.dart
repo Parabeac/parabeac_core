@@ -29,29 +29,18 @@ class BLoCMiddleware extends StateManagementMiddleware {
     return '''
     ${generationManager.generateImports()}
 
-    part '${snakeName}_event.dart';
     part '${snakeName}_state.dart';
 
-    class ${pascalName}Bloc extends Bloc<${pascalName}Event, ${pascalName}State> {
-      ${pascalName}Bloc() : super(${initialStateName.pascalCase}State());
+    class ${pascalName}Cubit extends Cubit<${pascalName}State> {
+      ${pascalName}Cubit() : super(${initialStateName.pascalCase}State());
 
-      @override
-      Stream<${pascalName}State> mapEventToState(
-        ${pascalName}Event event,
-      ) async* {
-        // TODO: implement mapEventToState
+      void onGesture(){
+        // TODO: Populate onGesture method
+        //
+        // You can check the current state of the Cubit by using the [state] variable from `super`.
+        // To change the current state, call the [emit()] method with the state of your choice.
       }
     }
-    ''';
-  }
-
-  String _createEventPage(String name) {
-    var pascalName = name.pascalCase;
-    return '''
-    part of '${name.snakeCase}_bloc.dart';
-
-    @immutable
-    abstract class ${pascalName}Event {}
     ''';
   }
 
@@ -132,21 +121,11 @@ class BLoCMiddleware extends StateManagementMiddleware {
         stateBuffer.toString(),
         relativePath: parentDirectory));
 
-    /// Creates event page
-    fileStrategy.commandCreated(WriteSymbolCommand(
-
-        /// modified the [UUID] to prevent adding import because the event is
-        /// using `part of` syntax already when importing the bloc
-        'EVENT${node.currentContext.tree.UUID}',
-        '${generalName}_event',
-        _createEventPage(parentState),
-        relativePath: parentDirectory));
-
-    /// Creates bloc page
+    /// Creates cubit page
     managerData.addImport(FlutterImport('meta.dart', 'meta'));
     fileStrategy.commandCreated(WriteSymbolCommand(
         node.currentContext.tree.UUID,
-        '${generalName}_bloc',
+        '${generalName}_cubit',
         _createBlocPage(
           parentState,
           node.name,
