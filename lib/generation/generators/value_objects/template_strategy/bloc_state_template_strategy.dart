@@ -16,41 +16,25 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
       {args}) {
     var widgetName = retrieveNodeName(node);
     node.managerData.hasParams = true;
-    var returnStatement = node.generator.generate(node, generatorContext);
     node.managerData.hasParams = false;
-    var overrides = '';
-    var overrideVars = '';
-    if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
-      node.overridableProperties.forEach((prop) {
-        overrides += '${prop.friendlyName}, ';
-        overrideVars += 'var ${prop.friendlyName};';
-      });
-    }
 
     return '''
 ${isFirst ? _getHeader(manager) : ''}
 
 class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{
-  ${manager.generateGlobalVariables()}
 
-  $overrideVars
-  
-
-  ${widgetName + 'State'}(${(overrides.isNotEmpty ? '{$overrides}' : '')}){}
-
-  @override
-  Widget get widget => $returnStatement;
+  ${widgetName + 'State'}(){}
 
 }''';
   }
 
   String _getHeader(manager) {
     return '''
-    part of '${abstractClassName.snakeCase}_bloc.dart';
+    part of '${abstractClassName.snakeCase}_cubit.dart';
 
     @immutable
     abstract class ${abstractClassName.pascalCase}State{
-      Widget get widget;
+      
     }
     ''';
   }
