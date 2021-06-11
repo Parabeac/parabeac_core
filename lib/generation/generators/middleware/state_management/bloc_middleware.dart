@@ -71,22 +71,29 @@ class BLoCMiddleware extends StateManagementMiddleware {
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
-
-      var globalVariableName = getVariableName(node.name.snakeCase);
-      managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
-          '${generalStateName.pascalCase}Bloc()'));
-
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-
-      managerData.addToDispose('$globalVariableName.close()');
       if (node.generator is! StringGeneratorAdapter) {
+        var nameWithCubit = '${generalStateName.pascalCase}Cubit';
+        var nameWithState = '${generalStateName.pascalCase}State';
+        var namewithToWidget = '${generalStateName.pascalCase}StateToWidget';
         node.generator = StringGeneratorAdapter('''
-      BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
-        cubit: $globalVariableName,
-        builder: (context, state) => state.widget  
-      )
+        LayoutBuilder(
+          builder: (context, constraints){
+            return BlocProvider<$nameWithCubit>(
+              create: (context) => $nameWithCubit(),
+              child: BlocBuilder<$nameWithCubit,$nameWithState>(
+                builder: (context, state){
+                  return GestureDetector(
+                    child: $namewithToWidget(),
+                    onTap: () => context.read<$nameWithCubit>().onGesture(),
+                  );
+                }
+              )
+            );
+          }
+        )  
       ''');
       }
+
       return Future.value(node);
     }
     var parentState = getNameOfNode(node);
