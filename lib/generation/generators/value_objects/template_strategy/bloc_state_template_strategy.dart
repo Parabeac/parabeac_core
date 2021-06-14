@@ -23,7 +23,7 @@ ${isFirst ? _getHeader(manager) : ''}
 
 class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{
 
-  ${widgetName + 'State'}(){}
+  ${widgetName + 'State'}(BoxConstraints constraints){}
 
 }''';
   }
