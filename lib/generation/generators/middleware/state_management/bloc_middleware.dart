@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generator_adap
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
@@ -62,7 +63,6 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var managerData = node.managerData;
     node.currentContext.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
 
     var fileStrategy =
         configuration.fileStructureStrategy as BLoCFileStructureStrategy;
@@ -74,9 +74,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
       if (node.generator is! StringGeneratorAdapter) {
         var nameWithCubit = '${generalStateName.pascalCase}Cubit';
         var nameWithState = '${generalStateName.pascalCase}State';
-        var master =
-            PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-        var namewithToWidget = '${master.name.camelCase}StateToWidget';
+        var namewithToWidget = '${generalStateName}StateToWidget';
 
         node.generator = StringGeneratorAdapter('''
         LayoutBuilder(
@@ -115,11 +113,17 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var isFirst = true;
     states.forEach((element) {
       element.currentContext.tree.data = node.managerData;
+
+      // Creating copy of template to generate State
+      var templateCopy = element.generator.templateStrategy;
+
       element.generator.templateStrategy = BLoCStateTemplateStrategy(
         isFirst: isFirst,
         abstractClassName: parentState,
       );
       stateBuffer.write(generationManager.generate(element));
+
+      element.generator.templateStrategy = templateCopy;
 
       isFirst = false;
     });
@@ -140,13 +144,31 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
         /// modified the [UUID] to prevent adding import because the event is
         /// using `part of` syntax already when importing the bloc
-        'MAP${node.currentContext.tree.UUID}',
+        '${node.currentContext.tree.UUID}',
         '${generalName}_map',
         mapBuffer.toString(),
         symbolPath: blocDirectory));
 
+    // Generate node's states' view pages
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        'SYMBOL${state.variation.node.currentContext.tree.UUID}',
+        state.variation.node.name.snakeCase,
+        generationManager.generate(state.variation.node),
+        relativePath: generalName, //Generate view files separately
+      ));
+    });
+
+    // Generate default node's view page
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        'SYMBOL${node.currentContext.tree.UUID}',
+        node.name.snakeCase,
+        generationManager.generate(node),
+        relativePath: generalName));
+
     /// Creates cubit page
     managerData.addImport(FlutterImport('meta.dart', 'meta'));
+    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
     fileStrategy.commandCreated(WriteSymbolCommand(
         node.currentContext.tree.UUID,
         '${generalName}_cubit',
@@ -155,16 +177,6 @@ class BLoCMiddleware extends StateManagementMiddleware {
           node.name,
         ),
         symbolPath: blocDirectory));
-
-    // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      fileStrategy.commandCreated(WriteSymbolCommand(
-        state.variation.node.currentContext.tree.UUID,
-        state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node),
-        relativePath: generalName, //Generate view files separately
-      ));
-    });
 
     return Future.value(null);
   }
@@ -175,11 +187,9 @@ class BLoCMiddleware extends StateManagementMiddleware {
         element.name.substring(0, element.name.lastIndexOf('/')).snakeCase;
     stateBuffer.write("import 'package:flutter/material.dart';");
     // TODO: replace dynamically
-    stateBuffer.write(
-        "import 'package:temp/widgets/${elementName}_bloc/${elementName}_cubit.dart';");
 
     stateBuffer.write(
-        'Widget ${element.name.camelCase}StateToWidget( ${element.name.pascalCase}State state, BoxConstraints constraints) {');
+        'Widget ${elementName}StateToWidget( ${elementName.pascalCase}State state, BoxConstraints constraints) {');
     for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
       if (i == 0) {
         stateBuffer.write(_getStateLogic(
