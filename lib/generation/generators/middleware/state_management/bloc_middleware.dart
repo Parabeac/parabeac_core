@@ -32,7 +32,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
     part '${snakeName}_state.dart';
 
     class ${pascalName}Cubit extends Cubit<${pascalName}State> {
-      ${pascalName}Cubit() : super(${initialStateName.pascalCase}State());
+      var constraints;
+      ${pascalName}Cubit(this.constraints) : super(${initialStateName.pascalCase}State(constraints));
 
       void onGesture(){
         // TODO: Populate onGesture method
@@ -64,6 +65,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
     node.currentContext.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
     managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+
     var fileStrategy =
         configuration.fileStructureStrategy as FlutterFileStructureStrategy;
 
@@ -76,7 +78,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
         var nameWithState = '${generalStateName.pascalCase}State';
         var master =
             PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-        var namewithToWidget = '${master.name.pascalCase}StateToWidget';
+        var namewithToWidget = '${master.name.camelCase}StateToWidget';
+
         node.generator = StringGeneratorAdapter('''
         LayoutBuilder(
           builder: (context, constraints){
@@ -121,7 +124,6 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
       isFirst = false;
     });
-    mapBuffer.write(_makeStateToWidgetFunction(node));
 
     /// Creates state page
     fileStrategy.commandCreated(WriteSymbolCommand(
@@ -134,6 +136,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         relativePath: parentDirectory));
 
     /// Creates map page
+    mapBuffer.write(_makeStateToWidgetFunction(node));
     fileStrategy.commandCreated(WriteSymbolCommand(
 
         /// modified the [UUID] to prevent adding import because the event is
@@ -159,6 +162,13 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
   String _makeStateToWidgetFunction(PBIntermediateNode element) {
     var stateBuffer = StringBuffer();
+    var elementName =
+        element.name.substring(0, element.name.lastIndexOf('/')).snakeCase;
+    stateBuffer.write("import 'package:flutter/material.dart';");
+    // TODO: replace dynamically
+    stateBuffer.write(
+        "import 'package:temp/widgets/${elementName}_bloc/${elementName}_cubit.dart';");
+
     stateBuffer.write(
         'Widget ${element.name.camelCase}StateToWidget( ${element.name.pascalCase}State state, BoxConstraints constraints) {');
     for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
