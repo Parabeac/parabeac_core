@@ -32,8 +32,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
     part '${snakeName}_state.dart';
 
     class ${pascalName}Cubit extends Cubit<${pascalName}State> {
-      var constraints;
-      ${pascalName}Cubit(this.constraints) : super(${initialStateName.pascalCase}State(constraints));
+      ${pascalName}Cubit(this.constraints) : super(${initialStateName.pascalCase}State());
 
       void onGesture(){
         // TODO: Populate onGesture method
@@ -184,8 +183,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
       }
     }
 
-    stateBuffer
-        .write('return ${element.name.pascalCase}(constraints); \n }');
+    stateBuffer.write('return ${element.name.pascalCase}(constraints); \n }');
 
     return stateBuffer.toString();
   }
