@@ -74,7 +74,9 @@ class BLoCMiddleware extends StateManagementMiddleware {
       if (node.generator is! StringGeneratorAdapter) {
         var nameWithCubit = '${generalStateName.pascalCase}Cubit';
         var nameWithState = '${generalStateName.pascalCase}State';
-        var namewithToWidget = '${generalStateName.pascalCase}StateToWidget';
+        var master =
+            PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
+        var namewithToWidget = '${master.name.pascalCase}StateToWidget';
         node.generator = StringGeneratorAdapter('''
         LayoutBuilder(
           builder: (context, constraints){
@@ -83,7 +85,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
               child: BlocBuilder<$nameWithCubit,$nameWithState>(
                 builder: (context, state){
                   return GestureDetector(
-                    child: $namewithToWidget(),
+                    child: $namewithToWidget(state, constraints),
                     onTap: () => context.read<$nameWithCubit>().onGesture(),
                   );
                 }
@@ -102,6 +104,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var states = <PBIntermediateNode>[node];
 
     var stateBuffer = StringBuffer();
+    var mapBuffer = StringBuffer();
 
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
@@ -115,8 +118,10 @@ class BLoCMiddleware extends StateManagementMiddleware {
         abstractClassName: parentState,
       );
       stateBuffer.write(generationManager.generate(element));
+
       isFirst = false;
     });
+    mapBuffer.write(_makeStateToWidgetFunction(node));
 
     /// Creates state page
     fileStrategy.commandCreated(WriteSymbolCommand(
@@ -126,6 +131,16 @@ class BLoCMiddleware extends StateManagementMiddleware {
         'STATE${node.currentContext.tree.UUID}',
         '${generalName}_state',
         stateBuffer.toString(),
+        relativePath: parentDirectory));
+
+    /// Creates map page
+    fileStrategy.commandCreated(WriteSymbolCommand(
+
+        /// modified the [UUID] to prevent adding import because the event is
+        /// using `part of` syntax already when importing the bloc
+        'MAP${node.currentContext.tree.UUID}',
+        '${generalName}_map',
+        mapBuffer.toString(),
         relativePath: parentDirectory));
 
     /// Creates cubit page
@@ -140,5 +155,37 @@ class BLoCMiddleware extends StateManagementMiddleware {
         relativePath: parentDirectory));
 
     return Future.value(null);
+  }
+
+  String _makeStateToWidgetFunction(PBIntermediateNode element) {
+    var stateBuffer = StringBuffer();
+    stateBuffer.write(
+        'Widget ${element.name.camelCase}StateToWidget( ${element.name.pascalCase}State state, BoxConstraints constraints) {');
+    for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
+      if (i == 0) {
+        stateBuffer.write(_getStateLogic(
+            element.auxiliaryData.stateGraph.states[i].variation.node, 'if'));
+      } else {
+        {
+          stateBuffer.write(_getStateLogic(
+              element.auxiliaryData.stateGraph.states[i].variation.node,
+              'else if'));
+        }
+      }
+    }
+
+    stateBuffer
+        .write('return ${element.name.pascalCase}State(constraints); \n }');
+
+    return stateBuffer.toString();
+  }
+
+  String _getStateLogic(PBIntermediateNode node, String statement) {
+    print('hi');
+    return '''
+      $statement (state is ${node.name.pascalCase}State){
+        return ${node.name.pascalCase}State(constraints);
+      } \n
+    ''';
   }
 }
