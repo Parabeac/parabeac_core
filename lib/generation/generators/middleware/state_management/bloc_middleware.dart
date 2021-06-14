@@ -31,7 +31,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
     part '${snakeName}_state.dart';
 
     class ${pascalName}Cubit extends Cubit<${pascalName}State> {
-      ${pascalName}Cubit(this.constraints) : super(${initialStateName.pascalCase}State());
+      ${pascalName}Cubit() : super(${initialStateName.pascalCase}State());
 
       void onGesture(){
         // TODO: Populate onGesture method
