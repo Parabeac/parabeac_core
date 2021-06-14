@@ -1,9 +1,8 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/bloc_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -66,7 +65,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
     managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
 
     var fileStrategy =
-        configuration.fileStructureStrategy as FlutterFileStructureStrategy;
+        configuration.fileStructureStrategy as BLoCFileStructureStrategy;
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
@@ -102,7 +101,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
     }
     var parentState = getNameOfNode(node);
     var generalName = parentState.snakeCase;
-    var parentDirectory = generalName + '_bloc';
+    var blocDirectory =
+        p.join(fileStrategy.RELATIVE_BLOC_PATH, '${generalName}_bloc');
     var states = <PBIntermediateNode>[node];
 
     var stateBuffer = StringBuffer();
@@ -132,7 +132,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         'STATE${node.currentContext.tree.UUID}',
         '${generalName}_state',
         stateBuffer.toString(),
-        relativePath: parentDirectory));
+        symbolPath: blocDirectory));
 
     /// Creates map page
     mapBuffer.write(_makeStateToWidgetFunction(node));
@@ -143,7 +143,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         'MAP${node.currentContext.tree.UUID}',
         '${generalName}_map',
         mapBuffer.toString(),
-        relativePath: parentDirectory));
+        symbolPath: blocDirectory));
 
     /// Creates cubit page
     managerData.addImport(FlutterImport('meta.dart', 'meta'));
@@ -154,7 +154,17 @@ class BLoCMiddleware extends StateManagementMiddleware {
           parentState,
           node.name,
         ),
-        relativePath: parentDirectory));
+        symbolPath: blocDirectory));
+
+    // Generate node's states' view pages
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        state.variation.node.currentContext.tree.UUID,
+        state.variation.node.name.snakeCase,
+        generationManager.generate(state.variation.node),
+        relativePath: generalName, //Generate view files separately
+      ));
+    });
 
     return Future.value(null);
   }
