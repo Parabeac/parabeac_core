@@ -185,16 +185,15 @@ class BLoCMiddleware extends StateManagementMiddleware {
     }
 
     stateBuffer
-        .write('return ${element.name.pascalCase}State(constraints); \n }');
+        .write('return ${element.name.pascalCase}(constraints); \n }');
 
     return stateBuffer.toString();
   }
 
   String _getStateLogic(PBIntermediateNode node, String statement) {
-    print('hi');
     return '''
       $statement (state is ${node.name.pascalCase}State){
-        return ${node.name.pascalCase}State(constraints);
+        return ${node.name.pascalCase}(constraints);
       } \n
     ''';
   }
