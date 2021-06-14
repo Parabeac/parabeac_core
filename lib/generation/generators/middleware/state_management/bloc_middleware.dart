@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
@@ -71,10 +72,11 @@ class BLoCMiddleware extends StateManagementMiddleware {
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
+      managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
       if (node.generator is! StringGeneratorAdapter) {
         var nameWithCubit = '${generalStateName.pascalCase}Cubit';
         var nameWithState = '${generalStateName.pascalCase}State';
-        var namewithToWidget = '${generalStateName}StateToWidget';
+        var namewithToWidget = '${generalStateName.camelCase}StateToWidget';
 
         node.generator = StringGeneratorAdapter('''
         LayoutBuilder(
@@ -183,29 +185,32 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
   String _makeStateToWidgetFunction(PBIntermediateNode element) {
     var stateBuffer = StringBuffer();
+    var importBuffer = StringBuffer();
     var elementName =
         element.name.substring(0, element.name.lastIndexOf('/')).snakeCase;
-    stateBuffer.write("import 'package:flutter/material.dart';");
-    // TODO: replace dynamically
+    importBuffer.write("import 'package:flutter/material.dart'; \n");
+    importBuffer.write(
+        "import 'package:${MainInfo().projectName}/blocs/${elementName}_bloc/${elementName}_cubit.dart';\n");
 
     stateBuffer.write(
-        'Widget ${elementName}StateToWidget( ${elementName.pascalCase}State state, BoxConstraints constraints) {');
+        'Widget ${elementName.camelCase}StateToWidget( ${elementName.pascalCase}State state, BoxConstraints constraints) {');
     for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
+      var node = element.auxiliaryData.stateGraph.states[i].variation.node;
       if (i == 0) {
-        stateBuffer.write(_getStateLogic(
-            element.auxiliaryData.stateGraph.states[i].variation.node, 'if'));
+        stateBuffer.write(_getStateLogic(node, 'if'));
       } else {
         {
-          stateBuffer.write(_getStateLogic(
-              element.auxiliaryData.stateGraph.states[i].variation.node,
-              'else if'));
+          stateBuffer.write(_getStateLogic(node, 'else if'));
         }
       }
+      importBuffer.write(
+          "import 'package:${MainInfo().projectName}/widgets/${elementName}/${node.name.snakeCase}.dart'; \n");
     }
-
+    importBuffer.write(
+        "import 'package:${MainInfo().projectName}/widgets/${elementName}/${element.name.snakeCase}.dart'; \n");
     stateBuffer.write('return ${element.name.pascalCase}(constraints); \n }');
 
-    return stateBuffer.toString();
+    return importBuffer.toString() + stateBuffer.toString();
   }
 
   String _getStateLogic(PBIntermediateNode node, String statement) {
