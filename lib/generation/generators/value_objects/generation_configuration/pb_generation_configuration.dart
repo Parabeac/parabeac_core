@@ -176,7 +176,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     if (rootName.contains('_')) {
       rootName = rootName.split('_')[0].pascalCase;
     }
-    var currentMap = poLinker.getPlatformOrientationData(rootName);
+    var currentMap = poLinker.getPlatformOrientationData(rootName.snakeCase);
     var className = [rootName.pascalCase, ''];
     if (currentMap.length > 1) {
       className[0] += 'PlatformBuilder';
