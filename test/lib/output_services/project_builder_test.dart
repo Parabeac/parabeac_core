@@ -106,7 +106,7 @@ void main() {
       when(mockConfig.fileStructureStrategy).thenReturn(fss);
 
       projectBuilder = FlutterProjectBuilder(mockConfig,
-          genProjectAbsPath: Directory.current.path,
+          // genProjectAbsPath: Directory.current.path,
           project: project,
           pageWriter: PBFlutterWriter());
     });
@@ -116,7 +116,7 @@ void main() {
         /// Check that the Dart file was created
         /// It should be a file named `testingPage`
         /// Stafefulwidget with a Scaffold and a Container
-        await projectBuilder.convertToFlutterProject();
+        await projectBuilder.genProjectFiles();
       },
       timeout: Timeout(
         Duration(minutes: 1),

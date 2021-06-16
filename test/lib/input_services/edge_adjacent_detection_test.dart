@@ -28,6 +28,7 @@ void main() {
       sketchNode = ShapePathMock();
       context = ContextMock();
       MainInfo().outputPath = '';
+      MainInfo().pngPath = '';
 
       when(sketchNode.points).thenReturn([
         {
@@ -132,6 +133,7 @@ void main() {
       when(sketchNode.UUID).thenReturn('');
       shapePath =
           InheritedShapePath(sketchNode, 'testName', currentContext: context);
+      
     });
 
     test('Detecting Shape', () {
