@@ -126,7 +126,7 @@ void collectArguments(ArgResults arguments) {
 
   /// If outputPath is empty, assume we are outputting to design file path
   info.outputPath =
-      arguments['out'] ?? p.dirname(info.designFilePath ?? Directory.current);
+      arguments['out'] ?? p.dirname(info.designFilePath ?? Directory.current.path);
 
   info.exportPBDL = arguments['export-pbdl'] ?? false;
   
