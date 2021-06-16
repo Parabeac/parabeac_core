@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/command_gen_middleware.dart';
@@ -8,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
@@ -15,6 +17,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -186,7 +189,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     return className;
   }
 
-  Future<void> generatePlatformAndOrientationInstance(PBProject mainTree) {
+  /// Generate platform and orientation instances for all the
+  /// screens that requireds and change main.dart if need it
+  void generatePlatformAndOrientationInstance(PBProject mainTree) {
     var currentMap = poLinker.getWhoNeedsAbstractInstance();
 
     currentMap.forEach((screenName, platformsMap) {
@@ -205,14 +210,13 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
       var newCommand = generatePlatformInstance(
           platformsMap, screenName, fileStructureStrategy, rawImports);
+      fileStructureStrategy.commandCreated(newCommand);
 
-      if (newCommand != null) {
-        commandObservers
-            .forEach((observer) => observer.commandCreated(newCommand));
-      }
+      setMainForPlatform(newCommand, screenName);
     });
   }
 
+  /// Gets all the screen imports for the builder
   Set<String> getPlatformImports(String screenName) {
     var platformOrientationMap =
         poLinker.getPlatformOrientationData(screenName);
@@ -223,5 +227,33 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       });
     });
     return imports;
+  }
+
+  /// This method takes a command and checks if one of its child screens
+  /// is the home screen for the project, if so modify main
+  /// to redirect to the proper builder
+  bool setMainForPlatform(var newCommand, String screenName) {
+    var platformOrientationMap =
+        poLinker.getPlatformOrientationData(screenName);
+
+    platformOrientationMap.forEach((key, map) {
+      map.forEach((key, tree) {
+        if (tree.rootNode is InheritedScaffold &&
+            (tree.rootNode as InheritedScaffold).isHomeScreen) {
+          fileStructureStrategy.commandCreated(EntryFileCommand(
+              entryScreenName: (newCommand as WriteScreenCommand)
+                  .name
+                  .replaceAll('.dart', '')
+                  .pascalCase,
+              entryScreenImport: _importProcessor
+                  .getFormattedImports(newCommand.UUID,
+                      importMapper: (import) =>
+                          FlutterImport(import, MainInfo().projectName))
+                  .join('\n')));
+          return true;
+        }
+      });
+    });
+    return false;
   }
 }
