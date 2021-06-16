@@ -11,6 +11,7 @@ import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:tuple/tuple.dart';
 
 // String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
 
@@ -24,23 +25,13 @@ import 'package:quick_log/quick_log.dart';
 /// For example, if the Flutter project were to be `my/awesome/path/FlutterProject,`
 /// the [flutterDir] would be `my/awesome/path,` while the project name is `FlutterProject.`
 class FlutterProjectBuilder {
+  /// The [PBProject] that will be converted into a Flutter project.
   PBProject project;
 
-  Logger log;
+  /// Logger that prints consoles informatio
+  static Logger log;
 
   PBPageWriter pageWriter;
-
-  /// The path of the directory where the [project] is going to be generated at.
-  final String flutterDir;
-
-  /// The name that will be used for the generation of the [project]
-  ///
-  /// If no [projectName] is provided, the [PBProject.projectName] will
-  /// be used as the default value.
-  String projectName;
-
-  /// The absolute path for the generated [project]
-  String genProjectAbsPath;
 
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
@@ -51,69 +42,81 @@ class FlutterProjectBuilder {
     this.generationConfiguration, {
     this.project,
     this.pageWriter,
-    this.projectName,
-    this.genProjectAbsPath,
-    this.flutterDir,
   }) {
     log = Logger(runtimeType.toString());
-
-    projectName ??= project.projectName;
-    genProjectAbsPath ??= p.join(flutterDir, projectName);
-
-    if (genProjectAbsPath == null) {
-      log.error(
-          '[genProjectAbsPath] is null, caused by not providing both [projectName] & [flutterDir] or providing [genProjectAbsPath]');
-      throw NullThrownError();
-    }
 
     generationConfiguration.pageWriter = pageWriter;
   }
 
-  Future<void> convertToFlutterProject({List<ArchiveFile> rawImages}) async {
-    try {
-      var createResult = Process.runSync('flutter', ['create', projectName],
-          workingDirectory: MainInfo().outputPath);
-      if (createResult.stderr != null && createResult.stderr.isNotEmpty) {
-        log.error(createResult.stderr);
-      } else {
-        log.info(createResult.stdout);
+  /// Creating a Flutter project within the [projectDir] with the name of [flutterProjectName].
+  ///
+  /// Make sure that the [projectDir] does not contain the [flutterProjectName], it should only be
+  /// the directory where the flutter project is going to be generated. Finally, the function
+  /// is going to return a [Tuple2], [Tuple2.item1] being the path of the [flutterProjectName] and
+  /// [Tuple2.item2] being the [ProcessResult.stdout] or [ProcessResult.stderr] depending
+  /// on the [ProcessResult.exitCode]. If the [createAssetsDir] is `true`, its going to create
+  /// the [assetsDir] within the flutter project.
+  static Future<Tuple2> createFlutterProject(String flutterProjectName,
+      {String projectDir,
+      bool createAssetsDir = true,
+      String assetsDir = 'assets/images/'}) {
+    return Process.run('flutter', ['create', flutterProjectName],
+            workingDirectory: projectDir, runInShell: true)
+        .then((result) => Tuple2(p.join(projectDir, flutterProjectName),
+            result.exitCode == 2 ? result.stderr : result.stdout))
+        .then((tuple) async {
+      if (createAssetsDir) {
+        await Directory(p.join(tuple.item1, assetsDir))
+            .create(recursive: true)
+            .catchError((e) {
+          log.error(e.toString());
+        });
       }
-    } catch (error, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: error,
-            stackTrace: stackTrace,
-          );
-      log.error(error.toString());
-    }
-
-    await Directory(p.join(genProjectAbsPath, 'assets/images'))
-        .create(recursive: true)
-        .catchError((e) {
-      log.error(e.toString());
+      return tuple;
+    }).catchError((onError) {
+      MainInfo().captureException(onError);
+      log.error(onError.toString());
     });
+  }
 
+  /// Formatting the flutter project that is at [projectPath].
+  ///
+  /// The formatter is going to be running within `[projectPath]bin/*`,
+  /// `[projectPath]lib/*`, and `[projectPath]test/*` by using `dart format`.
+  /// There is an option to set to set the current working directory of as [projectDir],
+  static Future<dynamic> formatProject(String projectPath, {String projectDir}) {
+    return Process.run(
+            'dart',
+            [
+              'format',
+              p.join(projectPath, 'bin'),
+              p.join(projectPath, 'lib'),
+              p.join(projectPath, 'test')
+            ],
+            workingDirectory: projectDir,
+            runInShell: true)
+        .then((result) => result.exitCode == 2 ? result.stderr : result.stdout)
+        .catchError((error) {
+      MainInfo().captureException(error);
+      log.error(error.toString());
+    });
+  }
+
+  Future<void> genProjectFiles(String genProjectPath,
+      {List<ArchiveFile> rawImages}) async {
+        
     if (MainInfo().figmaProjectID != null &&
         MainInfo().figmaProjectID.isNotEmpty) {
       log.info('Processing remaining images...');
       await FigmaAssetProcessor().processImageQueue();
     }
 
-    Process.runSync(
-        p.join(MainInfo().cwd.path,
-            '/lib/generation/helperScripts/shell-proxy.sh'),
-        [
-          'mv ${p.join('./pngs', '*')} ${p.join(genProjectAbsPath, 'assets/images/')}'
-        ],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: MainInfo().outputPath);
-
     // Add all images
     if (rawImages != null) {
       for (var image in rawImages) {
         if (image.name != null) {
           var f = File(p.setExtension(
-              p.join(genProjectAbsPath, 'assets/images/',
+              p.join(genProjectPath, 'assets/images/',
                   image.name.replaceAll(' ', '')),
               '.png'));
           f.writeAsBytesSync(image.content);
@@ -126,14 +129,13 @@ class FlutterProjectBuilder {
         project.sharedStyles.isNotEmpty &&
         MainInfo().exportStyles) {
       try {
-        Directory(p.join(genProjectAbsPath, 'lib/document/'))
+        Directory(p.join(genProjectPath, 'lib/document/'))
             .createSync(recursive: true);
 
-        WriteStyleClasses(genProjectAbsPath);
+        WriteStyleClasses(genProjectPath);
 
-        var s =
-            File(p.join(genProjectAbsPath, 'lib/document/shared_props.g.dart'))
-                .openWrite(mode: FileMode.write, encoding: utf8);
+        var s = File(p.join(genProjectPath, 'lib/document/shared_props.g.dart'))
+            .openWrite(mode: FileMode.write, encoding: utf8);
 
         s.write('''${FlutterImport('dart:ui', null)}
               ${FlutterImport('flutter/material.dart', null)}
@@ -153,35 +155,15 @@ class FlutterProjectBuilder {
     await generationConfiguration
         .generatePlatformAndOrientationInstance(project);
 
+
     Process.runSync(
-        p.join(MainInfo().cwd.path,
-            '/lib/generation/helperScripts/shell-proxy.sh'),
-        ['rm -rf .dart_tool/build'],
+        'rm',
+        ['-rf', '.dart_tool/build'],
         runInShell: true,
         environment: Platform.environment,
         workingDirectory: MainInfo().outputPath);
 
-    // Remove pngs folder
-    Process.runSync(
-        p.join(MainInfo().cwd.path,
-            '/lib/generation/helperScripts/shell-proxy.sh'),
-        ['rm -rf ${p.join(MainInfo().outputPath, '/pngs')}'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: MainInfo().outputPath);
-
-    log.info(
-      Process.runSync(
-              'dart',
-              [
-                'format',
-                '${p.join(genProjectAbsPath, 'bin')}',
-                '${p.join(genProjectAbsPath, 'lib')}',
-                '${p.join(genProjectAbsPath, 'test')}'
-              ],
-              workingDirectory: MainInfo().outputPath)
-          .stdout,
-    );
+    await formatProject(genProjectPath, projectDir: MainInfo().outputPath);
   }
 }
 
