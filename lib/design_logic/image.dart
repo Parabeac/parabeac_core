@@ -95,7 +95,7 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var pngsPath =
-        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
+        p.join(MainInfo().pngPath, '$UUID.png'.replaceAll(':', '_'));
     try {
       var img = await AzureAssetService().downloadImage(UUID);
       var file = File(pngsPath)..createSync(recursive: true);

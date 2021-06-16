@@ -8,7 +8,7 @@ import 'package:path/path.dart' as p;
 
 /// Takes Initial Design File and puts it into a tree in object format.
 /// Currently only supports Sketch Files
-///Class used to process the contents of a sketch file
+/// Class used to process the contents of a sketch file
 class InputDesignService {
   final String pathToFile;
   final String IMAGE_DIR_NAME = 'images/';
@@ -44,7 +44,7 @@ class InputDesignService {
   ///Getting the images in the sketch file and adding them to the png folder.
   void setImageDir() {
     ///Creating the pngs folder, if it's already not there.
-    var pngsPath = p.join(MainInfo().outputPath, 'pngs');
+    var pngsPath = p.join(MainInfo().pngPath);
     Directory(pngsPath).createSync(recursive: true);
     for (final file in archive) {
       final fileName = file.name;
