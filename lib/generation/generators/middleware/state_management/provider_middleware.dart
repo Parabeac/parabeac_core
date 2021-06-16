@@ -38,7 +38,6 @@ class ProviderMiddleware extends Middleware {
 
       if (node.generator is! StringGeneratorAdapter) {
         var modelName = ImportHelper.getName(node.functionCallName).pascalCase;
-        var defaultWidget = node.functionCallName.pascalCase;
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
@@ -54,7 +53,7 @@ class ProviderMiddleware extends Middleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>().OnGesture(),
+                    ${modelName}>().onGesture(),
                 child: Consumer<$modelName>(
                   builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentLayout
                 ),
