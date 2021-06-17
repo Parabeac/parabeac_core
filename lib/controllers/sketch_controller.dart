@@ -33,7 +33,7 @@ class SketchController extends Controller {
 
     AzureAssetService().projectUUID = designProject.id;
 
-    super.convert(designProject , apService ?? SketchAssetProcessor());
+    super.convert(designProject, apService ?? SketchAssetProcessor());
   }
 
   SketchProject generateSketchNodeTree(
@@ -82,7 +82,7 @@ class SketchController extends Controller {
 
       process = await Process.start('npm', ['run', 'prod'],
           workingDirectory:
-              p.join(MainInfo().cwd.path, '/SketchAssetConverter'));
+              p.join(MainInfo().cwd.path, 'SketchAssetConverter'));
 
       await for (var event in process.stdout.transform(utf8.decoder)) {
         if (event.toLowerCase().contains('server is listening on port')) {
