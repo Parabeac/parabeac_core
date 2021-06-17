@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:recase/recase.dart';
 
 class PBPlatformOrientationLinkerService {
   static final PBPlatformOrientationLinkerService _pbPlatformLinkerService =
@@ -65,7 +66,8 @@ class PBPlatformOrientationLinkerService {
       // Check if we have exact trees (same orientation and platform)
       var trees = _map[key];
       for (var currTree in trees) {
-        var treeName = key;
+        // Ensure we're comparing the same string by converting to snakecase
+        var treeName = key.snakeCase;
         var iterTreeName = currTree.rootNode.name.snakeCase;
         if (treeName == iterTreeName &&
             tree.data.orientation == currTree.data.orientation &&
