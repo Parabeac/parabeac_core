@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
@@ -66,12 +66,12 @@ class PBPlatformOrientationLinkerService {
       var trees = _map[key];
       for (var currTree in trees) {
         var treeName = key;
-        var iterTreeName = currTree.rootNode.name;
+        var iterTreeName = currTree.rootNode.name.snakeCase;
         if (treeName == iterTreeName &&
             tree.data.orientation == currTree.data.orientation &&
             tree.data.platform == currTree.data.platform) {
           // Rename the tree if both trees have the same orientation and platform
-          tree.rootNode.name = treeName + '_${_mapCounter[tree.rootNode.name]}';
+          tree.rootNode.name = treeName + '_${_mapCounter[iterTreeName]}';
           _mapCounter[treeName]++;
         }
       }
