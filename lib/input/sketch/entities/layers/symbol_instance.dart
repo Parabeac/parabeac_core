@@ -9,6 +9,7 @@ import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -146,13 +147,13 @@ class SymbolInstance extends SketchNode
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
-    var sym = PBSharedInstanceIntermediateNode(
-      this,
-      symbolID,
-      sharedParamValues: _extractParameters(),
-      currentContext: currentContext,
-      constraints: convertSketchConstraintToPBDLConstraint(resizingConstraint),
-    );
+    var sym = PBSharedInstanceIntermediateNode(this, symbolID,
+        sharedParamValues: _extractParameters(),
+        currentContext: currentContext,
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width));
     return Future.value(sym);
   }
 

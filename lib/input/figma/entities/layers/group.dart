@@ -13,6 +13,7 @@ import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -114,12 +115,14 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
 
       children.clear();
 
-      return Future.value(InheritedBitmap(
-        this,
-        name,
-        currentContext: currentContext,
-        constraints: convertFigmaConstraintToPBDLConstraint(constraints),
-      ));
+      return Future.value(
+        InheritedBitmap(this, name,
+            currentContext: currentContext,
+            constraints: PBIntermediateConstraints.fromConstraints(
+                convertFigmaConstraintToPBDLConstraint(constraints),
+                boundaryRectangle.height,
+                boundaryRectangle.width)),
+      );
     }
     return Future.value(TempGroupLayoutNode(
       this,

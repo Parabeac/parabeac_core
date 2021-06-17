@@ -27,3 +27,4 @@ class PBBitmapGenerator extends PBGenerator {
     return buffer.toString();
   }
 }
+

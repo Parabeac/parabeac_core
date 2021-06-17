@@ -15,8 +15,8 @@ class PBSizeHelper extends PBAttributesHelper {
     final buffer = StringBuffer();
 
     var body = source.size ?? {};
-    double height = body['height'];
-    double width = body['width'];
+    double relativeHeight = body['height'];
+    double relativeWidth = body['width'];
 
     //Add relative sizing if the widget has context
     var screenWidth;
@@ -31,32 +31,39 @@ class PBSizeHelper extends PBAttributesHelper {
           .abs();
     }
 
-    height = (height != null && screenHeight != null && screenHeight > 0.0)
-        ? height / screenHeight
-        : height;
-    width = (width != null && screenWidth != null && screenWidth > 0.0)
-        ? width / screenWidth
-        : width;
+    relativeHeight =
+        (relativeHeight != null && screenHeight != null && screenHeight > 0.0)
+            ? relativeHeight / screenHeight
+            : relativeHeight;
+    relativeWidth =
+        (relativeWidth != null && screenWidth != null && screenWidth > 0.0)
+            ? relativeWidth / screenWidth
+            : relativeWidth;
 
-    if (generatorContext.sizingContext == SizingValueContext.MediaQueryValue) {
+    if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
+      var height = source.constraints.fixedHeight != null
+          ? body['height'].toStringAsFixed(3)
+          : 'MediaQuery.of(context).size.height * ${relativeHeight.toStringAsFixed(3)},';
+      var width = source.constraints.fixedWidth != null
+          ? body['width'].toStringAsFixed(3)
+          : 'MediaQuery.of(context).size.width * ${relativeWidth.toStringAsFixed(3)},';
+
       buffer.write(
-          'width: MediaQuery.of(context).size.width * ${width.toStringAsFixed(3)},');
-      buffer.write(
-          'height: MediaQuery.of(context).size.height * ${height.toStringAsFixed(3)},');
+          'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
     } else if (generatorContext.sizingContext ==
         SizingValueContext.LayoutBuilderValue) {
-      buffer
-          .write('width: constraints.maxWidth * ${width.toStringAsFixed(3)},');
       buffer.write(
-          'height: constraints.maxHeight * ${height.toStringAsFixed(3)},');
+          'width: constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},');
+      buffer.write(
+          'height: constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},');
     } else {
-      height = body['height'];
-      width = body['width'];
-      if (width != null) {
-        buffer.write('width: ${width.toStringAsFixed(3)},');
+      relativeHeight = body['height'];
+      relativeWidth = body['width'];
+      if (relativeWidth != null) {
+        buffer.write('width: ${relativeWidth.toStringAsFixed(3)},');
       }
-      if (height != null) {
-        buffer.write('height: ${height.toStringAsFixed(3)},');
+      if (relativeHeight != null) {
+        buffer.write('height: ${relativeHeight.toStringAsFixed(3)},');
       }
     }
 

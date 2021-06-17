@@ -10,7 +10,7 @@ class PBScaffoldGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
+    generatorContext.sizingContext = SizingValueContext.ScaleValue;
     var appBar = source.getAttributeNamed('appBar')?.attributeNode;
     var body = source.getAttributeNamed('body')?.attributeNode;
     var bottomNavBar =

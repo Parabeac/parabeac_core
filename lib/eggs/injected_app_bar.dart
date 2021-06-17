@@ -19,6 +19,10 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String UUID;
 
+  @override
+  List<PBIntermediateNode> get children =>
+      [leadingItem, middleItem, trailingItem];
+
   PBIntermediateNode get leadingItem =>
       getAttributeNamed('leading')?.attributeNode;
   PBIntermediateNode get middleItem =>
@@ -66,12 +70,10 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void alignChild() {
     /// This align only modifies middleItem
-    var tempNode = InjectedContainer(
-      middleItem.bottomRightCorner,
-      middleItem.topLeftCorner,
-      middleItem.name,
-      middleItem.UUID,
-    )..addChild(middleItem);
+    var tempNode = InjectedContainer(middleItem.bottomRightCorner,
+        middleItem.topLeftCorner, middleItem.name, middleItem.UUID,
+        currentContext: currentContext)
+      ..addChild(middleItem);
 
     getAttributeNamed('title').attributeNode = tempNode;
   }

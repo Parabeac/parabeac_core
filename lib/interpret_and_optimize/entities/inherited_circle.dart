@@ -1,7 +1,7 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -34,9 +34,6 @@ class InheritedCircle extends PBVisualIntermediateNode
 
     auxiliaryData.borderInfo = {};
     auxiliaryData.borderInfo['shape'] = 'circle';
-    auxiliaryData.alignment = alignX != null && alignY != null
-        ? {'alignX': alignX, 'alignY': alignY}
-        : null;
   }
 
   @override
@@ -55,15 +52,17 @@ class InheritedCircle extends PBVisualIntermediateNode
     child = node;
   }
 
-  /// Should add positional info ONLY to parent node. This should only be sent here if the parent and child node is only one-to-one.
-  ///
-  /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
   @override
   void alignChild() {
-    var align =
-        InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-    align.addChild(child);
-    align.alignChild();
-    child = align;
+    var padding = Padding('', child.constraints,
+        left: child.topLeftCorner.x - topLeftCorner.x,
+        right: bottomRightCorner.x - child.bottomRightCorner.x,
+        top: child.topLeftCorner.y - topLeftCorner.y,
+        bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+        topLeftCorner: topLeftCorner,
+        bottomRightCorner: bottomRightCorner,
+        currentContext: currentContext);
+    padding.addChild(child);
+    child = padding;
   }
 }

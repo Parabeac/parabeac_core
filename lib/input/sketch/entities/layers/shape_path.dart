@@ -7,6 +7,7 @@ import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_path.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -122,8 +123,10 @@ class ShapePath extends AbstractShapeLayer implements SketchNodeFactory {
     return Future.value(InheritedShapePath(this, name,
         currentContext: currentContext,
         image: image,
-        constraints:
-            convertSketchConstraintToPBDLConstraint(resizingConstraint)));
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width)));
   }
 
   @override

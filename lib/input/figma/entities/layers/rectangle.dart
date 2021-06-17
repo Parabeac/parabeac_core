@@ -10,6 +10,7 @@ import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -103,7 +104,10 @@ class FigmaRectangle extends FigmaVector
         this,
         name,
         currentContext: currentContext,
-        constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertFigmaConstraintToPBDLConstraint(constraints),
+            boundaryRectangle.height,
+            boundaryRectangle.width),
       ));
     }
     PBBorder border;
@@ -129,7 +133,10 @@ class FigmaRectangle extends FigmaVector
             ? toHex(style.borders[0].color)
             : null
       },
-      constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+      constraints: PBIntermediateConstraints.fromConstraints(
+          convertFigmaConstraintToPBDLConstraint(constraints),
+          boundaryRectangle.height,
+          boundaryRectangle.width),
     ));
   }
 

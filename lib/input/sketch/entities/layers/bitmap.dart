@@ -8,6 +8,7 @@ import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
@@ -113,8 +114,10 @@ class Bitmap extends SketchNode implements SketchNodeFactory, Image {
     }
     return Future.value(InheritedBitmap(this, name,
         currentContext: currentContext,
-        constraints:
-            convertSketchConstraintToPBDLConstraint(resizingConstraint)));
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width)));
   }
 
   @JsonKey(name: 'image')

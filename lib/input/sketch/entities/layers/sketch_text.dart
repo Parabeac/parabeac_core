@@ -8,6 +8,7 @@ import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -137,8 +138,10 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         name,
         Uuid().v4(),
         currentContext: currentContext,
-        constraints:
+        constraints: PBIntermediateConstraints.fromConstraints(
             convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width),
       )..addChild(
           InheritedText(this, name, currentContext: currentContext),
         ));

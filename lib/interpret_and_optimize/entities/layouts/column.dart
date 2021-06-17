@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/handle_flex.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
 ///Colum contains nodes that are all `vertical` to each other, without overlapping eachother
@@ -40,12 +39,6 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
     generator = PBColumnGenerator();
   }
 
-  // checkCrossAxisAlignment() {
-  //   // TODO: this is the default for now
-  //   alignment['crossAxisAlignment'] =
-  //       'crossAxisAlignment: CrossAxisAlignment.start';
-  // }
-
   @override
   void alignChildren() {
     checkCrossAxisAlignment();
@@ -69,18 +62,12 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
     var columnMinX = topLeftCorner.x;
     var columnMaxX = bottomRightCorner.x;
 
-    if (topLeftCorner.x < currentContext.screenTopLeftCorner.x) {
-      columnMinX = currentContext.screenTopLeftCorner.x;
-    }
-    if (bottomRightCorner.x > currentContext.screenBottomRightCorner.x) {
-      columnMaxX = currentContext.screenBottomRightCorner.x;
-    }
-
     for (var i = 0; i < children.length; i++) {
-      //TODO: Check to see if the left or right padding or both is equal to 0 or even negative if that's even possible.
-      var padding = Padding(Uuid().v4(),
-          left: children[i].topLeftCorner.x - columnMinX,
-          right: columnMaxX - children[i].bottomRightCorner.x,
+      var padding = Padding('', children[i].constraints,
+          left: children[i].topLeftCorner.x - columnMinX ?? 0.0,
+          right: columnMaxX - children[i].bottomRightCorner.x ?? 0.0,
+          top: 0.0,
+          bottom: 0.0,
           topLeftCorner: children[i].topLeftCorner,
           bottomRightCorner: children[i].bottomRightCorner,
           currentContext: currentContext);

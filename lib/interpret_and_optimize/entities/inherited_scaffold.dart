@@ -4,7 +4,7 @@ import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
@@ -29,6 +29,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+
+  @override
+  List<PBIntermediateNode> get children => [child, navbar, tabbar];
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
 
@@ -76,7 +79,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     addAttribute(PBAttribute('body'));
   }
 
-  @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
@@ -122,11 +124,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void alignChild() {
     if (child != null) {
-      var align =
-          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-      align.addChild(child);
-      align.alignChild();
-      child = align;
+      var padding = Padding('', child.constraints,
+          left: child.topLeftCorner.x - topLeftCorner.x,
+          right: bottomRightCorner.x - child.bottomRightCorner.x,
+          top: child.topLeftCorner.y - topLeftCorner.y,
+          bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+          topLeftCorner: topLeftCorner,
+          bottomRightCorner: bottomRightCorner,
+          currentContext: currentContext);
+      padding.addChild(child);
+      child = padding;
     }
   }
 }

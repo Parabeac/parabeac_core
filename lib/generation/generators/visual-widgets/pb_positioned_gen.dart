@@ -25,8 +25,7 @@ class PBPositionedGenerator extends PBGenerator {
         right: source.valueHolder.right,
       );
 
-      if (generatorContext.sizingContext ==
-          SizingValueContext.MediaQueryValue) {
+      if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
         multStringH = 'MediaQuery.of(context).size.width * ';
         multStringV = 'MediaQuery.of(context).size.height *';
         _calculateRelativeValues(source, valueHolder);

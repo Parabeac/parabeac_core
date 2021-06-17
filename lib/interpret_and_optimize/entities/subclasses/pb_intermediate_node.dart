@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -23,7 +23,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   final String UUID;
 
-  PBDLConstraints constraints;
+  PBIntermediateConstraints constraints;
 
   /// Map representing the attributes of [this].
   /// The key represents the name of the attribute, while the value

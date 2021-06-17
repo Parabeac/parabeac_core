@@ -29,8 +29,15 @@ class PBContext {
 }
 
 enum SizingValueContext {
+  /// Should be hardcoded values
   PointValue,
-  MediaQueryValue,
+
+  /// Should be using BoxConstraints to scale
+  ScaleValue,
+
+  /// Should conform to the Layout Builder code, usually used when calling views.
   LayoutBuilderValue,
+
+  /// TODO: Remove
   AppBarChild,
 }

@@ -2,12 +2,13 @@ import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -29,7 +30,7 @@ class InheritedContainer extends PBVisualIntermediateNode
       PBContext currentContext,
       Map borderInfo,
       this.isBackgroundVisible = true,
-      PBDLConstraints constraints})
+      PBIntermediateConstraints constraints})
       : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: originalRef.UUID ?? '', constraints: constraints) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
@@ -57,10 +58,6 @@ class InheritedContainer extends PBVisualIntermediateNode
       }
     }
 
-    auxiliaryData.alignment = alignX != null && alignY != null
-        ? {'alignX': alignX, 'alignY': alignY}
-        : null;
-
     auxiliaryData.borderInfo = borderInfo;
 
     assert(originalRef != null,
@@ -83,17 +80,26 @@ class InheritedContainer extends PBVisualIntermediateNode
     child = node;
   }
 
-  /// Should add positional info ONLY to parent node. This should only be sent here if the parent and child node is only one-to-one.
-  ///
-  /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
   @override
   void alignChild() {
     if (child != null) {
-      var align =
-          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-      align.addChild(child);
-      align.alignChild();
-      child = align;
+      /// Refactor to child.constraints != null
+      if (child is! InheritedText) {
+        var left = child.topLeftCorner.x - topLeftCorner.x ?? 0.0;
+        var right = bottomRightCorner.x - child.bottomRightCorner.x ?? 0.0;
+        var top = child.topLeftCorner.y - topLeftCorner.y ?? 0.0;
+        var bottom = child.bottomRightCorner.y - bottomRightCorner.y ?? 0.0;
+        var padding = Padding('', child.constraints,
+            left: left,
+            right: right,
+            top: top,
+            bottom: bottom,
+            topLeftCorner: topLeftCorner,
+            bottomRightCorner: bottomRightCorner,
+            currentContext: currentContext);
+        padding.addChild(child);
+        child = padding;
+      }
     }
   }
 }

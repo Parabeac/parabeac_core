@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
@@ -24,9 +23,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   //TODO: remove all overriden UUID
   @override
   final String UUID;
-
-  // @override
-  // PBContext currentContext;
 
   @override
   PrototypeNode prototypeNode;
@@ -69,10 +65,11 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     }
 
     for (var i = 0; i < children.length; i++) {
-      //TODO: Check to see if the left or right padding or both is equal to 0 or even negative if that's even possible.
-      var padding = Padding(Uuid().v4(),
-          top: children[i].topLeftCorner.y - rowMinY,
-          bottom: rowMaxY - children[i].bottomRightCorner.y,
+      var padding = Padding('', children[i].constraints,
+          top: children[i].topLeftCorner.y - rowMinY ?? 0.0,
+          bottom: rowMaxY - children[i].bottomRightCorner.y ?? 0.0,
+          left: 0.0,
+          right: 0.0,
           topLeftCorner: children[i].topLeftCorner,
           bottomRightCorner: children[i].bottomRightCorner,
           currentContext: currentContext);

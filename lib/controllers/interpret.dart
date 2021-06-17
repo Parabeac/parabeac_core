@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_constraint_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
@@ -127,6 +128,9 @@ class Interpret {
         intermediateTree.rootNode, currentContext, stopwatch2);
 
     var stopwatch3 = Stopwatch()..start();
+
+    intermediateTree = await PBConstraintGenerationService()
+        .implementConstraints(intermediateTree);
 
     /// AlignGenerationService
     intermediateTree.rootNode = await alignGenerationService(
