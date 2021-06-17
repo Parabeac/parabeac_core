@@ -1,15 +1,16 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
-import 'package:parabeac_core/generation/generators/pb_variable.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/bloc_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
@@ -29,29 +30,18 @@ class BLoCMiddleware extends StateManagementMiddleware {
     return '''
     ${generationManager.generateImports()}
 
-    part '${snakeName}_event.dart';
     part '${snakeName}_state.dart';
 
-    class ${pascalName}Bloc extends Bloc<${pascalName}Event, ${pascalName}State> {
-      ${pascalName}Bloc() : super(${initialStateName.pascalCase}State());
+    class ${pascalName}Cubit extends Cubit<${pascalName}State> {
+      ${pascalName}Cubit() : super(${initialStateName.pascalCase}State());
 
-      @override
-      Stream<${pascalName}State> mapEventToState(
-        ${pascalName}Event event,
-      ) async* {
-        // TODO: implement mapEventToState
+      void onGesture(){
+        // TODO: Populate onGesture method
+        //
+        // You can check the current state of the Cubit by using the [state] variable from `super`.
+        // To change the current state, call the [emit()] method with the state of your choice.
       }
     }
-    ''';
-  }
-
-  String _createEventPage(String name) {
-    var pascalName = name.pascalCase;
-    return '''
-    part of '${name.snakeCase}_bloc.dart';
-
-    @immutable
-    abstract class ${pascalName}Event {}
     ''';
   }
 
@@ -74,38 +64,49 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var managerData = node.managerData;
     node.currentContext.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
-    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+
     var fileStrategy =
-        configuration.fileStructureStrategy as FlutterFileStructureStrategy;
+        configuration.fileStructureStrategy as BLoCFileStructureStrategy;
 
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
-
-      var globalVariableName = getVariableName(node.name.snakeCase);
-      managerData.addGlobalVariable(PBVariable(globalVariableName, 'var ', true,
-          '${generalStateName.pascalCase}Bloc()'));
-
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
-
-      managerData.addToDispose('$globalVariableName.close()');
+      managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
       if (node.generator is! StringGeneratorAdapter) {
+        var nameWithCubit = '${generalStateName.pascalCase}Cubit';
+        var nameWithState = '${generalStateName.pascalCase}State';
+        var namewithToWidget = '${generalStateName.camelCase}StateToWidget';
+
         node.generator = StringGeneratorAdapter('''
-      BlocBuilder<${generalStateName.pascalCase}Bloc, ${generalStateName.pascalCase}State>(
-        cubit: $globalVariableName,
-        builder: (context, state) => state.widget  
-      )
+        LayoutBuilder(
+          builder: (context, constraints){
+            return BlocProvider<$nameWithCubit>(
+              create: (context) => $nameWithCubit(),
+              child: BlocBuilder<$nameWithCubit,$nameWithState>(
+                builder: (context, state){
+                  return GestureDetector(
+                    child: $namewithToWidget(state, constraints),
+                    onTap: () => context.read<$nameWithCubit>().onGesture(),
+                  );
+                }
+              )
+            );
+          }
+        )  
       ''');
       }
+
       return Future.value(node);
     }
     var parentState = getNameOfNode(node);
     var generalName = parentState.snakeCase;
-    var parentDirectory = generalName + '_bloc';
+    var blocDirectory =
+        p.join(fileStrategy.RELATIVE_BLOC_PATH, '${generalName}_bloc');
     var states = <PBIntermediateNode>[node];
 
     var stateBuffer = StringBuffer();
+    var mapBuffer = StringBuffer();
 
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       states.add(state.variation.node);
@@ -114,11 +115,18 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var isFirst = true;
     states.forEach((element) {
       element.currentContext.tree.data = node.managerData;
+
+      // Creating copy of template to generate State
+      var templateCopy = element.generator.templateStrategy;
+
       element.generator.templateStrategy = BLoCStateTemplateStrategy(
         isFirst: isFirst,
         abstractClassName: parentState,
       );
       stateBuffer.write(generationManager.generate(element));
+
+      element.generator.templateStrategy = templateCopy;
+
       isFirst = false;
     });
 
@@ -130,29 +138,86 @@ class BLoCMiddleware extends StateManagementMiddleware {
         'STATE${node.currentContext.tree.UUID}',
         '${generalName}_state',
         stateBuffer.toString(),
-        relativePath: parentDirectory));
+        symbolPath: blocDirectory));
 
-    /// Creates event page
+    /// Creates map page
+    mapBuffer.write(_makeStateToWidgetFunction(node));
     fileStrategy.commandCreated(WriteSymbolCommand(
 
         /// modified the [UUID] to prevent adding import because the event is
         /// using `part of` syntax already when importing the bloc
-        'EVENT${node.currentContext.tree.UUID}',
-        '${generalName}_event',
-        _createEventPage(parentState),
-        relativePath: parentDirectory));
+        '${node.currentContext.tree.UUID}',
+        '${generalName}_map',
+        mapBuffer.toString(),
+        symbolPath: blocDirectory));
 
-    /// Creates bloc page
+    // Generate node's states' view pages
+    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        'SYMBOL${state.variation.node.currentContext.tree.UUID}',
+        state.variation.node.name.snakeCase,
+        generationManager.generate(state.variation.node),
+        relativePath: generalName, //Generate view files separately
+      ));
+    });
+
+    // Generate default node's view page
+    fileStrategy.commandCreated(WriteSymbolCommand(
+        'SYMBOL${node.currentContext.tree.UUID}',
+        node.name.snakeCase,
+        generationManager.generate(node),
+        relativePath: generalName));
+
+    /// Creates cubit page
     managerData.addImport(FlutterImport('meta.dart', 'meta'));
+    managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
     fileStrategy.commandCreated(WriteSymbolCommand(
         node.currentContext.tree.UUID,
-        '${generalName}_bloc',
+        '${generalName}_cubit',
         _createBlocPage(
           parentState,
           node.name,
         ),
-        relativePath: parentDirectory));
+        symbolPath: blocDirectory));
 
     return Future.value(null);
+  }
+
+  String _makeStateToWidgetFunction(PBIntermediateNode element) {
+    var stateBuffer = StringBuffer();
+    var importBuffer = StringBuffer();
+    var elementName =
+        element.name.substring(0, element.name.lastIndexOf('/')).snakeCase;
+    importBuffer.write("import 'package:flutter/material.dart'; \n");
+    importBuffer.write(
+        "import 'package:${MainInfo().projectName}/blocs/${elementName}_bloc/${elementName}_cubit.dart';\n");
+
+    stateBuffer.write(
+        'Widget ${elementName.camelCase}StateToWidget( ${elementName.pascalCase}State state, BoxConstraints constraints) {');
+    for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
+      var node = element.auxiliaryData.stateGraph.states[i].variation.node;
+      if (i == 0) {
+        stateBuffer.write(_getStateLogic(node, 'if'));
+      } else {
+        {
+          stateBuffer.write(_getStateLogic(node, 'else if'));
+        }
+      }
+      importBuffer.write(
+          "import 'package:${MainInfo().projectName}/widgets/${elementName}/${node.name.snakeCase}.dart'; \n");
+    }
+    importBuffer.write(
+        "import 'package:${MainInfo().projectName}/widgets/${elementName}/${element.name.snakeCase}.dart'; \n");
+    stateBuffer.write('return ${element.name.pascalCase}(constraints); \n }');
+
+    return importBuffer.toString() + stateBuffer.toString();
+  }
+
+  String _getStateLogic(PBIntermediateNode node, String statement) {
+    return '''
+      $statement (state is ${node.name.pascalCase}State){
+        return ${node.name.pascalCase}(constraints);
+      } \n
+    ''';
   }
 }
