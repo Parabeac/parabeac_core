@@ -223,7 +223,10 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
       map.forEach((key, tree) {
-        imports.addAll(_importProcessor.getImport(tree.UUID));
+        var tempImports = _importProcessor.getImport(tree.UUID);
+        if (tempImports != null) {
+          imports.addAll(tempImports);
+        }
       });
     });
     return imports;
