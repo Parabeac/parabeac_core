@@ -71,9 +71,6 @@ class PBSharedInterAggregationService {
         log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
       }
     }
-
-    //sharedMasterNode.overridableProperties
-    //    .removeWhere((prop) => prop == null || prop.value == null);
   }
 
   ///Its going to check the [PBSharedInstanceIntermediateNode]s and the [PBSharedMasterNode]s that are coming through
