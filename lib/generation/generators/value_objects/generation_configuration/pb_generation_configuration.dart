@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/command_gen_middleware.dart';
@@ -219,9 +220,13 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
       map.forEach((key, tree) {
-        var tempImports = _importProcessor.getImport(tree.UUID);
-        if (tempImports != null) {
-          imports.addAll(tempImports);
+        var uuidImport = _importProcessor.getImport(tree.UUID);
+        if (uuidImport == null) {
+          MainInfo().sentry.captureException(
+              exception: Exception(
+                  'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
+        } else {
+          imports.addAll(_importProcessor.getImport(tree.UUID));
         }
       });
     });
