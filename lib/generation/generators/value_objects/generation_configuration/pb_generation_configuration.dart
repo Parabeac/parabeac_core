@@ -225,7 +225,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           MainInfo().sentry.captureException(
               exception: Exception(
                   'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
-          print('buffer');
         } else {
           imports.addAll(_importProcessor.getImport(tree.UUID));
         }
