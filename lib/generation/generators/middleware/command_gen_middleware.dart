@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generation_con
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
+import 'package:recase/recase.dart';
 
 class CommandGenMiddleware extends Middleware
     with PBPlatformOrientationGeneration {
@@ -40,7 +41,7 @@ class CommandGenMiddleware extends Middleware
         tree.UUID,
         tree.rootNode.currentContext.tree.data.platform,
         tree.identifier,
-        tree.rootNode.name,
+        tree.rootNode.name.snakeCase,
         generationManager.generate(tree.rootNode),
       );
     } else if (tree.isScreen()) {
