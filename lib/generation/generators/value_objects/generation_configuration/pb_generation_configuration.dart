@@ -208,11 +208,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         ResponsiveLayoutBuilderCommand.NAME_TO_RESPONSIVE_LAYOUT,
       ));
 
+      // TODO: Find a more effective way to do this, since there are a lot
+      // of assumptions happening in the code.
       var newCommand = generatePlatformInstance(
           platformsMap, screenName, fileStructureStrategy, rawImports);
-      fileStructureStrategy.commandCreated(newCommand);
 
-      setMainForPlatform(newCommand, screenName);
+      if (newCommand != null) {
+        setMainForPlatform(newCommand, screenName);
+      }
     });
   }
 
@@ -239,7 +242,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// This method takes a command and checks if one of its child screens
   /// is the home screen for the project, if so modify main
   /// to redirect to the proper builder
-  bool setMainForPlatform(var newCommand, String screenName) {
+  bool setMainForPlatform(WriteScreenCommand newCommand, String screenName) {
     var platformOrientationMap =
         poLinker.getPlatformOrientationData(screenName);
 
@@ -248,10 +251,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         if (tree.rootNode is InheritedScaffold &&
             (tree.rootNode as InheritedScaffold).isHomeScreen) {
           fileStructureStrategy.commandCreated(EntryFileCommand(
-              entryScreenName: (newCommand as WriteScreenCommand)
-                  .name
-                  .replaceAll('.dart', '')
-                  .pascalCase,
+              entryScreenName:
+                  newCommand.name.replaceAll('.dart', '').pascalCase,
               entryScreenImport: _importProcessor
                   .getFormattedImports(newCommand.UUID,
                       importMapper: (import) =>
