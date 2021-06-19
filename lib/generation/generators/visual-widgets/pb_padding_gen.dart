@@ -20,11 +20,15 @@ class PBPaddingGen extends PBGenerator {
               : 'Width') +
           ' * $fixedValue';
     }
-    return 'MediaQuery.of(context).size.' +
-        (paddingPosition.item1 == 'top' || paddingPosition.item1 == 'bottom'
-            ? 'height'
-            : 'width') +
-        ' * $fixedValue';
+    if (paddingPosition.item2) {
+      return '$fixedValue';
+    } else {
+      return 'MediaQuery.of(context).size.' +
+          (paddingPosition.item1 == 'top' || paddingPosition.item1 == 'bottom'
+              ? 'height'
+              : 'width') +
+          ' * $fixedValue';
+    }
   }
 
   @override
@@ -65,7 +69,7 @@ class PBPaddingGen extends PBGenerator {
     for (var position in paddingPositions) {
       if (reflectedPadding.getField(Symbol(position.item1)).reflectee != 0) {
         buffer.write(
-            '$position: ${relativePadding(source.generator.templateStrategy, reflectedPadding.getField(Symbol(position.item1)).reflectee, position)},');
+            '${position.item1}: ${relativePadding(source.generator.templateStrategy, reflectedPadding.getField(Symbol(position.item1)).reflectee, position)},');
       }
     }
 
