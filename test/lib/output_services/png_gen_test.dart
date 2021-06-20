@@ -19,7 +19,7 @@ void main() async {
 
   group('Local Sketch PNG Testing:', () {
     setUpAll(() async {
-      MainInfo().sketchPath =
+      MainInfo().designFilePath =
           '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch';
       uuids = [
         '85D93FCD-5A69-4DAF-AE90-351CD9B64554', // Shape Group
@@ -58,7 +58,7 @@ void main() async {
 
   group('Github Sketch PNG Testing:', () {
     setUpAll(() async {
-      MainInfo().sketchPath =
+      MainInfo().designFilePath =
           '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch';
       uuids = [
         '85D93FCD-5A69-4DAF-AE90-351CD9B64554', // Shape Group
@@ -94,7 +94,7 @@ void main() async {
       await FigmaAssetProcessor().processImageQueue();
       for (var uuid in FigmaAssetProcessor().uuidQueue) {
         expect(
-            File(p.join(MainInfo().outputPath, 'pngs',
+            File(p.join(MainInfo().pngPath,
                     '$uuid.png'.replaceAll(':', '_')))
                 .existsSync(),
             true);

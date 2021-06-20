@@ -109,6 +109,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
 
   ///Generates the [PBIntermediateTree]s within the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
+    var processInfo = MainInfo();
     _head = CommandGenMiddleware(
         generationManager, this, _importProcessor, pb_project.projectName);
 
@@ -132,7 +133,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     commandQueue.clear();
     await generateTrees(pb_project.forest, pb_project);
 
-    await _commitDependencies(pb_project.projectAbsPath);
+    await _commitDependencies(processInfo.genProjectPath);
   }
 
   void registerMiddleware(Middleware middleware) {

@@ -1,35 +1,27 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
-import 'package:quick_log/quick_log.dart';
 
 import 'controller.dart';
 
 class DesignController extends Controller {
   @override
-  var log = Logger('FigmaController');
-
-  DesignController();
+  DesignType get designType => DesignType.PBDL;
 
   @override
-  void convertFile(
-    var pbdf,
-    var outputPath,
-    configuration, {
-    bool jsonOnly = false,
+  void convertFile({
     DesignProject designProject,
     AssetProcessingService apService,
   }) async {
-    var designProject = generateDesignProject(pbdf, outputPath);
+    var pbdf = MainInfo().pbdf;
+    if (pbdf == null) {
+      throw Error(); //todo: throw correct error
+    }
+    designProject ??= generateDesignProject(pbdf, MainInfo().genProjectPath);
     AzureAssetService().projectUUID = pbdf['id'];
 
-    super.convertFile(
-      pbdf,
-      outputPath,
-      configuration,
-      designProject: designProject,
-      jsonOnly: jsonOnly,
-    );
+    super.convert(designProject, apService);
   }
 
   DesignProject generateDesignProject(var pbdf, var proejctName) {

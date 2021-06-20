@@ -108,7 +108,7 @@ class Vector implements DesignNodeFactory, DesignNode, Image {
     imageReference = AssetProcessingService.getImageName(UUID);
 
     var pngsPath =
-        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
+        p.join(MainInfo().pngPath, '$UUID.png'.replaceAll(':', '_'));
     var file = File(pngsPath)..createSync(recursive: true);
     file.writeAsBytesSync(img);
     return Future.value(

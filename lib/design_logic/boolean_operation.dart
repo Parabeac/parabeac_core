@@ -34,7 +34,7 @@ class BooleanOperation implements DesignNodeFactory, DesignNode {
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     var img = await AzureAssetService().downloadImage(UUID);
     var path =
-        p.join(MainInfo().outputPath, 'pngs', '$UUID.png'.replaceAll(':', '_'));
+        p.join(MainInfo().pngPath, '$UUID.png'.replaceAll(':', '_'));
     var file = File(path)..createSync(recursive: true);
     file.writeAsBytesSync(img);
 
