@@ -77,16 +77,18 @@ class MiddlewareUtils {
       ${manager.generateImports()}
       class ${defaultStateName} extends ChangeNotifier {
 
-      Widget currentWidget;
-      ${defaultStateName}(){}
-
-      // default provider event handler for gestures.
-      void onGesture() {
-      }
+        LayoutBuilder currentLayout;
+        final String widgetName;
+        ${defaultStateName}(this.widgetName);
+  
+        // default provider event handler for gestures.
+        void onGesture() {
+        }
+        
+        void setCurrentLayout(LayoutBuilder layout) {
+          currentLayout = layout;
+        }
       
-      void setCurrentWidget(Widget currentWidget) {
-        this.currentWidget = currentWidget;
-      }
       }
       ''';
   }
@@ -100,11 +102,15 @@ class MiddlewareUtils {
           {String type = 'var'}) =>
       '${type} ${node.name.camelCase};';
 
-  static String generateVariableBody(node) =>
-      (node?.generator?.generate(node ?? '',
-              GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
-          '') +
-      ';';
+  static String generateVariableBody(node) {
+    node?.managerData?.hasParams = true;
+    String genCode = (node?.generator?.generate(node ?? '',
+        GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
+        '') +
+        ';';
+    node?.managerData?.hasParams = false;
+    return genCode;
+  }
 
   static String wrapOnLayout(String className) {
     return '''

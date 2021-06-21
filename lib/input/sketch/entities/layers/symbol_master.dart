@@ -59,6 +59,8 @@ class SymbolMaster extends AbstractGroupLayer
 
   Style _style;
 
+  static Map<String, SymbolMaster> SN_SymbolMasters;
+
   @override
   void set isVisible(bool _isVisible) => this._isVisible = _isVisible;
 
@@ -148,6 +150,8 @@ class SymbolMaster extends AbstractGroupLayer
     if (name != null) {
       this.name = name?.replaceAll(RegExp(r'[\s_\+]'), '');
       this.name = PBInputFormatter.removeFirstDigits(name);
+      SN_SymbolMasters ??= {};
+      SN_SymbolMasters[symbolID] = this;
     }
   }
 

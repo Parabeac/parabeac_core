@@ -41,21 +41,21 @@ class ProviderMiddleware extends Middleware {
         var providerWidget = '''
         ChangeNotifierProvider(
           create: (context) =>
-              ${modelName}(), 
+              ${modelName}('${node.name}'), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = ${MiddlewareUtils.generateVariableBody(node)};
+              var layout = ${MiddlewareUtils.generateVariableBody(node)};
               
               context
                   .read<${modelName}>()
-                  .setCurrentWidget(
-                      widget); // Setting active state
+                  .setCurrentLayout(
+                      layout); // Setting active state
 
               return GestureDetector(
                 onTap: () => context.read<
                     ${modelName}>().onGesture(),
                 child: Consumer<$modelName>(
-                  builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentWidget
+                  builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentLayout
                 ),
               );
             },

@@ -138,7 +138,7 @@ class PBSharedParameterProp {
   dynamic get initialValue => _initialValue;
 
   final String _friendlyName;
-  String get friendlyName => _friendlyName ?? SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ?? 'noname';
+  String get friendlyName => SN_UUIDtoVarName[propertyName] ?? 'noname';
 
   PBSharedParameterProp(this._friendlyName, this._type, this.value,
       this._canOverride, this._propertyName, this._UUID, this._initialValue);

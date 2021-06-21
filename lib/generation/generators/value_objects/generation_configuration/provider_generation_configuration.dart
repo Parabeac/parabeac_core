@@ -58,17 +58,8 @@ class ProviderGenerationConfiguration extends GenerationConfiguration {
   }
 
   String _generateMainFunction() {
-    var providers = registeredModels
-        .map((e) => 'ChangeNotifierProvider(create: (_) => $e())');
     return '''
-    runApp(
-      MultiProvider(
-        providers: [
-          ${providers.join(', ')}
-        ],
-        child: MyApp(),
-      ),
-    );
+    runApp(MyApp());
     ''';
   }
 }
