@@ -32,8 +32,12 @@ class RiverpodFileStructureStrategy extends FileStructureStrategy {
   }
 
   void writeRiverpodModelFile(String code, String fileName) {
-    super
-        .pageWriter
-        .write(code, '${_modelsPath}${fileName}.dart'); // Removed .g
+    // don't overwrite the model file as user could have changed it
+    // only create the first time
+    if (!File('$_modelsPath$fileName.dart').existsSync()) {
+      super
+          .pageWriter
+          .write(code, '$_modelsPath$fileName.dart'); // Removed .g
+    }
   }
 }

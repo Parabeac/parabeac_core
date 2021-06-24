@@ -5,15 +5,12 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 
 class ProviderFileStructureStrategy extends FileStructureStrategy {
-  final RELATIVE_PROVIDER_PATH = 'lib/providers/';
   final RELATIVE_MODEL_PATH = 'lib/models/';
-  var _providersPath;
   var _modelsPath;
 
   ProviderFileStructureStrategy(
       String genProjectPath, PBPageWriter pageWriter, PBProject pbProject)
       : super(genProjectPath, pageWriter, pbProject) {
-    _providersPath = '${genProjectPath}${RELATIVE_PROVIDER_PATH}';
     _modelsPath = '${genProjectPath}${RELATIVE_MODEL_PATH}';
   }
 
@@ -27,13 +24,15 @@ class ProviderFileStructureStrategy extends FileStructureStrategy {
   }
 
   Future<void> _generateMissingDirectories() async {
-    Directory(_providersPath).createSync(recursive: true);
     Directory(_modelsPath).createSync(recursive: true);
   }
 
   void writeProviderModelFile(String code, String fileName) {
-    super
-        .pageWriter
-        .write(code, '${_modelsPath}${fileName}.dart'); // Removed .g
+
+    if (!File('$_modelsPath$fileName.dart').existsSync()) {
+      super
+          .pageWriter
+          .write(code, '$_modelsPath$fileName.dart'); // Removed .g
+    }
   }
 }
