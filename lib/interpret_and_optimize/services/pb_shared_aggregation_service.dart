@@ -47,7 +47,6 @@ class PBSharedInterAggregationService {
   ///are going to look for its [PBSharedParameterValue] if it does not have one.
   void gatherSharedParameters(
       PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
-
     // first fill in any Shared Instances before we can check our overridable properties are in the tree
     for (var prop in sharedMasterNode.overridableProperties) {
       var targetUUID = prop?.UUID;
@@ -71,9 +70,6 @@ class PBSharedInterAggregationService {
         log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
       }
     }
-
-    //sharedMasterNode.overridableProperties
-    //    .removeWhere((prop) => prop == null || prop.value == null);
   }
 
   ///Its going to check the [PBSharedInstanceIntermediateNode]s and the [PBSharedMasterNode]s that are coming through
@@ -122,5 +118,4 @@ class PBSharedInterAggregationService {
 
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
-
 }

@@ -82,7 +82,7 @@ class MiddlewareUtils {
         ${defaultStateName}(this.widgetName);
   
         // default provider event handler for gestures.
-        void OnGesture() {
+        void onGesture() {
         }
         
         void setCurrentLayout(LayoutBuilder layout) {

@@ -32,7 +32,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
 
-      // If we are processing master symbol generation grab the master, else grab gab the master of ourselves
+      // If we are processing master symbol generation grab the master, else grab the master of ourselves
       var masterSymbol = generatorContext.masterNode ??
           PBSymbolStorage().getSharedMasterNodeBySymbolID(source.SYMBOL_ID);
 
