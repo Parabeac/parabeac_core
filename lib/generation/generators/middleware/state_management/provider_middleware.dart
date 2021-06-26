@@ -53,7 +53,7 @@ class ProviderMiddleware extends Middleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>().OnGesture(),
+                    ${modelName}>().onGesture(),
                 child: Consumer<$modelName>(
                   builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentLayout
                 ),
