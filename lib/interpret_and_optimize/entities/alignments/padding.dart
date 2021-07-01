@@ -5,7 +5,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class Padding extends PBVisualIntermediateNode {
-
   double left, right, top, bottom, screenWidth, screenHeight;
 
   @override
@@ -55,23 +54,26 @@ class Padding extends PBVisualIntermediateNode {
     /// Calculating the percentage of the padding in relation to the [screenHeight] and the [screenWidth].
     /// FIXME: creating a lifecyle between the [PBGenerator] and the [PBIntermediateNode] where it provides a callback that
     /// executes just before the generator generates the code for the [PBIntermediateNode].
-    screenHeight = screenHeight == 0 ? 1 : screenHeight;
-    screenWidth = screenWidth == 0 ? 1 : screenWidth;
-    if (left != null) {
-      left = (left / screenWidth);
-      left = left < 0.01 ? null : left;
+
+    if (screenWidth > 0) {
+      if (left != null) {
+        left = (left / screenWidth);
+        left = left < 0.01 ? null : left;
+      }
+      if (right != null) {
+        right = right / screenWidth;
+        right = right < 0.01 ? null : right;
+      }
     }
-    if (right != null) {
-      right = right / screenWidth;
-      right = right < 0.01 ? null : right;
-    }
-    if (top != null) {
-      top = top / screenHeight;
-      top = top < 0.01 ? null : top;
-    }
-    if (bottom != null) {
-      bottom = bottom / screenHeight;
-      bottom = bottom < 0.01 ? null : bottom;
+    if (screenWidth > 0) {
+      if (top != null) {
+        top = top / screenHeight;
+        top = top < 0.01 ? null : top;
+      }
+      if (bottom != null) {
+        bottom = bottom / screenHeight;
+        bottom = bottom < 0.01 ? null : bottom;
+      }
     }
   }
 
