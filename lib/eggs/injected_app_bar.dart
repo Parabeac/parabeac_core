@@ -72,7 +72,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
     /// This align only modifies middleItem
     var tempNode = InjectedContainer(middleItem.bottomRightCorner,
         middleItem.topLeftCorner, middleItem.name, middleItem.UUID,
-        currentContext: currentContext)
+        currentContext: currentContext, constraints: middleItem.constraints)
       ..addChild(middleItem);
 
     getAttributeNamed('title').attributeNode = tempNode;
@@ -100,7 +100,7 @@ class PBAppBarGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();
 

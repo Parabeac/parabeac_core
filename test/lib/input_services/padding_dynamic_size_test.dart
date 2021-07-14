@@ -26,12 +26,14 @@ void main() {
 
       currentChild = NodeMock();
       when(currentChild.currentContext).thenReturn(currentContext);
-      currentPadding = Padding(Uuid().v4(),
-          left: 15,
-          right: 15,
-          bottom: 15,
-          top: 15,
-          currentContext: currentContext);
+
+      ///TODO: Update padding test
+      // currentPadding = Padding(Uuid().v4(),
+      //     left: 15,
+      //     right: 15,
+      //     bottom: 15,
+      //     top: 15,
+      //     currentContext: currentContext);
     });
     test('Calculating dynamic padding size', () {
       currentPadding.addChild(currentChild);

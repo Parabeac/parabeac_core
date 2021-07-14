@@ -14,10 +14,10 @@ class PBIntermediateConstraints {
 
   PBIntermediateConstraints.fromConstraints(
       PBDLConstraints constraints, double height, double width) {
-    pinLeft = constraints.pinLeft;
-    pinRight = constraints.pinRight;
-    pinTop = constraints.pinTop;
-    pinBottom = constraints.pinBottom;
+    pinLeft = constraints.pinLeft ?? false;
+    pinRight = constraints.pinRight ?? false;
+    pinTop = constraints.pinTop ?? false;
+    pinBottom = constraints.pinBottom ?? false;
     if (constraints.fixedHeight) {
       fixedHeight = height;
     }

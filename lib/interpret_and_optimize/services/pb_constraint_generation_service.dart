@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -27,8 +28,8 @@ class PBConstraintGenerationService implements PBGenerationService {
 
     for (var node
         in tree.where((element) => element != null).toList().reversed) {
-      // if (node is PBLayoutIntermediateNode) {
-      if (node.children.length > 1) {
+      if (node is PBLayoutIntermediateNode) {
+        // if (node.children.isNotEmpty) {
         /// Inherit Constraints from all the children of this layout.
         node.children
             .where((element) => element != null)
@@ -59,8 +60,15 @@ class PBConstraintGenerationService implements PBGenerationService {
       }
       if (node.constraints == null) {
         if (node.child?.constraints == null) {
+          // if (node.child != null) {
           print(
-              "Constraint Inheritance could not be performed because child's constraints were null");
+              "Constraint Inheritance could not be performed because child's constraints were null for class type: [${node.runtimeType}]");
+          // }
+          if (node is! InheritedText) {
+            print('asdf');
+          } else {
+            node.constraints = PBIntermediateConstraints();
+          }
         } else {
           node.constraints = node.child.constraints;
         }

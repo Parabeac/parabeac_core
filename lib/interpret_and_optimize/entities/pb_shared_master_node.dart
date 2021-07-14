@@ -86,26 +86,24 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.currentContext.screenTopLeftCorner =
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    parametersDefinition = overridableProperties
-        .map((p) {
-            var PBSymMasterP = PBSymbolMasterParameter(
-            p._friendlyName,
-            p.type,
-            p.UUID,
-            p.canOverride,
-            p.propertyName,
-            /* Removed Parameter Definition as it was accepting JSON?*/
-            null, // TODO: @Eddie
-            currentContext.screenTopLeftCorner.x,
-            currentContext.screenTopLeftCorner.y,
-            currentContext.screenBottomRightCorner.x,
-            currentContext.screenBottomRightCorner.y,
-            context: currentContext);
-            parametersDefsMap[p.propertyName] = PBSymMasterP;
-            return PBSymMasterP; })
-        .toList()
-          ..removeWhere((p) => p == null || p.parameterDefinition == null);
-
+    parametersDefinition = overridableProperties.map((p) {
+      var PBSymMasterP = PBSymbolMasterParameter(
+          p._friendlyName,
+          p.type,
+          p.UUID,
+          p.canOverride,
+          p.propertyName,
+          /* Removed Parameter Definition as it was accepting JSON?*/
+          null, // TODO: @Eddie
+          currentContext.screenTopLeftCorner.x,
+          currentContext.screenTopLeftCorner.y,
+          currentContext.screenBottomRightCorner.x,
+          currentContext.screenBottomRightCorner.y,
+          context: currentContext);
+      parametersDefsMap[p.propertyName] = PBSymMasterP;
+      return PBSymMasterP;
+    }).toList()
+      ..removeWhere((p) => p == null || p.parameterDefinition == null);
   }
 
   @override
@@ -136,7 +134,10 @@ class PBSharedParameterProp {
   dynamic get initialValue => _initialValue;
 
   final String _friendlyName;
-  String get friendlyName => _friendlyName ?? SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ?? 'noname';
+  String get friendlyName =>
+      _friendlyName ??
+      SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
+      'noname';
 
   PBSharedParameterProp(this._friendlyName, this._type, this.value,
       this._canOverride, this._propertyName, this._UUID, this._initialValue);

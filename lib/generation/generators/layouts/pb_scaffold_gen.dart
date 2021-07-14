@@ -25,14 +25,14 @@ class PBScaffoldGenerator extends PBGenerator {
       }
       if (appBar != null) {
         buffer.write('appBar: ');
-        generatorContext.sizingContext = SizingValueContext.PointValue;
+        // generatorContext.sizingContext = SizingValueContext.PointValue;
         var appbarStr = appBar.generator.generate(appBar, generatorContext);
 
         buffer.write('$appbarStr,\n');
       }
       if (bottomNavBar != null) {
         buffer.write('bottomNavigationBar: ');
-        generatorContext.sizingContext = SizingValueContext.PointValue;
+        // generatorContext.sizingContext = SizingValueContext.PointValue;
         var navigationBar =
             bottomNavBar.generator.generate(bottomNavBar, generatorContext);
         buffer.write('$navigationBar, \n');
@@ -41,6 +41,7 @@ class PBScaffoldGenerator extends PBGenerator {
       if (body != null) {
         // hack to pass screen width and height to the child
         buffer.write('body: ');
+        // generatorContext.sizingContext = SizingValueContext.ScaleValue;
         var bodyStr = body.generator.generate(body, generatorContext);
         buffer.write('$bodyStr, \n');
       }

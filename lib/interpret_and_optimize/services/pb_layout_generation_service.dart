@@ -31,7 +31,7 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///[LayoutRule] that check post conditions.
   final List<PostConditionRule> _postLayoutRules = [
     StackReductionVisualRule(),
-    ContainerPostRule(),
+    // ContainerPostRule(),
     ContainerConstraintRule()
   ];
 
@@ -44,13 +44,13 @@ class PBLayoutGenerationService implements PBGenerationService {
 
   PBLayoutGenerationService({this.currentContext}) {
     var layoutHandlers = <String, PBLayoutIntermediateNode>{
-      'column': PBIntermediateColumnLayout(
-        '',
-        currentContext: currentContext,
-        UUID: Uuid().v4(),
-      ),
-      'row': PBIntermediateRowLayout('', Uuid().v4(),
-          currentContext: currentContext),
+      // 'column': PBIntermediateColumnLayout(
+      //   '',
+      //   currentContext: currentContext,
+      //   UUID: Uuid().v4(),
+      // ),
+      // 'row': PBIntermediateRowLayout('', Uuid().v4(),
+      //     currentContext: currentContext),
       'stack': PBIntermediateStackLayout('', Uuid().v4(),
           currentContext: currentContext),
     };
@@ -152,7 +152,8 @@ class PBLayoutGenerationService implements PBGenerationService {
           : _replaceNode(
               tempGroup,
               InjectedContainer(tempGroup.bottomRightCorner,
-                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID));
+                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID,
+                  constraints: tempGroup.constraints));
     }
     return tempGroup;
   }
@@ -217,6 +218,10 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
       parent.replaceChildren(children);
       if (children.length == 1) {
+        /// With the support for scaling & pinning, Stacks are now responsible for positioning.
+        // if (parent is PBIntermediateStackLayout) {
+        //   return parent;
+        // }
         return _replaceNode(parent, children[0]);
       } else {
         return parent is! TempGroupLayoutNode

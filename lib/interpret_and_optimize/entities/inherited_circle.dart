@@ -55,10 +55,10 @@ class InheritedCircle extends PBVisualIntermediateNode
   @override
   void alignChild() {
     var padding = Padding('', child.constraints,
-        left: child.topLeftCorner.x - topLeftCorner.x,
-        right: bottomRightCorner.x - child.bottomRightCorner.x,
-        top: child.topLeftCorner.y - topLeftCorner.y,
-        bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+        left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+        right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+        top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+        bottom: (child.bottomRightCorner.y - bottomRightCorner.y).abs(),
         topLeftCorner: topLeftCorner,
         bottomRightCorner: bottomRightCorner,
         currentContext: currentContext);

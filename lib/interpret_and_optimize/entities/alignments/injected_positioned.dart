@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_positioned_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -18,8 +19,9 @@ class InjectedPositioned extends PBIntermediateNode
     this.UUID, {
     this.valueHolder,
     this.currentContext,
+    PBIntermediateConstraints constraints,
   }) : super(Point(0, 0), Point(0, 0), UUID, '',
-            currentContext: currentContext) {
+            currentContext: currentContext, constraints: constraints) {
     generator = PBPositionedGenerator();
   }
 

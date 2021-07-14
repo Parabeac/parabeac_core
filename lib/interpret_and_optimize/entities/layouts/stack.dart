@@ -54,16 +54,16 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
       left = child.topLeftCorner.x - topLeftCorner.x;
       right = bottomRightCorner.x - child.bottomRightCorner.x;
 
-      alignedChildren.add(InjectedPositioned(
-        Uuid().v4(),
-        valueHolder: PositionedValueHolder(
-          top: top,
-          bottom: bottom,
-          left: left,
-          right: right,
-        ),
-        currentContext: currentContext,
-      )..addChild(child));
+      alignedChildren.add(InjectedPositioned(Uuid().v4(),
+          valueHolder: PositionedValueHolder(
+            top: top,
+            bottom: bottom,
+            left: left,
+            right: right,
+          ),
+          currentContext: currentContext,
+          constraints: child.constraints)
+        ..addChild(child));
     }
     replaceChildren(alignedChildren);
   }

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
@@ -55,10 +53,10 @@ class InjectedContainer extends PBVisualIntermediateNode
   void alignChild() {
     /// Add Padding that takes into account pinning (hard values).
     var padding = Padding('', child.constraints,
-        left: child.topLeftCorner.x - topLeftCorner.x,
-        right: bottomRightCorner.x - child.bottomRightCorner.x,
-        top: child.topLeftCorner.y - topLeftCorner.y,
-        bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+        left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+        right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+        top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+        bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
         topLeftCorner: topLeftCorner,
         bottomRightCorner: bottomRightCorner,
         currentContext: currentContext);

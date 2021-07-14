@@ -74,7 +74,7 @@ class PBTabBarGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
       var tabs = source.tabs;
 

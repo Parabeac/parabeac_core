@@ -85,10 +85,12 @@ class InheritedContainer extends PBVisualIntermediateNode
     if (child != null) {
       /// Refactor to child.constraints != null
       if (child is! InheritedText) {
-        var left = child.topLeftCorner.x - topLeftCorner.x ?? 0.0;
-        var right = bottomRightCorner.x - child.bottomRightCorner.x ?? 0.0;
-        var top = child.topLeftCorner.y - topLeftCorner.y ?? 0.0;
-        var bottom = child.bottomRightCorner.y - bottomRightCorner.y ?? 0.0;
+        var left = (child.topLeftCorner.x - topLeftCorner.x).abs() ?? 0.0;
+        var right =
+            (bottomRightCorner.x - child.bottomRightCorner.x).abs() ?? 0.0;
+        var top = (child.topLeftCorner.y - topLeftCorner.y).abs() ?? 0.0;
+        var bottom =
+            (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0;
         var padding = Padding('', child.constraints,
             left: left,
             right: right,

@@ -80,10 +80,11 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   void alignChild() {
     if (child != null) {
       var padding = Padding('', child.constraints,
-          left: child.topLeftCorner.x - topLeftCorner.x,
-          right: bottomRightCorner.x - child.bottomRightCorner.x,
-          top: child.topLeftCorner.y - topLeftCorner.y,
-          bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+          left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+          right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+          top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+          bottom:
+              (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
           topLeftCorner: topLeftCorner,
           bottomRightCorner: bottomRightCorner,
           currentContext: currentContext);

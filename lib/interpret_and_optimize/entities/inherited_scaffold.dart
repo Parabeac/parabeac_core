@@ -5,6 +5,7 @@ import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
@@ -109,26 +110,48 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (child is TempGroupLayoutNode) {
       child.addChild(node);
       return;
+    } else {
+      if (child != null) {
+        child.addChild(node);
+      } else {
+        var stack = PBIntermediateStackLayout(
+          node.name,
+          '',
+          currentContext: currentContext,
+        );
+        stack.addChild(node);
+        child = stack;
+      }
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    } else {
-      child = node;
-    }
+    // if (child != null) {
+    //   var temp = TempGroupLayoutNode(null, currentContext, node.name);
+    //   temp.addChild(child);
+    //   temp.addChild(node);
+    //   child = temp;
+    // } else {
+    //   child = node;
+    // }
   }
 
   @override
   void alignChild() {
     if (child != null) {
+      // if (child is! PBIntermediateStackLayout) {
+      //   var stack = PBIntermediateStackLayout(
+      //     '',
+      //     '',
+      //     currentContext: currentContext,
+      //   );
+      //   stack.addChild(child);
+      //   child = stack;
+      // }
+
       var padding = Padding('', child.constraints,
-          left: child.topLeftCorner.x - topLeftCorner.x,
-          right: bottomRightCorner.x - child.bottomRightCorner.x,
-          top: child.topLeftCorner.y - topLeftCorner.y,
-          bottom: child.bottomRightCorner.y - bottomRightCorner.y,
+          left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+          right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+          top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+          bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs(),
           topLeftCorner: topLeftCorner,
           bottomRightCorner: bottomRightCorner,
           currentContext: currentContext);

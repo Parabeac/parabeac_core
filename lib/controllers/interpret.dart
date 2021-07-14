@@ -123,7 +123,6 @@ class Interpret {
     var stopwatch2 = Stopwatch()..start();
 
     /// LayoutGenerationService
-
     intermediateTree.rootNode = await layoutGenerationService(
         intermediateTree.rootNode, currentContext, stopwatch2);
 
