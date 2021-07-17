@@ -25,21 +25,28 @@ class PBPositionedGenerator extends PBGenerator {
         right: source.valueHolder.right,
       );
 
+      valueHolder.left =
+          source.currentContext.getRatioPercentage(source.valueHolder.left);
+      valueHolder.right =
+          source.currentContext.getRatioPercentage(source.valueHolder.right);
+      valueHolder.top = source.currentContext
+          .getRatioPercentage(source.valueHolder.top, false);
+      valueHolder.bottom = source.currentContext
+          .getRatioPercentage(source.valueHolder.bottom, false);
+
       if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
         multStringH = 'MediaQuery.of(context).size.width * ';
         multStringV = 'MediaQuery.of(context).size.height *';
-        _calculateRelativeValues(source, valueHolder);
       } else if (generatorContext.sizingContext ==
           SizingValueContext.LayoutBuilderValue) {
-        _calculateRelativeValues(source, valueHolder);
         multStringH = 'constraints.maxWidth * ';
         multStringV = 'constraints.maxHeight * ';
       }
 
       buffer.write(
-          'left: $multStringH${valueHolder.left.toStringAsFixed(3)}, right: $multStringH${valueHolder.right.toStringAsFixed(3)},');
+          'left: ${_normalizeValue(multStringH, valueHolder.left)}, right: ${_normalizeValue(multStringH, valueHolder.right)},');
       buffer.write(
-          'top: $multStringV${valueHolder.top.toStringAsFixed(3)}, bottom: $multStringV${valueHolder.bottom.toStringAsFixed(3)},');
+          'top: ${_normalizeValue(multStringH, valueHolder.top)}, bottom: ${_normalizeValue(multStringH, valueHolder.bottom)},');
 
       try {
         source.child.currentContext = source.currentContext;
@@ -58,24 +65,18 @@ class PBPositionedGenerator extends PBGenerator {
     }
   }
 
-  void _calculateRelativeValues(
-      InjectedPositioned source, PositionedValueHolder holder) {
-    if (source.currentContext?.screenTopLeftCorner?.x != null &&
-        source.currentContext?.screenBottomRightCorner?.x != null) {
-      var screenWidth = ((source.currentContext?.screenTopLeftCorner?.x) -
-              (source.currentContext?.screenBottomRightCorner?.x))
-          .abs();
-      holder.left = source.valueHolder.left / screenWidth;
-      holder.right = source.valueHolder.right / screenWidth;
+  /// Going to return the value without the [preValueStatement] if the [value]
+  /// is equal to `0`.
+  ///
+  /// The main purpose of this is to prevent reduntant multiplication, for example,
+  /// ```dart
+  /// MediaQuery.of(context).size.height * 0.0
+  /// ```
+  /// Where it should be `0`.
+  String _normalizeValue(String preValueStatement, double value) {
+    if (value == 0) {
+      return '0';
     }
-
-    if (source.currentContext?.screenTopLeftCorner?.y != null &&
-        source.currentContext?.screenBottomRightCorner?.y != null) {
-      var screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
-              (source.currentContext.screenBottomRightCorner.y))
-          .abs();
-      holder.top = source.valueHolder.top / screenHeight;
-      holder.bottom = source.valueHolder.bottom / screenHeight;
-    }
+    return '$preValueStatement${value.toStringAsFixed(3)}';
   }
 }

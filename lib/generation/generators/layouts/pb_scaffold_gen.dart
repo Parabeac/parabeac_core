@@ -39,7 +39,7 @@ class PBScaffoldGenerator extends PBGenerator {
       }
 
       if (body != null) {
-        generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
+        generatorContext.sizingContext = SizingValueContext.ScaleValue;
         // hack to pass screen width and height to the child
         buffer.write('body: ');
         // generatorContext.sizingContext = SizingValueContext.ScaleValue;
