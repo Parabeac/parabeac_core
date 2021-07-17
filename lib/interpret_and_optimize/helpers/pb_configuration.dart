@@ -28,8 +28,6 @@ class PBConfiguration {
 
   String outputDirPath;
 
-  String get genProjectPath => p.join(outputDirPath, projectName);
-
   @JsonKey(defaultValue: 'Material')
   final String widgetStyle;
 

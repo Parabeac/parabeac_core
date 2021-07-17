@@ -86,7 +86,7 @@ class FigmaAssetProcessor extends AssetProcessingService {
                 }
 
                 if (writeAsFile) {
-                  var pngsPath = p.join(MainInfo().outputPath, 'pngs',
+                  var pngsPath = p.join(MainInfo().pngPath,
                       '${entry.key}.png'.replaceAll(':', '_'));
                   var file = File(pngsPath)..createSync(recursive: true);
                   file.writeAsBytesSync(imageRes.bodyBytes);

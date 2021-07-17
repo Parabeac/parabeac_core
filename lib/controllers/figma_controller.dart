@@ -2,41 +2,32 @@ import 'package:parabeac_core/controllers/controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/figma/entities/layers/component.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
+import 'package:parabeac_core/input/figma/helper/api_call_service.dart';
+import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/figma/helper/figma_project.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
+import 'package:parabeac_core/input/helper/azure_asset_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
-import 'package:quick_log/quick_log.dart';
 
 class FigmaController extends Controller {
-  ///SERVICE
   @override
-  var log = Logger('FigmaController');
-
-  FigmaController();
+  DesignType get designType => DesignType.FIGMA;
 
   @override
-  void convertFile(
-    var jsonFigma,
-    var outputPath,
-    var configuration, {
-    bool jsonOnly = false,
+  void convertFile({
     DesignProject designProject,
     AssetProcessingService apService,
   }) async {
-    var figmaProject = generateFigmaTree(jsonFigma, outputPath);
+    var jsonFigma = await _fetchFigmaFile();
+    if (jsonFigma == null) {
+      throw Error(); //todo: find correct error
+    }
+    AzureAssetService().projectUUID = MainInfo().figmaProjectID;
+    designProject ??= generateFigmaTree(jsonFigma, MainInfo().genProjectPath);
+    designProject = declareScaffolds(designProject);
 
-    figmaProject = declareScaffolds(figmaProject);
-
-    _sortPages(figmaProject);
-
-    super.convertFile(
-      jsonFigma,
-      outputPath,
-      configuration,
-      designProject: figmaProject,
-      jsonOnly: jsonOnly,
-      apService: apService,
-    );
+    _sortPages(designProject);
+    super.convert(designProject, apService ?? FigmaAssetProcessor());
   }
 
   FigmaProject generateFigmaTree(var jsonFigma, var projectname) {
@@ -51,6 +42,10 @@ class FigmaController extends Controller {
       return null;
     }
   }
+
+  Future<dynamic> _fetchFigmaFile() => APICallService.makeAPICall(
+      'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
+      MainInfo().figmaKey);
 
   /// This method was required for Figma, so we could
   /// detect which `FigmaFrame` were Scaffolds or Containers
@@ -88,5 +83,13 @@ class FigmaController extends Controller {
         return 0;
       });
     });
+  }
+
+  @override
+  Future<void> setup() async {
+    var processInfo = MainInfo();
+    if (processInfo.figmaKey == null || processInfo.figmaProjectID == null) {
+      throw Error(); //todo: place correct error
+    }
   }
 }

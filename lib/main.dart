@@ -4,11 +4,6 @@ import 'package:parabeac_core/controllers/design_controller.dart';
 import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/controllers/sketch_controller.dart';
-import 'package:parabeac_core/input/figma/helper/api_call_service.dart';
-import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
-import 'package:parabeac_core/input/helper/azure_asset_service.dart';
-import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
-import 'package:parabeac_core/input/sketch/services/input_design.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:quick_log/quick_log.dart';
@@ -16,19 +11,44 @@ import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
+import 'controllers/controller.dart';
 import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
-ArgResults argResults;
+var controllers = <Controller>[
+  FigmaController(),
+  SketchController(),
+  DesignController()
+];
 
+///sets up parser
+final parser = ArgParser()
+  ..addOption('path',
+      help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
+  ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
+  ..addOption('project-name',
+      help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')
+  ..addOption('config-path',
+      help: 'Path of the configuration file',
+      abbr: 'c',
+      defaultsTo:
+          '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
+  ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
+  ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
+  ..addOption(
+    'pbdl-in',
+    help:
+        'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
+  )
+  ..addFlag('help',
+      help: 'Displays this help information.', abbr: 'h', negatable: false)
+  ..addFlag('export-pbdl',
+      help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
+  ..addFlag('exclude-styles',
+      help: 'If this flag is set, it will exclude output styles document');
 void main(List<String> args) async {
   await checkConfigFile();
-
-  //Sentry logging initialization
-  MainInfo().sentry = SentryClient(
-      dsn:
-          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747');
   var log = Logger('Main');
   var pubspec = File('pubspec.yaml');
   await pubspec.readAsString().then((String text) {
@@ -39,32 +59,6 @@ void main(List<String> args) async {
 
   MainInfo().cwd = Directory.current;
 
-  ///sets up parser
-  final parser = ArgParser()
-    ..addOption('path',
-        help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
-    ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
-    ..addOption('project-name',
-        help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')
-    ..addOption('config-path',
-        help: 'Path of the configuration file',
-        abbr: 'c',
-        defaultsTo:
-            '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
-    ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
-    ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
-    ..addOption(
-      'pbdl-in',
-      help:
-          'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
-    )
-    ..addFlag('help',
-        help: 'Displays this help information.', abbr: 'h', negatable: false)
-    ..addFlag('export-pbdl',
-        help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
-    ..addFlag('exclude-styles',
-        help: 'If this flag is set, it will exclude output styles document');
-
 //error handler using logger package
   void handleError(String msg) {
     log.error(msg);
@@ -72,171 +66,91 @@ void main(List<String> args) async {
     exit(2);
   }
 
-  argResults = parser.parse(args);
+  var argResults = parser.parse(args);
 
-  //Check if no args passed or only -h/--help passed
+  /// Check if no args passed or only -h/--help passed
   if (argResults['help'] || argResults.arguments.isEmpty) {
     print('''
   ** PARABEAC HELP **
 ${parser.usage}
     ''');
     exit(0);
-  }
-
-  var configuration =
-      generateConfiguration(p.normalize(argResults['config-path']));
-
-  // Detect platform
-  MainInfo().platform = Platform.operatingSystem;
-  configuration.platform = Platform.operatingSystem;
-
-  String path = argResults['path'];
-
-  MainInfo().figmaKey = argResults['figKey'];
-  MainInfo().figmaProjectID = argResults['fig'];
-
-  var designType = 'sketch';
-  MainInfo().exportStyles = !argResults['exclude-styles'];
-  var jsonOnly = argResults['export-pbdl'];
-
-  // var configurationPath = argResults['config-path'];
-  // var configurationType = 'default';
-  String projectName = argResults['project-name'];
-
-  // Handle input errors
-  if (hasTooFewArgs(argResults)) {
+  } else if (hasTooFewArgs(argResults)) {
     handleError(
         'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
   } else if (hasTooManyArgs(argResults)) {
     handleError(
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
-  } else if (argResults['figKey'] != null && argResults['fig'] != null) {
-    designType = 'figma';
-  } else if (argResults['path'] != null) {
-    designType = 'sketch';
-  } else if (argResults['pbdl-in'] != null) {
-    designType = 'pbdl';
   }
 
-  // Populate `MainInfo()`
-
-  // If outputPath is empty, assume we are outputting to design file path
-  MainInfo().outputPath = (p.absolute(
-      p.normalize(argResults['out'] ?? p.dirname(path ?? Directory.current))));
-  configuration.outputDirPath = MainInfo().outputPath;
-
-  MainInfo().projectName = projectName;
-  configuration.projectName = projectName;
-  MainInfo().configuration = configuration;
-
-  // Create pngs directory
-  var pngsPath = p.join(MainInfo().outputPath,
-      (jsonOnly || argResults['pbdl-in'] != null ? '' : 'pngs'));
-  await Directory(pngsPath).create(recursive: true);
-
-  if (designType == 'sketch') {
-    if (argResults['pbdl-in'] != null) {
-      var pbdlPath = argResults['pbdl-in'];
-      var jsonString = File(pbdlPath).readAsStringSync();
-      MainInfo().pbdf = json.decode(jsonString);
-    }
-    Process process;
-    if (!jsonOnly) {
-      var file = await FileSystemEntity.isFile(path);
-      var exists = await File(path).exists();
-
-      if (!file || !exists) {
-        handleError('$path is not a file');
-      }
-      MainInfo().sketchPath = p.normalize(p.absolute(path));
-      InputDesignService(path);
-
-      if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
-        var isSACupToDate = await Process.run(
-          './pb-scripts/check-git.sh',
-          [],
-          workingDirectory: MainInfo().cwd.path,
-        );
-
-        if (isSACupToDate.stdout
-            .contains('Sketch Asset Converter is behind master.')) {
-          log.warning(isSACupToDate.stdout);
-        } else {
-          log.info(isSACupToDate.stdout);
-        }
-
-        process = await Process.start('npm', ['run', 'prod'],
-            workingDirectory: MainInfo().cwd.path + '/SketchAssetConverter');
-
-        await for (var event in process.stdout.transform(utf8.decoder)) {
-          if (event.toLowerCase().contains('server is listening on port')) {
-            log.fine('Successfully started Sketch Asset Converter');
-            break;
-          }
-        }
-      }
-    }
-
-    SketchController().convertFile(
-      path,
-      MainInfo().outputPath + projectName,
-      configuration,
-      jsonOnly: jsonOnly,
-      apService: SketchAssetProcessor(),
-    );
-    process?.kill();
-  } else if (designType == 'xd') {
-    assert(false, 'We don\'t support Adobe XD.');
-  } else if (designType == 'figma') {
-    if (argResults['pbdl-in'] != null) {
-      var pbdlPath = argResults['pbdl-in'];
-      var jsonString = File(pbdlPath).readAsStringSync();
-      MainInfo().pbdf = json.decode(jsonString);
-    }
-    if (MainInfo().figmaKey == null || MainInfo().figmaKey.isEmpty) {
-      assert(false, 'Please provided a Figma API key to proceed.');
-    }
-    if (MainInfo().figmaProjectID == null ||
-        MainInfo().figmaProjectID.isEmpty) {
-      assert(false, 'Please provided a Figma project ID to proceed.');
-    }
-    var jsonOfFigma = await APICallService.makeAPICall(
-        'https://api.figma.com/v1/files/${MainInfo().figmaProjectID}',
-        MainInfo().figmaKey);
-
-    if (jsonOfFigma != null) {
-      AzureAssetService().projectUUID = MainInfo().figmaProjectID;
-      // Starts Figma to Object
-      FigmaController().convertFile(
-        jsonOfFigma,
-        MainInfo().outputPath + projectName,
-        configuration,
-        jsonOnly: jsonOnly,
-        apService: FigmaAssetProcessor(),
-      );
-    } else {
-      log.error('File was not retrieved from Figma.');
-    }
-  } else if (designType == 'pbdl') {
-    var pbdlPath = argResults['pbdl-in'];
-    var isFile = FileSystemEntity.isFileSync(pbdlPath);
-    var exists = File(pbdlPath).existsSync();
-
-    if (!isFile || !exists) {
-      handleError('$path is not a file');
-    }
-
-    var jsonString = await File(pbdlPath).readAsString();
-
-    var pbdf = json.decode(jsonString);
-
-    DesignController().convertFile(
-      pbdf,
-      MainInfo().outputPath + projectName,
-      configuration,
-    );
+  collectArguments(argResults);
+  var processInfo = MainInfo();
+  if (processInfo.designType == DesignType.UNKNOWN) {
+    throw UnsupportedError('We have yet to support this DesignType! ');
   }
+
+  var controller = controllers.firstWhere(
+      (controller) => controller.designType == processInfo.designType);
+  await controller.setup();
+  controller.convertFile();
+
   exitCode = 0;
+}
+
+/// Populates the corresponding fields of the [MainInfo] object with the
+/// corresponding [arguments].
+///
+/// Remember that [MainInfo] is a Singleton, therefore, nothing its going to
+/// be return from the function. When you use [MainInfo] again, its going to
+/// contain the proper values from [arguments]
+void collectArguments(ArgResults arguments) {
+  var info = MainInfo();
+
+  info.configuration =
+      generateConfiguration(p.normalize(arguments['config-path']));
+
+  /// Detect platform
+  info.platform = Platform.operatingSystem;
+
+  info.figmaKey = arguments['figKey'];
+  info.figmaProjectID = arguments['fig'];
+
+  info.designFilePath = arguments['path'];
+  if (arguments['pbdl-in'] != null) {
+    info.pbdlPath = arguments['pbdl-in'];
+  }
+
+  info.designType = determineDesignTypeFromArgs(arguments);
+  info.exportStyles = !arguments['exclude-styles'];
+  info.projectName ??= arguments['project-name'];
+
+  /// If outputPath is empty, assume we are outputting to design file path
+  info.outputPath =
+      arguments['out'] ?? p.dirname(info.designFilePath ?? Directory.current.path);
+
+  info.exportPBDL = arguments['export-pbdl'] ?? false;
+  
+  /// In the future when we are generating certain dart files only.
+  /// At the moment we are only generating in the flutter project.
+  info.pngPath = p.join(info.genProjectPath, 'assets/images');
+}
+
+/// Determine the [MainInfo.designType] from the [arguments]
+///
+/// If [arguments] include `figKey` or `fig`, that implies that [MainInfo.designType]
+/// should be [DesignType.FIGMA]. If there is a `path`, then the [MainInfo.designType]
+/// should be [DesignType.SKETCH]. Otherwise, if it includes the flag `pndl-in`, the type
+/// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
+/// to [DesignType.UNKNOWN].
+DesignType determineDesignTypeFromArgs(ArgResults arguments) {
+  if (arguments['figKey'] != null && arguments['fig'] != null) {
+    return DesignType.FIGMA;
+  } else if (arguments['path'] != null) {
+    return DesignType.SKETCH;
+  } else if (arguments['pbdl-in'] != null) {
+    return DesignType.PBDL;
+  }
+  return DesignType.UNKNOWN;
 }
 
 /// Checks whether a configuration file is made already,

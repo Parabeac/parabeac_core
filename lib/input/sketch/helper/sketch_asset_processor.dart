@@ -33,12 +33,12 @@ class SketchAssetProcessor extends AssetProcessingService {
               'uuid': uuid,
               'width': width,
               'height': height,
-              'blob': getBlobName(MainInfo().sketchPath),
+              'blob': getBlobName(MainInfo().designFilePath),
               'container': 'design-file'
             }
           : {
               'uuid': uuid,
-              'path': MainInfo().sketchPath,
+              'path': MainInfo().designFilePath,
               'width': width,
               'height': height
             };
