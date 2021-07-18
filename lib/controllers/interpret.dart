@@ -118,11 +118,7 @@ class Interpret {
       PBAlignGenerationService().addAlignmentToLayouts
     ];
 
-    var builder = AITServiceBuilder(currentContext, intermediateTree, aitServices)
-    .addTransformation((tree, context) {
-      print(tree.hashCode);
-      return Future.value(tree);
-    });
+    var builder = AITServiceBuilder(currentContext, intermediateTree, aitServices);
     return builder.build();
 
   }
