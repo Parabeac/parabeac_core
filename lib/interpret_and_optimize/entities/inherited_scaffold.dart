@@ -89,6 +89,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
+        // currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
+            // currentContext.canvasTLC.y - node.topLeftCorner.y);
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
@@ -100,6 +102,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
+      // currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
+            // currentContext.canvasTLC.y - node.topLeftCorner.y);
       return;
     }
     if (node is InjectedTabBar) {
@@ -123,29 +127,11 @@ class InheritedScaffold extends PBVisualIntermediateNode
         child = stack;
       }
     }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    // if (child != null) {
-    //   var temp = TempGroupLayoutNode(null, currentContext, node.name);
-    //   temp.addChild(child);
-    //   temp.addChild(node);
-    //   child = temp;
-    // } else {
-    //   child = node;
-    // }
   }
 
   @override
   void alignChild() {
     if (child != null) {
-      // if (child is! PBIntermediateStackLayout) {
-      //   var stack = PBIntermediateStackLayout(
-      //     '',
-      //     '',
-      //     currentContext: currentContext,
-      //   );
-      //   stack.addChild(child);
-      //   child = stack;
-      // }
 
       var padding = Padding('', child.constraints,
           left: (child.topLeftCorner.x - topLeftCorner.x).abs(),

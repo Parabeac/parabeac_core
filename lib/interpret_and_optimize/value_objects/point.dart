@@ -38,4 +38,14 @@ class Point implements Comparable<Point> {
     }
     return false;
   }
+  /// calculates the distance given two [Point]s
+  /// 
+  /// [isXAxis], which default to `true`, is a flag on which axis should
+  /// the calculation be done.
+  static double dist(Point TLC, Point BTC, [isXAxis = true]){
+    if(TLC == null || BTC == null){
+      throw NullThrownError();
+    }
+    return isXAxis ? (BTC.x - TLC.x).abs() : (BTC.y - TLC.y).abs();
+  }
 }
