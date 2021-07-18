@@ -13,17 +13,18 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 ///tree.where((element) => element != null).toList().reversed.map((e) => e.name).toList()
-class PBConstraintGenerationService implements PBGenerationService {
+class PBConstraintGenerationService implements AITService {
   @override
   PBContext currentContext;
 
-  PBConstraintGenerationService({this.currentContext});
+  PBConstraintGenerationService();
 
   /// Traverse to the bottom of the tree, and implement constraints to nodes that don't already contain it such as [InjectedContainer] and then work our way up the tree.
   /// Through Traversal, discover whether there are elements that will conflict on scaling, if so, change the layout to a Stack.
-  PBIntermediateTree implementConstraints(PBIntermediateTree tree) {
+  Future<PBIntermediateTree> implementConstraints(PBIntermediateTree tree, PBContext context) {
+    currentContext = context;
     if (tree.rootNode == null) {
-      return tree;
+      return Future.value(tree);
     }
 
     for (var node
@@ -74,7 +75,7 @@ class PBConstraintGenerationService implements PBGenerationService {
         }
       }
     }
-    return tree;
+    return Future.value(tree);
   }
 
   /// Go through children and find out if there's a node that will overlap another node when scaling.

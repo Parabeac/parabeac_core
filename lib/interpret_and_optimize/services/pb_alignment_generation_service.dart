@@ -3,6 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/layer_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -10,19 +11,18 @@ import 'package:quick_log/quick_log.dart';
 /// Interpret the alignment relationship between a child node and a parent Visual or Layout Node. After interpretation, inject the proper alignment whether that’s Padding based or Flex-based.
 /// Input: PBIntermediateNode Tree
 /// Output: PBIntermediateNode Tree
-class PBAlignGenerationService implements PBGenerationService {
-  /// The originalRoot intermediate node.
-  PBIntermediateNode originalRoot;
-
+class PBAlignGenerationService implements AITService {
   var log;
 
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
-  PBAlignGenerationService(this.originalRoot, {this.currentContext}) {
+  PBAlignGenerationService() {
     log = Logger(runtimeType.toString());
   }
 
   /// Should find all layout nodes
-  PBIntermediateNode addAlignmentToLayouts() {
+  Future<PBIntermediateTree> addAlignmentToLayouts(PBIntermediateTree tree, PBContext context) {
+    currentContext = context;
+    var originalRoot = tree.rootNode;
     if (originalRoot == null) {
       log.warning(
           '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
@@ -51,7 +51,8 @@ class PBAlignGenerationService implements PBGenerationService {
         });
       }
     }
-    return originalRoot;
+    tree.rootNode = originalRoot;
+    return Future.value(tree);
   }
 
   @override

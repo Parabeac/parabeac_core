@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
@@ -22,7 +23,7 @@ import 'package:uuid/uuid.dart';
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
 /// Input: PBVisualIntermediateNode Tree or PBLayoutIntermediate Tree
 /// Output:PBIntermediateNode Tree
-class PBLayoutGenerationService implements PBGenerationService {
+class PBLayoutGenerationService implements AITService {
   ///The available Layouts that could be injected.
   final List<PBLayoutIntermediateNode> _availableLayouts = [];
 
@@ -42,7 +43,7 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///The default [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode _defaultLayout;
 
-  PBLayoutGenerationService({this.currentContext}) {
+  PBLayoutGenerationService() {
     var layoutHandlers = <String, PBLayoutIntermediateNode>{
       // 'column': PBIntermediateColumnLayout(
       //   '',
@@ -56,7 +57,7 @@ class PBLayoutGenerationService implements PBGenerationService {
     };
 
     for (var layoutType
-        in currentContext.configuration.layoutPrecedence ?? ['column']) {
+        in MainInfo().configuration.layoutPrecedence ?? ['column']) {
       layoutType = layoutType.toLowerCase();
       if (layoutHandlers.containsKey(layoutType)) {
         _availableLayouts.add(layoutHandlers[layoutType]);
@@ -66,11 +67,13 @@ class PBLayoutGenerationService implements PBGenerationService {
     _defaultLayout = _availableLayouts[0];
   }
 
-  PBIntermediateNode extractLayouts(
-    PBIntermediateNode rootNode,
+  Future<PBIntermediateTree> extractLayouts(
+    PBIntermediateTree tree, PBContext context
   ) {
+    currentContext = context;
+    var rootNode = tree.rootNode;
     if (rootNode == null) {
-      return rootNode;
+      return Future.value(tree);
     }
     try {
       rootNode = _traverseLayersUtil(rootNode, (layer) {
@@ -87,7 +90,7 @@ class PBLayoutGenerationService implements PBGenerationService {
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
-      return _applyPostConditionRules(rootNode);
+      _applyPostConditionRules(rootNode);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -95,7 +98,8 @@ class PBLayoutGenerationService implements PBGenerationService {
           );
       log.error(e.toString());
     } finally {
-      return rootNode;
+      tree.rootNode = rootNode;
+      return Future.value(tree);
     }
   }
 

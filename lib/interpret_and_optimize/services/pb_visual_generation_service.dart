@@ -18,7 +18,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_serv
 /// Takes a SketchNodeTree and begins generating PBNode interpretations. For each node, the node is going to pass through the PBSemanticInterpretationService which checks if the node should generate a specific PBIntermediateNode based on the semantics that it contains.
 /// Input: SketchNodeTree
 /// Output: PBIntermediateNodeTree
-class PBVisualGenerationService implements PBGenerationService {
+class PBVisualGenerationService implements AITService {
   /// The originalRoot sketch node.
   DesignNode originalRoot;
 

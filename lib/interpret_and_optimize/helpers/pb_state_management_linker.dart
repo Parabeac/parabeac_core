@@ -3,7 +3,12 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
 
@@ -83,18 +88,18 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node) async {
-    var visualServiceResult = await interpret.visualGenerationService(
+    var tree = PBIntermediateTree(node.name);
+    tree.rootNode = await interpret.visualGenerationService(
         (node as PBInheritedIntermediate).originalRef,
         node.currentContext,
         Stopwatch()..start(),
         ignoreStates: true);
-    var pluginServiceResult = await interpret.pluginService(
-        visualServiceResult, node.currentContext, Stopwatch()..start());
-    var layoutServiceResult = await interpret.layoutGenerationService(
-        pluginServiceResult,
-        pluginServiceResult.currentContext,
-        Stopwatch()..start());
-    return await interpret.alignGenerationService(layoutServiceResult,
-        layoutServiceResult.currentContext, Stopwatch()..start());
+    var builder = AITServiceBuilder(node.currentContext, tree);
+    builder
+        .addTransformation(
+            PBPluginControlService().convertAndModifyPluginNodeTree)
+        .addTransformation(PBLayoutGenerationService().extractLayouts)
+        .addTransformation(PBAlignGenerationService().addAlignmentToLayouts);
+    return builder.build().then((tree) => tree.rootNode);
   }
 }
