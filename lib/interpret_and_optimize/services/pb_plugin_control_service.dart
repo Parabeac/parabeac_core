@@ -12,7 +12,7 @@ import 'package:quick_log/quick_log.dart';
 /// When finding a plugin node, we call layoutInstruction(). This gives the PluginNdoe the ability to modify the relevant tree if needed.
 /// Input: PBIntermediateTree
 /// Output: PBIntermediateTree
-class PBPluginControlService implements AITService {
+class PBPluginControlService implements AITHandler {
 
 
   var log = Logger('Plugin Control Service');
@@ -85,5 +85,7 @@ class PBPluginControlService implements AITService {
   }
 
   @override
-  PBContext currentContext;
+  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+    return convertAndModifyPluginNodeTree(tree, context);
+  }
 }

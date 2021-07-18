@@ -10,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_serv
 /// Input: SketchNode
 /// Output: PBIntermediateNode, null (No Semantics found that matches that SketchNode), or DenyListNode if the node is part of a DenyList set in the configuration.
 
-class PBSemanticGenerationService implements AITService {
+class PBSemanticGenerationService {
   PBSemanticGenerationService({this.currentContext});
 
   /// Return DenyListNode if found in the deny List. Return null if there were no semantic node found. Return any other type of PBIntermediateNode if we can tell from direct or indirect semantics.

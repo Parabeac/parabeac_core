@@ -11,51 +11,46 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/node_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_deny_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 /// Takes a SketchNodeTree and begins generating PBNode interpretations. For each node, the node is going to pass through the PBSemanticInterpretationService which checks if the node should generate a specific PBIntermediateNode based on the semantics that it contains.
 /// Input: SketchNodeTree
 /// Output: PBIntermediateNodeTree
-class PBVisualGenerationService implements AITService {
-  /// The originalRoot sketch node.
-  DesignNode originalRoot;
+class PBVisualGenerationService{
 
   PositionalCleansingService _positionalCleansingService;
-
-  @override
-  PBContext currentContext;
 
   PBStateManagementHelper smHelper;
 
   /// Boolean that is `true` if the [VisualGenerationService]
   /// is currently processing a state management node
-  bool _ignoreStates;
+  bool ignoreStates = false;
 
-  /// Constructor for PBVisualGenerationService, must include the root SketchNode
-  PBVisualGenerationService(originalRoot,
-      {this.currentContext, bool ignoreStates = false}) {
-    _ignoreStates = ignoreStates;
+  PBVisualGenerationService() {
+    _positionalCleansingService = PositionalCleansingService();
+    smHelper = PBStateManagementHelper();
+  }
+
+  DesignNode _positionalOffsetAdjustment(DesignNode designNode){
     // Only do positional cleansing for non-state nodes, since those nodes
     // have already been through this service
-    if (!_ignoreStates) {
-      _positionalCleansingService = PositionalCleansingService();
-      this.originalRoot =
-          _positionalCleansingService.eliminateOffset(originalRoot);
-    } else {
-      this.originalRoot = originalRoot;
+    if(designNode != null && !ignoreStates){
+      return _positionalCleansingService.eliminateOffset(designNode);
     }
-
-    smHelper = PBStateManagementHelper();
+    return designNode;
   }
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateNode> getIntermediateTree() async {
+  Future<PBIntermediateTree> getIntermediateTree(DesignNode originalRoot, PBContext currentContext) async {
     if (originalRoot == null) {
       return Future.value(null);
     }
+    var tree = PBIntermediateTree(originalRoot.name);
+    originalRoot = _positionalOffsetAdjustment(originalRoot);
+
     PBPluginListHelper().initPlugins(currentContext);
 
     var queue = <NodeTuple>[];
@@ -85,7 +80,7 @@ class PBVisualGenerationService implements AITService {
           }
 
           // Interpret state management node
-          if (!_ignoreStates &&
+          if (!ignoreStates &&
               smHelper.isValidStateNode(result.name) &&
               (currentNode.designNode.name !=
                       currentNode.convertedParent?.name ??
@@ -105,6 +100,10 @@ class PBVisualGenerationService implements AITService {
 
           // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.
           rootIntermediateNode ??= result;
+          if(rootIntermediateNode != null){
+            _extractScreenSize(rootIntermediateNode, currentContext);
+          }
+           
 
           if (result != null) {
             // Add next depth to queue.
@@ -130,19 +129,18 @@ class PBVisualGenerationService implements AITService {
           prototypeNode,
           rootIntermediateNode.currentContext);
       destHolder.addChild(rootIntermediateNode);
-      return destHolder;
+      tree.rootNode = destHolder;
+      return Future.value(tree);
     }
-    if (rootIntermediateNode != null) {
-      _extractScreenSize(rootIntermediateNode);
-    }
-    return rootIntermediateNode;
+    tree.rootNode = rootIntermediateNode;
+    return Future.value(tree);
   }
 
   ///Sets the size of the UI element.
   ///
   ///We are assuming that since the [rootIntermediateNode] contains all of the nodes
   ///then it should represent the biggest screen size that encapsulates the entire UI elements.
-  void _extractScreenSize(PBIntermediateNode rootIntermediateNode) {
+  void _extractScreenSize(PBIntermediateNode rootIntermediateNode, PBContext currentContext) {
     if ((currentContext.screenBottomRightCorner == null &&
             currentContext.screenTopLeftCorner == null) ||
         (currentContext.screenBottomRightCorner !=

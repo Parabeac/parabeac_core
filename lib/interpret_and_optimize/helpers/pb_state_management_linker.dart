@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_gener
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
 
@@ -88,14 +89,17 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node) async {
-    var tree = PBIntermediateTree(node.name);
-    tree.rootNode = await interpret.visualGenerationService(
-        (node as PBInheritedIntermediate).originalRef,
-        node.currentContext,
-        Stopwatch()..start(),
-        ignoreStates: true);
-    var builder = AITServiceBuilder(node.currentContext, tree);
+    var visualGenerationService = PBVisualGenerationService();
+    visualGenerationService.ignoreStates = true;
+
+    var builder = AITServiceBuilder(
+        node.currentContext, (node as PBInheritedIntermediate).originalRef);
     builder
+        .addTransformation(visualGenerationService.getIntermediateTree)
+        .addTransformation((PBIntermediateTree tree, context) {
+          /// Making sure the name of the tree was changed back
+          tree.name = node.name;
+        })
         .addTransformation(
             PBPluginControlService().convertAndModifyPluginNodeTree)
         .addTransformation(PBLayoutGenerationService().extractLayouts)

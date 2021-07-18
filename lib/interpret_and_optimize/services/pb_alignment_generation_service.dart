@@ -1,4 +1,3 @@
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/layer_tuple.dart';
@@ -11,7 +10,7 @@ import 'package:quick_log/quick_log.dart';
 /// Interpret the alignment relationship between a child node and a parent Visual or Layout Node. After interpretation, inject the proper alignment whether that’s Padding based or Flex-based.
 /// Input: PBIntermediateNode Tree
 /// Output: PBIntermediateNode Tree
-class PBAlignGenerationService implements AITService {
+class PBAlignGenerationService implements AITHandler {
   var log;
 
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
@@ -57,4 +56,9 @@ class PBAlignGenerationService implements AITService {
 
   @override
   PBContext currentContext;
+
+  @override
+  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+    return addAlignmentToLayouts(tree, context);
+  }
 }

@@ -1,10 +1,11 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/input/helper/design_project.dart';
 import 'package:parabeac_core/input/helper/design_page.dart';
 import 'package:parabeac_core/input/helper/design_screen.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -18,8 +19,6 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
-
-import 'main_info.dart';
 
 class Interpret {
   var log = Logger('Interpret');
@@ -96,58 +95,116 @@ class Interpret {
 
   Future<PBIntermediateTree> _generateScreen(DesignScreen designScreen) async {
     var currentContext = PBContext(configuration);
-
-    var parentComponent = designScreen.designNode;
-
-    var stopwatch = Stopwatch()..start();
-
-    /// VisualGenerationService
-    var intermediateTree = PBIntermediateTree(designScreen.designNode.name);
-    currentContext.tree = intermediateTree;
     currentContext.project = _pb_project;
-    intermediateTree.rootNode = await visualGenerationService(
-        parentComponent, currentContext, stopwatch);
 
-    if (intermediateTree.rootNode == null) {
-      return intermediateTree;
-    }
     var aitServices = [
-      PBPluginControlService().convertAndModifyPluginNodeTree,
-      PBLayoutGenerationService().extractLayouts,
-      PBConstraintGenerationService().implementConstraints,
-      PBAlignGenerationService().addAlignmentToLayouts
+      PBVisualGenerationService().getIntermediateTree,
+      PBSymbolLinkerService(),
+      PBPluginControlService(),
+      PBLayoutGenerationService(),
+      PBConstraintGenerationService(),
+      PBAlignGenerationService()
     ];
 
-    var builder = AITServiceBuilder(currentContext, intermediateTree, aitServices);
+    var builder =
+        AITServiceBuilder(currentContext, designScreen.designNode, aitServices);
     return builder.build();
-
   }
+}
 
-  // TODO: refactor this method and/or `getIntermediateTree`
-  // to not take the [ignoreStates] variable.
-  Future<PBIntermediateNode> visualGenerationService(
-      var component, var context, var stopwatch,
-      {bool ignoreStates = false}) async {
-    /// VisualGenerationService
-    PBIntermediateNode node;
-    try {
-      node = await PBVisualGenerationService(component,
-              currentContext: context, ignoreStates: ignoreStates)
-          .getIntermediateTree();
-    } catch (e, stackTrace) {
-      await MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      log.error(e.toString());
-      log.error('at PBVisualGenerationService');
+class AITServiceBuilder {
+  Logger log;
+
+  PBIntermediateTree _intermediateTree;
+  set intermediateTree(PBIntermediateTree tree) => _intermediateTree = tree;
+
+  final PBContext _context;
+  Stopwatch _stopwatch;
+
+  /// These are the [AITHandler]s that are going to be transforming
+  /// the [_intermediateTree].
+  final List _transformations = [];
+
+  final DesignNode designNode;
+
+  AITServiceBuilder(this._context, this.designNode, [List transformations]) {
+    log = Logger(runtimeType.toString());
+    _stopwatch = Stopwatch();
+
+    if (transformations != null) {
+      transformations.forEach(addTransformation);
+      if (_verifyTransformationsFailed()) {
+        throw Error();
+      }
     }
-    // print(
-    //     'Visual Generation Service executed in ${stopwatch.elapsedMilliseconds} milliseconds.');
-    stopwatch.stop();
-    node = await _pbSymbolLinkerService.linkSymbols(node);
-    return node;
   }
 
-
+  AITServiceBuilder addTransformation(transformation) {
+    if (transformation is AITHandler) {
+      _transformations.add(transformation.handleTree);
+    } else if (transformation is AITNodeTransformation || transformation is PBDLConversion) {
+      _transformations.add(transformation);
+    } 
+    return this;
   }
+
+  /// Verifies that only the allows data types are within the [_transformations]
+  bool _verifyTransformationsFailed() {
+    return _transformations.any((transformation) =>
+        transformation is! AITHandler &&
+        transformation is! AITNodeTransformation &&
+        transformation is! PBDLConversion &&
+        transformation is! AITTransformation);
+  }
+
+  Future<PBIntermediateTree> _pbdlConversion(PBDLConversion conversion) async {
+    try {
+      _stopwatch.start();
+      log.fine('Converting ${designNode.name} to AIT');
+      _intermediateTree = await conversion(designNode, _context);
+      _context.tree = _intermediateTree;
+      _stopwatch.stop();
+      log.fine(
+          'Finished with ${designNode.name} (${_stopwatch.elapsedMilliseconds}');
+      return _intermediateTree;
+    } catch (e) {
+      MainInfo().captureException(e);
+      log.error('PBDL Conversion was not possible');
+
+      /// Exit from Parabeac-Core
+      throw Error();
+    }
+  }
+
+  Future<PBIntermediateTree> build() async {
+    var pbdlConversion = _transformations
+        .firstWhere((transformation) => transformation is PBDLConversion);
+    if (pbdlConversion == null) {
+      throw Error();
+    }
+    _transformations.removeWhere((element) => element is PBDLConversion);
+    await _pbdlConversion(pbdlConversion);
+
+    for (var transformation in _transformations) {
+      var name = transformation.toString();
+      _stopwatch.start();
+      log.fine('Started running $name...');
+      try {
+        if (transformation is AITNodeTransformation) {
+          for (var node in _intermediateTree) {
+            node = await transformation(_context, node);
+          }
+        } else if (transformation is AITTransformation) {
+          _intermediateTree = await transformation(_context, _intermediateTree);
+        }
+      } catch (e) {
+        MainInfo().captureException(e);
+        log.error('${e.toString()} at $name');
+      } finally {
+        _stopwatch.stop();
+        log.fine('stoped running $name (${_stopwatch.elapsed.inMilliseconds})');
+      }
+    }
+    return _intermediateTree;
+  }
+}

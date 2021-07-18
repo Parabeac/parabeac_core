@@ -13,7 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 ///tree.where((element) => element != null).toList().reversed.map((e) => e.name).toList()
-class PBConstraintGenerationService implements AITService {
+class PBConstraintGenerationService implements AITHandler {
   @override
   PBContext currentContext;
 
@@ -188,5 +188,11 @@ class PBConstraintGenerationService implements AITService {
       }
     }
     return constraints;
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+   return implementConstraints(tree, context);
+    
   }
 }

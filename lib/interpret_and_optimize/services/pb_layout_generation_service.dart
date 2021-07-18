@@ -1,9 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
@@ -23,7 +20,7 @@ import 'package:uuid/uuid.dart';
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
 /// Input: PBVisualIntermediateNode Tree or PBLayoutIntermediate Tree
 /// Output:PBIntermediateNode Tree
-class PBLayoutGenerationService implements AITService {
+class PBLayoutGenerationService implements AITHandler {
   ///The available Layouts that could be injected.
   final List<PBLayoutIntermediateNode> _availableLayouts = [];
 
@@ -35,9 +32,6 @@ class PBLayoutGenerationService implements AITService {
     // ContainerPostRule(),
     ContainerConstraintRule()
   ];
-
-  @override
-  PBContext currentContext;
 
   ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
   ///The default [PBLayoutIntermediateNode]
@@ -52,8 +46,10 @@ class PBLayoutGenerationService implements AITService {
       // ),
       // 'row': PBIntermediateRowLayout('', Uuid().v4(),
       //     currentContext: currentContext),
-      'stack': PBIntermediateStackLayout('', Uuid().v4(),
-          currentContext: currentContext),
+      'stack': PBIntermediateStackLayout(
+        '',
+        Uuid().v4(),
+      ),
     };
 
     for (var layoutType
@@ -68,20 +64,24 @@ class PBLayoutGenerationService implements AITService {
   }
 
   Future<PBIntermediateTree> extractLayouts(
-    PBIntermediateTree tree, PBContext context
-  ) {
-    currentContext = context;
+      PBIntermediateTree tree, PBContext context) {
     var rootNode = tree.rootNode;
     if (rootNode == null) {
       return Future.value(tree);
     }
     try {
+      // rootNode = (tree
+      //         .map(_removingMeaninglessGroup)
+      //         .map((node) => _layoutConditionalReplacement(node, context))
+      //         .toList()
+      //           ..removeWhere((element) => element == null))
+          // .first;
       rootNode = _traverseLayersUtil(rootNode, (layer) {
         return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
             .map(_removingMeaninglessGroup)
-            .map(_layoutConditionalReplacement)
+            .map((node) => _layoutConditionalReplacement(node, context))
             .toList()
 
               /// Filter out the elements that are null in the tree
@@ -91,6 +91,7 @@ class PBLayoutGenerationService implements AITService {
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
       _applyPostConditionRules(rootNode);
+      // return Future.value(tree);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -171,7 +172,8 @@ class PBLayoutGenerationService implements AITService {
   ///nodes should be considered into subsections. For example, if child 0 and child 1 statisfy the
   ///rule of a [Row] but not child 3, then child 0 and child 1 should be placed inside of a [Row]. Therefore,
   ///there could be many[IntermediateLayoutNodes] derived in the children level of the `group`.
-  PBIntermediateNode _layoutConditionalReplacement(PBIntermediateNode parent,
+  PBIntermediateNode _layoutConditionalReplacement(
+      PBIntermediateNode parent, PBContext context,
       {depth = 1}) {
     if (parent is PBLayoutIntermediateNode && depth >= 0) {
       parent.sortChildren();
@@ -192,21 +194,21 @@ class PBLayoutGenerationService implements AITService {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               currentNode.addChild(nextNode);
-              currentNode =
-                  _layoutConditionalReplacement(currentNode, depth: depth - 1);
+              currentNode = _layoutConditionalReplacement(currentNode, context,
+                  depth: depth - 1);
               generatedLayout = currentNode;
             } else if (layout.runtimeType == nextNode.runtimeType) {
               nextNode.addChild(currentNode);
-              nextNode =
-                  _layoutConditionalReplacement(nextNode, depth: depth - 1);
+              nextNode = _layoutConditionalReplacement(nextNode, context,
+                  depth: depth - 1);
               generatedLayout = nextNode;
             }
 
             ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
             ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
             ///of the generated layout.
-            generatedLayout ??= layout
-                .generateLayout([currentNode, nextNode], currentContext, '');
+            generatedLayout ??=
+                layout.generateLayout([currentNode, nextNode], context, '');
             var start = childPointer, end = childPointer + 2;
             children.replaceRange(
                 start,
@@ -230,10 +232,8 @@ class PBLayoutGenerationService implements AITService {
       } else {
         return parent is! TempGroupLayoutNode
             ? parent
-            : _replaceNode(
-                parent,
-                _defaultLayout.generateLayout(
-                    children, currentContext, parent.name));
+            : _replaceNode(parent,
+                _defaultLayout.generateLayout(children, context, parent.name));
       }
     }
     return parent;
@@ -270,5 +270,11 @@ class PBLayoutGenerationService implements AITService {
       }
     }
     return node;
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    return extractLayouts(tree, context);
   }
 }
