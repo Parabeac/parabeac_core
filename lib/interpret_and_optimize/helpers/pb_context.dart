@@ -29,7 +29,7 @@ class PBContext {
   }
 
   double get originalScreenWidth => Point.dist(_screenTLC, _screenBRC);
-  double get originaScreenHeight => Point.dist(_screenTLC, _screenBRC, true);
+  double get originaScreenHeight => Point.dist(_screenTLC, _screenBRC, false);
 
   /// These values represent the current "focus area" size as it travels down the
   /// tree.
@@ -67,7 +67,7 @@ class PBContext {
       return size;
     }
     return isHorizontal ? size / originalScreenWidth : size / originaScreenHeight;
-  }
+   }
 }
 
 enum SizingValueContext {

@@ -26,13 +26,13 @@ class PBPositionedGenerator extends PBGenerator {
       );
 
       valueHolder.left =
-          source.currentContext.getRatioPercentage(source.valueHolder.left);
+          source.currentContext.getRatioPercentage(source.valueHolder.left, true);
       valueHolder.right =
-          source.currentContext.getRatioPercentage(source.valueHolder.right);
+          source.currentContext.getRatioPercentage(source.valueHolder.right, true);
       valueHolder.top = source.currentContext
-          .getRatioPercentage(source.valueHolder.top, false);
+          .getRatioPercentage(source.valueHolder.top);
       valueHolder.bottom = source.currentContext
-          .getRatioPercentage(source.valueHolder.bottom, false);
+          .getRatioPercentage(source.valueHolder.bottom);
 
       if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
         multStringH = 'MediaQuery.of(context).size.width * ';
@@ -46,7 +46,7 @@ class PBPositionedGenerator extends PBGenerator {
       buffer.write(
           'left: ${_normalizeValue(multStringH, valueHolder.left)}, right: ${_normalizeValue(multStringH, valueHolder.right)},');
       buffer.write(
-          'top: ${_normalizeValue(multStringH, valueHolder.top)}, bottom: ${_normalizeValue(multStringH, valueHolder.bottom)},');
+          'top: ${_normalizeValue(multStringV, valueHolder.top)}, bottom: ${_normalizeValue(multStringV, valueHolder.bottom)},');
 
       try {
         source.child.currentContext = source.currentContext;

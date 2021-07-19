@@ -17,10 +17,8 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'interfaces/pb_inherited_intermediate.dart';
 
 class InheritedScaffold extends PBVisualIntermediateNode
-    with
-        PBColorMixin
-    implements
-        /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
+    with PBColorMixin
+    implements PBInheritedIntermediate {
   @override
   var originalRef;
   @override
@@ -89,8 +87,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-        // currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
-            // currentContext.canvasTLC.y - node.topLeftCorner.y);
+        // currentContext.focusAreaTLC = Point(currentContext.focusAreaTLC.x,
+        //     currentContext.focusAreaBRC.y - node.topLeftCorner.y);
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
@@ -102,8 +100,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-      // currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
-            // currentContext.canvasTLC.y - node.topLeftCorner.y);
+      // currentContext.focusAreaBRC = Point(currentContext.focusAreaTLC.x,
+      //     currentContext.focusAreaBRC.y - node.topLeftCorner.y);
       return;
     }
     if (node is InjectedTabBar) {
@@ -132,7 +130,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void alignChild() {
     if (child != null) {
-
       var padding = Padding('', child.constraints,
           left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
           right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
