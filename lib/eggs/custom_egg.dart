@@ -1,13 +1,16 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:uuid/uuid.dart';
+import 'package:recase/recase.dart';
 
 class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
@@ -24,12 +27,19 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
 
   @override
   void addChild(PBIntermediateNode node) {
-    // TODO: implement addChild
+    getAttributeNamed('child').attributeNode = node;
   }
 
   @override
   void alignChild() {
-    // TODO: implement alignChild
+    var tempNode = InjectedContainer(
+      child.bottomRightCorner,
+      child.topLeftCorner,
+      child.name,
+      child.UUID,
+    )..addChild(child);
+
+    getAttributeNamed('title').attributeNode = tempNode;
   }
 
   @override
@@ -40,19 +50,20 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
-    // TODO: implement generatePluginNode
-    throw UnimplementedError();
+    return CustomEgg(topLeftCorner, bottomRightCorner,
+        originalRef.name.replaceAll('<custom>', '').pascalCase);
   }
 }
 
 class CustomEggGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    // TODO: check if [source.name] it is actually formated as class name
-    context.configuration.generationConfiguration.fileStructureStrategy
+    // TODO: Do correct import
+    source.currentContext.configuration.generationConfiguration
+        .fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
       Uuid().v4(),
-      source.name,
+      source.name.snakeCase,
       customBoilerPlate(source.name),
       relativePath: 'egg',
       symbolPath: 'lib',
@@ -70,7 +81,9 @@ class CustomEggGenerator extends PBGenerator {
 
 String customBoilerPlate(String className) {
   return '''
-      class $className extends StatefullWidget{
+      import 'package:flutter/material.dart';
+
+      class $className extends StatefulWidget{
         final Widget child;
         $className({Key key, this.child}) : super (key: key);
 
