@@ -1,3 +1,4 @@
+import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
@@ -19,6 +20,7 @@ class PBPluginListHelper {
           currentContext: context),
       '<tab>': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),
+      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
     };
   }
 
@@ -34,9 +36,16 @@ class PBPluginListHelper {
     '<navbar>',
     '<tabbar>',
     '<tab>',
+    '<custom>',
   ];
 
-  List<String> baseNames = ['<background>', '<navbar>', '<tabbar>', '<tab>'];
+  List<String> baseNames = [
+    '<background>',
+    '<navbar>',
+    '<tabbar>',
+    '<tab>',
+    '<custom>',
+  ];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist
