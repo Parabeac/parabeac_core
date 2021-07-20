@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -58,7 +59,11 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
 class CustomEggGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    // TODO: Do correct import
+    // TODO: correct import
+    source.managerData.addImport(FlutterImport(
+      'egg/${source.name.snakeCase}.dart',
+      MainInfo().projectName,
+    ));
     source.currentContext.configuration.generationConfiguration
         .fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
