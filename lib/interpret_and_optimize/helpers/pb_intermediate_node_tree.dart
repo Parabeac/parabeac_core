@@ -110,7 +110,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   /// Find the distance between [source] and [target], where the [source] is an
   /// ancestor of [target].
   /// 
-  /// IF [source] IS NOT AN ANCESTOR OF [target], THEN ITS GOING TO RETURN `-2`.
+  /// IF [source] IS NOT AN ANCESTOR OF [target], THEN ITS GOING TO RETURN `-1`.
   /// This is because the nodes of the tree dont have an out going edge 
   /// pointing towards its parents, all directed edges are going down the tree.
   int dist(PBIntermediateNode source, PBIntermediateNode target,
@@ -142,9 +142,14 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
           dist[outNode] = newDist;
           queue.add(outNode);
         }
+
+        /// returning the found [target] distance.
+        if(outNode == target){
+          return dist[target];
+        }
       }
     }
-    return dist[target] == maxPathLength ? -1 : dist[target];
+    return -1;
   }
 
   @override
