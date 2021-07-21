@@ -41,26 +41,26 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     if (node is PBInheritedIntermediate) {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<leading>')) {
-        getAttributeNamed('leading').attributeNode = node;
+        getAttributeNamed('leading').attributeNode = node as PBIntermediateNode;
       }
 
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<trailing>')) {
-        getAttributeNamed('actions').attributeNode = node;
+        getAttributeNamed('actions').attributeNode = node as PBIntermediateNode;
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<middle>')) {
-        getAttributeNamed('title').attributeNode = node;
+        getAttributeNamed('title').attributeNode = node as PBIntermediateNode;
       }
     }
 

@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -19,6 +20,9 @@ class InheritedStar extends PBVisualIntermediateNode
 
   @override
   PrototypeNode prototypeNode;
+  
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   InheritedStar(this.originalRef, String name,
       {Uint8List image,
@@ -50,17 +54,6 @@ class InheritedStar extends PBVisualIntermediateNode
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    // Hopefully we converted the SVG correctly. Most likely this will get called to add the shapes but this is unnecessary.
-    if (node is InheritedShapePath) {
-      return;
-    }
-    assert(false,
-        'Child with type ${node.runtimeType} could not be added as a child.');
-    return;
   }
 
   @override

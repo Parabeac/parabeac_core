@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -168,11 +170,10 @@ class AITServiceBuilder {
       return _intermediateTree;
     } catch (e) {
       MainInfo().captureException(e);
-      log.error('PBDL Conversion was not possible');
+      log.error('PBDL Conversion was not possible because of - \n$e');
 
-      /// Exit from Parabeac-Core
-      throw Error();
-    }
+      exit(1);
+     }
   }
 
   Future<PBIntermediateTree> build() async {

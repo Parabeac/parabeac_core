@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -18,6 +19,9 @@ class InheritedOval extends PBVisualIntermediateNode
   @override
   var originalRef;
   var log = Logger('Layout Generation Service');
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   @override
   PrototypeNode prototypeNode;
@@ -54,15 +58,6 @@ class InheritedOval extends PBVisualIntermediateNode
         UUID, '${MainInfo().outputPath}assets/images', image);
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    // Hopefully we converted the SVG correctly. Most likely this will get called to add the shapes but this is unnecessary.
-    if (node is InheritedShapePath) {
-      return;
-    }
-    log.error(
-        'Child with type ${node.runtimeType} could not be added as a child.');
-  }
 
   @override
   void alignChild() {

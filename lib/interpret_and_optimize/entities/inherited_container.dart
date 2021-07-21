@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -22,6 +23,9 @@ class InheritedContainer extends PBVisualIntermediateNode
   PrototypeNode prototypeNode;
 
   bool isBackgroundVisible = true;
+
+  @override
+  ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
 
   InheritedContainer(this.originalRef, Point topLeftCorner,
       Point bottomRightCorner, String name,
@@ -62,22 +66,6 @@ class InheritedContainer extends PBVisualIntermediateNode
 
     assert(originalRef != null,
         'A null original reference was sent to an PBInheritedIntermediate Node');
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    if (child is TempGroupLayoutNode) {
-      child.addChild(node);
-      return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    }
-    child = node;
   }
 
   @override

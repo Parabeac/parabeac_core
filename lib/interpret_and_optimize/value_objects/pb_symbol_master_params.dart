@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -17,6 +18,9 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
   double topLeftX, topLeftY, bottomRightX, bottomRightY;
 
   PBContext context;
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   PBSymbolMasterParameter(
       String name,
@@ -41,8 +45,6 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
     return PBIntermediateNode;
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {}
 
   @override
   void alignChild() {}

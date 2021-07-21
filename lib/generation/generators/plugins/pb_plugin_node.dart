@@ -26,6 +26,4 @@ abstract class PBEgg extends PBVisualIntermediateNode {
 
   void extractInformation(DesignNode incomingNode);
 
-  @override
-  void addChild(PBIntermediateNode node);
 }

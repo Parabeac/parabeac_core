@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -35,6 +36,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   @override
   List<PBIntermediateNode> get children => [child];
+
+  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
   /// Gets the [PBIntermediateNode] at attribute `child`
   PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
@@ -136,5 +139,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   }
 
   /// Adds child to node.
-  void addChild(PBIntermediateNode node);
+  void addChild(node){
+    childrenStrategy.addChild(this, node);
+  }
 }

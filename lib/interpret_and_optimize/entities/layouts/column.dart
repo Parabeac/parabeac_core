@@ -91,7 +91,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  void addChild(PBIntermediateNode node) => addChildToLayout(node);
+  void addChild(node) => addChildToLayout(node);
 
   /// Invert method for Column alignment
   void _invertAlignment() {

@@ -27,7 +27,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     addChildToLayout(node);
   }
 

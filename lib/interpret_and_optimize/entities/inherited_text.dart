@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -14,6 +15,9 @@ class InheritedText extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.
   bool isTextParameter = false;
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   @override
   var originalRef;
@@ -73,12 +77,6 @@ class InheritedText extends PBVisualIntermediateNode
 
   String _sanitizeText(String text) {
     return text.replaceAll('\$', '\\\$');
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    assert(true, 'Adding a child to InheritedText should not be possible.');
-    return;
   }
 
   @override

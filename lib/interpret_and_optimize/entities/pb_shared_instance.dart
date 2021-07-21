@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -36,6 +37,9 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   @override
   PrototypeNode prototypeNode;
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
@@ -72,9 +76,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     }).toList()
       ..removeWhere((v) => v == null || v.value == null);
   }
-
-  @override
-  void addChild(PBIntermediateNode node) {}
 
   @override
   void alignChild() {

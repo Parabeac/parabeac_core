@@ -31,7 +31,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  void addChild(PBIntermediateNode node) => addChildToLayout(node);
+  void addChild(node) => addChildToLayout(node);
 
   /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
   @override

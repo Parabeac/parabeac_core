@@ -83,7 +83,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild( node) {
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));

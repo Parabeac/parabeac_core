@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_positioned
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -14,6 +15,9 @@ class InjectedPositioned extends PBIntermediateNode
   final String UUID;
 
   final PositionedValueHolder valueHolder;
+  
+  @override
+  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
   InjectedPositioned(
     this.UUID, {
@@ -25,12 +29,6 @@ class InjectedPositioned extends PBIntermediateNode
     generator = PBPositionedGenerator();
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    assert(child == null,
-        'Tried assigning multiple children to class [InjectedPositioned]');
-    child = node;
-  }
 }
 
 /// Class to help us communicate and manipulate positioning values.

@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -22,6 +23,9 @@ class InheritedShapePath extends PBVisualIntermediateNode
   var originalRef;
   @override
   PrototypeNode prototypeNode;
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   InheritedShapePath(this.originalRef, String name,
       {Uint8List image,
@@ -94,11 +98,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
     var isHorizontal = deltaY < 0.01 && deltaX > 0;
 
     return isVertical || isHorizontal;
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    return;
   }
 
   @override

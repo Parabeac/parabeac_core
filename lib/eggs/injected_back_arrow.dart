@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -15,6 +16,9 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
 
   @override
   String semanticName = '<back-arrow>';
+  
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   InjectedBackArrow(
       Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
@@ -23,8 +27,6 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
     generator = PBBackArrowGenerator();
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {}
 
   @override
   void alignChild() {}

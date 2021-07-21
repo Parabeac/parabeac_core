@@ -33,7 +33,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   }
 
   @override
-  void addChild(PBIntermediateNode node) => addChildToLayout(node);
+  void addChild(node) => addChildToLayout(node);
 
   @override
   void alignChildren() {

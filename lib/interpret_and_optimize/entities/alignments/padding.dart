@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_padding_ge
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
@@ -23,6 +24,9 @@ class Padding extends PBVisualIntermediateNode {
 
   PBIntermediateConstraints childToParentConstraints;
 
+  @override
+  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
+
   Padding(
     this.UUID,
     this.childToParentConstraints, {
@@ -38,7 +42,7 @@ class Padding extends PBVisualIntermediateNode {
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     assert(child == null, 'Padding cannot accept multiple children.');
     child = node;
 
