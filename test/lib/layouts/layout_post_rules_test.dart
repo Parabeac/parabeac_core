@@ -11,7 +11,7 @@ class InheritedContainerMockWrapper extends Mock implements InheritedContainer {
   @override
   var child;
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     child = node;
   }
 }
