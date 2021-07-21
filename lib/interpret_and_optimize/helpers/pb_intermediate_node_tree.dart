@@ -4,6 +4,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:recase/recase.dart';
+import 'package:tuple/tuple.dart';
+import "dart:collection";
 import 'package:uuid/uuid.dart';
 
 enum TREE_TYPE {
@@ -99,6 +101,52 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   bool isHomeScreen() =>
       isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
 
+
+  /// Finding the depth of the [node] in relation to the [rootNode].
+  int depthOf(node) {
+    return dist(rootNode, node);
+  }
+
+  /// Find the distance between [source] and [target], where the [source] is an
+  /// ancestor of [target].
+  /// 
+  /// IF [source] IS NOT AN ANCESTOR OF [target], THEN ITS GOING TO RETURN `-2`.
+  /// This is because the nodes of the tree dont have an out going edge 
+  /// pointing towards its parents, all directed edges are going down the tree.
+  int dist(PBIntermediateNode source, PBIntermediateNode target,
+      {int edgeCost = 1}) {
+    if (!contains(target)) {
+      throw Error();
+    }
+
+    var maxPathLength = length + 1;
+
+    Queue queue = Queue<PBIntermediateNode>();
+    var dist = <PBIntermediateNode, int>{
+      for (var node in toList()) node: maxPathLength
+    };
+
+    queue.add(source);
+    dist[source] = 0;
+
+    while (queue.isNotEmpty) {
+      var node = queue.removeFirst();
+
+      for (var outNode in node?.children ?? []) {
+        if (dist[outNode] != maxPathLength) {
+          continue;
+        }
+
+        var newDist = dist[node] + edgeCost;
+        if (newDist < dist[outNode]) {
+          dist[outNode] = newDist;
+          queue.add(outNode);
+        }
+      }
+    }
+    return dist[target] == maxPathLength ? -1 : dist[target];
+  }
+
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
 }
@@ -110,5 +158,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
 /// children by using the [IntermediateDFSIterator]. Furthermore, this allows the
 /// [PBIntermediateTree] to traverse through its nodes, leveraging the dart methods.
 abstract class TraversableNode<E> {
+  E parent;
+  int treeLevel;
   List<E> children;
 }

@@ -12,6 +12,13 @@ void main() {
   PBIntermediateTree tree;
   group('Testing the PBIntermediateTree', () {
     setUp(() {
+      ///This is the tree that is going to be build:
+      ///       R_123
+      ///         |
+      /// [P_0, P_1, P_2, P_3, P_4]
+      ///   |    |    |    |    |
+      /// [C_0][C_1][C_2][C_3][C_4]
+      
       numberOfContainers = 10;
       containerList = List.generate((numberOfContainers ~/ 2), (idx) {
         var container = MockContainer();
@@ -38,6 +45,19 @@ void main() {
     test('Testing the traversal of the IntermediateTree', () {
       expect(tree.length, numberOfContainers);
       expect(tree.first, rootNode);
+    });
+
+    test('Testing [PBIntermediateTree.dist] function, see if it gives the correct distance between two nodes', (){
+      var child = tree.firstWhere((node) => node.UUID == 'C_0');
+      expect(child, isNotNull);
+      expect(tree.depftOf(child), 2);
+
+      var parent = tree.firstWhere((node) => node.UUID == 'P_0');
+      expect(parent, isNotNull);
+      expect(tree.depftOf(parent), 1);
+      
+      expect(rootNode, isNotNull);
+      expect(tree.depftOf(rootNode), 0);
     });
   });
 }
