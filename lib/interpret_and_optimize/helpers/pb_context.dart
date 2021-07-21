@@ -14,7 +14,7 @@ class PBContext {
   Point get screenTopLeftCorner => _screenTLC;
   set screenTopLeftCorner(Point screenTopLeftCorner) {
     if (_screenTLC == null) {
-      focusAreaTLC = screenTopLeftCorner;
+      canvasTLC = screenTopLeftCorner;
     }
     _screenTLC = screenTopLeftCorner;
   }
@@ -23,7 +23,7 @@ class PBContext {
   Point get screenBottomRightCorner => _screenBRC;
   set screenBottomRightCorner(Point screenBottomRightCorner) {
     if (_screenBRC == null) {
-      focusAreaBRC = screenBottomRightCorner;
+      canvasBRC = screenBottomRightCorner;
     }
     _screenBRC = screenBottomRightCorner;
   }
@@ -36,8 +36,11 @@ class PBContext {
   ///
   /// The size of the canvas is changed by some widgets, for example, if there is an
   /// appbar declared in the Scaffold, then the canvas should decrese in size to accomodate for that.
-  Point focusAreaTLC;
-  Point focusAreaBRC;
+  /// Some of the scenarios the focusAreaWould change:
+  /// - When the appbar is used, it should shrink the canvas top point to make room for the appbar
+  /// - When another stack is declared, its TLC becomes the new canvas TLC(same for BRC).
+  Point canvasTLC;
+  Point canvasBRC;
 
   PBIntermediateTree tree;
   PBProject project;
