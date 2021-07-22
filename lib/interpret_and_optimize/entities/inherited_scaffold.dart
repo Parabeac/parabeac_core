@@ -87,8 +87,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-        // currentContext.focusAreaTLC = Point(currentContext.focusAreaTLC.x,
-        //     currentContext.focusAreaBRC.y - node.topLeftCorner.y);
+       currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
+          node.bottomRightCorner.y);
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
@@ -100,8 +100,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-      // currentContext.focusAreaBRC = Point(currentContext.focusAreaTLC.x,
-      //     currentContext.focusAreaBRC.y - node.topLeftCorner.y);
+      currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
+          node.bottomRightCorner.y);
       return;
     }
     if (node is InjectedTabBar) {
