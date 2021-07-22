@@ -40,7 +40,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       child.UUID,
     )..addChild(child);
 
-    getAttributeNamed('title').attributeNode = tempNode;
+    getAttributeNamed('child').attributeNode = tempNode;
   }
 
   @override
