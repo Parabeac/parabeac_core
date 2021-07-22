@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -19,7 +20,7 @@ part 'pb_shared_master_node.g.dart';
 
 @JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   ///SERVICE
   var log = Logger('PBSharedMasterNode');
 
@@ -33,6 +34,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The unique symbol identifier of the [PBSharedMasterNode]
   @JsonKey(name: 'symbolID')
   final String SYMBOL_ID;
+
+  @override
+  @JsonKey()
+  String type = 'symbol_master';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)

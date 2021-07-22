@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -16,7 +17,7 @@ part 'inherited_shape_group.g.dart';
 
 @JsonSerializable()
 class InheritedShapeGroup extends PBVisualIntermediateNode
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey(ignore: true)
   var originalRef;
@@ -31,6 +32,10 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   @override
   @JsonKey(fromJson: Point.bottomRightFromJson)
   Point bottomRightCorner;
+
+  @override
+  @JsonKey()
+  String type = 'inherited_shape_group';
 
   InheritedShapeGroup(this.originalRef, String name,
       {Uint8List image, PBContext currentContext})

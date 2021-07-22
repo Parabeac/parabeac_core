@@ -5,6 +5,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -19,9 +20,10 @@ part 'pb_shared_instance.g.dart';
 /// As some nodes are shared throughout the project, shared instances are pointers to shared master nodes with overridable properties.
 /// Superclass: PBSharedIntermediateNode
 
-@JsonSerializable()
+@JsonSerializable(ignoreUnannotated: true)
 class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
+  @JsonKey()
   final String SYMBOL_ID;
 
   ///The parameters that are going to be overriden in the [PBSharedMasterNode].
@@ -42,6 +44,10 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
+
+  @override
+  @JsonKey()
+  String type = 'symbol_instance';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)

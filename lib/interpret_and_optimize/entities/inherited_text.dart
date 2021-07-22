@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -15,7 +16,7 @@ part 'inherited_text.g.dart';
 @JsonSerializable()
 class InheritedText extends PBVisualIntermediateNode
     with PBColorMixin
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   ///For the generator to strip out the quotation marks.
   bool isTextParameter = false;
 
@@ -28,6 +29,10 @@ class InheritedText extends PBVisualIntermediateNode
 
   @JsonKey(ignore: true)
   num alignmenttype;
+
+  @override
+  @JsonKey()
+  String type = 'inherited_text';
 
   @JsonKey(name: 'content')
   String text;

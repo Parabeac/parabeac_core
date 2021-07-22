@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,17 +13,25 @@ part 'temp_group_layout_node.g.dart';
 
 /// A temporary node that must be removed
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey()
   var children;
+  
   @override
   final originalRef;
+
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
+
   @override
-  String get UUID => originalRef.UUID;
+  @JsonKey()
+  String type = 'temp_group';
+
+  @override
+  @JsonKey(name: 'UUID')
+  String UUID;
 
   TempGroupLayoutNode(this.originalRef, PBContext currentContext, String name,
       {topLeftCorner, bottomRightCorner})
@@ -60,8 +69,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }
 
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$TempGroupLayoutNodeFromJson(json);
   }
 }

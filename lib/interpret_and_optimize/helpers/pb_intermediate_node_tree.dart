@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_view_data
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
@@ -16,13 +17,18 @@ enum TREE_TYPE {
 }
 
 @JsonSerializable()
-class PBIntermediateTree extends Iterable<PBIntermediateNode> {
+class PBIntermediateTree extends Iterable<PBIntermediateNode>
+    implements IntermediateNodeFactory {
   String _UUID;
   String get UUID => _UUID;
 
   /// The [TREE_TYPE] of the [PBIntermediateTree].
   TREE_TYPE _tree_type = TREE_TYPE.SCREEN;
   TREE_TYPE get tree_type => _tree_type;
+
+  @override
+  @JsonKey()
+  String type = 'intermediate_tree';
 
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.
