@@ -1,3 +1,5 @@
+import 'package:parabeac_core/design_logic/artboard.dart';
+import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
@@ -67,15 +69,18 @@ class PBPluginListHelper {
   /// Returns the PluginNode associated if it exists.
   PBEgg returnAllowListNodeIfExists(DesignNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
-    for (var key in allowListNames.keys) {
-      if (node.name.contains(key)) {
-        return allowListNames[key].generatePluginNode(
-            Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
-            Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
-                node.boundaryRectangle.y + node.boundaryRectangle.height),
-            node);
+    if (node is! PBArtboard && node is! PBSharedInstanceDesignNode) {
+      for (var key in allowListNames.keys) {
+        if (node.name.contains(key)) {
+          return allowListNames[key].generatePluginNode(
+              Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
+              Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
+                  node.boundaryRectangle.y + node.boundaryRectangle.height),
+              node);
+        }
       }
     }
+    return null;
   }
 
   returnDenyListNodeIfExist(SymbolInstance symbolInstance) {}
