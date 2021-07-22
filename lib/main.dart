@@ -125,11 +125,11 @@ void collectArguments(ArgResults arguments) {
   info.projectName ??= arguments['project-name'];
 
   /// If outputPath is empty, assume we are outputting to design file path
-  info.outputPath =
-      arguments['out'] ?? p.dirname(info.designFilePath ?? Directory.current.path);
+  info.outputPath = arguments['out'] ??
+      p.dirname(info.designFilePath ?? Directory.current.path);
 
   info.exportPBDL = arguments['export-pbdl'] ?? false;
-  
+
   /// In the future when we are generating certain dart files only.
   /// At the moment we are only generating in the flutter project.
   info.pngPath = p.join(info.genProjectPath, 'assets/images');
@@ -223,7 +223,7 @@ void addToAmplitude() async {
   });
 
   await http.post(
-    lambdaEndpt,
+    Uri.parse(lambdaEndpt),
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: body,
   );

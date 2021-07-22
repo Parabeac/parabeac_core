@@ -10,14 +10,27 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'inherited_star.g.dart';
+
+@JsonSerializable()
 class InheritedStar extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
+  @JsonKey(ignore: true)
   var originalRef;
 
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
+
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
 
   InheritedStar(this.originalRef, String name,
       {Uint8List image, PBContext currentContext})
@@ -63,4 +76,8 @@ class InheritedStar extends PBVisualIntermediateNode
   void alignChild() {
     // Images don't have children.
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedStarFromJson(json);
 }

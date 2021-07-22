@@ -79,4 +79,7 @@ class Padding extends PBVisualIntermediateNode {
 
   @override
   void alignChild() {}
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

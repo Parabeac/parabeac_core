@@ -45,7 +45,7 @@ class SketchAssetProcessor extends AssetProcessingService {
 
       var response = await http
           .post(
-            svg_convertion_endpoint,
+            Uri.parse(svg_convertion_endpoint),
             headers: {HttpHeaders.contentTypeHeader: 'application/json'},
             body: jsonEncode(body),
           )

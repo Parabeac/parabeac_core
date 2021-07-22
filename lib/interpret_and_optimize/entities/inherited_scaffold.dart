@@ -12,20 +12,33 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-
 import 'interfaces/pb_inherited_intermediate.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'inherited_scaffold.g.dart';
+
+@JsonSerializable()
 class InheritedScaffold extends PBVisualIntermediateNode
     with
         PBColorMixin
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
   @override
+  @JsonKey(ignore: true)
   var originalRef;
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
+  @JsonKey(defaultValue: false)
   bool isHomeScreen = false;
+
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
@@ -129,4 +142,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
       child = align;
     }
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedScaffoldFromJson(json);
 }

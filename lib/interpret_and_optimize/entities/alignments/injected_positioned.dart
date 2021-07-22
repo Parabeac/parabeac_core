@@ -29,6 +29,9 @@ class InjectedPositioned extends PBIntermediateNode
         'Tried assigning multiple children to class [InjectedPositioned]');
     child = node;
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }
 
 /// Class to help us communicate and manipulate positioning values.

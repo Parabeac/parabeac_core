@@ -115,4 +115,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
       alignment['mainAxisAlignment'] = tempCrossAxis;
     }
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

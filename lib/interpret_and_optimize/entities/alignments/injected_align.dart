@@ -65,4 +65,7 @@ class InjectedAlign extends PBVisualIntermediateNode
     alignX = alignmentX.toDouble();
     alignY = alignmentY.toDouble();
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

@@ -8,14 +8,27 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'inherited_circle.g.dart';
+
+@JsonSerializable()
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
+  @JsonKey(ignore: true)
   final originalRef;
 
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
+
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
 
   InheritedCircle(this.originalRef, Point bottomRightCorner,
       Point topLeftCorner, String name,
@@ -66,4 +79,8 @@ class InheritedCircle extends PBVisualIntermediateNode
     align.alignChild();
     child = align;
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedCircleFromJson(json);
 }

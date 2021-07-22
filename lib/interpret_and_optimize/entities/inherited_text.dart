@@ -8,7 +8,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'inherited_text.g.dart';
+
+@JsonSerializable()
 class InheritedText extends PBVisualIntermediateNode
     with PBColorMixin
     implements PBInheritedIntermediate {
@@ -19,16 +23,25 @@ class InheritedText extends PBVisualIntermediateNode
   var originalRef;
 
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
+  @JsonKey(ignore: true)
   num alignmenttype;
 
+  @JsonKey(name: 'content')
   String text;
+  @JsonKey(fromJson: InheritedTextPBDLHelper.fontSizeFromJson)
   num fontSize;
+  @JsonKey(fromJson: InheritedTextPBDLHelper.fontNameFromJson)
   String fontName;
+  @JsonKey(fromJson: InheritedTextPBDLHelper.fontWeightFromJson)
   String fontWeight; // one of the w100-w900 weights
+  @JsonKey(fromJson: InheritedTextPBDLHelper.fontStyleFromJson)
   String fontStyle; // normal, or italic
+  @JsonKey(fromJson: InheritedTextPBDLHelper.textAlignmentFromJson)
   String textAlignment;
+  @JsonKey(fromJson: InheritedTextPBDLHelper.letterSpacingFromJson)
   num letterSpacing;
 
   InheritedText(this.originalRef, String name, {PBContext currentContext})
@@ -85,4 +98,34 @@ class InheritedText extends PBVisualIntermediateNode
   void alignChild() {
     // Text don't have children.
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedTextFromJson(json);
+}
+
+class InheritedTextPBDLHelper {
+  static num fontSizeFromJson(Map<String, dynamic> json) =>
+      _fontDescriptor(json)['fontDescriptor']['fontSize'];
+
+  static String fontNameFromJson(Map<String, dynamic> json) =>
+      _fontDescriptor(json)['fontDescriptor']['fontName'];
+
+  static String fontWeightFromJson(Map<String, dynamic> json) =>
+      _fontDescriptor(json)['fontWeight'];
+
+  static String fontStyleFromJson(Map<String, dynamic> json) =>
+      _fontDescriptor(json)['fontStyle'];
+
+  static num textAlignmentFromJson(Map<String, dynamic> json) =>
+      _textStyle(json)['paragraphStyle']['alignment'] ?? 0;
+
+  static num letterSpacingFromJson(Map<String, dynamic> json) =>
+      _fontDescriptor(json)['letterSpacing'];
+
+  static Map<String, dynamic> _fontDescriptor(Map<String, dynamic> json) =>
+      _textStyle(json)['fontDescriptor'];
+
+  static Map<String, dynamic> _textStyle(Map<String, dynamic> json) =>
+      json['style']['textStyle'];
 }

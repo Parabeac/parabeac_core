@@ -2,8 +2,13 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_project_d
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'pb_project.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class PBProject {
+  @JsonKey(name: 'name')
   final String projectName;
   final String projectAbsPath;
 
@@ -40,6 +45,7 @@ class PBProject {
 
   set genProjectData(PBGenerationProjectData projectData) =>
       _genProjectData = projectData;
+  @JsonKey(ignore: true)
   PBGenerationProjectData get genProjectData => _genProjectData;
 
   @Deprecated(
@@ -49,6 +55,7 @@ class PBProject {
 
   @Deprecated(
       'Use the fileStructureStrategy within the GenerationConfiguration')
+  @JsonKey(ignore: true)
   FileStructureStrategy get fileStructureStrategy => _fileStructureStrategy;
 
   PBProject(this.projectName, this.projectAbsPath, this.sharedStyles,
@@ -58,4 +65,9 @@ class PBProject {
     _fileStructureStrategy = fileStructureStrategy;
     _genProjectData = PBGenerationProjectData();
   }
+
+  factory PBProject.fromJson(Map<String, dynamic> json) =>
+      _$PBProjectFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PBProjectToJson(this);
 }

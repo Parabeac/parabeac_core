@@ -5,6 +5,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'pb_intermediate_node_tree.g.dart';
 
 enum TREE_TYPE {
   MISC,
@@ -12,6 +15,7 @@ enum TREE_TYPE {
   VIEW,
 }
 
+@JsonSerializable()
 class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   String _UUID;
   String get UUID => _UUID;
@@ -30,6 +34,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   bool lockData = false;
 
   PBGenerationViewData _data;
+  @JsonKey(ignore: true)
   PBGenerationViewData get data => _data;
   set data(PBGenerationViewData viewData) {
     if (!lockData) {
@@ -78,7 +83,8 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   String _identifier;
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
-  PBIntermediateTree(this._name) {
+  PBIntermediateTree(String name) {
+    _name = name;
     _dependentsOn = {};
     _UUID = Uuid().v4();
   }
@@ -101,6 +107,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
 
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
+
+  factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
+      _$PBIntermediateNodeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 }
 
 /// By extending the class, any node could be used in any iterator to traverse its

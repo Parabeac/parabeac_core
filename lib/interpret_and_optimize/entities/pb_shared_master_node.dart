@@ -13,7 +13,11 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'pb_shared_master_node.g.dart';
+
+@JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   ///SERVICE
@@ -23,10 +27,19 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   final originalRef;
 
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
   ///The unique symbol identifier of the [PBSharedMasterNode]
+  @JsonKey(name: 'symbolID')
   final String SYMBOL_ID;
+
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
 
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
@@ -86,26 +99,24 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.currentContext.screenTopLeftCorner =
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    parametersDefinition = overridableProperties
-        .map((p) {
-            var PBSymMasterP = PBSymbolMasterParameter(
-            p._friendlyName,
-            p.type,
-            p.UUID,
-            p.canOverride,
-            p.propertyName,
-            /* Removed Parameter Definition as it was accepting JSON?*/
-            null, // TODO: @Eddie
-            currentContext.screenTopLeftCorner.x,
-            currentContext.screenTopLeftCorner.y,
-            currentContext.screenBottomRightCorner.x,
-            currentContext.screenBottomRightCorner.y,
-            context: currentContext);
-            parametersDefsMap[p.propertyName] = PBSymMasterP;
-            return PBSymMasterP; })
-        .toList()
-          ..removeWhere((p) => p == null || p.parameterDefinition == null);
-
+    parametersDefinition = overridableProperties.map((p) {
+      var PBSymMasterP = PBSymbolMasterParameter(
+          p._friendlyName,
+          p.type,
+          p.UUID,
+          p.canOverride,
+          p.propertyName,
+          /* Removed Parameter Definition as it was accepting JSON?*/
+          null, // TODO: @Eddie
+          currentContext.screenTopLeftCorner.x,
+          currentContext.screenTopLeftCorner.y,
+          currentContext.screenBottomRightCorner.x,
+          currentContext.screenBottomRightCorner.y,
+          context: currentContext);
+      parametersDefsMap[p.propertyName] = PBSymMasterP;
+      return PBSymMasterP;
+    }).toList()
+      ..removeWhere((p) => p == null || p.parameterDefinition == null);
   }
 
   @override
@@ -114,6 +125,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   void alignChild() {}
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$PBSharedMasterNodeFromJson(json);
 }
 
 class PBSharedParameterProp {
@@ -136,7 +151,10 @@ class PBSharedParameterProp {
   dynamic get initialValue => _initialValue;
 
   final String _friendlyName;
-  String get friendlyName => _friendlyName ?? SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ?? 'noname';
+  String get friendlyName =>
+      _friendlyName ??
+      SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
+      'noname';
 
   PBSharedParameterProp(this._friendlyName, this._type, this.value,
       this._canOverride, this._propertyName, this._UUID, this._initialValue);

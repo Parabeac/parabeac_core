@@ -4,13 +4,22 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'temp_group_layout_node.g.dart';
+
+@JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 
 /// A temporary node that must be removed
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate {
   @override
+  @JsonKey()
+  var children;
+  @override
   final originalRef;
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
   @override
   String get UUID => originalRef.UUID;
@@ -46,8 +55,13 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    assert(
-        false, 'Attempted to generateLayout for class type [$runtimeType]');
+    assert(false, 'Attempted to generateLayout for class type [$runtimeType]');
     return null;
+  }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    throw UnimplementedError();
   }
 }

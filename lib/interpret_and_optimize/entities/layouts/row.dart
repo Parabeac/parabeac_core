@@ -99,4 +99,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   void sortChildren() => replaceChildren(children
     ..sort((child0, child1) =>
         child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

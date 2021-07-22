@@ -38,4 +38,10 @@ class Point implements Comparable<Point> {
     }
     return false;
   }
+
+  static Point topLeftFromJson(Map<String, dynamic> json) =>
+      Point(json['x'], json['y']);
+
+  static Point bottomRightFromJson(Map<String, dynamic> json) =>
+      Point(json['x'] + json['width'], json['y'] + json['height']);
 }
