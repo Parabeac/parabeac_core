@@ -110,13 +110,14 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   /// Find the distance between [source] and [target], where the [source] is an
   /// ancestor of [target].
   /// 
-  /// IF [source] IS NOT AN ANCESTOR OF [target], THEN ITS GOING TO RETURN `-1`.
+  /// IF [source] IS NOT AN ANCESTOR OF [target] OR [target] IS 
+  /// NOT PRESENT IN THE [PBIntermediateNode], THEN ITS GOING TO RETURN `-1`.
   /// This is because the nodes of the tree dont have an out going edge 
   /// pointing towards its parents, all directed edges are going down the tree.
   int dist(PBIntermediateNode source, PBIntermediateNode target,
       {int edgeCost = 1}) {
     if (!contains(target)) {
-      throw Error();
+      return -1;
     }
 
     var maxPathLength = length + 1;

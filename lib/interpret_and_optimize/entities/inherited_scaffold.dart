@@ -117,9 +117,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
         child.addChild(node);
       } else {
         var stack = PBIntermediateStackLayout(
-          node.name,
-          '',
-          currentContext: currentContext,
+         currentContext,
+         name: node.name
         );
         stack.addChild(node);
         child = stack;

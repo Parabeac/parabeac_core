@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/handle_flex.dart';
-import 'package:uuid/uuid.dart';
 
 ///Colum contains nodes that are all `vertical` to each other, without overlapping eachother
 
@@ -23,19 +22,11 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   ];
 
   @override
-  final String UUID;
-
-  @override
-  PBContext currentContext;
-
-  @override
   PrototypeNode prototypeNode;
 
   PBIntermediateColumnLayout(
-    String name, {
-    this.currentContext,
-    this.UUID,
-  }) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
+    PBContext currentContext,
+    {String name}) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
     generator = PBColumnGenerator();
   }
 
@@ -83,8 +74,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var col = PBIntermediateColumnLayout(name,
-        currentContext: currentContext, UUID: Uuid().v4());
+    var col = PBIntermediateColumnLayout(currentContext, name: name);
     col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));
     return col;

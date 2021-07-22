@@ -51,7 +51,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   void replaceChildren(List<PBIntermediateNode> children) {
     if (children.isNotEmpty) {
       getAttributeNamed('children')?.attributeNodes = children;
-      _resize();
+      resize();
     } else {
       PBIntermediateNode.logger.warning(
           'Trying to add a list of children to the $runtimeType that is either null or empty');
@@ -71,10 +71,10 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Add node to child
   void addChildToLayout(PBIntermediateNode node) {
     getAttributeNamed('children').attributeNodes.add(node);
-    _resize();
+    resize();
   }
 
-  void _resize() {
+  void resize() {
     if (children.isEmpty) {
       PBIntermediateNode.logger
           .warning('There should be children in the layout so it can resize.');
@@ -99,7 +99,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     if (children.contains(node)) {
       children.remove(node);
     }
-    _resize();
+    resize();
     return false;
   }
 

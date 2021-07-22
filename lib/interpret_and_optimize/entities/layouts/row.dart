@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:uuid/uuid.dart';
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
 
@@ -20,14 +19,10 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     RowOverlappingException()
   ];
 
-  //TODO: remove all overriden UUID
-  @override
-  final String UUID;
-
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateRowLayout(String name, this.UUID, {PBContext currentContext})
+  PBIntermediateRowLayout(PBContext currentContext, {String name})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
     generator = PBRowGenerator();
   }
@@ -85,8 +80,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(name, Uuid().v4(),
-        currentContext: currentContext);
+    var row = PBIntermediateRowLayout(currentContext, name: name);
     row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;

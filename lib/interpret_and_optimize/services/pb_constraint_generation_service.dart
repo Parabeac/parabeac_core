@@ -4,25 +4,19 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 ///tree.where((element) => element != null).toList().reversed.map((e) => e.name).toList()
 class PBConstraintGenerationService implements AITHandler {
-  @override
-  PBContext currentContext;
 
   PBConstraintGenerationService();
 
   /// Traverse to the bottom of the tree, and implement constraints to nodes that don't already contain it such as [InjectedContainer] and then work our way up the tree.
   /// Through Traversal, discover whether there are elements that will conflict on scaling, if so, change the layout to a Stack.
   Future<PBIntermediateTree> implementConstraints(PBIntermediateTree tree, PBContext context) {
-    currentContext = context;
     if (tree.rootNode == null) {
       return Future.value(tree);
     }
@@ -50,7 +44,7 @@ class PBConstraintGenerationService implements AITHandler {
           if (_shouldLayoutBeStack(node)) {
             /// Change Layout to Stack
             var newStackReplacement =
-                PBIntermediateStackLayout(node.UUID, node.name);
+                PBIntermediateStackLayout(context, name: node.name);
             node.attributes.forEach((element) {
               newStackReplacement.addAttribute(element);
             });

@@ -14,7 +14,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -47,9 +46,8 @@ class PBLayoutGenerationService implements AITHandler {
       // 'row': PBIntermediateRowLayout('', Uuid().v4(),
       //     currentContext: currentContext),
       'stack': PBIntermediateStackLayout(
-        '',
-        Uuid().v4(),
-      ),
+        null,
+       ),
     };
 
     for (var layoutType

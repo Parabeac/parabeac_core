@@ -54,7 +54,6 @@ class PBVisualGenerationService{
     PBPluginListHelper().initPlugins(currentContext);
 
     var queue = <NodeTuple>[];
-    PBIntermediateNode rootIntermediateNode;
     queue.add(NodeTuple(originalRoot, null));
     while (queue.isNotEmpty) {
       var currentNode = queue.removeAt(0);
@@ -98,10 +97,10 @@ class PBVisualGenerationService{
             _addToParent(currentNode.convertedParent, result);
           }
 
-          // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.
-          rootIntermediateNode ??= result;
-          if(rootIntermediateNode != null){
-            _extractScreenSize(rootIntermediateNode, currentContext);
+          // If we haven't assigned the tree.rootNode, this must be the first node, aka root node.
+          tree.rootNode ??= result;
+          if(tree.rootNode != null){
+            _extractScreenSize(tree.rootNode, currentContext);
           }
            
 
@@ -123,33 +122,32 @@ class PBVisualGenerationService{
     if (originalRoot.prototypeNodeUUID != null) {
       var prototypeNode = PrototypeNode(originalRoot.prototypeNodeUUID);
       var destHolder = PBDestHolder(
-          rootIntermediateNode.topLeftCorner,
-          rootIntermediateNode.bottomRightCorner,
-          rootIntermediateNode.UUID,
+          tree.rootNode.topLeftCorner,
+          tree.rootNode.bottomRightCorner,
+          tree.rootNode.UUID,
           prototypeNode,
-          rootIntermediateNode.currentContext);
-      destHolder.addChild(rootIntermediateNode);
+          tree.rootNode.currentContext);
+      destHolder.addChild(tree.rootNode);
       tree.rootNode = destHolder;
       return Future.value(tree);
     }
-    tree.rootNode = rootIntermediateNode;
     return Future.value(tree);
   }
 
   ///Sets the size of the UI element.
   ///
-  ///We are assuming that since the [rootIntermediateNode] contains all of the nodes
+  ///We are assuming that since the [tree.rootNode] contains all of the nodes
   ///then it should represent the biggest screen size that encapsulates the entire UI elements.
-  void _extractScreenSize(PBIntermediateNode rootIntermediateNode, PBContext currentContext) {
+  void _extractScreenSize(PBIntermediateNode rootNode, PBContext currentContext) {
     if ((currentContext.screenBottomRightCorner == null &&
             currentContext.screenTopLeftCorner == null) ||
         (currentContext.screenBottomRightCorner !=
-                rootIntermediateNode.bottomRightCorner ||
+                rootNode.bottomRightCorner ||
             currentContext.screenTopLeftCorner !=
-                rootIntermediateNode.bottomRightCorner)) {
+                rootNode.bottomRightCorner)) {
       currentContext.screenBottomRightCorner =
-          rootIntermediateNode.bottomRightCorner;
-      currentContext.screenTopLeftCorner = rootIntermediateNode.topLeftCorner;
+          rootNode.bottomRightCorner;
+      currentContext.screenTopLeftCorner = rootNode.topLeftCorner;
     }
   }
 

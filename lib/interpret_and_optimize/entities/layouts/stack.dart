@@ -14,24 +14,34 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   static final List<LayoutRule> STACK_RULES = [OverlappingNodesLayoutRule()];
 
   @override
-  PBContext currentContext;
-
-  @override
-  final String UUID;
-
-  @override
   Map alignment = {};
 
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateStackLayout(String name, this.UUID, {this.currentContext})
+  PBIntermediateStackLayout(PBContext currentContext, {String name})
       : super(STACK_RULES, [], currentContext, name) {
     generator = PBStackGenerator();
   }
 
   @override
   void addChild(node) => addChildToLayout(node);
+
+  @override
+  void resize() {
+    var depth = currentContext.tree?.depthOf(this);
+
+    /// Since there are cases where [Stack] are being created, and
+    /// childrend are being populated, and consequently [Stack.resize] is being
+    /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
+    /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
+    if (depth != null && depth <= 2 && depth >= 0) {
+      topLeftCorner = currentContext.canvasTLC;
+      bottomRightCorner = currentContext.canvasBRC;
+    } else {
+      super.resize();
+    }
+  }
 
   /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
   @override
@@ -72,9 +82,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
       PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
     var stack = PBIntermediateStackLayout(
-      name,
-      Uuid().v4(),
-      currentContext: currentContext,
+      currentContext,
+      name: name
     );
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
