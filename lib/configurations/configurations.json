@@ -12,5 +12,6 @@
       "mobile": 360,
       "tablet": 600,
       "desktop": 1280
-   }
+   },
+   "scaling":  true
 }

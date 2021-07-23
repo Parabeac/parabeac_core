@@ -15,12 +15,14 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     (json['layoutPrecedence'] as List)?.map((e) => e as String)?.toList() ??
         ['column', 'row', 'stack'],
     json['breakpoints'] as Map<String, dynamic>,
+    json['scaling'] as bool ?? true,
   );
 }
 
 Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
     <String, dynamic>{
       'widgetStyle': instance.widgetStyle,
+      'scaling': instance.scaling,
       'widgetType': instance.widgetType,
       'widgetSpacing': instance.widgetSpacing,
       'state-management': instance.stateManagement,

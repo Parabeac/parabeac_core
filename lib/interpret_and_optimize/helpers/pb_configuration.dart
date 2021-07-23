@@ -31,6 +31,9 @@ class PBConfiguration {
   @JsonKey(defaultValue: 'Material')
   final String widgetStyle;
 
+  @JsonKey(defaultValue: true)
+  final bool scaling;
+
   @JsonKey(defaultValue: 'Stateless')
   final String widgetType;
 
@@ -47,7 +50,7 @@ class PBConfiguration {
   final Map breakpoints;
 
   PBConfiguration(this.widgetStyle, this.widgetType, this.widgetSpacing,
-      this.stateManagement, this.layoutPrecedence, this.breakpoints);
+      this.stateManagement, this.layoutPrecedence, this.breakpoints, this.scaling);
 
   /// Converting the [json] into a [PBConfiguration] object.
   ///

@@ -10,7 +10,9 @@ class PBScaffoldGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.ScaleValue;
+    generatorContext.sizingContext = generatorContext.configuration.scaling
+        ? SizingValueContext.ScaleValue
+        : SizingValueContext.PointValue;
     var appBar = source.getAttributeNamed('appBar')?.attributeNode;
     var body = source.getAttributeNamed('body')?.attributeNode;
     var bottomNavBar =
@@ -39,7 +41,10 @@ class PBScaffoldGenerator extends PBGenerator {
       }
 
       if (body != null) {
-        generatorContext.sizingContext = SizingValueContext.ScaleValue;
+        generatorContext.sizingContext = generatorContext.configuration.scaling
+            ? SizingValueContext.ScaleValue
+            : SizingValueContext.PointValue;
+
         // hack to pass screen width and height to the child
         buffer.write('body: ');
         // generatorContext.sizingContext = SizingValueContext.ScaleValue;
