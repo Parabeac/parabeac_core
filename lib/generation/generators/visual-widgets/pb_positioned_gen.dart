@@ -18,21 +18,7 @@ class PBPositionedGenerator extends PBGenerator {
       var multStringH = '';
       var multStringV = '';
 
-      var valueHolder = PositionedValueHolder(
-        top: source.valueHolder.top,
-        bottom: source.valueHolder.bottom,
-        left: source.valueHolder.left,
-        right: source.valueHolder.right,
-      );
-
-      valueHolder.left =
-          source.currentContext.getRatioPercentage(source.valueHolder.left, true);
-      valueHolder.right =
-          source.currentContext.getRatioPercentage(source.valueHolder.right, true);
-      valueHolder.top = source.currentContext
-          .getRatioPercentage(source.valueHolder.top);
-      valueHolder.bottom = source.currentContext
-          .getRatioPercentage(source.valueHolder.bottom);
+      var valueHolder = source.valueHolder;
 
       if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
         multStringH = 'MediaQuery.of(context).size.width * ';
@@ -41,6 +27,17 @@ class PBPositionedGenerator extends PBGenerator {
           SizingValueContext.LayoutBuilderValue) {
         multStringH = 'constraints.maxWidth * ';
         multStringV = 'constraints.maxHeight * ';
+      }
+      if (!(generatorContext.sizingContext == SizingValueContext.PointValue)) {
+        /// [SizingValueContext.PointValue] is the only value in which dont change based on another scale/sizing
+        valueHolder.left = source.currentContext
+            .getRatioPercentage(source.valueHolder.left, true);
+        valueHolder.right = source.currentContext
+            .getRatioPercentage(source.valueHolder.right, true);
+        valueHolder.top =
+            source.currentContext.getRatioPercentage(source.valueHolder.top);
+        valueHolder.bottom =
+            source.currentContext.getRatioPercentage(source.valueHolder.bottom);
       }
 
       buffer.write(
@@ -53,10 +50,9 @@ class PBPositionedGenerator extends PBGenerator {
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
       } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
+        MainInfo().captureException(
+          e,
+        );
         log.error(e.toString());
       }
 
