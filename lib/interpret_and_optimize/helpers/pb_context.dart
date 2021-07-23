@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 class PBContext {
   final PBConfiguration configuration;
@@ -28,8 +28,8 @@ class PBContext {
     _screenBRC = screenBottomRightCorner;
   }
 
-  double get originalScreenWidth => Point.dist(_screenTLC, _screenBRC);
-  double get originaScreenHeight => Point.dist(_screenTLC, _screenBRC, false);
+  double get originalScreenWidth => _screenBRC.x - _screenTLC.x;
+  double get originaScreenHeight => _screenBRC.y - _screenTLC.y;
 
   /// These values represent the current "focus area" size as it travels down the
   /// tree.
@@ -69,8 +69,10 @@ class PBContext {
     if (size == 0) {
       return size;
     }
-    return isHorizontal ? size / originalScreenWidth : size / originaScreenHeight;
-   }
+    return isHorizontal
+        ? size / originalScreenWidth
+        : size / originaScreenHeight;
+  }
 }
 
 enum SizingValueContext {

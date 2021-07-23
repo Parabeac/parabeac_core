@@ -7,7 +7,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.

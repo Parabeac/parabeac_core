@@ -5,7 +5,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:recase/recase.dart';
 
 class PBPlatformOrientationLinkerService {

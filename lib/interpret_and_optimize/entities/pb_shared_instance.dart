@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
@@ -10,7 +11,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 
 /// As some nodes are shared throughout the project, shared instances are pointers to shared master nodes with overridable properties.

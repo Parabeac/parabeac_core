@@ -2,7 +2,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_flexible_g
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 class Flexible extends PBVisualIntermediateNode {
   int flex;

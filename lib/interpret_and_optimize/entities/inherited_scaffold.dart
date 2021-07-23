@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
@@ -12,7 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attr
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+
 
 import 'interfaces/pb_inherited_intermediate.dart';
 

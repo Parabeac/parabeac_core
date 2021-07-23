@@ -5,7 +5,7 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 /// Helping understand indirect and direct semantics that should remove a node from a tree.

@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
