@@ -8,7 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+// import 'dart:math';
 import 'package:quick_log/quick_log.dart';
 
 /// PB’s  representation of the intermediate representation for a sketch node.
@@ -141,5 +141,37 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// Adds child to node.
   void addChild(node){
     childrenStrategy.addChild(this, node);
+  }
+}
+extension PBPointLegacyMethod on Point{
+  Point clone(Point point) => Point(point.x, point.y);
+
+  // TODO: This is a temporal fix
+  // (y.abs() - anotherPoint.y.abs()).abs() < 3
+  @override
+  int compareTo(Point anotherPoint) =>
+      y == anotherPoint.y || (y.abs() - anotherPoint.y.abs()).abs() < 3
+          ? x.compareTo(anotherPoint.x)
+          : y.compareTo(anotherPoint.y);
+  // @override
+  // bool operator ==(Object point) {
+  //   if (point is Point) {
+  //     return y == point.y ? x == point.x : y == point.y;
+  //   }
+  //   return false;
+  // }
+
+  bool operator <(Object point) {
+    if (point is Point) {
+      return y == point.y ? x <= point.x : y <= point.y;
+    }
+    return false;
+  }
+
+  bool operator >(Object point) {
+    if (point is Point) {
+      return y == point.y ? x >= point.x : y >= point.y;
+    }
+    return false;
   }
 }

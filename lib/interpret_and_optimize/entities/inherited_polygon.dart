@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
@@ -11,7 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+
 
 class InheritedPolygon extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {

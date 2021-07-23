@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -8,7 +10,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
@@ -42,6 +43,13 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   @override
   void alignChild() {
+    // var padding = Padding('', child.constraints,
+    //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+    //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+    //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+    //     bottom: (child.bottomRightCorner.y - bottomRightCorner.y).abs(),
+    //     topLeftCorner: topLeftCorner,
+    //     bottomRightCorner: bottomRightCorner,
     var padding = Padding('', child.constraints,
         left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
         right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
@@ -52,5 +60,7 @@ class InheritedCircle extends PBVisualIntermediateNode
         currentContext: currentContext);
     padding.addChild(child);
     child = padding;
+    // padding.addChild(child);
+    // child = padding;
   }
 }

@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_containe
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 import 'abstract_design_node_factory.dart';
 import 'color.dart';

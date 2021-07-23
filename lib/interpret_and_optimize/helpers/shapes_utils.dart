@@ -1,4 +1,4 @@
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 class ShapesComparisonUtils {
   static bool areXCoordinatesOverlapping(

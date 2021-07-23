@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/alignments/spacer.
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 /// Calculates the flex of a child relative to its parent

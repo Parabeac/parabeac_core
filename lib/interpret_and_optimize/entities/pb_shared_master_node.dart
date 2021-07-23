@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
@@ -11,7 +12,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBSharedMasterNode extends PBVisualIntermediateNode
