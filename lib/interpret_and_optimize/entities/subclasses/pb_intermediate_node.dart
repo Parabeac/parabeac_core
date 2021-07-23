@@ -57,6 +57,9 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   Point topLeftCorner;
   Point bottomRightCorner;
+  
+  double get width => bottomRightCorner.x - topLeftCorner.x;
+  double get height => bottomRightCorner.y - topLeftCorner.y;
 
   PBContext currentContext;
 

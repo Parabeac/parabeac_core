@@ -8,11 +8,6 @@ import 'dart:math';
 
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
-  @override
-  PBContext currentContext;
-
-  @override
-  final String UUID;
 
   final PositionedValueHolder valueHolder;
   
@@ -20,13 +15,16 @@ class InjectedPositioned extends PBIntermediateNode
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
   InjectedPositioned(
-    this.UUID, {
+    String UUID, 
+    Point tlc,
+    Point brc,
+    {
     this.valueHolder,
-    this.currentContext,
+    PBContext currentContext,
     PBIntermediateConstraints constraints,
-  }) : super(Point(0, 0), Point(0, 0), UUID, '',
+  }) : super(tlc ?? Point(0, 0), brc ?? Point(0, 0), UUID, '',
             currentContext: currentContext, constraints: constraints) {
-    generator = PBPositionedGenerator();
+    generator = PBPositionedGenerator(overrideChildDim: true);
   }
 
 }
@@ -38,11 +36,16 @@ class PositionedValueHolder {
   double left;
   double right;
 
+  double height;
+  double width;
+
   PositionedValueHolder({
     this.top,
     this.bottom,
     this.left,
     this.right,
+    this.height,
+    this.width
   }) {
     top ??= 0;
     bottom ??= 0;

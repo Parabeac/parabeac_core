@@ -63,13 +63,15 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
       left = child.topLeftCorner.x - topLeftCorner.x;
       right = bottomRightCorner.x - child.bottomRightCorner.x;
 
-      alignedChildren.add(InjectedPositioned(Uuid().v4(),
+      alignedChildren.add(InjectedPositioned(
+          Uuid().v4(), child.topLeftCorner, child.bottomRightCorner,
           valueHolder: PositionedValueHolder(
-            top: top,
-            bottom: bottom,
-            left: left,
-            right: right,
-          ),
+              top: top,
+              bottom: bottom,
+              left: left,
+              right: right,
+              height: child.height,
+              width: child.width),
           currentContext: currentContext,
           constraints: child.constraints)
         ..addChild(child));
@@ -81,10 +83,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
-    var stack = PBIntermediateStackLayout(
-      currentContext,
-      name: name
-    );
+    var stack = PBIntermediateStackLayout(currentContext, name: name);
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;
