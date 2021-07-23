@@ -1,4 +1,3 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -39,23 +38,14 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void addChild(PBIntermediateNode node) {
     if (node is PBInheritedIntermediate) {
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<leading>')) {
+      if (node.name.contains('<leading>')) {
         getAttributeNamed('leading').attributeNode = node;
       }
 
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<trailing>')) {
+      if (node.name.contains('<trailing>')) {
         getAttributeNamed('actions').attributeNode = node;
       }
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<middle>')) {
+      if (node.name.contains('<middle>')) {
         getAttributeNamed('title').attributeNode = node;
       }
     }
@@ -67,18 +57,18 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   void alignChild() {
     /// This align only modifies middleItem
     var tempNode = InjectedContainer(
-      middleItem.bottomRightCorner,
-      middleItem.topLeftCorner,
-      middleItem.name,
-      middleItem.UUID,
+      bottomRightCorner: middleItem.bottomRightCorner,
+      topLeftCorner: middleItem.topLeftCorner,
+      name: middleItem.name,
+      UUID: middleItem.UUID,
     )..addChild(middleItem);
 
     getAttributeNamed('title').attributeNode = tempNode;
   }
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, originalRef) {
+  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+      PBIntermediateNode originalRef) {
     return InjectedAppbar(
         topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
@@ -90,7 +80,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {}
+  void extractInformation(PBIntermediateNode incomingNode) {}
 }
 
 class PBAppBarGenerator extends PBGenerator {

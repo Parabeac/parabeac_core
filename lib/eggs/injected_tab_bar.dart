@@ -1,5 +1,4 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
@@ -35,10 +34,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   void addChild(PBIntermediateNode node) {
     if (node is PBInheritedIntermediate) {
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<tab>')) {
+      if (node.name.contains('<tab>')) {
         assert(node is! Tab, 'node should be a Tab');
         getAttributeNamed('tabs').attributeNodes.add(node);
       }
@@ -56,15 +52,15 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   void alignChild() {}
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
+  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+      PBIntermediateNode originalRef) {
     return InjectedTabBar(
         topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {
+  void extractInformation(PBIntermediateNode incomingNode) {
     // TODO: implement extractInformation
   }
 }
