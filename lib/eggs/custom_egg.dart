@@ -33,14 +33,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
 
   @override
   void alignChild() {
-    var tempNode = InjectedContainer(
-      child.bottomRightCorner,
-      child.topLeftCorner,
-      child.name,
-      child.UUID,
-    )..addChild(child);
-
-    getAttributeNamed('child').attributeNode = tempNode;
+    // Don't do anything
   }
 
   @override
