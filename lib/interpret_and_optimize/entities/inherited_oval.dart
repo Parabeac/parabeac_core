@@ -19,9 +19,6 @@ part 'inherited_oval.g.dart';
 @JsonSerializable()
 class InheritedOval extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
-  @override
-  @JsonKey(ignore: true)
-  var originalRef;
   @JsonKey(ignore: true)
   var log = Logger('Layout Generation Service');
 
@@ -40,30 +37,35 @@ class InheritedOval extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'inherited_oval';
 
-  InheritedOval(this.originalRef, String name,
-      {Uint8List image, PBContext currentContext})
-      : super(
-            Point(originalRef.boundaryRectangle.x,
-                originalRef.boundaryRectangle.y),
-            Point(
-                originalRef.boundaryRectangle.x +
-                    originalRef.boundaryRectangle.width,
-                originalRef.boundaryRectangle.y +
-                    originalRef.boundaryRectangle.height),
-            currentContext,
-            name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  @override
+  String UUID;
+
+  @override
+  var size;
+
+  InheritedOval({
+    String name,
+    Uint8List image,
+    PBContext currentContext,
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    this.UUID,
+    this.prototypeNode,
+    this.size,
+    this.type,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID ?? '') {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBBitmapGenerator();
 
-    size = {
-      'width': originalRef.boundaryRectangle.width,
-      'height': originalRef.boundaryRectangle.height
-    };
+    // size = {
+    //   'width': originalRef.boundaryRectangle.width,
+    //   'height': originalRef.boundaryRectangle.height
+    // };
 
-    name = originalRef.name;
+    // name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);

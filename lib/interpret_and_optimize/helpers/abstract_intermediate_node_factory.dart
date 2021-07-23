@@ -19,7 +19,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
 
-  static final List<IntermediateNodeFactory> _figmaNodes = [
+  static final List<IntermediateNodeFactory> _intermediateNodes = [
     InheritedBitmap(),
     InheritedCircle(),
     InheritedContainer(),
@@ -43,7 +43,7 @@ class AbstractIntermediateNodeFactory {
   static PBIntermediateNode getFigmaNode(Map<String, dynamic> json) {
     var className = json[INTERMEDIATE_TYPE];
     if (className != null) {
-      for (var intermediateNode in _figmaNodes) {
+      for (var intermediateNode in _intermediateNodes) {
         if (intermediateNode.type == className) {
           return intermediateNode.fromJson(json);
         }

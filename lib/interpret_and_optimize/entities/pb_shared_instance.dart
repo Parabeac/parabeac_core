@@ -39,9 +39,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   bool isMasterState = false;
 
   @override
-  var originalRef;
-
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -56,40 +53,43 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey(fromJson: Point.bottomRightFromJson)
   Point bottomRightCorner;
 
+  @override
+  String UUID;
+
+  @override
+  var size;
+
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
-  PBSharedInstanceIntermediateNode(
-    this.originalRef,
-    this.SYMBOL_ID, {
+  PBSharedInstanceIntermediateNode({
+    this.SYMBOL_ID,
     this.sharedParamValues,
     Point topLeftCorner,
     Point bottomRightCorner,
     PBContext currentContext,
-  }) : super(
-            Point(originalRef.boundaryRectangle.x,
-                originalRef.boundaryRectangle.y),
-            Point(
-                (originalRef.boundaryRectangle.x +
-                    originalRef.boundaryRectangle.width),
-                (originalRef.boundaryRectangle.y +
-                    originalRef.boundaryRectangle.height)),
-            currentContext,
-            originalRef.name,
-            UUID: originalRef.UUID) {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+    this.UUID,
+    this.prototypeNode,
+    this.size,
+    this.type,
+    this.overrideValues,
+    String name,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID) {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBSymbolInstanceGenerator();
 
-    overrideValues = sharedParamValues.map((v) {
-      var symOvrValue =
-          PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type);
-      overrideValuesMap[v.overrideName] = symOvrValue;
-      return symOvrValue;
-    }).toList()
-      ..removeWhere((v) => v == null || v.value == null);
+    /// if [sharedParamValues] sets [overrideValues], then only pass one
+    // overrideValues = sharedParamValues.map((v) {
+    //   var symOvrValue =
+    //       PBSymbolInstanceOverridableValue(v.UUID, v.value, v.type);
+    //   overrideValuesMap[v.overrideName] = symOvrValue;
+    //   return symOvrValue;
+    // }).toList()
+    //   ..removeWhere((v) => v == null || v.value == null);
   }
 
   @override

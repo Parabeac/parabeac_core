@@ -19,10 +19,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     with PBColorMixin
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(ignore: true)
-  final originalRef;
-
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -39,31 +35,41 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'inherited_container';
 
-  InheritedContainer(
-    this.originalRef,
+  @override
+  String UUID;
+
+  @override
+  var size;
+
+  InheritedContainer({
     Point topLeftCorner,
     Point bottomRightCorner,
-    String name, {
+    String name,
     double alignX,
     double alignY,
     PBContext currentContext,
     Map borderInfo,
     this.isBackgroundVisible = true,
+    this.type,
+    this.UUID,
+    this.size,
+    this.prototypeNode,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+            UUID: UUID ?? '') {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBContainerGenerator();
 
     borderInfo ??= {};
 
-    size = {
-      'width': originalRef.boundaryRectangle.width,
-      'height': originalRef.boundaryRectangle.height,
-    };
+    // size = {
+    //   'width': originalRef.boundaryRectangle.width,
+    //   'height': originalRef.boundaryRectangle.height,
+    // };
 
     // have to save this in case it is overridden
+    // TODO: what to do with styles
     auxiliaryData.style = originalRef.style;
 
     if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
@@ -82,8 +88,8 @@ class InheritedContainer extends PBVisualIntermediateNode
 
     auxiliaryData.borderInfo = borderInfo;
 
-    assert(originalRef != null,
-        'A null original reference was sent to an PBInheritedIntermediate Node');
+    // assert(originalRef != null,
+    //     'A null original reference was sent to an PBInheritedIntermediate Node');
   }
 
   @override

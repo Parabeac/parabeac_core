@@ -21,9 +21,6 @@ class InheritedText extends PBVisualIntermediateNode
   bool isTextParameter = false;
 
   @override
-  var originalRef;
-
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -33,6 +30,19 @@ class InheritedText extends PBVisualIntermediateNode
   @override
   @JsonKey()
   String type = 'inherited_text';
+
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
+
+  @override
+  String UUID;
+
+  @override
+  var size;
 
   @JsonKey(name: 'content')
   String text;
@@ -49,24 +59,32 @@ class InheritedText extends PBVisualIntermediateNode
   @JsonKey(fromJson: InheritedTextPBDLHelper.letterSpacingFromJson)
   num letterSpacing;
 
-  InheritedText(this.originalRef, String name, {PBContext currentContext})
-      : super(
-            Point(originalRef.boundaryRectangle.x,
-                originalRef.boundaryRectangle.y),
-            Point(
-                originalRef.boundaryRectangle.x +
-                    originalRef.boundaryRectangle.width,
-                originalRef.boundaryRectangle.y +
-                    originalRef.boundaryRectangle.height),
-            currentContext,
-            name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  InheritedText({
+    name,
+    PBContext currentContext,
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    this.UUID,
+    this.type,
+    this.size,
+    this.alignmenttype,
+    this.fontName,
+    this.fontSize,
+    this.fontStyle,
+    this.fontWeight,
+    this.isTextParameter,
+    this.letterSpacing,
+    this.prototypeNode,
+    this.text,
+    this.textAlignment,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID ?? '') {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBTextGen();
 
-    text = (originalRef as Text).content;
+    // text = (originalRef as Text).content;
     if (text.contains('\$')) {
       text = _sanitizeText(text);
     }

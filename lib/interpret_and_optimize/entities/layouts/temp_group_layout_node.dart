@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 part 'temp_group_layout_node.g.dart';
 
@@ -16,10 +17,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey()
-  var children;
-  
-  @override
-  final originalRef;
+  List<PBIntermediateNode> children;
 
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
@@ -33,12 +31,30 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @JsonKey(name: 'UUID')
   String UUID;
 
-  TempGroupLayoutNode(this.originalRef, PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner})
-      : super([], [], currentContext, name) {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
+
+  @override
+  var size;
+
+  TempGroupLayoutNode({
+    PBContext currentContext,
+    String name,
+    topLeftCorner,
+    bottomRightCorner,
+    this.UUID,
+    this.children,
+    this.prototypeNode,
+    this.size,
+    this.type,
+  }) : super([], [], currentContext, name) {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     this.topLeftCorner = topLeftCorner;
     this.bottomRightCorner = bottomRightCorner;
   }
@@ -71,5 +87,4 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$TempGroupLayoutNodeFromJson(json);
-  }
 }

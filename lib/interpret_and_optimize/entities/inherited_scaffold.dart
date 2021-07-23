@@ -26,9 +26,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate,
         IntermediateNodeFactory {
   @override
-  @JsonKey(ignore: true)
-  var originalRef;
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -47,6 +44,12 @@ class InheritedScaffold extends PBVisualIntermediateNode
   String type = 'inherited_scaffold';
 
   @override
+  String UUID;
+
+  @override
+  var size;
+
+  @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
@@ -63,33 +66,33 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
-  InheritedScaffold(this.originalRef,
-      {Point topLeftCorner,
-      Point bottomRightCorner,
-      String name,
-      PBContext currentContext,
-      this.isHomeScreen})
-      : super(
-            Point(originalRef.boundaryRectangle.x,
-                originalRef.boundaryRectangle.y),
-            Point(
-                originalRef.boundaryRectangle.x +
-                    originalRef.boundaryRectangle.width,
-                originalRef.boundaryRectangle.y +
-                    originalRef.boundaryRectangle.height),
-            currentContext,
-            name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  InheritedScaffold({
+    Point topLeftCorner,
+    Point bottomRightCorner,
+    String name,
+    PBContext currentContext,
+    this.isHomeScreen,
+    this.UUID,
+    this.prototypeNode,
+    this.size,
+    this.type,
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          name,
+          UUID: UUID ?? '',
+        ) {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
 
     generator = PBScaffoldGenerator();
 
-    auxiliaryData.color = toHex(originalRef.backgroundColor);
+    // auxiliaryData.color = toHex(originalRef.backgroundColor);
 
     // Add body attribute
     addAttribute(PBAttribute('body'));

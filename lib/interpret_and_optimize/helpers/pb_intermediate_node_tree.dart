@@ -89,7 +89,9 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   String _identifier;
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
-  PBIntermediateTree(String name) {
+  PBIntermediateTree({
+    String name,
+  }) {
     _name = name;
     _dependentsOn = {};
     _UUID = Uuid().v4();

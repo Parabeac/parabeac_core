@@ -34,23 +34,37 @@ class InjectedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'injected_container';
 
-  InjectedContainer(
+  @override
+  String UUID;
+
+  @override
+  var size;
+
+  InjectedContainer({
     Point bottomRightCorner,
     Point topLeftCorner,
     String name,
-    String UUID, {
+    String UUID,
     double alignX,
     double alignY,
     String color,
     PBContext currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID) {
+    this.prototypeNode,
+    this.size,
+    this.type,
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          name,
+          UUID: UUID,
+        ) {
     generator = PBContainerGenerator();
 
-    size = {
-      'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
-      'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
-    };
+    // size = {
+    //   'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
+    //   'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
+    // };
 
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}

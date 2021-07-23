@@ -25,9 +25,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   var log = Logger('PBSharedMasterNode');
 
   @override
-  final originalRef;
-
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -46,17 +43,23 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey(fromJson: Point.bottomRightFromJson)
   Point bottomRightCorner;
 
+  @override
+  String UUID;
+
+  @override
+  var size;
+
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
   set children(List<PBIntermediateNode> children) {
-    child ??= TempGroupLayoutNode(originalRef, currentContext, name);
+    child ??= TempGroupLayoutNode(currentContext: currentContext, name: name);
     if (child is PBLayoutIntermediateNode) {
       children.forEach((element) => child.addChild(element));
     } else {
-      child = TempGroupLayoutNode(originalRef, currentContext, name)
+      child = TempGroupLayoutNode(currentContext: currentContext, name: name)
         ..replaceChildren([child, ...children]);
     }
   }
@@ -66,16 +69,24 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   List<PBSharedParameterProp> overridableProperties;
   String friendlyName;
 
-  PBSharedMasterNode(
-    this.originalRef,
+  PBSharedMasterNode({
     this.SYMBOL_ID,
     String name,
     Point topLeftCorner,
-    Point bottomRightCorner, {
+    Point bottomRightCorner,
     this.overridableProperties,
     PBContext currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '') {
+    this.UUID,
+    this.prototypeNode,
+    this.type,
+    this.size,
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          name,
+          UUID: UUID ?? '',
+        ) {
     try {
       //Remove any special characters and leading numbers from the method name
       friendlyName = name
@@ -93,16 +104,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     }
     ;
 
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBMasterSymbolGenerator();
 
-    this.currentContext.screenBottomRightCorner = Point(
-        originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
-        originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
-    this.currentContext.screenTopLeftCorner =
-        Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
+    // this.currentContext.screenBottomRightCorner = Point(
+    //     originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
+    //     originalRef.boundaryRectangle.y + originalRef.boundaryRectangle.height);
+    // this.currentContext.screenTopLeftCorner =
+    //     Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
     parametersDefinition = overridableProperties.map((p) {
       var PBSymMasterP = PBSymbolMasterParameter(

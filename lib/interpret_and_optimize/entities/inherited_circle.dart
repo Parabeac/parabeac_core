@@ -17,10 +17,6 @@ part 'inherited_circle.g.dart';
 class InheritedCircle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(ignore: true)
-  final originalRef;
-
-  @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
 
@@ -35,20 +31,33 @@ class InheritedCircle extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'inherited_circle';
 
-  InheritedCircle(this.originalRef, Point bottomRightCorner,
-      Point topLeftCorner, String name,
-      {PBContext currentContext, Point alignX, Point alignY})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  @override
+  String UUID;
+
+  @override
+  var size;
+
+  InheritedCircle({
+    Point bottomRightCorner,
+    Point topLeftCorner,
+    String name,
+    PBContext currentContext,
+    Point alignX,
+    Point alignY,
+    this.UUID,
+    this.size,
+    this.prototypeNode,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID ?? '') {
+    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
+    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
+    // }
     generator = PBBitmapGenerator();
 
-    size = {
-      'width': originalRef.boundaryRectangle.width,
-      'height': originalRef.boundaryRectangle.height,
-    };
+    // size = {
+    //   'width': originalRef.boundaryRectangle.width,
+    //   'height': originalRef.boundaryRectangle.height,
+    // };
 
     auxiliaryData.borderInfo = {};
     auxiliaryData.borderInfo['shape'] = 'circle';
