@@ -33,6 +33,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   @JsonKey()
   final String UUID;
 
+  String prototypeNodeUUID;
+
   /// Map representing the attributes of [this].
   /// The key represents the name of the attribute, while the value
   /// is a List<PBIntermediateNode> representing the nodes under
