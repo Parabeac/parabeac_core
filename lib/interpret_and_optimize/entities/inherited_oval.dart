@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_path.dart';

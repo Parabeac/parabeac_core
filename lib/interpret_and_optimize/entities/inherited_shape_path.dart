@@ -1,12 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/shape_path.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -20,7 +17,6 @@ part 'inherited_shape_path.g.dart';
 
 @JsonSerializable()
 class InheritedShapePath extends PBVisualIntermediateNode
-    with PBColorMixin
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
@@ -85,29 +81,29 @@ class InheritedShapePath extends PBVisualIntermediateNode
   }
 
   void _detectLineAsContainer() {
-    var path = (originalRef as ShapePath);
-    // Possible vertical or horizontal point
-    if (path.points.length == 2) {
-      //Parse the points
-      var p1Str = path.points[0]['point']
-          .toString()
-          .replaceAll('{', '')
-          .replaceAll('}', '')
-          .split(',');
-      var p2Str = path.points[1]['point']
-          .toString()
-          .replaceAll('{', '')
-          .replaceAll('}', '')
-          .split(',');
+    // var path = (originalRef as ShapePath);
+    // // Possible vertical or horizontal point
+    // if (path.points.length == 2) {
+    //   //Parse the points
+    //   var p1Str = path.points[0]['point']
+    //       .toString()
+    //       .replaceAll('{', '')
+    //       .replaceAll('}', '')
+    //       .split(',');
+    //   var p2Str = path.points[1]['point']
+    //       .toString()
+    //       .replaceAll('{', '')
+    //       .replaceAll('}', '')
+    //       .split(',');
 
-      var p1 = Point(double.parse(p1Str[0]), double.parse(p1Str[1]));
-      var p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
+    //   var p1 = Point(double.parse(p1Str[0]), double.parse(p1Str[1]));
+    //   var p2 = Point(double.parse(p2Str[0]), double.parse(p2Str[1]));
 
-      if (_isEdgeAdjacent(p1, p2)) {
-        generator = PBContainerGenerator();
-        auxiliaryData.color = toHex(originalRef.style.borders[0].color);
-      }
-    }
+    //   if (_isEdgeAdjacent(p1, p2)) {
+    //     generator = PBContainerGenerator();
+    //     auxiliaryData.color = toHex(originalRef.style.borders[0].color);
+    //   }
+    // }
   }
 
   /// Returns true if [p1] and [p2] form

@@ -1,5 +1,3 @@
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
@@ -20,8 +18,6 @@ part 'inherited_scaffold.g.dart';
 
 @JsonSerializable()
 class InheritedScaffold extends PBVisualIntermediateNode
-    with
-        PBColorMixin
     implements
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate,
         IntermediateNodeFactory {
@@ -111,11 +107,11 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void addChild(PBIntermediateNode node) {
     if (node is PBSharedInstanceIntermediateNode) {
-      if (node.originalRef.name.contains('<navbar>')) {
+      if (node.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
         return;
       }
-      if (node.originalRef.name.contains('<tabbar>')) {
+      if (node.name.contains('<tabbar>')) {
         addAttribute(
             PBAttribute('bottomNavigationBar', attributeNodes: [node]));
         return;
@@ -137,7 +133,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
+      @override
+      var temp =
+          TempGroupLayoutNode(currentContext: currentContext, name: node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;

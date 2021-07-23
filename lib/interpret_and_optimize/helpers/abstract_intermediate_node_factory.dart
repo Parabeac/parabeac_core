@@ -40,7 +40,7 @@ class AbstractIntermediateNodeFactory {
 
   AbstractIntermediateNodeFactory();
 
-  static PBIntermediateNode getFigmaNode(Map<String, dynamic> json) {
+  static PBIntermediateNode getIntermediateNode(Map<String, dynamic> json) {
     var className = json[INTERMEDIATE_TYPE];
     if (className != null) {
       for (var intermediateNode in _intermediateNodes) {

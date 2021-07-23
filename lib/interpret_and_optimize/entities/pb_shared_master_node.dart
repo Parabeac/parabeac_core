@@ -1,9 +1,7 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -120,24 +118,25 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     // this.currentContext.screenTopLeftCorner =
     //     Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    parametersDefinition = overridableProperties.map((p) {
-      var PBSymMasterP = PBSymbolMasterParameter(
-          p._friendlyName,
-          p.type,
-          p.UUID,
-          p.canOverride,
-          p.propertyName,
-          /* Removed Parameter Definition as it was accepting JSON?*/
-          null, // TODO: @Eddie
-          currentContext.screenTopLeftCorner.x,
-          currentContext.screenTopLeftCorner.y,
-          currentContext.screenBottomRightCorner.x,
-          currentContext.screenBottomRightCorner.y,
-          context: currentContext);
-      parametersDefsMap[p.propertyName] = PBSymMasterP;
-      return PBSymMasterP;
-    }).toList()
-      ..removeWhere((p) => p == null || p.parameterDefinition == null);
+    // parametersDefinition = overridableProperties.map((p) {
+    //   var PBSymMasterP = PBSymbolMasterParameter(
+    //       // p._friendlyName,
+    //       p.type,
+    //       p.value,
+    //       p.UUID,
+    //       p.canOverride,
+    //       p.propertyName,
+    //       /* Removed Parameter Definition as it was accepting JSON?*/
+    //       null, // TODO: @Eddie
+    //       currentContext.screenTopLeftCorner.x,
+    //       currentContext.screenTopLeftCorner.y,
+    //       currentContext.screenBottomRightCorner.x,
+    //       currentContext.screenBottomRightCorner.y,
+    //       context: currentContext);
+    //   parametersDefsMap[p.propertyName] = PBSymMasterP;
+    //   return PBSymMasterP;
+    // }).toList()
+    //   ..removeWhere((p) => p == null || p.parameterDefinition == null);
   }
 
   @override
@@ -152,31 +151,24 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
       _$PBSharedMasterNodeFromJson(json);
 }
 
+@JsonSerializable()
 class PBSharedParameterProp {
-  final Type _type;
-  Type get type => _type;
-  set type(Type type) => _type;
+  final String type;
 
   PBIntermediateNode value;
 
-  final bool _canOverride;
-  bool get canOverride => _canOverride;
+  final String propertyName;
 
-  final String _propertyName;
-  String get propertyName => _propertyName;
+  final String UUID;
 
-  final String _UUID;
-  String get UUID => _UUID;
+  final dynamic initialValue;
 
-  final dynamic _initialValue;
-  dynamic get initialValue => _initialValue;
+  // final String _friendlyName;
+  // String get friendlyName =>
+  //     _friendlyName ??
+  //     SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
+  //     'noname';
 
-  final String _friendlyName;
-  String get friendlyName =>
-      _friendlyName ??
-      SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
-      'noname';
-
-  PBSharedParameterProp(this._friendlyName, this._type, this.value,
-      this._canOverride, this._propertyName, this._UUID, this._initialValue);
+  PBSharedParameterProp(
+      this.type, this.value, this.propertyName, this.UUID, this.initialValue);
 }

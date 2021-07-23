@@ -101,7 +101,7 @@ class Interpret {
     var stopwatch = Stopwatch()..start();
 
     /// VisualGenerationService
-    var intermediateTree = PBIntermediateTree(designScreen.designNode.name);
+    var intermediateTree = PBIntermediateTree(name: designScreen.designNode.name);
     currentContext.tree = intermediateTree;
     currentContext.project = _pb_project;
     intermediateTree.rootNode = await visualGenerationService(

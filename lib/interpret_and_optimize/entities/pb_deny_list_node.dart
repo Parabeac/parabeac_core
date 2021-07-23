@@ -7,10 +7,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 /// A node that should not be converted to intermediate.
 class PBDenyListNode extends PBIntermediateNode {
-  PBDenyListNode(Point topLeftCorner, Point bottomRightCorner,
-      PBContext currentContext, String name,
-      {String UUID})
-      : super(
+  PBDenyListNode(
+    Point topLeftCorner,
+    Point bottomRightCorner,
+    String name, {
+    String UUID,
+    PBContext currentContext,
+  }) : super(
           topLeftCorner,
           bottomRightCorner,
           UUID,

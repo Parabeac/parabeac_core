@@ -1,4 +1,3 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
@@ -79,7 +78,10 @@ class InheritedCircle extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
+      var temp = TempGroupLayoutNode(
+        currentContext: currentContext,
+        name: node.name,
+      );
       temp.addChild(child);
       temp.addChild(node);
       child = temp;

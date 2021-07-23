@@ -1,4 +1,3 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -9,7 +8,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermedia
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'alignments/injected_align.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -114,27 +112,26 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       _$PBSharedInstanceIntermediateNodeFromJson(json);
 }
 
+@JsonSerializable()
 class PBSharedParameterValue {
-  final Type _type;
-  Type get type => _type;
-  set type(Type type) => _type;
+  final String type;
 
-  final dynamic _value;
-  dynamic get value => _value;
+  final dynamic value;
 
-  final String _UUID;
-  String get UUID => _UUID;
+  final String UUID;
 
-  final String _overrideName;
-  String get overrideName => _overrideName;
-
-  String get name =>
-      SN_UUIDtoVarName[PBInputFormatter.findLastOf(_overrideName, '/')];
+  final String overrideName;
 
   PBSharedParameterValue(
-    this._type,
-    this._value,
-    this._UUID,
-    this._overrideName,
+    this.type,
+    this.value,
+    this.UUID,
+    this.overrideName,
   );
+
+  @override
+  factory PBSharedParameterValue.fromJson(Map<String, dynamic> json) =>
+      _$PBSharedParameterValueFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PBSharedParameterValueToJson(this);
 }

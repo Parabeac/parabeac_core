@@ -1,5 +1,3 @@
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
@@ -16,7 +14,6 @@ part 'inherited_container.g.dart';
 
 @JsonSerializable()
 class InheritedContainer extends PBVisualIntermediateNode
-    with PBColorMixin
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
@@ -73,20 +70,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     //   'height': originalRef.boundaryRectangle.height,
     // };
 
-    // have to save this in case it is overridden
-    // TODO: what to do with styles
-    auxiliaryData.style = originalRef.style;
-
-    if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
-      for (var fill in originalRef.style.fills) {
-        if (fill.isEnabled) {
-          auxiliaryData.color = toHex(fill.color);
-          // use the first one found.
-          break;
-        }
-      }
-    }
-
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
@@ -105,7 +88,8 @@ class InheritedContainer extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
+      var temp =
+          TempGroupLayoutNode(currentContext: currentContext, name: node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;

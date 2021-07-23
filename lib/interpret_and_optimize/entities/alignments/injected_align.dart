@@ -25,7 +25,8 @@ class InjectedAlign extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, name);
+      var temp =
+          TempGroupLayoutNode(currentContext: currentContext, name: node.name);
       temp.addChild(child);
       temp.addChild(node);
       child = temp;

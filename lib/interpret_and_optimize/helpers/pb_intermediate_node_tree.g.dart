@@ -8,8 +8,9 @@ part of 'pb_intermediate_node_tree.dart';
 
 PBIntermediateTree _$PBIntermediateTreeFromJson(Map<String, dynamic> json) {
   return PBIntermediateTree(
-    json['name'] as String,
+    name: json['name'] as String,
   )
+    ..type = json['type'] as String
     ..lockData = json['lockData'] as bool
     ..rootNode = json['rootNode'] == null
         ? null
@@ -18,6 +19,7 @@ PBIntermediateTree _$PBIntermediateTreeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBIntermediateTreeToJson(PBIntermediateTree instance) =>
     <String, dynamic>{
+      'type': instance.type,
       'lockData': instance.lockData,
       'rootNode': instance.rootNode,
       'name': instance.name,
