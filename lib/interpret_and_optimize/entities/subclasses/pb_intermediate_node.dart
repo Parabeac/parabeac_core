@@ -138,4 +138,11 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   void addChild(PBIntermediateNode node);
 
   PBIntermediateNode fromJson(Map<String, dynamic> json);
+
+  static Map sizeFromJson(Map<String, dynamic> json) {
+    return {
+      'width': json['boundaryRectangle']['width'],
+      'height': json['boundaryRectangle']['height'],
+    };
+  }
 }
