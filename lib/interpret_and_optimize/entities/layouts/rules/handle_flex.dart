@@ -1,6 +1,6 @@
-import 'package:parabeac_core/design_logic/text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/flexible.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/spacer.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -61,7 +61,7 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
     if (child is! PBIntermediateRowLayout &&
         child is! PBIntermediateColumnLayout) {
       // Wrap text in container
-      if (child is! Text) {
+      if (child is! InheritedText) {
         resultingChildren.add(_putChildInFlex(isVertical, child, parentLength));
       }
     } else {
