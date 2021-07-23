@@ -35,13 +35,18 @@ class InheritedCircle extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InheritedCircle({
-    Point bottomRightCorner,
-    Point topLeftCorner,
+    this.bottomRightCorner,
+    this.topLeftCorner,
     String name,
-    PBContext currentContext,
+    this.currentContext,
     Point alignX,
     Point alignY,
     this.UUID,

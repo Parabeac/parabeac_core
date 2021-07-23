@@ -35,12 +35,17 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InheritedShapeGroup({
     String name,
     Uint8List image,
-    PBContext currentContext,
+    this.currentContext,
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,

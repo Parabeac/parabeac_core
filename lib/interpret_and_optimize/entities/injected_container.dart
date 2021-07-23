@@ -11,6 +11,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'interfaces/pb_inherited_intermediate.dart';
+
 part 'injected_container.g.dart';
 
 @JsonSerializable()
@@ -38,17 +40,22 @@ class InjectedContainer extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InjectedContainer({
-    Point bottomRightCorner,
-    Point topLeftCorner,
+    this.bottomRightCorner,
+    this.topLeftCorner,
     String name,
-    String UUID,
+    this.UUID,
     double alignX,
     double alignY,
     String color,
-    PBContext currentContext,
+    this.currentContext,
     this.prototypeNode,
     this.size,
     this.type,

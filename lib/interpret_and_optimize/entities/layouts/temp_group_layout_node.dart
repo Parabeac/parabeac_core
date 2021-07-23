@@ -39,13 +39,18 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   Point bottomRightCorner;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   TempGroupLayoutNode({
-    PBContext currentContext,
+    this.currentContext,
     String name,
-    topLeftCorner,
-    bottomRightCorner,
+    this.topLeftCorner,
+    this.bottomRightCorner,
     this.UUID,
     this.children,
     this.prototypeNode,

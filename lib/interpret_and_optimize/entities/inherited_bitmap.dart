@@ -39,11 +39,16 @@ class InheritedBitmap extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InheritedBitmap({
     String name,
-    PBContext currentContext,
+    this.currentContext,
     this.referenceImage,
     this.bottomRightCorner,
     this.topLeftCorner,

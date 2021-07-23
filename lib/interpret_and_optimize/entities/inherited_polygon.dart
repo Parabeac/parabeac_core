@@ -37,12 +37,17 @@ class InheritedPolygon extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InheritedPolygon({
     name,
     Uint8List image,
-    PBContext currentContext,
+    this.currentContext,
     this.UUID,
     this.topLeftCorner,
     this.bottomRightCorner,

@@ -47,7 +47,12 @@ class InheritedScaffold extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
@@ -67,10 +72,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   InheritedScaffold({
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    this.topLeftCorner,
+    this.bottomRightCorner,
     String name,
-    PBContext currentContext,
+    this.currentContext,
     this.isHomeScreen,
     this.UUID,
     this.prototypeNode,

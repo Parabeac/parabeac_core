@@ -39,15 +39,20 @@ class InheritedContainer extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   InheritedContainer({
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    this.topLeftCorner,
+    this.bottomRightCorner,
     String name,
     double alignX,
     double alignY,
-    PBContext currentContext,
+    this.currentContext,
     Map borderInfo,
     this.isBackgroundVisible = true,
     this.type,

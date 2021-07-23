@@ -19,8 +19,6 @@ part 'pb_shared_instance.g.dart';
 
 /// As some nodes are shared throughout the project, shared instances are pointers to shared master nodes with overridable properties.
 /// Superclass: PBSharedIntermediateNode
-
-@JsonSerializable(ignoreUnannotated: true)
 class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @JsonKey()
@@ -57,7 +55,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
@@ -66,9 +69,9 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   PBSharedInstanceIntermediateNode({
     this.SYMBOL_ID,
     this.sharedParamValues,
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    PBContext currentContext,
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    this.currentContext,
     this.UUID,
     this.prototypeNode,
     this.size,

@@ -42,7 +42,12 @@ class InheritedText extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   @JsonKey(name: 'content')
   String text;
@@ -61,7 +66,7 @@ class InheritedText extends PBVisualIntermediateNode
 
   InheritedText({
     name,
-    PBContext currentContext,
+    this.currentContext,
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,

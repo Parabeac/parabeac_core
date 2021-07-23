@@ -47,7 +47,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  var size;
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
 
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
@@ -72,10 +77,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   PBSharedMasterNode({
     this.SYMBOL_ID,
     String name,
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    this.topLeftCorner,
+    this.bottomRightCorner,
     this.overridableProperties,
-    PBContext currentContext,
+    this.currentContext,
     this.UUID,
     this.prototypeNode,
     this.type,
