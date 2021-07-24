@@ -44,7 +44,12 @@ class InheritedShapePath extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedShapePath({
+    this.originalRef,
     String name,
     Uint8List image,
     this.currentContext,
@@ -126,7 +131,10 @@ class InheritedShapePath extends PBVisualIntermediateNode
   @override
   void alignChild() {}
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedShapePathFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedShapePath.fromJson(json);
 }

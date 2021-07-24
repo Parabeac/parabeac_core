@@ -1,5 +1,4 @@
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -64,7 +63,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   // quick lookup based on UUID_type
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   PBSharedInstanceIntermediateNode({
+    this.originalRef,
     this.SYMBOL_ID,
     this.sharedParamValues,
     this.topLeftCorner,
@@ -107,9 +111,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     }
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedInstanceIntermediateNodeFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      PBSharedInstanceIntermediateNode.fromJson(json);
 }
 
 @JsonSerializable()

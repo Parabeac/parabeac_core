@@ -43,7 +43,12 @@ class InheritedPolygon extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedPolygon({
+    this.originalRef,
     name,
     Uint8List image,
     this.currentContext,
@@ -91,7 +96,10 @@ class InheritedPolygon extends PBVisualIntermediateNode
     // Images don't hae children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedPolygonFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedPolygon.fromJson(json);
 }

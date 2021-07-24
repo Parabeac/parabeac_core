@@ -8,6 +8,8 @@ part of 'pb_shared_master_node.dart';
 
 PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
   return PBSharedMasterNode(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     SYMBOL_ID: json['symbolID'] as String,
     name: json['name'] as String,
     topLeftCorner:
@@ -38,6 +40,7 @@ Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
       'bottomRightCorner': instance.bottomRightCorner?.toJson(),
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };
 
 PBSharedParameterProp _$PBSharedParameterPropFromJson(

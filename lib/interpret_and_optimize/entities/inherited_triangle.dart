@@ -43,7 +43,12 @@ class InheritedTriangle extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedTriangle({
+    this.originalRef,
     String name,
     Uint8List image,
     this.currentContext,
@@ -92,7 +97,10 @@ class InheritedTriangle extends PBVisualIntermediateNode
     // Images don't have children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedTriangleFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedTriangle.fromJson(json);
 }

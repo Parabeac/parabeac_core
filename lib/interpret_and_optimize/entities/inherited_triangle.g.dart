@@ -8,6 +8,8 @@ part of 'inherited_triangle.dart';
 
 InheritedTriangle _$InheritedTriangleFromJson(Map<String, dynamic> json) {
   return InheritedTriangle(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'] as String,
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
@@ -42,4 +44,5 @@ Map<String, dynamic> _$InheritedTriangleToJson(InheritedTriangle instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

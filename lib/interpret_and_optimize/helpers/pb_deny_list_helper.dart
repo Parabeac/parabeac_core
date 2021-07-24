@@ -1,5 +1,5 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_deny_list_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 // Helping understand indirect and direct semantics that should remove a node from a tree.
@@ -13,16 +13,16 @@ class PBDenyListHelper {
     '937FDFA9-BCF9-4577-AE5E-0CF7FDD47254': true,
   };
 
-  bool isInDenyListDirect(DesignNode node) {
+  bool isInDenyListDirect(PBIntermediateNode node) {
     if (denyList[node.UUID] != null) {
       return true;
     }
     return false;
   }
 
-  PBDenyListNode returnDenyListNodeIfExist(DesignNode node) {
+  PBDenyListNode returnDenyListNodeIfExist(PBIntermediateNode node) {
     if (isInDenyListDirect(node)) {
-      return PBDenyListNode(Point(0, 0), Point(0, 0), null, '');
+      return PBDenyListNode(Point(0, 0), Point(0, 0), '');
     } else {
       return null;
     }

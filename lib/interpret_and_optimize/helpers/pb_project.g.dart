@@ -10,7 +10,6 @@ PBProject _$PBProjectFromJson(Map<String, dynamic> json) {
   return PBProject(
     json['name'] as String,
     json['projectAbsPath'] as String,
-    json['sharedStyles'] as List,
   )
     ..lockData = json['lockData'] as bool
     ..forest = (json['forest'] as List)
@@ -25,5 +24,4 @@ Map<String, dynamic> _$PBProjectToJson(PBProject instance) => <String, dynamic>{
       'projectAbsPath': instance.projectAbsPath,
       'lockData': instance.lockData,
       'forest': instance.forest?.map((e) => e?.toJson())?.toList(),
-      'sharedStyles': instance.sharedStyles,
     };

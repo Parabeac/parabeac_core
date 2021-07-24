@@ -46,7 +46,12 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedBitmap({
+    this.originalRef,
     String name,
     this.currentContext,
     this.referenceImage,
@@ -88,7 +93,10 @@ class InheritedBitmap extends PBVisualIntermediateNode
     return;
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedBitmapFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedBitmap.fromJson(json);
 }

@@ -8,6 +8,8 @@ part of 'inherited_text.dart';
 
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'],
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
@@ -64,4 +66,5 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'fontStyle': instance.fontStyle,
       'textAlignment': instance.textAlignment,
       'letterSpacing': instance.letterSpacing,
+      'originalRef': instance.originalRef,
     };

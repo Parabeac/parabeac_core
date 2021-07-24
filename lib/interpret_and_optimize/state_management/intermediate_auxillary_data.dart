@@ -1,5 +1,3 @@
-import 'package:parabeac_core/design_logic/pb_style.dart';
-import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 
 class IntermediateAuxiliaryData {
@@ -13,9 +11,6 @@ class IntermediateAuxiliaryData {
 
   /// The background color of the element.
   String color;
-
-  /// the style of the element (which can be overridden)
-  PBStyle style;
 
   IntermediateAuxiliaryData({
     this.stateGraph,

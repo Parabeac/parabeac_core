@@ -1,6 +1,5 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -37,7 +36,6 @@ class PBProject {
     }
   }
 
-  List<SharedStyle> sharedStyles = [];
   @Deprecated(
       'Use the fileStructureStrategy within the GenerationConfiguration')
   FileStructureStrategy _fileStructureStrategy;
@@ -58,7 +56,7 @@ class PBProject {
   @JsonKey(ignore: true)
   FileStructureStrategy get fileStructureStrategy => _fileStructureStrategy;
 
-  PBProject(this.projectName, this.projectAbsPath, this.sharedStyles,
+  PBProject(this.projectName, this.projectAbsPath,
       {FileStructureStrategy fileStructureStrategy}) {
     _forest = [];
     _genProjectData = PBGenerationProjectData();

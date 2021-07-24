@@ -8,6 +8,8 @@ part of 'inherited_polygon.dart';
 
 InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
   return InheritedPolygon(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'],
     UUID: json['UUID'] as String,
     topLeftCorner:
@@ -42,4 +44,5 @@ Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

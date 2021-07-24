@@ -47,7 +47,12 @@ class InheritedOval extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedOval({
+    this.originalRef,
     String name,
     Uint8List image,
     this.currentContext,
@@ -90,7 +95,10 @@ class InheritedOval extends PBVisualIntermediateNode
     // Images don't have children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedOvalFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedOval.fromJson(json);
 }

@@ -8,6 +8,8 @@ part of 'inherited_bitmap.dart';
 
 InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
   return InheritedBitmap(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'] as String,
     referenceImage: json['imageReference'] as String,
     bottomRightCorner: Point.bottomRightFromJson(
@@ -44,4 +46,5 @@ Map<String, dynamic> _$InheritedBitmapToJson(InheritedBitmap instance) =>
       'bottomRightCorner': instance.bottomRightCorner,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

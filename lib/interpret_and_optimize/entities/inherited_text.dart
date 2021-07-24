@@ -60,7 +60,12 @@ class InheritedText extends PBVisualIntermediateNode
   @JsonKey(fromJson: InheritedTextPBDLHelper.letterSpacingFromJson)
   num letterSpacing;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedText({
+    this.originalRef,
     name,
     this.currentContext,
     this.topLeftCorner,
@@ -106,9 +111,12 @@ class InheritedText extends PBVisualIntermediateNode
     // Text don't have children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedTextFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedText.fromJson(json);
 }
 
 class InheritedTextPBDLHelper {

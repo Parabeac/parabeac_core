@@ -8,6 +8,8 @@ part of 'inherited_scaffold.dart';
 
 InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
   return InheritedScaffold(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     bottomRightCorner: Point.bottomRightFromJson(
@@ -44,4 +46,5 @@ Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
       'UUID': instance.UUID,
       'size': instance.size,
       'child': instance.child,
+      'originalRef': instance.originalRef,
     };

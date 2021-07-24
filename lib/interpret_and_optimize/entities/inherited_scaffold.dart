@@ -67,7 +67,12 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedScaffold({
+    this.originalRef,
     this.topLeftCorner,
     this.bottomRightCorner,
     String name,
@@ -155,7 +160,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedScaffoldFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedScaffold.fromJson(json);
 }

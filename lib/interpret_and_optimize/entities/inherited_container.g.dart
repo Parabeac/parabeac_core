@@ -8,6 +8,8 @@ part of 'inherited_container.dart';
 
 InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
   return InheritedContainer(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     bottomRightCorner: Point.bottomRightFromJson(
@@ -44,4 +46,5 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

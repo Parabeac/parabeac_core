@@ -72,7 +72,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   List<PBSharedParameterProp> overridableProperties;
   String friendlyName;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   PBSharedMasterNode({
+    this.originalRef,
     this.SYMBOL_ID,
     String name,
     this.topLeftCorner,
@@ -146,9 +151,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @override
   void alignChild() {}
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedMasterNodeFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      PBSharedMasterNode.fromJson(json);
 }
 
 @JsonSerializable()

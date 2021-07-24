@@ -8,6 +8,8 @@ part of 'inherited_shape_group.dart';
 
 InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
   return InheritedShapeGroup(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'] as String,
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
@@ -43,4 +45,5 @@ Map<String, dynamic> _$InheritedShapeGroupToJson(
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

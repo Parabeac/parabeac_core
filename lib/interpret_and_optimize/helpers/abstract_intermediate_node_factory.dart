@@ -40,12 +40,12 @@ class AbstractIntermediateNodeFactory {
 
   AbstractIntermediateNodeFactory();
 
-  static PBIntermediateNode getIntermediateNode(Map<String, dynamic> json) {
+  static dynamic getIntermediateNode(Map<String, dynamic> json) {
     var className = json[INTERMEDIATE_TYPE];
     if (className != null) {
       for (var intermediateNode in _intermediateNodes) {
         if (intermediateNode.type == className) {
-          return intermediateNode.fromJson(json);
+          return intermediateNode.createIntermediateNode(json);
         }
       }
     }
@@ -55,5 +55,5 @@ class AbstractIntermediateNodeFactory {
 
 abstract class IntermediateNodeFactory {
   String type;
-  PBIntermediateNode fromJson(Map<String, dynamic> json);
+  dynamic createIntermediateNode(Map<String, dynamic> json);
 }

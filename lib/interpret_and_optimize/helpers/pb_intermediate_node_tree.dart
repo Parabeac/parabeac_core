@@ -116,10 +116,14 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
 
-  factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
-      _$PBIntermediateNodeFromJson(json);
+  Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
-  Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
+  static PBIntermediateTree fromJson(Map<String, dynamic> json) =>
+      _$PBIntermediateTreeFromJson(json);
+
+  @override
+  PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
+      PBIntermediateTree.fromJson(json);
 }
 
 /// By extending the class, any node could be used in any iterator to traverse its

@@ -45,7 +45,12 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   TempGroupLayoutNode({
+    this.originalRef,
     this.currentContext,
     String name,
     this.topLeftCorner,
@@ -59,8 +64,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
     //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     // }
-    this.topLeftCorner = topLeftCorner;
-    this.bottomRightCorner = bottomRightCorner;
   }
 
   @override
@@ -88,7 +91,10 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$TempGroupLayoutNodeFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      TempGroupLayoutNode.fromJson(json);
 }

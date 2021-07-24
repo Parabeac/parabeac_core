@@ -8,6 +8,8 @@ part of 'inherited_circle.dart';
 
 InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
   return InheritedCircle(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     bottomRightCorner: Point.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>),
     topLeftCorner:
@@ -42,4 +44,5 @@ Map<String, dynamic> _$InheritedCircleToJson(InheritedCircle instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

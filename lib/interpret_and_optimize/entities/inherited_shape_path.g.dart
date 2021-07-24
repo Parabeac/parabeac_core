@@ -8,6 +8,8 @@ part of 'inherited_shape_path.dart';
 
 InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
   return InheritedShapePath(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'] as String,
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
@@ -42,4 +44,5 @@ Map<String, dynamic> _$InheritedShapePathToJson(InheritedShapePath instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

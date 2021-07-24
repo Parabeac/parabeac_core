@@ -43,7 +43,12 @@ class InheritedStar extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedStar({
+    this.originalRef,
     name,
     Uint8List image,
     this.currentContext,
@@ -92,7 +97,10 @@ class InheritedStar extends PBVisualIntermediateNode
     // Images don't have children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedStarFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedStar.fromJson(json);
 }

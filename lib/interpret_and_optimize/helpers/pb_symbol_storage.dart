@@ -105,7 +105,7 @@ class PBSymbolStorage {
 
   String getNameOfSymbolWithID(String id) {
     return _pbSharedMasterNodes.containsKey(id)
-        ? _pbSharedMasterNodes[id].originalRef.name
+        ? _pbSharedMasterNodes[id].name
         : null;
   }
 }

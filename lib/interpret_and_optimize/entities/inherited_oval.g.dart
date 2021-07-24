@@ -8,6 +8,8 @@ part of 'inherited_oval.dart';
 
 InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
   return InheritedOval(
+    originalRef: PBInheritedIntermediate.originalRefFromJson(
+        json['originalRef'] as Map<String, dynamic>),
     name: json['name'] as String,
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
@@ -42,4 +44,5 @@ Map<String, dynamic> _$InheritedOvalToJson(InheritedOval instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'size': instance.size,
+      'originalRef': instance.originalRef,
     };

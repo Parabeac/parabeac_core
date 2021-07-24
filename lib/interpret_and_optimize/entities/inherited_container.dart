@@ -43,7 +43,12 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedContainer({
+    this.originalRef,
     this.topLeftCorner,
     this.bottomRightCorner,
     String name,
@@ -111,7 +116,10 @@ class InheritedContainer extends PBVisualIntermediateNode
     }
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedContainerFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedContainer.fromJson(json);
 }

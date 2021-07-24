@@ -42,7 +42,12 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
+  final Map<String, dynamic> originalRef;
+
   InheritedShapeGroup({
+    this.originalRef,
     String name,
     Uint8List image,
     this.currentContext,
@@ -83,7 +88,10 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     // Images don't have children.
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedShapeGroupFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedShapeGroup.fromJson(json);
 }
