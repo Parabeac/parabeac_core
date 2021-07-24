@@ -24,7 +24,19 @@ class PBPositionedGenerator extends PBGenerator {
       var xAxisBoilerplate = boilerplate.item1;
       var yAxisBoilerplate = boilerplate.item2;
 
-      var valueHolder = source.valueHolder;
+      /// Since the generation phase is going to run multiple times, we are going to have to
+      /// create a copy/clone of the [PositionedValueHolder] instead of assigning the values
+      /// directly to the [source.valueHolder]. This would causse the [source.valueHolder.getRatioPercentage]
+      /// to be applyed to ratios determine in a previoud generation phase run.
+      /// This is going to be the case until we find a more suitable solution for the generation
+      /// phase overall.
+      var valueHolder = PositionedValueHolder(
+          top: source.valueHolder.top,
+          bottom: source.valueHolder.bottom,
+          left: source.valueHolder.left,
+          right: source.valueHolder.right,
+          width: source.valueHolder.width,
+          height: source.valueHolder.height);
 
       if (!(generatorContext.sizingContext == SizingValueContext.PointValue)) {
         /// [SizingValueContext.PointValue] is the only value in which dont change based on another scale/sizing
@@ -33,23 +45,23 @@ class PBPositionedGenerator extends PBGenerator {
         valueHolder.left = ratio(source.valueHolder.left, isHorizontal: true);
         valueHolder.right = ratio(source.valueHolder.right, isHorizontal: true);
         valueHolder.top = ratio(source.valueHolder.top, isHorizontal: false);
-        valueHolder.bottom = ratio(source.valueHolder.bottom, isHorizontal: false);
+        valueHolder.bottom =
+            ratio(source.valueHolder.bottom, isHorizontal: false);
 
         valueHolder.height = ratio(source.height, isHorizontal: false);
         valueHolder.width = ratio(source.width, isHorizontal: true);
       }
       try {
-      buffer.write(
-          'left: ${_normalizeValue(xAxisBoilerplate, valueHolder.left)}, top: ${valueHolder.top},');
-      if (overrideChildDim) {
         buffer.write(
-            'width: ${_normalizeValue(xAxisBoilerplate, valueHolder.width)}, height: ${_normalizeValue(yAxisBoilerplate, valueHolder.height)},');
-      } else {
-        buffer.write(
-            'right: ${_normalizeValue(xAxisBoilerplate, valueHolder.right)}, bottom: ${_normalizeValue(yAxisBoilerplate, valueHolder.bottom)},');
-      }
+            'left: ${_normalizeValue(xAxisBoilerplate, valueHolder.left)}, top: ${_normalizeValue(yAxisBoilerplate, valueHolder.top)},');
+        if (overrideChildDim) {
+          buffer.write(
+              'width: ${_normalizeValue(xAxisBoilerplate, valueHolder.width)}, height: ${_normalizeValue(yAxisBoilerplate, valueHolder.height)},');
+        } else {
+          buffer.write(
+              'right: ${_normalizeValue(xAxisBoilerplate, valueHolder.right)}, bottom: ${_normalizeValue(yAxisBoilerplate, valueHolder.bottom)},');
+        }
 
-      
         source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
@@ -88,9 +100,9 @@ class PBPositionedGenerator extends PBGenerator {
   /// Where it should be `0`.
   String _normalizeValue(String preValueStatement, double value) {
     var n = double.parse(value.toStringAsFixed(3));
-    if (value == 0) {
+    if (n == 0) {
       return '0';
     }
-        return '$preValueStatement${value.toStringAsFixed(3)}';
+    return '$preValueStatement$n';
   }
 }
