@@ -58,8 +58,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   Point topLeftCorner;
   Point bottomRightCorner;
   
-  double get width => bottomRightCorner.x - topLeftCorner.x;
-  double get height => bottomRightCorner.y - topLeftCorner.y;
+  double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
+  double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
 
   PBContext currentContext;
 
@@ -147,7 +147,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   }
 }
 extension PBPointLegacyMethod on Point{
-  Point clone(Point point) => Point(point.x, point.y);
+  Point clone() => Point(x, y);
 
   // TODO: This is a temporal fix ----- Not sure why there some sort of safe area for the y-axis??
   // (y.abs() - anotherPoint.y.abs()).abs() < 3

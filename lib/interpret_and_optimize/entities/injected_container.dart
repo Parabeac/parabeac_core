@@ -42,15 +42,15 @@ class InjectedContainer extends PBVisualIntermediateNode
   @override
   void alignChild() {
     /// Add Padding that takes into account pinning (hard values).
-    var padding = Padding('', child.constraints,
-        left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-        right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-        top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-        bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
-        topLeftCorner: topLeftCorner,
-        bottomRightCorner: bottomRightCorner,
-        currentContext: currentContext);
-    padding.child = child;
-    child = padding;
+    // var padding = Padding('', child.constraints,
+    //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+    //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+    //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+    //     bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
+    //     topLeftCorner: topLeftCorner,
+    //     bottomRightCorner: bottomRightCorner,
+    //     currentContext: currentContext);
+    // padding.child = child;
+    // child = padding;
   }
 }

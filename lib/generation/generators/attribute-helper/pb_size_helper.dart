@@ -52,8 +52,8 @@ class PBSizeHelper extends PBAttributesHelper {
           ? body['width'].toStringAsFixed(3)
           : 'MediaQuery.of(context).size.width * ${relativeWidth.toStringAsFixed(3)}';
 
-      buffer.write(
-          'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
+      // buffer.write(
+      //     'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
     } else if (generatorContext.sizingContext ==
         SizingValueContext.LayoutBuilderValue) {
       buffer.write(

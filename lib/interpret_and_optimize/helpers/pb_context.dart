@@ -65,7 +65,7 @@ class PBContext {
   ///
   /// [isHorizontal] (default value is `false`)
   /// represents if the ratio should be the Horizontal one or the Vertical one.
-  double getRatioPercentage(double size, [bool isHorizontal = false]) {
+  double getRatioPercentage(double size, {bool isHorizontal = false}) {
     if (size == 0) {
       return size;
     }

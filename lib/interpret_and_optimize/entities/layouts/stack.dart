@@ -35,7 +35,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     /// childrend are being populated, and consequently [Stack.resize] is being
     /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
     /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
-    if (depth != null && depth <= 1 && depth >= 0) {
+    if (depth != null && depth <= 2 && depth >= 0) {
       topLeftCorner = currentContext.canvasTLC;
       bottomRightCorner = currentContext.canvasBRC;
     } else {
@@ -64,7 +64,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
       right = bottomRightCorner.x - child.bottomRightCorner.x;
 
       alignedChildren.add(InjectedPositioned(
-          Uuid().v4(), child.topLeftCorner, child.bottomRightCorner,
+          Uuid().v4(), child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
           valueHolder: PositionedValueHolder(
               top: top,
               bottom: bottom,

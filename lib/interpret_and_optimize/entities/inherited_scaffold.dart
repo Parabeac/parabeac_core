@@ -130,16 +130,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void alignChild() {
     if (child != null) {
-      var padding = Padding('', child.constraints,
-          left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-          right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-          top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-          bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs(),
-          topLeftCorner: topLeftCorner,
-          bottomRightCorner: bottomRightCorner,
-          currentContext: currentContext);
-      padding.addChild(child);
-      child = padding;
+      // var padding = Padding('', child.constraints,
+      //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
+      //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
+      //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
+      //     bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs(),
+      //     topLeftCorner: topLeftCorner,
+      //     bottomRightCorner: bottomRightCorner,
+      //     currentContext: currentContext);
+      // padding.addChild(child);
+      // child = padding;
     }
   }
 }

@@ -18,8 +18,7 @@ class PBPositionedGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is InjectedPositioned) {
-      var buffer = StringBuffer();
-      buffer.write('Positioned(');
+      var buffer = StringBuffer('Positioned(');
 
       var boilerplate = _getBoilerplate(generatorContext.sizingContext);
       var xAxisBoilerplate = boilerplate.item1;
@@ -31,16 +30,17 @@ class PBPositionedGenerator extends PBGenerator {
         /// [SizingValueContext.PointValue] is the only value in which dont change based on another scale/sizing
 
         var ratio = source.currentContext.getRatioPercentage;
-        valueHolder.left = ratio(source.valueHolder.left, true);
-        valueHolder.right = ratio(source.valueHolder.right, true);
-        valueHolder.top = ratio(source.valueHolder.top);
-        valueHolder.bottom = ratio(source.valueHolder.bottom);
+        valueHolder.left = ratio(source.valueHolder.left, isHorizontal: true);
+        valueHolder.right = ratio(source.valueHolder.right, isHorizontal: true);
+        valueHolder.top = ratio(source.valueHolder.top, isHorizontal: false);
+        valueHolder.bottom = ratio(source.valueHolder.bottom, isHorizontal: false);
 
-        valueHolder.height = ratio(source.height);
-        valueHolder.width = ratio(source.width, true);
+        valueHolder.height = ratio(source.height, isHorizontal: false);
+        valueHolder.width = ratio(source.width, isHorizontal: true);
       }
+      try {
       buffer.write(
-          'left: ${_normalizeValue(xAxisBoilerplate, valueHolder.left)}, top: ${_normalizeValue(yAxisBoilerplate, valueHolder.top)},');
+          'left: ${_normalizeValue(xAxisBoilerplate, valueHolder.left)}, top: ${valueHolder.top},');
       if (overrideChildDim) {
         buffer.write(
             'width: ${_normalizeValue(xAxisBoilerplate, valueHolder.width)}, height: ${_normalizeValue(yAxisBoilerplate, valueHolder.height)},');
@@ -49,7 +49,7 @@ class PBPositionedGenerator extends PBGenerator {
             'right: ${_normalizeValue(xAxisBoilerplate, valueHolder.right)}, bottom: ${_normalizeValue(yAxisBoilerplate, valueHolder.bottom)},');
       }
 
-      try {
+      
         source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${source.child.generator.generate(source.child, generatorContext)},');
@@ -70,7 +70,7 @@ class PBPositionedGenerator extends PBGenerator {
       SizingValueContext sizingValueContext) {
     if (sizingValueContext == SizingValueContext.ScaleValue) {
       return Tuple2('${PBGenerator.MEDIAQUERY_HORIZONTAL_BOILERPLATE} * ',
-          '${PBGenerator.MEDIAQUERY_VERTICAL_BOILERPLATE} *');
+          '${PBGenerator.MEDIAQUERY_VERTICAL_BOILERPLATE} * ');
     }
     if (sizingValueContext == SizingValueContext.LayoutBuilderValue) {
       return Tuple2('constraints.maxWidth * ', 'constraints.maxHeight * ');
@@ -88,9 +88,9 @@ class PBPositionedGenerator extends PBGenerator {
   /// Where it should be `0`.
   String _normalizeValue(String preValueStatement, double value) {
     var n = double.parse(value.toStringAsFixed(3));
-    if (n == 0) {
+    if (value == 0) {
       return '0';
     }
-    return '$preValueStatement$n';
+        return '$preValueStatement${value.toStringAsFixed(3)}';
   }
 }
