@@ -1,25 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:parabeac_core/controllers/design_controller.dart';
-import 'package:parabeac_core/controllers/figma_controller.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/controllers/sketch_controller.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
-import 'controllers/controller.dart';
 import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
-var controllers = <Controller>[
-  FigmaController(),
-  SketchController(),
-  DesignController()
+final designToPBDLServices = <DesignToPBDLService>[
+  SketchToPBDLService(),
+  FigmaToPBDLService(),
 ];
 
 ///sets up parser
@@ -89,10 +86,10 @@ ${parser.usage}
     throw UnsupportedError('We have yet to support this DesignType! ');
   }
 
-  var controller = controllers.firstWhere(
-      (controller) => controller.designType == processInfo.designType);
-  await controller.setup();
-  controller.convertFile();
+  var pbdlService = designToPBDLServices.firstWhere(
+    (service) => service.designType == processInfo.designType,
+  );
+  var pbdl = await pbdlService.callPBDL(processInfo);
 
   exitCode = 0;
 }
