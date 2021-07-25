@@ -23,11 +23,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   String get UUID => _UUID;
 
   /// The [TREE_TYPE] of the [PBIntermediateTree].
-  TREE_TYPE _tree_type = TREE_TYPE.SCREEN;
-  TREE_TYPE get tree_type => _tree_type;
+  @JsonKey(ignore: true)
+  TREE_TYPE tree_type = TREE_TYPE.SCREEN;
 
   @override
-  @JsonKey()
+  @JsonKey(ignore: true)
   String type = 'intermediate_tree';
 
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
@@ -37,6 +37,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   /// Furthermore, this is a workaround to the unability of creating a copy of the [PBIntermediateTree] to prevent
   /// the modifications to the object (https://github.com/dart-lang/sdk/issues/3367). As a result, the [lockData] flag
   /// has to be used to prevent those modification in phases where the data needs to be analyzed but unmodified.
+  @JsonKey(ignore: true)
   bool lockData = false;
 
   PBGenerationViewData _data;
@@ -49,6 +50,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   }
 
   PBIntermediateNode _rootNode;
+  @JsonKey(name: 'designNode')
   PBIntermediateNode get rootNode => _rootNode;
   set rootNode(PBIntermediateNode rootNode) {
     if (!lockData) {
@@ -56,11 +58,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
       _identifier ??= rootNode?.name?.snakeCase ?? name.snakeCase;
 
       if (rootNode is InheritedScaffold) {
-        _tree_type = TREE_TYPE.SCREEN;
+        tree_type = TREE_TYPE.SCREEN;
       } else if (rootNode is PBSharedMasterNode) {
-        _tree_type = TREE_TYPE.VIEW;
+        tree_type = TREE_TYPE.VIEW;
       } else {
-        _tree_type = TREE_TYPE.MISC;
+        tree_type = TREE_TYPE.MISC;
       }
     }
   }
@@ -87,6 +89,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   /// platform or orientation. The [identifier] is just going to be set once, its going
   /// to be the [name] of the [rootNode].
   String _identifier;
+  @JsonKey(name: 'name')
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
   PBIntermediateTree({
@@ -119,7 +122,8 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
   static PBIntermediateTree fromJson(Map<String, dynamic> json) =>
-      _$PBIntermediateTreeFromJson(json);
+      _$PBIntermediateTreeFromJson(json)
+        ..tree_type = treeTypeFromJson(json['designNode']);
 
   @override
   PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
@@ -134,4 +138,15 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
 /// [PBIntermediateTree] to traverse through its nodes, leveraging the dart methods.
 abstract class TraversableNode<E> {
   List<E> children;
+}
+
+TREE_TYPE treeTypeFromJson(Map<String, dynamic> json) {
+  switch (json['type']) {
+    case 'artboard':
+      return TREE_TYPE.SCREEN;
+    case 'shared_master':
+      return TREE_TYPE.VIEW;
+    default:
+      return TREE_TYPE.MISC;
+  }
 }

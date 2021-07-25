@@ -91,7 +91,7 @@ class InheritedText extends PBVisualIntermediateNode
     generator = PBTextGen();
 
     // text = (originalRef as Text).content;
-    if (text.contains('\$')) {
+    if (text?.contains('\$') ?? false) {
       text = _sanitizeText(text);
     }
   }

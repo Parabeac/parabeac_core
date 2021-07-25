@@ -98,9 +98,9 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     try {
       //Remove any special characters and leading numbers from the method name
       friendlyName = name
-          .replaceAll(RegExp(r'[^\w]+'), '')
-          .replaceAll(RegExp(r'/'), '')
-          .replaceFirst(RegExp(r'^[\d]+'), '');
+          ?.replaceAll(RegExp(r'[^\w]+'), '')
+          ?.replaceAll(RegExp(r'/'), '')
+          ?.replaceFirst(RegExp(r'^[\d]+'), '');
       //Make first letter of method name capitalized
       friendlyName = friendlyName[0].toUpperCase() + friendlyName.substring(1);
     } catch (e, stackTrace) {
