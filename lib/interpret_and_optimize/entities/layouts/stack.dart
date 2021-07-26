@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,6 +19,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   @override
   PrototypeNode prototypeNode;
+
+  AlignStrategy alignStrategy = PositionedAlignment();
 
   PBIntermediateStackLayout(PBContext currentContext, {String name})
       : super(STACK_RULES, [], currentContext, name) {
@@ -43,42 +46,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     }
   }
 
-  /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
-  @override
-  void alignChildren() {
-    var alignedChildren = <PBIntermediateNode>[];
-    for (var child in children) {
-      if (child.topLeftCorner == topLeftCorner &&
-          child.bottomRightCorner == bottomRightCorner) {
-        //if they are the same size then there is no need for adjusting.
-        alignedChildren.add(child);
-        continue;
-      }
-
-      double top, bottom, left, right;
-
-      top = child.topLeftCorner.y - topLeftCorner.y;
-      bottom = bottomRightCorner.y - child.bottomRightCorner.y;
-
-      left = child.topLeftCorner.x - topLeftCorner.x;
-      right = bottomRightCorner.x - child.bottomRightCorner.x;
-
-      alignedChildren.add(InjectedPositioned(
-          Uuid().v4(), child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
-          valueHolder: PositionedValueHolder(
-              top: top,
-              bottom: bottom,
-              left: left,
-              right: right,
-              height: child.height,
-              width: child.width),
-          currentContext: currentContext,
-          constraints: child.constraints)
-        ..addChild(child));
-    }
-    replaceChildren(alignedChildren);
-  }
-
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
@@ -87,5 +54,35 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;
+  }
+}
+
+class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
+  /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
+
+  @override
+  void align(PBContext context, PBIntermediateStackLayout node) {
+    var alignedChildren = <PBIntermediateNode>[];
+    node.children.skipWhile((child) {
+      /// if they are the same size then there is no need for adjusting.
+      if (child.topLeftCorner == node.topLeftCorner &&
+          child.bottomRightCorner == node.bottomRightCorner) {
+        alignedChildren.add(child);
+        return true;
+      }
+      return false;
+    }).forEach((child) {
+      alignedChildren.add(InjectedPositioned(Uuid().v4(),
+          child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
+          constraints: child.constraints,
+          currentContext: context,
+          valueHolder: PositionedValueHolder(
+              top: child.topLeftCorner.y - node.topLeftCorner.y,
+              bottom: node.bottomRightCorner.y - child.bottomRightCorner.y,
+              left: child.topLeftCorner.x - node.topLeftCorner.x,
+              right: node.bottomRightCorner.x - child.bottomRightCorner.x))
+        ..addChild(child));
+    });
+    node.replaceChildren(alignedChildren);
   }
 }

@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
@@ -44,15 +45,13 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     addAttribute(PBAttribute('children'));
   }
 
-  void alignChildren();
-
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children) {
     if (children.isNotEmpty) {
       getAttributeNamed('children')?.attributeNodes = children;
       resize();
     } else {
-      PBIntermediateNode.logger.warning(
+      logger.warning(
           'Trying to add a list of children to the $runtimeType that is either null or empty');
     }
   }
@@ -75,7 +74,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   void resize() {
     if (children.isEmpty) {
-      PBIntermediateNode.logger
+      logger
           .warning('There should be children in the layout so it can resize.');
       return;
     }
@@ -171,3 +170,5 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     }
   }
 }
+
+

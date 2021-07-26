@@ -6,27 +6,28 @@ import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart'
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
 import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
-  @override
-  final String UUID;
-  @override
-  PBContext currentContext;
+
   @override
   String semanticName = '<tabbar>';
 
   List<PBIntermediateNode> get tabs => getAttributeNamed('tabs').attributeNodes;
 
+  @override
+  AlignStrategy alignStrategy = NoAlignment();
+
   InjectedTabBar(
     Point topLeftCorner,
     Point bottomRightCorner,
     String name,
-    this.UUID, {
-    this.currentContext,
+    String UUID, {
+    PBContext currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBTabBarGenerator();
     addAttribute(PBAttribute('tabs'));
@@ -52,8 +53,6 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
 
-  @override
-  void alignChild() {}
 
   @override
   PBEgg generatePluginNode(

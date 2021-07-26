@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/hand
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
@@ -22,6 +23,9 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
+  @override
+  AlignStrategy alignStrategy = RowAlignment();
+
   PBIntermediateRowLayout(PBContext currentContext, {String name})
       : super(ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
     generator = PBRowGenerator();
@@ -29,53 +33,6 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
 
   @override
   void addChild(node) => addChildToLayout(node);
-
-  @override
-  void alignChildren() {
-    checkCrossAxisAlignment();
-    if (currentContext.configuration.widgetSpacing == 'Expanded') {
-      _addPerpendicularAlignment();
-      _addParallelAlignment();
-    } else {
-      assert(false,
-          'We don\'t support Configuration [${currentContext.configuration.widgetSpacing}] yet.');
-    }
-  }
-
-  void _addParallelAlignment() {
-    var newchildren = handleFlex(false, topLeftCorner, bottomRightCorner,
-        children?.cast<PBIntermediateNode>());
-    replaceChildren(newchildren);
-  }
-
-  void _addPerpendicularAlignment() {
-    var rowMinY = topLeftCorner.y;
-    var rowMaxY = bottomRightCorner.y;
-
-    if (topLeftCorner.y < currentContext.screenTopLeftCorner.y) {
-      rowMinY = currentContext.screenTopLeftCorner.y;
-    }
-    if (bottomRightCorner.y > currentContext.screenBottomRightCorner.y) {
-      rowMaxY = currentContext.screenBottomRightCorner.y;
-    }
-
-    for (var i = 0; i < children.length; i++) {
-      var padding = Padding('', children[i].constraints,
-          top: children[i].topLeftCorner.y - rowMinY ?? 0.0,
-          bottom: rowMaxY - children[i].bottomRightCorner.y ?? 0.0,
-          left: 0.0,
-          right: 0.0,
-          topLeftCorner: children[i].topLeftCorner,
-          bottomRightCorner: children[i].bottomRightCorner,
-          currentContext: currentContext);
-      padding.addChild(children[i]);
-
-      //Replace Children.
-      var childrenCopy = children;
-      childrenCopy[i] = padding;
-      replaceChildren(childrenCopy);
-    }
-  }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
@@ -90,4 +47,54 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   void sortChildren() => replaceChildren(children
     ..sort((child0, child1) =>
         child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+}
+
+class RowAlignment extends AlignStrategy<PBIntermediateRowLayout>{
+  @override
+  void align(PBContext context, PBIntermediateRowLayout node) {
+    node.checkCrossAxisAlignment();
+    if (node.currentContext.configuration.widgetSpacing == 'Expanded') {
+      _addPerpendicularAlignment(node);
+      _addParallelAlignment(node);
+    } else {
+      assert(false,
+          'We don\'t support Configuration [${node.currentContext.configuration.widgetSpacing}] yet.');
+    }
+  }
+
+   void _addParallelAlignment(PBIntermediateRowLayout node) {
+    var newchildren = handleFlex(false, node.topLeftCorner, node.bottomRightCorner,
+        node.children?.cast<PBIntermediateNode>());
+    node.replaceChildren(newchildren);
+  }
+
+  void _addPerpendicularAlignment(PBIntermediateRowLayout node) {
+    var rowMinY = node.topLeftCorner.y;
+    var rowMaxY = node.bottomRightCorner.y;
+
+    if (node.topLeftCorner.y < node.currentContext.screenTopLeftCorner.y) {
+      rowMinY = node.currentContext.screenTopLeftCorner.y;
+    }
+    if (node.bottomRightCorner.y > node.currentContext.screenBottomRightCorner.y) {
+      rowMaxY = node.currentContext.screenBottomRightCorner.y;
+    }
+
+    for (var i = 0; i < node.children.length; i++) {
+      var padding = Padding('', node.children[i].constraints,
+          top: node.children[i].topLeftCorner.y - rowMinY ?? 0.0,
+          bottom: rowMaxY - node.children[i].bottomRightCorner.y ?? 0.0,
+          left: 0.0,
+          right: 0.0,
+          topLeftCorner: node.children[i].topLeftCorner,
+          bottomRightCorner: node.children[i].bottomRightCorner,
+          currentContext: node.currentContext);
+      padding.addChild(node.children[i]);
+
+      //Replace Children.
+      var childrenCopy = node.children;
+      childrenCopy[i] = padding;
+      node.replaceChildren(childrenCopy);
+    }
+  }
+
 }

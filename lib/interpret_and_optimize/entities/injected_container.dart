@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -19,6 +20,9 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   @override
   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
+
+  @override
+  AlignStrategy alignStrategy = PaddingAlignment();
 
   InjectedContainer(
     Point bottomRightCorner,
@@ -38,19 +42,4 @@ class InjectedContainer extends PBVisualIntermediateNode
     };
   }
 
-
-  @override
-  void alignChild() {
-    /// Add Padding that takes into account pinning (hard values).
-    // var padding = Padding('', child.constraints,
-    //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-    //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-    //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-    //     bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
-    //     topLeftCorner: topLeftCorner,
-    //     bottomRightCorner: bottomRightCorner,
-    //     currentContext: currentContext);
-    // padding.child = child;
-    // child = padding;
-  }
 }

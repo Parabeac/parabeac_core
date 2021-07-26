@@ -40,18 +40,4 @@ class InheritedCircle extends PBVisualIntermediateNode
     auxiliaryData.borderInfo = {};
     auxiliaryData.borderInfo['shape'] = 'circle';
   }
-
-  @override
-  void alignChild() {
-    // var padding = Padding('', child.constraints,
-    //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-    //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-    //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-    //     bottom: (child.bottomRightCorner.y - bottomRightCorner.y).abs(),
-    //     topLeftCorner: topLeftCorner,
-    //     bottomRightCorner: bottomRightCorner,
-    //     currentContext: currentContext);
-    // padding.addChild(child);
-    // child = padding;
-  }
 }

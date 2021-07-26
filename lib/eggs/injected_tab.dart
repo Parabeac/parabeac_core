@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -59,9 +60,6 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
 
     return tab;
   }
-
-  @override
-  void alignChild() {}
 
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {

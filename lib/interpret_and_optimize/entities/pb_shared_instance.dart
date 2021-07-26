@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
@@ -40,6 +41,9 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
+
+  @override
+  AlignStrategy alignStrategy = PaddingAlignment();
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
@@ -77,22 +81,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       ..removeWhere((v) => v == null || v.value == null);
   }
 
-  @override
-  void alignChild() {
-    if (child != null) {
-      // var padding = Padding('', child.constraints,
-      //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-      //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-      //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-      //     bottom:
-      //         (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0,
-      //     topLeftCorner: topLeftCorner,
-      //     bottomRightCorner: bottomRightCorner,
-      //     currentContext: currentContext);
-      // padding.addChild(child);
-      // child = padding;
-    }
-  }
 }
 
 class PBSharedParameterValue {

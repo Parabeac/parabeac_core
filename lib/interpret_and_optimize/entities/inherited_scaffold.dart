@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 
@@ -26,6 +27,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
   PrototypeNode prototypeNode;
 
   bool isHomeScreen = false;
+
+  @override
+  AlignStrategy alignStrategy = PaddingAlignment();
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
@@ -124,22 +128,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
         stack.addChild(node);
         child = stack;
       }
-    }
-  }
-
-  @override
-  void alignChild() {
-    if (child != null) {
-      // var padding = Padding('', child.constraints,
-      //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-      //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-      //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-      //     bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs(),
-      //     topLeftCorner: topLeftCorner,
-      //     bottomRightCorner: bottomRightCorner,
-      //     currentContext: currentContext);
-      // padding.addChild(child);
-      // child = padding;
     }
   }
 }

@@ -10,14 +10,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
-  ///SERVICE
-  var log = Logger('PBSharedMasterNode');
 
   @override
   final originalRef;
@@ -71,9 +70,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             exception: e,
             stackTrace: stackTrace,
           );
-      log.error(e.toString());
+      logger.error(e.toString());
     }
-    ;
 
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
@@ -109,9 +107,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @override
   void addChild(node) =>
       child == null ? child = node : children = [node];
-
-  @override
-  void alignChild() {}
 }
 
 class PBSharedParameterProp {

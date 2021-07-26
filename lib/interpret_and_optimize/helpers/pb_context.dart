@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -41,6 +42,12 @@ class PBContext {
   /// - When another stack is declared, its TLC becomes the new canvas TLC(same for BRC).
   Point canvasTLC;
   Point canvasBRC;
+
+  /// The [constextConstrains] represents the costraints that would be inherited by a section of the tree.
+  /// 
+  /// For example, when there is a [InjectedPositioned] that contains [contextConstraints.fixedWidth], then
+  /// all of the [InjectedPositioned.child] subtree should inherit that information.
+  PBIntermediateConstraints contextConstraints = PBIntermediateConstraints();
 
   PBIntermediateTree tree;
   PBProject project;

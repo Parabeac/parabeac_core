@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 /// A temporary node that must be removed
@@ -27,12 +28,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   void addChild(node) {
     addChildToLayout(node);
-  }
-
-  @override
-  void alignChildren() {
-    assert(false, 'Attempted to align children on class type [$runtimeType]');
-    return null;
   }
 
   @override

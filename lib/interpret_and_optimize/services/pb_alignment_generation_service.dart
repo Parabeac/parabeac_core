@@ -26,15 +26,7 @@ class PBAlignGenerationService implements AITHandler {
       return null;
     }
 
-    tree.forEach((node) {
-      if(node is PBVisualIntermediateNode){
-        node.alignChild();
-      }
-      if(node is PBLayoutIntermediateNode){
-        // TODO: convert to using aling() on each node.
-        node.alignChildren();
-      }
-     });
+    tree.forEach((node) => node.align(context));
     return Future.value(tree);
   }
 

@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -15,7 +16,7 @@ import 'package:quick_log/quick_log.dart';
 /// Usually, we work with its subclasses. We normalize several aspects of data that a sketch node presents in order to work better at the intermediate level.
 /// Sometimes, PBNode’s do not have a direct representation of a sketch node. For example, most layout nodes are primarily made through and understanding of a need for a layout.
 abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
-  static final logger = Logger('PBIntermediateNode');
+  Logger logger;
 
   /// A subsemantic is contextual info to be analyzed in or in-between the visual generation & layout generation services.
   String subsemantic;
@@ -38,6 +39,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   List<PBIntermediateNode> get children => [child];
 
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
+  
+  AlignStrategy alignStrategy = NoAlignment();
 
   /// Gets the [PBIntermediateNode] at attribute `child`
   PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
@@ -57,7 +60,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   Point topLeftCorner;
   Point bottomRightCorner;
-  
+
   double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
   double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
 
@@ -76,6 +79,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   PBIntermediateNode(
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
       {this.currentContext, this.subsemantic, this.constraints}) {
+    logger = Logger(runtimeType.toString());
     _attributes = [];
     _pointCorrection();
   }
@@ -141,12 +145,23 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     return true;
   }
 
+  /// These are the constrains that are going to be used by the sub tree.
+  void _setSubTreeConstrains(PBIntermediateConstraints constraints) {}
+
   /// Adds child to node.
-  void addChild(node){
+  void addChild(node) {
     childrenStrategy.addChild(this, node);
+
+    /// Checking the constrains of the [node] being added to the tree, smoe of the
+    /// constrains could be inherited to that section of the sub-tree.
+  }
+
+  void align(PBContext context) {
+    alignStrategy.align(context, this);
   }
 }
-extension PBPointLegacyMethod on Point{
+
+extension PBPointLegacyMethod on Point {
   Point clone() => Point(x, y);
 
   // TODO: This is a temporal fix ----- Not sure why there some sort of safe area for the y-axis??
@@ -155,7 +170,7 @@ extension PBPointLegacyMethod on Point{
       y == anotherPoint.y || (y.abs() - anotherPoint.y.abs()).abs() < 3
           ? x.compareTo(anotherPoint.x)
           : y.compareTo(anotherPoint.y);
-  
+
   bool operator <(Object point) {
     if (point is Point) {
       return y == point.y ? x <= point.x : y <= point.y;
