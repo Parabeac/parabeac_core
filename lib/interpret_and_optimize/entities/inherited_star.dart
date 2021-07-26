@@ -30,7 +30,7 @@ class InheritedStar extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_star';
+  String type = 'star';
 
   @override
   String UUID;
@@ -57,7 +57,6 @@ class InheritedStar extends PBVisualIntermediateNode
     this.bottomRightCorner,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,

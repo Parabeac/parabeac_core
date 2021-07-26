@@ -32,7 +32,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'symbol_master';
+  String type = 'shared_master';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)
@@ -86,7 +86,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.currentContext,
     this.UUID,
     this.prototypeNode,
-    this.type,
     this.size,
   }) : super(
           topLeftCorner,
@@ -96,13 +95,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
           UUID: UUID ?? '',
         ) {
     try {
-      //Remove any special characters and leading numbers from the method name
-      friendlyName = name
-          ?.replaceAll(RegExp(r'[^\w]+'), '')
-          ?.replaceAll(RegExp(r'/'), '')
-          ?.replaceFirst(RegExp(r'^[\d]+'), '');
-      //Make first letter of method name capitalized
-      friendlyName = friendlyName[0].toUpperCase() + friendlyName.substring(1);
+      if (name != null) {
+        //Remove any special characters and leading numbers from the method name
+        friendlyName = name
+            .replaceAll(RegExp(r'[^\w]+'), '')
+            .replaceAll(RegExp(r'/'), '')
+            .replaceFirst(RegExp(r'^[\d]+'), '');
+        //Make first letter of method name capitalized
+        friendlyName =
+            friendlyName[0].toUpperCase() + friendlyName.substring(1);
+      }
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,

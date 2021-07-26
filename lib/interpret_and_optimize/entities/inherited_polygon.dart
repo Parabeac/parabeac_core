@@ -30,7 +30,7 @@ class InheritedPolygon extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_polygon';
+  String type = 'polygon';
 
   @override
   String UUID;
@@ -57,7 +57,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
     this.bottomRightCorner,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,

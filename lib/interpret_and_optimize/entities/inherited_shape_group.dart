@@ -29,7 +29,7 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_shape_group';
+  String type = 'image';
 
   @override
   String UUID;
@@ -56,7 +56,6 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,

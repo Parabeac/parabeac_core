@@ -16,7 +16,6 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     bottomRightCorner: Point.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>),
     UUID: json['UUID'] as String,
-    type: json['type'] as String,
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
     fontName: InheritedTextPBDLHelper.fontNameFromJson(
         json['fontName'] as Map<String, dynamic>),
@@ -29,8 +28,8 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     isTextParameter: json['isTextParameter'] as bool,
     letterSpacing: InheritedTextPBDLHelper.letterSpacingFromJson(
         json['letterSpacing'] as Map<String, dynamic>),
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     text: json['content'] as String,
     textAlignment: InheritedTextPBDLHelper.textAlignmentFromJson(
         json['textAlignment'] as Map<String, dynamic>),
@@ -43,7 +42,8 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>

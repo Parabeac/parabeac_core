@@ -34,7 +34,7 @@ class InheritedOval extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_oval';
+  String type = 'oval';
 
   @override
   String UUID;
@@ -61,7 +61,6 @@ class InheritedOval extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
     // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {

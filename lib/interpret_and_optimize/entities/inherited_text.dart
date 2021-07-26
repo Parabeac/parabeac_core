@@ -25,7 +25,7 @@ class InheritedText extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_text';
+  String type = 'text';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)
@@ -71,7 +71,6 @@ class InheritedText extends PBVisualIntermediateNode
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,
-    this.type,
     this.size,
     this.alignmenttype,
     this.fontName,

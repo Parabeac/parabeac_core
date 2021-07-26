@@ -39,7 +39,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'symbol_instance';
+  String type = 'shared_instance';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)
@@ -77,7 +77,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
     this.overrideValues,
     String name,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,

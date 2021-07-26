@@ -28,7 +28,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
 
   @override
   @JsonKey(ignore: true)
-  String type = 'intermediate_tree';
+  String type = 'tree';
 
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.

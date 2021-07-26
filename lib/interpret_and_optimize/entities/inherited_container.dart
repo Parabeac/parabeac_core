@@ -30,7 +30,7 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_container';
+  String type = 'rectangle';
 
   @override
   String UUID;
@@ -57,7 +57,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     this.currentContext,
     Map borderInfo,
     this.isBackgroundVisible = true,
-    this.type,
     this.UUID,
     this.size,
     this.prototypeNode,

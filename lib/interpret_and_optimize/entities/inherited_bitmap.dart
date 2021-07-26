@@ -26,7 +26,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_bitmap';
+  String type = 'image';
 
   @override
   @JsonKey(fromJson: Point.topLeftFromJson)
@@ -57,7 +57,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
     this.referenceImage,
     this.bottomRightCorner,
     this.topLeftCorner,
-    this.type,
     this.UUID,
     this.prototypeNode,
     this.size,

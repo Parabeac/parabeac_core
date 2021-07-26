@@ -31,7 +31,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_shape_path';
+  String type = 'image';
 
   @override
   String UUID;
@@ -56,7 +56,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
     this.topLeftCorner,
     this.bottomRightCorner,
     this.prototypeNode,
-    this.type,
     this.UUID,
     this.size,
   }) : super(

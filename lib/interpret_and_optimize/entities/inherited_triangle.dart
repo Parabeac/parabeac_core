@@ -30,7 +30,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_triangle';
+  String type = 'triangle';
 
   @override
   String UUID;
@@ -57,7 +57,6 @@ class InheritedTriangle extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,

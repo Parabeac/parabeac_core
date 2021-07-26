@@ -16,10 +16,9 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     bottomRightCorner: Point.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>),
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    type: json['type'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)
@@ -29,7 +28,8 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>

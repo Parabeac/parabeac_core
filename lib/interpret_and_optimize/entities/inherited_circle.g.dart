@@ -17,8 +17,8 @@ InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)

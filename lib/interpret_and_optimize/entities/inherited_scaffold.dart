@@ -22,28 +22,29 @@ class InheritedScaffold extends PBVisualIntermediateNode
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate,
         IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
-  @JsonKey(defaultValue: false)
+  @JsonKey(defaultValue: false, name: 'isFlowHome')
   bool isHomeScreen = false;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   @JsonKey()
-  String type = 'inherited_scaffold';
+  String type = 'artboard';
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -68,8 +69,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   InheritedScaffold({
     this.originalRef,
@@ -81,7 +82,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,
@@ -160,8 +160,12 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedScaffoldFromJson(json);
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    return _$InheritedScaffoldFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

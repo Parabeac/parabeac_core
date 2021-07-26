@@ -15,9 +15,8 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     bottomRightCorner: Point.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>),
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
-    type: json['type'] as String,
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
   )
@@ -29,7 +28,8 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$InheritedShapePathToJson(InheritedShapePath instance) =>

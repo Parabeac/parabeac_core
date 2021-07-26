@@ -8,19 +8,13 @@ part of 'inherited_scaffold.dart';
 
 InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
   return InheritedScaffold(
-    originalRef: PBInheritedIntermediate.originalRefFromJson(
-        json['originalRef'] as Map<String, dynamic>),
-    topLeftCorner:
-        Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner: Point.bottomRightFromJson(
-        json['bottomRightCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
-    isHomeScreen: json['isHomeScreen'] as bool ?? false,
+    isHomeScreen: json['isFlowHome'] as bool ?? false,
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    type: json['type'] as String,
+        json['prototypeNodeUUID'] as String),
+    size: PBIntermediateNode.sizeFromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)
@@ -28,6 +22,7 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
             ? null
             : PBIntermediateNode.fromJson(e as Map<String, dynamic>))
         ?.toList()
+    ..type = json['type'] as String
     ..child = json['child'] == null
         ? null
         : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
@@ -38,13 +33,10 @@ Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
       'subsemantic': instance.subsemantic,
       'children': instance.children,
       'name': instance.name,
-      'prototypeNode': instance.prototypeNode,
-      'isHomeScreen': instance.isHomeScreen,
-      'topLeftCorner': instance.topLeftCorner,
-      'bottomRightCorner': instance.bottomRightCorner,
+      'prototypeNodeUUID': instance.prototypeNode,
+      'isFlowHome': instance.isHomeScreen,
       'type': instance.type,
       'UUID': instance.UUID,
-      'size': instance.size,
+      'boundaryRectangle': instance.size,
       'child': instance.child,
-      'originalRef': instance.originalRef,
     };

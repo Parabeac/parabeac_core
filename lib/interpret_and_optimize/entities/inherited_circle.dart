@@ -28,7 +28,7 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_circle';
+  String type = 'circle';
 
   @override
   String UUID;

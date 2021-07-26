@@ -16,10 +16,9 @@ InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
         json['bottomRightCorner'] as Map<String, dynamic>),
     topLeftCorner:
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    type: json['type'] as String,
     UUID: json['UUID'] as String,
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
@@ -30,7 +29,8 @@ InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$InheritedBitmapToJson(InheritedBitmap instance) =>

@@ -9,17 +9,15 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_pa
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_star.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
 
-  static final List<IntermediateNodeFactory> _intermediateNodes = [
+  static final Set<IntermediateNodeFactory> _intermediateNodes = {
     InheritedBitmap(),
     InheritedCircle(),
     InheritedContainer(),
@@ -31,12 +29,11 @@ class AbstractIntermediateNodeFactory {
     InheritedStar(),
     InheritedText(),
     InheritedTriangle(),
-    InjectedContainer(),
     PBSharedInstanceIntermediateNode(),
     PBSharedMasterNode(),
     TempGroupLayoutNode(),
     PBIntermediateTree(),
-  ];
+  };
 
   AbstractIntermediateNodeFactory();
 

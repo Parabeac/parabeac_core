@@ -24,7 +24,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'temp_group';
+  String type = 'group';
 
   @override
   @JsonKey(name: 'UUID')
@@ -59,7 +59,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     this.children,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super([], [], currentContext, name) {
     // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
     //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);

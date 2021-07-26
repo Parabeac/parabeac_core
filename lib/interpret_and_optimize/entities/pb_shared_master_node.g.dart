@@ -17,15 +17,15 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
     bottomRightCorner: Point.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>),
     UUID: json['UUID'] as String,
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
-    type: json['type'] as String,
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>

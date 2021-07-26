@@ -21,15 +21,15 @@ TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
             ? null
             : PBIntermediateNode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+    prototypeNode:
+        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    type: json['type'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$TempGroupLayoutNodeToJson(
