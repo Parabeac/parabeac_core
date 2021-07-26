@@ -48,17 +48,17 @@ class InheritedText extends PBVisualIntermediateNode
 
   @JsonKey(name: 'content')
   String text;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontSizeFromJson)
+  @JsonKey(ignore: true)
   num fontSize;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontNameFromJson)
+  @JsonKey(ignore: true)
   String fontName;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontWeightFromJson)
+  @JsonKey(ignore: true)
   String fontWeight; // one of the w100-w900 weights
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontStyleFromJson)
+  @JsonKey(ignore: true)
   String fontStyle; // normal, or italic
-  @JsonKey(fromJson: InheritedTextPBDLHelper.textAlignmentFromJson)
+  @JsonKey(ignore: true)
   String textAlignment;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.letterSpacingFromJson)
+  @JsonKey(ignore: true)
   num letterSpacing;
 
   @override
@@ -125,10 +125,10 @@ class InheritedText extends PBVisualIntermediateNode
 
 class InheritedTextPBDLHelper {
   static num fontSizeFromJson(Map<String, dynamic> json) =>
-      _fontDescriptor(json)['fontDescriptor']['fontSize'];
+      _fontDescriptor(json)['fontSize'];
 
   static String fontNameFromJson(Map<String, dynamic> json) =>
-      _fontDescriptor(json)['fontDescriptor']['fontName'];
+      _fontDescriptor(json)['fontName'];
 
   static String fontWeightFromJson(Map<String, dynamic> json) =>
       _fontDescriptor(json)['fontWeight'];
