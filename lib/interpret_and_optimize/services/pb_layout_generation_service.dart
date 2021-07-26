@@ -223,9 +223,9 @@ class PBLayoutGenerationService implements AITHandler {
       parent.replaceChildren(children);
       if (children.length == 1) {
         /// With the support for scaling & pinning, Stacks are now responsible for positioning.
-        // if (parent is PBIntermediateStackLayout) {
-        //   return parent;
-        // }
+        if (parent is PBIntermediateStackLayout) {
+          return parent;
+        }
         return _replaceNode(parent, children[0]);
       } else {
         return parent is! TempGroupLayoutNode
