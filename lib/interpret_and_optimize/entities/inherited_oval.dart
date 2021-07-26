@@ -22,14 +22,15 @@ class InheritedOval extends PBVisualIntermediateNode
   var log = Logger('Layout Generation Service');
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
@@ -40,7 +41,7 @@ class InheritedOval extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -48,8 +49,8 @@ class InheritedOval extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   InheritedOval({
     this.originalRef,
@@ -63,17 +64,7 @@ class InheritedOval extends PBVisualIntermediateNode
     this.size,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBBitmapGenerator();
-
-    // size = {
-    //   'width': originalRef.boundaryRectangle.width,
-    //   'height': originalRef.boundaryRectangle.height
-    // };
-
-    // name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
@@ -95,7 +86,10 @@ class InheritedOval extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedOvalFromJson(json);
+      _$InheritedOvalFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

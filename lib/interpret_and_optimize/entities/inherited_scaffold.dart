@@ -89,16 +89,11 @@ class InheritedScaffold extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
 
     generator = PBScaffoldGenerator();
-
-    // auxiliaryData.color = toHex(originalRef.backgroundColor);
 
     // Add body attribute
     addAttribute(PBAttribute('body'));

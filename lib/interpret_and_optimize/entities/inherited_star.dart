@@ -18,14 +18,15 @@ part 'inherited_star.g.dart';
 class InheritedStar extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
@@ -36,7 +37,7 @@ class InheritedStar extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -44,8 +45,8 @@ class InheritedStar extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   InheritedStar({
     this.originalRef,
@@ -64,17 +65,7 @@ class InheritedStar extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBBitmapGenerator();
-
-    // size = {
-    //   'width': originalRef.boundaryRectangle.width,
-    //   'height': originalRef.boundaryRectangle.height
-    // };
-
-    // name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
@@ -97,7 +88,10 @@ class InheritedStar extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedStarFromJson(json);
+      _$InheritedStarFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

@@ -34,7 +34,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   bool isMasterState = false;
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
@@ -42,17 +43,17 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   String type = 'shared_instance';
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -64,8 +65,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   PBSharedInstanceIntermediateNode({
     this.originalRef,
@@ -81,9 +82,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     String name,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBSymbolInstanceGenerator();
 
     /// if [sharedParamValues] sets [overrideValues], then only pass one
@@ -111,7 +109,10 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedInstanceIntermediateNodeFromJson(json);
+      _$PBSharedInstanceIntermediateNodeFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

@@ -19,7 +19,11 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   List<PBIntermediateNode> children;
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  PBIntermediateNode child;
+
+  @override
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
@@ -31,23 +35,21 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   String UUID;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  Map<String, dynamic> originalRef;
 
   TempGroupLayoutNode({
     this.originalRef,
@@ -59,11 +61,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     this.children,
     this.prototypeNode,
     this.size,
-  }) : super([], [], currentContext, name) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
-  }
+  }) : super([], [], currentContext, name);
 
   @override
   void addChild(PBIntermediateNode node) {
@@ -91,9 +89,13 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$TempGroupLayoutNodeFromJson(json);
+      _$TempGroupLayoutNodeFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
-      TempGroupLayoutNode.fromJson(json);
+      (TempGroupLayoutNode.fromJson(json) as TempGroupLayoutNode)
+        ..originalRef = json;
 }

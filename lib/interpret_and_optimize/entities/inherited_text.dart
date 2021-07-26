@@ -17,7 +17,8 @@ class InheritedText extends PBVisualIntermediateNode
   bool isTextParameter = false;
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @JsonKey(ignore: true)
@@ -28,17 +29,17 @@ class InheritedText extends PBVisualIntermediateNode
   String type = 'text';
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -61,8 +62,8 @@ class InheritedText extends PBVisualIntermediateNode
   num letterSpacing;
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   InheritedText({
     this.originalRef,
@@ -84,12 +85,7 @@ class InheritedText extends PBVisualIntermediateNode
     this.textAlignment,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBTextGen();
-
-    // text = (originalRef as Text).content;
     if (text?.contains('\$') ?? false) {
       text = _sanitizeText(text);
     }
@@ -111,7 +107,16 @@ class InheritedText extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedTextFromJson(json);
+      _$InheritedTextFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json
+        ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
+        ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
+        ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
+        ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
+        ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
+        ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json);
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

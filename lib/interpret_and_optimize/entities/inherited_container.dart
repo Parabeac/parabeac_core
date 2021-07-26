@@ -16,16 +16,17 @@ part 'inherited_container.g.dart';
 class InheritedContainer extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   bool isBackgroundVisible = true;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
@@ -36,7 +37,7 @@ class InheritedContainer extends PBVisualIntermediateNode
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -44,8 +45,8 @@ class InheritedContainer extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
-  @JsonKey(fromJson: PBInheritedIntermediate.originalRefFromJson)
-  final Map<String, dynamic> originalRef;
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
 
   InheritedContainer({
     this.originalRef,
@@ -62,26 +63,14 @@ class InheritedContainer extends PBVisualIntermediateNode
     this.prototypeNode,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBContainerGenerator();
 
     borderInfo ??= {};
-
-    // size = {
-    //   'width': originalRef.boundaryRectangle.width,
-    //   'height': originalRef.boundaryRectangle.height,
-    // };
-
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
 
     auxiliaryData.borderInfo = borderInfo;
-
-    // assert(originalRef != null,
-    //     'A null original reference was sent to an PBInheritedIntermediate Node');
   }
 
   @override
@@ -116,7 +105,10 @@ class InheritedContainer extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedContainerFromJson(json);
+      _$InheritedContainerFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

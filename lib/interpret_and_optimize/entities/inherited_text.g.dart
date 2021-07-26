@@ -8,15 +8,10 @@ part of 'inherited_text.dart';
 
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
-    originalRef: PBInheritedIntermediate.originalRefFromJson(
-        json['originalRef'] as Map<String, dynamic>),
     name: json['name'],
-    topLeftCorner:
-        Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner: Point.bottomRightFromJson(
-        json['bottomRightCorner'] as Map<String, dynamic>),
     UUID: json['UUID'] as String,
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
+    size: PBIntermediateNode.sizeFromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     fontName: InheritedTextPBDLHelper.fontNameFromJson(
         json['fontName'] as Map<String, dynamic>),
     fontSize: InheritedTextPBDLHelper.fontSizeFromJson(
@@ -28,8 +23,8 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     isTextParameter: json['isTextParameter'] as bool,
     letterSpacing: InheritedTextPBDLHelper.letterSpacingFromJson(
         json['letterSpacing'] as Map<String, dynamic>),
-    prototypeNode:
-        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
+    prototypeNode: PrototypeNode.prototypeNodeFromJson(
+        json['prototypeNodeUUID'] as String),
     text: json['content'] as String,
     textAlignment: InheritedTextPBDLHelper.textAlignmentFromJson(
         json['textAlignment'] as Map<String, dynamic>),
@@ -53,12 +48,10 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'child': instance.child,
       'name': instance.name,
       'isTextParameter': instance.isTextParameter,
-      'prototypeNode': instance.prototypeNode,
+      'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
-      'topLeftCorner': instance.topLeftCorner,
-      'bottomRightCorner': instance.bottomRightCorner,
       'UUID': instance.UUID,
-      'size': instance.size,
+      'boundaryRectangle': instance.size,
       'content': instance.text,
       'fontSize': instance.fontSize,
       'fontName': instance.fontName,
@@ -66,5 +59,4 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'fontStyle': instance.fontStyle,
       'textAlignment': instance.textAlignment,
       'letterSpacing': instance.letterSpacing,
-      'originalRef': instance.originalRef,
     };

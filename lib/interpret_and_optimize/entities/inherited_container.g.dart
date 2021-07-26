@@ -8,18 +8,13 @@ part of 'inherited_container.dart';
 
 InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
   return InheritedContainer(
-    originalRef: PBInheritedIntermediate.originalRefFromJson(
-        json['originalRef'] as Map<String, dynamic>),
-    topLeftCorner:
-        Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner: Point.bottomRightFromJson(
-        json['bottomRightCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
     isBackgroundVisible: json['isBackgroundVisible'] as bool,
     UUID: json['UUID'] as String,
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    prototypeNode:
-        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
+    size: PBIntermediateNode.sizeFromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
+    prototypeNode: PrototypeNode.prototypeNodeFromJson(
+        json['prototypeNodeUUID'] as String),
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)
@@ -39,12 +34,9 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
       'children': instance.children,
       'child': instance.child,
       'name': instance.name,
-      'prototypeNode': instance.prototypeNode,
+      'prototypeNodeUUID': instance.prototypeNode,
       'isBackgroundVisible': instance.isBackgroundVisible,
-      'topLeftCorner': instance.topLeftCorner,
-      'bottomRightCorner': instance.bottomRightCorner,
       'type': instance.type,
       'UUID': instance.UUID,
-      'size': instance.size,
-      'originalRef': instance.originalRef,
+      'boundaryRectangle': instance.size,
     };
