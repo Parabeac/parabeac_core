@@ -52,6 +52,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
+  @JsonKey(ignore: true)
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
@@ -67,6 +68,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
       getAttributeNamed('body').attributeNode = node;
     }
   }
+
+  @override
+  @JsonKey(ignore: true)
+  List<PBIntermediateNode> get children => super.children;
 
   @override
   @JsonKey(ignore: true)
@@ -156,10 +161,20 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    return _$InheritedScaffoldFromJson(json)
+    var artboard = _$InheritedScaffoldFromJson(json)
       ..topLeftCorner = Point.topLeftFromJson(json)
       ..bottomRightCorner = Point.bottomRightFromJson(json)
       ..originalRef = json;
+
+    //Map artboard children by calling `addChild` method
+    var rawChildren = json['children'] as List<Map>;
+    rawChildren.forEach((child) {
+      if (child == null) {
+        return null;
+      }
+      artboard.addChild(PBIntermediateNode.fromJson(child));
+    });
+    return artboard;
   }
 
   @override
