@@ -15,13 +15,6 @@ part 'temp_group_layout_node.g.dart';
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey()
-  List<PBIntermediateNode> children;
-
-  @override
-  PBIntermediateNode child;
-
-  @override
   @JsonKey(
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
@@ -58,7 +51,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,
-    this.children,
     this.prototypeNode,
     this.size,
   }) : super([], [], currentContext, name);
