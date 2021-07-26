@@ -43,7 +43,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   @override
-  AlignStrategy alignStrategy = PaddingAlignment();
+  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type

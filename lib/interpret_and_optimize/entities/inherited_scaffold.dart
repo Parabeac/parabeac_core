@@ -29,7 +29,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   bool isHomeScreen = false;
 
   @override
-  AlignStrategy alignStrategy = PaddingAlignment();
+  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;

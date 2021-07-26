@@ -20,6 +20,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
+  @override
   AlignStrategy alignStrategy = PositionedAlignment();
 
   PBIntermediateStackLayout(PBContext currentContext, {String name})
@@ -80,7 +81,9 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               top: child.topLeftCorner.y - node.topLeftCorner.y,
               bottom: node.bottomRightCorner.y - child.bottomRightCorner.y,
               left: child.topLeftCorner.x - node.topLeftCorner.x,
-              right: node.bottomRightCorner.x - child.bottomRightCorner.x))
+              right: node.bottomRightCorner.x - child.bottomRightCorner.x,
+              width: child.width,
+              height: child.height))
         ..addChild(child));
     });
     node.replaceChildren(alignedChildren);

@@ -22,7 +22,7 @@ class InjectedContainer extends PBVisualIntermediateNode
   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
 
   @override
-  AlignStrategy alignStrategy = PaddingAlignment();
+  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
 
   InjectedContainer(
     Point bottomRightCorner,

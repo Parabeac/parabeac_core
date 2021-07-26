@@ -26,7 +26,7 @@ class PBAlignGenerationService implements AITHandler {
       return null;
     }
 
-    tree.forEach((node) => node.align(context));
+    tree.forEach((node) => node?.align(context));
     return Future.value(tree);
   }
 
