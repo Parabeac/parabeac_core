@@ -145,9 +145,6 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     return true;
   }
 
-  /// These are the constrains that are going to be used by the sub tree.
-  void _setSubTreeConstrains(PBIntermediateConstraints constraints) {}
-
   /// Adds child to node.
   void addChild(node) {
     childrenStrategy.addChild(this, node);

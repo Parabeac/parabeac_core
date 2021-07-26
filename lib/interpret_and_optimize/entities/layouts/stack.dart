@@ -57,35 +57,3 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     return stack;
   }
 }
-
-class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
-  /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
-
-  @override
-  void align(PBContext context, PBIntermediateStackLayout node) {
-    var alignedChildren = <PBIntermediateNode>[];
-    node.children.skipWhile((child) {
-      /// if they are the same size then there is no need for adjusting.
-      if (child.topLeftCorner == node.topLeftCorner &&
-          child.bottomRightCorner == node.bottomRightCorner) {
-        alignedChildren.add(child);
-        return true;
-      }
-      return false;
-    }).forEach((child) {
-      alignedChildren.add(InjectedPositioned(Uuid().v4(),
-          child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
-          constraints: child.constraints,
-          currentContext: context,
-          valueHolder: PositionedValueHolder(
-              top: child.topLeftCorner.y - node.topLeftCorner.y,
-              bottom: node.bottomRightCorner.y - child.bottomRightCorner.y,
-              left: child.topLeftCorner.x - node.topLeftCorner.x,
-              right: node.bottomRightCorner.x - child.bottomRightCorner.x,
-              width: child.width,
-              height: child.height))
-        ..addChild(child));
-    });
-    node.replaceChildren(alignedChildren);
-  }
-}
