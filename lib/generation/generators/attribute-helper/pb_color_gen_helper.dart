@@ -13,38 +13,39 @@ class PBColorGenHelper extends PBAttributesHelper {
     if (source == null) {
       return statement;
     }
-    if (source.auxiliaryData.style != null) {
-      if (source is InheritedScaffold) {
-        var scaffold = source;
-        if (scaffold.auxiliaryData.color == null) {
-          statement = '';
-        } else {
-          statement = findDefaultColor(scaffold.auxiliaryData.color) != null
-              ? 'backgroundColor: ${findDefaultColor(
-              scaffold.auxiliaryData.color)},\n'
-              : 'backgroundColor: Color(${scaffold
-              .auxiliaryData.color}),\n';
-        }
-      } else if (source.auxiliaryData.color == null) {
-        statement = '';
-      } else {
-        if (source is! InheritedContainer) {
-          statement = findDefaultColor(source.auxiliaryData.color) != null
-              ? 'color: ${findDefaultColor(
-              source.auxiliaryData.color)},\n'
-              : 'color: Color(${source
-              .auxiliaryData.color}),\n';
-        } else if ((source as InheritedContainer).isBackgroundVisible) {
-          statement = findDefaultColor(source.auxiliaryData.color) != null
-              ? 'color: ${findDefaultColor(
-              source.auxiliaryData.color)},\n'
-              : 'color: Color(${source
-              .auxiliaryData.color}),\n';
-        } else {
-          statement = '';
-        }
-      }
-    } else {
+    // if (source.auxiliaryData.style != null) {
+    //   if (source is InheritedScaffold) {
+    //     var scaffold = source;
+    //     if (scaffold.auxiliaryData.color == null) {
+    //       statement = '';
+    //     } else {
+    //       statement = findDefaultColor(scaffold.auxiliaryData.color) != null
+    //           ? 'backgroundColor: ${findDefaultColor(
+    //           scaffold.auxiliaryData.color)},\n'
+    //           : 'backgroundColor: Color(${scaffold
+    //           .auxiliaryData.color}),\n';
+    //     }
+    //   } else if (source.auxiliaryData.color == null) {
+    //     statement = '';
+    //   } else {
+    //     if (source is! InheritedContainer) {
+    //       statement = findDefaultColor(source.auxiliaryData.color) != null
+    //           ? 'color: ${findDefaultColor(
+    //           source.auxiliaryData.color)},\n'
+    //           : 'color: Color(${source
+    //           .auxiliaryData.color}),\n';
+    //     } else if ((source as InheritedContainer).isBackgroundVisible) {
+    //       statement = findDefaultColor(source.auxiliaryData.color) != null
+    //           ? 'color: ${findDefaultColor(
+    //           source.auxiliaryData.color)},\n'
+    //           : 'color: Color(${source
+    //           .auxiliaryData.color}),\n';
+    //     } else {
+    //       statement = '';
+    //     }
+    //   }
+    // }
+     else {
       if (source is InheritedScaffold) {
         var scaffold = source;
         if (scaffold.auxiliaryData.color == null) {

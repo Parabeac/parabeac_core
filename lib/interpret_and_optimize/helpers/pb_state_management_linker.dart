@@ -1,5 +1,4 @@
-import 'package:parabeac_core/controllers/interpret.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -9,7 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/state_management/intermedia
 
 class PBStateManagementLinker {
   PBStateManagementLinker._internal() {
-    interpret = Interpret();
+    // interpret = Interpret();
     _statemap = {};
     stateQueue = [];
   }
@@ -19,7 +18,7 @@ class PBStateManagementLinker {
 
   factory PBStateManagementLinker() => _instance;
 
-  Interpret interpret;
+  // Interpret interpret;
 
   Map<String, PBIntermediateNode> _statemap;
 
@@ -83,13 +82,13 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node) async {
-    var pluginServiceResult = await interpret.pluginService(
-        node, node.currentContext, Stopwatch()..start());
-    var layoutServiceResult = await interpret.layoutGenerationService(
-        pluginServiceResult,
-        pluginServiceResult.currentContext,
-        Stopwatch()..start());
-    return await interpret.alignGenerationService(layoutServiceResult,
-        layoutServiceResult.currentContext, Stopwatch()..start());
+    // var pluginServiceResult = await interpret.pluginService(
+    //     node, node.currentContext, Stopwatch()..start());
+    // var layoutServiceResult = await interpret.layoutGenerationService(
+    //     pluginServiceResult,
+    //     pluginServiceResult.currentContext,
+    //     Stopwatch()..start());
+    // return await interpret.alignGenerationService(layoutServiceResult,
+    //     layoutServiceResult.currentContext, Stopwatch()..start());
   }
 }
