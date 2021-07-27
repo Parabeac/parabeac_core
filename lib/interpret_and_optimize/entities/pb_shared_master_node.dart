@@ -154,7 +154,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
       _$PBSharedMasterNodeFromJson(json)
         ..topLeftCorner = Point.topLeftFromJson(json)
         ..bottomRightCorner = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+        ..originalRef = json
+        ..mapRawChildren(json);
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

@@ -80,11 +80,16 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$TempGroupLayoutNodeFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var tempGroup = _$TempGroupLayoutNodeFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+
+    tempGroup.mapRawChildren(json);
+
+    return tempGroup;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>

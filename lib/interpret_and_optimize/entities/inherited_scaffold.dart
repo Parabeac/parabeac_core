@@ -138,7 +138,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      @override
       var temp =
           TempGroupLayoutNode(currentContext: currentContext, name: node.name);
       temp.addChild(child);
@@ -167,13 +166,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
       ..originalRef = json;
 
     //Map artboard children by calling `addChild` method
-    var rawChildren = json['children'] as List<Map>;
-    rawChildren.forEach((child) {
-      if (child == null) {
-        return null;
-      }
-      artboard.addChild(PBIntermediateNode.fromJson(child));
-    });
+    artboard.mapRawChildren(json);
     return artboard;
   }
 

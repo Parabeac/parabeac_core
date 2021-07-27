@@ -164,4 +164,13 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
       'height': json['height'],
     };
   }
+
+  void mapRawChildren(Map<String, dynamic> json) {
+    var rawChildren = json['children'] as List;
+    rawChildren?.forEach((child) {
+      if (child != null) {
+        addChild(PBIntermediateNode.fromJson(child));
+      }
+    });
+  }
 }

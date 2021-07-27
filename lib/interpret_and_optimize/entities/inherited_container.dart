@@ -48,6 +48,10 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
+  @override
+  @JsonKey(ignore: true)
+  List<PBIntermediateNode> get children => null;
+
   InheritedContainer({
     this.originalRef,
     this.topLeftCorner,
@@ -104,11 +108,16 @@ class InheritedContainer extends PBVisualIntermediateNode
     }
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedContainerFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var container = _$InheritedContainerFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+
+    container.mapRawChildren(json);
+
+    return container;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
