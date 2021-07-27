@@ -46,7 +46,7 @@ class Point implements Comparable<Point> {
 
   static Point topLeftFromJson(Map<String, dynamic> json) {
     if (json == null) {
-      print('nullVal');
+      return null;
     }
     var x, y;
     if (json.containsKey('boundaryRectangle')) {
@@ -61,7 +61,7 @@ class Point implements Comparable<Point> {
 
   static Point bottomRightFromJson(Map<String, dynamic> json) {
     if (json == null) {
-      print('nullVal');
+      return null;
     }
     var x, y;
     if (json.containsKey('boundaryRectangle')) {
