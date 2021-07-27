@@ -4,6 +4,16 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_co
 /// Each property must be set.
 /// TODO: Use https://pub.dev/packages/meta to make these named parameters required.
 class PBIntermediateConstraints {
+  bool pinLeft;
+  bool pinRight;
+  bool pinTop;
+  bool pinBottom;
+
+  /// If value is null, then the height is not fixed.
+  double fixedHeight;
+
+  /// If value is null, then the width is not fixed.
+  double fixedWidth;
   PBIntermediateConstraints(
       {this.pinLeft,
       this.pinRight,
@@ -25,14 +35,14 @@ class PBIntermediateConstraints {
       fixedWidth = width;
     }
   }
-  bool pinLeft;
-  bool pinRight;
-  bool pinTop;
-  bool pinBottom;
 
-  /// If value is null, then the height is not fixed.
-  double fixedHeight;
-
-  /// If value is null, then the width is not fixed.
-  double fixedWidth;
+  PBIntermediateConstraints clone() {
+    return PBIntermediateConstraints(
+        pinBottom: pinBottom,
+        pinTop: pinTop,
+        pinRight: pinRight,
+        pinLeft: pinLeft,
+        fixedHeight: fixedHeight,
+        fixedWidth: fixedWidth);
+  }
 }
