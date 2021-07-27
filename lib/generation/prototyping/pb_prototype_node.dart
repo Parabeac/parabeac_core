@@ -11,6 +11,6 @@ class PrototypeNode {
       _$PrototypeNodeFromJson(json);
   Map<String, dynamic> toJson() => _$PrototypeNodeToJson(this);
 
-  static PrototypeNode prototypeNodeFromJson(Map<String, dynamic> json) =>
-      PrototypeNode(json['prototypeNodeUUID']);
+  static PrototypeNode prototypeNodeFromJson(String prototypeNodeUUID) =>
+      PrototypeNode(prototypeNodeUUID);
 }

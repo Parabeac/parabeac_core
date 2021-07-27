@@ -21,7 +21,7 @@ abstract class PBEgg extends PBVisualIntermediateNode {
       layer;
 
   PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
-      PBIntermediateNode originalRef);
+      PBIntermediateNode originalNode);
 
   void extractInformation(PBIntermediateNode incomingNode);
 

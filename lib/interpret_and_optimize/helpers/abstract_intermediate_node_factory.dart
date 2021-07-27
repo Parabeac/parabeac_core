@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
@@ -40,9 +41,15 @@ class AbstractIntermediateNodeFactory {
   static dynamic getIntermediateNode(Map<String, dynamic> json) {
     var className = json[INTERMEDIATE_TYPE];
     if (className != null) {
-      for (var intermediateNode in _intermediateNodes) {
-        if (intermediateNode.type == className) {
-          return intermediateNode.createIntermediateNode(json);
+      for (var candidate in _intermediateNodes) {
+        if (candidate.type == className) {
+          var iNode = candidate.createIntermediateNode(json);
+          var tag = PBPluginListHelper().returnAllowListNodeIfExists(iNode);
+          // Return tag if it exists
+          if (tag != null) {
+            return tag;
+          }
+          return iNode;
         }
       }
     }

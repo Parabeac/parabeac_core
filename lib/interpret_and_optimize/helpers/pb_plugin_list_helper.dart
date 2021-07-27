@@ -23,7 +23,23 @@ class PBPluginListHelper {
 
   factory PBPluginListHelper() => _instance;
 
-  PBPluginListHelper._internal();
+  PBPluginListHelper._internal() {
+    allowListNames = {
+      '<tabbar>': InjectedTabBar(
+        Point(0, 0),
+        Point(0, 0),
+        Uuid().v4(),
+        '',
+      ),
+      '<navbar>': InjectedAppbar(
+        Point(0, 0),
+        Point(0, 0),
+        Uuid().v4(),
+        '',
+      ),
+      '<tab>': Tab(Point(0, 0), Point(0, 0), '', UUID: Uuid().v4()),
+    };
+  }
 
   Map<String, PBEgg> allowListNames;
 
@@ -60,10 +76,7 @@ class PBPluginListHelper {
     for (var key in allowListNames.keys) {
       if (node.name.contains(key)) {
         return allowListNames[key].generatePluginNode(
-          node.topLeftCorner,
-          node.bottomRightCorner,
-          node,
-        );
+            node.topLeftCorner, node.bottomRightCorner, node);
       }
     }
     return null;
