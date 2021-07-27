@@ -10,10 +10,10 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-
 
 import 'interfaces/pb_inherited_intermediate.dart';
 
@@ -84,12 +84,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   @override
-  void addChild( node) {
+  void addChild(node) {
+    print(this.name);
+    if (this.name == 'ArtboardTRpinnoscale') {
+      print('object');
+    }
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-       currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
-          node.bottomRightCorner.y);
+        currentContext.canvasTLC =
+            Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
@@ -101,8 +105,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-      currentContext.canvasTLC = Point(currentContext.canvasTLC.x,
-          node.bottomRightCorner.y);
+      currentContext.canvasTLC =
+          Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
       return;
     }
     if (node is InjectedTabBar) {
@@ -117,10 +121,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
       if (child != null) {
         child.addChild(node);
       } else {
-        var stack = PBIntermediateStackLayout(
-         currentContext,
-         name: node.name
-        );
+        var stack = PBIntermediateStackLayout(currentContext,
+            name: node.name,
+            constraints: PBIntermediateConstraints(
+                pinBottom: false,
+                pinLeft: false,
+                pinRight: false,
+                pinTop: false));
         stack.addChild(node);
         child = stack;
       }
@@ -128,18 +135,5 @@ class InheritedScaffold extends PBVisualIntermediateNode
   }
 
   @override
-  void alignChild() {
-    if (child != null) {
-      // var padding = Padding('', child.constraints,
-      //     left: (child.topLeftCorner.x - topLeftCorner.x).abs(),
-      //     right: (bottomRightCorner.x - child.bottomRightCorner.x).abs(),
-      //     top: (child.topLeftCorner.y - topLeftCorner.y).abs(),
-      //     bottom: (bottomRightCorner.y - child.bottomRightCorner.y).abs(),
-      //     topLeftCorner: topLeftCorner,
-      //     bottomRightCorner: bottomRightCorner,
-      //     currentContext: currentContext);
-      // padding.addChild(child);
-      // child = padding;
-    }
-  }
+  void alignChild() {}
 }

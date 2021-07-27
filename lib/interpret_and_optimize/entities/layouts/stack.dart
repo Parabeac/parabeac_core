@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -19,8 +20,9 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateStackLayout(PBContext currentContext, {String name})
-      : super(STACK_RULES, [], currentContext, name) {
+  PBIntermediateStackLayout(PBContext currentContext,
+      {String name, PBIntermediateConstraints constraints})
+      : super(STACK_RULES, [], currentContext, name, constraints: constraints) {
     generator = PBStackGenerator();
   }
 
@@ -46,6 +48,9 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
   @override
   void alignChildren() {
+    if (this.currentContext.tree.first.name == 'ArtboardTRpinnoscale') {
+      print('asdf');
+    }
     var alignedChildren = <PBIntermediateNode>[];
     for (var child in children) {
       if (child.topLeftCorner == topLeftCorner &&
@@ -63,8 +68,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
       left = child.topLeftCorner.x - topLeftCorner.x;
       right = bottomRightCorner.x - child.bottomRightCorner.x;
 
-      alignedChildren.add(InjectedPositioned(
-          Uuid().v4(), child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
+      alignedChildren.add(InjectedPositioned(Uuid().v4(),
+          child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
           valueHolder: PositionedValueHolder(
               top: top,
               bottom: bottom,
