@@ -13,7 +13,7 @@ InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
+        json['prototypeNodeUUID'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)
