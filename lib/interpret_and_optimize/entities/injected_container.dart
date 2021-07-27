@@ -68,10 +68,10 @@ class InjectedContainer extends PBVisualIntermediateNode
         ) {
     generator = PBContainerGenerator();
 
-    // size = {
-    //   'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
-    //   'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
-    // };
+    size = {
+      'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
+      'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
+    };
 
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}

@@ -17,7 +17,7 @@ class PBTextGen extends PBGenerator {
           .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
       var buffer = StringBuffer();
       buffer.write('AutoSizeText(\n');
-      var isTextParameter = source.isTextParameter;
+      var isTextParameter = source.isTextParameter ?? true;
       if (isTextParameter) {
         var text = source.text;
         buffer.write('$text, \n');

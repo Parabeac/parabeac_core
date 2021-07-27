@@ -95,6 +95,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
+    overridableProperties ??= [];
     try {
       if (name != null) {
         //Remove any special characters and leading numbers from the method name

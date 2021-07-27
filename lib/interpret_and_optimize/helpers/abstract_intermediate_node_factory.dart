@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
@@ -44,6 +45,10 @@ class AbstractIntermediateNodeFactory {
       for (var candidate in _intermediateNodes) {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json);
+          // Interpret state management node
+          if (iNode is PBSharedMasterNode) {
+            interpretStateManagement(iNode);
+          }
           var tag = PBPluginListHelper().returnAllowListNodeIfExists(iNode);
           // Return tag if it exists
           if (tag != null) {
@@ -54,6 +59,18 @@ class AbstractIntermediateNodeFactory {
       }
     }
     return null;
+  }
+
+  /// Checks whether `node` is a state management node, and interprets it accordingly.
+  static void interpretStateManagement(PBSharedMasterNode node) {
+    var smHelper = PBStateManagementHelper();
+    if (smHelper.isValidStateNode(node.name)) {
+      if (smHelper.isDefaultNode(node)) {
+        smHelper.interpretStateManagementNode(node);
+      } else {
+        smHelper.interpretStateManagementNode(node);
+      }
+    }
   }
 }
 

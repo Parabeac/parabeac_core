@@ -1,7 +1,10 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
+import 'package:quick_log/quick_log.dart';
 
 part 'pb_project.g.dart';
 
@@ -9,7 +12,7 @@ part 'pb_project.g.dart';
 class PBProject {
   @JsonKey(name: 'name')
   final String projectName;
-  final String projectAbsPath;
+  String projectAbsPath;
 
   /// This flag makes the data in the [PBProject] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.
@@ -59,6 +62,9 @@ class PBProject {
   @JsonKey(ignore: true)
   FileStructureStrategy get fileStructureStrategy => _fileStructureStrategy;
 
+  @JsonKey(ignore: true)
+  static Logger log = Logger('PBProject');
+
   PBProject(this.projectName, this.projectAbsPath,
       {FileStructureStrategy fileStructureStrategy}) {
     _forest = [];
@@ -77,12 +83,24 @@ class PBProject {
       List<Map<String, dynamic>> pages) {
     var trees = <PBIntermediateTree>[];
     pages.forEach((page) {
-      var screens = (page['screens'] as Iterable)
-          .map((screen) =>
-              PBIntermediateTree.fromJson(screen)..name = page['name'])
-          .toList();
+      var screens = (page['screens'] as Iterable).map((screen) {
+        // Generate Intermedite tree
+        var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
+        tree.data = PBGenerationViewData();
+        // Populate platform and orientation information
+        if (tree.isScreen()) {
+          PBPlatformOrientationLinkerService()
+              .addOrientationPlatformInformation(tree);
+        }
+        if (tree != null) {
+          PBProject.log.fine(
+              'Processed \'${tree.name}\' in page \'${tree.identifier}\' with item type: \'${tree.tree_type}\'');
+        }
+        return tree;
+      }).toList();
       trees.addAll(screens);
     });
+
     return trees;
   }
 }

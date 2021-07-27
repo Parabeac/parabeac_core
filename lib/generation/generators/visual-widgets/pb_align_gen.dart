@@ -15,8 +15,6 @@ class PBAlignGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Align(');
 
-      source.alignX;
-
       buffer.write(
           'alignment: Alignment(${source.alignX.toStringAsFixed(2)}, ${source.alignY.toStringAsFixed(2)}),');
 

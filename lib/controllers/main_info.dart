@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 class MainInfo {
   static final MainInfo _singleton = MainInfo._internal();
 
-  final _sentry = '';
+  final _sentry = DummySentry();
 
   @Deprecated(
       'Use the function handle error for logging and capturing the error')
@@ -113,3 +113,10 @@ class MainInfo {
 
 /// The type of design that is being processed by Parabeac Core.
 enum DesignType { SKETCH, FIGMA, PBDL, UNKNOWN }
+
+class DummySentry {
+  /// Decoupling the exception capture client from the services that report the [exception]
+  void captureException({exception, stackTrace}) {
+    print('dummy sentry');
+  }
+}

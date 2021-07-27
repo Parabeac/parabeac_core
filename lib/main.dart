@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
@@ -10,6 +12,7 @@ import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
+import 'controllers/interpret.dart';
 import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
@@ -90,7 +93,20 @@ ${parser.usage}
     (service) => service.designType == processInfo.designType,
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
-  // await Interpret().interpretAndOptimize(pbdl);
+  var intermediateProject = await Interpret(
+    configuration: MainInfo().configuration,
+  ).interpretAndOptimize(pbdl);
+
+  var projectGenFuture = await FlutterProjectBuilder.createFlutterProject(
+      processInfo.projectName,
+      projectDir: processInfo.outputPath);
+
+  var fpb = FlutterProjectBuilder(
+      MainInfo().configuration.generationConfiguration,
+      project: intermediateProject,
+      pageWriter: PBFlutterWriter());
+
+  await fpb.genProjectFiles(projectGenFuture.item1);
 
   exitCode = 0;
 }
