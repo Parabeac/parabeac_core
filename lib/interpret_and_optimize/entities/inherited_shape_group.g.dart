@@ -11,16 +11,11 @@ InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
+        json['prototypeNodeUUID'] as Map<String, dynamic>),
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
-    ..children = (json['children'] as List)
-        ?.map((e) => e == null
-            ? null
-            : PBIntermediateNode.fromJson(e as Map<String, dynamic>))
-        ?.toList()
     ..child = json['child'] == null
         ? null
         : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
@@ -31,7 +26,6 @@ Map<String, dynamic> _$InheritedShapeGroupToJson(
         InheritedShapeGroup instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
-      'children': instance.children,
       'child': instance.child,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,

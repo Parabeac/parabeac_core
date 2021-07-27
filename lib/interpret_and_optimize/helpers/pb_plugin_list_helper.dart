@@ -60,7 +60,10 @@ class PBPluginListHelper {
     for (var key in allowListNames.keys) {
       if (node.name.contains(key)) {
         return allowListNames[key].generatePluginNode(
-            node.topLeftCorner, node.bottomRightCorner, node);
+          node.topLeftCorner,
+          node.bottomRightCorner,
+          node,
+        );
       }
     }
     return null;

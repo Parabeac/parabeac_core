@@ -86,7 +86,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(dynamic incomingNode) {}
+  void extractInformation(PBIntermediateNode incomingNode) {}
 }
 
 class PBAppBarGenerator extends PBGenerator {

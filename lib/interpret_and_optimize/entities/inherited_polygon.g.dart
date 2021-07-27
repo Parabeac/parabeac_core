@@ -11,7 +11,7 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
     name: json['name'],
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
+        json['prototypeNodeUUID'] as Map<String, dynamic>),
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
   )

@@ -10,7 +10,7 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
   return InheritedShapePath(
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
+        json['prototypeNodeUUID'] as Map<String, dynamic>),
     UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),

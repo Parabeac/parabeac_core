@@ -10,11 +10,12 @@ class ContainerConstraintRule extends PostConditionRule {
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
     if (testRule(currentNode, nextNode)) {
       var container = InjectedContainer(
-          bottomRightCorner: currentNode.bottomRightCorner,
-          topLeftCorner: currentNode.topLeftCorner,
-          name: currentNode.name,
-          UUID: Uuid().v4(),
-          currentContext: currentNode.currentContext);
+        bottomRightCorner:currentNode.bottomRightCorner,
+        topLeftCorner:currentNode.topLeftCorner,
+        name: currentNode.name,
+        UUID: Uuid().v4(),
+        currentContext: currentNode.currentContext,
+      );
       container.addChild(currentNode);
       return container;
     }

@@ -14,7 +14,7 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
         json['boundaryRectangle'] as Map<String, dynamic>),
     isTextParameter: json['isTextParameter'] as bool,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
+        json['prototypeNodeUUID'] as Map<String, dynamic>),
     text: json['content'] as String,
   )
     ..subsemantic = json['subsemantic'] as String

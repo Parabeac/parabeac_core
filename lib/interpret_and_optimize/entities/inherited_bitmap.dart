@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
@@ -5,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -64,8 +66,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
     generator = PBBitmapGenerator();
-    // ImageReferenceStorage().addReference(
-    //     originalRef.UUID, '${MainInfo().outputPath}assets/images');
+    ImageReferenceStorage()
+        .addReference(UUID, '${MainInfo().outputPath}assets/images');
   }
 
   @override

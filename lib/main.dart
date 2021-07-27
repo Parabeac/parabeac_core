@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
@@ -91,7 +90,7 @@ ${parser.usage}
     (service) => service.designType == processInfo.designType,
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
-  await Interpret().interpretAndOptimize(pbdl);
+  // await Interpret().interpretAndOptimize(pbdl);
 
   exitCode = 0;
 }

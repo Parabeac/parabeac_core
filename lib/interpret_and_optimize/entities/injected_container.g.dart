@@ -14,8 +14,8 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
         Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
     UUID: json['UUID'] as String,
-    prototypeNode:
-        PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
+    prototypeNode: PrototypeNode.prototypeNodeFromJson(
+        json['prototypeNode'] as Map<String, dynamic>),
     size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
     type: json['type'] as String,
   )
