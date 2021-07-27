@@ -83,13 +83,8 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node) async {
-    var visualServiceResult = await interpret.visualGenerationService(
-        (node as PBInheritedIntermediate).originalRef,
-        node.currentContext,
-        Stopwatch()..start(),
-        ignoreStates: true);
     var pluginServiceResult = await interpret.pluginService(
-        visualServiceResult, node.currentContext, Stopwatch()..start());
+        node, node.currentContext, Stopwatch()..start());
     var layoutServiceResult = await interpret.layoutGenerationService(
         pluginServiceResult,
         pluginServiceResult.currentContext,

@@ -15,15 +15,11 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
             ? null
             : PBSharedParameterValue.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    topLeftCorner:
-        Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
-    bottomRightCorner: Point.bottomRightFromJson(
-        json['bottomRightCorner'] as Map<String, dynamic>),
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
-    type: json['type'] as String,
+        json['prototypeNodeUUID'] as String),
+    size: PBIntermediateNode.sizeFromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
@@ -34,7 +30,8 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
@@ -47,12 +44,10 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'SYMBOL_ID': instance.SYMBOL_ID,
       'overrideValues':
           instance.sharedParamValues?.map((e) => e?.toJson())?.toList(),
-      'prototypeNode': instance.prototypeNode?.toJson(),
+      'prototypeNodeUUID': instance.prototypeNode?.toJson(),
       'type': instance.type,
-      'topLeftCorner': instance.topLeftCorner?.toJson(),
-      'bottomRightCorner': instance.bottomRightCorner?.toJson(),
       'UUID': instance.UUID,
-      'size': instance.size,
+      'boundaryRectangle': instance.size,
     };
 
 PBSharedParameterValue _$PBSharedParameterValueFromJson(

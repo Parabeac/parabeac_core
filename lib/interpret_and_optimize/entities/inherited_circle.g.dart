@@ -8,15 +8,12 @@ part of 'inherited_circle.dart';
 
 InheritedCircle _$InheritedCircleFromJson(Map<String, dynamic> json) {
   return InheritedCircle(
-    bottomRightCorner: Point.bottomRightFromJson(
-        json['bottomRightCorner'] as Map<String, dynamic>),
-    topLeftCorner:
-        Point.topLeftFromJson(json['topLeftCorner'] as Map<String, dynamic>),
     name: json['name'] as String,
     UUID: json['UUID'] as String,
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
+    size: PBIntermediateNode.sizeFromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNode'] as Map<String, dynamic>),
+        json['prototypeNodeUUID'] as String),
   )
     ..subsemantic = json['subsemantic'] as String
     ..children = (json['children'] as List)
@@ -36,10 +33,8 @@ Map<String, dynamic> _$InheritedCircleToJson(InheritedCircle instance) =>
       'children': instance.children,
       'child': instance.child,
       'name': instance.name,
-      'prototypeNode': instance.prototypeNode,
-      'topLeftCorner': instance.topLeftCorner,
-      'bottomRightCorner': instance.bottomRightCorner,
+      'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
       'UUID': instance.UUID,
-      'size': instance.size,
+      'boundaryRectangle': instance.size,
     };

@@ -107,7 +107,10 @@ class InjectedContainer extends PBVisualIntermediateNode
     child = align;
   }
 
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InjectedContainerFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InjectedContainer.fromJson(json);
 }

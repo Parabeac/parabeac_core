@@ -23,7 +23,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   var log = Logger('PBSharedMasterNode');
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   ///The unique symbol identifier of the [PBSharedMasterNode]
@@ -32,20 +33,20 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'symbol_master';
+  String type = 'shared_master';
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -72,7 +73,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   List<PBSharedParameterProp> overridableProperties;
   String friendlyName;
 
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   PBSharedMasterNode({
+    this.originalRef,
     this.SYMBOL_ID,
     String name,
     this.topLeftCorner,
@@ -81,7 +87,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.currentContext,
     this.UUID,
     this.prototypeNode,
-    this.type,
     this.size,
   }) : super(
           topLeftCorner,
@@ -91,13 +96,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
           UUID: UUID ?? '',
         ) {
     try {
-      //Remove any special characters and leading numbers from the method name
-      friendlyName = name
-          .replaceAll(RegExp(r'[^\w]+'), '')
-          .replaceAll(RegExp(r'/'), '')
-          .replaceFirst(RegExp(r'^[\d]+'), '');
-      //Make first letter of method name capitalized
-      friendlyName = friendlyName[0].toUpperCase() + friendlyName.substring(1);
+      if (name != null) {
+        //Remove any special characters and leading numbers from the method name
+        friendlyName = name
+            .replaceAll(RegExp(r'[^\w]+'), '')
+            .replaceAll(RegExp(r'/'), '')
+            .replaceFirst(RegExp(r'^[\d]+'), '');
+        //Make first letter of method name capitalized
+        friendlyName =
+            friendlyName[0].toUpperCase() + friendlyName.substring(1);
+      }
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
@@ -106,10 +114,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
       log.error(e.toString());
     }
     ;
-
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBMasterSymbolGenerator();
 
     // this.currentContext.screenBottomRightCorner = Point(
@@ -146,9 +150,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @override
   void alignChild() {}
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$PBSharedMasterNodeFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json
+        ..mapRawChildren(json);
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedMasterNodeFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      PBSharedMasterNode.fromJson(json);
 }
 
 @JsonSerializable()

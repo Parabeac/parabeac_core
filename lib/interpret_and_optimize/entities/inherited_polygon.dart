@@ -18,32 +18,38 @@ part 'inherited_polygon.g.dart';
 class InheritedPolygon extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   @JsonKey()
-  String type = 'inherited_polygon';
+  String type = 'polygon';
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   InheritedPolygon({
+    this.originalRef,
     name,
     Uint8List image,
     this.currentContext,
@@ -52,7 +58,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
     this.bottomRightCorner,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,
@@ -60,17 +65,7 @@ class InheritedPolygon extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBBitmapGenerator();
-
-    // size = {
-    //   'width': originalRef.boundaryRectangle.width,
-    //   'height': originalRef.boundaryRectangle.height
-    // };
-    // name = originalRef.name;
-
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
   }
@@ -91,7 +86,13 @@ class InheritedPolygon extends PBVisualIntermediateNode
     // Images don't hae children.
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedPolygonFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedPolygonFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedPolygon.fromJson(json);
 }

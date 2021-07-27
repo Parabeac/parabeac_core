@@ -1,5 +1,4 @@
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -35,25 +34,26 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   bool isMasterState = false;
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
   @JsonKey()
-  String type = 'symbol_instance';
+  String type = 'shared_instance';
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -64,7 +64,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   // quick lookup based on UUID_type
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
 
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   PBSharedInstanceIntermediateNode({
+    this.originalRef,
     this.SYMBOL_ID,
     this.sharedParamValues,
     this.topLeftCorner,
@@ -73,14 +78,10 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
     this.overrideValues,
     String name,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBSymbolInstanceGenerator();
 
     /// if [sharedParamValues] sets [overrideValues], then only pass one
@@ -107,9 +108,15 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     }
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$PBSharedInstanceIntermediateNodeFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedInstanceIntermediateNodeFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      PBSharedInstanceIntermediateNode.fromJson(json);
 }
 
 @JsonSerializable()

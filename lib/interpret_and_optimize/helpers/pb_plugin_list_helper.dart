@@ -1,7 +1,6 @@
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
@@ -67,7 +66,6 @@ class PBPluginListHelper {
         );
       }
     }
+    return null;
   }
-
-  returnDenyListNodeIfExist(PBSharedInstanceIntermediateNode symbolInstance) {}
 }

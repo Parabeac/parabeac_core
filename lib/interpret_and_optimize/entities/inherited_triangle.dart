@@ -18,32 +18,38 @@ part 'inherited_triangle.g.dart';
 class InheritedTriangle extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   @JsonKey()
-  String type = 'inherited_triangle';
+  String type = 'triangle';
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
   @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   InheritedTriangle({
+    this.originalRef,
     String name,
     Uint8List image,
     this.currentContext,
@@ -52,7 +58,6 @@ class InheritedTriangle extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,
@@ -60,17 +65,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBBitmapGenerator();
-
-    // size = {
-    //   'width': originalRef.boundaryRectangle.width,
-    //   'height': originalRef.boundaryRectangle.height
-    // };
-
-    // name = originalRef.name;
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
@@ -92,7 +87,13 @@ class InheritedTriangle extends PBVisualIntermediateNode
     // Images don't have children.
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedTriangleFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json;
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedTriangleFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedTriangle.fromJson(json);
 }

@@ -68,10 +68,16 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
-      PBIntermediateNode originalRef) {
-    return InjectedAppbar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
-        currentContext: currentContext);
+      PBIntermediateNode originalNode) {
+    var appbar = InjectedAppbar(
+      topLeftCorner,
+      bottomRightCorner,
+      UUID,
+      originalNode.name,
+      currentContext: currentContext,
+    );
+    originalNode.children?.forEach(appbar.addChild);
+    return appbar;
   }
 
   @override

@@ -15,53 +15,45 @@ part 'temp_group_layout_node.g.dart';
 class TempGroupLayoutNode extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  @JsonKey()
-  List<PBIntermediateNode> children;
-
-  @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @override
   @JsonKey()
-  String type = 'temp_group';
+  String type = 'group';
 
   @override
   @JsonKey(name: 'UUID')
   String UUID;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
-  @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @override
+  Map<String, dynamic> originalRef;
+
   TempGroupLayoutNode({
+    this.originalRef,
     this.currentContext,
     String name,
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,
-    this.children,
     this.prototypeNode,
     this.size,
-    this.type,
-  }) : super([], [], currentContext, name) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
-    this.topLeftCorner = topLeftCorner;
-    this.bottomRightCorner = bottomRightCorner;
-  }
+  }) : super([], [], currentContext, name);
 
   @override
   void addChild(PBIntermediateNode node) {
@@ -88,7 +80,19 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var tempGroup = _$TempGroupLayoutNodeFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+
+    tempGroup.mapRawChildren(json);
+
+    return tempGroup;
+  }
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$TempGroupLayoutNodeFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      (TempGroupLayoutNode.fromJson(json) as TempGroupLayoutNode)
+        ..originalRef = json;
 }

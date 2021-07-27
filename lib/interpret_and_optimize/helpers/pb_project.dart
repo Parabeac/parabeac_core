@@ -1,6 +1,5 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -23,6 +22,7 @@ class PBProject {
   /// the modifications to the object (https://github.com/dart-lang/sdk/issues/3367). As a result, the [lockData] flag
   /// has to be used to prevent those modification in phases where the data needs to be analyzed but unmodified.
   bool _lockData = false;
+  @JsonKey(ignore: true)
   bool get lockData => _lockData;
   set lockData(lock) {
     _lockData = lock;
@@ -30,14 +30,15 @@ class PBProject {
   }
 
   List<PBIntermediateTree> _forest;
+  @JsonKey(fromJson: PBProject.forestFromJson, name: 'pages')
   List<PBIntermediateTree> get forest => _forest;
+  @JsonKey(fromJson: PBProject.forestFromJson, name: 'pages')
   set forest(List<PBIntermediateTree> forest) {
     if (!lockData) {
       _forest = forest;
     }
   }
 
-  List<SharedStyle> sharedStyles = [];
   @Deprecated(
       'Use the fileStructureStrategy within the GenerationConfiguration')
   FileStructureStrategy _fileStructureStrategy;
@@ -58,7 +59,7 @@ class PBProject {
   @JsonKey(ignore: true)
   FileStructureStrategy get fileStructureStrategy => _fileStructureStrategy;
 
-  PBProject(this.projectName, this.projectAbsPath, this.sharedStyles,
+  PBProject(this.projectName, this.projectAbsPath,
       {FileStructureStrategy fileStructureStrategy}) {
     _forest = [];
     _genProjectData = PBGenerationProjectData();
@@ -70,4 +71,18 @@ class PBProject {
       _$PBProjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$PBProjectToJson(this);
+
+  /// Maps JSON pages to a list of [PBIntermediateTree]
+  static List<PBIntermediateTree> forestFromJson(
+      List<Map<String, dynamic>> pages) {
+    var trees = <PBIntermediateTree>[];
+    pages.forEach((page) {
+      var screens = (page['screens'] as Iterable)
+          .map((screen) =>
+              PBIntermediateTree.fromJson(screen)..name = page['name'])
+          .toList();
+      trees.addAll(screens);
+    });
+    return trees;
+  }
 }

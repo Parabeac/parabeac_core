@@ -22,28 +22,29 @@ class InheritedScaffold extends PBVisualIntermediateNode
         /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate,
         IntermediateNodeFactory {
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
-  @JsonKey(defaultValue: false)
+  @JsonKey(defaultValue: false, name: 'isFlowHome')
   bool isHomeScreen = false;
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   @JsonKey()
-  String type = 'inherited_scaffold';
+  String type = 'artboard';
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -51,6 +52,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   PBContext currentContext;
 
   @override
+  @JsonKey(ignore: true)
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
@@ -67,7 +69,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
+  @override
+  @JsonKey(ignore: true)
+  List<PBIntermediateNode> get children => super.children;
+
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   InheritedScaffold({
+    this.originalRef,
     this.topLeftCorner,
     this.bottomRightCorner,
     String name,
@@ -76,7 +87,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.UUID,
     this.prototypeNode,
     this.size,
-    this.type,
   }) : super(
           topLeftCorner,
           bottomRightCorner,
@@ -84,16 +94,11 @@ class InheritedScaffold extends PBVisualIntermediateNode
           name,
           UUID: UUID ?? '',
         ) {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     this.name = name
         ?.replaceAll(RegExp(r'[\W]'), '')
         ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
 
     generator = PBScaffoldGenerator();
-
-    // auxiliaryData.color = toHex(originalRef.backgroundColor);
 
     // Add body attribute
     addAttribute(PBAttribute('body'));
@@ -133,7 +138,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
     // If there's multiple children add a temp group so that layout service lays the children out.
     if (child != null) {
-      @override
       var temp =
           TempGroupLayoutNode(currentContext: currentContext, name: node.name);
       temp.addChild(child);
@@ -155,7 +159,18 @@ class InheritedScaffold extends PBVisualIntermediateNode
     }
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var artboard = _$InheritedScaffoldFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+
+    //Map artboard children by calling `addChild` method
+    artboard.mapRawChildren(json);
+    return artboard;
+  }
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedScaffoldFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedScaffold.fromJson(json);
 }

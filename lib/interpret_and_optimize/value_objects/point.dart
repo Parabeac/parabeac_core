@@ -44,11 +44,35 @@ class Point implements Comparable<Point> {
     return false;
   }
 
-  static Point topLeftFromJson(Map<String, dynamic> json) =>
-      Point(json['x'], json['y']);
+  static Point topLeftFromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+    var x, y;
+    if (json.containsKey('boundaryRectangle')) {
+      x = json['boundaryRectangle']['x'];
+      y = json['boundaryRectangle']['y'];
+    } else {
+      x = json['x'];
+      y = json['y'];
+    }
+    return Point(x, y);
+  }
 
-  static Point bottomRightFromJson(Map<String, dynamic> json) =>
-      Point(json['x'] + json['width'], json['y'] + json['height']);
+  static Point bottomRightFromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+    var x, y;
+    if (json.containsKey('boundaryRectangle')) {
+      x = json['boundaryRectangle']['x'] + json['boundaryRectangle']['width'];
+      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['width'];
+    } else {
+      x = json['x'] + json['width'];
+      y = json['y'] + json['height'];
+    }
+    return Point(x, y);
+  }
 
   Map<String, dynamic> toJson() => _$PointToJson(this);
 }

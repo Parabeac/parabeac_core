@@ -151,8 +151,12 @@ class PBLayoutGenerationService implements PBGenerationService {
               tempGroup, (tempGroup as TempGroupLayoutNode).children[0])
           : _replaceNode(
               tempGroup,
-              InjectedContainer(tempGroup.bottomRightCorner,
-                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID));
+              InjectedContainer(
+                bottomRightCorner: tempGroup.bottomRightCorner,
+                topLeftCorner: tempGroup.topLeftCorner,
+                name: tempGroup.name,
+                UUID: tempGroup.UUID,
+              ));
     }
     return tempGroup;
   }

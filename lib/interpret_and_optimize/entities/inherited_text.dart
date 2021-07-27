@@ -17,7 +17,8 @@ class InheritedText extends PBVisualIntermediateNode
   bool isTextParameter = false;
 
   @override
-  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
   @JsonKey(ignore: true)
@@ -25,20 +26,20 @@ class InheritedText extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'inherited_text';
+  String type = 'text';
 
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(ignore: true)
   Point topLeftCorner;
   @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(ignore: true)
   Point bottomRightCorner;
 
   @override
   String UUID;
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
@@ -47,26 +48,30 @@ class InheritedText extends PBVisualIntermediateNode
 
   @JsonKey(name: 'content')
   String text;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontSizeFromJson)
+  @JsonKey(ignore: true)
   num fontSize;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontNameFromJson)
+  @JsonKey(ignore: true)
   String fontName;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontWeightFromJson)
+  @JsonKey(ignore: true)
   String fontWeight; // one of the w100-w900 weights
-  @JsonKey(fromJson: InheritedTextPBDLHelper.fontStyleFromJson)
+  @JsonKey(ignore: true)
   String fontStyle; // normal, or italic
-  @JsonKey(fromJson: InheritedTextPBDLHelper.textAlignmentFromJson)
+  @JsonKey(ignore: true)
   String textAlignment;
-  @JsonKey(fromJson: InheritedTextPBDLHelper.letterSpacingFromJson)
+  @JsonKey(ignore: true)
   num letterSpacing;
 
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
   InheritedText({
+    this.originalRef,
     name,
     this.currentContext,
     this.topLeftCorner,
     this.bottomRightCorner,
     this.UUID,
-    this.type,
     this.size,
     this.alignmenttype,
     this.fontName,
@@ -80,13 +85,8 @@ class InheritedText extends PBVisualIntermediateNode
     this.textAlignment,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
             UUID: UUID ?? '') {
-    // if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-    //   prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    // }
     generator = PBTextGen();
-
-    // text = (originalRef as Text).content;
-    if (text.contains('\$')) {
+    if (text?.contains('\$') ?? false) {
       text = _sanitizeText(text);
     }
   }
@@ -106,17 +106,29 @@ class InheritedText extends PBVisualIntermediateNode
     // Text don't have children.
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InheritedTextFromJson(json)
+        ..topLeftCorner = Point.topLeftFromJson(json)
+        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        ..originalRef = json
+        ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
+        ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
+        ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
+        ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
+        ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
+        ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json);
+
   @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedTextFromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedText.fromJson(json);
 }
 
 class InheritedTextPBDLHelper {
   static num fontSizeFromJson(Map<String, dynamic> json) =>
-      _fontDescriptor(json)['fontDescriptor']['fontSize'];
+      _fontDescriptor(json)['fontSize'];
 
   static String fontNameFromJson(Map<String, dynamic> json) =>
-      _fontDescriptor(json)['fontDescriptor']['fontName'];
+      _fontDescriptor(json)['fontName'];
 
   static String fontWeightFromJson(Map<String, dynamic> json) =>
       _fontDescriptor(json)['fontWeight'];
