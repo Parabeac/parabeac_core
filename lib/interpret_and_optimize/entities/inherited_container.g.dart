@@ -14,7 +14,7 @@ InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as Map<String, dynamic>),
+        json['prototypeNodeUUID'] as String),
   )
     ..subsemantic = json['subsemantic'] as String
     ..child = json['child'] == null

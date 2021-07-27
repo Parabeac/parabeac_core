@@ -17,7 +17,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         ?.toList(),
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as Map<String, dynamic>),
+        json['prototypeNodeUUID'] as String),
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,

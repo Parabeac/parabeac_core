@@ -12,7 +12,7 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
     isHomeScreen: json['isFlowHome'] as bool ?? false,
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as Map<String, dynamic>),
+        json['prototypeNodeUUID'] as String),
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
   )
