@@ -17,18 +17,18 @@ class PBTextGen extends PBGenerator {
           .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
       var buffer = StringBuffer();
       buffer.write('AutoSizeText(\n');
-      var isTextParameter = source.isTextParameter ?? true;
+      var isTextParameter = source.isTextParameter;
       if (isTextParameter) {
         var text = source.text;
         buffer.write('$text, \n');
       }
-      // else {
-      //   if (SN_UUIDtoVarName.containsKey('${source.UUID}_stringValue')) {
-      //     buffer.write('${SN_UUIDtoVarName[source.UUID + '_stringValue']} ?? ');
-      //   }
-      //   buffer
-      //       .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
-      // }
+      else {
+        // if (SN_UUIDtoVarName.containsKey('${source.UUID}_stringValue')) {
+        //   buffer.write('${SN_UUIDtoVarName[source.UUID + '_stringValue']} ?? ');
+        // }
+        buffer
+            .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
+      }
       buffer.write('style: ');
       // if (SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')) {
       //   buffer.write(SN_UUIDtoVarName[source.UUID + '_textStyle'] + ' ?? ');

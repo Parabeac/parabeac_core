@@ -14,6 +14,7 @@ part 'inherited_text.g.dart';
 class InheritedText extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   ///For the generator to strip out the quotation marks.
+  @JsonKey(defaultValue: false)
   bool isTextParameter = false;
 
   @override

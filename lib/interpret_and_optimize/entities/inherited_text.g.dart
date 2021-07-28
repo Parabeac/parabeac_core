@@ -12,7 +12,7 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
-    isTextParameter: json['isTextParameter'] as bool,
+    isTextParameter: json['isTextParameter'] as bool ?? false,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
     text: json['content'] as String,
