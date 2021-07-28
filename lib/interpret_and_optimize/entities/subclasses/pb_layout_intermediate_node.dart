@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prot
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -38,9 +39,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner, this.prototypeNode})
+      {topLeftCorner,
+      bottomRightCorner,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
       : super(topLeftCorner, bottomRightCorner, Uuid().v4(), name,
-            currentContext: currentContext) {
+            currentContext: currentContext, constraints: constraints) {
     // Declaring children for layout node
     addAttribute(PBAttribute('children'));
   }
@@ -170,5 +174,3 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     }
   }
 }
-
-

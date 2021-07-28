@@ -25,6 +25,10 @@ class PBPositionedGenerator extends PBGenerator {
       var xAxisBoilerplate = boilerplate.item1;
       var yAxisBoilerplate = boilerplate.item2;
 
+      if (generatorContext.tree.first.name == 'ArtboardTRpinnoscale') {
+        print('asdf');
+      }
+
       /// Since the generation phase is going to run multiple times, we are going to have to
       /// create a copy/clone of the [PositionedValueHolder] instead of assigning the values
       /// directly to the [source.valueHolder]. This would causse the [source.valueHolder.getRatioPercentage]
@@ -111,12 +115,13 @@ class PBPositionedGenerator extends PBGenerator {
   /// MediaQuery.of(context).size.height * 0.0
   /// ```
   /// Where it should be `0`.
-  String _normalizeValue(String preValueStatement, _PositionedValue positionalValue) {
+  String _normalizeValue(
+      String preValueStatement, _PositionedValue positionalValue) {
     var n = double.parse(positionalValue.value.toStringAsFixed(3));
     if (n == 0) {
       return '0';
     }
-    if(positionalValue.remainPointValue){
+    if (positionalValue.remainPointValue) {
       return '$n';
     }
     return '$preValueStatement$n';
@@ -124,29 +129,29 @@ class PBPositionedGenerator extends PBGenerator {
 
   List<_PositionedValue> _getPositionalAtt(
       PositionedValueHolder positionedValueHolder,
-      PBIntermediateConstraints constrains) {
+      PBIntermediateConstraints constraints) {
     var attributes = <_PositionedValue>[];
-    var fixedWidth = constrains.fixedWidth != null;
-    var fixedHeight = constrains.fixedHeight != null;
-    if (!(constrains.pinLeft && constrains.pinRight)) {
+    var fixedWidth = constraints.fixedWidth != null;
+    var fixedHeight = constraints.fixedHeight != null;
+    if (!constraints.pinLeft && !constraints.pinRight) {
       ///use [positionedValueHolder.left]
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', false));
       attributes.add(
           _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
-    } else if (constrains.pinLeft && !constrains.pinRight) {
+    } else if (constraints.pinLeft && !constraints.pinRight) {
       ///use [positionedValueHolder.left]
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', true));
       attributes.add(
           _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
-    } else if (!constrains.pinLeft && constrains.pinRight) {
+    } else if (!constraints.pinLeft && constraints.pinRight) {
       /// use [positionedValueHolder.right]
       attributes
           .add(_PositionedValue(positionedValueHolder.right, 'right', true));
       attributes.add(
           _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
-    } else if (constrains.pinLeft && constrains.pinRight) {
+    } else if (constraints.pinLeft && constraints.pinRight) {
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', true));
       attributes
@@ -154,23 +159,23 @@ class PBPositionedGenerator extends PBGenerator {
     }
 
     ///Vertical constrains
-    if (!(constrains.pinTop && constrains.pinBottom)) {
+    if (!constraints.pinTop && !constraints.pinBottom) {
       attributes.add(
           _PositionedValue(positionedValueHolder.top, 'top', false, false));
       attributes.add(_PositionedValue(
           positionedValueHolder.height, 'height', fixedHeight, false));
-    } else if (constrains.pinTop && !constrains.pinBottom) {
+    } else if (constraints.pinTop && !constraints.pinBottom) {
       attributes
           .add(_PositionedValue(positionedValueHolder.top, 'top', true, false));
       attributes.add(_PositionedValue(
           positionedValueHolder.height, 'height', fixedHeight, false));
-    } else if (!constrains.pinTop && constrains.pinBottom) {
+    } else if (!constraints.pinTop && constraints.pinBottom) {
       /// use [positionedValueHolder.right]
       attributes.add(_PositionedValue(
           positionedValueHolder.bottom, 'bottom', true, false));
       attributes.add(_PositionedValue(
           positionedValueHolder.height, 'height', fixedHeight, false));
-    } else if (constrains.pinTop && constrains.pinBottom) {
+    } else if (constraints.pinTop && constraints.pinBottom) {
       attributes
           .add(_PositionedValue(positionedValueHolder.top, 'top', true, false));
       attributes.add(_PositionedValue(

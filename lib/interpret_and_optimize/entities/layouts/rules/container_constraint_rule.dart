@@ -11,7 +11,8 @@ class ContainerConstraintRule extends PostConditionRule {
     if (testRule(currentNode, nextNode)) {
       var container = InjectedContainer(currentNode.bottomRightCorner,
           currentNode.topLeftCorner, currentNode.name, Uuid().v4(),
-          currentContext: currentNode.currentContext);
+          currentContext: currentNode.currentContext,
+          constraints: currentNode.constraints);
       container.addChild(currentNode);
       return container;
     }

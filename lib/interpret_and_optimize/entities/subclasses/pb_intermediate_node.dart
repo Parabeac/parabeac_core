@@ -39,7 +39,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   List<PBIntermediateNode> get children => [child];
 
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
-  
+
   AlignStrategy alignStrategy = NoAlignment();
 
   /// Gets the [PBIntermediateNode] at attribute `child`
@@ -153,8 +153,21 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     /// constrains could be inherited to that section of the sub-tree.
   }
 
+  /// In a recursive manner align the current [this] and the [children] of [this] 
+  /// 
+  /// Its creating a [PBContext.clone] because some values of the [context] are modified
+  /// when passed to some of the [children]. 
+  /// For example, the [context.contextConstraints] might
+  /// could contain information from a parent to that particular section of the tree. However,
+  /// because its pass by reference that edits to the context are going to affect the entire [context.tree] and
+  /// not just the sub tree, therefore, we need to [PBContext.clone] to avoid those side effets.
+  /// 
+  /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
+    for (var child in children) {
+      child?.align(context.clone());
+    }
   }
 }
 

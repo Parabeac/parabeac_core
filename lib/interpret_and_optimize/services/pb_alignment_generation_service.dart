@@ -18,20 +18,21 @@ class PBAlignGenerationService implements AITHandler {
   }
 
   /// Should find all layout nodes
-  Future<PBIntermediateTree> addAlignmentToLayouts(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> addAlignmentToLayouts(
+      PBIntermediateTree tree, PBContext context) {
     var originalRoot = tree.rootNode;
     if (originalRoot == null) {
       log.warning(
           '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
       return null;
     }
-
-    tree.forEach((node) => node?.align(context));
+    tree.rootNode.align(context);
     return Future.value(tree);
   }
 
   @override
-  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
     return addAlignmentToLayouts(tree, context);
   }
 }
