@@ -48,9 +48,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
   @override
   void alignChildren() {
-    if (this.currentContext.tree.first.name == 'ArtboardTRpinnoscale') {
-      print('asdf');
-    }
     var alignedChildren = <PBIntermediateNode>[];
     for (var child in children) {
       if (child.topLeftCorner == topLeftCorner &&

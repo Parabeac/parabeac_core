@@ -86,9 +86,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void addChild(node) {
     print(this.name);
-    if (this.name == 'ArtboardTRpinnoscale') {
-      print('object');
-    }
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
