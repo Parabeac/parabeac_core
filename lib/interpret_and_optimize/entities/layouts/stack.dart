@@ -21,14 +21,12 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
-  @override
-  AlignStrategy alignStrategy = PositionedAlignment();
 
   PBIntermediateStackLayout(PBContext currentContext,
       {String name, PBIntermediateConstraints constraints})
       : super(STACK_RULES, [], currentContext, name, constraints: constraints) {
     generator = PBStackGenerator();
-    // alignStrategy = PositionedAlignment();
+    alignStrategy = PositionedAlignment();
   }
 
   @override

@@ -31,7 +31,6 @@ void main() {
     PBIntermediateStackLayout stack;
     setUp(() {
       context = PBContext(null);
-      context.contextConstraints = PBIntermediateConstraints();
 
       tree = TreeBuilder(10, nodeBuilder: (index) {
 
@@ -77,15 +76,16 @@ void main() {
       parent.constraints.fixedWidth = inheritedFixedWidth;
       alignGenerationService.addAlignmentToLayouts(tree, context);
 
-      var inheritedConstrainsChild =
+
+      var inheritedConstrainsChild0 =
           tree.firstWhere((child) => child.UUID == 'C_0');
       var nonInheritedConstrainsChild =
           tree.firstWhere((child) => child.UUID == 'C_1');
 
-      expect(inheritedConstrainsChild.constraints.fixedHeight,
+      expect(inheritedConstrainsChild0.constraints.fixedHeight,
           inheritedFixedHeight);
       expect(
-          inheritedConstrainsChild.constraints.fixedWidth, inheritedFixedWidth);
+          inheritedConstrainsChild0.constraints.fixedWidth, inheritedFixedWidth);
       expect(nonInheritedConstrainsChild.constraints.fixedHeight, isNull);
       expect(nonInheritedConstrainsChild.constraints.fixedWidth, isNull);
     });

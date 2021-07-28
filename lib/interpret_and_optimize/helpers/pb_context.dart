@@ -67,7 +67,7 @@ class PBContext {
       this.canvasBRC,
       this.canvasTLC,
       this.generationManager}) {
-    contextConstraints = PBIntermediateConstraints();
+    contextConstraints ??= PBIntermediateConstraints();
   }
 
   void addDependent(PBIntermediateTree dependent) {
