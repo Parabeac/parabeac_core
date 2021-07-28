@@ -44,10 +44,10 @@ class PBContext {
   Point canvasBRC;
 
   /// The [constextConstrains] represents the costraints that would be inherited by a section of the tree.
-  /// 
+  ///
   /// For example, when there is a [InjectedPositioned] that contains [contextConstraints.fixedWidth], then
   /// all of the [InjectedPositioned.child] subtree should inherit that information.
-  PBIntermediateConstraints contextConstraints = PBIntermediateConstraints();
+  PBIntermediateConstraints contextConstraints;
 
   PBIntermediateTree tree;
   PBProject project;
@@ -59,7 +59,16 @@ class PBContext {
 
   PBGenerationViewData get managerData => tree?.data;
 
-  PBContext(this.configuration, {this.tree});
+  PBContext(this.configuration,
+      {this.tree,
+      this.contextConstraints,
+      this.masterNode,
+      this.project,
+      this.canvasBRC,
+      this.canvasTLC,
+      this.generationManager}) {
+    contextConstraints = PBIntermediateConstraints();
+  }
 
   void addDependent(PBIntermediateTree dependent) {
     if (dependent != null) {
@@ -79,6 +88,20 @@ class PBContext {
     return isHorizontal
         ? size / originalScreenWidth
         : size / originaScreenHeight;
+  }
+
+  PBContext clone() {
+    var context = PBContext(configuration,
+        tree: tree,
+        contextConstraints: contextConstraints.clone(),
+        masterNode: masterNode,
+        project: project,
+        canvasBRC: canvasBRC,
+        canvasTLC: canvasTLC,
+        generationManager: generationManager);
+    context.screenTopLeftCorner = _screenTLC;
+    context.screenBottomRightCorner = _screenBRC;
+    return context;
   }
 }
 

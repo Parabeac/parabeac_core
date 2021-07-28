@@ -5,27 +5,52 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
-abstract class AlignStrategy<T extends PBIntermediateNode>{
+/// [AlignStrategy] uses the strategy pattern to define the alignment logic for
+/// the [PBIntermediateNode].
+abstract class AlignStrategy<T extends PBIntermediateNode> {
   void align(PBContext context, T node);
 
-  void _setConstraints(PBContext context, T node){
-    if(node.constraints.fixedHeight != null){
-      context.contextConstraints.fixedHeight = node.constraints.fixedHeight;
+  /// Some aspects of the [PBContext] are going to be inherited to a subtree
+  /// of the [PBIntermediateTree]. These are the [PBContext.fixedHeight] and
+  /// [PBContext.fixedWidth].
+  ///
+  /// If the [context] contains either [context.fixedHeight] or [context.fixedHeight],
+  /// then its going to force those values into the [node]. However, if the [node] contains non-null
+  /// constrains and the [context] does not, then [context] is going to grab those values and force upon the children
+  /// from that subtree.
+  ///
+  /// Another important note is when the [context] contains [context.fixedHeight] the subtree, then we will
+  /// assign the [node.constraints.pinTop] = `true` and [node.constraints.pinBottom] = `false`.
+  /// When [context.fixedWidth] is not `null`, se assign the [context.fixedWidth] to subtree and
+  /// we make [node.constraints.pinLeft] = `true` and [node.constraints.pingRight] = `false`.
+  void _setConstraints(PBContext context, T node) {
+    context.contextConstraints.fixedHeight ??= node.constraints.fixedHeight;
+    context.contextConstraints.fixedWidth ??= node.constraints.fixedWidth;
+
+    if (context.contextConstraints.fixedHeight != null) {
+      node.constraints.fixedHeight = context.contextConstraints.fixedHeight;
+      node.constraints.pinTop = true;
+      node.constraints.pinBottom = false;
     }
-    if(node.constraints.fixedWidth != null){
-      context.contextConstraints.fixedWidth = node.constraints.fixedWidth;
+
+    if (context.contextConstraints.fixedWidth != null) {
+      node.constraints.fixedWidth = context.contextConstraints.fixedWidth;
+      node.constraints.pinLeft = true;
+      node.constraints.pinRight = false;
     }
   }
 }
 
-class PaddingAlignment extends AlignStrategy{
+class PaddingAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
     var padding = Padding('', node.child.constraints,
         left: (node.child.topLeftCorner.x - node.topLeftCorner.x).abs(),
-        right: (node.bottomRightCorner.x - node.child.bottomRightCorner.x).abs(),
+        right:
+            (node.bottomRightCorner.x - node.child.bottomRightCorner.x).abs(),
         top: (node.child.topLeftCorner.y - node.topLeftCorner.y).abs(),
-        bottom: (node.child.bottomRightCorner.y - node.bottomRightCorner.y).abs(),
+        bottom:
+            (node.child.bottomRightCorner.y - node.bottomRightCorner.y).abs(),
         topLeftCorner: node.topLeftCorner,
         bottomRightCorner: node.bottomRightCorner,
         currentContext: node.currentContext);
@@ -35,7 +60,7 @@ class PaddingAlignment extends AlignStrategy{
   }
 }
 
-class NoAlignment extends AlignStrategy{
+class NoAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
     super._setConstraints(context, node);

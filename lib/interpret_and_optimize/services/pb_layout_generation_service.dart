@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stac
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -47,7 +48,7 @@ class PBLayoutGenerationService implements AITHandler {
       //     currentContext: currentContext),
       'stack': PBIntermediateStackLayout(
         null,
-       ),
+      ),
     };
 
     for (var layoutType
@@ -73,7 +74,7 @@ class PBLayoutGenerationService implements AITHandler {
       //         .map((node) => _layoutConditionalReplacement(node, context))
       //         .toList()
       //           ..removeWhere((element) => element == null))
-          // .first;
+      // .first;
       rootNode = _traverseLayersUtil(rootNode, (layer) {
         return layer
 
@@ -242,6 +243,21 @@ class PBLayoutGenerationService implements AITHandler {
       PBIntermediateNode candidate, PBIntermediateNode replacement) {
     if (candidate is PBLayoutIntermediateNode &&
         replacement is PBLayoutIntermediateNode) {
+      /// For supporting pinning & resizing information, we will merge constraints.
+      print(replacement.constraints);
+      replacement.constraints = PBIntermediateConstraints.mergeFromContraints(
+          candidate.constraints ??
+              PBIntermediateConstraints(
+                  pinBottom: false,
+                  pinLeft: false,
+                  pinRight: false,
+                  pinTop: false),
+          replacement.constraints ??
+              PBIntermediateConstraints(
+                  pinBottom: false,
+                  pinLeft: false,
+                  pinRight: false,
+                  pinTop: false));
       replacement.prototypeNode = candidate.prototypeNode;
     }
     return replacement;

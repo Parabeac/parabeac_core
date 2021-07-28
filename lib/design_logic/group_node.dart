@@ -115,11 +115,15 @@ class GroupNode implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
-      Future.value(TempGroupLayoutNode(this, currentContext, name,
-          topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
-          bottomRightCorner: Point<double>(
-              boundaryRectangle.x + boundaryRectangle.width,
-              boundaryRectangle.y + boundaryRectangle.height)));
+      Future.value(TempGroupLayoutNode(
+        this,
+        currentContext,
+        name,
+        topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
+        bottomRightCorner: Point<double>(
+            boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
+      ));
 
   @override
   toJson() {

@@ -11,59 +11,22 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_serv
 
 ///tree.where((element) => element != null).toList().reversed.map((e) => e.name).toList()
 class PBConstraintGenerationService implements AITHandler {
-
   PBConstraintGenerationService();
 
   /// Traverse to the bottom of the tree, and implement constraints to nodes that don't already contain it such as [InjectedContainer] and then work our way up the tree.
   /// Through Traversal, discover whether there are elements that will conflict on scaling, if so, change the layout to a Stack.
-  Future<PBIntermediateTree> implementConstraints(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> implementConstraints(
+      PBIntermediateTree tree, PBContext context) {
     if (tree.rootNode == null) {
       return Future.value(tree);
     }
 
     for (var node
         in tree.where((element) => element != null).toList().reversed) {
-      if (node is PBLayoutIntermediateNode) {
-        // if (node.children.isNotEmpty) {
-        /// Inherit Constraints from all the children of this layout.
-        node.children
-            .where((element) => element != null)
-            .toList()
-            .forEach((element) {
-          node.constraints = _inheritConstraintsFromChild(
-              constraints: node.constraints ??
-                  PBIntermediateConstraints(
-                    pinTop: false,
-                    pinBottom: false,
-                    pinLeft: false,
-                    pinRight: false,
-                  ),
-              childConstraints: element.constraints);
-        });
-        if (node is PBLayoutIntermediateNode) {
-          if (_shouldLayoutBeStack(node)) {
-            /// Change Layout to Stack
-            var newStackReplacement =
-                PBIntermediateStackLayout(context, name: node.name);
-            node.attributes.forEach((element) {
-              newStackReplacement.addAttribute(element);
-            });
-            newStackReplacement.constraints = node.constraints;
-            node = newStackReplacement;
-          }
-        }
-      }
       if (node.constraints == null) {
         if (node.child?.constraints == null) {
-          // if (node.child != null) {
-          print(
-              "Constraint Inheritance could not be performed because child's constraints were null for class type: [${node.runtimeType}]");
-          // }
-          if (node is! InheritedText) {
-            print('asdf');
-          } else {
-            node.constraints = PBIntermediateConstraints();
-          }
+          node.constraints = PBIntermediateConstraints(
+              pinBottom: false, pinLeft: false, pinRight: false, pinTop: false);
         } else {
           node.constraints = node.child.constraints;
         }
@@ -73,6 +36,7 @@ class PBConstraintGenerationService implements AITHandler {
   }
 
   /// Go through children and find out if there's a node that will overlap another node when scaling.
+  /// @deprecated - remove with PR to dev/stable.
   bool _shouldLayoutBeStack(PBLayoutIntermediateNode node) {
     if (node is PBIntermediateStackLayout) {
       return false;
@@ -91,6 +55,7 @@ class PBConstraintGenerationService implements AITHandler {
     }
   }
 
+  /// @deprecated - remove with PR to dev/stable.
   bool _isHorizontalOverlap(PBLayoutIntermediateNode node) {
     var lastLeftPinIndex = -1;
     var lastRightPinIndex = -1;
@@ -122,6 +87,7 @@ class PBConstraintGenerationService implements AITHandler {
     return isOverlap;
   }
 
+  /// @deprecated - remove with PR to dev/stable.
   bool _isVerticalOverlap(PBLayoutIntermediateNode node) {
     var lastTopPinIndex = -1;
     var lastBottomPinIndex = -1;
@@ -152,6 +118,7 @@ class PBConstraintGenerationService implements AITHandler {
     return isOverlap;
   }
 
+  /// @deprecated - remove with PR to dev/stable.
   PBIntermediateConstraints _inheritConstraintsFromChild(
       {PBIntermediateConstraints constraints,
       PBIntermediateConstraints childConstraints}) {
@@ -185,8 +152,8 @@ class PBConstraintGenerationService implements AITHandler {
   }
 
   @override
-  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
-   return implementConstraints(tree, context);
-    
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    return implementConstraints(tree, context);
   }
 }
