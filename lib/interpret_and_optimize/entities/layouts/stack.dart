@@ -48,42 +48,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     }
   }
 
-  /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
-  @override
-  void alignChildren() {
-    var alignedChildren = <PBIntermediateNode>[];
-    for (var child in children) {
-      if (child.topLeftCorner == topLeftCorner &&
-          child.bottomRightCorner == bottomRightCorner) {
-        //if they are the same size then there is no need for adjusting.
-        alignedChildren.add(child);
-        continue;
-      }
-
-      double top, bottom, left, right;
-
-      top = child.topLeftCorner.y - topLeftCorner.y;
-      bottom = bottomRightCorner.y - child.bottomRightCorner.y;
-
-      left = child.topLeftCorner.x - topLeftCorner.x;
-      right = bottomRightCorner.x - child.bottomRightCorner.x;
-
-      alignedChildren.add(InjectedPositioned(Uuid().v4(),
-          child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
-          valueHolder: PositionedValueHolder(
-              top: top,
-              bottom: bottom,
-              left: left,
-              right: right,
-              height: child.height,
-              width: child.width),
-          currentContext: currentContext,
-          constraints: child.constraints)
-        ..addChild(child));
-    }
-    replaceChildren(alignedChildren);
-  }
-
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
