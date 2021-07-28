@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attr
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
@@ -26,6 +27,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
   PrototypeNode prototypeNode;
 
   bool isHomeScreen = false;
+
+  @override
+  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
 
   @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
@@ -130,7 +134,4 @@ class InheritedScaffold extends PBVisualIntermediateNode
       }
     }
   }
-
-  @override
-  void alignChild() {}
 }

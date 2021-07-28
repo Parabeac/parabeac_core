@@ -16,7 +16,6 @@ class PBIntermediateConstraints {
 
   /// If value is null, then the width is not fixed.
   double fixedWidth;
-
   PBIntermediateConstraints(
       {this.pinLeft,
       this.pinRight,
@@ -37,6 +36,16 @@ class PBIntermediateConstraints {
     if (constraints.fixedWidth) {
       fixedWidth = width;
     }
+  }
+
+  PBIntermediateConstraints clone() {
+    return PBIntermediateConstraints(
+        pinBottom: pinBottom,
+        pinTop: pinTop,
+        pinRight: pinRight,
+        pinLeft: pinLeft,
+        fixedHeight: fixedHeight,
+        fixedWidth: fixedWidth);
   }
 
   PBIntermediateConstraints.mergeFromContraints(

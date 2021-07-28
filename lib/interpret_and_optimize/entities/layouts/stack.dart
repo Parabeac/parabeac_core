@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,10 +21,12 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
+
   PBIntermediateStackLayout(PBContext currentContext,
       {String name, PBIntermediateConstraints constraints})
       : super(STACK_RULES, [], currentContext, name, constraints: constraints) {
     generator = PBStackGenerator();
+    alignStrategy = PositionedAlignment();
   }
 
   @override

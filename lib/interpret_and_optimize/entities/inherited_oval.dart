@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
@@ -19,7 +20,6 @@ class InheritedOval extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
   @override
   var originalRef;
-  var log = Logger('Layout Generation Service');
 
   @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
@@ -59,9 +59,4 @@ class InheritedOval extends PBVisualIntermediateNode
         UUID, '${MainInfo().outputPath}assets/images', image);
   }
 
-
-  @override
-  void alignChild() {
-    // Images don't have children.
-  }
 }

@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -15,7 +16,7 @@ import 'package:quick_log/quick_log.dart';
 /// Usually, we work with its subclasses. We normalize several aspects of data that a sketch node presents in order to work better at the intermediate level.
 /// Sometimes, PBNode’s do not have a direct representation of a sketch node. For example, most layout nodes are primarily made through and understanding of a need for a layout.
 abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
-  static final logger = Logger('PBIntermediateNode');
+  Logger logger;
 
   /// A subsemantic is contextual info to be analyzed in or in-between the visual generation & layout generation services.
   String subsemantic;
@@ -38,6 +39,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   List<PBIntermediateNode> get children => [child];
 
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
+
+  AlignStrategy alignStrategy = NoAlignment();
 
   /// Gets the [PBIntermediateNode] at attribute `child`
   PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
@@ -76,6 +79,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   PBIntermediateNode(
       this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
       {this.currentContext, this.subsemantic, this.constraints}) {
+    logger = Logger(runtimeType.toString());
     _attributes = [];
     _pointCorrection();
   }
@@ -144,6 +148,26 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// Adds child to node.
   void addChild(node) {
     childrenStrategy.addChild(this, node);
+
+    /// Checking the constrains of the [node] being added to the tree, smoe of the
+    /// constrains could be inherited to that section of the sub-tree.
+  }
+
+  /// In a recursive manner align the current [this] and the [children] of [this] 
+  /// 
+  /// Its creating a [PBContext.clone] because some values of the [context] are modified
+  /// when passed to some of the [children]. 
+  /// For example, the [context.contextConstraints] might
+  /// could contain information from a parent to that particular section of the tree. However,
+  /// because its pass by reference that edits to the context are going to affect the entire [context.tree] and
+  /// not just the sub tree, therefore, we need to [PBContext.clone] to avoid those side effets.
+  /// 
+  /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
+  void align(PBContext context) {
+    alignStrategy.align(context, this);
+    for (var child in children) {
+      child?.align(context.clone());
+    }
   }
 }
 

@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -27,6 +28,10 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   @override
   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
+
+  /// TODO: switch to padding
+  @override
+  AlignStrategy alignStrategy = NoAlignment();
 
   InheritedContainer(this.originalRef, Point topLeftCorner,
       Point bottomRightCorner, String name,
@@ -69,28 +74,28 @@ class InheritedContainer extends PBVisualIntermediateNode
         'A null original reference was sent to an PBInheritedIntermediate Node');
   }
 
-  @override
-  void alignChild() {
-    if (child != null) {
-      /// Refactor to child.constraints != null
-      if (child is! InheritedText) {
-        // var left = (child.topLeftCorner.x - topLeftCorner.x).abs() ?? 0.0;
-        // var right =
-        //     (bottomRightCorner.x - child.bottomRightCorner.x).abs() ?? 0.0;
-        // var top = (child.topLeftCorner.y - topLeftCorner.y).abs() ?? 0.0;
-        // var bottom =
-        //     (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0;
-        // var padding = Padding('', child.constraints,
-        //     left: left,
-        //     right: right,
-        //     top: top,
-        //     bottom: bottom,
-        //     topLeftCorner: topLeftCorner,
-        //     bottomRightCorner: bottomRightCorner,
-        //     currentContext: currentContext);
-        // padding.addChild(child);
-        // child = padding;
-      }
-    }
-  }
+  // @override
+  // void alignChild() {
+  //   if (child != null) {
+  //     /// Refactor to child.constraints != null
+  //     if (child is! InheritedText) {
+  //       // var left = (child.topLeftCorner.x - topLeftCorner.x).abs() ?? 0.0;
+  //       // var right =
+  //       //     (bottomRightCorner.x - child.bottomRightCorner.x).abs() ?? 0.0;
+  //       // var top = (child.topLeftCorner.y - topLeftCorner.y).abs() ?? 0.0;
+  //       // var bottom =
+  //       //     (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0;
+  //       // var padding = Padding('', child.constraints,
+  //       //     left: left,
+  //       //     right: right,
+  //       //     top: top,
+  //       //     bottom: bottom,
+  //       //     topLeftCorner: topLeftCorner,
+  //       //     bottomRightCorner: bottomRightCorner,
+  //       //     currentContext: currentContext);
+  //       // padding.addChild(child);
+  //       // child = padding;
+  //     }
+  //   }
+  // }
 }

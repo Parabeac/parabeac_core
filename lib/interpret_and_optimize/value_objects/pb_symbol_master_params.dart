@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -44,8 +45,4 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
     //TODO: return a more specified Type
     return PBIntermediateNode;
   }
-
-
-  @override
-  void alignChild() {}
 }

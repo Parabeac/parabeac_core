@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_padding_ge
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -9,34 +10,24 @@ import 'dart:math';
 class Padding extends PBVisualIntermediateNode {
   double left, right, top, bottom, screenWidth, screenHeight;
 
-  @override
-  final String UUID;
   Map padding;
-
-  @override
-  PBContext currentContext;
-
-  @override
-  Point topLeftCorner;
-
-  @override
-  Point bottomRightCorner;
 
   PBIntermediateConstraints childToParentConstraints;
 
   @override
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
+
   Padding(
-    this.UUID,
+    String UUID,
     this.childToParentConstraints, {
     this.left = 0,
     this.right = 0,
     this.top = 0,
     this.bottom = 0,
-    this.topLeftCorner,
-    this.bottomRightCorner,
-    this.currentContext,
+    Point topLeftCorner,
+    Point bottomRightCorner,
+    PBContext currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, '', UUID: UUID) {
     generator = PBPaddingGen();
   }
@@ -81,7 +72,4 @@ class Padding extends PBVisualIntermediateNode {
       bottom = bottom < 0.01 ? 0.0 : bottom;
     }
   }
-
-  @override
-  void alignChild() {}
 }
