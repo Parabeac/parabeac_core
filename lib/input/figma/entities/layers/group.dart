@@ -124,15 +124,21 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
                 boundaryRectangle.width)),
       );
     }
-    return Future.value(TempGroupLayoutNode(
+    var t = Future.value(TempGroupLayoutNode(
       this,
       currentContext,
       name,
       topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
-      bottomRightCorner: Point<double>(boundaryRectangle.x + boundaryRectangle.width,
+      bottomRightCorner: Point<double>(
+          boundaryRectangle.x + boundaryRectangle.width,
           boundaryRectangle.y + boundaryRectangle.height),
-      constraints: convertFigmaConstraintToPBDLConstraint(constraints),
+      constraints: PBIntermediateConstraints.fromConstraints(
+          convertFigmaConstraintToPBDLConstraint(constraints),
+          boundaryRectangle.height,
+          boundaryRectangle.width),
     ));
+    // print(await t.then((value) => value.constraints));
+    return t;
   }
 
   bool areAllVectors() {

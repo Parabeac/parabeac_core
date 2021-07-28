@@ -8,6 +8,7 @@ class PBDLConstraints {
       this.pinBottom,
       this.fixedHeight,
       this.fixedWidth});
+
   /// - If all the pins are `false` thats just means is going to scale normally.
   /// - If there is a pin value that is `true` we are going to use the constant value for that
   /// attribute instead of the scaling value(using media query).
@@ -15,7 +16,6 @@ class PBDLConstraints {
   bool pinRight;
   bool pinTop;
   bool pinBottom;
-
 
   bool fixedHeight;
   bool fixedWidth;

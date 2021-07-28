@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 
 /// Named PBDL in anticipation of the refactor where PBDL becomes the design standard.
@@ -44,5 +46,47 @@ class PBIntermediateConstraints {
         pinLeft: pinLeft,
         fixedHeight: fixedHeight,
         fixedWidth: fixedWidth);
+  }
+
+  PBIntermediateConstraints.mergeFromContraints(
+      PBIntermediateConstraints first, PBIntermediateConstraints second) {
+    pinTop = (first.pinTop || second.pinTop) ? true : false;
+    pinLeft = (first.pinLeft || second.pinLeft) ? true : false;
+    pinRight = (first.pinRight || second.pinRight) ? true : false;
+    pinBottom = (first.pinBottom || second.pinBottom) ? true : false;
+
+    /// Set Fixed Height Value
+    if (first.fixedHeight != null || second.fixedHeight != null) {
+      if (first.fixedHeight != null && second.fixedHeight != null) {
+        if (first.fixedHeight != second.fixedHeight) {
+          log('PBIntermediatConstraints tried merging constraints where fixed height & fixed height were both set & not equal.');
+          fixedHeight = first.fixedHeight;
+        } else {
+          fixedHeight = first.fixedHeight;
+        }
+      }
+      if (first.fixedHeight == null) {
+        fixedHeight = second.fixedHeight;
+      } else {
+        fixedHeight = first.fixedHeight;
+      }
+    }
+
+    /// Set Fixed Width Value
+    if (first.fixedWidth != null || second.fixedWidth != null) {
+      if (first.fixedWidth != null && second.fixedWidth != null) {
+        if (first.fixedWidth != second.fixedWidth) {
+          log('PBIntermediatConstraints tried merging constraints where fixed width & fixed width were both set & not equal.');
+          fixedWidth = first.fixedHeight;
+        } else {
+          fixedWidth = first.fixedHeight;
+        }
+      }
+      if (first.fixedWidth == null) {
+        fixedWidth = second.fixedWidth;
+      } else {
+        fixedWidth = first.fixedWidth;
+      }
+    }
   }
 }

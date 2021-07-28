@@ -7,6 +7,7 @@ import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -118,12 +119,15 @@ class Group extends AbstractGroupLayer implements SketchNodeFactory {
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
       Future.value(TempGroupLayoutNode(this, currentContext, name,
-          topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
+          topLeftCorner:
+              Point<double>(boundaryRectangle.x, boundaryRectangle.y),
           bottomRightCorner: Point<double>(
               boundaryRectangle.x + boundaryRectangle.width,
               boundaryRectangle.y + boundaryRectangle.height),
-          constraints:
-              convertSketchConstraintToPBDLConstraint(resizingConstraint)));
+          constraints: PBIntermediateConstraints.fromConstraints(
+              convertSketchConstraintToPBDLConstraint(resizingConstraint),
+              boundaryRectangle.height,
+              boundaryRectangle.width)));
 
   @override
   Map<String, dynamic> toPBDF() => <String, dynamic>{

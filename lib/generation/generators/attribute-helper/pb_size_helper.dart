@@ -40,10 +40,6 @@ class PBSizeHelper extends PBAttributesHelper {
             ? relativeWidth / screenWidth
             : relativeWidth;
 
-    if (source.currentContext.tree.first.name == 'ArtboardBRpinfixedwidth') {
-      print('asdf');
-    }
-
     if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
       var height = source.constraints.fixedHeight != null
           ? body['height'].toStringAsFixed(3)
