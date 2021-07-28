@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:pbdl/pbdl.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:path/path.dart' as p;
 
 class Interpret {
   var log = Logger('Interpret');
@@ -40,7 +41,8 @@ class Interpret {
   Future<PBProject> interpretAndOptimize(PBDLProject project) async {
     _pbProject = PBProject.fromJson(project.toJson());
 
-    _pbProject.projectAbsPath = MainInfo().outputPath;
+    _pbProject.projectAbsPath =
+        p.join(MainInfo().outputPath, MainInfo().projectName);
 
     _pbProject.forest = await Future.wait(_pbProject.forest
         .map((tree) async => await _generateScreen(tree))
