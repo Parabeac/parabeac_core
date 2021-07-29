@@ -1,6 +1,7 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:pbdl/pbdl.dart';
+import 'package:path/path.dart' as p;
 
 class FigmaToPBDLService implements DesignToPBDLService {
   @override
@@ -10,6 +11,6 @@ class FigmaToPBDLService implements DesignToPBDLService {
   Future<PBDLProject> callPBDL(MainInfo info) => PBDL.fromFigma(
         info.figmaProjectID,
         info.figmaKey,
-        outputPath: info.outputPath,
+        outputPath: p.join(info.outputPath, 'assets'),
       );
 }
