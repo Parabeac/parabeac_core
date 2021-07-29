@@ -8,7 +8,7 @@ class SketchToPBDLService implements DesignToPBDLService {
   Future<PBDLProject> callPBDL(MainInfo info) async {
     return PBDL.fromSketch(
       info.designFilePath,
-      outputPath: p.join(info.outputPath, 'assets'),
+      outputPath: p.join(info.genProjectPath, 'assets'),
     );
   }
 
