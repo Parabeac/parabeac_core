@@ -9,7 +9,7 @@ part of 'pb_shared_instance.dart';
 PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     Map<String, dynamic> json) {
   return PBSharedInstanceIntermediateNode(
-    SYMBOL_ID: json['SYMBOL_ID'] as String,
+    SYMBOL_ID: json['symbolID'] as String,
     sharedParamValues: (json['overrideValues'] as List)
         ?.map((e) => e == null
             ? null
@@ -41,7 +41,7 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'children': instance.children?.map((e) => e?.toJson())?.toList(),
       'child': instance.child?.toJson(),
       'name': instance.name,
-      'SYMBOL_ID': instance.SYMBOL_ID,
+      'symbolID': instance.SYMBOL_ID,
       'overrideValues':
           instance.sharedParamValues?.map((e) => e?.toJson())?.toList(),
       'prototypeNodeUUID': instance.prototypeNode?.toJson(),

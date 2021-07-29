@@ -18,7 +18,7 @@ part 'pb_shared_instance.g.dart';
 /// Superclass: PBSharedIntermediateNode
 class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
-  @JsonKey()
+  @JsonKey(name: 'symbolID')
   final String SYMBOL_ID;
 
   ///The parameters that are going to be overriden in the [PBSharedMasterNode].
