@@ -1,4 +1,3 @@
-[submodule "SketchAssetConverter"]
-	path = SketchAssetConverter
-	url = https://github.com/Parabeac/SketchAssetConverter.git
-	branch = master
+[submodule "pbdl"]
+	path = pbdl
+	url = https://github.com/Parabeac/pbdl
