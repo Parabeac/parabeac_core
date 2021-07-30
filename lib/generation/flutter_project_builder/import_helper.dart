@@ -1,10 +1,6 @@
-import 'package:parabeac_core/eggs/injected_app_bar.dart';
-import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
 import 'package:path/path.dart' as p;
@@ -16,52 +12,39 @@ class ImportHelper implements FileWriterObserver {
 
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
-  static Set<String> findImports(PBIntermediateNode node, String path) {
-    Set currentImports = <String>{};
-    if (node == null) {
-      return currentImports;
-    }
 
-    String id;
-    if (node is PBSharedInstanceIntermediateNode) {
-      id = node.SYMBOL_ID;
-    } else if (node is PBDestHolder) {
-      id = node.pNode.destinationUUID;
-    } else {
-      id = node.UUID;
-    }
+  // static Set<String> findImports(PBIntermediateNode node, String path) {
+  //   Set currentImports = <String>{};
+  //   if (node == null) {
+  //     return currentImports;
+  //   }
 
-    var nodePaths = PBGenCache().getPaths(id);
-    // Make sure nodePath exists and is not the same as path (importing yourself)
-    if (nodePaths != null &&
-        nodePaths.isNotEmpty &&
-        !nodePaths.any((element) => element == path)) {
-      var paths = PBGenCache().getRelativePath(path, id);
-      paths.forEach(currentImports.add);
-    }
+  //   String id;
+  //   if (node is PBSharedInstanceIntermediateNode) {
+  //     id = node.SYMBOL_ID;
+  //   } else if (node is PBDestHolder) {
+  //     id = node.pNode.destinationUUID;
+  //   } else {
+  //     id = node.UUID;
+  //   }
 
-    // Recurse through child/children and add to imports
-    if (node is PBLayoutIntermediateNode) {
-      node.children
-          .forEach((child) => currentImports.addAll(findImports(child, path)));
-    } else if (node is InheritedScaffold) {
-      currentImports.addAll(findImports(node.navbar, path));
-      currentImports.addAll(findImports(node.tabbar, path));
-      currentImports.addAll(findImports(node.child, path));
-    } else if (node is InjectedAppbar) {
-      currentImports.addAll(findImports(node.leadingItem, path));
-      currentImports.addAll(findImports(node.middleItem, path));
-      currentImports.addAll(findImports(node.trailingItem, path));
-    } else if (node is InjectedTabBar) {
-      for (var tab in node.tabs) {
-        currentImports.addAll(findImports(tab, path));
-      }
-    } else {
-      currentImports.addAll(findImports(node.child, path));
-    }
+  //   var nodePaths = PBGenCache().getPaths(id);
+  //   // Make sure nodePath exists and is not the same as path (importing yourself)
+  //   if (nodePaths != null &&
+  //       nodePaths.isNotEmpty &&
+  //       !nodePaths.any((element) => element == path)) {
+  //     var paths = PBGenCache().getRelativePath(path, id);
+  //     paths.forEach(currentImports.add);
+  //   }
 
-    return currentImports;
-  }
+  //   node.attributes.forEach((attribute) {
+  //     attribute.attributeNodes.forEach((attributeNode) {
+  //       currentImports.addAll(findImports(attributeNode, path));
+  //     });
+  //   });
+
+  //   return currentImports;
+  // }
 
   List<String> getImport(String UUID) {
     if (imports.containsKey(UUID)) {
