@@ -1,5 +1,7 @@
-import 'dart:io';
+// import 'dart:io';
+import 'package:file/local.dart';
 import 'package:path/path.dart' as p;
+import 'package:file/file.dart';
 import 'package:quick_log/quick_log.dart';
 
 /// The [FileSystemAnalyser]'s main purpose is enable the continous modification
@@ -16,6 +18,10 @@ import 'package:quick_log/quick_log.dart';
 class FileSystemAnalyzer {
   Logger _logger;
 
+  /// Had to expose use the `file` dart package and expose the
+  /// [FileSystem] in order to perform some testing in the [FileSystemAnalyzer].
+  FileSystem fileSystem;
+
   /// A set that contains multiple paths
   p.PathSet _pathSet;
 
@@ -30,10 +36,11 @@ class FileSystemAnalyzer {
   /// times.
   bool _projectChecked = false;
 
-  FileSystemAnalyzer(String projectPath) {
+  FileSystemAnalyzer(String projectPath, {this.fileSystem}) {
     assert(projectPath != null);
 
     _logger = Logger(runtimeType.toString());
+    fileSystem ??= LocalFileSystem();
 
     _projectPath = p.normalize(projectPath);
     _pathSet = p.PathSet(context: p.Context());
@@ -50,15 +57,26 @@ class FileSystemAnalyzer {
 
   /// returns if a [Directory] is present on the path of [_projectPath]
   Future<bool> projectExist() {
-    return FileSystemEntity.type(_projectPath, followLinks: false)
+    return fileSystem.isDirectory(_projectPath)
+    .then((isDirectory) {
+      _projectChecked = true;
+      if(isDirectory){
+        _projectDir = fileSystem.directory(_projectPath);
+      }
+      else{
+        _logger.info(
+          'The $_projectPath does not exist or its not of type Directory.');
+      }
+      return isDirectory;
+    });
+    return fileSystem.type(_projectPath, followLinks: false)
         .then((FileSystemEntityType type) {
       _projectChecked = true;
-      if (type is Directory) {
-        _projectDir = Directory(_projectPath);
+      if (fileSystem.isDirectorySync(path)) {
+        _projectDir = fileSystem.directory(_projectPath);
         return true;
       }
-      _logger.info(
-          'The $_projectPath does not exist or its not of type Directory (actual type: ${type.toString()})');
+      
       return false;
     });
   }
