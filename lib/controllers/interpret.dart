@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -47,6 +48,9 @@ class Interpret {
     _pbProject.forest = await Future.wait(_pbProject.forest
         .map((tree) async => await _generateScreen(tree))
         .toList());
+
+    // TODO: do this in just one go
+    await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return _pbProject;
   }
