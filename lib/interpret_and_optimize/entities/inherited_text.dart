@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -120,8 +121,19 @@ class InheritedText extends PBVisualIntermediateNode
         ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json);
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
-      InheritedText.fromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) {
+    var inheritedText = InheritedText.fromJson(json);
+    // Return an [InheritedContainer] that wraps this text
+    return InheritedContainer(
+      UUID: inheritedText.UUID,
+      topLeftCorner: inheritedText.topLeftCorner,
+      bottomRightCorner: inheritedText.bottomRightCorner,
+      name: inheritedText.name,
+      currentContext: inheritedText.currentContext,
+      size: inheritedText.size,
+      originalRef: json,
+    )..addChild(inheritedText);
+  }
 }
 
 class InheritedTextPBDLHelper {

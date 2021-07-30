@@ -66,7 +66,7 @@ class Point implements Comparable<Point> {
     var x, y;
     if (json.containsKey('boundaryRectangle')) {
       x = json['boundaryRectangle']['x'] + json['boundaryRectangle']['width'];
-      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['width'];
+      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['height'];
     } else {
       x = json['x'] + json['width'];
       y = json['y'] + json['height'];
