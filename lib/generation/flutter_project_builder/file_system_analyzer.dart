@@ -1,4 +1,3 @@
-// import 'dart:io';
 import 'package:file/local.dart';
 import 'package:path/path.dart' as p;
 import 'package:file/file.dart';
@@ -24,6 +23,7 @@ class FileSystemAnalyzer {
 
   /// A set that contains multiple paths
   p.PathSet _pathSet;
+  List<String> get paths => _pathSet.toList();
 
   /// Path of where the project [Directory] is located.
   String _projectPath;
@@ -46,38 +46,24 @@ class FileSystemAnalyzer {
     _pathSet = p.PathSet(context: p.Context());
   }
 
-  bool containsFile(String path){
-    if(path == null){
+  bool containsFile(String path) {
+    if (path == null) {
       throw NullThrownError();
     }
     return _pathSet.contains(p.normalize(path));
   }
 
-
-
   /// returns if a [Directory] is present on the path of [_projectPath]
   Future<bool> projectExist() {
-    return fileSystem.isDirectory(_projectPath)
-    .then((isDirectory) {
+    return fileSystem.isDirectory(_projectPath).then((isDirectory) {
       _projectChecked = true;
-      if(isDirectory){
+      if (isDirectory) {
         _projectDir = fileSystem.directory(_projectPath);
-      }
-      else{
+      } else {
         _logger.info(
-          'The $_projectPath does not exist or its not of type Directory.');
+            'The $_projectPath does not exist or its not of type Directory.');
       }
       return isDirectory;
-    });
-    return fileSystem.type(_projectPath, followLinks: false)
-        .then((FileSystemEntityType type) {
-      _projectChecked = true;
-      if (fileSystem.isDirectorySync(path)) {
-        _projectDir = fileSystem.directory(_projectPath);
-        return true;
-      }
-      
-      return false;
     });
   }
 
