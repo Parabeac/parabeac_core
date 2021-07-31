@@ -15,5 +15,6 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
       'topLeftCorner': instance.topLeftCorner?.toJson(),
       'bottomRightCorner': instance.bottomRightCorner?.toJson(),
       'size': instance.size,
+      'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
     };

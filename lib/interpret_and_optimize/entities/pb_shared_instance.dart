@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_ins
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'alignments/injected_align.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
 part 'pb_shared_instance.g.dart';
 

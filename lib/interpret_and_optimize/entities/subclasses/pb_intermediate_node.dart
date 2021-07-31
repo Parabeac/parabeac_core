@@ -76,7 +76,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   Map size;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
-  @JsonKey(ignore: true)
+  @JsonKey(name: 'style')
   IntermediateAuxiliaryData auxiliaryData = IntermediateAuxiliaryData();
 
   /// Name of the element if available.
@@ -154,7 +154,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   void addChild(PBIntermediateNode node);
 
   factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
-      AbstractIntermediateNodeFactory.getIntermediateNode(json);
+      AbstractIntermediateNodeFactory.getIntermediateNode(json)..auxiliaryData;
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 

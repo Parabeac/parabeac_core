@@ -17,12 +17,17 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
         json['boundaryRectangle'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
+    ..auxiliaryData = json['style'] == null
+        ? null
+        : IntermediateAuxiliaryData.fromJson(
+            json['style'] as Map<String, dynamic>)
     ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$InheritedScaffoldToJson(InheritedScaffold instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
+      'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,
       'isFlowHome': instance.isHomeScreen,

@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
 part 'inherited_bitmap.g.dart';
 

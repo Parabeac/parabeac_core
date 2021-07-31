@@ -9,7 +9,7 @@ part of 'inherited_container.dart';
 InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
   return InheritedContainer(
     name: json['name'] as String,
-    isBackgroundVisible: json['isBackgroundVisible'] as bool,
+    isBackgroundVisible: json['isBackgroundVisible'] as bool ?? true,
     UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
@@ -20,6 +20,10 @@ InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
     ..child = json['child'] == null
         ? null
         : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..auxiliaryData = json['style'] == null
+        ? null
+        : IntermediateAuxiliaryData.fromJson(
+            json['style'] as Map<String, dynamic>)
     ..type = json['type'] as String;
 }
 
@@ -27,6 +31,7 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'child': instance.child,
+      'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,
       'isBackgroundVisible': instance.isBackgroundVisible,

@@ -74,7 +74,7 @@ class PBPluginListHelper {
   PBEgg returnAllowListNodeIfExists(PBIntermediateNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
     for (var key in allowListNames.keys) {
-      if (node.name.contains(key)) {
+      if (node.name?.contains(key) ?? false) {
         return allowListNames[key].generatePluginNode(
             node.topLeftCorner, node.bottomRightCorner, node);
       }

@@ -26,6 +26,10 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
     ..child = json['child'] == null
         ? null
         : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..auxiliaryData = json['style'] == null
+        ? null
+        : IntermediateAuxiliaryData.fromJson(
+            json['style'] as Map<String, dynamic>)
     ..type = json['type'] as String;
 }
 
@@ -34,6 +38,7 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'subsemantic': instance.subsemantic,
       'children': instance.children,
       'child': instance.child,
+      'style': instance.auxiliaryData,
       'name': instance.name,
       'isTextParameter': instance.isTextParameter,
       'prototypeNodeUUID': instance.prototypeNode,

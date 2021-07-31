@@ -27,7 +27,11 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..child = json['child'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>);
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+    ..auxiliaryData = json['style'] == null
+        ? null
+        : IntermediateAuxiliaryData.fromJson(
+            json['style'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
@@ -35,6 +39,7 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'subsemantic': instance.subsemantic,
       'children': instance.children,
       'child': instance.child,
+      'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,
       'topLeftCorner': instance.topLeftCorner,
