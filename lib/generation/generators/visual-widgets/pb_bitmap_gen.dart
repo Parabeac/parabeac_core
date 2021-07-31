@@ -24,9 +24,8 @@ class PBBitmapGenerator extends PBGenerator {
     //   buffer.write('${SN_UUIDtoVarName[source.UUID + '_layerStyle']} ?? ');
     // }
 
-    // TODO: do we need this?
     var imagePath = source is InheritedBitmap
-        ? p.relative(source.referenceImage, from: MainInfo().outputPath)
+        ? p.relative(source.referenceImage, from: MainInfo().genProjectPath)
         : ('assets/images/' + source.UUID + '.png');
 
     buffer.write(
