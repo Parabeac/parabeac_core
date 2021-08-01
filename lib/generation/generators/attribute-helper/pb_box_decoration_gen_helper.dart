@@ -17,19 +17,18 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
       }
       if (borderInfo != null) {
-        if (borderInfo['shape'] == 'circle') {
+        if (borderInfo.shape == 'circle') {
           buffer.write('shape: BoxShape.circle,');
-        } else if (borderInfo['borderRadius'] != null) {
+        } else if (borderInfo.borderRadius != null) {
           buffer.write(
-              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo['borderRadius']})),');
-          if ((borderInfo['borderColorHex'] != null) ||
-              (borderInfo['borderThickness'] != null)) {
+              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
+          if ((borderInfo.color != null) || (borderInfo.thickness != null)) {
             buffer.write('border: Border.all(');
-            if (borderInfo['borderColorHex'] != null) {
-              buffer.write('color: Color(${borderInfo['borderColorHex']}),');
+            if (borderInfo.color != null) {
+              buffer.write('color: Color(${borderInfo.color.toString()}),');
             }
-            if (borderInfo['borderThickness'] != null) {
-              buffer.write('width: ${borderInfo['borderThickness']},');
+            if (borderInfo.thickness != null) {
+              buffer.write('width: ${borderInfo.thickness},');
             }
             buffer.write('),'); // end of Border.all(
           }

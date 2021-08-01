@@ -1,3 +1,4 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/intermediate_border_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -9,9 +10,9 @@ class IntermediateAuxiliaryData {
   @JsonKey(ignore: true)
   DirectedStateGraph stateGraph;
 
-  /// Info relating to a elements borders, currently just in a map format.
-  @JsonKey(defaultValue: {})
-  Map borderInfo = {};
+  /// Info relating to a elements borders.
+  @JsonKey(ignore: true)
+  IntermediateBorderInfo borderInfo;
 
   /// Info relating to the alignment of an element, currently just in a map format.
   Map alignment;
@@ -29,7 +30,8 @@ class IntermediateAuxiliaryData {
   }
 
   factory IntermediateAuxiliaryData.fromJson(Map<String, dynamic> json) =>
-      _$IntermediateAuxiliaryDataFromJson(json);
+      _$IntermediateAuxiliaryDataFromJson(json)
+        ..borderInfo = IntermediateBorderInfo.fromJson(json['borders'][0]);
 
   Map<String, dynamic> toJson() => _$IntermediateAuxiliaryDataToJson(this);
 }

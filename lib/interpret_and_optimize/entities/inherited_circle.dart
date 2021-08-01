@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/intermediate_border_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -62,8 +63,8 @@ class InheritedCircle extends PBVisualIntermediateNode
             UUID: UUID ?? '') {
     generator = PBBitmapGenerator();
 
-    auxiliaryData.borderInfo = {};
-    auxiliaryData.borderInfo['shape'] = 'circle';
+    auxiliaryData.borderInfo = IntermediateBorderInfo();
+    auxiliaryData.borderInfo.shape = 'circle';
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;

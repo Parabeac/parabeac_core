@@ -18,11 +18,9 @@ class PBContainerGenerator extends PBGenerator {
 
     buffer.write(PBSizeHelper().generate(source, generatorContext));
 
-    if (source.auxiliaryData.borderInfo != null &&
-        source.auxiliaryData.borderInfo.isNotEmpty) {
+    if (source.auxiliaryData.borderInfo != null) {
       buffer.write(PBBoxDecorationHelper().generate(source, generatorContext));
-    }
-    else {
+    } else {
       buffer.write(PBColorGenHelper().generate(source, generatorContext));
     }
 

@@ -62,7 +62,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     double alignX,
     double alignY,
     this.currentContext,
-    Map borderInfo,
     this.isBackgroundVisible = true,
     this.UUID,
     this.size,
@@ -71,12 +70,9 @@ class InheritedContainer extends PBVisualIntermediateNode
             UUID: UUID ?? '') {
     generator = PBContainerGenerator();
 
-    borderInfo ??= {};
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
-
-    auxiliaryData.borderInfo = borderInfo;
   }
 
   @override
@@ -117,7 +113,7 @@ class InheritedContainer extends PBVisualIntermediateNode
       ..originalRef = json;
 
     container.mapRawChildren(json);
-    container.auxiliaryData.borderInfo['borderRadius'] = json['fixedRadius'];
+    container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
 
     return container;
   }
