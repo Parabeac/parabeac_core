@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -51,6 +53,7 @@ abstract class Controller {
       [AssetProcessingService apService]) async {
     var processInfo = MainInfo();
     var configuration = processInfo.configuration;
+    var indexFileFuture = Future.value();
 
     /// IN CASE OF JSON ONLY
     if (processInfo.exportPBDL) {
@@ -60,6 +63,8 @@ abstract class Controller {
     if (!(await fileSystemAnalyzer.projectExist())) {
       await FlutterProjectBuilder.createFlutterProject(processInfo.projectName,
           projectDir: processInfo.outputPath);
+    } else{
+      indexFileFuture = fileSystemAnalyzer.indexProjectFiles();
     }
 
     Interpret().init(processInfo.genProjectPath, configuration);
@@ -72,6 +77,7 @@ abstract class Controller {
         project: pbProject,
         pageWriter: PBFlutterWriter());
 
+    await indexFileFuture;
     await fpb.genProjectFiles(processInfo.genProjectPath);
   }
 
