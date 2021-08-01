@@ -117,6 +117,7 @@ class InheritedContainer extends PBVisualIntermediateNode
       ..originalRef = json;
 
     container.mapRawChildren(json);
+    container.auxiliaryData.borderInfo['borderRadius'] = json['fixedRadius'];
 
     return container;
   }

@@ -12,7 +12,7 @@ IntermediateAuxiliaryData _$IntermediateAuxiliaryDataFromJson(
     alignment: json['alignment'] as Map<String, dynamic>,
     color: ColorUtils.pbColorFromJsonFills(
         json['fills'] as List<Map<String, dynamic>>),
-  )..borderInfo = json['borderInfo'] as Map<String, dynamic>;
+  )..borderInfo = json['borderInfo'] as Map<String, dynamic> ?? {};
 }
 
 Map<String, dynamic> _$IntermediateAuxiliaryDataToJson(
