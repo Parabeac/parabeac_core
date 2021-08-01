@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/interpret.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/input/helper/asset_processing_service.dart';
@@ -55,10 +56,11 @@ abstract class Controller {
     if (processInfo.exportPBDL) {
       return stopAndToJson(designProject, apService);
     }
-
-    var projectGenFuture = await FlutterProjectBuilder.createFlutterProject(
-        processInfo.projectName,
-        projectDir: processInfo.outputPath);
+    var fileSystemAnalyzer = FileSystemAnalyzer(processInfo.genProjectPath);
+    if (!(await fileSystemAnalyzer.projectExist())) {
+      await FlutterProjectBuilder.createFlutterProject(processInfo.projectName,
+          projectDir: processInfo.outputPath);
+    }
 
     Interpret().init(processInfo.genProjectPath, configuration);
 
@@ -70,7 +72,7 @@ abstract class Controller {
         project: pbProject,
         pageWriter: PBFlutterWriter());
 
-    await fpb.genProjectFiles(projectGenFuture.item1);
+    await fpb.genProjectFiles(processInfo.genProjectPath);
   }
 
   void convertFile(
