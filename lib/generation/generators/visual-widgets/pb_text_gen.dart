@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
@@ -21,8 +22,7 @@ class PBTextGen extends PBGenerator {
       if (isTextParameter) {
         var text = source.text;
         buffer.write('$text, \n');
-      }
-      else {
+      } else {
         // if (SN_UUIDtoVarName.containsKey('${source.UUID}_stringValue')) {
         //   buffer.write('${SN_UUIDtoVarName[source.UUID + '_stringValue']} ?? ');
         // }
@@ -51,14 +51,9 @@ class PBTextGen extends PBGenerator {
       if (source.letterSpacing != null) {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
-      // if (source.auxiliaryData.color != null) {
-      //   if (findDefaultColor(source.auxiliaryData.color) == null) {
-      //     buffer.write('color: Color(${source.auxiliaryData.color}),');
-      //   } else {
-      //     buffer
-      //         .write('color: ${findDefaultColor(source.auxiliaryData.color)},');
-      //   }
-      // }
+      if (source.auxiliaryData.color != null) {
+        buffer.write(PBColorGenHelper().generate(source, generatorContext));
+      }
 
       buffer.write('),');
       if (source.textAlignment != null) {
