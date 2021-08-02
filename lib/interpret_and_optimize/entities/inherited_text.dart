@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -119,7 +120,8 @@ class InheritedText extends PBVisualIntermediateNode
         ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
         ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
         ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
-        ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json);
+        ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json)
+        ..auxiliaryData.color = PBColor.fromJson(json['style']['textStyle']['fontColor']);
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) {
