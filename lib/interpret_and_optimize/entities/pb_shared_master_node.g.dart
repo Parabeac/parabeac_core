@@ -10,6 +10,11 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
   return PBSharedMasterNode(
     SYMBOL_ID: json['symbolID'] as String,
     name: json['name'] as String,
+    overridableProperties: (json['overrideProperties'] as List)
+        ?.map((e) => e == null
+            ? null
+            : PBSharedParameterProp.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     UUID: json['UUID'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
@@ -38,6 +43,8 @@ Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
       'type': instance.type,
       'UUID': instance.UUID,
       'boundaryRectangle': instance.size,
+      'overrideProperties':
+          instance.overridableProperties?.map((e) => e?.toJson())?.toList(),
     };
 
 PBSharedParameterProp _$PBSharedParameterPropFromJson(
@@ -47,7 +54,7 @@ PBSharedParameterProp _$PBSharedParameterPropFromJson(
     json['value'] == null
         ? null
         : PBIntermediateNode.fromJson(json['value'] as Map<String, dynamic>),
-    json['propertyName'] as String,
+    PBSharedParameterProp._propertyNameFromJson(json['name'] as String),
     json['UUID'] as String,
     json['initialValue'],
   );
@@ -58,7 +65,7 @@ Map<String, dynamic> _$PBSharedParameterPropToJson(
     <String, dynamic>{
       'type': instance.type,
       'value': instance.value,
-      'propertyName': instance.propertyName,
+      'name': instance.propertyName,
       'UUID': instance.UUID,
       'initialValue': instance.initialValue,
     };

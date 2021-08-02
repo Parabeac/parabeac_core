@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'package:recase/recase.dart';
 
 part 'pb_shared_master_node.g.dart';
 
@@ -69,7 +70,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
-
+  @JsonKey(name: 'overrideProperties')
   List<PBSharedParameterProp> overridableProperties;
   String friendlyName;
 
@@ -169,6 +170,7 @@ class PBSharedParameterProp {
 
   PBIntermediateNode value;
 
+  @JsonKey(name: 'name', fromJson: _propertyNameFromJson)
   final String propertyName;
 
   final String UUID;
@@ -183,4 +185,12 @@ class PBSharedParameterProp {
 
   PBSharedParameterProp(
       this.type, this.value, this.propertyName, this.UUID, this.initialValue);
+
+  factory PBSharedParameterProp.fromJson(Map<String, dynamic> json) =>
+      _$PBSharedParameterPropFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PBSharedParameterPropToJson(this);
+
+  static String _propertyNameFromJson(String name) =>
+      name.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').camelCase;
 }

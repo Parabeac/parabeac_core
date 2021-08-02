@@ -31,7 +31,9 @@ class IntermediateAuxiliaryData {
 
   factory IntermediateAuxiliaryData.fromJson(Map<String, dynamic> json) =>
       _$IntermediateAuxiliaryDataFromJson(json)
-        ..borderInfo = IntermediateBorderInfo.fromJson(json['borders'][0]);
+        ..borderInfo = json['borders'].isNotEmpty
+            ? IntermediateBorderInfo.fromJson(json['borders'][0])
+            : IntermediateBorderInfo();
 
   Map<String, dynamic> toJson() => _$IntermediateAuxiliaryDataToJson(this);
 }
