@@ -60,6 +60,8 @@ abstract class Controller {
       return stopAndToJson(designProject, apService);
     }
     var fileSystemAnalyzer = FileSystemAnalyzer(processInfo.genProjectPath);
+    fileSystemAnalyzer.addFileExtension('.dart');
+    
     if (!(await fileSystemAnalyzer.projectExist())) {
       await FlutterProjectBuilder.createFlutterProject(processInfo.projectName,
           projectDir: processInfo.outputPath);

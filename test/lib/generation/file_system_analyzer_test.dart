@@ -39,11 +39,15 @@ void main() {
         '$FileSystemAnalyzer indexing files within the project path that is passed to it.',
         () async {
       var cDir = fileSystem.currentDirectory;
+      var testingExtension = '.dart';
+      var testingExtension2 = '.js';
       var files = <String>[
         './example_directory/some_file.dart',
         './parabeac_file.g.dart',
         './inside/multiple/directories/inside.dart',
-        './testing_extension/should_be_ignored.txt'
+        './testing_extension/should_be_ignored.txt',
+        './another_extension/test/.gitignore',
+        './testing_raw_extension_input/index.js'
       ].map((file) => p.join(projectPath, p.normalize(file)));
 
       /// Setting up the files within the [fileSystem.currentDirectory]
@@ -52,12 +56,21 @@ void main() {
       });
 
       /// [fileSystemAnalyzer] should strip anything that is not the actual file extension
-      fileSystemAnalyzer.addFileExtension('extension.dart');
-      expect(fileSystemAnalyzer.extensions.contains('.dart'), true);
+      fileSystemAnalyzer.addFileExtension('extension$testingExtension');
+      expect(fileSystemAnalyzer.extensions.contains(testingExtension), true);
+
+      // [fileSystemAnalyzer] should also accept raw extension
+      fileSystemAnalyzer.addFileExtension(testingExtension2);
+      expect(fileSystemAnalyzer.extensions.contains(testingExtension2), true);
 
       await fileSystemAnalyzer.indexProjectFiles();
 
-      expect((files.length - 1), fileSystemAnalyzer.paths.length,
+      expect(
+          files.where((path) {
+            var ext = p.extension(path);
+            return ext == testingExtension || ext == testingExtension2;
+          }).length,
+          fileSystemAnalyzer.paths.length,
           reason:
               '$FileSystemAnalyzer should contain one less than the number of files because of the extension filter we set (.dart files).');
       fileSystemAnalyzer.paths.forEach((indexedFile) {

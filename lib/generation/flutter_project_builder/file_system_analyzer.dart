@@ -45,8 +45,7 @@ class FileSystemAnalyzer {
   /// times.
   bool _projectChecked = false;
 
-  FileSystemAnalyzer(String projectPath,
-      {this.fileSystem}) {
+  FileSystemAnalyzer(String projectPath, {this.fileSystem}) {
     assert(projectPath != null);
 
     _logger = Logger(runtimeType.toString());
@@ -66,12 +65,15 @@ class FileSystemAnalyzer {
 
   /// Adding [ext] to the files that should be taken into consideration when
   /// running [indexProjectFiles].
-  /// 
+  ///
   /// [level] represents 'how many dots from the end, for example, [level] of
   /// `1` could return `.dart` from `.g.dart`, [level] `2` would return `.g.dart`
   void addFileExtension(String ext, [int level = 1]) {
     if (ext != null) {
-      _extensions.add(p.extension(ext, level));
+      /// [ext] could just be `.dart` in which case [p.extension] would return and empty string,
+      /// therefore, we have to check if its just the raw extension or not.
+      ext = ext.startsWith('.') ? ext : p.extension(ext, level);
+      _extensions.add(ext);
     }
   }
 
