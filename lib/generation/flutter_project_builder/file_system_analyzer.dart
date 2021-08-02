@@ -25,6 +25,15 @@ class FileSystemAnalyzer {
   p.PathSet _pathSet;
   List<String> get paths => _pathSet.toList();
 
+  /// These are the extensions that should be indexed, if the [Set] is empty then, its
+  /// going to assume that all the files should be indexed.
+  ///
+  /// For example, [_extensions] contains `.dart`, then only the `dart` files are going
+  /// to be indexed. In other words, we are only going to care if `dart` files have been changed or
+  /// missing.
+  Iterable<String> get extensions => _extensions.toList();
+  Set<String> _extensions;
+
   /// Path of where the project [Directory] is located.
   String _projectPath;
   String get projectPath => _projectPath;
@@ -36,11 +45,13 @@ class FileSystemAnalyzer {
   /// times.
   bool _projectChecked = false;
 
-  FileSystemAnalyzer(String projectPath, {this.fileSystem}) {
+  FileSystemAnalyzer(String projectPath,
+      {this.fileSystem}) {
     assert(projectPath != null);
 
     _logger = Logger(runtimeType.toString());
     fileSystem ??= LocalFileSystem();
+    _extensions = <String>{};
 
     _projectPath = p.normalize(projectPath);
     _pathSet = p.PathSet(context: p.Context());
@@ -51,6 +62,17 @@ class FileSystemAnalyzer {
       throw NullThrownError();
     }
     return _pathSet.contains(p.normalize(path));
+  }
+
+  /// Adding [ext] to the files that should be taken into consideration when
+  /// running [indexProjectFiles].
+  /// 
+  /// [level] represents 'how many dots from the end, for example, [level] of
+  /// `1` could return `.dart` from `.g.dart`, [level] `2` would return `.g.dart`
+  void addFileExtension(String ext, [int level = 1]) {
+    if (ext != null) {
+      _extensions.add(p.extension(ext, level));
+    }
   }
 
   /// returns if a [Directory] is present on the path of [_projectPath]
@@ -67,8 +89,11 @@ class FileSystemAnalyzer {
     });
   }
 
-  /// From the [_projectPath] provided, we are going to scan all the files within and
-  /// save them in [_pathSet]
+  /// From the [_projectPath] provided, we are going to scan all the [File]s within and
+  /// save them in [_pathSet].
+  ///
+  /// All the [File]s are going to be indexed if [_extensions.isEmpty], if not, only the [File]s
+  /// that contain any extension of [extension] within [File.path].
   Future<void> indexProjectFiles() async {
     if (!_projectChecked) {
       await projectExist();
@@ -81,7 +106,10 @@ class FileSystemAnalyzer {
     _logger.info('Indexing files within $projectPath...');
     var filePaths = await _projectDir
         .list(recursive: true, followLinks: false)
-        .where((entity) => entity is File)
+        .where((entity) =>
+            entity is File &&
+            (_extensions.isEmpty ||
+                _extensions.any((ext) => entity.path.contains(ext))))
         .cast<File>()
         .map<String>((File file) => p.normalize(file.path))
         .toList();

@@ -42,7 +42,8 @@ void main() {
       var files = <String>[
         './example_directory/some_file.dart',
         './parabeac_file.g.dart',
-        './inside/multiple/directories/inside.dart'
+        './inside/multiple/directories/inside.dart',
+        './testing_extension/should_be_ignored.txt'
       ].map((file) => p.join(projectPath, p.normalize(file)));
 
       /// Setting up the files within the [fileSystem.currentDirectory]
@@ -50,11 +51,15 @@ void main() {
         cDir.childFile(file).createSync(recursive: true);
       });
 
+      /// [fileSystemAnalyzer] should strip anything that is not the actual file extension
+      fileSystemAnalyzer.addFileExtension('extension.dart');
+      expect(fileSystemAnalyzer.extensions.contains('.dart'), true);
+
       await fileSystemAnalyzer.indexProjectFiles();
 
-      expect(files.length, fileSystemAnalyzer.paths.length,
+      expect((files.length - 1), fileSystemAnalyzer.paths.length,
           reason:
-              '$FileSystemAnalyzer should contains the same number of paths that the files created.');
+              '$FileSystemAnalyzer should contain one less than the number of files because of the extension filter we set (.dart files).');
       fileSystemAnalyzer.paths.forEach((indexedFile) {
         var pathFound = files.contains(indexedFile);
         expect(pathFound, true,
