@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -48,6 +51,7 @@ class Interpret {
     _pbProject.forest = await Future.wait(_pbProject.forest
         .map((tree) async => await _generateScreen(tree))
         .toList());
+    _pbProject.forest.removeWhere((element) => element == null);
 
     // TODO: do this in just one go
     await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
@@ -57,15 +61,22 @@ class Interpret {
 
   Future<PBIntermediateTree> _generateScreen(
       PBIntermediateTree intermediateTree) async {
-    var currentContext = createContext(intermediateTree);
-
-    intermediateTree.rootNode.currentContext = currentContext;
-
-    await PBSymbolLinkerService().linkSymbols(intermediateTree.rootNode);
-
     if (intermediateTree.rootNode == null) {
       return intermediateTree;
     }
+
+    var currentContext = createContext(intermediateTree);
+    intermediateTree.rootNode.currentContext = currentContext;
+
+    var stateNode = AbstractIntermediateNodeFactory.interpretStateManagement(
+        intermediateTree.rootNode);
+
+    // Remove non-default state management nodes by returning `null`
+    if (stateNode == null) {
+      return null;
+    }
+
+    await PBSymbolLinkerService().linkSymbols(intermediateTree.rootNode);
 
     ///
     /// pre-layout generation service for plugin nodes.
@@ -78,7 +89,6 @@ class Interpret {
     var stopwatch2 = Stopwatch()..start();
 
     /// LayoutGenerationService
-
     intermediateTree.rootNode = await layoutGenerationService(
         intermediateTree.rootNode, currentContext, stopwatch2);
 

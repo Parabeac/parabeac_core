@@ -72,13 +72,15 @@ class PBPluginListHelper {
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
   PBEgg returnAllowListNodeIfExists(PBIntermediateNode node) {
-    // InjectedContainer(null,null)..subsemantic = '';
-    for (var key in allowListNames.keys) {
-      if (node.name?.contains(key) ?? false) {
-        return allowListNames[key].generatePluginNode(
-            node.topLeftCorner, node.bottomRightCorner, node);
+    if (node != null) {
+      for (var key in allowListNames.keys) {
+        if (node.name?.contains(key) ?? false) {
+          return allowListNames[key].generatePluginNode(
+              node.topLeftCorner, node.bottomRightCorner, node);
+        }
       }
     }
+
     return null;
   }
 }

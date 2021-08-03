@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
@@ -45,10 +46,8 @@ class AbstractIntermediateNodeFactory {
       for (var candidate in _intermediateNodes) {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json);
-          // Interpret state management node
-          if (iNode is PBSharedMasterNode) {
-            interpretStateManagement(iNode);
-          }
+
+          // Check if `iNode` is a tag
           var tag = PBPluginListHelper().returnAllowListNodeIfExists(iNode);
           // Return tag if it exists
           if (tag != null) {
@@ -62,13 +61,21 @@ class AbstractIntermediateNodeFactory {
   }
 
   /// Checks whether `node` is a state management node, and interprets it accordingly.
-  static void interpretStateManagement(PBSharedMasterNode node) {
+  ///
+  /// Returns `null` if `node` is a non-default state management node, effectively removing `node` from the tree.
+  /// Returns `node` if it is a default state management node or a non-state management node.
+  static PBIntermediateNode interpretStateManagement(PBIntermediateNode node) {
+    if (node is! PBSharedMasterNode) {
+      return node;
+    }
     var smHelper = PBStateManagementHelper();
     if (smHelper.isValidStateNode(node.name)) {
       if (smHelper.isDefaultNode(node)) {
         smHelper.interpretStateManagementNode(node);
+        return node;
       } else {
         smHelper.interpretStateManagementNode(node);
+        return null;
       }
     }
   }

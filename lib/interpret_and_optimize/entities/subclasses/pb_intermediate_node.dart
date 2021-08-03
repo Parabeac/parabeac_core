@@ -154,7 +154,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   void addChild(PBIntermediateNode node);
 
   factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
-      AbstractIntermediateNodeFactory.getIntermediateNode(json)..auxiliaryData;
+      AbstractIntermediateNodeFactory.getIntermediateNode(json);
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 
