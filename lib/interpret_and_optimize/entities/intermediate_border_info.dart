@@ -13,11 +13,18 @@ class IntermediateBorderInfo {
 
   String shape;
 
+  /// Whether `color`, `thickness` and `shape` are available.
+  ///
+  /// Note that `borderRadius` should always be enabled
+  @JsonKey(name: 'isEnabled')
+  bool isBorderOutlineVisible;
+
   IntermediateBorderInfo({
     this.borderRadius,
     this.color,
     this.thickness,
     this.shape,
+    this.isBorderOutlineVisible,
   });
 
   factory IntermediateBorderInfo.fromJson(Map<String, dynamic> json) =>

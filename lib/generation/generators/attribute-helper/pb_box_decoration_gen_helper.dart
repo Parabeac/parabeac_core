@@ -20,9 +20,12 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         if (borderInfo.shape == 'circle') {
           buffer.write('shape: BoxShape.circle,');
         } else if (borderInfo.borderRadius != null) {
+          // Write border radius if it exists
           buffer.write(
               'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
-          if ((borderInfo.color != null) || (borderInfo.thickness != null)) {
+          // Write border outline properties if applicable
+          if (borderInfo.isBorderOutlineVisible &&
+              (borderInfo.color != null || borderInfo.thickness != null)) {
             buffer.write('border: Border.all(');
             if (borderInfo.color != null) {
               buffer.write('color: Color(${borderInfo.color.toString()}),');

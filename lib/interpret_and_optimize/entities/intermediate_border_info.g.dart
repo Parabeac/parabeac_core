@@ -15,6 +15,7 @@ IntermediateBorderInfo _$IntermediateBorderInfoFromJson(
         : PBColor.fromJson(json['color'] as Map<String, dynamic>),
     thickness: json['thickness'] as num,
     shape: json['shape'] as String,
+    isBorderOutlineVisible: json['isEnabled'] as bool,
   );
 }
 
@@ -25,4 +26,5 @@ Map<String, dynamic> _$IntermediateBorderInfoToJson(
       'color': instance.color,
       'thickness': instance.thickness,
       'shape': instance.shape,
+      'isEnabled': instance.isBorderOutlineVisible,
     };

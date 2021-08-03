@@ -33,7 +33,8 @@ class IntermediateAuxiliaryData {
       _$IntermediateAuxiliaryDataFromJson(json)
         ..borderInfo = json['borders'].isNotEmpty
             ? IntermediateBorderInfo.fromJson(json['borders'][0])
-            : IntermediateBorderInfo();
+            : IntermediateBorderInfo(
+                isBorderOutlineVisible: false, borderRadius: 0);
 
   Map<String, dynamic> toJson() => _$IntermediateAuxiliaryDataToJson(this);
 }
