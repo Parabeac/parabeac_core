@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:pbdl/pbdl.dart';
@@ -97,6 +98,10 @@ class Interpret {
     /// AlignGenerationService
     intermediateTree.rootNode = await alignGenerationService(
         intermediateTree.rootNode, currentContext, stopwatch3);
+
+    // Populate platform and orientation information
+    PBPlatformOrientationLinkerService()
+        .addOrientationPlatformInformation(intermediateTree);
 
     return intermediateTree;
   }
