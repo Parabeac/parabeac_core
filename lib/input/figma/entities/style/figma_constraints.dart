@@ -9,8 +9,9 @@ class FigmaConstraints {
   FigmaConstraintType horizontal;
   FigmaConstraintType vertical;
 
-  factory FigmaConstraints.fromJson(Map<String, dynamic> json) =>
-      _$FigmaConstraintsFromJson(json);
+  factory FigmaConstraints.fromJson(Map<String, dynamic> json) {
+    return _$FigmaConstraintsFromJson(json);
+  }
   Map<String, dynamic> toJson() => _$FigmaConstraintsToJson(this);
 }
 

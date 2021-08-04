@@ -13,8 +13,6 @@ import 'package:quick_log/quick_log.dart';
 /// Input: PBIntermediateTree
 /// Output: PBIntermediateTree
 class PBPluginControlService implements AITHandler {
-
-
   var log = Logger('Plugin Control Service');
 
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
@@ -22,7 +20,8 @@ class PBPluginControlService implements AITHandler {
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateTree> convertAndModifyPluginNodeTree(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> convertAndModifyPluginNodeTree(
+      PBIntermediateTree tree, PBContext context) {
     var originalRoot = tree.rootNode;
     if (originalRoot == null) {
       log.warning(
@@ -41,7 +40,6 @@ class PBPluginControlService implements AITHandler {
           var layerToReplace =
               currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
           if (layerToReplace == null && currentLayer.nodeLayer != null) {
-            // print('Deleting an entire layer, was this on purpose?');
             log.warning('Deleting an entire layer, was this on purpose?');
 
             currentLayer.nodeLayer = layerToReplace;
@@ -85,7 +83,8 @@ class PBPluginControlService implements AITHandler {
   }
 
   @override
-  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
     return convertAndModifyPluginNodeTree(tree, context);
   }
 }

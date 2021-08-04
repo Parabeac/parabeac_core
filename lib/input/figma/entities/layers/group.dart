@@ -12,6 +12,8 @@ import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_organizational_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -124,21 +126,32 @@ class Group extends FigmaFrame implements AbstractFigmaNodeFactory, Image {
                 boundaryRectangle.width)),
       );
     }
-    var t = Future.value(TempGroupLayoutNode(
-      this,
-      currentContext,
-      name,
-      topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
-      bottomRightCorner: Point<double>(
-          boundaryRectangle.x + boundaryRectangle.width,
-          boundaryRectangle.y + boundaryRectangle.height),
-      constraints: PBIntermediateConstraints.fromConstraints(
-          convertFigmaConstraintToPBDLConstraint(constraints),
-          boundaryRectangle.height,
-          boundaryRectangle.width),
-    ));
-    // print(await t.then((value) => value.constraints));
-    return t;
+
+    return Future.value(
+        InheritedOrganizationalGroup(this, currentContext, name));
+
+    // var stack = PBIntermediateStackLayout(currentContext,
+    //     name: name,
+    //     constraints: PBIntermediateConstraints(
+    //         pinTop: false, pinBottom: false, pinRight: false, pinLeft: false));
+    // stack.topLeftCorner =
+    //     Point<double>(boundaryRectangle.x, boundaryRectangle.y);
+    // stack.bottomRightCorner = Point<double>(
+    //     boundaryRectangle.x + boundaryRectangle.width,
+    //     boundaryRectangle.y + boundaryRectangle.height);
+    // // var t = Future.value(TempGroupLayoutNode(
+    // //   this,
+    // //   currentContext,
+    // //   name,
+    // //   topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
+    // //   bottomRightCorner: Point<double>(
+    // //       boundaryRectangle.x + boundaryRectangle.width,
+    // //       boundaryRectangle.y + boundaryRectangle.height),
+    // //   constraints: PBIntermediateConstraints(
+    // //       pinTop: false, pinBottom: false, pinRight: false, pinLeft: false),
+    // // ));
+    // return Future.value(stack);
+    // return t;
   }
 
   bool areAllVectors() {

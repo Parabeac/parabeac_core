@@ -75,11 +75,11 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     var alignedChildren = <PBIntermediateNode>[];
     node.children.skipWhile((child) {
       /// if they are the same size then there is no need for adjusting.
-      if (child.topLeftCorner == node.topLeftCorner &&
-          child.bottomRightCorner == node.bottomRightCorner) {
-        alignedChildren.add(child);
-        return true;
-      }
+      // if (child.topLeftCorner == node.topLeftCorner &&
+      //     child.bottomRightCorner == node.bottomRightCorner) {
+      //   alignedChildren.add(child);
+      //   return true;
+      // }
       return false;
     }).forEach((child) {
       alignedChildren.add(InjectedPositioned(Uuid().v4(),

@@ -79,7 +79,7 @@ class PBLayoutGenerationService implements AITHandler {
         return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
-            .map(_removingMeaninglessGroup)
+            // .map(_removingMeaninglessGroup)
             .map((node) => _layoutConditionalReplacement(node, context))
             .toList()
 

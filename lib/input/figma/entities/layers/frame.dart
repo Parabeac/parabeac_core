@@ -10,7 +10,10 @@ import 'package:parabeac_core/input/figma/entities/layers/group.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
@@ -136,34 +139,38 @@ class FigmaFrame extends FigmaNode
         isHomeScreen: isFlowHome,
       ));
     } else {
-      var tempGroup = Group(
-        name: name,
-        isVisible: isVisible,
-        type: type,
-        pluginData: pluginData,
-        sharedPluginData: sharedPluginData,
-        boundaryRectangle: boundaryRectangle,
-        style: style,
-        fills: fills,
-        strokes: strokes,
-        strokeWeight: strokeWeight,
-        strokeAlign: strokeAlign,
-        cornerRadius: cornerRadius,
-        constraints: constraints,
-        layoutAlign: layoutAlign,
-        size: size,
-        horizontalPadding: horizontalPadding,
-        verticalPadding: verticalPadding,
-        itemSpacing: itemSpacing,
-        children: children,
-        UUID: UUID,
-        backgroundColor: backgroundColor,
-        prototypeNodeUUID: prototypeNodeUUID,
-        transitionDuration: transitionDuration,
-        transitionEasing: transitionEasing,
-      );
-
-      return Future.value(tempGroup.interpretNode(currentContext));
+      // var tempGroup = Group(
+      //   name: name,
+      //   isVisible: isVisible,
+      //   type: type,
+      //   pluginData: pluginData,
+      //   sharedPluginData: sharedPluginData,
+      //   boundaryRectangle: boundaryRectangle,
+      //   style: style,
+      //   fills: fills,
+      //   strokes: strokes,
+      //   strokeWeight: strokeWeight,
+      //   strokeAlign: strokeAlign,
+      //   cornerRadius: cornerRadius,
+      //   constraints: constraints,
+      //   layoutAlign: layoutAlign,
+      //   size: size,
+      //   horizontalPadding: horizontalPadding,
+      //   verticalPadding: verticalPadding,
+      //   itemSpacing: itemSpacing,
+      //   children: children,
+      //   UUID: UUID,
+      //   backgroundColor: backgroundColor,
+      //   prototypeNodeUUID: prototypeNodeUUID,
+      //   transitionDuration: transitionDuration,
+      //   transitionEasing: transitionEasing,
+      // );
+      return Future.value(PBIntermediateStackLayout(currentContext,
+          name: name,
+          constraints: PBIntermediateConstraints.fromConstraints(
+              convertFigmaConstraintToPBDLConstraint(constraints),
+              boundaryRectangle.height,
+              boundaryRectangle.width)));
     }
   }
 

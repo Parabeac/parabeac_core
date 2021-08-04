@@ -3,6 +3,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_co
 
 PBDLConstraints convertFigmaConstraintToPBDLConstraint(
     FigmaConstraints figmaConstraints) {
+  if (figmaConstraints == null) {
+    print(figmaConstraints);
+  }
   var constraints = PBDLConstraints();
   constraints =
       _convertFigmaConstraint(figmaConstraints.horizontal, constraints, false);
@@ -63,23 +66,10 @@ PBDLConstraints _convertFigmaConstraint(FigmaConstraintType figmaConstraintType,
   return constraints;
 }
 
-// } else if (figmaConstraintType == FigmaConstraintType.MIN) {
-//   if (isVertical) {
-//     constraints.pinTop = true;
-//     constraints.pinBottom = false;
-//     constraints.fixedHeight = false;
-//   } else {
-//     constraints.pinLeft = true;
-//     constraints.pinRight = false;
-//     constraints.fixedWidth = false;
+// PBDLConstraints findNonGroupConstraintInChildren(FigmaFrame node) {
+//   for (var i = 0; i < node.children.length; i++) {
+//     if (node.children[i] is! Group) {
+//       return;
+//     }
 //   }
-// } else if (figmaConstraintType == FigmaConstraintType.MAX) {
-//   if (isVertical) {
-//     constraints.pinTop = false;
-//     constraints.pinBottom = true;
-//     constraints.fixedHeight = false;
-//   } else {
-//     constraints.pinLeft = false;
-//     constraints.pinRight = true;
-//     constraints.fixedWidth = false;
-//   }
+// }

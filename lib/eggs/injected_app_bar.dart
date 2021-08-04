@@ -81,18 +81,25 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void extractInformation(DesignNode incomingNode) {}
 }
-class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar>{
+
+class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
   @override
   void align(PBContext context, InjectedAppbar node) {
-     /// This align only modifies middleItem
-    var tempNode = InjectedContainer(node.middleItem.bottomRightCorner,
-        node.middleItem.topLeftCorner, node.middleItem.name, node.middleItem.UUID,
-        currentContext: node.currentContext, constraints: node.middleItem.constraints)
-      ..addChild(node.middleItem);
-
-    node.getAttributeNamed('title').attributeNode = tempNode;
+    /// This align only modifies middleItem
+    if (node.middleItem != null) {
+      var tempNode = InjectedContainer(
+          node.middleItem.bottomRightCorner,
+          node.middleItem.topLeftCorner,
+          node.middleItem.name,
+          node.middleItem.UUID,
+          currentContext: node.currentContext,
+          constraints: node.middleItem.constraints)
+        ..addChild(node.middleItem);
+      node.getAttributeNamed('title').attributeNode = tempNode;
+    }
   }
 }
+
 class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
@@ -105,9 +112,11 @@ class PBAppBarGenerator extends PBGenerator {
       buffer.write('AppBar(');
 
       source.attributes.forEach((attribute) {
-        attribute.attributeNode.currentContext = source.currentContext;
-        buffer.write(
-            '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
+        if (attribute.attributeNode != null) {
+          attribute.attributeNode.currentContext = source.currentContext;
+          buffer.write(
+              '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
+        }
       });
 
       buffer.write(')');
