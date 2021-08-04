@@ -9,20 +9,17 @@ import 'package:quick_log/quick_log.dart';
 /// Interpret the alignment relationship between a child node and a parent Visual or Layout Node. After interpretation, inject the proper alignment whether that’s Padding based or Flex-based.
 /// Input: PBIntermediateNode Tree
 /// Output: PBIntermediateNode Tree
-class PBAlignGenerationService implements AITHandler {
-  var log;
+class PBAlignGenerationService extends AITHandler {
 
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
-  PBAlignGenerationService() {
-    log = Logger(runtimeType.toString());
-  }
+  PBAlignGenerationService();
 
   /// Should find all layout nodes
   Future<PBIntermediateTree> addAlignmentToLayouts(
       PBIntermediateTree tree, PBContext context) {
     var originalRoot = tree.rootNode;
     if (originalRoot == null) {
-      log.warning(
+      logger.warning(
           '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
       return null;
     }

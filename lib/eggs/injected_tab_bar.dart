@@ -13,7 +13,6 @@ import 'dart:math';
 import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
-
   @override
   String semanticName = '<tabbar>';
 
@@ -41,7 +40,9 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
           .name
           .contains('<tab>')) {
         assert(node is! Tab, 'node should be a Tab');
-        getAttributeNamed('tabs').attributeNodes.add(node as PBIntermediateNode);
+        getAttributeNamed('tabs')
+            .attributeNodes
+            .add(node as PBIntermediateNode);
       }
     }
 
@@ -53,12 +54,11 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
 
-
   @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
     return InjectedTabBar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
+        topLeftCorner, bottomRightCorner, originalRef.name, UUID,
         currentContext: currentContext);
   }
 

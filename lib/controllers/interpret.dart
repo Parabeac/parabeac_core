@@ -20,6 +20,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:tuple/tuple.dart';
 
 class Interpret {
   var log = Logger('Interpret');
@@ -123,8 +124,9 @@ class AITServiceBuilder {
   Stopwatch _stopwatch;
 
   /// These are the [AITHandler]s that are going to be transforming
-  /// the [_intermediateTree].
-  final List _transformations = [];
+  /// the [_intermediateTree] in a [Tuple2]. The [Tuple2.item1] is the id, if any, and
+  /// [Tuple2.item2] is the actual [AITHandler]
+  final List<Tuple2> _transformations = [];
 
   final DesignNode designNode;
 
@@ -140,22 +142,26 @@ class AITServiceBuilder {
     }
   }
 
-  AITServiceBuilder addTransformation(transformation) {
+  /// Adding a [transformation] that will be applyed to the [PBIntermediateTree]. The [id]
+  /// is to [log] the [transformation].
+  AITServiceBuilder addTransformation(transformation, {String id}) {
+    id ??= transformation.runtimeType.toString();
     if (transformation is AITHandler) {
-      _transformations.add(transformation.handleTree);
-    } else if (transformation is AITNodeTransformation || transformation is PBDLConversion) {
-      _transformations.add(transformation);
-    } 
+      _transformations.add(Tuple2(id, transformation.handleTree));
+    } else if (transformation is AITNodeTransformation ||
+        transformation is PBDLConversion) {
+      _transformations.add(Tuple2(id, transformation));
+    }
     return this;
   }
 
   /// Verifies that only the allows data types are within the [_transformations]
   bool _verifyTransformationsFailed() {
     return _transformations.any((transformation) =>
-        transformation is! AITHandler &&
-        transformation is! AITNodeTransformation &&
-        transformation is! PBDLConversion &&
-        transformation is! AITTransformation);
+        transformation.item2 is! AITHandler &&
+        transformation.item2 is! AITNodeTransformation &&
+        transformation.item2 is! PBDLConversion &&
+        transformation.item2 is! AITTransformation);
   }
 
   Future<PBIntermediateTree> _pbdlConversion(PBDLConversion conversion) async {
@@ -163,6 +169,9 @@ class AITServiceBuilder {
       _stopwatch.start();
       log.fine('Converting ${designNode.name} to AIT');
       _intermediateTree = await conversion(designNode, _context);
+
+      assert(_intermediateTree != null,
+          'All PBDL conversions should yield a IntermediateTree');
       _context.tree = _intermediateTree;
       _stopwatch.stop();
       log.fine(
@@ -173,22 +182,34 @@ class AITServiceBuilder {
       log.error('PBDL Conversion was not possible because of - \n$e');
 
       exit(1);
-     }
+    }
   }
 
   Future<PBIntermediateTree> build() async {
     var pbdlConversion = _transformations
-        .firstWhere((transformation) => transformation is PBDLConversion);
+        .firstWhere((transformation) => transformation.item2 is PBDLConversion)
+        .item2;
     if (pbdlConversion == null) {
       throw Error();
     }
-    _transformations.removeWhere((element) => element is PBDLConversion);
+    _transformations.removeWhere((element) => element.item2 is PBDLConversion);
     await _pbdlConversion(pbdlConversion);
 
-    for (var transformation in _transformations) {
-      var name = transformation.toString();
+    if (_intermediateTree == null || _intermediateTree.rootNode == null) {
+      log.warning(
+          'Skipping ${designNode.name} as either $PBIntermediateTree or $PBIntermediateTree.rootNode is null');
+      return Future.value(_intermediateTree);
+    }
+
+    var treeName = _intermediateTree.name;
+    log.fine('Transforming $treeName ...');
+
+    for (var transformationTuple in _transformations) {
+      var transformation = transformationTuple.item2;
+      var name = transformationTuple.item1;
+
       _stopwatch.start();
-      log.fine('Started running $name...');
+      log.debug('Started running $name...');
       try {
         if (transformation is AITNodeTransformation) {
           for (var node in _intermediateTree) {
@@ -197,14 +218,22 @@ class AITServiceBuilder {
         } else if (transformation is AITTransformation) {
           _intermediateTree = await transformation(_context, _intermediateTree);
         }
+
+        if (_intermediateTree == null || _intermediateTree.rootNode == null) {
+          log.error(
+              'The $name returned a null \"$treeName\" $PBIntermediateTree (or its rootnode is null)\n after its transformation, this will remove the tree from the process!');
+          throw NullThrownError();
+        }
       } catch (e) {
         MainInfo().captureException(e);
         log.error('${e.toString()} at $name');
       } finally {
         _stopwatch.stop();
-        log.fine('stoped running $name (${_stopwatch.elapsed.inMilliseconds})');
+        log.debug(
+            'Stoped running $name (${_stopwatch.elapsed.inMilliseconds})');
       }
     }
+    log.fine('Finish transforming $treeName');
     return _intermediateTree;
   }
 }

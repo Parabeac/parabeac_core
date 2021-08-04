@@ -9,7 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.d
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
-class PBSymbolLinkerService implements AITHandler{
+class PBSymbolLinkerService extends AITHandler{
   PBSymbolStorage _symbolStorage;
   PBSharedInterAggregationService _aggregationService;
 

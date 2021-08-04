@@ -20,11 +20,10 @@ import 'package:tuple/tuple.dart';
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
 /// Input: PBVisualIntermediateNode Tree or PBLayoutIntermediate Tree
 /// Output:PBIntermediateNode Tree
-class PBLayoutGenerationService implements AITHandler {
+class PBLayoutGenerationService extends AITHandler {
   ///The available Layouts that could be injected.
   final List<PBLayoutIntermediateNode> _availableLayouts = [];
 
-  var log = Logger('Layout Generation Service');
 
   ///[LayoutRule] that check post conditions.
   final List<PostConditionRule> _postLayoutRules = [
@@ -96,7 +95,7 @@ class PBLayoutGenerationService implements AITHandler {
             exception: e,
             stackTrace: stackTrace,
           );
-      log.error(e.toString());
+      logger.error(e.toString());
     } finally {
       tree.rootNode = rootNode;
       return Future.value(tree);

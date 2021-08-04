@@ -12,21 +12,18 @@ import 'package:quick_log/quick_log.dart';
 /// When finding a plugin node, we call layoutInstruction(). This gives the PluginNdoe the ability to modify the relevant tree if needed.
 /// Input: PBIntermediateTree
 /// Output: PBIntermediateTree
-class PBPluginControlService implements AITHandler {
-
-
-  var log = Logger('Plugin Control Service');
-
+class PBPluginControlService extends AITHandler {
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
   PBPluginControlService();
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  Future<PBIntermediateTree> convertAndModifyPluginNodeTree(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> convertAndModifyPluginNodeTree(
+      PBIntermediateTree tree, PBContext context) {
     var originalRoot = tree.rootNode;
     if (originalRoot == null) {
-      log.warning(
-          '[PBPluginControlService] generate() attempted to generate a non-existing tree.');
+      logger.warning(
+          'generate() attempted to generate a non-existing tree.');
       return null;
     }
 
@@ -42,7 +39,7 @@ class PBPluginControlService implements AITHandler {
               currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
           if (layerToReplace == null && currentLayer.nodeLayer != null) {
             // print('Deleting an entire layer, was this on purpose?');
-            log.warning('Deleting an entire layer, was this on purpose?');
+            logger.warning('Deleting an entire layer, was this on purpose?');
 
             currentLayer.nodeLayer = layerToReplace;
             break;
@@ -85,7 +82,8 @@ class PBPluginControlService implements AITHandler {
   }
 
   @override
-  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
     return convertAndModifyPluginNodeTree(tree, context);
   }
 }

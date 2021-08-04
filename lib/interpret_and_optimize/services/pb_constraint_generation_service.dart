@@ -10,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 
 ///tree.where((element) => element != null).toList().reversed.map((e) => e.name).toList()
-class PBConstraintGenerationService implements AITHandler {
+class PBConstraintGenerationService extends AITHandler {
   PBConstraintGenerationService();
 
   /// Traverse to the bottom of the tree, and implement constraints to nodes that don't already contain it such as [InjectedContainer] and then work our way up the tree.
