@@ -78,6 +78,7 @@ class AbstractIntermediateNodeFactory {
         return null;
       }
     }
+    return node;
   }
 }
 
