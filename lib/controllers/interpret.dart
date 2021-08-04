@@ -100,8 +100,10 @@ class Interpret {
         intermediateTree.rootNode, currentContext, stopwatch3);
 
     // Populate platform and orientation information
-    PBPlatformOrientationLinkerService()
-        .addOrientationPlatformInformation(intermediateTree);
+    if (intermediateTree.isScreen()) {
+      PBPlatformOrientationLinkerService()
+          .addOrientationPlatformInformation(intermediateTree);
+    }
 
     return intermediateTree;
   }
