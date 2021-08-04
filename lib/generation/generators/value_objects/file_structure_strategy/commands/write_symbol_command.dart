@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/node_file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -16,8 +17,10 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   String relativePath;
 
   WriteSymbolCommand(String UUID, this.fileName, String code,
-      {this.relativePath = '', this.symbolPath = DEFAULT_SYMBOL_PATH})
-      : super(UUID, code);
+      {this.relativePath = '',
+      this.symbolPath = DEFAULT_SYMBOL_PATH,
+      FileOwnership ownership = FileOwnership.PBC})
+      : super(UUID, code, ownership);
 
   /// Writes a symbol file containing [data] with [fileName] as its filename.
   ///
@@ -28,7 +31,7 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
         ? p.join(strategy.GENERATED_PROJECT_PATH, symbolPath)
         : p.join(strategy.GENERATED_PROJECT_PATH, symbolPath, relativePath);
 
-    strategy.writeDataToFile(code, absPath, fileName, UUID: UUID);
+    strategy.writeDataToFile(code, absPath, fileName, UUID: UUID, ownership: ownership);
     return Future.value(p.join(absPath, fileName));
   }
 }

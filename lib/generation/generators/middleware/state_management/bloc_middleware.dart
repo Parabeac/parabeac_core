@@ -138,7 +138,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         'STATE${node.currentContext.tree.UUID}',
         '${generalName}_state',
         stateBuffer.toString(),
-        symbolPath: blocDirectory));
+        symbolPath: blocDirectory,));
 
     /// Creates map page
     mapBuffer.write(_makeStateToWidgetFunction(node));

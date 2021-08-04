@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
@@ -65,14 +66,18 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// Notifies the [fileObserver] of when a file supposed to be created.
   bool notifyObserverInDryRun = true;
 
+  /// How the extension of the [File]s are going to be written based on the ownership of
+  /// the [File].
+  FileOwnershipPolicy fileOwnershipPolicy;
+
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
   FileStructureStrategy(
-    this.GENERATED_PROJECT_PATH,
-    this._pageWriter,
-    this._pbProject,
-  );
+      this.GENERATED_PROJECT_PATH, this._pageWriter, this._pbProject,
+      {this.fileOwnershipPolicy}) {
+    fileOwnershipPolicy ??= DotGFileOwnershipPolicy();
+  }
 
   void addFileObserver(FileWriterObserver observer) {
     if (observer != null) {
@@ -158,8 +163,9 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   /// [FileWriterObserver]s are going to be notfied of the new created file.
   void writeDataToFile(String data, String directory, String name,
-      {String UUID, String ext = '.dart'}) {
-    var file = getFile(directory, p.setExtension(name, ext));
+      {String UUID, FileOwnership ownership}) {
+    var file = getFile(directory,
+        p.setExtension(name, fileOwnershipPolicy.getFileExtension(ownership)));
 
     if (!dryRunMode) {
       file.createSync(recursive: true);
