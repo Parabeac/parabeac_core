@@ -1,5 +1,34 @@
+import 'dart:io';
+
+import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:test/test.dart';
+import 'package:path/path.dart' as p;
+
+class FileSystemAnalyzerMock extends Mock implements FileSystemAnalyzer {}
+
+class FileMock extends Mock implements File {}
+
+class PageWriterMock extends Mock implements PBPageWriter {}
+
+class ProjectMock extends Mock implements PBProject {}
+
+/// Its a [FileStructureStrategy] deticated for testing some of the methods for [FileStructureStrategy], as
+/// I can not just use [Mock] on a particular methods [FileStructureStrategy.getFile].
+class FileStructureSystemMock extends FileStructureStrategy {
+  final FileMock file;
+  FileStructureSystemMock(String GENERATED_PROJECT_PATH,
+      PBPageWriter pageWriter, PBProject pbProject, this.file)
+      : super(GENERATED_PROJECT_PATH, pageWriter, pbProject);
+
+  @override
+  File getFile(String directory, String name) => file;
+}
 
 void main() {
   group(
@@ -29,6 +58,77 @@ void main() {
       expect(actualPBCExt, pbcDevFile,
           reason: reasonMessage(
               actualPBCExt, FileOwnership.PBC, existingFileExtension));
+    });
+  });
+
+  group(
+      '$FileStructureStrategy only re-writing files that are [${FileOwnership.PBC}] owned and only once for [${FileOwnership.DEV}]',
+      () {
+    final generatedProjectPath = '/GeneratedProjectPath/';
+    FileSystemAnalyzer analyzer;
+    FileStructureStrategy fileStructureStrategy;
+    File fileMock;
+
+    /// Simple function to [verify] the arguments or call count of calling
+    /// [File.writeAsStringSync].
+    var commandVerification = (List<String> paths) {
+      reset(fileMock);
+      paths.forEach((path) {
+        var baseName = p.basename(path);
+        var command = WriteScreenCommand(
+            'UUID_$baseName', baseName, p.dirname(path), 'CODE_$baseName');
+        fileStructureStrategy.commandCreated(command);
+      });
+      return verify(fileMock.writeAsStringSync(any));
+    };
+
+    var devFiles = [
+      './some_dev_files/dev_file.dart',
+      './other_dev_files/main.dart',
+      './random_dev_files/readme.md',
+      './random_dev_files/.gitignore',
+    ];
+
+    var pbcFiles = [
+      './files_to_replace/another_depth/screen_one.g.dart',
+      './files_to_replace/another_depth/screen_two.g.dart'
+    ];
+
+    /// Contains both the [devFiles] and the [pbcFiles].
+    List<String> existingFiles;
+    setUp(() {
+      /// Adding the [generatedProjectPath] to [devFiles] & [pbcFiles].
+      var addingGenProjectPath =
+          (path) => p.normalize(p.join(generatedProjectPath, path));
+      pbcFiles = pbcFiles.map(addingGenProjectPath).toList();
+      devFiles = devFiles.map(addingGenProjectPath).toList();
+
+      existingFiles = pbcFiles + devFiles;
+      analyzer = FileSystemAnalyzerMock();
+
+      fileMock = FileMock();
+      fileStructureStrategy = FileStructureSystemMock(
+          generatedProjectPath, PageWriterMock(), ProjectMock(), fileMock);
+
+      when(analyzer.paths).thenReturn(pbcFiles);
+      when(analyzer.containsFile(any)).thenAnswer((realInvocation) =>
+          existingFiles.contains(realInvocation.positionalArguments.first));
+    });
+
+    test('$FileStructureStrategy replacing only [${FileOwnership.PBC}', () {
+      var verification = commandVerification(pbcFiles);
+      expect(verification.callCount, pbcFiles.length,
+          reason:
+              '$FileStructureStrategy did not replace the correct amount of files (${devFiles.length}), it only replaced ${verification.callCount}');
+    });
+
+    test(
+        '$FileStructureStrategy not replacing [${FileOwnership.DEV}] owned files',
+        () {
+      var verification = commandVerification(devFiles);
+      expect(verification.callCount, 0,
+          reason:
+              '$FileStructureStrategy should not be able to replace the ${FileOwnership.DEV} files, which is doing.');
     });
   });
 }
