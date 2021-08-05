@@ -162,10 +162,13 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// be used.
   ///
   /// [FileWriterObserver]s are going to be notfied of the new created file.
+  /// TODO: aggregate parameters into a file class
   void writeDataToFile(String data, String directory, String name,
-      {String UUID, FileOwnership ownership}) {
-    var file = getFile(directory,
-        p.setExtension(name, fileOwnershipPolicy.getFileExtension(ownership)));
+      {String UUID, FileOwnership ownership, String ext = '.dart'}) {
+    var file = getFile(
+        directory,
+        p.setExtension(
+            name, fileOwnershipPolicy.getFileExtension(ownership, ext)));
 
     if (!dryRunMode) {
       file.createSync(recursive: true);
@@ -187,9 +190,16 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// no file is found, then its going to run [writeDataToFile]. [appendIfFound] flag
   /// appends the information only if that information does not exist in the file. If no
   /// [ModFile] function is found, its going to append the information at the end of the lines
+  /// TODO: aggregate the parameters into a file class
   void appendDataToFile(ModFile modFile, String directory, String name,
-      {String UUID, bool createFileIfNotFound = true, String ext = '.dart'}) {
-    name = p.setExtension(name, ext);
+      {String UUID,
+      bool createFileIfNotFound = true,
+      String ext = '.dart',
+      FileOwnership ownership}) {
+    name = ownership == null
+        ? p.setExtension(name, ext)
+        : p.setExtension(
+            name, fileOwnershipPolicy.getFileExtension(ownership, ext));
     var file = getFile(directory, name);
     if (file.existsSync()) {
       var fileLines = file.readAsLinesSync();

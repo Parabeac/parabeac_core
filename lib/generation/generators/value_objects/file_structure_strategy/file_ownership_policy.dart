@@ -12,8 +12,11 @@ abstract class FileOwnershipPolicy {
   /// The extension the developer own [File]s are going to have.
   FileOwnership fileOwnership;
 
-  /// Based on the [ownership], its going to return the proper [File] extension.
-  String getFileExtension(FileOwnership ownership);
+  /// Based on the [ownership], its going to return the proper [File] extension. This is
+  /// done by modifying the [existingExtension] because its better to assume that the [File]
+  /// extension is not going to be the same forever. Might be only `.dart` right now, but it
+  /// could easily support `.json` tomorrow.
+  String getFileExtension(FileOwnership ownership, String existingExtension);
 }
 
 /// The possible [FileOwnership] that could exist at once.
@@ -29,6 +32,16 @@ class FileOwnershipPolicyError extends IOException {
   String toString() => message;
 }
 
+/// This [IOException] is thrown when the wrong [File] extension(or something unexpected)
+///  is given to the [FileOwnershipPolicy.getFileExtension].
+class FileWrongExtensionFormat extends IOException {
+  final String message;
+
+  FileWrongExtensionFormat(this.message);
+  @override
+  String toString() => message;
+}
+
 /// This [FileOwnershipPolicy] enforces the developer own files to have the `.dart` extension,
 /// while the Parabeac-Core own files with the `.g.dart` extension.
 class DotGFileOwnershipPolicy implements FileOwnershipPolicy {
@@ -36,13 +49,16 @@ class DotGFileOwnershipPolicy implements FileOwnershipPolicy {
   FileOwnership fileOwnership;
 
   @override
-  String getFileExtension(FileOwnership ownership) {
-    switch (ownership) {
-      case FileOwnership.DEV:
-        return '.dart';
-      case FileOwnership.PBC:
-      default:
-        return '.g.dart';
+  String getFileExtension(FileOwnership ownership, String existingExtension) {
+    if (!existingExtension.startsWith('.')) {
+      throw FileWrongExtensionFormat(
+          'Wrong extension of $existingExtension given to $runtimeType, it only supports extensions starting with \'.\'');
     }
+    if (ownership == FileOwnership.DEV) {
+      return existingExtension;
+    }
+
+    var modExt = '.g' + existingExtension;
+    return modExt;
   }
 }
