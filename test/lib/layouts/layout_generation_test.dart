@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
@@ -8,7 +10,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:test/test.dart';
 
 class TempGroupMock extends Mock implements TempGroupLayoutNode {}
