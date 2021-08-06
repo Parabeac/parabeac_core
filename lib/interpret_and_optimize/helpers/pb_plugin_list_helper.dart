@@ -1,3 +1,6 @@
+import 'package:parabeac_core/design_logic/artboard.dart';
+import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
+import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
@@ -19,6 +22,7 @@ class PBPluginListHelper {
           currentContext: context),
       '<tab>': Tab(Point(0, 0), Point(0, 0), '',
           currentContext: context, UUID: Uuid().v4()),
+      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
     };
   }
 
@@ -34,9 +38,16 @@ class PBPluginListHelper {
     '<navbar>',
     '<tabbar>',
     '<tab>',
+    '<custom>',
   ];
 
-  List<String> baseNames = ['<background>', '<navbar>', '<tabbar>', '<tab>'];
+  List<String> baseNames = [
+    '<background>',
+    '<navbar>',
+    '<tabbar>',
+    '<tab>',
+    '<custom>',
+  ];
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist
@@ -58,15 +69,18 @@ class PBPluginListHelper {
   /// Returns the PluginNode associated if it exists.
   PBEgg returnAllowListNodeIfExists(DesignNode node) {
     // InjectedContainer(null,null)..subsemantic = '';
-    for (var key in allowListNames.keys) {
-      if (node.name.contains(key)) {
-        return allowListNames[key].generatePluginNode(
-            Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
-            Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
-                node.boundaryRectangle.y + node.boundaryRectangle.height),
-            node);
+    if (node is! PBArtboard && node is! PBSharedInstanceDesignNode) {
+      for (var key in allowListNames.keys) {
+        if (node.name.contains(key)) {
+          return allowListNames[key].generatePluginNode(
+              Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
+              Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
+                  node.boundaryRectangle.y + node.boundaryRectangle.height),
+              node);
+        }
       }
     }
+    return null;
   }
 
   returnDenyListNodeIfExist(SymbolInstance symbolInstance) {}
