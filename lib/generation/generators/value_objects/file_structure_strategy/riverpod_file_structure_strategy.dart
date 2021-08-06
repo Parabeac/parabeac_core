@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -11,9 +12,9 @@ class RiverpodFileStructureStrategy extends FileStructureStrategy {
   var _providersPath;
   var _modelsPath;
 
-  RiverpodFileStructureStrategy(
-      String genProjectPath, PBPageWriter pageWriter, PBProject pbProject)
-      : super(genProjectPath, pageWriter, pbProject) {
+  RiverpodFileStructureStrategy(String genProjectPath, PBPageWriter pageWriter,
+      PBProject pbProject, FileSystemAnalyzer fileSystemAnalyzer)
+      : super(genProjectPath, pageWriter, pbProject, fileSystemAnalyzer) {
     _providersPath = p.join(genProjectPath, RELATIVE_PROVIDER_PATH);
     _modelsPath = p.join(genProjectPath, RELATIVE_MODEL_PATH);
   }

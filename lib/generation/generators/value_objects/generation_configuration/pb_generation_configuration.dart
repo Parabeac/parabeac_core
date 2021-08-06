@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/command_gen_middleware.dart';
@@ -62,6 +63,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// to execute [FileStructureCommand]s before the [GenerationConfiguration] is done with [setUpConfiguration].
   /// Those [FileStructureCommand]s could just be added to the list.
   final List<FileStructureCommand> commandQueue = [];
+
+  FileSystemAnalyzer fileSystemAnalyzer;
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
@@ -150,7 +153,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   ///Configure the required classes for the [PBGenerationConfiguration]
   Future<void> setUpConfiguration(PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        pbProject.projectAbsPath, pageWriter, pbProject);
+        pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
     commandObservers.add(fileStructureStrategy);
 
     logger.info('Setting up the directories');

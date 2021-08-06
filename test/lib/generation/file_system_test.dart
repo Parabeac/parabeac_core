@@ -12,7 +12,10 @@ import 'package:path/path.dart' as p;
 
 class FileSystemAnalyzerMock extends Mock implements FileSystemAnalyzer {}
 
-class FileMock extends Mock implements File {}
+class FileMock extends Mock implements File {
+  @override
+  String path;
+}
 
 class PageWriterMock extends Mock implements PBPageWriter {}
 
@@ -22,12 +25,17 @@ class ProjectMock extends Mock implements PBProject {}
 /// I can not just use [Mock] on a particular methods [FileStructureStrategy.getFile].
 class FileStructureSystemMock extends FileStructureStrategy {
   final FileMock file;
+  final FileSystemAnalyzer analyzer;
+  String path;
   FileStructureSystemMock(String GENERATED_PROJECT_PATH,
-      PBPageWriter pageWriter, PBProject pbProject, this.file)
-      : super(GENERATED_PROJECT_PATH, pageWriter, pbProject);
+      PBPageWriter pageWriter, PBProject pbProject, this.file, this.analyzer)
+      : super(GENERATED_PROJECT_PATH, pageWriter, pbProject, analyzer);
 
   @override
-  File getFile(String directory, String name) => file;
+  File getFile(String directory, String name) {
+    file.path = p.join(directory, name);
+    return file;
+  }
 }
 
 void main() {
@@ -71,15 +79,29 @@ void main() {
 
     /// Simple function to [verify] the arguments or call count of calling
     /// [File.writeAsStringSync].
-    var commandVerification = (List<String> paths) {
+    ///
+    /// Because of no calls to a method and calling [verify] will cause an error, therefore,
+    /// if the caller of the [commandVerification] funciton expects no calls, then it would have to pass
+    /// `true` for [noCalls]. This flag will force the function to call [verifyNever] instead of [verify]
+    var commandVerification =
+        (List<String> paths, FileOwnership ownership, {bool noCalls = false}) {
       reset(fileMock);
       paths.forEach((path) {
         var baseName = p.basename(path);
-        var command = WriteScreenCommand(
-            'UUID_$baseName', baseName, p.dirname(path), 'CODE_$baseName');
+        var ext = p.extension(path);
+
+        /// Files like `.gitignore` are going to be evaluated to [ext.isEmpty] by [p.extension],
+        /// therefore, I am padding the [baseName]
+        ext = ext.isEmpty ? baseName : ext;
+
+        var command = WriteScreenCommand('UUID_$baseName',
+            baseName == ext ? '' : baseName, p.dirname(path), 'CODE_$baseName',
+            ownership: ownership, fileExtension: ext);
         fileStructureStrategy.commandCreated(command);
       });
-      return verify(fileMock.writeAsStringSync(any));
+      return noCalls
+          ? verifyNever(fileMock.writeAsStringSync(any))
+          : verify(fileMock.writeAsStringSync(any));
     };
 
     var devFiles = [
@@ -107,16 +129,16 @@ void main() {
       analyzer = FileSystemAnalyzerMock();
 
       fileMock = FileMock();
-      fileStructureStrategy = FileStructureSystemMock(
-          generatedProjectPath, PageWriterMock(), ProjectMock(), fileMock);
+      fileStructureStrategy = FileStructureSystemMock(generatedProjectPath,
+          PageWriterMock(), ProjectMock(), fileMock, analyzer);
 
-      when(analyzer.paths).thenReturn(pbcFiles);
+      when(analyzer.paths).thenReturn(existingFiles);
       when(analyzer.containsFile(any)).thenAnswer((realInvocation) =>
           existingFiles.contains(realInvocation.positionalArguments.first));
     });
 
-    test('$FileStructureStrategy replacing only [${FileOwnership.PBC}', () {
-      var verification = commandVerification(pbcFiles);
+    test('$FileStructureStrategy replacing only [${FileOwnership.PBC}]', () {
+      var verification = commandVerification(pbcFiles, FileOwnership.PBC);
       expect(verification.callCount, pbcFiles.length,
           reason:
               '$FileStructureStrategy did not replace the correct amount of files (${devFiles.length}), it only replaced ${verification.callCount}');
@@ -125,10 +147,11 @@ void main() {
     test(
         '$FileStructureStrategy not replacing [${FileOwnership.DEV}] owned files',
         () {
-      var verification = commandVerification(devFiles);
+      var verification =
+          commandVerification(devFiles, FileOwnership.DEV, noCalls: true);
       expect(verification.callCount, 0,
           reason:
-              '$FileStructureStrategy should not be able to replace the ${FileOwnership.DEV} files, which is doing.');
+              '$FileStructureStrategy should not be able to replace the ${FileOwnership.DEV} files, which its doing.');
     });
   });
 }

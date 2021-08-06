@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:path/path.dart' as p;
 
@@ -20,7 +21,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 ///while something like BLoC will assign a directory to a single.
 ///
 abstract class FileStructureStrategy implements CommandInvoker {
-  final Logger logger = Logger('FileStructureStrategy');
+  Logger logger;
 
   ///The `default` path of where all the views are going to be generated.
   ///
@@ -70,12 +71,25 @@ abstract class FileStructureStrategy implements CommandInvoker {
   /// the [File].
   FileOwnershipPolicy fileOwnershipPolicy;
 
+  /// Uses the [FileSystemAnalyzer] to see if certain [File]s aready exist in the file system.
+  ///
+  /// This is primarly used when checking [FileOwnership.DEV]'s [File]s in the files sytem to see if they exist.
+  /// If they do exist, then PBC is not going to modify them, ignoring whatever modification towards the [File]
+  /// that was comming through [writeDataToFile] (method that created the actual [File]s).
+  FileSystemAnalyzer _fileSystemAnalyzer;
+
   String _screenDirectoryPath;
   String _viewDirectoryPath;
 
-  FileStructureStrategy(
-      this.GENERATED_PROJECT_PATH, this._pageWriter, this._pbProject,
+  FileStructureStrategy(this.GENERATED_PROJECT_PATH, this._pageWriter,
+      this._pbProject, this._fileSystemAnalyzer,
       {this.fileOwnershipPolicy}) {
+    logger = Logger(runtimeType.toString());
+    if (_fileSystemAnalyzer == null) {
+      logger.error(
+          '$FileSystemAnalyzer is null, meaning there are no files indexed and all files are going to be created.');
+      _fileSystemAnalyzer = FileSystemAnalyzer(GENERATED_PROJECT_PATH);
+    }
     fileOwnershipPolicy ??= DotGFileOwnershipPolicy();
   }
 
@@ -169,6 +183,14 @@ abstract class FileStructureStrategy implements CommandInvoker {
         directory,
         p.setExtension(
             name, fileOwnershipPolicy.getFileExtension(ownership, ext)));
+
+    if (_fileSystemAnalyzer.containsFile(file.path) &&
+        ownership == FileOwnership.DEV) {
+      /// file is going to be ignored
+      logger.fine(
+          'File $name has been ignored as is already present in the project');
+      return;
+    }
 
     if (!dryRunMode) {
       file.createSync(recursive: true);

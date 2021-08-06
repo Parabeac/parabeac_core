@@ -7,11 +7,13 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 class WriteScreenCommand extends NodeFileStructureCommand {
   String name;
   String relativePath;
+  String fileExtension;
 
   static final SCREEN_PATH = 'lib/screens';
 
   WriteScreenCommand(String UUID, this.name, this.relativePath, String code,
-      {FileOwnership ownership = FileOwnership.PBC})
+      {FileOwnership ownership = FileOwnership.PBC,
+      this.fileExtension = '.dart'})
       : super(UUID, code, ownership);
 
   /// Writes a screen file containing [code] to [path] with [name] as its filename.
@@ -22,7 +24,7 @@ class WriteScreenCommand extends NodeFileStructureCommand {
     var absPath =
         p.join(strategy.GENERATED_PROJECT_PATH, SCREEN_PATH, relativePath);
     strategy.writeDataToFile(code, absPath, name,
-        UUID: UUID, ownership: ownership);
+        UUID: UUID, ownership: ownership, ext: fileExtension);
     return Future.value(p.join(absPath, name));
   }
 }

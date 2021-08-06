@@ -61,11 +61,11 @@ abstract class Controller {
     }
     var fileSystemAnalyzer = FileSystemAnalyzer(processInfo.genProjectPath);
     fileSystemAnalyzer.addFileExtension('.dart');
-    
+
     if (!(await fileSystemAnalyzer.projectExist())) {
       await FlutterProjectBuilder.createFlutterProject(processInfo.projectName,
           projectDir: processInfo.outputPath);
-    } else{
+    } else {
       indexFileFuture = fileSystemAnalyzer.indexProjectFiles();
     }
 
@@ -75,9 +75,8 @@ abstract class Controller {
         designProject, processInfo.projectName, processInfo.genProjectPath);
 
     var fpb = FlutterProjectBuilder(
-        MainInfo().configuration.generationConfiguration,
-        project: pbProject,
-        pageWriter: PBFlutterWriter());
+        MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
+        project: pbProject, pageWriter: PBFlutterWriter());
 
     await indexFileFuture;
     await fpb.genProjectFiles(processInfo.genProjectPath);
