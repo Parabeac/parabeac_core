@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 import 'abstract_design_node_factory.dart';
 
@@ -115,11 +115,15 @@ class GroupNode implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) =>
-      Future.value(TempGroupLayoutNode(this, currentContext, name,
-          topLeftCorner: Point(boundaryRectangle.x, boundaryRectangle.y),
-          bottomRightCorner: Point(
-              boundaryRectangle.x + boundaryRectangle.width,
-              boundaryRectangle.y + boundaryRectangle.height)));
+      Future.value(TempGroupLayoutNode(
+        this,
+        currentContext,
+        name,
+        topLeftCorner: Point<double>(boundaryRectangle.x, boundaryRectangle.y),
+        bottomRightCorner: Point<double>(
+            boundaryRectangle.x + boundaryRectangle.width,
+            boundaryRectangle.y + boundaryRectangle.height),
+      ));
 
   @override
   toJson() {

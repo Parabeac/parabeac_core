@@ -8,6 +8,7 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/group.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
 import 'package:parabeac_core/input/figma/helper/style_extractor.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -42,7 +43,7 @@ class FigmaFrame extends FigmaNode
 
   double cornerRadius;
 
-  var constraints;
+  FigmaConstraints constraints;
 
   String layoutAlign;
 

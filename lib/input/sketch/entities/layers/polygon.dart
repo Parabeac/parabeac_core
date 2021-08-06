@@ -7,7 +7,9 @@ import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_asset_processor.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_polygon.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -122,7 +124,12 @@ class Polygon extends AbstractShapeLayer implements SketchNodeFactory {
         .processImage(UUID, boundaryRectangle.width, boundaryRectangle.height);
 
     return Future.value(InheritedPolygon(this, name,
-        currentContext: currentContext, image: image));
+        currentContext: currentContext,
+        image: image,
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width)));
   }
 
   @override

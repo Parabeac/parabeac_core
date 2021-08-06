@@ -1,4 +1,5 @@
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/command_gen_middleware.dart';
@@ -62,6 +63,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// to execute [FileStructureCommand]s before the [GenerationConfiguration] is done with [setUpConfiguration].
   /// Those [FileStructureCommand]s could just be added to the list.
   final List<FileStructureCommand> commandQueue = [];
+
+  FileSystemAnalyzer fileSystemAnalyzer;
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
@@ -150,7 +153,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   ///Configure the required classes for the [PBGenerationConfiguration]
   Future<void> setUpConfiguration(PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        pbProject.projectAbsPath, pageWriter, pbProject);
+        pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
     commandObservers.add(fileStructureStrategy);
 
     logger.info('Setting up the directories');
@@ -209,11 +212,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         ResponsiveLayoutBuilderCommand.NAME_TO_RESPONSIVE_LAYOUT,
       ));
 
+      // TODO: Find a more effective way to do this, since there are a lot
+      // of assumptions happening in the code.
       var newCommand = generatePlatformInstance(
           platformsMap, screenName, fileStructureStrategy, rawImports);
-      fileStructureStrategy.commandCreated(newCommand);
 
-      setMainForPlatform(newCommand, screenName);
+      if (newCommand != null) {
+        setMainForPlatform(newCommand, screenName);
+      }
     });
   }
 
@@ -224,7 +230,14 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
       map.forEach((key, tree) {
-        imports.addAll(_importProcessor.getImport(tree.UUID));
+        var uuidImport = _importProcessor.getImport(tree.UUID);
+        if (uuidImport == null) {
+          MainInfo().sentry.captureException(
+              exception: Exception(
+                  'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
+        } else {
+          imports.addAll(_importProcessor.getImport(tree.UUID));
+        }
       });
     });
     return imports;
@@ -233,7 +246,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// This method takes a command and checks if one of its child screens
   /// is the home screen for the project, if so modify main
   /// to redirect to the proper builder
-  bool setMainForPlatform(var newCommand, String screenName) {
+  bool setMainForPlatform(WriteScreenCommand newCommand, String screenName) {
     var platformOrientationMap =
         poLinker.getPlatformOrientationData(screenName);
 
@@ -242,10 +255,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         if (tree.rootNode is InheritedScaffold &&
             (tree.rootNode as InheritedScaffold).isHomeScreen) {
           fileStructureStrategy.commandCreated(EntryFileCommand(
-              entryScreenName: (newCommand as WriteScreenCommand)
-                  .name
-                  .replaceAll('.dart', '')
-                  .pascalCase,
+              entryScreenName:
+                  newCommand.name.replaceAll('.dart', '').pascalCase,
               entryScreenImport: _importProcessor
                   .getFormattedImports(newCommand.UUID,
                       importMapper: (import) =>

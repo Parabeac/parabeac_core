@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/text.dart';
@@ -6,14 +7,19 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+
 
 class InheritedText extends PBVisualIntermediateNode
     with PBColorMixin
     implements PBInheritedIntermediate {
   ///For the generator to strip out the quotation marks.
   bool isTextParameter = false;
+
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   @override
   var originalRef;
@@ -75,14 +81,4 @@ class InheritedText extends PBVisualIntermediateNode
     return text.replaceAll('\$', '\\\$');
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    assert(true, 'Adding a child to InheritedText should not be possible.');
-    return;
-  }
-
-  @override
-  void alignChild() {
-    // Text don't have children.
-  }
 }

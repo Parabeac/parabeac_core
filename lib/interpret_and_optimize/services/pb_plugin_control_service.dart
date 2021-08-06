@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/layer_tuple.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -11,21 +12,18 @@ import 'package:quick_log/quick_log.dart';
 /// When finding a plugin node, we call layoutInstruction(). This gives the PluginNdoe the ability to modify the relevant tree if needed.
 /// Input: PBIntermediateTree
 /// Output: PBIntermediateTree
-class PBPluginControlService implements PBGenerationService {
-  /// The originalRoot intermediate node.
-  PBIntermediateNode originalRoot;
-
-  var log = Logger('Plugin Control Service');
-
+class PBPluginControlService extends AITHandler {
   /// Constructor for PBPluginGenerationService, must include the root SketchNode
-  PBPluginControlService(this.originalRoot, {this.currentContext});
+  PBPluginControlService();
 
   /// Builds and returns intermediate tree by breadth depth first.
   /// @return Returns the root node of the intermediate tree.
-  PBIntermediateNode convertAndModifyPluginNodeTree() {
+  Future<PBIntermediateTree> convertAndModifyPluginNodeTree(
+      PBIntermediateTree tree, PBContext context) {
+    var originalRoot = tree.rootNode;
     if (originalRoot == null) {
-      log.warning(
-          '[PBPluginControlService] generate() attempted to generate a non-existing tree.');
+      logger.warning(
+          'generate() attempted to generate a non-existing tree.');
       return null;
     }
 
@@ -41,7 +39,7 @@ class PBPluginControlService implements PBGenerationService {
               currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
           if (layerToReplace == null && currentLayer.nodeLayer != null) {
             // print('Deleting an entire layer, was this on purpose?');
-            log.warning('Deleting an entire layer, was this on purpose?');
+            logger.warning('Deleting an entire layer, was this on purpose?');
 
             currentLayer.nodeLayer = layerToReplace;
             break;
@@ -79,9 +77,13 @@ class PBPluginControlService implements PBGenerationService {
         }
       }
     }
-    return rootIntermediateNode;
+    tree.rootNode = rootIntermediateNode;
+    return Future.value(tree);
   }
 
   @override
-  PBContext currentContext;
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    return convertAndModifyPluginNodeTree(tree, context);
+  }
 }

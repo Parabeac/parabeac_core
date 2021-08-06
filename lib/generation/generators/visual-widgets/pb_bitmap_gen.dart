@@ -22,8 +22,10 @@ class PBBitmapGenerator extends PBGenerator {
     } else if (SN_UUIDtoVarName.containsKey('${source.UUID}_layerStyle')) {
       buffer.write('${SN_UUIDtoVarName[source.UUID + '_layerStyle']} ?? ');
     }
+    // buffer.write(
+    // '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source, generatorContext)})');
     buffer.write(
-        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\', ${_sizehelper.generate(source, generatorContext)})');
+        '\'assets/${source is InheritedBitmap ? source.referenceImage : ('images/' + source.UUID + '.png')}\')');
     return buffer.toString();
   }
 }

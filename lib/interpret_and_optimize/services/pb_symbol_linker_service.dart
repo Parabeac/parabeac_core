@@ -3,10 +3,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
-class PBSymbolLinkerService {
+class PBSymbolLinkerService extends AITHandler{
   PBSymbolStorage _symbolStorage;
   PBSharedInterAggregationService _aggregationService;
 
@@ -17,9 +20,10 @@ class PBSymbolLinkerService {
 
 // /Linking [PBSharedMasterNode] and [PBSharedInstanceIntermediateNode] together; linking its
 // /parameter and values.
-  Future<PBIntermediateNode> linkSymbols(PBIntermediateNode rootNode) async{
+  Future<PBIntermediateTree> linkSymbols(PBIntermediateTree tree) async{
+    var rootNode = tree.rootNode;
     if(rootNode == null){
-      return rootNode;
+      return Future.value(tree);
     }
 
     var stack = <PBIntermediateNode>[];
@@ -45,6 +49,12 @@ class PBSymbolLinkerService {
 
       rootIntermediateNode ??= currentNode;
     }
-    return rootIntermediateNode;
+    tree.rootNode = rootIntermediateNode;
+    return Future.value(tree);
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(PBContext context, PBIntermediateTree tree) {
+    return linkSymbols(tree);
   }
 }

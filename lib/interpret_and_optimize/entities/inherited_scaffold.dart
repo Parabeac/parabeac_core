@@ -1,25 +1,26 @@
+import 'dart:math';
 import 'package:parabeac_core/design_logic/color.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 import 'interfaces/pb_inherited_intermediate.dart';
 
 class InheritedScaffold extends PBVisualIntermediateNode
-    with
-        PBColorMixin
-    implements
-        /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
+    with PBColorMixin
+    implements PBInheritedIntermediate {
   @override
   var originalRef;
   @override
@@ -28,7 +29,13 @@ class InheritedScaffold extends PBVisualIntermediateNode
   bool isHomeScreen = false;
 
   @override
+  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
+
+  @override
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+
+  @override
+  List<PBIntermediateNode> get children => [child, navbar, tabbar];
 
   PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
 
@@ -76,16 +83,21 @@ class InheritedScaffold extends PBVisualIntermediateNode
     addAttribute(PBAttribute('body'));
   }
 
-  @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
+    print(this.name);
+    if (this.name == 'ArtboardTRpinnoscale') {
+      print('object');
+    }
     if (node is PBSharedInstanceIntermediateNode) {
       if (node.originalRef.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
+        currentContext.canvasTLC =
+            Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
         return;
       }
       if (node.originalRef.name.contains('<tabbar>')) {
@@ -97,6 +109,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
+      currentContext.canvasTLC =
+          Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
       return;
     }
     if (node is InjectedTabBar) {
@@ -107,26 +121,20 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (child is TempGroupLayoutNode) {
       child.addChild(node);
       return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
     } else {
-      child = node;
-    }
-  }
-
-  @override
-  void alignChild() {
-    if (child != null) {
-      var align =
-          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-      align.addChild(child);
-      align.alignChild();
-      child = align;
+      if (child != null) {
+        child.addChild(node);
+      } else {
+        var stack = PBIntermediateStackLayout(currentContext,
+            name: node.name,
+            constraints: PBIntermediateConstraints(
+                pinBottom: false,
+                pinLeft: false,
+                pinRight: false,
+                pinTop: false));
+        stack.addChild(node);
+        child = stack;
+      }
     }
   }
 }

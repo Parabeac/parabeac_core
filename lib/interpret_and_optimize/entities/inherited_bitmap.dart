@@ -1,14 +1,19 @@
+import 'dart:math';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+// import 'dart:math';
 import 'package:quick_log/quick_log.dart';
 
 class InheritedBitmap extends PBVisualIntermediateNode
@@ -19,16 +24,17 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @override
   PrototypeNode prototypeNode;
 
-  var log = Logger('Inherited Bitmap');
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
+
 
   String referenceImage;
 
-  InheritedBitmap(
-    this.originalRef,
-    String name, {
-    PBContext currentContext,
-    this.referenceImage,
-  }) : super(
+  InheritedBitmap(this.originalRef, String name,
+      {PBContext currentContext,
+      this.referenceImage,
+      PBIntermediateConstraints constraints})
+      : super(
             Point(originalRef.boundaryRectangle.x,
                 originalRef.boundaryRectangle.y),
             Point(
@@ -38,7 +44,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
                     originalRef.boundaryRectangle.height),
             currentContext,
             name,
-            UUID: originalRef.UUID ?? '') {
+            UUID: originalRef.UUID ?? '',
+            constraints: constraints) {
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
     }
@@ -46,7 +53,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
 
     if (originalRef.name == null ||
         (originalRef as Image).imageReference == null) {
-      log.debug('NULL BITMAP');
+      logger.debug('NULL BITMAP');
     }
     name = (originalRef as Image).imageReference;
     size = {
@@ -58,14 +65,4 @@ class InheritedBitmap extends PBVisualIntermediateNode
         originalRef.UUID, '${MainInfo().outputPath}assets/images');
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    assert(true, 'Tried adding a child to InheritedBitmap.');
-    return;
-  }
-
-  @override
-  void alignChild() {
-    return;
-  }
 }

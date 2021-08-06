@@ -4,9 +4,10 @@ import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 import 'abstract_design_node_factory.dart';
@@ -119,6 +120,7 @@ class Text extends DesignElement implements DesignNodeFactory, DesignNode {
         name,
         Uuid().v4(),
         currentContext: currentContext,
+        constraints: PBIntermediateConstraints(),
       )..addChild(
           InheritedText(this, name, currentContext: currentContext),
         ));

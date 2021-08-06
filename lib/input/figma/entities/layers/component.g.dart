@@ -20,7 +20,10 @@ Component _$ComponentFromJson(Map<String, dynamic> json) {
     strokeWeight: json['strokeWeight'],
     strokeAlign: json['strokeAlign'],
     cornerRadius: json['cornerRadius'],
-    constraints: json['constraints'],
+    constraints: json['constraints'] == null
+        ? null
+        : FigmaConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>),
     layoutAlign: json['layoutAlign'],
     size: json['size'],
     horizontalPadding: json['horizontalPadding'],

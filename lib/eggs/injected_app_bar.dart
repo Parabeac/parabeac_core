@@ -5,19 +5,21 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_container
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
-  PBContext currentContext;
-
-  @override
   String semanticName = '<navbar>';
 
   @override
-  String UUID;
+  AlignStrategy alignStrategy = CustomAppBarAlignment();
+
+  @override
+  List<PBIntermediateNode> get children =>
+      [leadingItem, middleItem, trailingItem];
 
   PBIntermediateNode get leadingItem =>
       getAttributeNamed('leading')?.attributeNode;
@@ -27,8 +29,8 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       getAttributeNamed('actions')?.attributeNode;
 
   InjectedAppbar(
-      Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
-      {this.currentContext})
+      Point topLeftCorner, Point bottomRightCorner, String UUID, String name,
+      {PBContext currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
     addAttribute(PBAttribute('leading'));
@@ -37,43 +39,30 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     if (node is PBInheritedIntermediate) {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<leading>')) {
-        getAttributeNamed('leading').attributeNode = node;
+        getAttributeNamed('leading').attributeNode = node as PBIntermediateNode;
       }
 
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<trailing>')) {
-        getAttributeNamed('actions').attributeNode = node;
+        getAttributeNamed('actions').attributeNode = node as PBIntermediateNode;
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<middle>')) {
-        getAttributeNamed('title').attributeNode = node;
+        getAttributeNamed('title').attributeNode = node as PBIntermediateNode;
       }
     }
 
     return;
-  }
-
-  @override
-  void alignChild() {
-    /// This align only modifies middleItem
-    var tempNode = InjectedContainer(
-      middleItem.bottomRightCorner,
-      middleItem.topLeftCorner,
-      middleItem.name,
-      middleItem.UUID,
-    )..addChild(middleItem);
-
-    getAttributeNamed('title').attributeNode = tempNode;
   }
 
   @override
@@ -92,13 +81,24 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void extractInformation(DesignNode incomingNode) {}
 }
+class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar>{
+  @override
+  void align(PBContext context, InjectedAppbar node) {
+     /// This align only modifies middleItem
+    var tempNode = InjectedContainer(node.middleItem.bottomRightCorner,
+        node.middleItem.topLeftCorner, node.middleItem.name, node.middleItem.UUID,
+        currentContext: node.currentContext, constraints: node.middleItem.constraints)
+      ..addChild(node.middleItem);
 
+    node.getAttributeNamed('title').attributeNode = tempNode;
+  }
+}
 class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();
 

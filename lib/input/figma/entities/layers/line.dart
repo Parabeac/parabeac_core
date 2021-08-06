@@ -1,12 +1,15 @@
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 import 'figma_node.dart';
 
@@ -24,7 +27,7 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
       sharedPluginData,
       style,
       layoutAlign,
-      constraints,
+      FigmaConstraints constraints,
       Frame boundaryRectangle,
       size,
       fills,
@@ -75,6 +78,10 @@ class FigmaLine extends FigmaVector implements AbstractFigmaNodeFactory {
         boundaryRectangle.y + boundaryRectangle.height,
       ),
       name,
+      constraints: PBIntermediateConstraints.fromConstraints(
+          convertFigmaConstraintToPBDLConstraint(constraints),
+          boundaryRectangle.height,
+          boundaryRectangle.width),
     ));
   }
 

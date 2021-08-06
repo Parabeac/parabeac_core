@@ -4,9 +4,12 @@ import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.d
 import 'package:parabeac_core/input/figma/entities/layers/figma_node.dart';
 import 'package:parabeac_core/input/figma/entities/layers/frame.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_color.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/override_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -39,7 +42,7 @@ class Instance extends FigmaFrame
       strokeWeight,
       strokeAlign,
       cornerRadius,
-      constraints,
+      FigmaConstraints constraints,
       layoutAlign,
       size,
       horizontalPadding,
@@ -93,12 +96,13 @@ class Instance extends FigmaFrame
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) {
     /// TODO: Check if `sharedParamValues` exits and pass to it, default to emptu for now
-    var sym = PBSharedInstanceIntermediateNode(
-      this,
-      componentId,
-      sharedParamValues: [],
-      currentContext: currentContext,
-    );
+    var sym = PBSharedInstanceIntermediateNode(this, componentId,
+        sharedParamValues: [],
+        currentContext: currentContext,
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertFigmaConstraintToPBDLConstraint(constraints),
+            boundaryRectangle.height,
+            boundaryRectangle.width));
     return Future.value(sym);
   }
 

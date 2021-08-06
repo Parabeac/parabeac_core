@@ -7,10 +7,12 @@ import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/border.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 part 'rectangle.g.dart';
 
@@ -131,20 +133,26 @@ class Rectangle extends AbstractShapeLayer
         border = b;
       }
     }
-    return Future.value(InheritedContainer(
-      this,
-      Point(boundaryRectangle.x, boundaryRectangle.y),
-      Point(boundaryRectangle.x + boundaryRectangle.width,
-          boundaryRectangle.y + boundaryRectangle.height),
-      name,
-      currentContext: currentContext,
-      borderInfo: {
-        'borderRadius':
-            style.borderOptions.isEnabled ? points[0]['cornerRadius'] : null,
-        'borderColorHex': border != null ? toHex(border.color) : null,
-        'borderThickness': border != null ? border.thickness : null
-      },
-    ));
+    return Future.value(
+      InheritedContainer(
+          this,
+          Point(boundaryRectangle.x, boundaryRectangle.y),
+          Point(boundaryRectangle.x + boundaryRectangle.width,
+              boundaryRectangle.y + boundaryRectangle.height),
+          name,
+          currentContext: currentContext,
+          borderInfo: {
+            'borderRadius': style.borderOptions.isEnabled
+                ? points[0]['cornerRadius']
+                : null,
+            'borderColorHex': border != null ? toHex(border.color) : null,
+            'borderThickness': border != null ? border.thickness : null
+          },
+          constraints: PBIntermediateConstraints.fromConstraints(
+              convertSketchConstraintToPBDLConstraint(resizingConstraint),
+              boundaryRectangle.height,
+              boundaryRectangle.width)),
+    );
   }
 
   @override

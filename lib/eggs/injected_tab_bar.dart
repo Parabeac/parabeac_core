@@ -6,41 +6,43 @@ import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart'
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
-  final String UUID;
-  @override
-  PBContext currentContext;
-  @override
   String semanticName = '<tabbar>';
 
   List<PBIntermediateNode> get tabs => getAttributeNamed('tabs').attributeNodes;
+
+  @override
+  AlignStrategy alignStrategy = NoAlignment();
 
   InjectedTabBar(
     Point topLeftCorner,
     Point bottomRightCorner,
     String name,
-    this.UUID, {
-    this.currentContext,
+    String UUID, {
+    PBContext currentContext,
   }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBTabBarGenerator();
     addAttribute(PBAttribute('tabs'));
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(node) {
     if (node is PBInheritedIntermediate) {
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<tab>')) {
         assert(node is! Tab, 'node should be a Tab');
-        getAttributeNamed('tabs').attributeNodes.add(node);
+        getAttributeNamed('tabs')
+            .attributeNodes
+            .add(node as PBIntermediateNode);
       }
     }
 
@@ -53,13 +55,10 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
 
   @override
-  void alignChild() {}
-
-  @override
   PBEgg generatePluginNode(
       Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
     return InjectedTabBar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
+        topLeftCorner, bottomRightCorner, originalRef.name, UUID,
         currentContext: currentContext);
   }
 
@@ -74,7 +73,7 @@ class PBTabBarGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
       var tabs = source.tabs;
 

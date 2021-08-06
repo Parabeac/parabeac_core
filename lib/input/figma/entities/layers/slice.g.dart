@@ -13,7 +13,10 @@ FigmaSlice _$FigmaSliceFromJson(Map<String, dynamic> json) {
     pluginData: json['pluginData'],
     sharedPluginData: json['sharedPluginData'],
     layoutAlign: json['layoutAlign'] as String,
-    constraints: json['constraints'],
+    constraints: json['constraints'] == null
+        ? null
+        : FigmaConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>),
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),

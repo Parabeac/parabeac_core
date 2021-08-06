@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
@@ -9,15 +10,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate {
-  ///SERVICE
-  var log = Logger('PBSharedMasterNode');
 
   @override
   final originalRef;
@@ -71,9 +70,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             exception: e,
             stackTrace: stackTrace,
           );
-      log.error(e.toString());
+      logger.error(e.toString());
     }
-    ;
 
     if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
       prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
@@ -86,34 +84,29 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.currentContext.screenTopLeftCorner =
         Point(originalRef.boundaryRectangle.x, originalRef.boundaryRectangle.y);
 
-    parametersDefinition = overridableProperties
-        .map((p) {
-            var PBSymMasterP = PBSymbolMasterParameter(
-            p._friendlyName,
-            p.type,
-            p.UUID,
-            p.canOverride,
-            p.propertyName,
-            /* Removed Parameter Definition as it was accepting JSON?*/
-            null, // TODO: @Eddie
-            currentContext.screenTopLeftCorner.x,
-            currentContext.screenTopLeftCorner.y,
-            currentContext.screenBottomRightCorner.x,
-            currentContext.screenBottomRightCorner.y,
-            context: currentContext);
-            parametersDefsMap[p.propertyName] = PBSymMasterP;
-            return PBSymMasterP; })
-        .toList()
-          ..removeWhere((p) => p == null || p.parameterDefinition == null);
-
+    parametersDefinition = overridableProperties.map((p) {
+      var PBSymMasterP = PBSymbolMasterParameter(
+          p._friendlyName,
+          p.type,
+          p.UUID,
+          p.canOverride,
+          p.propertyName,
+          /* Removed Parameter Definition as it was accepting JSON?*/
+          null, // TODO: @Eddie
+          currentContext.screenTopLeftCorner.x,
+          currentContext.screenTopLeftCorner.y,
+          currentContext.screenBottomRightCorner.x,
+          currentContext.screenBottomRightCorner.y,
+          context: currentContext);
+      parametersDefsMap[p.propertyName] = PBSymMasterP;
+      return PBSymMasterP;
+    }).toList()
+      ..removeWhere((p) => p == null || p.parameterDefinition == null);
   }
 
   @override
-  void addChild(PBIntermediateNode node) =>
+  void addChild(node) =>
       child == null ? child = node : children = [node];
-
-  @override
-  void alignChild() {}
 }
 
 class PBSharedParameterProp {
@@ -136,7 +129,10 @@ class PBSharedParameterProp {
   dynamic get initialValue => _initialValue;
 
   final String _friendlyName;
-  String get friendlyName => _friendlyName ?? SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ?? 'noname';
+  String get friendlyName =>
+      _friendlyName ??
+      SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
+      'noname';
 
   PBSharedParameterProp(this._friendlyName, this._type, this.value,
       this._canOverride, this._propertyName, this._UUID, this._initialValue);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:archive/archive.dart';
@@ -38,14 +39,19 @@ class FlutterProjectBuilder {
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
+  FileSystemAnalyzer fileSystemAnalyzer;
+
   FlutterProjectBuilder(
-    this.generationConfiguration, {
+    this.generationConfiguration,
+    this.fileSystemAnalyzer, {
     this.project,
     this.pageWriter,
   }) {
     log = Logger(runtimeType.toString());
+    fileSystemAnalyzer ??= FileSystemAnalyzer(project.projectAbsPath);
 
     generationConfiguration.pageWriter = pageWriter;
+    generationConfiguration.fileSystemAnalyzer = fileSystemAnalyzer;
   }
 
   /// Creating a Flutter project within the [projectDir] with the name of [flutterProjectName].
@@ -84,7 +90,8 @@ class FlutterProjectBuilder {
   /// The formatter is going to be running within `[projectPath]bin/*`,
   /// `[projectPath]lib/*`, and `[projectPath]test/*` by using `dart format`.
   /// There is an option to set to set the current working directory of as [projectDir],
-  static Future<dynamic> formatProject(String projectPath, {String projectDir}) {
+  static Future<dynamic> formatProject(String projectPath,
+      {String projectDir}) {
     return Process.run(
             'dart',
             [
@@ -104,7 +111,6 @@ class FlutterProjectBuilder {
 
   Future<void> genProjectFiles(String genProjectPath,
       {List<ArchiveFile> rawImages}) async {
-        
     if (MainInfo().figmaProjectID != null &&
         MainInfo().figmaProjectID.isNotEmpty) {
       log.info('Processing remaining images...');
@@ -152,13 +158,9 @@ class FlutterProjectBuilder {
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
 
     await generationConfiguration.generateProject(project);
-    await generationConfiguration
-        .generatePlatformAndOrientationInstance(project);
+    generationConfiguration.generatePlatformAndOrientationInstance(project);
 
-
-    Process.runSync(
-        'rm',
-        ['-rf', '.dart_tool/build'],
+    Process.runSync('rm', ['-rf', '.dart_tool/build'],
         runInShell: true,
         environment: Platform.environment,
         workingDirectory: MainInfo().outputPath);

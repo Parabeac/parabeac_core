@@ -2,9 +2,12 @@ import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
+import 'package:parabeac_core/input/helper/figma_constraint_to_pbdl.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -35,7 +38,7 @@ class FigmaEllipse extends FigmaVector
     sharedPluginData,
     style,
     layoutAlign,
-    constraints,
+    FigmaConstraints constraints,
     Frame boundaryRectangle,
     size,
     this.fills,
@@ -81,7 +84,13 @@ class FigmaEllipse extends FigmaVector
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
     imageReference = FigmaAssetProcessor().processImage(UUID);
     return Future.value(
-        InheritedBitmap(this, name, currentContext: currentContext));
+      InheritedBitmap(this, name,
+          currentContext: currentContext,
+          constraints: PBIntermediateConstraints.fromConstraints(
+              convertFigmaConstraintToPBDLConstraint(constraints),
+              boundaryRectangle.height,
+              boundaryRectangle.width)),
+    );
   }
 
   @override

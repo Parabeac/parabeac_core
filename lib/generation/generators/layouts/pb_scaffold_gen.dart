@@ -10,7 +10,9 @@ class PBScaffoldGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
+    generatorContext.sizingContext = generatorContext.configuration.scaling
+        ? SizingValueContext.ScaleValue
+        : SizingValueContext.PointValue;
     var appBar = source.getAttributeNamed('appBar')?.attributeNode;
     var body = source.getAttributeNamed('body')?.attributeNode;
     var bottomNavBar =
@@ -25,23 +27,27 @@ class PBScaffoldGenerator extends PBGenerator {
       }
       if (appBar != null) {
         buffer.write('appBar: ');
-        generatorContext.sizingContext = SizingValueContext.PointValue;
+        // generatorContext.sizingContext = SizingValueContext.PointValue;
         var appbarStr = appBar.generator.generate(appBar, generatorContext);
 
         buffer.write('$appbarStr,\n');
       }
       if (bottomNavBar != null) {
         buffer.write('bottomNavigationBar: ');
-        generatorContext.sizingContext = SizingValueContext.PointValue;
+        // generatorContext.sizingContext = SizingValueContext.PointValue;
         var navigationBar =
             bottomNavBar.generator.generate(bottomNavBar, generatorContext);
         buffer.write('$navigationBar, \n');
       }
 
       if (body != null) {
-        generatorContext.sizingContext = SizingValueContext.MediaQueryValue;
+        generatorContext.sizingContext = generatorContext.configuration.scaling
+            ? SizingValueContext.ScaleValue
+            : SizingValueContext.PointValue;
+
         // hack to pass screen width and height to the child
         buffer.write('body: ');
+        // generatorContext.sizingContext = SizingValueContext.ScaleValue;
         var bodyStr = body.generator.generate(body, generatorContext);
         buffer.write('$bodyStr, \n');
       }

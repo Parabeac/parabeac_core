@@ -5,12 +5,14 @@ import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/flow.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/input/sketch/entities/style/style.dart';
+import 'package:parabeac_core/input/sketch/helper/sketch_constraint_to_pbdl.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 part 'sketch_text.g.dart';
@@ -74,7 +76,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
       layerListExpandedType,
       String name,
       bool nameIsFixed,
-      resizingConstraint,
+      int resizingConstraint,
       resizingType,
       double rotation,
       sharedStyleID,
@@ -136,6 +138,10 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
         name,
         Uuid().v4(),
         currentContext: currentContext,
+        constraints: PBIntermediateConstraints.fromConstraints(
+            convertSketchConstraintToPBDLConstraint(resizingConstraint),
+            boundaryRectangle.height,
+            boundaryRectangle.width),
       )..addChild(
           InheritedText(this, name, currentContext: currentContext),
         ));
@@ -201,8 +207,7 @@ class SketchText extends SketchNode implements SketchNodeFactory, Text {
   var attributedString;
 
   @override
-  set automaticallyDrawOnUnderlyingPath(
-      _automaticallyDrawOnUnderlyingPath) {
+  set automaticallyDrawOnUnderlyingPath(_automaticallyDrawOnUnderlyingPath) {
     // TODO: implement automaticallyDrawOnUnderlyingPath
   }
 

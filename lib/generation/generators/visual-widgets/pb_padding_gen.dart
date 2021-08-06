@@ -4,22 +4,31 @@ import 'package:parabeac_core/generation/generators/value_objects/template_strat
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:tuple/tuple.dart';
 import '../pb_generator.dart';
 
 class PBPaddingGen extends PBGenerator {
   PBPaddingGen() : super();
 
   String relativePadding(
-      TemplateStrategy strategy, bool isVertical, double value) {
+      TemplateStrategy strategy, double value, Tuple2 paddingPosition) {
     var fixedValue = value.toStringAsFixed(2);
     if (strategy is StatelessTemplateStrategy) {
       return 'constraints.max' +
-          (isVertical ? 'Height' : 'Width') +
+          (paddingPosition.item1 == 'top' || paddingPosition.item1 == 'bottom'
+              ? 'Height'
+              : 'Width') +
           ' * $fixedValue';
     }
-    return 'MediaQuery.of(context).size.' +
-        (isVertical ? 'height' : 'width') +
-        ' * $fixedValue';
+    if (paddingPosition.item2) {
+      return '$fixedValue';
+    } else {
+      return 'MediaQuery.of(context).size.' +
+          (paddingPosition.item1 == 'top' || paddingPosition.item1 == 'bottom'
+              ? 'height'
+              : 'width') +
+          ' * $fixedValue';
+    }
   }
 
   @override
@@ -36,26 +45,31 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('Padding(');
     buffer.write('padding: EdgeInsets.only(');
 
-    final paddingPositionsW = ['left', 'right'];
-    final paddingPositionsH = ['bottom', 'top'];
-    var reflectedPadding = reflect(padding);
-    for (var position in paddingPositionsW) {
-      var value = reflectedPadding.getField(Symbol(position)).reflectee;
-      var isVertical = false;
-      if (position == 'top' || position == 'bottom') {
-        isVertical = true;
-      }
-      if (value != null) {
-        buffer.write(
-            '$position: ${relativePadding(source.generator.templateStrategy, isVertical, value)},');
-      }
-    }
+    final paddingPositions = [
+      Tuple2(
+        'left',
+        padding.childToParentConstraints.pinLeft,
+      ),
+      Tuple2(
+        'right',
+        padding.childToParentConstraints.pinRight,
+      ),
+      Tuple2(
+        'bottom',
+        padding.childToParentConstraints.pinBottom,
+      ),
+      Tuple2(
+        'top',
+        padding.childToParentConstraints.pinTop,
+      )
+    ];
 
-    for (var position in paddingPositionsH) {
-      var value = reflectedPadding.getField(Symbol(position)).reflectee;
-      if (value != null) {
+    var reflectedPadding = reflect(padding);
+
+    for (var position in paddingPositions) {
+      if (reflectedPadding.getField(Symbol(position.item1)).reflectee != 0) {
         buffer.write(
-            '$position: ${relativePadding(source.generator.templateStrategy, true, value)},');
+            '${position.item1}: ${relativePadding(source.generator.templateStrategy, reflectedPadding.getField(Symbol(position.item1)).reflectee, position)},');
       }
     }
 

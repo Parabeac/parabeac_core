@@ -30,7 +30,9 @@ BooleanOperation _$BooleanOperationFromJson(Map<String, dynamic> json) {
     ..sharedPluginData = json['sharedPluginData']
     ..isVisible = json['visible'] as bool ?? true
     ..layoutAlign = json['layoutAlign'] as String
-    ..constraints = json['constraints']
+    ..constraints = json['constraints'] == null
+        ? null
+        : FigmaConstraints.fromJson(json['constraints'] as Map<String, dynamic>)
     ..size = json['size']
     ..strokes = json['strokes']
     ..strokeWeight = (json['strokeWeight'] as num)?.toDouble()

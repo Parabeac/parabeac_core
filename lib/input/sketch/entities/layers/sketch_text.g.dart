@@ -25,7 +25,7 @@ SketchText _$SketchTextFromJson(Map<String, dynamic> json) {
     layerListExpandedType: json['layerListExpandedType'],
     name: json['name'] as String,
     nameIsFixed: json['nameIsFixed'] as bool,
-    resizingConstraint: json['resizingConstraint'],
+    resizingConstraint: json['resizingConstraint'] as int,
     resizingType: json['resizingType'],
     rotation: (json['rotation'] as num)?.toDouble(),
     sharedStyleID: json['sharedStyleID'],

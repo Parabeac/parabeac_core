@@ -1,62 +1,57 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
 /// Input: PBVisualIntermediateNode Tree or PBLayoutIntermediate Tree
 /// Output:PBIntermediateNode Tree
-class PBLayoutGenerationService implements PBGenerationService {
+class PBLayoutGenerationService extends AITHandler {
   ///The available Layouts that could be injected.
   final List<PBLayoutIntermediateNode> _availableLayouts = [];
 
-  var log = Logger('Layout Generation Service');
 
   ///[LayoutRule] that check post conditions.
   final List<PostConditionRule> _postLayoutRules = [
     StackReductionVisualRule(),
-    ContainerPostRule(),
+    // ContainerPostRule(),
     ContainerConstraintRule()
   ];
-
-  @override
-  PBContext currentContext;
 
   ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
   ///The default [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode _defaultLayout;
 
-  PBLayoutGenerationService({this.currentContext}) {
+  PBLayoutGenerationService() {
     var layoutHandlers = <String, PBLayoutIntermediateNode>{
-      'column': PBIntermediateColumnLayout(
-        '',
-        currentContext: currentContext,
-        UUID: Uuid().v4(),
+      // 'column': PBIntermediateColumnLayout(
+      //   '',
+      //   currentContext: currentContext,
+      //   UUID: Uuid().v4(),
+      // ),
+      // 'row': PBIntermediateRowLayout('', Uuid().v4(),
+      //     currentContext: currentContext),
+      'stack': PBIntermediateStackLayout(
+        null,
       ),
-      'row': PBIntermediateRowLayout('', Uuid().v4(),
-          currentContext: currentContext),
-      'stack': PBIntermediateStackLayout('', Uuid().v4(),
-          currentContext: currentContext),
     };
 
     for (var layoutType
-        in currentContext.configuration.layoutPrecedence ?? ['column']) {
+        in MainInfo().configuration.layoutPrecedence ?? ['column']) {
       layoutType = layoutType.toLowerCase();
       if (layoutHandlers.containsKey(layoutType)) {
         _availableLayouts.add(layoutHandlers[layoutType]);
@@ -66,19 +61,25 @@ class PBLayoutGenerationService implements PBGenerationService {
     _defaultLayout = _availableLayouts[0];
   }
 
-  PBIntermediateNode extractLayouts(
-    PBIntermediateNode rootNode,
-  ) {
+  Future<PBIntermediateTree> extractLayouts(
+      PBIntermediateTree tree, PBContext context) {
+    var rootNode = tree.rootNode;
     if (rootNode == null) {
-      return rootNode;
+      return Future.value(tree);
     }
     try {
+      // rootNode = (tree
+      //         .map(_removingMeaninglessGroup)
+      //         .map((node) => _layoutConditionalReplacement(node, context))
+      //         .toList()
+      //           ..removeWhere((element) => element == null))
+      // .first;
       rootNode = _traverseLayersUtil(rootNode, (layer) {
         return layer
 
             ///Remove the `TempGroupLayout` nodes that only contain one node
             .map(_removingMeaninglessGroup)
-            .map(_layoutConditionalReplacement)
+            .map((node) => _layoutConditionalReplacement(node, context))
             .toList()
 
               /// Filter out the elements that are null in the tree
@@ -87,15 +88,17 @@ class PBLayoutGenerationService implements PBGenerationService {
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
-      return _applyPostConditionRules(rootNode);
+      _applyPostConditionRules(rootNode);
+      // return Future.value(tree);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
             exception: e,
             stackTrace: stackTrace,
           );
-      log.error(e.toString());
+      logger.error(e.toString());
     } finally {
-      return rootNode;
+      tree.rootNode = rootNode;
+      return Future.value(tree);
     }
   }
 
@@ -152,7 +155,8 @@ class PBLayoutGenerationService implements PBGenerationService {
           : _replaceNode(
               tempGroup,
               InjectedContainer(tempGroup.bottomRightCorner,
-                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID));
+                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID,
+                  constraints: tempGroup.constraints));
     }
     return tempGroup;
   }
@@ -166,7 +170,8 @@ class PBLayoutGenerationService implements PBGenerationService {
   ///nodes should be considered into subsections. For example, if child 0 and child 1 statisfy the
   ///rule of a [Row] but not child 3, then child 0 and child 1 should be placed inside of a [Row]. Therefore,
   ///there could be many[IntermediateLayoutNodes] derived in the children level of the `group`.
-  PBIntermediateNode _layoutConditionalReplacement(PBIntermediateNode parent,
+  PBIntermediateNode _layoutConditionalReplacement(
+      PBIntermediateNode parent, PBContext context,
       {depth = 1}) {
     if (parent is PBLayoutIntermediateNode && depth >= 0) {
       parent.sortChildren();
@@ -187,21 +192,21 @@ class PBLayoutGenerationService implements PBGenerationService {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               currentNode.addChild(nextNode);
-              currentNode =
-                  _layoutConditionalReplacement(currentNode, depth: depth - 1);
+              currentNode = _layoutConditionalReplacement(currentNode, context,
+                  depth: depth - 1);
               generatedLayout = currentNode;
             } else if (layout.runtimeType == nextNode.runtimeType) {
               nextNode.addChild(currentNode);
-              nextNode =
-                  _layoutConditionalReplacement(nextNode, depth: depth - 1);
+              nextNode = _layoutConditionalReplacement(nextNode, context,
+                  depth: depth - 1);
               generatedLayout = nextNode;
             }
 
             ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
             ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
             ///of the generated layout.
-            generatedLayout ??= layout
-                .generateLayout([currentNode, nextNode], currentContext, '');
+            generatedLayout ??=
+                layout.generateLayout([currentNode, nextNode], context, '');
             var start = childPointer, end = childPointer + 2;
             children.replaceRange(
                 start,
@@ -217,14 +222,16 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
       parent.replaceChildren(children);
       if (children.length == 1) {
+        /// With the support for scaling & pinning, Stacks are now responsible for positioning.
+        if (parent is PBIntermediateStackLayout) {
+          return parent;
+        }
         return _replaceNode(parent, children[0]);
       } else {
         return parent is! TempGroupLayoutNode
             ? parent
-            : _replaceNode(
-                parent,
-                _defaultLayout.generateLayout(
-                    children, currentContext, parent.name));
+            : _replaceNode(parent,
+                _defaultLayout.generateLayout(children, context, parent.name));
       }
     }
     return parent;
@@ -235,6 +242,21 @@ class PBLayoutGenerationService implements PBGenerationService {
       PBIntermediateNode candidate, PBIntermediateNode replacement) {
     if (candidate is PBLayoutIntermediateNode &&
         replacement is PBLayoutIntermediateNode) {
+      /// For supporting pinning & resizing information, we will merge constraints.
+      print(replacement.constraints);
+      replacement.constraints = PBIntermediateConstraints.mergeFromContraints(
+          candidate.constraints ??
+              PBIntermediateConstraints(
+                  pinBottom: false,
+                  pinLeft: false,
+                  pinRight: false,
+                  pinTop: false),
+          replacement.constraints ??
+              PBIntermediateConstraints(
+                  pinBottom: false,
+                  pinLeft: false,
+                  pinRight: false,
+                  pinTop: false));
       replacement.prototypeNode = candidate.prototypeNode;
     }
     return replacement;
@@ -261,5 +283,11 @@ class PBLayoutGenerationService implements PBGenerationService {
       }
     }
     return node;
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    return extractLayouts(tree, context);
   }
 }

@@ -15,7 +15,10 @@ FigmaRectangle _$FigmaRectangleFromJson(Map<String, dynamic> json) {
     sharedPluginData: json['sharedPluginData'],
     style: json['style'],
     layoutAlign: json['layoutAlign'],
-    constraints: json['constraints'],
+    constraints: json['constraints'] == null
+        ? null
+        : FigmaConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>),
     boundaryRectangle: json['absoluteBoundingBox'] == null
         ? null
         : Frame.fromJson(json['absoluteBoundingBox'] as Map<String, dynamic>),

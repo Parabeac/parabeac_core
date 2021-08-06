@@ -3,6 +3,7 @@ import 'package:parabeac_core/design_logic/group_node.dart';
 import 'package:parabeac_core/design_logic/image.dart';
 import 'package:parabeac_core/input/figma/entities/abstract_figma_node_factory.dart';
 import 'package:parabeac_core/input/figma/entities/layers/vector.dart';
+import 'package:parabeac_core/input/figma/entities/style/figma_constraints.dart';
 import 'package:parabeac_core/input/figma/entities/style/figma_style.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';

@@ -5,9 +5,10 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prot
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:uuid/uuid.dart';
 
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.
@@ -38,22 +39,23 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner, bottomRightCorner, this.prototypeNode})
+      {topLeftCorner,
+      bottomRightCorner,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
       : super(topLeftCorner, bottomRightCorner, Uuid().v4(), name,
-            currentContext: currentContext) {
+            currentContext: currentContext, constraints: constraints) {
     // Declaring children for layout node
     addAttribute(PBAttribute('children'));
   }
-
-  void alignChildren();
 
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children) {
     if (children.isNotEmpty) {
       getAttributeNamed('children')?.attributeNodes = children;
-      _resize();
+      resize();
     } else {
-      PBIntermediateNode.logger.warning(
+      logger.warning(
           'Trying to add a list of children to the $runtimeType that is either null or empty');
     }
   }
@@ -71,12 +73,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Add node to child
   void addChildToLayout(PBIntermediateNode node) {
     getAttributeNamed('children').attributeNodes.add(node);
-    _resize();
+    resize();
   }
 
-  void _resize() {
+  void resize() {
     if (children.isEmpty) {
-      PBIntermediateNode.logger
+      logger
           .warning('There should be children in the layout so it can resize.');
       return;
     }
@@ -99,7 +101,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     if (children.contains(node)) {
       children.remove(node);
     }
-    _resize();
+    resize();
     return false;
   }
 

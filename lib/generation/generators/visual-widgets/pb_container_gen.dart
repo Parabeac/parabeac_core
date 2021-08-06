@@ -4,7 +4,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_hel
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 class PBContainerGenerator extends PBGenerator {
   String color;
@@ -21,15 +21,14 @@ class PBContainerGenerator extends PBGenerator {
     if (source.auxiliaryData.borderInfo != null &&
         source.auxiliaryData.borderInfo.isNotEmpty) {
       buffer.write(PBBoxDecorationHelper().generate(source, generatorContext));
-    }
-    else {
+    } else {
       buffer.write(PBColorGenHelper().generate(source, generatorContext));
     }
 
-    if (source.auxiliaryData.alignment != null) {
-      buffer.write(
-          'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
-    }
+    // if (source.auxiliaryData.alignment != null) {
+    //   buffer.write(
+    //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
+    // }
 
     if (source.child != null) {
       source.child.topLeftCorner =
