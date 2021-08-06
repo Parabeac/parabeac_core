@@ -40,6 +40,7 @@ class PBPluginListHelper {
         '',
       ),
       '<tab>': Tab(Point(0, 0), Point(0, 0), '', UUID: Uuid().v4()),
+      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
     };
   }
 
