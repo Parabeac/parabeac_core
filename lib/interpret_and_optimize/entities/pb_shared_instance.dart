@@ -124,18 +124,29 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 class PBSharedParameterValue {
   final String type;
 
-  final dynamic value;
+  /// Initial value of [PBSharedParameterValue]
+  dynamic initialValue;
+
+  /// Current value of [PBSharedParameterValue]
+  ///
+  /// This is useful when we need to do something to `initialValue`
+  /// in order to correctly export the Override
+  @JsonKey(ignore: true)
+  String value;
 
   final String UUID;
 
-  final String overrideName;
+  @JsonKey(name: 'name')
+  String overrideName;
 
   PBSharedParameterValue(
     this.type,
-    this.value,
+    this.initialValue,
     this.UUID,
     this.overrideName,
-  );
+  ) {
+    value = initialValue;
+  }
 
   @override
   factory PBSharedParameterValue.fromJson(Map<String, dynamic> json) =>

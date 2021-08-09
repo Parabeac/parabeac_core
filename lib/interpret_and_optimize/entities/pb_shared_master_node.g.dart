@@ -56,7 +56,6 @@ PBSharedParameterProp _$PBSharedParameterPropFromJson(
         : PBIntermediateNode.fromJson(json['value'] as Map<String, dynamic>),
     PBSharedParameterProp._propertyNameFromJson(json['name'] as String),
     json['UUID'] as String,
-    json['initialValue'],
   );
 }
 
@@ -67,5 +66,4 @@ Map<String, dynamic> _$PBSharedParameterPropToJson(
       'value': instance.value,
       'name': instance.propertyName,
       'UUID': instance.UUID,
-      'initialValue': instance.initialValue,
     };

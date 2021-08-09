@@ -34,7 +34,6 @@ class MiddlewareUtils {
       if (variationNode is PBSharedMasterNode &&
           (variationNode.overridableProperties?.isNotEmpty ?? false)) {
         variationNode.overridableProperties.forEach((prop) {
-          // var friendlyName = SN_UUIDtoVarName[prop.propertyName] ?? 'NOTFOUND';
           var friendlyName = prop.propertyName;
           overrideVars += 'final $friendlyName;';
           overrideAttr += 'this.$friendlyName, ';

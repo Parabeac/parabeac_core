@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
@@ -115,8 +116,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
           );
       log.error(e.toString());
     }
-    ;
+
     generator = PBMasterSymbolGenerator();
+
+    overridableProperties.forEach(OverrideHelper.addProperty);
 
     // this.currentContext.screenBottomRightCorner = Point(
     //     originalRef.boundaryRectangle.x + originalRef.boundaryRectangle.width,
@@ -175,16 +178,12 @@ class PBSharedParameterProp {
 
   final String UUID;
 
-  final dynamic initialValue;
-
-  // final String _friendlyName;
-  // String get friendlyName =>
-  //     _friendlyName ??
-  //     SN_UUIDtoVarName[PBInputFormatter.findLastOf(propertyName, '/')] ??
-  //     'noname';
-
   PBSharedParameterProp(
-      this.type, this.value, this.propertyName, this.UUID, this.initialValue);
+    this.type,
+    this.value,
+    this.propertyName,
+    this.UUID,
+  );
 
   factory PBSharedParameterProp.fromJson(Map<String, dynamic> json) =>
       _$PBSharedParameterPropFromJson(json);

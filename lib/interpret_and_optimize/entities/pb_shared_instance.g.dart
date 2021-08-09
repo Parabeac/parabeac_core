@@ -59,9 +59,9 @@ PBSharedParameterValue _$PBSharedParameterValueFromJson(
     Map<String, dynamic> json) {
   return PBSharedParameterValue(
     json['type'] as String,
-    json['value'],
+    json['initialValue'],
     json['UUID'] as String,
-    json['overrideName'] as String,
+    json['name'] as String,
   );
 }
 
@@ -69,7 +69,7 @@ Map<String, dynamic> _$PBSharedParameterValueToJson(
         PBSharedParameterValue instance) =>
     <String, dynamic>{
       'type': instance.type,
-      'value': instance.value,
+      'initialValue': instance.initialValue,
       'UUID': instance.UUID,
-      'overrideName': instance.overrideName,
+      'name': instance.overrideName,
     };
