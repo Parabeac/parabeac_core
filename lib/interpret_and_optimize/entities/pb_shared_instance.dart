@@ -125,6 +125,7 @@ class PBSharedParameterValue {
   final String type;
 
   /// Initial value of [PBSharedParameterValue]
+  @JsonKey(name: 'value')
   dynamic initialValue;
 
   /// Current value of [PBSharedParameterValue]
