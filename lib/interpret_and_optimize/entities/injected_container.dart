@@ -12,28 +12,64 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
+part 'injected_container.g.dart';
+
+@JsonSerializable()
 class InjectedContainer extends PBVisualIntermediateNode
-    implements PBInjectedIntermediate, PrototypeEnable {
+    implements
+        PBInjectedIntermediate,
+        PrototypeEnable,
+        IntermediateNodeFactory {
   @override
+  @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
-
-  @override
   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
+  @override
+  @JsonKey(fromJson: Point.topLeftFromJson)
+  Point topLeftCorner;
+  @override
+  @JsonKey(fromJson: Point.bottomRightFromJson)
+  Point bottomRightCorner;
 
   @override
-  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
+  @JsonKey()
+  String type = 'injected_container';
 
-  InjectedContainer(
-    Point bottomRightCorner,
-    Point topLeftCorner,
+  @override
+  String UUID;
+
+  @override
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
+
+  InjectedContainer({
+    this.bottomRightCorner,
+    this.topLeftCorner,
     String name,
-    String UUID, {
+    this.UUID,
+    double alignX,
+    double alignY,
     String color,
-    PBContext currentContext,
-    PBIntermediateConstraints constraints,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID, constraints: constraints) {
+    this.currentContext,
+    this.prototypeNode,
+    this.size,
+    this.type,
+  }) : super(
+          topLeftCorner,
+          bottomRightCorner,
+          currentContext,
+          name,
+          UUID: UUID,
+        ) {
     generator = PBContainerGenerator();
 
     size = {
@@ -42,4 +78,10 @@ class InjectedContainer extends PBVisualIntermediateNode
     };
   }
 
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$InjectedContainerFromJson(json);
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InjectedContainer.fromJson(json);
 }

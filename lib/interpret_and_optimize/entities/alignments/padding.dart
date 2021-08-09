@@ -72,4 +72,6 @@ class Padding extends PBVisualIntermediateNode {
       bottom = bottom < 0.01 ? 0.0 : bottom;
     }
   }
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

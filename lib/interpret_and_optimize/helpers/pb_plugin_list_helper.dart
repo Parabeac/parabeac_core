@@ -1,11 +1,8 @@
-import 'package:parabeac_core/design_logic/artboard.dart';
-import 'package:parabeac_core/design_logic/pb_shared_instance_design_node.dart';
 import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'dart:math';
@@ -28,7 +25,24 @@ class PBPluginListHelper {
 
   factory PBPluginListHelper() => _instance;
 
-  PBPluginListHelper._internal();
+  PBPluginListHelper._internal() {
+    allowListNames = {
+      '<tabbar>': InjectedTabBar(
+        Point(0, 0),
+        Point(0, 0),
+        Uuid().v4(),
+        '',
+      ),
+      '<navbar>': InjectedAppbar(
+        Point(0, 0),
+        Point(0, 0),
+        Uuid().v4(),
+        '',
+      ),
+      '<tab>': Tab(Point(0, 0), Point(0, 0), '', UUID: Uuid().v4()),
+      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
+    };
+  }
 
   Map<String, PBEgg> allowListNames;
 
@@ -67,21 +81,16 @@ class PBPluginListHelper {
 
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
-  PBEgg returnAllowListNodeIfExists(DesignNode node) {
-    // InjectedContainer(null,null)..subsemantic = '';
-    if (node is! PBArtboard && node is! PBSharedInstanceDesignNode) {
+  PBEgg returnAllowListNodeIfExists(PBIntermediateNode node) {
+    if (node != null) {
       for (var key in allowListNames.keys) {
-        if (node.name.contains(key)) {
+        if (node.name?.contains(key) ?? false) {
           return allowListNames[key].generatePluginNode(
-              Point(node.boundaryRectangle.x, node.boundaryRectangle.y),
-              Point(node.boundaryRectangle.x + node.boundaryRectangle.width,
-                  node.boundaryRectangle.y + node.boundaryRectangle.height),
-              node);
+              node.topLeftCorner, node.bottomRightCorner, node);
         }
       }
     }
+
     return null;
   }
-
-  returnDenyListNodeIfExist(SymbolInstance symbolInstance) {}
 }

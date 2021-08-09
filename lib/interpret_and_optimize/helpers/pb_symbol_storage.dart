@@ -71,13 +71,13 @@ class PBSymbolStorage {
   ///Looks for the symbol in both the [_pbSharedMasterNodes] and
   ///the [pageSymbols] maps
   PBIntermediateNode getSymbol(String id) {
-    var node = getSharedInstaceNode(id);
-    node ??= getSharedMasterNode(id) as PBIntermediateNode;
+    PBIntermediateNode node = getSharedInstaceNode(id);
+    node ??= getSharedMasterNode(id);
     return node;
   }
 
   /// Removes the symbol with given [id].
-  /// 
+  ///
   /// Returns [true] if the object was successfuly removed,
   /// [false] if the object did not exist.
   bool removeSymbolWithId(String id) {
@@ -105,7 +105,7 @@ class PBSymbolStorage {
 
   String getNameOfSymbolWithID(String id) {
     return _pbSharedMasterNodes.containsKey(id)
-        ? _pbSharedMasterNodes[id].originalRef.name
+        ? _pbSharedMasterNodes[id].name
         : null;
   }
 }

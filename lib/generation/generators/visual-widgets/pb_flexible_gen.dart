@@ -9,8 +9,7 @@ class PBFlexibleGenerator extends PBGenerator {
   PBFlexibleGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is Flexible) {
       var buffer = StringBuffer();
       buffer.write('Flexible(');
@@ -25,5 +24,6 @@ class PBFlexibleGenerator extends PBGenerator {
       buffer.write(')');
       return buffer.toString();
     }
+    return '';
   }
 }

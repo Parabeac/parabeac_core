@@ -33,4 +33,7 @@ class Flexible extends PBVisualIntermediateNode {
     generator = PBFlexibleGenerator();
     this.child = child;
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

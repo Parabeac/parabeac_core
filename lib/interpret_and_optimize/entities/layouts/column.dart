@@ -100,4 +100,7 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout>{
       node.replaceChildren(childrenCopy?.cast<PBIntermediateNode>());
     }
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

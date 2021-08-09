@@ -18,4 +18,7 @@ class Spacer extends PBVisualIntermediateNode {
             UUID: UUID) {
     generator = PBSpacerGenerator();
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

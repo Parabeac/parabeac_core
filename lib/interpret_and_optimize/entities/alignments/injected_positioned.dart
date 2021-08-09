@@ -27,6 +27,8 @@ class InjectedPositioned extends PBIntermediateNode
     generator = PBPositionedGenerator(overrideChildDim: true);
   }
 
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }
 
 /// Class to help us communicate and manipulate positioning values.

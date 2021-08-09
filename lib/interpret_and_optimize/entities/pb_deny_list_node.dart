@@ -2,17 +2,21 @@ import 'dart:math';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+@JsonSerializable()
 
 /// A node that should not be converted to intermediate.
 class PBDenyListNode extends PBIntermediateNode {
-  @override
+    @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
-
-  PBDenyListNode(Point topLeftCorner, Point bottomRightCorner,
-      PBContext currentContext, String name,
-      {String UUID})
-      : super(
+  PBDenyListNode(
+    Point topLeftCorner,
+    Point bottomRightCorner,
+    String name, {
+    String UUID,
+    PBContext currentContext,
+  }) : super(
           topLeftCorner,
           bottomRightCorner,
           UUID,
@@ -20,4 +24,6 @@ class PBDenyListNode extends PBIntermediateNode {
           currentContext: currentContext,
         );
 
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

@@ -2,11 +2,15 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_view_data
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:recase/recase.dart';
 import 'package:tuple/tuple.dart';
 import "dart:collection";
 import 'package:uuid/uuid.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'pb_intermediate_node_tree.g.dart';
 
 enum TREE_TYPE {
   MISC,
@@ -14,13 +18,19 @@ enum TREE_TYPE {
   VIEW,
 }
 
-class PBIntermediateTree extends Iterable<PBIntermediateNode> {
+@JsonSerializable()
+class PBIntermediateTree extends Iterable<PBIntermediateNode>
+    implements IntermediateNodeFactory {
   String _UUID;
   String get UUID => _UUID;
 
   /// The [TREE_TYPE] of the [PBIntermediateTree].
-  TREE_TYPE _tree_type = TREE_TYPE.SCREEN;
-  TREE_TYPE get tree_type => _tree_type;
+  @JsonKey(ignore: true)
+  TREE_TYPE tree_type = TREE_TYPE.SCREEN;
+
+  @override
+  @JsonKey(ignore: true)
+  String type = 'tree';
 
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.
@@ -29,9 +39,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   /// Furthermore, this is a workaround to the unability of creating a copy of the [PBIntermediateTree] to prevent
   /// the modifications to the object (https://github.com/dart-lang/sdk/issues/3367). As a result, the [lockData] flag
   /// has to be used to prevent those modification in phases where the data needs to be analyzed but unmodified.
+  @JsonKey(ignore: true)
   bool lockData = false;
 
   PBGenerationViewData _data;
+  @JsonKey(ignore: true)
   PBGenerationViewData get data => _data;
   set data(PBGenerationViewData viewData) {
     if (!lockData) {
@@ -40,6 +52,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   }
 
   PBIntermediateNode _rootNode;
+  @JsonKey(name: 'designNode')
   PBIntermediateNode get rootNode => _rootNode;
   set rootNode(PBIntermediateNode rootNode) {
     if (!lockData) {
@@ -47,11 +60,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
       _identifier ??= rootNode?.name?.snakeCase ?? name.snakeCase;
 
       if (rootNode is InheritedScaffold) {
-        _tree_type = TREE_TYPE.SCREEN;
+        tree_type = TREE_TYPE.SCREEN;
       } else if (rootNode is PBSharedMasterNode) {
-        _tree_type = TREE_TYPE.VIEW;
+        tree_type = TREE_TYPE.VIEW;
       } else {
-        _tree_type = TREE_TYPE.MISC;
+        tree_type = TREE_TYPE.MISC;
       }
     }
   }
@@ -78,9 +91,13 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
   /// platform or orientation. The [identifier] is just going to be set once, its going
   /// to be the [name] of the [rootNode].
   String _identifier;
+  @JsonKey(name: 'name')
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
-  PBIntermediateTree(this._name) {
+  PBIntermediateTree({
+    String name,
+  }) {
+    _name = name;
     _dependentsOn = {};
     _UUID = Uuid().v4();
   }
@@ -155,6 +172,16 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode> {
 
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
+
+  Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
+
+  static PBIntermediateTree fromJson(Map<String, dynamic> json) =>
+      _$PBIntermediateTreeFromJson(json)
+        ..tree_type = treeTypeFromJson(json['designNode']);
+
+  @override
+  PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
+      PBIntermediateTree.fromJson(json);
 }
 
 /// By extending the class, any node could be used in any iterator to traverse its
@@ -167,4 +194,15 @@ abstract class TraversableNode<E> {
   E parent;
   int treeLevel;
   List<E> children;
+}
+
+TREE_TYPE treeTypeFromJson(Map<String, dynamic> json) {
+  switch (json['type']) {
+    case 'artboard':
+      return TREE_TYPE.SCREEN;
+    case 'shared_master':
+      return TREE_TYPE.VIEW;
+    default:
+      return TREE_TYPE.MISC;
+  }
 }

@@ -30,19 +30,21 @@ class PBSymbolLinkerService extends AITHandler{
     PBIntermediateNode rootIntermediateNode;
     stack.add(rootNode);
 
-    while(stack.isNotEmpty){
+    while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
-      if(currentNode is PBLayoutIntermediateNode){
-        currentNode.children.forEach(stack.add);
-      } else if (currentNode is PBVisualIntermediateNode && currentNode.child != null){
-        stack.add(currentNode.child);
-      }
+      // Traverse `currentNode's` attributes and add to stack
+      currentNode.attributes.forEach((attribute) {
+        attribute.attributeNodes.forEach((node) {
+          node.currentContext ??= currentNode.currentContext;
+          stack.add(node);
+        });
+      });
 
-      if(currentNode is PBSharedMasterNode){
+      if (currentNode is PBSharedMasterNode) {
         await _symbolStorage.addSharedMasterNode(currentNode);
-        _aggregationService.gatherSharedParameters(currentNode, currentNode.child);
-
-      } else if (currentNode is PBSharedInstanceIntermediateNode){
+        _aggregationService.gatherSharedParameters(
+            currentNode, currentNode.child);
+      } else if (currentNode is PBSharedInstanceIntermediateNode) {
         await _symbolStorage.addSharedInstance(currentNode);
         _aggregationService.gatherSharedValues(currentNode);
       }

@@ -57,4 +57,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     children.forEach((child) => stack.addChild(child));
     return stack;
   }
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

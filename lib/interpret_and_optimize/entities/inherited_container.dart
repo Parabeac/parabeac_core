@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
@@ -14,88 +12,95 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
+part 'inherited_container.g.dart';
+
+@JsonSerializable()
 class InheritedContainer extends PBVisualIntermediateNode
-    with PBColorMixin
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  final originalRef;
-
-  @override
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
+  @JsonKey(defaultValue: true)
   bool isBackgroundVisible = true;
 
   @override
-  ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
+  @JsonKey(ignore: true)
+  Point topLeftCorner;
+  @override
+  @JsonKey(ignore: true)
+  Point bottomRightCorner;
+
+   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
 
   /// TODO: switch to padding
   @override
   AlignStrategy alignStrategy = NoAlignment();
 
-  InheritedContainer(this.originalRef, Point topLeftCorner,
-      Point bottomRightCorner, String name,
-      {double alignX,
-      double alignY,
-      PBContext currentContext,
-      Map borderInfo,
-      this.isBackgroundVisible = true,
-      PBIntermediateConstraints constraints})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '', constraints: constraints) {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+
+  @override
+  @JsonKey()
+  String type = 'rectangle';
+
+  @override
+  String UUID;
+
+  @override
+  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
+  Map size;
+
+  @override
+  @JsonKey(ignore: true)
+  PBContext currentContext;
+
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
+  @override
+  @JsonKey(ignore: true)
+  List<PBIntermediateNode> get children => null;
+
+  InheritedContainer({
+    this.originalRef,
+    this.topLeftCorner,
+    this.bottomRightCorner,
+    String name,
+    double alignX,
+    double alignY,
+    this.currentContext,
+    this.isBackgroundVisible = true,
+    this.UUID,
+    this.size,
+    this.prototypeNode,
+  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
+            UUID: UUID ?? '') {
     generator = PBContainerGenerator();
 
-    borderInfo ??= {};
-
-    size = {
-      'width': originalRef.boundaryRectangle.width,
-      'height': originalRef.boundaryRectangle.height,
-    };
-
-    // have to save this in case it is overridden
-    auxiliaryData.style = originalRef.style;
-
-    if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
-      for (var fill in originalRef.style.fills) {
-        if (fill.isEnabled) {
-          auxiliaryData.color = toHex(fill.color);
-          // use the first one found.
-          break;
-        }
-      }
-    }
-
-    auxiliaryData.borderInfo = borderInfo;
-
-    assert(originalRef != null,
-        'A null original reference was sent to an PBInheritedIntermediate Node');
+    auxiliaryData.alignment = alignX != null && alignY != null
+        ? {'alignX': alignX, 'alignY': alignY}
+        : null;
   }
 
-  // @override
-  // void alignChild() {
-  //   if (child != null) {
-  //     /// Refactor to child.constraints != null
-  //     if (child is! InheritedText) {
-  //       // var left = (child.topLeftCorner.x - topLeftCorner.x).abs() ?? 0.0;
-  //       // var right =
-  //       //     (bottomRightCorner.x - child.bottomRightCorner.x).abs() ?? 0.0;
-  //       // var top = (child.topLeftCorner.y - topLeftCorner.y).abs() ?? 0.0;
-  //       // var bottom =
-  //       //     (bottomRightCorner.y - child.bottomRightCorner.y).abs() ?? 0.0;
-  //       // var padding = Padding('', child.constraints,
-  //       //     left: left,
-  //       //     right: right,
-  //       //     top: top,
-  //       //     bottom: bottom,
-  //       //     topLeftCorner: topLeftCorner,
-  //       //     bottomRightCorner: bottomRightCorner,
-  //       //     currentContext: currentContext);
-  //       // padding.addChild(child);
-  //       // child = padding;
-  //     }
-  //   }
-  // }
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var container = _$InheritedContainerFromJson(json)
+      ..topLeftCorner = Point.topLeftFromJson(json)
+      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      ..originalRef = json;
+
+    container.mapRawChildren(json);
+    container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
+
+    return container;
+  }
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+      InheritedContainer.fromJson(json);
 }

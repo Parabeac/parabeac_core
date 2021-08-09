@@ -55,13 +55,15 @@ class PBSharedInterAggregationService {
         // add Designer Warning here, not even sure if this is the designers fault or not
         log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
-      if ((prop.value != null) &&
-          (prop.type == PBSharedInstanceIntermediateNode)) {
+      if ((prop.value != null) && (prop.type == 'symbolID')) {
+        prop.value.currentContext = rootChildNode.currentContext;
+
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
       }
     }
+
     sharedMasterNode.overridableProperties
         .removeWhere((prop) => prop == null || prop.value == null);
   }
@@ -92,18 +94,6 @@ class PBSharedInterAggregationService {
       return;
     }
     if (masterNode?.SYMBOL_ID == instanceIntermediateNode?.SYMBOL_ID) {
-      instanceIntermediateNode.sharedParamValues =
-          instanceIntermediateNode.sharedParamValues.map((v) {
-        for (var symParam in masterNode.overridableProperties) {
-          if (symParam.propertyName == v.overrideName) {
-            return PBSharedParameterValue(
-                symParam.type, v.value, symParam.UUID, symParam.propertyName);
-          }
-        }
-        return null;
-      }).toList()
-            ..removeWhere((v) => v == null || v.value == null);
-
       instanceIntermediateNode.currentContext
           .addDependent(masterNode.currentContext.tree);
 
@@ -115,5 +105,4 @@ class PBSharedInterAggregationService {
 
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
-
 }

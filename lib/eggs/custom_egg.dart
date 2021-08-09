@@ -1,5 +1,4 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
@@ -37,13 +36,13 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {
+  void extractInformation(PBIntermediateNode incomingNode) {
     // TODO: implement extractInformation
   }
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
+  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+      PBIntermediateNode originalRef) {
     return CustomEgg(topLeftCorner, bottomRightCorner,
         originalRef.name.replaceAll('<custom>', '').pascalCase);
   }

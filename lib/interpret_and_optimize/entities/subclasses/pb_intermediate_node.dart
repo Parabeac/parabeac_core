@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attr
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -15,14 +16,24 @@ import 'package:quick_log/quick_log.dart';
 /// PB’s  representation of the intermediate representation for a sketch node.
 /// Usually, we work with its subclasses. We normalize several aspects of data that a sketch node presents in order to work better at the intermediate level.
 /// Sometimes, PBNode’s do not have a direct representation of a sketch node. For example, most layout nodes are primarily made through and understanding of a need for a layout.
+import 'package:json_annotation/json_annotation.dart';
+
+part 'pb_intermediate_node.g.dart';
+
+@JsonSerializable(
+  explicitToJson: true,
+  createFactory: false,
+)
 abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   Logger logger;
 
   /// A subsemantic is contextual info to be analyzed in or in-between the visual generation & layout generation services.
   String subsemantic;
 
+  @JsonKey(ignore: true)
   PBGenerator generator;
 
+  @JsonKey()
   final String UUID;
 
   PBIntermediateConstraints constraints;
@@ -33,6 +44,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// that attribute.
   List<PBAttribute> _attributes;
 
+  @JsonKey(ignore: true)
   List<PBAttribute> get attributes => _attributes;
 
   @override
@@ -58,19 +70,25 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     }
   }
 
+  @JsonKey(fromJson: Point.topLeftFromJson)
   Point topLeftCorner;
+
+  @JsonKey(fromJson: Point.bottomRightFromJson)
   Point bottomRightCorner;
 
   double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
   double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
 
+  @JsonKey(ignore: true)
   PBContext currentContext;
 
+  @JsonKey(ignore: true)
   PBGenerationViewData get managerData => currentContext.tree.data;
 
   Map size;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
+  @JsonKey(name: 'style')
   IntermediateAuxiliaryData auxiliaryData = IntermediateAuxiliaryData();
 
   /// Name of the element if available.
@@ -169,6 +187,27 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
       child?.align(context.clone());
     }
   }
+
+    factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
+      AbstractIntermediateNodeFactory.getIntermediateNode(json);
+
+  Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
+
+  static Map sizeFromJson(Map<String, dynamic> json) {
+    return {
+      'width': json['width'],
+      'height': json['height'],
+    };
+  }
+
+  void mapRawChildren(Map<String, dynamic> json) {
+    var rawChildren = json['children'] as List;
+    rawChildren?.forEach((child) {
+      if (child != null) {
+        addChild(PBIntermediateNode.fromJson(child));
+      }
+    });
+  }
 }
 
 extension PBPointLegacyMethod on Point {
@@ -193,5 +232,7 @@ extension PBPointLegacyMethod on Point {
       return y == point.y ? x >= point.x : y >= point.y;
     }
     return false;
-  }
+
+
+}
 }

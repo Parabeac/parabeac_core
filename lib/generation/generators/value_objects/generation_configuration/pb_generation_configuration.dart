@@ -104,7 +104,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         relPath = p.join(tree.identifier, platformFolder, tree.identifier);
       }
       if (tree.isHomeScreen()) {
-        await _setMainScreen(tree, relPath, project.projectName);
+        await _setMainScreen(tree, relPath, MainInfo().projectName);
       }
       await applyMiddleware(tree);
     }
@@ -114,7 +114,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   Future<void> generateProject(PBProject pb_project) async {
     var processInfo = MainInfo();
     _head = CommandGenMiddleware(
-        generationManager, this, _importProcessor, pb_project.projectName);
+        generationManager, this, _importProcessor, MainInfo().projectName);
 
     ///First we are going to perform a dry run in the generation to
     ///gather all the necessary information

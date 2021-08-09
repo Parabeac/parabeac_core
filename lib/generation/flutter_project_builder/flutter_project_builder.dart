@@ -5,10 +5,8 @@ import 'package:path/path.dart' as p;
 
 import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
-import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
@@ -111,54 +109,36 @@ class FlutterProjectBuilder {
 
   Future<void> genProjectFiles(String genProjectPath,
       {List<ArchiveFile> rawImages}) async {
-    if (MainInfo().figmaProjectID != null &&
-        MainInfo().figmaProjectID.isNotEmpty) {
-      log.info('Processing remaining images...');
-      await FigmaAssetProcessor().processImageQueue();
-    }
-
-    // Add all images
-    if (rawImages != null) {
-      for (var image in rawImages) {
-        if (image.name != null) {
-          var f = File(p.setExtension(
-              p.join(genProjectPath, 'assets/images/',
-                  image.name.replaceAll(' ', '')),
-              '.png'));
-          f.writeAsBytesSync(image.content);
-        }
-      }
-    }
-
     // generate shared Styles if any found
-    if (project.sharedStyles != null &&
-        project.sharedStyles.isNotEmpty &&
-        MainInfo().exportStyles) {
-      try {
-        Directory(p.join(genProjectPath, 'lib/document/'))
-            .createSync(recursive: true);
+    // if (project.sharedStyles != null &&
+    //     project.sharedStyles.isNotEmpty &&
+    //     MainInfo().exportStyles) {
+    // try {
+    //   Directory(p.join(genProjectPath, 'lib/document/'))
+    //       .createSync(recursive: true);
 
-        WriteStyleClasses(genProjectPath);
+    //   WriteStyleClasses(genProjectPath);
 
-        var s = File(p.join(genProjectPath, 'lib/document/shared_props.g.dart'))
-            .openWrite(mode: FileMode.write, encoding: utf8);
+    //   var s = File(p.join(genProjectPath, 'lib/document/shared_props.g.dart'))
+    //       .openWrite(mode: FileMode.write, encoding: utf8);
 
-        s.write('''${FlutterImport('dart:ui', null)}
-              ${FlutterImport('flutter/material.dart', null)}
+    //   s.write('''${FlutterImport('dart:ui', null)}
+    //         ${FlutterImport('flutter/material.dart', null)}
 
-              ''');
-        for (var sharedStyle in project.sharedStyles) {
-          s.write(sharedStyle.generate() + '\n');
-        }
-        await s.close();
-      } catch (e) {
-        log.error(e.toString());
-      }
-    }
+    //         ''');
+    //   for (var sharedStyle in project.sharedStyles) {
+    //     s.write(sharedStyle.generate() + '\n');
+    //   }
+    //   await s.close();
+    // } catch (e) {
+    //   log.error(e.toString());
+    // }
+    // }
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
 
     await generationConfiguration.generateProject(project);
-    generationConfiguration.generatePlatformAndOrientationInstance(project);
+    generationConfiguration
+        .generatePlatformAndOrientationInstance(project);
 
     Process.runSync('rm', ['-rf', '.dart_tool/build'],
         runInShell: true,

@@ -1,25 +1,23 @@
 import 'dart:io';
 
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
-import 'package:sentry/sentry.dart';
 import 'package:path/path.dart' as p;
 
 class MainInfo {
   static final MainInfo _singleton = MainInfo._internal();
-  
-  final SentryClient _sentry = SentryClient(
-      dsn:
-          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747');
 
-  @Deprecated('Use the function handle error for logging and capturing the error')
-  SentryClient get sentry => _sentry;
+  final _sentry = DummySentry();
+
+  @Deprecated(
+      'Use the function handle error for logging and capturing the error')
+  get sentry => _sentry;
 
   /// Path representing where the output of parabeac-core will be produced to.
-  /// 
-  /// First, we are going to check the if any path was passed as a flag to [outputPath], 
+  ///
+  /// First, we are going to check the if any path was passed as a flag to [outputPath],
   /// then check in the [configuration] to see if there are any paths saved ([PBConfiguration.outputDirPath]).
   String _outputPath;
-  String get outputPath =>  _outputPath ?? configuration?.outputDirPath;
+  String get outputPath => _outputPath ?? configuration?.outputDirPath;
   set outputPath(String path) => _outputPath = _validatePath(path);
 
   /// Path to the user's sketch file
@@ -28,9 +26,9 @@ class MainInfo {
   set designFilePath(String path) => _designFilePath = _validatePath(path);
 
   /// Absolute path of where the flutter project is going to be generating at.
-  /// 
-  /// If its PBC is generating the flutter project, its going to [p.join] the 
-  /// [outputPath] and the [projectName]. Meaning the the code should be generated 
+  ///
+  /// If its PBC is generating the flutter project, its going to [p.join] the
+  /// [outputPath] and the [projectName]. Meaning the the code should be generated
   /// into the flutter directory. Otherwise, the code is going to be generated within the directory
   /// specified in the [outputPath].
   String get genProjectPath {
@@ -103,7 +101,7 @@ class MainInfo {
 
   /// Decoupling the exception capture client from the services that report the [exception]
   void captureException(exception) {
-    _sentry.captureException(exception: exception);
+    // _sentry.captureException(exception: exception);
   }
 
   factory MainInfo() {
@@ -115,3 +113,10 @@ class MainInfo {
 
 /// The type of design that is being processed by Parabeac Core.
 enum DesignType { SKETCH, FIGMA, PBDL, UNKNOWN }
+
+class DummySentry {
+  /// Decoupling the exception capture client from the services that report the [exception]
+  void captureException({exception, stackTrace}) {
+    print('dummy sentry');
+  }
+}

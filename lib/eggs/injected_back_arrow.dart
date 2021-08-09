@@ -1,4 +1,3 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
@@ -28,11 +27,11 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
 
 
   @override
-  void extractInformation(DesignNode incomingNode) {}
+  void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
+  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+      PBIntermediateNode originalRef) {
     return InjectedBackArrow(
         topLeftCorner, bottomRightCorner, UUID, originalRef.name,
         currentContext: currentContext);

@@ -1,5 +1,4 @@
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -19,8 +18,8 @@ class MiddlewareUtils {
     if (node is PBSharedMasterNode &&
         (node.overridableProperties?.isNotEmpty ?? false)) {
       node.overridableProperties.forEach((prop) {
-        overrideVars += 'final ${prop.friendlyName};';
-        overrideAttr += 'this.${prop.friendlyName}, ';
+        overrideVars += 'final ${prop.propertyName};';
+        overrideAttr += 'this.${prop.propertyName}, ';
       });
       stateBuffer.write(MiddlewareUtils.generateEmptyVariable(node));
       stateInitializers.write(
@@ -35,7 +34,7 @@ class MiddlewareUtils {
       if (variationNode is PBSharedMasterNode &&
           (variationNode.overridableProperties?.isNotEmpty ?? false)) {
         variationNode.overridableProperties.forEach((prop) {
-          var friendlyName = SN_UUIDtoVarName[prop.propertyName] ?? 'NOTFOUND';
+          var friendlyName = prop.propertyName;
           overrideVars += 'final $friendlyName;';
           overrideAttr += 'this.$friendlyName, ';
         });

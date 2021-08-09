@@ -1,12 +1,12 @@
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/abstract_group_layer.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
-import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
@@ -37,28 +37,32 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   String semanticName;
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
-    var tab = Tab(
-      topLeftCorner,
-      bottomRightCorner,
-      originalRef.name,
-      currentContext: currentContext,
-      UUID: originalRef != null &&
-              originalRef.UUID != null &&
-              originalRef.UUID.isNotEmpty
-          ? originalRef.UUID
-          : Uuid().v4(),
-      prototypeNode: PrototypeNode(originalRef?.prototypeNodeUUID),
-    );
-    if (originalRef is! AbstractGroupLayer) {
-      var designNode = _convertWrapper(originalRef);
+  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+      PBIntermediateNode originalNode) {
+    if (originalNode is PBInheritedIntermediate) {
+      var tab = Tab(
+        topLeftCorner,
+        bottomRightCorner,
+        originalNode.name,
+        currentContext: currentContext,
+        UUID: originalNode != null &&
+                originalNode.UUID != null &&
+                originalNode.UUID.isNotEmpty
+            ? originalNode.UUID
+            : Uuid().v4(),
+        prototypeNode: (originalNode as PBInheritedIntermediate).prototypeNode,
+      );
+      if (originalNode != TempGroupLayoutNode) {
+        var designNode = _convertWrapper(originalNode);
 
-      ///Clean the node so that it doesn't get interpreted as a plugin again.
-      designNode.interpretNode(currentContext).then(tab.addChild);
+        ///Clean the node so that it doesn't get interpreted as a plugin again.
+        // designNode.interpretNode(currentContext).then(tab.addChild);
+        tab.addChild(designNode);
+      }
+      return tab;
     }
 
-    return tab;
+    return null;
   }
 
   @override
@@ -66,24 +70,24 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
     return layer;
   }
 
-  DesignNode _convertWrapper(DesignNode node) {
+  PBIntermediateNode _convertWrapper(PBIntermediateNode node) {
     /// This is for plugins
     var str = '${node.name}';
     node.name = str.replaceAll(RegExp(r'\<.*?\>'), '');
 
     ///This is for symbol master
-    if (node is SymbolMaster) {
+    if (node is PBSharedMasterNode) {
       /// Convert to AbstractGroup?
 
     }
 
     ///This is for symbol Instance
-    if (node is SymbolInstance) {}
+    if (node is PBSharedInstanceIntermediateNode) {}
     return node;
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {
+  void extractInformation(PBIntermediateNode incomingNode) {
     // TODO: implement extractInformation
   }
 }

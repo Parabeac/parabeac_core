@@ -97,4 +97,21 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout>{
     }
   }
 
+  @override
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
+    var row = PBIntermediateRowLayout(name, Uuid().v4(),
+        currentContext: currentContext);
+    row.prototypeNode = prototypeNode;
+    children.forEach((child) => row.addChild(child));
+    return row;
+  }
+
+  @override
+  void sortChildren() => replaceChildren(children
+    ..sort((child0, child1) =>
+        child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

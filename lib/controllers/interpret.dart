@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
-import 'package:parabeac_core/input/helper/design_project.dart';
-import 'package:parabeac_core/input/helper/design_page.dart';
-import 'package:parabeac_core/input/helper/design_screen.dart';
+import 'dart:convert';
+
+import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
+import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -18,9 +22,10 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generati
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_visual_generation_service.dart';
+import 'package:pbdl/pbdl.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
+import 'package:path/path.dart' as p;
 
 class Interpret {
   var log = Logger('Interpret');
@@ -29,70 +34,38 @@ class Interpret {
 
   static final Interpret _interpret = Interpret._internal();
 
-  factory Interpret() {
+  factory Interpret({PBConfiguration configuration}) {
+    _interpret.configuration ??= configuration;
+    _interpret._pbPrototypeLinkerService ??= PBPrototypeLinkerService();
     return _interpret;
   }
 
-  PBProject _pb_project;
-  PBSymbolLinkerService _pbSymbolLinkerService;
+  PBProject _pbProject;
   PBPrototypeLinkerService _pbPrototypeLinkerService;
   PBConfiguration configuration;
 
   void init(String projectName, PBConfiguration configuration) {
     this.configuration ??= configuration;
     log = Logger(runtimeType.toString());
-    _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
-    _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
+    // _interpret._pbSymbolLinkerService = PBSymbolLinkerService();
+    // _interpret._pbPrototypeLinkerService = PBPrototypeLinkerService();
   }
 
-  Future<PBProject> interpretAndOptimize(
-      DesignProject tree, String projectName, String projectPath) async {
-    _pb_project = PBProject(projectName, projectPath, tree.sharedStyles);
+  Future<PBProject> interpretAndOptimize(PBDLProject project) async {
+    _pbProject = PBProject.fromJson(project.toJson());
 
-    ///3rd Party Symbols
-    if (tree.miscPages != null) {
-      for (var i = 0; i < tree.miscPages?.length; i++) {
-        _pb_project.forest
-            .addAll((await _generateIntermediateTree(tree.miscPages[i])));
-      }
-    }
+    _pbProject.projectAbsPath =
+        p.join(MainInfo().outputPath, MainInfo().projectName);
 
-    /// Main Pages
-    if (tree.pages != null) {
-      for (var i = 0; i < tree.pages?.length; i++) {
-        _pb_project.forest
-            .addAll((await _generateIntermediateTree(tree.pages[i])));
-      }
-    }
+    _pbProject.forest = await Future.wait(_pbProject.forest
+        .map((tree) async => await _generateScreen(tree))
+        .toList());
+    _pbProject.forest.removeWhere((element) => element == null);
 
-    return _pb_project;
-  }
+    // TODO: do this in just one go
+    await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
-  /// Taking a design page, returns a PBIntermediateTree verison of it
-  Future<Iterable<PBIntermediateTree>> _generateIntermediateTree(
-      DesignPage designPage) async {
-    var tempForest = <PBIntermediateTree>[];
-    var pageItems = designPage.getPageItems();
-    for (var i = 0; i < pageItems.length; i++) {
-      var tree = await _generateScreen(pageItems[i]);
-      if (tree != null && tree.rootNode != null) {
-        tree.name = designPage.name;
-
-        tree.data = PBGenerationViewData();
-        if (tree.isScreen()) {
-          PBPlatformOrientationLinkerService()
-              .addOrientationPlatformInformation(tree);
-        }
-
-        if (tree != null) {
-          log.fine(
-              'Processed \'${tree.name}\' in group \'${designPage.name}\' with item type: \'${tree.tree_type}\'');
-
-          tempForest.add(tree);
-        }
-      }
-    }
-    return tempForest;
+    return _pbProject;
   }
 
   Future<PBIntermediateTree> _generateScreen(DesignScreen designScreen) async {

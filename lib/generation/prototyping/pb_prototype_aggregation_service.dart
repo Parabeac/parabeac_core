@@ -30,18 +30,17 @@ class PBPrototypeAggregationService {
 
   factory PBPrototypeAggregationService() => _instance;
 
+  List screens = [];
+
   /// Iterates through `_unregNodes` to find whether any [PBPrototypeNode]'s
   /// `destinationUUID` matches the `node` UUID. If there is a match, populate
   /// the [PrototypeNode].
   Future<void> analyzeIntermediateNode(PBIntermediateNode node) async {
     if (node is InheritedScaffold) {
+      screens.add(node);
+
       ///check if any of the [IntermediateNode]s looking for a destination contains their destination.
-      for (var _pNode in _unregNodes) {
-        if (_pNode.prototypeNode.destinationUUID == node.UUID) {
-          _pNode.prototypeNode.destinationName = node.name;
-          _addDependent(_pNode as PBIntermediateNode, node);
-        }
-      }
+      iterateUnregisterNodes(node);
     } else if (node is PrototypeEnable) {
       var page = _storage.getPageNodeById(
           (node as PrototypeEnable).prototypeNode.destinationUUID);
@@ -102,6 +101,27 @@ class PBPrototypeAggregationService {
       return destHolder;
     } else {
       return iNode;
+    }
+  }
+
+  // TODO: change it on the future
+  // This temporal solution solves the issue for topological sorting
+  // when two screens link each other, but one comes first
+  // and does not get linked to the proper button on the screen
+  Future<void> linkDanglingPrototypeNodes() async {
+    if (_unregNodes.isNotEmpty) {
+      for (var screen in screens) {
+        iterateUnregisterNodes(screen);
+      }
+    }
+  }
+
+  void iterateUnregisterNodes(PBIntermediateNode node) {
+    for (var _pNode in _unregNodes) {
+      if (_pNode.prototypeNode.destinationUUID == node.UUID) {
+        _pNode.prototypeNode.destinationName = node.name;
+        _addDependent(_pNode as PBIntermediateNode, node);
+      }
     }
   }
 }
