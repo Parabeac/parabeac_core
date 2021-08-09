@@ -87,11 +87,7 @@ class PBProject {
         // Generate Intermedite tree
         var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
         tree.data = PBGenerationViewData();
-        // Populate platform and orientation information
-        if (tree.isScreen()) {
-          PBPlatformOrientationLinkerService()
-              .addOrientationPlatformInformation(tree);
-        }
+
         if (tree != null) {
           PBProject.log.fine(
               'Processed \'${tree.name}\' in page \'${tree.identifier}\' with item type: \'${tree.tree_type}\'');

@@ -101,7 +101,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         relPath = p.join(tree.identifier, platformFolder, tree.identifier);
       }
       if (tree.isHomeScreen()) {
-        await _setMainScreen(tree, relPath, project.projectName);
+        await _setMainScreen(tree, relPath, MainInfo().projectName);
       }
       await applyMiddleware(tree);
     }
