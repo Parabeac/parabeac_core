@@ -205,10 +205,10 @@ class BLoCMiddleware extends StateManagementMiddleware {
         }
       }
       importBuffer.write(
-          "import 'package:${MainInfo().projectName}/widgets/${elementName}/${node.name.snakeCase}.dart'; \n");
+          "import 'package:${MainInfo().projectName}/widgets/$elementName/${node.name.snakeCase}.dart'; \n");
     }
     importBuffer.write(
-        "import 'package:${MainInfo().projectName}/widgets/${elementName}/${element.name.snakeCase}.dart'; \n");
+        "import 'package:${MainInfo().projectName}/widgets/$elementName/${element.name.snakeCase}.dart'; \n");
     stateBuffer.write('return ${element.name.pascalCase}(constraints); \n }');
 
     return importBuffer.toString() + stateBuffer.toString();

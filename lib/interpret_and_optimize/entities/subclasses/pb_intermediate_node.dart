@@ -21,7 +21,7 @@ part 'pb_intermediate_node.g.dart';
 
 @JsonSerializable(
     explicitToJson: true, createFactory: false, ignoreUnannotated: true)
-abstract class PBIntermediateNode extends Iterable<PBIntermediateNode>
+abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
     implements TraversableNode<PBIntermediateNode> {
   @JsonKey(ignore: true)
   Logger logger;
@@ -74,9 +74,9 @@ abstract class PBIntermediateNode extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   PBIntermediateNode get child => children.isEmpty ? null : children.first;
 
-  @override
-  @JsonKey(ignore: true)
-  Iterator<PBIntermediateNode> get iterator => children.iterator;
+  // @override
+  // @JsonKey(ignore: true)
+  // Iterator<PBIntermediateNode> get iterator => children.iterator;
 
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');

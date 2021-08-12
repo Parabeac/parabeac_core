@@ -40,8 +40,9 @@ class MultipleChildStrategy extends ChildrenStrategy {
         return child;
       }));
     } else if (children is PBIntermediateNode) {
-      children.parent = target;
-      children.forEach(target.addChild);
+      var node = children;
+      node.parent = target;
+      node.children.forEach(target.addChild);
     }
   }
 }

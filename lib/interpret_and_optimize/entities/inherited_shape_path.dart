@@ -89,8 +89,8 @@ class InheritedShapePath extends PBVisualIntermediateNode
   /// Returns true if [p1] and [p2] form
   /// either a vertical or horizontal line.
   bool _isEdgeAdjacent(Point p1, Point p2) {
-    num deltaX = (p1.x - p2.x).abs();
-    num deltaY = (p1.y - p2.y).abs();
+    var deltaX = (p1.x - p2.x).abs();
+    var deltaY = (p1.y - p2.y).abs();
 
     var isVertical = deltaX < 0.01 && deltaY > 0;
     var isHorizontal = deltaY < 0.01 && deltaX > 0;

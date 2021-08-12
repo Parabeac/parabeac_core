@@ -64,29 +64,34 @@ class PBLayoutGenerationService extends AITHandler {
       return Future.value(tree);
     }
     try {
-      var removedList = tree.toList()
-        ..removeWhere((node) => node is TempGroupLayoutNode);
-      tree.rootNode = removedList.first;
-      // tree.forEach((att) => _removingMeaninglessGroup(att.attributeNode));
-      rootNode = (tree
-              .map((node) => _removingMeaninglessGroup(node))
-              .map((node) => _transformGroup(node))
-              .map((node) => _layoutConditionalReplacement(node, context))
-              .toList()
-                ..removeWhere((element) => element == null))
-          .first;
-      // rootNode = _traverseLayersUtil(rootNode, (layer) {
-      //   return layer
-      /// [rootNode -> scaffold], [scaffold, container], [temp, bitmap], [container, bitmap]
+      // var removedList = tree.toList()
+      //   ..removeWhere((node) => node is TempGroupLayoutNode);
+      // tree
+      //     .whereType<TempGroupLayoutNode>()
+      //     .forEach((group) => group.parent.children.remove(group));
+      // tree.rootNode = removedList.first;
+      // // tree.forEach((att) => _removingMeaninglessGroup(att.attributeNode));
+      // rootNode = (tree
+      //         // .map((node) => _removingMeaninglessGroup(node))
+      //         .map((node) => _transformGroup(node))
+      //         .map((node) => _layoutConditionalReplacement(node, context))
+      //         .toList()
+      //           ..removeWhere((element) => element == null))
+      //     .first;
 
-      //       ///Remove the `TempGroupLayout` nodes that only contain one node
-      //       .map(_removingMeaninglessGroup)
-      //       .map((node) => _layoutConditionalReplacement(node, context))
-      //       .toList()
+      var l = tree.toList()..map((_removingMeaninglessGroup));
+      tree.rootNode = l.first;
+      rootNode = _traverseLayersUtil(rootNode, (layer) {
+        // return layer
 
-      //         /// Filter out the elements that are null in the tree
-      //         ..removeWhere((element) => element == null);
-      // });
+        // ///Remove the `TempGroupLayout` nodes that only contain one node
+        // .map(_removingMeaninglessGroup)
+        // .map((node) => _layoutConditionalReplacement(node, context))
+        // .toList()
+
+        //   /// Filter out the elements that are null in the tree
+        //   ..removeWhere((element) => element == null);
+      });
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
@@ -104,45 +109,46 @@ class PBLayoutGenerationService extends AITHandler {
     }
   }
 
-  // PBIntermediateNode _traverseLayersUtil(
-  //     PBIntermediateNode rootNode,
-  //     List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
-  //         transformation) {
-  //   ///The stack is going to saving the current layer of tree along with the parent of
-  //   ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
-  //   ///of nodes for the current layer in the second layer.
-  //   var stack = <Tuple2<PBIntermediateNode, List<PBAttribute>>>[];
-  //   stack.add(Tuple2(null, [
-  //     PBAttribute('root', attributeNodes: [rootNode])
-  //   ]));
+  PBIntermediateNode _traverseLayersUtil(
+      PBIntermediateNode rootNode,
+      List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
+          transformation) {
+    ///The stack is going to saving the current layer of tree along with the parent of
+    ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
+    ///of nodes for the current layer in the second layer.
+    var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
+    stack.add(Tuple2(null, [rootNode]));
 
-  //   while (stack.isNotEmpty) {
-  //     var currentTuple = stack.removeLast();
-  //     currentTuple.item2.forEach((currentAttribute) {
-  //       currentAttribute.attributeNodes =
-  //           transformation(currentAttribute.attributeNodes);
-  //       currentAttribute?.attributeNodes?.forEach((currentNode) {
-  //         currentNode?.attributes?.forEach((attribute) {
-  //           stack.add(Tuple2(currentNode, [
-  //             PBAttribute(attribute.attributeName,
-  //                 attributeNodes: attribute.attributeNodes)
-  //           ]));
-  //         });
-  //       });
-  //     });
-  //     var node = currentTuple.item1;
-  //     if (node != null) {
-  //       currentTuple.item2.forEach((attribute) {
-  //         node.addAttribute(attribute, overwrite: true);
-  //       });
-  //     } else {
-  //       ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
-  //       ///new `rootNode`.
-  //       rootNode = currentTuple.item2.first.attributeNode;
-  //     }
-  //   }
-  //   return rootNode;
-  // }
+    while (stack.isNotEmpty) {
+      var currentTuple = stack.removeLast();
+      var children = currentTuple.item2;
+      var node = currentTuple.item1;
+
+      stack.add(Tuple2(node, node.children));
+      node.children = transformation(node.children);
+      children.forEach((child) {
+        // child = transformation(child);
+
+        // child?.attributeNodes?.forEach((currentNode) {
+        //   currentNode?.attributes?.forEach((attribute) {
+        //     stack.add(Tuple2(currentNode, [
+        //       // currentNode.
+        //     ]));
+        //   });
+        // });
+      });
+      if (node != null) {
+        currentTuple.item2.forEach((attribute) {
+          // node.addAttribute(attribute, overwrite: true);
+        });
+      } else {
+        ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
+        ///new `rootNode`.
+        // rootNode = currentTuple.item2.first.attributeNode;
+      }
+    }
+    return rootNode;
+  }
 
   /// If this node is an unecessary [TempGroupLayoutNode], just return the child or an
   /// [InjectContainer] if the group is empty

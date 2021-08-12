@@ -26,7 +26,7 @@ class PBSymbolLinkerService extends AITHandler {
       return Future.value(tree);
     }
 
-    for (PBIntermediateNode node in tree) {
+    for (var node in tree) {
       if (node is PBSharedMasterNode) {
         await _symbolStorage.addSharedMasterNode(node);
         _aggregationService.gatherSharedParameters(node, node.child);

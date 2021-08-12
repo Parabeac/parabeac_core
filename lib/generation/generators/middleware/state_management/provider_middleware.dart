@@ -77,7 +77,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
 
               return GestureDetector(
                 onTap: () => context.read<
-                    ${modelName}>().onGesture(),
+                    $modelName>().onGesture(),
                 child: Consumer<$modelName>(
                   builder: (context, ${modelName.toLowerCase()}, child) => ${modelName.toLowerCase()}.currentWidget
                 ),

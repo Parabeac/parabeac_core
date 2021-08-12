@@ -53,8 +53,7 @@ class PBPluginControlService extends AITHandler {
           assert(currentLayer.nodeLayer.length <= 1,
               '[Plugin Control Service] We are going to end up deleting nodes here, something probably went wrong.');
           (currentLayer.parent as PBVisualIntermediateNode).replaceAttribute(
-              currentLayer.parent.first.attributeName,
-              currentLayer.nodeLayer[0]);
+              currentLayer.parent.attributeName, currentLayer.nodeLayer[0]);
         } else if (currentLayer.parent is PBLayoutIntermediateNode) {
           (currentLayer.parent as PBLayoutIntermediateNode)
               .replaceChildren(currentLayer.nodeLayer, context);
@@ -63,8 +62,8 @@ class PBPluginControlService extends AITHandler {
         /// Add next depth layer to queue.
         if (currentIntermediateNode is PBVisualIntermediateNode &&
             currentIntermediateNode.child != null) {
-          queue.add(LayerTuple([currentIntermediateNode.child],
-              currentIntermediateNode));
+          queue.add(LayerTuple(
+              [currentIntermediateNode.child], currentIntermediateNode));
         } else if (currentIntermediateNode is PBLayoutIntermediateNode &&
             currentIntermediateNode.children != null) {
           queue.add(LayerTuple(

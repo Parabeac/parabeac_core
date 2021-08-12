@@ -58,7 +58,7 @@ PBDLConstraints _convertFigmaConstraint(FigmaConstraintType figmaConstraintType,
     constraints.fixedWidth = false;
   } else {
     print(
-        'We currently do not support Figma Constraint Type: ${figmaConstraintType}');
+        'We currently do not support Figma Constraint Type: $figmaConstraintType');
   }
   return constraints;
 }
