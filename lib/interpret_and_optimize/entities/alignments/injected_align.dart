@@ -1,37 +1,23 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_align_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 
 class InjectedAlign extends PBVisualIntermediateNode
     implements PBInjectedIntermediate {
   double alignX;
   double alignY;
 
-  InjectedAlign(Point topLeftCorner, Point bottomRightCorner,
-      PBContext currentContext, String name)
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  InjectedAlign(
+      String UUID, Rectangle frame, PBContext currentContext, String name)
+      : super(UUID, frame, currentContext, name) {
     generator = PBAlignGenerator();
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    if (child is TempGroupLayoutNode) {
-      child.addChild(node);
-      return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp =
-          TempGroupLayoutNode(currentContext: currentContext, name: node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    }
-    child = node;
+    childrenStrategy = TempChildrenStrategy('child');
   }
 
   @override

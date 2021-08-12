@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_spacer_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -11,11 +13,13 @@ class Spacer extends PBVisualIntermediateNode {
   @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
 
-
-  Spacer(topLeftCorner, bottomRightCorner, String UUID,
-      {this.flex, PBContext currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, '',
-            UUID: UUID) {
+  Spacer(String UUID, Rectangle frame, {this.flex, PBContext currentContext})
+      : super(
+          UUID,
+          frame,
+          currentContext,
+          '',
+        ) {
     generator = PBSpacerGenerator();
   }
 

@@ -24,7 +24,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   PBIntermediateStackLayout(PBContext currentContext,
       {String name, PBIntermediateConstraints constraints})
-      : super(STACK_RULES, [], currentContext, name, constraints: constraints) {
+      : super(null, null, STACK_RULES, [], currentContext, name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
   }

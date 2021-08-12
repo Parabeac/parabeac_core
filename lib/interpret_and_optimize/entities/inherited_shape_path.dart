@@ -28,20 +28,10 @@ class InheritedShapePath extends PBVisualIntermediateNode
   @JsonKey(
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
-    ChildrenStrategy childrenStrategy = NoChildStrategy();
-  @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
 
   @override
   @JsonKey()
   String type = 'image';
-
-  @override
-  String UUID;
 
   @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
@@ -49,30 +39,25 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   @override
   @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  @override
-  @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedShapePath({
+  InheritedShapePath(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     String name,
     Uint8List image,
-    this.currentContext,
-    this.topLeftCorner,
-    this.bottomRightCorner,
+    PBContext currentContext,
     this.prototypeNode,
-    this.UUID,
     this.size,
   }) : super(
-          topLeftCorner,
-          bottomRightCorner,
+          UUID,
+          frame,
           currentContext,
           name,
-          UUID: UUID ?? '',
         ) {
     generator = PBBitmapGenerator();
+    childrenStrategy = NoChildStrategy();
 
     ImageReferenceStorage().addReferenceAndWrite(
         UUID, '${MainInfo().outputPath}assets/images', image);
@@ -121,8 +106,8 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedShapePathFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..topLeftCorner = Point.topLeftFromJson(json)
+        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

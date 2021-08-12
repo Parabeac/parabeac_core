@@ -2,7 +2,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:quick_log/quick_log.dart';
 
-
 abstract class ChildrenStrategy {
   Logger log;
   //TODO: will be used in the migrations to attributes
@@ -48,8 +47,7 @@ class MultipleChildStrategy extends ChildrenStrategy {
 }
 
 class NoChildStrategy extends ChildrenStrategy {
-  NoChildStrategy([bool overridable])
-      : super('N/A', overridable);
+  NoChildStrategy([bool overridable]) : super('N/A', overridable);
 
   @override
   void addChild(PBIntermediateNode target, children) {
@@ -60,22 +58,22 @@ class NoChildStrategy extends ChildrenStrategy {
   }
 }
 
-class TempChildrenStrategy extends ChildrenStrategy{
-  TempChildrenStrategy(String attributeName,[ bool overwridable]) : super(attributeName, overwridable);
+class TempChildrenStrategy extends ChildrenStrategy {
+  TempChildrenStrategy(String attributeName, [bool overwridable])
+      : super(attributeName, overwridable);
 
   @override
   void addChild(PBIntermediateNode target, children) {
-    if(target.child is TempGroupLayoutNode){
+    if (target.child is TempGroupLayoutNode) {
       target.child.addChild(children);
-    }
-    else if (target.child != null){
-       var temp = TempGroupLayoutNode(null, target.currentContext, children.name);
+    } else if (target.child != null) {
+      var temp = TempGroupLayoutNode(null, null,
+          currentContext: target.currentContext, name: children.name);
       temp.addChild(target.child);
       temp.addChild(children);
       temp.parent = target;
       target.child = temp;
-    }
-    else if(children is PBIntermediateNode){
+    } else if (children is PBIntermediateNode) {
       children.parent = target;
       target.child = children;
     }

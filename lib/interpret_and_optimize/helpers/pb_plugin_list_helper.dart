@@ -13,13 +13,15 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '<tabbar>': InjectedTabBar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
-          currentContext: context),
-      '<navbar>': InjectedAppbar(Point(0, 0), Point(0, 0), Uuid().v4(), '',
-          currentContext: context),
-      '<tab>': Tab(Point(0, 0), Point(0, 0), '',
-          currentContext: context, UUID: Uuid().v4()),
-      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
+      '<tabbar>': InjectedTabBar(null, null, '', currentContext: context),
+      '<navbar>': InjectedAppbar(null, null, '', currentContext: context),
+      '<tab>': Tab(
+        null,
+        null,
+        '',
+        currentContext: context,
+      ),
+      '<custom>': CustomEgg(null, null, ''),
     };
   }
 
@@ -28,19 +30,21 @@ class PBPluginListHelper {
   PBPluginListHelper._internal() {
     allowListNames = {
       '<tabbar>': InjectedTabBar(
-        Point(0, 0),
-        Point(0, 0),
-        Uuid().v4(),
+        null,
+        null,
         '',
       ),
       '<navbar>': InjectedAppbar(
-        Point(0, 0),
-        Point(0, 0),
-        Uuid().v4(),
+        null,
+        null,
         '',
       ),
-      '<tab>': Tab(Point(0, 0), Point(0, 0), '', UUID: Uuid().v4()),
-      '<custom>': CustomEgg(Point(0, 0), Point(0, 0), ''),
+      '<tab>': Tab(
+        null,
+        null,
+        '',
+      ),
+      '<custom>': CustomEgg(null, null, ''),
     };
   }
 
@@ -85,8 +89,7 @@ class PBPluginListHelper {
     if (node != null) {
       for (var key in allowListNames.keys) {
         if (node.name?.contains(key) ?? false) {
-          return allowListNames[key].generatePluginNode(
-              node.topLeftCorner, node.bottomRightCorner, node);
+          return allowListNames[key].generatePluginNode(node.frame, node);
         }
       }
     }

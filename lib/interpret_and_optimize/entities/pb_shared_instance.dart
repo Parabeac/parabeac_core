@@ -50,28 +50,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   String type = 'shared_instance';
 
   @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-  @override
-  String UUID;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  @override
-  ChildrenStrategy childrenStrategy = NoChildStrategy();
-
-  @override
-  AlignStrategy alignStrategy = NoAlignment();//PaddingAlignment();
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
@@ -81,22 +61,27 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  PBSharedInstanceIntermediateNode({
+  PBSharedInstanceIntermediateNode(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     this.SYMBOL_ID,
     this.sharedParamValues,
-    this.topLeftCorner,
-    this.bottomRightCorner,
-    this.currentContext,
-    this.UUID,
+    PBContext currentContext,
     this.prototypeNode,
     this.size,
     this.overrideValues,
     String name,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID) {
+  }) : super(
+          UUID,
+          frame,
+          currentContext,
+          name,
+        ) {
     generator = PBSymbolInstanceGenerator();
-
+    
+    childrenStrategy = NoChildStrategy();
+    alignStrategy = NoAlignment();
     /// if [sharedParamValues] sets [overrideValues], then only pass one
     // overrideValues = sharedParamValues.map((v) {
     //   var symOvrValue =
@@ -109,8 +94,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedInstanceIntermediateNodeFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..topLeftCorner = Point.topLeftFromJson(json)
+        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

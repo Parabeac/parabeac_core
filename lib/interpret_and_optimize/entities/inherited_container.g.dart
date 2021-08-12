@@ -8,18 +8,24 @@ part of 'inherited_container.dart';
 
 InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
   return InheritedContainer(
+    json['UUID'] as String,
+    DeserializedRectangle.fromJson(json['frame'] as Map<String, dynamic>),
     name: json['name'] as String,
     isBackgroundVisible: json['isBackgroundVisible'] as bool ?? true,
-    UUID: json['UUID'] as String,
     size: PBIntermediateNode.sizeFromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
   )
-    ..subsemantic = json['subsemantic'] as String
-    ..child = json['child'] == null
+    ..parent = json['parent'] == null
         ? null
-        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
+        : PBIntermediateNode.fromJson(json['parent'] as Map<String, dynamic>)
+    ..treeLevel = json['treeLevel'] as int
+    ..subsemantic = json['subsemantic'] as String
+    ..topLeftCorner = PBPointLegacyMethod.topLeftFromJson(
+        json['topLeftCorner'] as Map<String, dynamic>)
+    ..bottomRightCorner = PBPointLegacyMethod.bottomRightFromJson(
+        json['bottomRightCorner'] as Map<String, dynamic>)
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -29,13 +35,18 @@ InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
     <String, dynamic>{
+      'parent': instance.parent,
+      'treeLevel': instance.treeLevel,
       'subsemantic': instance.subsemantic,
-      'child': instance.child,
+      'UUID': instance.UUID,
+      'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
+      'bottomRightCorner':
+          PBPointLegacyMethod.toJson(instance.bottomRightCorner),
+      'frame': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,
       'isBackgroundVisible': instance.isBackgroundVisible,
       'type': instance.type,
-      'UUID': instance.UUID,
       'boundaryRectangle': instance.size,
     };

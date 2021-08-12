@@ -44,15 +44,18 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
       if (spacerLength > 0) {
         var flex = _calculateFlex(spacerLength, parentLength);
         resultingChildren.add(Spacer(
-            isVertical
-                ? Point(
-                    prevChild.topLeftCorner.x, prevChild.bottomRightCorner.y)
-                : Point(
-                    prevChild.bottomRightCorner.x, prevChild.topLeftCorner.y),
-            isVertical
-                ? Point(child.bottomRightCorner.x, child.topLeftCorner.y)
-                : Point(child.topLeftCorner.x, child.bottomRightCorner.y), //brc
-            Uuid().v4(),
+            null,
+            Rectangle.fromPoints(
+                isVertical
+                    ? Point(prevChild.topLeftCorner.x,
+                        prevChild.bottomRightCorner.y)
+                    : Point(prevChild.bottomRightCorner.x,
+                        prevChild.topLeftCorner.y),
+                isVertical
+                    ? Point(child.bottomRightCorner.x, child.topLeftCorner.y)
+                    : Point(child.topLeftCorner.x,
+                        child.bottomRightCorner.y)), //brc
+
             flex: flex,
             currentContext: children.first.currentContext));
       }
@@ -81,10 +84,6 @@ PBIntermediateNode _putChildInFlex(
       : _calculateWidth(child.topLeftCorner, child.bottomRightCorner);
   var flex = _calculateFlex(widgetLength.abs(), parentLength.abs());
 
-  return Flexible(Uuid().v4(),
-      currentContext: child.currentContext,
-      topLeftCorner: child.topLeftCorner,
-      bottomRightCorner: child.bottomRightCorner,
-      child: child,
-      flex: flex);
+  return Flexible(null, child.frame,
+      currentContext: child.currentContext, child: child, flex: flex);
 }

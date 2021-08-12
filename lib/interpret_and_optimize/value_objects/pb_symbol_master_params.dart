@@ -9,7 +9,7 @@ import 'dart:math';
 
 ///TODO: Need another class for elements that generate but are not visuals.
 
-class PBSymbolMasterParameter extends PBVisualIntermediateNode
+class PBSymbolMasterParameter extends PBIntermediateNode
     implements PBInjectedIntermediate {
   final Type type;
   final String parameterID;
@@ -35,7 +35,12 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
       this.bottomRightX,
       this.bottomRightY,
       {this.context})
-      : super(Point(0, 0), Point(0, 0), context, name);
+      : super(
+          null,
+          null,
+          name,
+          currentContext: context,
+        );
 
   static String _typeToJson(type) {
     return type.toString();

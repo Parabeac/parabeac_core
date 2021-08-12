@@ -25,9 +25,6 @@ class InheritedText extends PBVisualIntermediateNode
   bool isTextParameter = false;
 
   @override
-  ChildrenStrategy childrenStrategy = NoChildStrategy();
-
-  @override
   @JsonKey(
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
@@ -40,22 +37,8 @@ class InheritedText extends PBVisualIntermediateNode
   String type = 'text';
 
   @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-  @override
-  String UUID;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   @JsonKey(name: 'content')
   String text;
@@ -76,13 +59,12 @@ class InheritedText extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedText({
+  InheritedText(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     name,
-    this.currentContext,
-    this.topLeftCorner,
-    this.bottomRightCorner,
-    this.UUID,
+    PBContext currentContext,
     this.size,
     this.alignmenttype,
     this.fontName,
@@ -94,9 +76,15 @@ class InheritedText extends PBVisualIntermediateNode
     this.prototypeNode,
     this.text,
     this.textAlignment,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID ?? '') {
+  }) : super(
+          UUID,
+          frame,
+          currentContext,
+          name,
+        ) {
     generator = PBTextGen();
+    childrenStrategy = NoChildStrategy();
+
     if (text?.contains('\$') ?? false) {
       text = _sanitizeText(text);
     }
@@ -108,8 +96,8 @@ class InheritedText extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedTextFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..topLeftCorner = Point.topLeftFromJson(json)
+        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json
         ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
         ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
@@ -117,16 +105,18 @@ class InheritedText extends PBVisualIntermediateNode
         ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
         ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
         ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json)
-        ..auxiliaryData.color = PBColor.fromJson(json['style']['textStyle']['fontColor']);
+        ..auxiliaryData.color =
+            PBColor.fromJson(json['style']['textStyle']['fontColor']);
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) {
     var inheritedText = InheritedText.fromJson(json);
     // Return an [InheritedContainer] that wraps this text
     return InheritedContainer(
-      UUID: inheritedText.UUID,
-      topLeftCorner: inheritedText.topLeftCorner,
-      bottomRightCorner: inheritedText.bottomRightCorner,
+      inheritedText.UUID,
+      inheritedText.frame,
+      // topLeftCorner: inheritedText.topLeftCorner,
+      // bottomRightCorner: inheritedText.bottomRightCorner,
       name: inheritedText.name,
       currentContext: inheritedText.currentContext,
       size: inheritedText.size,

@@ -23,7 +23,7 @@ class PBDenyListHelper {
 
   PBDenyListNode returnDenyListNodeIfExist(PBIntermediateNode node) {
     if (isInDenyListDirect(node)) {
-      return PBDenyListNode(Point(0, 0), Point(0, 0), '');
+      return PBDenyListNode(null, node.frame);
     } else {
       return null;
     }

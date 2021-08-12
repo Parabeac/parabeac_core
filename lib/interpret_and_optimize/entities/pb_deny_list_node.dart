@@ -8,18 +8,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 /// A node that should not be converted to intermediate.
 class PBDenyListNode extends PBIntermediateNode {
-    @override
+  @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
   PBDenyListNode(
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    String name, {
     String UUID,
+    Rectangle frame, {
+    String name,
     PBContext currentContext,
   }) : super(
-          topLeftCorner,
-          bottomRightCorner,
           UUID,
+          frame,
           name,
           currentContext: currentContext,
         );

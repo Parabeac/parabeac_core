@@ -10,27 +10,22 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class Flexible extends PBVisualIntermediateNode {
   int flex;
 
-  @override
-  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
-
-
   //TODO: Find a way to make currentContext required
   //without breaking the json serializable
   Flexible(
-    String UUID, {
+    String UUID,
+    Rectangle frame, {
     PBContext currentContext,
     child,
     this.flex,
-    Point topLeftCorner,
-    Point bottomRightCorner,
   }) : super(
-          topLeftCorner,
-          bottomRightCorner,
+          UUID,
+          frame,
           currentContext,
           '',
-          UUID: UUID,
         ) {
     generator = PBFlexibleGenerator();
+    childrenStrategy = OneChildStrategy('child');
     this.child = child;
   }
 

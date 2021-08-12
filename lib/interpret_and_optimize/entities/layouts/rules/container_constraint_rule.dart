@@ -9,10 +9,11 @@ class ContainerConstraintRule extends PostConditionRule {
   dynamic executeAction(
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
     if (testRule(currentNode, nextNode)) {
-      var container = InjectedContainer(currentNode.bottomRightCorner,
-          currentNode.topLeftCorner, currentNode.name, Uuid().v4(),
+      var container = InjectedContainer(null, currentNode.frame,
+          name: currentNode.name,
           currentContext: currentNode.currentContext,
-          constraints: currentNode.constraints);
+          // constraints: currentNode.constraints
+          );
       container.addChild(currentNode);
       return container;
     }

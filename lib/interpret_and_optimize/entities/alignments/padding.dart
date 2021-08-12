@@ -17,18 +17,21 @@ class Padding extends PBVisualIntermediateNode {
   @override
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
-
   Padding(
     String UUID,
+    Rectangle frame,
     this.childToParentConstraints, {
     this.left = 0,
     this.right = 0,
     this.top = 0,
     this.bottom = 0,
-    Point topLeftCorner,
-    Point bottomRightCorner,
     PBContext currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, '', UUID: UUID) {
+  }) : super(
+          UUID,
+          frame,
+          currentContext,
+          '',
+        ) {
     generator = PBPaddingGen();
   }
 
@@ -72,6 +75,7 @@ class Padding extends PBVisualIntermediateNode {
       bottom = bottom < 0.01 ? 0.0 : bottom;
     }
   }
+
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

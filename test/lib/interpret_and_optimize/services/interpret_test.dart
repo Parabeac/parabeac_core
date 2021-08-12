@@ -86,7 +86,7 @@ void main() {
 
       when(project.pages).thenReturn([page]);
       when(page.getPageItems()).thenReturn([screen]);
-      when(screen.designNode).thenReturn(artboard);
+      when(screen.AITree).thenReturn(artboard);
       when(artboard.children).thenReturn([mockGroup]);
 
       when(artboard.isVisible).thenReturn(true);

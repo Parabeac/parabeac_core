@@ -37,13 +37,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   Map alignment = {};
 
-  PBLayoutIntermediateNode(this._layoutRules, this._exceptions,
+  PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules, this._exceptions,
       PBContext currentContext, String name,
-      {topLeftCorner,
-      bottomRightCorner,
+      {
       this.prototypeNode,
       PBIntermediateConstraints constraints})
-      : super(topLeftCorner, bottomRightCorner, Uuid().v4(), name,
+      : super(UUID ?? Uuid().v4(), frame, name,
             currentContext: currentContext, constraints: constraints) {
     // Declaring children for layout node
     addAttribute(PBAttribute('children'));

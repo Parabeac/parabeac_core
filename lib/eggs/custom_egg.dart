@@ -1,13 +1,13 @@
+import 'dart:math';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
@@ -16,23 +16,13 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
   CustomEgg(
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    String UUID,
+    Rectangle frame,
     String name, {
     PBContext currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  }) : super(UUID, frame, currentContext, name) {
     addAttribute(PBAttribute('child'));
     generator = CustomEggGenerator();
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) {
-    getAttributeNamed('child').attributeNode = node;
-  }
-
-  @override
-  void alignChild() {
-    // Don't do anything
   }
 
   @override
@@ -41,9 +31,8 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
-      PBIntermediateNode originalRef) {
-    return CustomEgg(topLeftCorner, bottomRightCorner,
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+    return CustomEgg(originalRef.name, frame,
         originalRef.name.replaceAll('<custom>', '').pascalCase);
   }
 }

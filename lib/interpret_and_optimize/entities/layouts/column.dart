@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:parabeac_core/generation/generators/layouts/pb_column_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
@@ -28,16 +30,17 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   AlignStrategy alignStrategy = ColumnAlignment();
 
-  PBIntermediateColumnLayout(
-    PBContext currentContext,
-    {String name}) : super(COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext, name) {
+  PBIntermediateColumnLayout(PBContext currentContext, Rectangle frame,
+      {String name})
+      : super(null, frame, COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext,
+            name) {
     generator = PBColumnGenerator();
   }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var col = PBIntermediateColumnLayout(currentContext, name: name);
+    var col = PBIntermediateColumnLayout(currentContext, null, name: name);
     col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));
     return col;
@@ -45,12 +48,9 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
 
   @override
   void addChild(node) => addChildToLayout(node);
-
-  
 }
 
-class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout>{
-  
+class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
   /// Invert method for Column alignment
   void _invertAlignment(PBIntermediateColumnLayout node) {
     if (node.alignment.isNotEmpty) {
@@ -60,6 +60,7 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout>{
       node.alignment['mainAxisAlignment'] = tempCrossAxis;
     }
   }
+
   @override
   void align(PBContext context, PBIntermediateColumnLayout node) {
     node.checkCrossAxisAlignment();
@@ -74,8 +75,8 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout>{
   }
 
   void _addParallelAlignment(PBIntermediateColumnLayout node) {
-    var newchildren = handleFlex(true, node.topLeftCorner, node.bottomRightCorner,
-        node.children?.cast<PBIntermediateNode>());
+    var newchildren = handleFlex(true, node.topLeftCorner,
+        node.bottomRightCorner, node.children?.cast<PBIntermediateNode>());
     node.replaceChildren(newchildren);
   }
 
@@ -84,13 +85,11 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout>{
     var columnMaxX = node.bottomRightCorner.x;
 
     for (var i = 0; i < node.children.length; i++) {
-      var padding = Padding('', node.children[i].constraints,
+      var padding = Padding(null, node.frame, node.children[i].constraints,
           left: node.children[i].topLeftCorner.x - columnMinX ?? 0.0,
           right: columnMaxX - node.children[i].bottomRightCorner.x ?? 0.0,
           top: 0.0,
           bottom: 0.0,
-          topLeftCorner: node.children[i].topLeftCorner,
-          bottomRightCorner: node.children[i].bottomRightCorner,
           currentContext: node.currentContext);
       padding.addChild(node.children[i]);
 

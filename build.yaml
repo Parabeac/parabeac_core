@@ -1,5 +1,5 @@
 targets:
-  parabeac_core:
+  $default:
     builders:
       parabeac_core|json_serializable:
         generate_for:
@@ -10,7 +10,7 @@ targets:
         options:
           any_map: false
           checked: false
-          create_factory: true
+          create_factory: false
           create_to_json: true
           disallow_unrecognized_keys: false
           explicit_to_json: false

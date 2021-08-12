@@ -9,10 +9,9 @@ part of 'intermediate_auxillary_data.dart';
 IntermediateAuxiliaryData _$IntermediateAuxiliaryDataFromJson(
     Map<String, dynamic> json) {
   return IntermediateAuxiliaryData(
-    alignment: json['alignment'] as Map<String, dynamic>,
     color: ColorUtils.pbColorFromJsonFills(
         json['fills'] as List<Map<String, dynamic>>),
-  );
+  )..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
 Map<String, dynamic> _$IntermediateAuxiliaryDataToJson(

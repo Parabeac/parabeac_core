@@ -23,8 +23,10 @@ part 'pb_intermediate_node.g.dart';
 @JsonSerializable(
   explicitToJson: true,
   createFactory: false,
+  ignoreUnannotated: true
 )
 abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
+  @JsonKey(ignore: true)
   Logger logger;
 
   /// A subsemantic is contextual info to be analyzed in or in-between the visual generation & layout generation services.
@@ -36,6 +38,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   @JsonKey()
   final String UUID;
 
+  @JsonKey(ignore: true)
   PBIntermediateConstraints constraints;
 
   /// Map representing the attributes of [this].
@@ -50,8 +53,10 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   @override
   List<PBIntermediateNode> get children => [child];
 
+  @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
+  @JsonKey(ignore: true)
   AlignStrategy alignStrategy = NoAlignment();
 
   /// Gets the [PBIntermediateNode] at attribute `child`
@@ -70,11 +75,20 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     }
   }
 
-  @JsonKey(fromJson: Point.topLeftFromJson)
+  @JsonKey(
+      fromJson: PBPointLegacyMethod.topLeftFromJson,
+      toJson: PBPointLegacyMethod.toJson)
   Point topLeftCorner;
 
-  @JsonKey(fromJson: Point.bottomRightFromJson)
+  @JsonKey(
+      fromJson: PBPointLegacyMethod.bottomRightFromJson,
+      toJson: PBPointLegacyMethod.toJson)
   Point bottomRightCorner;
+
+  @JsonKey(
+      fromJson: DeserializedRectangle.fromJson,
+      toJson: DeserializedRectangle.toJson)
+  Rectangle frame;
 
   double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
   double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
@@ -94,8 +108,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// Name of the element if available.
   String name;
 
-  PBIntermediateNode(
-      this.topLeftCorner, this.bottomRightCorner, this.UUID, this.name,
+  PBIntermediateNode(this.UUID, this.frame, this.name,
       {this.currentContext, this.subsemantic, this.constraints}) {
     logger = Logger(runtimeType.toString());
     _attributes = [];
@@ -164,22 +177,22 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   }
 
   /// Adds child to node.
-  void addChild(node) {
+  void addChild(PBIntermediateNode node) {
     childrenStrategy.addChild(this, node);
 
     /// Checking the constrains of the [node] being added to the tree, smoe of the
     /// constrains could be inherited to that section of the sub-tree.
   }
 
-  /// In a recursive manner align the current [this] and the [children] of [this] 
-  /// 
+  /// In a recursive manner align the current [this] and the [children] of [this]
+  ///
   /// Its creating a [PBContext.clone] because some values of the [context] are modified
-  /// when passed to some of the [children]. 
+  /// when passed to some of the [children].
   /// For example, the [context.contextConstraints] might
   /// could contain information from a parent to that particular section of the tree. However,
   /// because its pass by reference that edits to the context are going to affect the entire [context.tree] and
   /// not just the sub tree, therefore, we need to [PBContext.clone] to avoid those side effets.
-  /// 
+  ///
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
@@ -188,7 +201,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     }
   }
 
-    factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
+  factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
       AbstractIntermediateNodeFactory.getIntermediateNode(json);
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
@@ -232,7 +245,53 @@ extension PBPointLegacyMethod on Point {
       return y == point.y ? x >= point.x : y >= point.y;
     }
     return false;
+  }
 
+  static Point topLeftFromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+    var x, y;
+    if (json.containsKey('boundaryRectangle')) {
+      x = json['boundaryRectangle']['x'];
+      y = json['boundaryRectangle']['y'];
+    } else {
+      x = json['x'];
+      y = json['y'];
+    }
+    return Point(x, y);
+  }
 
+  static Point bottomRightFromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+    var x, y;
+    if (json.containsKey('boundaryRectangle')) {
+      x = json['boundaryRectangle']['x'] + json['boundaryRectangle']['width'];
+      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['height'];
+    } else {
+      x = json['x'] + json['width'];
+      y = json['y'] + json['height'];
+    }
+    return Point(x, y);
+  }
+
+  static Map toJson(Point point) => {'x': point.x, 'y': point.y};
 }
+
+extension DeserializedRectangle on Rectangle {
+  Point get topLeftCorner => topLeft;
+  Point get bottomRightCorner => bottomRight;
+
+  static Rectangle fromJson(Map<String, dynamic> json) {
+    return Rectangle(json['x'], json['y'], json['width'], json['height']);
+  }
+
+  static Map toJson(Rectangle rectangle) => {
+        'height': rectangle.height,
+        'width': rectangle.width,
+        'x': rectangle.left,
+        'y': rectangle.top
+      };
 }

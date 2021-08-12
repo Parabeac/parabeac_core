@@ -44,15 +44,13 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
 class PaddingAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
-    var padding = Padding('', node.child.constraints,
+    var padding = Padding(null, node.frame, node.child.constraints,
         left: (node.child.topLeftCorner.x - node.topLeftCorner.x).abs(),
         right:
             (node.bottomRightCorner.x - node.child.bottomRightCorner.x).abs(),
         top: (node.child.topLeftCorner.y - node.topLeftCorner.y).abs(),
         bottom:
             (node.child.bottomRightCorner.y - node.bottomRightCorner.y).abs(),
-        topLeftCorner: node.topLeftCorner,
-        bottomRightCorner: node.bottomRightCorner,
         currentContext: node.currentContext);
     padding.addChild(node.child);
     node.child = padding;
@@ -82,8 +80,8 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       }
       return false;
     }).forEach((child) {
-      alignedChildren.add(InjectedPositioned(Uuid().v4(),
-          child.topLeftCorner.clone(), child.bottomRightCorner.clone(),
+      alignedChildren.add(InjectedPositioned(null,
+          child.frame,
           constraints: child.constraints,
           currentContext: context,
           valueHolder: PositionedValueHolder(

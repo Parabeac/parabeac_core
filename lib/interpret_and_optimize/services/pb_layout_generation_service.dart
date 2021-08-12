@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
@@ -12,7 +13,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_generation_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
 
@@ -23,7 +23,6 @@ import 'package:tuple/tuple.dart';
 class PBLayoutGenerationService extends AITHandler {
   ///The available Layouts that could be injected.
   final List<PBLayoutIntermediateNode> _availableLayouts = [];
-
 
   ///[LayoutRule] that check post conditions.
   final List<PostConditionRule> _postLayoutRules = [
@@ -154,9 +153,10 @@ class PBLayoutGenerationService extends AITHandler {
               tempGroup, (tempGroup as TempGroupLayoutNode).children[0])
           : _replaceNode(
               tempGroup,
-              InjectedContainer(tempGroup.bottomRightCorner,
-                  tempGroup.topLeftCorner, tempGroup.name, tempGroup.UUID,
-                  constraints: tempGroup.constraints));
+              InjectedContainer(
+                tempGroup.UUID, tempGroup.frame, name: tempGroup.name,
+                // constraints: tempGroup.constraints
+              ));
     }
     return tempGroup;
   }

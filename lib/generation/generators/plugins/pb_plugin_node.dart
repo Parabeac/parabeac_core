@@ -7,22 +7,24 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
   String semanticName;
 
-  @override
-  final String UUID;
-
-  PBEgg(Point topLeftCorner, Point bottomRightCorner, PBContext currentContext,
-      String name, {this.UUID})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID);
+  PBEgg(
+    String UUID,
+    Rectangle frame,
+    PBContext currentContext,
+    String name,
+  ) : super(
+          UUID,
+          frame,
+          currentContext,
+          name,
+        );
 
   /// Override this function if you want to make tree modification prior to the layout service.
   /// Be sure to return something or you will remove the node from the tree.
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) =>
       layer;
 
-  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
-      PBIntermediateNode originalNode);
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode);
 
   void extractInformation(PBIntermediateNode incomingNode);
-
 }

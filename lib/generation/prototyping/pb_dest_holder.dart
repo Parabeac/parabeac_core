@@ -11,11 +11,9 @@ class PBDestHolder extends PBIntermediateNode {
   @override
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
-  PBDestHolder(Point topLeftCorner, Point bottomRightCorner, String UUID,
-      this.pNode, PBContext currentContext)
-      : super(topLeftCorner, bottomRightCorner, UUID, '',
-            currentContext: currentContext) {
+  PBDestHolder(
+      String UUID, Rectangle frame, this.pNode, PBContext currentContext)
+      : super(UUID, frame, '', currentContext: currentContext) {
     generator = PBPrototypeGenerator(pNode);
   }
-
 }

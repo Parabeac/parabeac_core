@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
@@ -28,36 +30,21 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   String type = 'group';
 
   @override
-  @JsonKey(name: 'UUID')
-  String UUID;
-
-  @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
-  PBContext currentContext;
-
-  @override
   Map<String, dynamic> originalRef;
 
-  TempGroupLayoutNode({
+  TempGroupLayoutNode(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
-    this.currentContext,
+    PBContext currentContext,
     String name,
-    this.topLeftCorner,
-    this.bottomRightCorner,
-    this.UUID,
     this.prototypeNode,
     this.size,
-  }) : super([], [], currentContext, name);
+  }) : super(UUID, frame, [], [], currentContext, name);
 
   @override
   void addChild(node) {
@@ -80,8 +67,8 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var tempGroup = _$TempGroupLayoutNodeFromJson(json)
-      ..topLeftCorner = Point.topLeftFromJson(json)
-      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // ..topLeftCorner = Point.topLeftFromJson(json)
+      // ..bottomRightCorner = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     tempGroup.mapRawChildren(json);

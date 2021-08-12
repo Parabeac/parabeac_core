@@ -27,10 +27,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   PBIntermediateNode get trailingItem =>
       getAttributeNamed('actions')?.attributeNode;
 
-  InjectedAppbar(
-      Point topLeftCorner, Point bottomRightCorner, String UUID, String name,
+  InjectedAppbar(String UUID, Rectangle frame, String name,
       {PBContext currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+      : super(UUID, frame, currentContext, name) {
     generator = PBAppBarGenerator();
     addAttribute(PBAttribute('leading'));
     addAttribute(PBAttribute('title'));
@@ -56,10 +55,8 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedAppbar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
+  PBEgg generatePluginNode(Rectangle frame, originalRef) {
+    return InjectedAppbar(UUID, frame, originalRef.name,
         currentContext: currentContext);
   }
 
@@ -71,18 +68,22 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void extractInformation(PBIntermediateNode incomingNode) {}
 }
-class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar>{
+
+class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
   @override
   void align(PBContext context, InjectedAppbar node) {
-     /// This align only modifies middleItem
-    var tempNode = InjectedContainer(node.middleItem.bottomRightCorner,
-        node.middleItem.topLeftCorner, node.middleItem.name, node.middleItem.UUID,
-        currentContext: node.currentContext, constraints: node.middleItem.constraints)
-      ..addChild(node.middleItem);
+    /// This align only modifies middleItem
+    var tempNode = InjectedContainer(
+      node.middleItem.UUID,
+      node.middleItem.frame,
+      name: node.middleItem.name,
+      currentContext: node.currentContext,
+    )..addChild(node.middleItem);
 
     node.getAttributeNamed('title').attributeNode = tempNode;
   }
 }
+
 class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 

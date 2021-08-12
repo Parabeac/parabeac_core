@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
@@ -21,6 +22,8 @@ final designToPBDLServices = <DesignToPBDLService>[
   SketchToPBDLService(),
   FigmaToPBDLService(),
 ];
+FileSystemAnalyzer fileSystemAnalyzer;
+Interpret interpretService;
 
 ///sets up parser
 final parser = ArgParser()
@@ -89,24 +92,30 @@ ${parser.usage}
     throw UnsupportedError('We have yet to support this DesignType! ');
   }
 
+  Future indexFileFuture;
+  fileSystemAnalyzer = FileSystemAnalyzer(processInfo.genProjectPath);
+  fileSystemAnalyzer.addFileExtension('.dart');
+
+  if (!(await fileSystemAnalyzer.projectExist())) {
+    await FlutterProjectBuilder.createFlutterProject(processInfo.projectName,
+        projectDir: processInfo.outputPath);
+  } else {
+    indexFileFuture = fileSystemAnalyzer.indexProjectFiles();
+  }
+
   var pbdlService = designToPBDLServices.firstWhere(
     (service) => service.designType == processInfo.designType,
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
-  var intermediateProject = await Interpret(
-    configuration: MainInfo().configuration,
-  ).interpretAndOptimize(pbdl);
-
-  var projectGenFuture = await FlutterProjectBuilder.createFlutterProject(
-      processInfo.projectName,
-      projectDir: processInfo.outputPath);
+  var intermediateProject = await interpretService.interpretAndOptimize(
+      pbdl, MainInfo().configuration);
 
   var fpb = FlutterProjectBuilder(
-      MainInfo().configuration.generationConfiguration,
-      project: intermediateProject,
-      pageWriter: PBFlutterWriter());
+      MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
+      project: intermediateProject, pageWriter: PBFlutterWriter());
 
-  await fpb.genProjectFiles(projectGenFuture.item1);
+  await indexFileFuture;
+  await fpb.genProjectFiles(processInfo.genProjectPath);
 
   exitCode = 0;
 }

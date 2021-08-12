@@ -10,11 +10,12 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
-      'children': instance.children?.map((e) => e?.toJson())?.toList(),
-      'child': instance.child?.toJson(),
-      'topLeftCorner': instance.topLeftCorner?.toJson(),
-      'bottomRightCorner': instance.bottomRightCorner?.toJson(),
-      'size': instance.size,
+      'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
+      'bottomRightCorner':
+          PBPointLegacyMethod.toJson(instance.bottomRightCorner),
+      'frame': DeserializedRectangle.toJson(instance.frame),
+      'width': instance.width,
+      'height': instance.height,
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
     };

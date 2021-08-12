@@ -8,32 +8,27 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
 class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
-
   @override
   String semanticName = '<back-arrow>';
-  
+
   @override
   ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   @override
   AlignStrategy alignStrategy = NoAlignment();
 
-  InjectedBackArrow(
-      Point topLeftCorner, Point bottomRightCorner, String UUID, String name,
+  InjectedBackArrow(String UUID, Rectangle frame, String name,
       {PBContext currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+      : super(UUID, frame, currentContext, name) {
     generator = PBBackArrowGenerator();
   }
-
 
   @override
   void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
-      PBIntermediateNode originalRef) {
-    return InjectedBackArrow(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+    return InjectedBackArrow(UUID, frame, originalRef.name,
         currentContext: currentContext);
   }
 }

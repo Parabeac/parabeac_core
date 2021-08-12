@@ -22,14 +22,17 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
   Tab(
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    String UUID,
+    Rectangle frame,
     String name, {
-    UUID,
     PBContext currentContext,
     this.prototypeNode,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID) {
+  }) : super(
+          UUID,
+          frame,
+          currentContext,
+          name,
+        ) {
     generator = PBTabGenerator();
   }
 
@@ -37,19 +40,14 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   String semanticName;
 
   @override
-  PBEgg generatePluginNode(Point topLeftCorner, Point bottomRightCorner,
+  PBEgg generatePluginNode(Rectangle frame, 
       PBIntermediateNode originalNode) {
     if (originalNode is PBInheritedIntermediate) {
       var tab = Tab(
-        topLeftCorner,
-        bottomRightCorner,
+        UUID,
+        frame,
         originalNode.name,
         currentContext: currentContext,
-        UUID: originalNode != null &&
-                originalNode.UUID != null &&
-                originalNode.UUID.isNotEmpty
-            ? originalNode.UUID
-            : Uuid().v4(),
         prototypeNode: (originalNode as PBInheritedIntermediate).prototypeNode,
       );
       if (originalNode != TempGroupLayoutNode) {

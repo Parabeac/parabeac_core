@@ -31,33 +31,12 @@ class InheritedContainer extends PBVisualIntermediateNode
   bool isBackgroundVisible = true;
 
   @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
-
-  /// TODO: switch to padding
-  @override
-  AlignStrategy alignStrategy = NoAlignment();
-
-
-  @override
   @JsonKey()
   String type = 'rectangle';
 
   @override
-  String UUID;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   @override
   @JsonKey(ignore: true)
@@ -67,21 +46,27 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   List<PBIntermediateNode> get children => null;
 
-  InheritedContainer({
+  InheritedContainer(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
-    this.topLeftCorner,
-    this.bottomRightCorner,
+    Rectangle rectangle,
     String name,
     double alignX,
     double alignY,
-    this.currentContext,
+    PBContext currentContext,
     this.isBackgroundVisible = true,
-    this.UUID,
     this.size,
     this.prototypeNode,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID ?? '') {
+  }) : super(
+          UUID,
+          rectangle,
+          currentContext,
+          name,
+        ) {
     generator = PBContainerGenerator();
+    childrenStrategy = TempChildrenStrategy('child');
+    //TODO switch alignment to Padding alignment
 
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
@@ -90,8 +75,8 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)
-      ..topLeftCorner = Point.topLeftFromJson(json)
-      ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // ..topLeftCorner = Point.topLeftFromJson(json)
+      // ..bottomRightCorner = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     container.mapRawChildren(json);

@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
+import 'package:pbdl/pbdl.dart';
 // import 'dart:math';
 import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -27,10 +28,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
-  @override
-  ChildrenStrategy childrenStrategy = NoChildStrategy();
-
-
   @JsonKey(name: 'imageReference')
   String referenceImage;
 
@@ -39,48 +36,39 @@ class InheritedBitmap extends PBVisualIntermediateNode
   String type = 'image';
 
   @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-  @override
-  String UUID;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
 
   @override
   @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  @override
-  @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedBitmap({
+  InheritedBitmap(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     String name,
-    this.currentContext,
+    PBContext currentContext,
     this.referenceImage,
-    this.bottomRightCorner,
-    this.topLeftCorner,
-    this.UUID,
     this.prototypeNode,
     this.size,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: UUID ?? '') {
+  }) : super(
+          UUID,
+          frame,
+          currentContext,
+          name,
+        ) {
     generator = PBBitmapGenerator();
+    childrenStrategy = NoChildStrategy();
+
     ImageReferenceStorage()
         .addReference(UUID, '${MainInfo().outputPath}assets/images');
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedBitmapFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..topLeftCorner = Point.topLeftFromJson(json)
+        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

@@ -122,7 +122,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         // Find and reference symbol master if overriding a symbol
         if (param.type == 'symbolID') {
           var instance = PBSharedInstanceIntermediateNode(
-            UUID: param.UUID,
+            param.UUID,
+            null,
             SYMBOL_ID: param.initialValue,
             name: param.overrideName,
             overrideValues: [],

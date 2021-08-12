@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -30,45 +31,28 @@ class InjectedContainer extends PBVisualIntermediateNode
   PrototypeNode prototypeNode;
   ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
   @override
-  @JsonKey(fromJson: Point.topLeftFromJson)
-  Point topLeftCorner;
-  @override
-  @JsonKey(fromJson: Point.bottomRightFromJson)
-  Point bottomRightCorner;
-
-  @override
   @JsonKey()
   String type = 'injected_container';
-
-  @override
-  String UUID;
-
   @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
   Map size;
 
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  InjectedContainer({
-    this.bottomRightCorner,
-    this.topLeftCorner,
+  InjectedContainer(
+    UUID,
+    Rectangle frame, {
     String name,
-    this.UUID,
     double alignX,
     double alignY,
     String color,
-    this.currentContext,
+    PBContext currentContext,
     this.prototypeNode,
     this.size,
     this.type,
   }) : super(
-          topLeftCorner,
-          bottomRightCorner,
+          UUID,
+          frame,
           currentContext,
-          name,
-          UUID: UUID,
+          name, 
         ) {
     generator = PBContainerGenerator();
 

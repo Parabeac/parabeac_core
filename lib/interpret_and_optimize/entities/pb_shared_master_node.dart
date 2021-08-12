@@ -22,7 +22,6 @@ part 'pb_shared_master_node.g.dart';
 @JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 class PBSharedMasterNode extends PBVisualIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
-
   @override
   @JsonKey(
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
@@ -37,22 +36,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   String type = 'shared_master';
 
   @override
-  @JsonKey(ignore: true)
-  Point topLeftCorner;
-  @override
-  @JsonKey(ignore: true)
-  Point bottomRightCorner;
-
-  @override
-  String UUID;
-
-  @override
   @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
   Map size;
-
-  @override
-  @JsonKey(ignore: true)
-  PBContext currentContext;
 
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
@@ -60,11 +45,13 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
   set children(List<PBIntermediateNode> children) {
-    child ??= TempGroupLayoutNode(currentContext: currentContext, name: name);
+    child ??= TempGroupLayoutNode(null, null,
+        currentContext: currentContext, name: name);
     if (child is PBLayoutIntermediateNode) {
       children.forEach((element) => child.addChild(element));
     } else {
-      child = TempGroupLayoutNode(currentContext: currentContext, name: name)
+      child = TempGroupLayoutNode(null, null,
+          currentContext: currentContext, name: name)
         ..replaceChildren([child, ...children]);
     }
   }
@@ -78,23 +65,21 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  PBSharedMasterNode({
+  PBSharedMasterNode(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     this.SYMBOL_ID,
     String name,
-    this.topLeftCorner,
-    this.bottomRightCorner,
     this.overridableProperties,
-    this.currentContext,
-    this.UUID,
+    PBContext currentContext,
     this.prototypeNode,
     this.size,
   }) : super(
-          topLeftCorner,
-          bottomRightCorner,
+          UUID,
+          frame,
           currentContext,
           name,
-          UUID: UUID ?? '',
         ) {
     overridableProperties ??= [];
     try {
@@ -148,14 +133,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }
 
   @override
-  void addChild(node) =>
-      child == null ? child = node : children = [node];
-
+  void addChild(node) => child == null ? child = node : children = [node];
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedMasterNodeFromJson(json)
-        ..topLeftCorner = Point.topLeftFromJson(json)
-        ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..topLeftCorner = Point.topLeftFromJson(json)
+        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json
         ..mapRawChildren(json);
 

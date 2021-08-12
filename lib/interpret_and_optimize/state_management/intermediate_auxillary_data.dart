@@ -10,6 +10,9 @@ class IntermediateAuxiliaryData {
   @JsonKey(ignore: true)
   DirectedStateGraph stateGraph;
 
+  /// Info relating to the alignment of an element, currently just in a map format.
+  Map alignment;
+
   /// Info relating to a elements borders.
   @JsonKey(ignore: true)
   IntermediateBorderInfo borderInfo;

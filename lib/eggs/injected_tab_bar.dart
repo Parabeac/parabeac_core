@@ -21,12 +21,11 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   AlignStrategy alignStrategy = NoAlignment();
 
   InjectedTabBar(
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    String name,
-    String UUID, {
+    String UUID,
+    Rectangle frame,
+    String name, {
     PBContext currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  }) : super(UUID, frame, currentContext, name) {
     generator = PBTabBarGenerator();
     addAttribute(PBAttribute('tabs'));
   }
@@ -51,10 +50,8 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, PBIntermediateNode originalRef) {
-    return InjectedTabBar(
-        topLeftCorner, bottomRightCorner, originalRef.name, UUID,
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+    return InjectedTabBar(UUID, frame, originalRef.name,
         currentContext: currentContext);
   }
 
