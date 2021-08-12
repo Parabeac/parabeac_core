@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 // import 'dart:math';
@@ -74,9 +75,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   PBIntermediateNode get child => children.isEmpty ? null : children.first;
 
-  // @override
-  // @JsonKey(ignore: true)
-  // Iterator<PBIntermediateNode> get iterator => children.iterator;
 
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
@@ -313,11 +311,49 @@ extension PBPointLegacyMethod on Point {
 }
 
 extension DeserializedRectangle on Rectangle {
-  Point get topLeftCorner => topLeft;
-  Point get bottomRightCorner => bottomRight;
+  bool _areXCoordinatesOverlapping(
+          Point topLeftCorner0,
+          Point bottomRightCorner0,
+          Point topLeftCorner1,
+          Point bottomRightCorner1) =>
+      topLeftCorner1.x >= topLeftCorner0.x &&
+          topLeftCorner1.x <= bottomRightCorner0.x ||
+      bottomRightCorner1.x <= bottomRightCorner0.x &&
+          bottomRightCorner1.x >= topLeftCorner0.x;
+
+  bool _areYCoordinatesOverlapping(
+          Point topLeftCorner0,
+          Point bottomRightCorner0,
+          Point topLeftCorner1,
+          Point bottomRightCorner1) =>
+      topLeftCorner1.y >= topLeftCorner0.y &&
+          topLeftCorner1.y <= bottomRightCorner0.y ||
+      bottomRightCorner1.y <= bottomRightCorner0.y &&
+          bottomRightCorner1.y >= topLeftCorner0.y;
+
+  bool isHorizontalTo(Rectangle frame) {
+    return (!(_areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
+        _areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
+
+  bool isVerticalTo(Rectangle frame) {
+    return (!(_areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
+        _areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
+
+  bool isOverlappingTo(Rectangle frame) {
+    return (_areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight)) &&
+        _areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
 
   static Rectangle fromJson(Map<String, dynamic> json) {
-    return Rectangle<num>(json['x'], json['y'], json['width'], json['height']);
+    return Rectangle(json['x'], json['y'], json['width'], json['height']);
   }
 
   static Map toJson(Rectangle rectangle) => {
