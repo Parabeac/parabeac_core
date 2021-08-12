@@ -113,6 +113,58 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
     }
   }
 
+  /// Removing the [node] from the [PBIntermediateTree]
+  ///
+  /// The entire subtree (starting with [node]) would be eliminated if specified to [eliminateSubTree],
+  /// otherwise, its just going to replace [node] with its [node.children]
+  bool removeNode(PBIntermediateNode node, {bool eliminateSubTree = false}) {
+    if (node.parent == null) {
+      ///TODO: log message
+      return false;
+    }
+    var parent = node.parent;
+    var removeChild = () =>
+        parent.children.removeWhere((element) => element.UUID == node.UUID);
+
+    if (eliminateSubTree) {
+      removeChild();
+    } else {
+      /// appending the [PBIntermediateNode]s of the removed [node]
+      var grandChilds = parent.children
+          .where((element) => element.UUID == node.UUID)
+          .map((e) => e.children)
+          ///FIXME: Right now the iterator is returning null insize of a list when iterating the tree.
+          .where((element) => element != null)
+          .expand((element) => element)
+          .toList();
+      removeChild();
+      grandChilds.forEach((element) => parent.addChild(element));
+    }
+    return true;
+  }
+
+  /// Replacing [target] with [replacement]
+  ///
+  /// The entire subtree (starting with [target]) if [replacement] does not [acceptChildren],
+  /// otherwise, those children would be appended to [replacement].
+  bool replaceNode(PBIntermediateNode target, PBIntermediateNode replacement,
+      {bool acceptChildren = false}) {
+    if (target.parent == null) {
+      ///TODO: throw correct error/log
+      return false;
+    }
+
+    var parent = target.parent;
+    var orphans = <PBIntermediateNode>[];
+    if (acceptChildren) {
+      orphans.addAll(target.children);
+    }
+    removeNode(target, eliminateSubTree: true);
+    replacement.children.addAll(orphans);
+    parent.children.add(replacement);
+    return true;
+  }
+
   /// Checks if the [PBIntermediateTree] is a [TREE_TYPE.SCREEN],
   /// meaning that the [rootNode] is of type [InheritedScaffold]
   bool isScreen() => tree_type == TREE_TYPE.SCREEN;
@@ -174,8 +226,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
 
-  Iterator<List> get layerIterator =>
-      IntermediateLayerIterator(this);
+  Iterator get layerIterator => IntermediateLayerIterator(this);
 
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
