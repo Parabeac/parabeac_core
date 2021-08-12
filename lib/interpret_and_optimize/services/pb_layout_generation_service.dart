@@ -79,8 +79,8 @@ class PBLayoutGenerationService extends AITHandler {
       //           ..removeWhere((element) => element == null))
       //     .first;
 
-      var l = tree.toList()..map((_removingMeaninglessGroup));
-      tree.rootNode = l.first;
+      tree = _removingMeaninglessGroup(tree);
+      // tree.rootNode = l.first;
       rootNode = _traverseLayersUtil(rootNode, (layer) {
         // return layer
 
@@ -150,24 +150,29 @@ class PBLayoutGenerationService extends AITHandler {
     return rootNode;
   }
 
-  /// If this node is an unecessary [TempGroupLayoutNode], just return the child or an
-  /// [InjectContainer] if the group is empty
+  /// If this node is an unecessary [TempGroupLayoutNode], from the [tree]
   ///
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
-  PBIntermediateNode _removingMeaninglessGroup(PBIntermediateNode tempGroup) {
-    while (tempGroup is TempGroupLayoutNode && tempGroup.children.length <= 1) {
-      tempGroup = (tempGroup as TempGroupLayoutNode).children.isNotEmpty
-          ? _replaceNode(
-              tempGroup, (tempGroup as TempGroupLayoutNode).children[0])
-          : _replaceNode(
-              tempGroup,
-              InjectedContainer(
-                tempGroup.UUID, tempGroup.frame, name: tempGroup.name,
-                // constraints: tempGroup.constraints
-              ));
-    }
-    return tempGroup;
+  PBIntermediateTree _removingMeaninglessGroup(PBIntermediateTree tree) {
+    tree
+        .where(
+            (node) => node is TempGroupLayoutNode && node.children.length <= 1)
+        .cast<TempGroupLayoutNode>()
+        .forEach((tempGroup) {
+      tree.replaceNode(
+          tempGroup,
+          tempGroup.children.isNotEmpty
+              ? _replaceNode(tempGroup, tempGroup.children.first)
+              : _replaceNode(
+                  tempGroup,
+                  InjectedContainer(
+                    tempGroup.UUID, tempGroup.frame,
+                    name: tempGroup.name,
+                    // constraints: tempGroup.constraints
+                  )));
+    });
+    return tree;
   }
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
