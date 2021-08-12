@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
@@ -35,26 +36,22 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'shared_master';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
 
   ///The children that makes the UI of the [PBSharedMasterNode]. The children are going to be wrapped
   ///using a [TempGroupLayoutNode] as the root Node.
-  set children(List<PBIntermediateNode> children) {
-    child ??= TempGroupLayoutNode(null, null,
-        currentContext: currentContext, name: name);
-    if (child is PBLayoutIntermediateNode) {
-      children.forEach((element) => child.addChild(element));
-    } else {
-      child = TempGroupLayoutNode(null, null,
-          currentContext: currentContext, name: name)
-        ..replaceChildren([child, ...children]);
-    }
-  }
+  // set children(List<PBIntermediateNode> children) {
+  //   child ??= TempGroupLayoutNode(null, null,
+  //       currentContext: currentContext, name: name);
+  //   if (child is PBLayoutIntermediateNode) {
+  //     children.forEach((element) => child.addChild(element));
+  //   } else {
+  //     child = TempGroupLayoutNode(null, null,
+  //         currentContext: currentContext, name: name)
+  //       ..replaceChildren([child, ...children]);
+  //   }
+  // }
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
   @JsonKey(name: 'overrideProperties')
@@ -72,13 +69,10 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.SYMBOL_ID,
     String name,
     this.overridableProperties,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     overridableProperties ??= [];
@@ -102,6 +96,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     }
 
     generator = PBMasterSymbolGenerator();
+    childrenStrategy = TempChildrenStrategy('child');
 
     overridableProperties.forEach(OverrideHelper.addProperty);
 
@@ -132,13 +127,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     //   ..removeWhere((p) => p == null || p.parameterDefinition == null);
   }
 
-  @override
-  void addChild(node) => child == null ? child = node : children = [node];
-
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedMasterNodeFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json
         ..mapRawChildren(json);
 

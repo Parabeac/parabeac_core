@@ -13,13 +13,12 @@ class PBPluginListHelper {
   static final PBPluginListHelper _instance = PBPluginListHelper._internal();
   void initPlugins(PBContext context) {
     allowListNames = {
-      '<tabbar>': InjectedTabBar(null, null, '', currentContext: context),
-      '<navbar>': InjectedAppbar(null, null, '', currentContext: context),
+      '<tabbar>': InjectedTabBar(null, null, ''),
+      '<navbar>': InjectedAppbar(null, null, ''),
       '<tab>': Tab(
         null,
         null,
         '',
-        currentContext: context,
       ),
       '<custom>': CustomEgg(null, null, ''),
     };

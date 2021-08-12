@@ -7,15 +7,13 @@ class PBRowGenerator extends PBLayoutGenerator {
   PBRowGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is PBIntermediateRowLayout) {
       var buffer = StringBuffer();
       var counter = 0;
       var children = source.children;
 
       for (var child in children) {
-        child.currentContext = source.currentContext;
         buffer.write(child.generator.generate(child, generatorContext));
         var trailing_comma = (counter + 1) == children.length ? '' : ',';
         buffer.write(trailing_comma);

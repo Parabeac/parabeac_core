@@ -26,11 +26,7 @@ class InheritedCircle extends PBVisualIntermediateNode
   @override
   @JsonKey()
   String type = 'circle';
-
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
+ 
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
@@ -40,15 +36,12 @@ class InheritedCircle extends PBVisualIntermediateNode
     Rectangle frame, {
     this.originalRef,
     String name,
-    PBContext currentContext,
     Point alignX,
     Point alignY,
-    this.size,
     this.prototypeNode,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBBitmapGenerator();
@@ -63,8 +56,6 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedCircleFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

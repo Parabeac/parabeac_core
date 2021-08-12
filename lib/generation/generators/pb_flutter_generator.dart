@@ -102,6 +102,7 @@ class PBFlutterGenerator extends PBGenerationManager {
   @override
   String generate(
     PBIntermediateNode rootNode,
+    PBContext context,
   ) {
     if (rootNode == null) {
       return null;
@@ -110,12 +111,12 @@ class PBFlutterGenerator extends PBGenerationManager {
     if (rootNode.generator == null) {
       log.error('Generator not registered for $rootNode');
     }
-    rootNode.currentContext.sizingContext = SizingValueContext.PointValue;
+    context.sizingContext = SizingValueContext.PointValue;
     return rootNode.generator?.templateStrategy
-            ?.generateTemplate(rootNode, this, rootNode.currentContext) ??
+            ?.generateTemplate(rootNode, this, context) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
         DEFAULT_STRATEGY.generateTemplate(
-            rootNode, this, rootNode.currentContext);
+            rootNode, this, context);
   }
 }

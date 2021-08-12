@@ -33,7 +33,7 @@ class ContainerPostRule extends PostConditionRule {
             pbvisual = children
                 .firstWhere((element) => element is PBVisualIntermediateNode);
         return overlappingNodesLayoutRule.testRule(pbvisual, pblayout) &&
-            (pbvisual as PBVisualIntermediateNode).child == null;
+            (pbvisual as PBVisualIntermediateNode).children.isNotEmpty;
       }
     }
     return false;

@@ -44,16 +44,18 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
 class PaddingAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
-    var padding = Padding(null, node.frame, node.child.constraints,
-        left: (node.child.topLeftCorner.x - node.topLeftCorner.x).abs(),
-        right:
-            (node.bottomRightCorner.x - node.child.bottomRightCorner.x).abs(),
-        top: (node.child.topLeftCorner.y - node.topLeftCorner.y).abs(),
-        bottom:
-            (node.child.bottomRightCorner.y - node.bottomRightCorner.y).abs(),
-        currentContext: node.currentContext);
-    padding.addChild(node.child);
-    node.child = padding;
+    var child = node.getAttributeNamed('child');
+    var padding = Padding(
+      null,
+      node.frame,
+      child.constraints,
+      left: (child.frame.topLeft.x - node.frame.topLeft.x).abs(),
+      right: (node.frame.bottomRight.x - child.frame.bottomRight.x).abs(),
+      top: (child.frame.topLeft.y - node.frame.topLeft.y).abs(),
+      bottom: (child.frame.bottomRight.y - node.frame.bottomRight.y).abs(),
+    );
+    padding.addChild(child);
+    node.addChild(padding);
     super._setConstraints(context, node);
   }
 }
@@ -66,34 +68,35 @@ class NoAlignment extends AlignStrategy {
 }
 
 class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
-  /// Do we need to subtract some sort of offset? Maybe child.topLeftCorner.x - topLeftCorner.x?
+  /// Do we need to subtract some sort of offset? Maybe child .frame.topLeft.x - topLeftCorner.x?
 
   @override
   void align(PBContext context, PBIntermediateStackLayout node) {
     var alignedChildren = <PBIntermediateNode>[];
-    node.children.skipWhile((child) {
+    node.children.skipWhile((att) {
+      var child = att;
+
       /// if they are the same size then there is no need for adjusting.
-      if (child.topLeftCorner == node.topLeftCorner &&
-          child.bottomRightCorner == node.bottomRightCorner) {
+      if (child.frame.topLeft == node.frame.topLeft &&
+          child.frame.bottomRight == node.frame.bottomRight) {
         alignedChildren.add(child);
         return true;
       }
       return false;
-    }).forEach((child) {
-      alignedChildren.add(InjectedPositioned(null,
-          child.frame,
+    }).forEach((att) {
+      var child = att;
+      alignedChildren.add(InjectedPositioned(null, child.frame,
           constraints: child.constraints,
-          currentContext: context,
           valueHolder: PositionedValueHolder(
-              top: child.topLeftCorner.y - node.topLeftCorner.y,
-              bottom: node.bottomRightCorner.y - child.bottomRightCorner.y,
-              left: child.topLeftCorner.x - node.topLeftCorner.x,
-              right: node.bottomRightCorner.x - child.bottomRightCorner.x,
-              width: child.width,
-              height: child.height))
+              top: child.frame.topLeft.y - node.frame.topLeft.y,
+              bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
+              left: child.frame.topLeft.x - node.frame.topLeft.x,
+              right: node.frame.bottomRight.x - child.frame.bottomRight.x,
+              width: child.frame.width,
+              height: child.frame.height))
         ..addChild(child));
     });
-    node.replaceChildren(alignedChildren);
+    node.replaceChildren(alignedChildren, context);
     super._setConstraints(context, node);
   }
 }

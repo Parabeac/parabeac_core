@@ -8,12 +8,10 @@ import 'dart:math';
 class PBDestHolder extends PBIntermediateNode {
   PrototypeNode pNode;
 
-  @override
-  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
-
   PBDestHolder(
-      String UUID, Rectangle frame, this.pNode, PBContext currentContext)
-      : super(UUID, frame, '', currentContext: currentContext) {
+      String UUID, Rectangle frame, this.pNode)
+      : super(UUID, frame, '') {
     generator = PBPrototypeGenerator(pNode);
+    childrenStrategy = OneChildStrategy('child');
   }
 }

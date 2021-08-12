@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
@@ -43,13 +44,14 @@ class ProviderMiddleware extends StateManagementMiddleware {
   }
 
   @override
-  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node) {
+  Future<PBIntermediateNode> handleStatefulNode(
+      PBIntermediateNode node, PBContext context) {
     String watcherName;
-    var managerData = node.managerData;
+    var managerData = context.managerData;
     var fileStrategy =
         configuration.fileStructureStrategy as ProviderFileStructureStrategy;
     if (node is PBSharedInstanceIntermediateNode) {
-      node.currentContext.project.genProjectData
+      context.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport(FlutterImport('provider.dart', 'provider'));
       watcherName = getVariableName(node.name.snakeCase + '_notifier');
@@ -99,19 +101,19 @@ class ProviderMiddleware extends StateManagementMiddleware {
           ..addImport(FlutterImport('material.dart', 'flutter')));
     // Write model class for current node
     var code = MiddlewareUtils.generateModelChangeNotifier(
-        watcherName, modelGenerator, node);
+        watcherName, modelGenerator, node, context);
 
     [
       /// This generated the `changeNotifier` that goes under the [fileStrategy.RELATIVE_MODEL_PATH]
       WriteSymbolCommand(
-        node.currentContext.tree.UUID,
+        context.tree.UUID,
         parentDirectory,
         code,
         symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
       ),
       // Generate default node's view page
-      WriteSymbolCommand(node.currentContext.tree.UUID, node.name.snakeCase,
-          generationManager.generate(node),
+      WriteSymbolCommand(context.tree.UUID, node.name.snakeCase,
+          generationManager.generate(node, context),
           relativePath: parentDirectory),
     ].forEach(fileStrategy.commandCreated);
 
@@ -122,9 +124,10 @@ class ProviderMiddleware extends StateManagementMiddleware {
     // Generate node's states' view pages
     node.auxiliaryData?.stateGraph?.states?.forEach((state) {
       fileStrategy.commandCreated(WriteSymbolCommand(
-        state.variation.node.currentContext.tree.UUID,
+        'TODO',
+        // state.variation.node.currentContext.tree.UUID,
         state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node),
+        generationManager.generate(state.variation.node, context),
         relativePath: parentDirectory,
       ));
     });

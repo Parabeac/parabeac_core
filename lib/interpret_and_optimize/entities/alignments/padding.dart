@@ -13,10 +13,7 @@ class Padding extends PBVisualIntermediateNode {
   Map padding;
 
   PBIntermediateConstraints childToParentConstraints;
-
-  @override
-  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
-
+  
   Padding(
     String UUID,
     Rectangle frame,
@@ -25,33 +22,19 @@ class Padding extends PBVisualIntermediateNode {
     this.right = 0,
     this.top = 0,
     this.bottom = 0,
-    PBContext currentContext,
   }) : super(
           UUID,
           frame,
-          currentContext,
           '',
         ) {
     generator = PBPaddingGen();
+    childrenStrategy = OneChildStrategy('child');
   }
 
   @override
-  void addChild(node) {
-    assert(child == null, 'Padding cannot accept multiple children.');
-    child = node;
-
-    // Calculate art board with
-    screenWidth = child.currentContext == null
-        ? (child.bottomRightCorner.x - child.topLeftCorner.x).abs()
-        : (child.currentContext.screenBottomRightCorner.x -
-                child.currentContext.screenTopLeftCorner.x)
-            .abs();
-    // Calculate art board height
-    screenHeight = child.currentContext == null
-        ? (child.bottomRightCorner.y - child.topLeftCorner.y).abs()
-        : (child.currentContext.screenBottomRightCorner.y -
-                child.currentContext.screenTopLeftCorner.y)
-            .abs();
+  void handleChildren(PBContext context) {
+    screenHeight = context.screenFrame.height;
+    screenWidth = context.screenFrame.width;
 
     /// Calculating the percentage of the padding in relation to the [screenHeight] and the [screenWidth].
     /// FIXME: creating a lifecyle between the [PBGenerator] and the [PBIntermediateNode] where it provides a callback that
@@ -74,7 +57,27 @@ class Padding extends PBVisualIntermediateNode {
       bottom = bottom / screenHeight;
       bottom = bottom < 0.01 ? 0.0 : bottom;
     }
+    super.handleChildren(context);
   }
+
+  // @override
+  // void addChild(PBIntermediateNode node) {
+  //   assert(child == null, 'Padding cannot accept multiple children.');
+  //   child = node;
+
+  //   // Calculate art board with
+  //   screenWidth = child.currentContext == null
+  //       ? (child.frame.bottomRight.x - child.frame.topLeft.x).abs()
+  //       : (child.currentContext.screenFrame.bottomRight.x -
+  //               child.currentContext.screenFrame.topLeft.x)
+  //           .abs();
+  //   // Calculate art board height
+  //   screenHeight = child.currentContext == null
+  //       ? (child.frame.bottomRight.y - child.frame.topLeft.y).abs()
+  //       : (child.currentContext.screenFrame.bottomRight.y -
+  //               child.currentContext.screenFrame.topLeft.y)
+  //           .abs();
+  // }
 
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) => null;

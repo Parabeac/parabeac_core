@@ -13,44 +13,43 @@ class InjectedAlign extends PBVisualIntermediateNode
   double alignX;
   double alignY;
 
-  InjectedAlign(
-      String UUID, Rectangle frame, PBContext currentContext, String name)
-      : super(UUID, frame, currentContext, name) {
+  InjectedAlign(String UUID, Rectangle frame, String name)
+      : super(UUID, frame, name) {
     generator = PBAlignGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
 
   @override
   void alignChild() {
-    var maxX = (topLeftCorner.x - bottomRightCorner.x).abs() -
-        (child.bottomRightCorner.x - child.topLeftCorner.x).abs();
-    var parentCenterX = (topLeftCorner.x + bottomRightCorner.x) / 2;
-    var childCenterX = (child.topLeftCorner.x + child.bottomRightCorner.x) / 2;
-    var alignmentX = 0.0;
+    // var maxX = (frame.topLeft.x - frame.bottomRight.x).abs() -
+    //     (child.frame.bottomRight.x - child.frame.topLeft.x).abs();
+    // var parentCenterX = (frame.topLeft.x + frame.bottomRight.x) / 2;
+    // var childCenterX = (child.frame.topLeft.x + child.frame.bottomRight.x) / 2;
+    // var alignmentX = 0.0;
 
-    if (maxX != 0.0) {
-      alignmentX = ((childCenterX - parentCenterX) / maxX) * 2;
-    }
+    // if (maxX != 0.0) {
+    //   alignmentX = ((childCenterX - parentCenterX) / maxX) * 2;
+    // }
 
-    var parentCenterY = (topLeftCorner.y + bottomRightCorner.y) / 2;
-    var maxY = (topLeftCorner.y - bottomRightCorner.y).abs() -
-        (child.bottomRightCorner.y - child.topLeftCorner.y).abs();
-    var childCenterY = (child.topLeftCorner.y + child.bottomRightCorner.y) / 2;
-    var alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
+    // var parentCenterY = (frame.topLeft.y + frame.bottomRight.y) / 2;
+    // var maxY = (frame.topLeft.y - frame.bottomRight.y).abs() -
+    //     (child.frame.bottomRight.y - child.frame.topLeft.y).abs();
+    // var childCenterY = (child.frame.topLeft.y + child.frame.bottomRight.y) / 2;
+    // var alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
 
-    if (maxY != 0.0) {
-      alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
-    }
+    // if (maxY != 0.0) {
+    //   alignmentY = ((childCenterY - parentCenterY) / maxY) * 2;
+    // }
 
-    if (alignmentX.isNaN) {
-      alignmentX = 0;
-    }
-    if (alignmentY.isNaN) {
-      alignmentY = 0;
-    }
+    // if (alignmentX.isNaN) {
+    //   alignmentX = 0;
+    // }
+    // if (alignmentY.isNaN) {
+    //   alignmentY = 0;
+    // }
 
-    alignX = alignmentX.toDouble();
-    alignY = alignmentY.toDouble();
+    // alignX = alignmentX.toDouble();
+    // alignY = alignmentY.toDouble();
   }
 
   @override

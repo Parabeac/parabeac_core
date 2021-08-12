@@ -3,7 +3,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_layer_iterator.dart';
 import 'package:recase/recase.dart';
 import 'package:tuple/tuple.dart';
 import "dart:collection";
@@ -23,6 +25,8 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
     implements IntermediateNodeFactory {
   String _UUID;
   String get UUID => _UUID;
+
+  PBContext context;
 
   /// The [TREE_TYPE] of the [PBIntermediateTree].
   @JsonKey(ignore: true)
@@ -94,9 +98,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   @JsonKey(name: 'name')
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
-  PBIntermediateTree({
-    String name,
-  }) {
+  PBIntermediateTree({String name, this.context}) {
     _name = name;
     _dependentsOn = {};
     _UUID = Uuid().v4();
@@ -118,7 +120,6 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   bool isHomeScreen() =>
       isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
 
-
   /// Finding the depth of the [node] in relation to the [rootNode].
   int depthOf(node) {
     return dist(rootNode, node);
@@ -126,10 +127,10 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
 
   /// Find the distance between [source] and [target], where the [source] is an
   /// ancestor of [target].
-  /// 
-  /// IF [source] IS NOT AN ANCESTOR OF [target] OR [target] IS 
+  ///
+  /// IF [source] IS NOT AN ANCESTOR OF [target] OR [target] IS
   /// NOT PRESENT IN THE [PBIntermediateNode], THEN ITS GOING TO RETURN `-1`.
-  /// This is because the nodes of the tree dont have an out going edge 
+  /// This is because the nodes of the tree dont have an out going edge
   /// pointing towards its parents, all directed edges are going down the tree.
   int dist(PBIntermediateNode source, PBIntermediateNode target,
       {int edgeCost = 1}) {
@@ -162,7 +163,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
         }
 
         /// returning the found [target] distance.
-        if(outNode == target){
+        if (outNode == target) {
           return dist[target];
         }
       }
@@ -172,6 +173,9 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
 
   @override
   Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
+
+  Iterator<List> get layerIterator =>
+      IntermediateLayerIterator(this);
 
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
@@ -191,8 +195,8 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
 /// children by using the [IntermediateDFSIterator]. Furthermore, this allows the
 /// [PBIntermediateTree] to traverse through its nodes, leveraging the dart methods.
 abstract class TraversableNode<E> {
+  String attributeName;
   E parent;
-  int treeLevel;
   List<E> children;
 }
 

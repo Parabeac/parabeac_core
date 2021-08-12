@@ -8,12 +8,12 @@ import 'package:recase/recase.dart';
 class StatelessTemplateStrategy extends TemplateStrategy {
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      PBContext generatorContext,
+      PBContext context,
       {args}) {
     var widgetName = node.name;
-    node.managerData.hasParams = true;
-    var returnStatement = node.generator.generate(node, generatorContext);
-    node.managerData.hasParams = false;
+    context.managerData.hasParams = true;
+    var returnStatement = node.generator.generate(node, context);
+    context.managerData.hasParams = false;
     var overrides = '';
     var overrideVars = '';
 

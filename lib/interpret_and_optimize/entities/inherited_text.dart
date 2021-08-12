@@ -36,10 +36,6 @@ class InheritedText extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'text';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   @JsonKey(name: 'content')
   String text;
   @JsonKey(ignore: true)
@@ -64,8 +60,6 @@ class InheritedText extends PBVisualIntermediateNode
     Rectangle frame, {
     this.originalRef,
     name,
-    PBContext currentContext,
-    this.size,
     this.alignmenttype,
     this.fontName,
     this.fontSize,
@@ -79,7 +73,6 @@ class InheritedText extends PBVisualIntermediateNode
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBTextGen();
@@ -96,8 +89,6 @@ class InheritedText extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedTextFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json
         ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
         ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
@@ -115,11 +106,9 @@ class InheritedText extends PBVisualIntermediateNode
     return InheritedContainer(
       inheritedText.UUID,
       inheritedText.frame,
-      // topLeftCorner: inheritedText.topLeftCorner,
-      // bottomRightCorner: inheritedText.bottomRightCorner,
+      // topLeftCorner: inheritedText .frame.topLeft,
+      // bottomRightCorner: inheritedText .frame.bottomRight,
       name: inheritedText.name,
-      currentContext: inheritedText.currentContext,
-      size: inheritedText.size,
       originalRef: json,
     )..addChild(inheritedText);
   }

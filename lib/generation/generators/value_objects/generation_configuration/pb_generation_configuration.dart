@@ -21,6 +21,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
@@ -75,8 +76,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   }
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
-  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree) =>
-      _head.applyMiddleware(tree);
+  Future<PBIntermediateTree> applyMiddleware(
+          PBIntermediateTree tree, PBContext context) =>
+      _head.applyMiddleware(tree, context);
 
   /// It is generating the [List] of [trees] by passing them through the link list
   /// of [Middleware].
@@ -87,27 +89,28 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// Finally, if the [PBIntermediateTree.isHomeScreen], it will modify the main file to
   /// reflect that information. At the end, the [Middleware] should be executing [FileStructureCommands]
   /// that generate the code for each tree in the [trees].
-  Future<void> generateTrees(
-      List<PBIntermediateTree> trees, PBProject project) async {
-    for (var tree in trees) {
-      tree.rootNode.currentContext.generationManager = generationManager;
-      generationManager.data = tree.data;
-      tree.data.addImport(FlutterImport('material.dart', 'flutter'));
+  Future<void> generateTree(PBIntermediateTree tree, PBProject project,
+      PBContext context, bool lockData) async {
+    fileStructureStrategy.dryRunMode = lockData;
+    tree.lockData = lockData;
+    fileStructureStrategy.addImportsInfo(tree, context);
 
-      // Relative path to the file to create
-      var relPath = p.join(tree.name.snakeCase, tree.identifier);
+    context.generationManager = generationManager;
+    generationManager.data = tree.data;
+    tree.data.addImport(FlutterImport('material.dart', 'flutter'));
 
-      // Change relative path if current tree is part of multi-platform setup
-      if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
-        var platformFolder =
-            poLinker.stripPlatform(tree.rootNode.managerData.platform);
-        relPath = p.join(tree.identifier, platformFolder, tree.identifier);
-      }
-      if (tree.isHomeScreen()) {
-        await _setMainScreen(tree, relPath, MainInfo().projectName);
-      }
-      await applyMiddleware(tree);
+    // Relative path to the file to create
+    var relPath = p.join(tree.name.snakeCase, tree.identifier);
+
+    // Change relative path if current tree is part of multi-platform setup
+    if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
+      var platformFolder = poLinker.stripPlatform(context.managerData.platform);
+      relPath = p.join(tree.identifier, platformFolder, tree.identifier);
     }
+    if (tree.isHomeScreen()) {
+      await _setMainScreen(tree, relPath, MainInfo().projectName);
+    }
+    await applyMiddleware(tree, context);
   }
 
   ///Generates the [PBIntermediateTree]s within the [pb_project]
@@ -120,21 +123,21 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     ///gather all the necessary information
     await setUpConfiguration(pb_project);
 
-    fileStructureStrategy.dryRunMode = true;
+    // fileStructureStrategy.dryRunMode = true;
     fileStructureStrategy.addFileObserver(_importProcessor);
-    pb_project.fileStructureStrategy = fileStructureStrategy;
+    // pb_project.fileStructureStrategy = fileStructureStrategy;
 
-    pb_project.lockData = true;
-    commandQueue.forEach(fileStructureStrategy.commandCreated);
-    await generateTrees(pb_project.forest, pb_project);
-    pb_project.lockData = false;
+    // pb_project.lockData = true;
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // await generateTrees(pb_project.forest, pb_project, context);
+    // pb_project.lockData = false;
 
     ///After the dry run is complete, then we are able to create the actual files.
-    fileStructureStrategy.dryRunMode = false;
+    // fileStructureStrategy.dryRunMode = false;
 
-    commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
     commandQueue.clear();
-    await generateTrees(pb_project.forest, pb_project);
+    // await generateTrees(pb_project.forest, pb_project, context);
 
     await _commitDependencies(processInfo.genProjectPath);
   }
@@ -151,7 +154,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   }
 
   ///Configure the required classes for the [PBGenerationConfiguration]
-  Future<void> setUpConfiguration(PBProject pbProject) async {
+  Future<void> setUpConfiguration(
+      PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
     commandObservers.add(fileStructureStrategy);

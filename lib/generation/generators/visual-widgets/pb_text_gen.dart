@@ -10,12 +10,12 @@ class PBTextGen extends PBGenerator {
   PBTextGen() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
-      source.currentContext.project.genProjectData
+      context.project.genProjectData
           .addDependencies('auto_size_text', '^2.1.0');
 
-      source.managerData
+      context.managerData
           .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
       var buffer = StringBuffer();
       buffer.write('AutoSizeText(\n');
@@ -56,7 +56,7 @@ class PBTextGen extends PBGenerator {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
       if (source.auxiliaryData.color != null) {
-        buffer.write(PBColorGenHelper().generate(source, generatorContext));
+        buffer.write(PBColorGenHelper().generate(source, context));
       }
 
       buffer.write('),');

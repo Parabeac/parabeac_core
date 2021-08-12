@@ -29,13 +29,10 @@ class InjectedContainer extends PBVisualIntermediateNode
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
-  ChildrenStrategy childrenStrategy = TempChildrenStrategy('child');
+
   @override
   @JsonKey()
   String type = 'injected_container';
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
-  Map size;
 
   InjectedContainer(
     UUID,
@@ -44,22 +41,15 @@ class InjectedContainer extends PBVisualIntermediateNode
     double alignX,
     double alignY,
     String color,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
     this.type,
   }) : super(
           UUID,
           frame,
-          currentContext,
-          name, 
+          name,
         ) {
     generator = PBContainerGenerator();
-
-    size = {
-      'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
-      'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
-    };
+    childrenStrategy = TempChildrenStrategy('child');
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>

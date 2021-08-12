@@ -10,17 +10,14 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class Spacer extends PBVisualIntermediateNode {
   int flex;
 
-  @override
-  ChildrenStrategy childrenStrategy = NoChildStrategy();
-
   Spacer(String UUID, Rectangle frame, {this.flex, PBContext currentContext})
       : super(
           UUID,
           frame,
-          currentContext,
           '',
         ) {
     generator = PBSpacerGenerator();
+    childrenStrategy = NoChildStrategy();
   }
 
   @override

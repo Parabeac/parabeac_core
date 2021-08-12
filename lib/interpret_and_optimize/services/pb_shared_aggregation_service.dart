@@ -4,8 +4,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 import 'package:quick_log/quick_log.dart';
+
+import 'intermediate_node_searcher_service.dart';
 
 class PBSharedInterAggregationService {
   PBSymbolStorage _symbolStorage;
@@ -56,7 +57,7 @@ class PBSharedInterAggregationService {
         log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
       if ((prop.value != null) && (prop.type == 'symbolID')) {
-        prop.value.currentContext = rootChildNode.currentContext;
+        // prop.value.currentContext = rootChildNode.currentContext;
 
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
@@ -94,8 +95,8 @@ class PBSharedInterAggregationService {
       return;
     }
     if (masterNode?.SYMBOL_ID == instanceIntermediateNode?.SYMBOL_ID) {
-      instanceIntermediateNode.currentContext
-          .addDependent(masterNode.currentContext.tree);
+      // instanceIntermediateNode.currentContext
+      //     .addDependent(masterNode.currentContext.tree);
 
       ///Get the attributes of the [masterNode] to the [instanceIntermediateNode] here ([instanceIntermediateNode] attributes)
       instanceIntermediateNode.functionCallName = masterNode.name;

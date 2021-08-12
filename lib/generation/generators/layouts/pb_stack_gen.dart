@@ -14,7 +14,6 @@ class PBStackGenerator extends PBGenerator {
       if (source.children.isNotEmpty) {
         buffer.write('\nchildren: [');
         for (var index = 0; index < source.children.length; index++) {
-          source.children[index].currentContext = source.currentContext;
           var element = source.children[index].generator
               .generate(source.children[index], generatorContext);
           buffer.write(element);

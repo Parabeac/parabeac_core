@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 
@@ -38,26 +39,26 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
       var prevChild = children[i - 1];
 
       var spacerLength = isVertical
-          ? _calculateHeight(prevChild.bottomRightCorner, child.topLeftCorner)
-          : _calculateWidth(prevChild.bottomRightCorner, child.topLeftCorner);
+          ? _calculateHeight(prevChild.frame.bottomRight, child.frame.topLeft)
+          : _calculateWidth(prevChild.frame.bottomRight, child.frame.topLeft);
 
       if (spacerLength > 0) {
         var flex = _calculateFlex(spacerLength, parentLength);
         resultingChildren.add(Spacer(
-            null,
-            Rectangle.fromPoints(
-                isVertical
-                    ? Point(prevChild.topLeftCorner.x,
-                        prevChild.bottomRightCorner.y)
-                    : Point(prevChild.bottomRightCorner.x,
-                        prevChild.topLeftCorner.y),
-                isVertical
-                    ? Point(child.bottomRightCorner.x, child.topLeftCorner.y)
-                    : Point(child.topLeftCorner.x,
-                        child.bottomRightCorner.y)), //brc
+          null,
+          Rectangle.fromPoints(
+              isVertical
+                  ? Point(
+                      prevChild.frame.topLeft.x, prevChild.frame.bottomRight.y)
+                  : Point(
+                      prevChild.frame.bottomRight.x, prevChild.frame.topLeft.y),
+              isVertical
+                  ? Point(child.frame.bottomRight.x, child.frame.topLeft.y)
+                  : Point(
+                      child.frame.topLeft.x, child.frame.bottomRight.y)), //brc
 
-            flex: flex,
-            currentContext: children.first.currentContext));
+          flex: flex,
+        ));
       }
     }
 
@@ -80,10 +81,9 @@ PBIntermediateNode _putChildInFlex(
     bool isVertical, PBIntermediateNode child, double parentLength) {
   //Calculate child flex
   var widgetLength = isVertical
-      ? _calculateHeight(child.topLeftCorner, child.bottomRightCorner)
-      : _calculateWidth(child.topLeftCorner, child.bottomRightCorner);
+      ? _calculateHeight(child.frame.topLeft, child.frame.bottomRight)
+      : _calculateWidth(child.frame.topLeft, child.frame.bottomRight);
   var flex = _calculateFlex(widgetLength.abs(), parentLength.abs());
 
-  return Flexible(null, child.frame,
-      currentContext: child.currentContext, child: child, flex: flex);
+  return Flexible(null, child.frame, child: child, flex: flex);
 }

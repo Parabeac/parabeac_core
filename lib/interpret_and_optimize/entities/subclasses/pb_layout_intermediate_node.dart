@@ -4,7 +4,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions/layout_exception.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -15,11 +14,6 @@ import 'package:uuid/uuid.dart';
 /// Superclass: PBIntermediateNode
 abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     implements PBInjectedIntermediate, PrototypeEnable {
-  ///Getting the children
-  @override
-  List<PBIntermediateNode> get children =>
-      getAttributeNamed('children')?.attributeNodes;
-
   ///The rules of the layout. MAKE SURE TO REGISTER THEIR CUSTOM RULES
   final List<LayoutRule> _layoutRules;
 
@@ -37,22 +31,15 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   Map alignment = {};
 
-  PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules, this._exceptions,
-      PBContext currentContext, String name,
-      {
-      this.prototypeNode,
-      PBIntermediateConstraints constraints})
-      : super(UUID ?? Uuid().v4(), frame, name,
-            currentContext: currentContext, constraints: constraints) {
-    // Declaring children for layout node
-    addAttribute(PBAttribute('children'));
-  }
+  PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules,
+      this._exceptions, String name,
+      {this.prototypeNode, PBIntermediateConstraints constraints})
+      : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints);
 
   ///Replace the current children with the [children]
-  void replaceChildren(List<PBIntermediateNode> children) {
+  void replaceChildren(List<PBIntermediateNode> children, PBContext context) {
     if (children.isNotEmpty) {
-      getAttributeNamed('children')?.attributeNodes = children;
-      resize();
+      resize(context);
     } else {
       logger.warning(
           'Trying to add a list of children to the $runtimeType that is either null or empty');
@@ -63,50 +50,61 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   /// Returns true if the replacement wsa succesful, false otherwise.
   bool replaceChildAt(int index, PBIntermediateNode replacement) {
     if (children != null && children.length > index) {
-      getAttributeNamed('children').attributeNodes[index] = replacement;
+      children[index] = replacement;
       return true;
     }
     return false;
   }
 
-  ///Add node to child
-  void addChildToLayout(PBIntermediateNode node) {
-    getAttributeNamed('children').attributeNodes.add(node);
-    resize();
+  @override
+  void addChild(PBIntermediateNode node) {
+    super.addChild(node);
   }
 
-  void resize() {
+  @override
+  void handleChildren(PBContext context) {
+    resize(context);
+    super.handleChildren(context);
+  }
+
+  ///Add node to child
+  // void addChildToLayout(PBIntermediateNode node) {
+  //   getAttributeNamed('children').attributeNodes.add(node);
+  //   resize();
+  // }
+
+  void resize(PBContext context) {
     if (children.isEmpty) {
       logger
           .warning('There should be children in the layout so it can resize.');
       return;
     }
-    var minX = (children[0]).topLeftCorner.x,
-        minY = (children[0]).topLeftCorner.y,
-        maxX = (children[0]).bottomRightCorner.x,
-        maxY = (children[0]).bottomRightCorner.y;
+    var minX = (children[0]).frame.topLeft.x,
+        minY = (children[0]).frame.topLeft.y,
+        maxX = (children[0]).frame.bottomRight.x,
+        maxY = (children[0]).frame.bottomRight.y;
     for (var child in children) {
-      minX = min((child).topLeftCorner.x, minX);
-      minY = min((child).topLeftCorner.y, minY);
-      maxX = max((child).bottomRightCorner.x, maxX);
-      maxY = max((child).bottomRightCorner.y, maxY);
+      minX = min((child).frame.topLeft.x, minX);
+      minY = min((child).frame.topLeft.y, minY);
+      maxX = max((child).frame.bottomRight.x, maxX);
+      maxY = max((child).frame.bottomRight.y, maxY);
     }
-    topLeftCorner = Point(minX, minY);
-    bottomRightCorner = Point(maxX, maxY);
+    frame = Rectangle.fromPoints(Point(minX, minY), Point(maxX, maxY));
   }
 
   ///Remove Child
-  bool removeChildren(PBIntermediateNode node) {
+  bool removeChildren(PBIntermediateNode node, PBContext context) {
     if (children.contains(node)) {
       children.remove(node);
     }
-    resize();
+    resize(context);
     return false;
   }
 
   ///Sort children
-  void sortChildren() => children.sort(
-      (child0, child1) => child0.topLeftCorner.compareTo(child1.topLeftCorner));
+  void sortChildren() =>
+      children.sort((child0, child1) => child0.frame.topLeft
+          .compareTo(child1.frame.topLeft));
 
   ///The [PBLayoutIntermediateNode] contains a series of rules that determines if the children is part of that layout. All the children
   ///are going to have to meet the rules that the [PBLayoutIntermediateNode] presents. This method presents a way of comparing two children [PBIntermediateNode]
@@ -133,43 +131,43 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       List<PBIntermediateNode> children, PBContext currentContext, String name);
 
   void checkCrossAxisAlignment() {
-    if (attributes.first.attributeNode != null) {
-      var attributesTopLeft = attributes.first.attributeNode.topLeftCorner;
+    // if (attributes.first.attributeNode != null) {
+    //   var attributesTopLeft = attributes.first.attributeNode.frame.topLeft;
 
-      var attributesBottomRight =
-          attributes.last.attributeNode.bottomRightCorner;
+    //   var attributesBottomRight =
+    //       attributes.last.attributeNode.frame.bottomRight;
 
-      var leftDifference = (topLeftCorner.x - attributesTopLeft.x).abs();
+    //   var leftDifference = (frame.topLeft.x - attributesTopLeft.x).abs();
 
-      var rightDifference =
-          (bottomRightCorner.x - attributesBottomRight.x).abs();
+    //   var rightDifference =
+    //       (frame.bottomRight.x - attributesBottomRight.x).abs();
 
-      var topDifference = (topLeftCorner.y - attributesTopLeft.y).abs();
+    //   var topDifference = (frame.topLeft.y - attributesTopLeft.y).abs();
 
-      var bottomDifference =
-          (bottomRightCorner.y - attributesBottomRight.y).abs();
+    //   var bottomDifference =
+    //       (frame.bottomRight.y - attributesBottomRight.y).abs();
 
-      if (leftDifference < rightDifference) {
-        alignment['mainAxisAlignment'] =
-            'mainAxisAlignment: MainAxisAlignment.start,';
-      } else if (leftDifference > rightDifference) {
-        alignment['mainAxisAlignment'] =
-            'mainAxisAlignment: MainAxisAlignment.end,';
-      } else {
-        alignment['mainAxisAlignment'] =
-            'mainAxisAlignment: MainAxisAlignment.center,';
-      }
+    //   if (leftDifference < rightDifference) {
+    //     alignment['mainAxisAlignment'] =
+    //         'mainAxisAlignment: MainAxisAlignment.start,';
+    //   } else if (leftDifference > rightDifference) {
+    //     alignment['mainAxisAlignment'] =
+    //         'mainAxisAlignment: MainAxisAlignment.end,';
+    //   } else {
+    //     alignment['mainAxisAlignment'] =
+    //         'mainAxisAlignment: MainAxisAlignment.center,';
+    //   }
 
-      if (topDifference < bottomDifference) {
-        alignment['crossAxisAlignment'] =
-            'crossAxisAlignment: CrossAxisAlignment.start,';
-      } else if (topDifference > bottomDifference) {
-        alignment['crossAxisAlignment'] =
-            'crossAxisAlignment: CrossAxisAlignment.end,';
-      } else {
-        alignment['crossAxisAlignment'] =
-            'crossAxisAlignment: CrossAxisAlignment.center,';
-      }
-    }
+    //   if (topDifference < bottomDifference) {
+    //     alignment['crossAxisAlignment'] =
+    //         'crossAxisAlignment: CrossAxisAlignment.start,';
+    //   } else if (topDifference > bottomDifference) {
+    //     alignment['crossAxisAlignment'] =
+    //         'crossAxisAlignment: CrossAxisAlignment.end,';
+    //   } else {
+    //     alignment['crossAxisAlignment'] =
+    //         'crossAxisAlignment: CrossAxisAlignment.center,';
+    //   }
+    // }
   }
 }

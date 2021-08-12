@@ -26,7 +26,7 @@ class AbstractIntermediateNodeFactory {
     InheritedContainer('$InheritedContainer', null),
     InheritedOval('$InheritedOval', null),
     InheritedPolygon('$InheritedPolygon', null),
-    InheritedScaffold('$InheritedScaffold', null),
+    InheritedScaffold('$InheritedScaffold', null, null, null),
     InheritedShapeGroup('$InheritedShapeGroup', null),
     InheritedShapePath('$InheritedShapePath', null),
     InheritedStar('$InheritedStar', null),

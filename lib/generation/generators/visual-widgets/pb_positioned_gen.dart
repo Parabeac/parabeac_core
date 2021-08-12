@@ -17,15 +17,15 @@ class PBPositionedGenerator extends PBGenerator {
   PBPositionedGenerator({this.overrideChildDim = false}) : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is InjectedPositioned) {
       var buffer = StringBuffer('Positioned(');
 
-      var boilerplate = _getBoilerplate(generatorContext.sizingContext);
+      var boilerplate = _getBoilerplate(context.sizingContext);
       var xAxisBoilerplate = boilerplate.item1;
       var yAxisBoilerplate = boilerplate.item2;
 
-      if (generatorContext.tree.first.name == 'ArtboardTRpinnoscale') {
+      if (context.tree.first.name == 'ArtboardTRpinnoscale') {
         print('asdf');
       }
 
@@ -45,10 +45,10 @@ class PBPositionedGenerator extends PBGenerator {
 
       var positionalAtt = _getPositionalAtt(valueHolder, source.constraints);
 
-      if (!(generatorContext.sizingContext == SizingValueContext.PointValue)) {
+      if (!(context.sizingContext == SizingValueContext.PointValue)) {
         /// [SizingValueContext.PointValue] is the only value in which dont change based on another scale/sizing
 
-        var ratio = source.currentContext.getRatioPercentage;
+        var ratio = context.getRatioPercentage;
         for (var attribute in positionalAtt) {
           if (!attribute.remainPointValue) {
             attribute.value =
@@ -79,9 +79,9 @@ class PBPositionedGenerator extends PBGenerator {
         //       'right: ${_normalizeValue(xAxisBoilerplate, valueHolder.right)}, bottom: ${_normalizeValue(yAxisBoilerplate, valueHolder.bottom)},');
         // }
 
-        source.child.currentContext = source.currentContext;
+        // source.child.currentContext = source.currentContext;
         buffer.write(
-            'child: ${source.child.generator.generate(source.child, generatorContext)},');
+            'child: ${source.child.generator.generate(source.child, context)},');
       } catch (e) {
         logger.error(e.toString());
         MainInfo().captureException(

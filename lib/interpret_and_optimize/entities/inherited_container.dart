@@ -35,33 +35,21 @@ class InheritedContainer extends PBVisualIntermediateNode
   String type = 'rectangle';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
-
-  @override
-  @JsonKey(ignore: true)
-  List<PBIntermediateNode> get children => null;
 
   InheritedContainer(
     String UUID,
     Rectangle frame, {
     this.originalRef,
-    Rectangle rectangle,
     String name,
     double alignX,
     double alignY,
-    PBContext currentContext,
     this.isBackgroundVisible = true,
-    this.size,
     this.prototypeNode,
   }) : super(
           UUID,
-          rectangle,
-          currentContext,
+          frame,
           name,
         ) {
     generator = PBContainerGenerator();
@@ -75,8 +63,6 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     container.mapRawChildren(json);

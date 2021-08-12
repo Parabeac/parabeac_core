@@ -1,10 +1,9 @@
 import 'dart:io';
-
+import 'dart:math';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'dart:convert';
-
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
@@ -43,37 +42,36 @@ class Interpret {
 
   final List<AITHandler> aitHandlers = [
     PBSymbolLinkerService(),
-    PBPluginControlService(),
+    // PBPluginControlService(),
     PBLayoutGenerationService(),
     PBConstraintGenerationService(),
     PBAlignGenerationService()
   ];
 
-  Future<PBProject> interpretAndOptimize(
-      PBDLProject project, PBConfiguration configuration,
-      {List<AITHandler> handlers,
-      PBContext context,
-      AITServiceBuilder aitServiceBuilder}) async {
+  Future<PBIntermediateTree> interpretAndOptimize(
+      PBIntermediateTree tree, PBContext context, PBProject project,
+      {List<AITHandler> handlers, AITServiceBuilder aitServiceBuilder}) async {
     handlers ??= aitHandlers;
-    context ??= PBContext(configuration);
 
-    aitServiceBuilder ??= AITServiceBuilder(context, aitHandlers);
+    aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
 
-    var _pbProject = PBProject.fromJson(project.toJson());
-    context.project = _pbProject;
+    /// This is a workaround for adding missing information to either the [PBContext] or any of the
+    /// [PBIntermediateNode]s.
+    aitServiceBuilder.addTransformation(
+        (PBContext context, PBIntermediateTree tree) {
+      context.project = project;
 
-    _pbProject.projectAbsPath =
-        p.join(MainInfo().outputPath, MainInfo().projectName);
+      /// Assuming that the [tree.rootNode] has the dimensions of the screen.
+      context.screenFrame = Rectangle.fromPoints(
+          tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+      context.tree = tree;
+      tree.context = context;
+      return Future.value(tree);
+    }, index: 0, id: 'Assigning $PBContext to $PBIntermediateTree');
 
-    _pbProject.forest = await Future.wait(_pbProject.forest
-        .map((tree) => aitServiceBuilder.build(tree: tree))
-        .toList());
-    _pbProject.forest.removeWhere((element) => element == null);
+    // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
-    // TODO: do this in just one go
-    await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
-
-    return _pbProject;
+    return aitServiceBuilder.build(tree: tree, context: context);
   }
 }
 
@@ -83,7 +81,6 @@ class AITServiceBuilder {
   PBIntermediateTree _intermediateTree;
   set intermediateTree(PBIntermediateTree tree) => _intermediateTree = tree;
 
-  final PBContext _context;
   Stopwatch _stopwatch;
 
   /// These are the [AITHandler]s that are going to be transforming
@@ -91,8 +88,7 @@ class AITServiceBuilder {
   /// [Tuple2.item2] is the actual [AITHandler]
   final List<Tuple2> _transformations = [];
 
-  AITServiceBuilder(this._context,
-      [List transformations, PBIntermediateTree tree]) {
+  AITServiceBuilder([List transformations, PBIntermediateTree tree]) {
     log = Logger(runtimeType.toString());
     _stopwatch = Stopwatch();
     _intermediateTree = tree;
@@ -107,12 +103,14 @@ class AITServiceBuilder {
 
   /// Adding a [transformation] that will be applyed to the [PBIntermediateTree]. The [id]
   /// is to [log] the [transformation].
-  AITServiceBuilder addTransformation(transformation, {String id}) {
+  AITServiceBuilder addTransformation(transformation, {String id, int index}) {
     id ??= transformation.runtimeType.toString();
+    index ??= _transformations.length;
     if (transformation is AITHandler) {
-      _transformations.add(Tuple2(id, transformation.handleTree));
-    } else if (transformation is AITNodeTransformation) {
-      _transformations.add(Tuple2(id, transformation));
+      _transformations.insert(index, Tuple2(id, transformation.handleTree));
+    } else if (transformation is AITNodeTransformation ||
+        transformation is AITTransformation) {
+      _transformations.insert(index, Tuple2(id, transformation));
     }
     return this;
   }
@@ -125,7 +123,8 @@ class AITServiceBuilder {
         transformation.item2 is! AITTransformation);
   }
 
-  Future<PBIntermediateTree> build({PBIntermediateTree tree}) async {
+  Future<PBIntermediateTree> build(
+      {PBIntermediateTree tree, PBContext context}) async {
     if (_intermediateTree == null && tree == null) {
       throw NullThrownError();
     }
@@ -143,10 +142,10 @@ class AITServiceBuilder {
       try {
         if (transformation is AITNodeTransformation) {
           for (var node in _intermediateTree) {
-            node = await transformation(_context, node);
+            node = await transformation(context, node, _intermediateTree);
           }
         } else if (transformation is AITTransformation) {
-          _intermediateTree = await transformation(_context, _intermediateTree);
+          _intermediateTree = await transformation(context, _intermediateTree);
         }
 
         if (_intermediateTree == null || _intermediateTree.rootNode == null) {
@@ -184,4 +183,4 @@ abstract class AITHandler {
 typedef AITTransformation = Future<PBIntermediateTree> Function(
     PBContext, PBIntermediateTree);
 typedef AITNodeTransformation = Future<PBIntermediateNode> Function(
-    PBContext, PBIntermediateNode);
+    PBContext, PBIntermediateNode, PBIntermediateTree);

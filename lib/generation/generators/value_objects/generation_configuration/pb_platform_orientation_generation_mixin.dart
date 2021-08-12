@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
@@ -73,20 +74,20 @@ mixin PBPlatformOrientationGeneration {
     return result;
   }
 
-  void getPlatformOrientationName(PBIntermediateNode node) {
+  void getPlatformOrientationName(PBIntermediateNode node, PBContext context) {
     var map = PBPlatformOrientationLinkerService()
-        .getPlatformOrientationData(node.currentContext.tree.identifier);
+        .getPlatformOrientationData(context.tree.identifier);
 
     if (map.length > 1) {
       var platform = PBPlatformOrientationLinkerService()
-          .stripPlatform(node.currentContext.tree.data.platform);
+          .stripPlatform(context.tree.data.platform);
       if (!node.name.contains('_$platform')) {
         node.name += '_$platform';
       }
     }
-    if (map[node.currentContext.tree.data.platform].length > 1) {
+    if (map[context.tree.data.platform].length > 1) {
       var orientation = PBPlatformOrientationLinkerService()
-          .stripOrientation(node.currentContext.tree.data.orientation);
+          .stripOrientation(context.tree.data.orientation);
       if (!node.name.contains('_$orientation')) {
         node.name += '_$orientation';
       }

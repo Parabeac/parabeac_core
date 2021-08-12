@@ -6,29 +6,23 @@ class PBSizeHelper extends PBAttributesHelper {
   PBSizeHelper() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
-    if (source.currentContext == null) {
+  String generate(PBIntermediateNode source, PBContext context) {
+    if (context == null) {
       print('Tried generating a size but couldn\'t retrieve [currentContext]');
       return '';
     }
 
     final buffer = StringBuffer();
 
-    var body = source.size ?? {};
-    double relativeHeight = body['height'];
-    double relativeWidth = body['width'];
+    double relativeHeight = source.frame.height;
+    double relativeWidth = source.frame.width;
 
     //Add relative sizing if the widget has context
     var screenWidth;
     var screenHeight;
-    if (source.currentContext.screenTopLeftCorner != null &&
-        source.currentContext.screenBottomRightCorner != null) {
-      screenWidth = ((source.currentContext.screenTopLeftCorner.x) -
-              (source.currentContext.screenBottomRightCorner.x))
-          .abs();
-      screenHeight = ((source.currentContext.screenTopLeftCorner.y) -
-              (source.currentContext.screenBottomRightCorner.y))
-          .abs();
+    if (context.screenFrame != null) {
+      screenWidth = context.screenFrame.width;
+      screenHeight = context.screenFrame.height;
     }
 
     relativeHeight =
@@ -40,25 +34,24 @@ class PBSizeHelper extends PBAttributesHelper {
             ? relativeWidth / screenWidth
             : relativeWidth;
 
-    if (generatorContext.sizingContext == SizingValueContext.ScaleValue) {
+    if (context.sizingContext == SizingValueContext.ScaleValue) {
       var height = source.constraints.fixedHeight != null
-          ? body['height'].toStringAsFixed(3)
+          ? relativeHeight.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.height * ${relativeHeight.toStringAsFixed(3)}';
       var width = source.constraints.fixedWidth != null
-          ? body['width'].toStringAsFixed(3)
+          ? relativeWidth.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.width * ${relativeWidth.toStringAsFixed(3)}';
 
       // buffer.write(
       //     'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
-    } else if (generatorContext.sizingContext ==
-        SizingValueContext.LayoutBuilderValue) {
+    } else if (context.sizingContext == SizingValueContext.LayoutBuilderValue) {
       buffer.write(
           'width: constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},');
       buffer.write(
           'height: constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},');
     } else {
-      relativeHeight = body['height'];
-      relativeWidth = body['width'];
+      // relativeHeight = body['height'];
+      // relativeWidth = body['width'];
       if (relativeWidth != null) {
         buffer.write('width: ${relativeWidth.toStringAsFixed(3)},');
       }

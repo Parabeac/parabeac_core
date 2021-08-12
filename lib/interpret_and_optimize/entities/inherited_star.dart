@@ -32,9 +32,7 @@ class InheritedStar extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'star';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
+ 
 
   @override
   @JsonKey(ignore: true)
@@ -46,13 +44,10 @@ class InheritedStar extends PBVisualIntermediateNode
     this.originalRef,
     name,
     Uint8List image,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBBitmapGenerator();
@@ -64,8 +59,8 @@ class InheritedStar extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedStarFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // . .frame.topLeft = Point.topLeftFromJson(json)
+        // . .frame.bottomRight = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

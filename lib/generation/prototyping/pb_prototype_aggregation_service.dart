@@ -8,6 +8,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:path/path.dart';
 
 /// This class keeps track of the [PrototypeNode]s that do not have necessary
 /// properties from their destination [PBIntermediateNode] and populates them
@@ -35,27 +37,29 @@ class PBPrototypeAggregationService {
   /// Iterates through `_unregNodes` to find whether any [PBPrototypeNode]'s
   /// `destinationUUID` matches the `node` UUID. If there is a match, populate
   /// the [PrototypeNode].
-  Future<void> analyzeIntermediateNode(PBIntermediateNode node) async {
+  Future<void> analyzeIntermediateNode(
+      PBIntermediateNode node, PBContext context) async {
     if (node is InheritedScaffold) {
       screens.add(node);
 
       ///check if any of the [IntermediateNode]s looking for a destination contains their destination.
-      iterateUnregisterNodes(node);
+      iterateUnregisterNodes(node, context);
     } else if (node is PrototypeEnable) {
       var page = _storage.getPageNodeById(
           (node as PrototypeEnable).prototypeNode.destinationUUID);
       if (page == null) {
         _unregNodes.add(node as PrototypeEnable);
       } else {
-        _addDependent(node, page);
+        _addDependent(node, page, context);
       }
     }
     _unregNodes.removeWhere(
         (pNode) => pNode.prototypeNode.destinationUUID == node.UUID);
   }
 
-  void _addDependent(PBIntermediateNode target, PBIntermediateNode dependent) {
-    target.currentContext.addDependent(dependent.currentContext.tree);
+  void _addDependent(PBIntermediateNode target, PBIntermediateNode dependent,
+      PBContext context) {
+    context.addDependent(context.tree);
   }
 
   /// Provide the `pNode` with the necessary attributes it needs from the `iNode`
@@ -65,26 +69,37 @@ class PBPrototypeAggregationService {
       return iNode;
     } else if (iNode is PBInheritedIntermediate) {
       var destHolder = PBDestHolder(
-          iNode.UUID,
-          iNode.frame,
-          (iNode as PBInheritedIntermediate).prototypeNode,
-          iNode.currentContext);
+        iNode.UUID,
+        iNode.frame,
+        (iNode as PBInheritedIntermediate).prototypeNode,
+      );
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is PBLayoutIntermediateNode) {
       var destHolder = PBDestHolder(
-          iNode.UUID, iNode.frame, iNode.prototypeNode, iNode.currentContext);
+        iNode.UUID,
+        iNode.frame,
+        iNode.prototypeNode,
+      );
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is InjectedContainer) {
       var destHolder = PBDestHolder(
-          iNode.UUID, iNode.frame, iNode.prototypeNode, iNode.currentContext);
+        iNode.UUID,
+        iNode.frame,
+        iNode.prototypeNode,
+      );
       destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is Tab) {
       var destHolder = PBDestHolder(
-          iNode.UUID, iNode.frame, iNode.prototypeNode, iNode.currentContext);
-      destHolder.addChild(iNode.child);
+        iNode.UUID,
+        iNode.frame,
+        iNode.prototypeNode,
+      );
+      iNode.children.forEach((element) {
+        destHolder.addChild(element);
+      });
       return destHolder;
     } else {
       return iNode;
@@ -95,19 +110,19 @@ class PBPrototypeAggregationService {
   // This temporal solution solves the issue for topological sorting
   // when two screens link each other, but one comes first
   // and does not get linked to the proper button on the screen
-  Future<void> linkDanglingPrototypeNodes() async {
+  Future<void> linkDanglingPrototypeNodes(PBContext context) async {
     if (_unregNodes.isNotEmpty) {
       for (var screen in screens) {
-        iterateUnregisterNodes(screen);
+        iterateUnregisterNodes(screen, context);
       }
     }
   }
 
-  void iterateUnregisterNodes(PBIntermediateNode node) {
+  void iterateUnregisterNodes(PBIntermediateNode node, PBContext context) {
     for (var _pNode in _unregNodes) {
       if (_pNode.prototypeNode.destinationUUID == node.UUID) {
         _pNode.prototypeNode.destinationName = node.name;
-        _addDependent(_pNode as PBIntermediateNode, node);
+        _addDependent(_pNode as PBIntermediateNode, node, context);
       }
     }
   }

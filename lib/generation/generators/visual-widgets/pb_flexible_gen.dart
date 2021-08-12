@@ -9,15 +9,15 @@ class PBFlexibleGenerator extends PBGenerator {
   PBFlexibleGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is Flexible) {
       var buffer = StringBuffer();
       buffer.write('Flexible(');
       buffer.write('flex: ${source.flex},');
       try {
-        source.child.currentContext = source.currentContext;
+        // source.child.currentContext = source.currentContext;
         buffer.write(
-            'child: ${source.child.generator.generate(source.child, generatorContext)},');
+            'child: ${source.child.generator.generate(source.child, context)},');
       } catch (e) {
         log.error(e.toString());
       }

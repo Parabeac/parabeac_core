@@ -36,15 +36,15 @@ class HorizontalNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (!(areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner))) &&
+          currentNode .frame.topLeft,
+          currentNode .frame.bottomRight,
+          nextNode .frame.topLeft,
+          nextNode .frame.bottomRight))) &&
       areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+          currentNode .frame.topLeft,
+          currentNode .frame.bottomRight,
+          nextNode .frame.topLeft,
+          nextNode .frame.bottomRight);
 }
 
 ///Returns if the points [topLeftCorner0] and [bottomRightCorner0]
@@ -54,28 +54,30 @@ class VerticalNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (!(areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner))) &&
+          currentNode .frame.topLeft,
+          currentNode .frame.bottomRight,
+          nextNode .frame.topLeft,
+          nextNode .frame.bottomRight))) &&
       areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+          currentNode .frame.topLeft,
+          currentNode .frame.bottomRight,
+          nextNode .frame.topLeft,
+          nextNode .frame.bottomRight);
 }
 
 class OverlappingNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
-      (areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner)) &&
-      areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+      currentNode.frame.containsPoint(nextNode.frame.topLeft) ||
+      currentNode.frame.containsPoint(nextNode.frame.bottomRight);
+  // (areXCoordinatesOverlapping(
+  //     currentNode .frame.topLeft,
+  //     currentNode .frame.bottomRight,
+  //     nextNode .frame.topLeft,
+  //     nextNode .frame.bottomRight)) &&
+  // areYCoordinatesOverlapping(
+  //     currentNode .frame.topLeft,
+  //     currentNode .frame.bottomRight,
+  //     nextNode .frame.topLeft,
+  //     nextNode .frame.bottomRight);
 }

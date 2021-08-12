@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
@@ -27,35 +28,35 @@ class CommandGenMiddleware extends Middleware
   }
 
   @override
-  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree) {
+  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree, PBContext context) {
     if (tree == null) {
       return Future.value(tree);
     }
 
     var command;
-    _addDependencyImports(tree, packageName);
+    _addDependencyImports(tree, packageName, context);
     if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
-      getPlatformOrientationName(tree.rootNode);
+      getPlatformOrientationName(tree.rootNode, context);
 
       command = ExportPlatformCommand(
         tree.UUID,
-        tree.rootNode.currentContext.tree.data.platform,
+        context.tree.data.platform,
         tree.identifier,
         tree.rootNode.name.snakeCase,
-        generationManager.generate(tree.rootNode),
+        generationManager.generate(tree.rootNode, context),
       );
     } else if (tree.isScreen()) {
       command = WriteScreenCommand(
         tree.UUID,
         tree.identifier,
         tree.name,
-        generationManager.generate(tree.rootNode),
+        generationManager.generate(tree.rootNode, context),
       );
     } else {
       command = WriteSymbolCommand(
         tree.UUID,
         tree.identifier,
-        generationManager.generate(tree.rootNode),
+        generationManager.generate(tree.rootNode, context),
         relativePath: tree.name,
       );
     }
@@ -69,9 +70,9 @@ class CommandGenMiddleware extends Middleware
   /// If an import path is found, it will be added to the `tree`'s data. The package format
   /// for imports is going to be enforced, therefore, [packageName] is going to be
   /// a required parameter.
-  void _addDependencyImports(PBIntermediateTree tree, String packageName) {
+  void _addDependencyImports(PBIntermediateTree tree, String packageName, PBContext context) {
     var iter = tree.dependentsOn;
-    var addImport = tree.rootNode.managerData.addImport;
+    var addImport = context.managerData.addImport;
 
     while (iter.moveNext()) {
       _importProcessor.getFormattedImports(

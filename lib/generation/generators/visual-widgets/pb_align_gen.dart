@@ -10,7 +10,7 @@ class PBAlignGenerator extends PBGenerator {
   PBAlignGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is InjectedAlign) {
       var buffer = StringBuffer();
       buffer.write('Align(');
@@ -19,9 +19,9 @@ class PBAlignGenerator extends PBGenerator {
           'alignment: Alignment(${source.alignX.toStringAsFixed(2)}, ${source.alignY.toStringAsFixed(2)}),');
 
       try {
-        source.child.currentContext = source.currentContext;
+        // source.child.currentContext = source.currentContext;
         buffer.write(
-            'child: ${source.child.generator.generate(source.child, generatorContext)},');
+            'child: ${source.child.generator.generate(source.child, context)},');
       } catch (e, stackTrace) {
         MainInfo().sentry.captureException(
               exception: e,

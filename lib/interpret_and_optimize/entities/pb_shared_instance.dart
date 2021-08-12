@@ -49,9 +49,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'shared_instance';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
 
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
@@ -67,15 +64,12 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.originalRef,
     this.SYMBOL_ID,
     this.sharedParamValues,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
     this.overrideValues,
     String name,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBSymbolInstanceGenerator();
@@ -94,8 +88,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$PBSharedInstanceIntermediateNodeFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // . .frame.topLeft = Point.topLeftFromJson(json)
+        // . .frame.bottomRight = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

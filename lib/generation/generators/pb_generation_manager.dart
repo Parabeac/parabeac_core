@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
@@ -24,7 +25,7 @@ abstract class PBGenerationManager {
     _data = data;
   }
 
-  String generate(PBIntermediateNode rootNode);
+  String generate(PBIntermediateNode rootNode, PBContext context);
 
   Set<String> getPaths(String uuid) => PBGenCache().getPaths(uuid);
 

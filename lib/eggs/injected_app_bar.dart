@@ -7,57 +7,52 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
 
-  @override
-  AlignStrategy alignStrategy = CustomAppBarAlignment();
+  PBIntermediateNode get leadingItem => getAttributeNamed('leading');
+  PBIntermediateNode get middleItem => getAttributeNamed('title');
+  PBIntermediateNode get trailingItem => getAttributeNamed('actions');
 
-  @override
-  List<PBIntermediateNode> get children =>
-      [leadingItem, middleItem, trailingItem];
-
-  PBIntermediateNode get leadingItem =>
-      getAttributeNamed('leading')?.attributeNode;
-  PBIntermediateNode get middleItem =>
-      getAttributeNamed('title')?.attributeNode;
-  PBIntermediateNode get trailingItem =>
-      getAttributeNamed('actions')?.attributeNode;
-
-  InjectedAppbar(String UUID, Rectangle frame, String name,
-      {PBContext currentContext})
-      : super(UUID, frame, currentContext, name) {
+  InjectedAppbar(
+    String UUID,
+    Rectangle frame,
+    String name,
+  ) : super(UUID, frame, name) {
     generator = PBAppBarGenerator();
-    addAttribute(PBAttribute('leading'));
-    addAttribute(PBAttribute('title'));
-    addAttribute(PBAttribute('actions'));
+    alignStrategy = CustomAppBarAlignment();
   }
 
   @override
-  void addChild(node) {
+  void addChild(PBIntermediateNode node) {
     if (node is PBInheritedIntermediate) {
+      var attName = 'child';
       if (node.name.contains('<leading>')) {
-        getAttributeNamed('leading').attributeNode = node;
+        attName = 'leading';
       }
-
       if (node.name.contains('<trailing>')) {
-        getAttributeNamed('actions').attributeNode = node;
+        attName = 'actions';
       }
       if (node.name.contains('<middle>')) {
-        getAttributeNamed('title').attributeNode = node;
+        attName = 'title';
       }
+      node.attributeName = attName;
+      children.add(node);
+      return;
     }
 
-    return;
+    super.addChild(node);
   }
 
   @override
   PBEgg generatePluginNode(Rectangle frame, originalRef) {
-    return InjectedAppbar(UUID, frame, originalRef.name,
-        currentContext: currentContext);
+    return InjectedAppbar(
+      UUID,
+      frame,
+      originalRef.name,
+    );
   }
 
   @override
@@ -77,10 +72,13 @@ class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
       node.middleItem.UUID,
       node.middleItem.frame,
       name: node.middleItem.name,
-      currentContext: node.currentContext,
-    )..addChild(node.middleItem);
+    )
+      ..addChild(node.middleItem)
+      ..attributeName = 'title';
 
-    node.getAttributeNamed('title').attributeNode = tempNode;
+    var target =
+        node.children.firstWhere((element) => element.attributeName == 'title');
+    target = tempNode;
   }
 }
 
@@ -95,10 +93,9 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      source.attributes.forEach((attribute) {
-        attribute.attributeNode.currentContext = source.currentContext;
+      source.children.forEach((child) {
         buffer.write(
-            '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
+            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child == 'actions', child == 'leading')},');
       });
 
       buffer.write(')');

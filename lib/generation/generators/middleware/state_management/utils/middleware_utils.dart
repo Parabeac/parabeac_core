@@ -1,3 +1,4 @@
+
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -9,6 +10,7 @@ class MiddlewareUtils {
     String defaultStateName,
     PBGenerationManager manager,
     PBIntermediateNode node,
+    PBContext context
   ) {
     var overrideVars = ''; // Variables outside of initializer
     var overrideAttr = ''; // Attributes that will be part of initializer
@@ -28,7 +30,7 @@ class MiddlewareUtils {
       stateBuffer.write(MiddlewareUtils.generateVariable(node));
     }
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.tree.data = node.managerData;
+      context.tree.data = context.managerData;
       var variationNode = state.variation.node;
 
       if (variationNode is PBSharedMasterNode &&
@@ -67,10 +69,11 @@ class MiddlewareUtils {
     String defaultStateName,
     PBGenerationManager manager,
     PBIntermediateNode node,
+    PBContext context
   ) {
     // Pass down manager data to states
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.tree.data = node.managerData;
+      // context.tree.data = node.managerData;
     });
     return '''
       ${manager.generateImports()}
@@ -100,8 +103,8 @@ class MiddlewareUtils {
       '$type ${node.name.camelCase};';
 
   static String generateVariableBody(PBIntermediateNode node) {
-    node.currentContext.sizingContext = SizingValueContext.PointValue;
-    return (node?.generator?.generate(node ?? '', node.currentContext) ?? '');
+    // node.currentContext.sizingContext = SizingValueContext.PointValue;
+    // return (node?.generator?.generate(node ?? '', node.currentContext) ?? '');
   }
 
   static String wrapOnLayout(String className) {

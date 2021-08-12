@@ -14,12 +14,10 @@ class PBDenyListNode extends PBIntermediateNode {
     String UUID,
     Rectangle frame, {
     String name,
-    PBContext currentContext,
   }) : super(
           UUID,
           frame,
           name,
-          currentContext: currentContext,
         );
 
   @override

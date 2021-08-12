@@ -10,10 +10,10 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
   BLoCStateTemplateStrategy({this.isFirst, this.abstractClassName});
   @override
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      PBContext generatorContext,
+      PBContext context,
       {args}) {
-    node.managerData.hasParams = true;
-    node.managerData.hasParams = false;
+    context.managerData.hasParams = true;
+    context.managerData.hasParams = false;
 
     return '''
 ${isFirst ? _getHeader(manager) : ''}

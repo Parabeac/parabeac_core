@@ -4,7 +4,6 @@ import 'package:quick_log/quick_log.dart';
 
 abstract class ChildrenStrategy {
   Logger log;
-  //TODO: will be used in the migrations to attributes
   final String attributeName;
   final bool overwridable;
   ChildrenStrategy(this.attributeName, this.overwridable) {
@@ -21,7 +20,7 @@ class OneChildStrategy extends ChildrenStrategy {
   void addChild(PBIntermediateNode target, dynamic child) {
     if (child is PBIntermediateNode) {
       child.parent = target;
-      target.child = child;
+      target.children = [child];
     } else {
       log.warning(
           'Tried adding ${child.runtimeType.toString()} to ${target.runtimeType.toString()}');
@@ -36,12 +35,13 @@ class MultipleChildStrategy extends ChildrenStrategy {
   @override
   void addChild(PBIntermediateNode target, children) {
     if (children is List<PBIntermediateNode>) {
-      children.forEach((child) {
+      target.children.addAll(children.map((child) {
         child.parent = target;
-        target.children.add(child);
-      });
+        return child;
+      }));
     } else if (children is PBIntermediateNode) {
-      target.child = children;
+      children.parent = target;
+      children.forEach(target.addChild);
     }
   }
 }
@@ -64,18 +64,20 @@ class TempChildrenStrategy extends ChildrenStrategy {
 
   @override
   void addChild(PBIntermediateNode target, children) {
-    if (target.child is TempGroupLayoutNode) {
-      target.child.addChild(children);
-    } else if (target.child != null) {
-      var temp = TempGroupLayoutNode(null, null,
-          currentContext: target.currentContext, name: children.name);
-      temp.addChild(target.child);
-      temp.addChild(children);
-      temp.parent = target;
-      target.child = temp;
+    var group =
+        target.children.firstWhere((element) => element is TempGroupLayoutNode);
+    if (group != null && target.children.length == 1) {
+      group.addChild(children);
+    } else if (target.children.isNotEmpty) {
+      var child = target.children.first;
+      var temp = TempGroupLayoutNode(null, null, name: children.name)
+        ..addChild(child)
+        ..addChild(children)
+        ..parent = target;
+      target.children = [temp];
     } else if (children is PBIntermediateNode) {
       children.parent = target;
-      target.child = children;
+      target.addChild(children);
     }
   }
 }

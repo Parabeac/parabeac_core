@@ -1,8 +1,7 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
@@ -21,13 +20,15 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pb_intermediate_node.g.dart';
 
 @JsonSerializable(
-  explicitToJson: true,
-  createFactory: false,
-  ignoreUnannotated: true
-)
-abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
+    explicitToJson: true, createFactory: false, ignoreUnannotated: true)
+abstract class PBIntermediateNode extends Iterable<PBIntermediateNode>
+    implements TraversableNode<PBIntermediateNode> {
   @JsonKey(ignore: true)
   Logger logger;
+
+  @override
+  @JsonKey(ignore: true)
+  String attributeName;
 
   /// A subsemantic is contextual info to be analyzed in or in-between the visual generation & layout generation services.
   String subsemantic;
@@ -45,13 +46,37 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// The key represents the name of the attribute, while the value
   /// is a List<PBIntermediateNode> representing the nodes under
   /// that attribute.
-  List<PBAttribute> _attributes;
+  // @JsonKey(
+  //   name: 'children',
+  //   fromJson: _childrenFromJson,
+  //   toJson: _childrenToJson,
+  //   nullable: true,
+  // )
+  // List<PBAttribute> _attributes;
 
+  // // TODO(eddie) this is a work around that is currently being tested, delete afterwards
+  // @JsonKey(name: 'child', fromJson: _childToJson, nullable: true)
+  // set _child(PBAttribute attribute) {
+  //   _attributes ??= [];
+  //   _attributes.add(attribute);
+  // }
+
+  // @JsonKey(ignore: true)
+  // List<PBAttribute> get attributes => _attributes;
+  @override
   @JsonKey(ignore: true)
-  List<PBAttribute> get attributes => _attributes;
+  PBIntermediateNode parent;
 
   @override
-  List<PBIntermediateNode> get children => [child];
+  @JsonKey(ignore: true)
+  List<PBIntermediateNode> children = [];
+
+  @JsonKey(ignore: true)
+  PBIntermediateNode get child => children.isEmpty ? null : children.first;
+
+  @override
+  @JsonKey(ignore: true)
+  Iterator<PBIntermediateNode> get iterator => children.iterator;
 
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
@@ -60,121 +85,104 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   AlignStrategy alignStrategy = NoAlignment();
 
   /// Gets the [PBIntermediateNode] at attribute `child`
-  PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
+  // PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
 
   /// Sets the `child` attribute's `attributeNode` to `element`.
   /// If a `child` attribute does not yet exist, it creates it.
-  set child(PBIntermediateNode element) {
-    if (element == null) {
-      return;
-    }
-    if (!hasAttribute('child')) {
-      addAttribute(PBAttribute('child', attributeNodes: [element]));
-    } else {
-      getAttributeNamed('child').attributeNode = element;
-    }
-  }
+  // set child(PBIntermediateNode element) {
+  //   if (element == null) {
+  //     return;
+  //   }
+  //   if (!hasAttribute('child')) {
+  //     addAttribute(PBAttribute('child', attributeNodes: [element]));
+  //   } else {
+  //     getAttributeNamed('child').attributeNode = element;
+  //   }
+
+  // }
 
   @JsonKey(
-      fromJson: PBPointLegacyMethod.topLeftFromJson,
-      toJson: PBPointLegacyMethod.toJson)
-  Point topLeftCorner;
-
-  @JsonKey(
-      fromJson: PBPointLegacyMethod.bottomRightFromJson,
-      toJson: PBPointLegacyMethod.toJson)
-  Point bottomRightCorner;
-
-  @JsonKey(
+      ignore: false,
+      name: 'boundaryRectangle',
       fromJson: DeserializedRectangle.fromJson,
       toJson: DeserializedRectangle.toJson)
   Rectangle frame;
 
-  double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
-  double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
+  // @JsonKey(ignore: true)
+  // PBContext currentContext;
 
-  @JsonKey(ignore: true)
-  PBContext currentContext;
-
-  @JsonKey(ignore: true)
-  PBGenerationViewData get managerData => currentContext.tree.data;
-
-  Map size;
+  // @JsonKey(ignore: true)
+  // PBGenerationViewData get managerData => currentContext.tree.data;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
   @JsonKey(name: 'style')
   IntermediateAuxiliaryData auxiliaryData = IntermediateAuxiliaryData();
 
   /// Name of the element if available.
+  @JsonKey(ignore: false)
   String name;
 
   PBIntermediateNode(this.UUID, this.frame, this.name,
-      {this.currentContext, this.subsemantic, this.constraints}) {
+      {this.subsemantic, this.constraints}) {
     logger = Logger(runtimeType.toString());
-    _attributes = [];
-    _pointCorrection();
-  }
-
-  ///Correcting the pints when given the incorrect ones
-  void _pointCorrection() {
-    if (topLeftCorner != null && bottomRightCorner != null) {
-      if (topLeftCorner.x > bottomRightCorner.x &&
-          topLeftCorner.y > bottomRightCorner.y) {
-        logger.warning(
-            'Correcting the positional data. BTC is higher than TLC for node: ${this}');
-        topLeftCorner = Point(min(topLeftCorner.x, bottomRightCorner.x),
-            min(topLeftCorner.y, bottomRightCorner.y));
-        bottomRightCorner = Point(max(topLeftCorner.x, bottomRightCorner.x),
-            max(topLeftCorner.y, bottomRightCorner.y));
-      }
-    }
+    // _attributes = [];
   }
 
   /// Returns the [PBAttribute] named `attributeName`. Returns
   /// null if the [PBAttribute] does not exist.
-  PBAttribute getAttributeNamed(String attributeName) {
-    for (var attribute in attributes) {
-      if (attribute.attributeName == attributeName) {
-        return attribute;
-      }
+  PBIntermediateNode getAttributeNamed(String attributeName) {
+    return children.firstWhere(
+        (element) => element.attributeName == attributeName,
+        orElse: () => null);
+  }
+
+  List<PBIntermediateNode> getAllAtrributeNamed(String attributeName) {
+    return children
+        .where((element) => element.attributeName == attributeName)
+        .toList();
+  }
+
+  void replaceAttribute(String attributeName, PBIntermediateNode node,
+      {bool allApperences = true}) {
+    if (hasAttribute(attributeName)) {
+      allApperences
+          ? children
+              .removeWhere((element) => element.attributeName == attributeName)
+          : children.remove(children
+              .firstWhere((element) => element.attributeName == attributeName));
+      children.add(node);
     }
-    return null;
   }
 
   /// Returns true if there is an attribute in the node's `attributes`
   /// that matches `attributeName`. Returns false otherwise.
   bool hasAttribute(String attributeName) {
-    for (var attribute in attributes) {
-      if (attribute.attributeName == attributeName) {
-        return true;
-      }
-    }
-    return false;
+    return children.any((element) => element.attributeName == attributeName);
   }
 
   /// Adds the [PBAttribute] to this node's `attributes` list.
   /// When `overwrite` is set to true, if the provided `attribute` has the same
   /// name as another attribute in `attributes`, it will replace the old one.
   /// Returns true if the addition was successful, false otherwise.
-  bool addAttribute(PBAttribute attribute, {bool overwrite = false}) {
-    // Iterate through the list of attributes
-    for (var i = 0; i < attributes.length; i++) {
-      var childAttr = attributes[i];
+  // bool addAttribute(PBAttribute attribute, {bool overwrite = false}) {
+  //   // Iterate through the list of attributes
+  //   for (var i = 0; i < attributes.length; i++) {
+  //     var childAttr = attributes[i];
 
-      // If there is a duplicate, replace if `overwrite` is true
-      if (childAttr.attributeName == attribute.attributeName) {
-        if (overwrite) {
-          attributes[i] = attribute;
-          return true;
-        }
-        return false;
-      }
-    }
+  //     // If there is a duplicate, replace if `overwrite` is true
+  //     if (childAttr.attributeName == attribute.attributeName) {
+  //       if (overwrite) {
+  //         attributes[i] = attribute;
+  //         return true;
+  //       }
+  //       return false;
+  //     }
+  //   }
 
-    // Add attribute, no duplicate found
-    attributes.add(attribute);
-    return true;
-  }
+  //   // Add attribute, no duplicate found
+  //   attributes.add(attribute);
+  //   return true;
+  // }
 
   /// Adds child to node.
   void addChild(PBIntermediateNode node) {
@@ -183,6 +191,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
     /// Checking the constrains of the [node] being added to the tree, smoe of the
     /// constrains could be inherited to that section of the sub-tree.
   }
+
+  void handleChildren(PBContext context) {}
 
   /// In a recursive manner align the current [this] and the [children] of [this]
   ///
@@ -196,7 +206,8 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
-    for (var child in children) {
+    for (var att in children ?? []) {
+      var child = att.attributeNode;
       child?.align(context.clone());
     }
   }
@@ -206,13 +217,6 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 
-  static Map sizeFromJson(Map<String, dynamic> json) {
-    return {
-      'width': json['width'],
-      'height': json['height'],
-    };
-  }
-
   void mapRawChildren(Map<String, dynamic> json) {
     var rawChildren = json['children'] as List;
     rawChildren?.forEach((child) {
@@ -221,6 +225,34 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
       }
     });
   }
+
+  // static List<PBAttribute> _childrenFromJson(Map<String, dynamic> json) {
+  //   var key = 'children';
+  //   var children = json[key] as List;
+  //   return <PBAttribute>[
+  //     PBAttribute(key,
+  //         attributeNodes: children
+  //             .map((child) => PBIntermediateNode.fromJson(child))
+  //             .toList())
+  //   ];
+  // }
+
+  // static Map<String, List> _childrenToJson(List<PBAttribute> attributes) {
+  //   var mapEntries = attributes
+  //       .map((PBAttribute attribute) => MapEntry(
+  //           attribute.attributeName,
+  //           attribute.attributeNode == null
+  //               ? attribute.attributeNodes.map((e) => e.toJson()).toList()
+  //               : [attribute.attributeNode.toJson()]))
+  //       .toList();
+  //   return Map.fromEntries(mapEntries);
+  // }
+
+  // static PBAttribute _childToJson(Map<String, dynamic> json) {
+  //   var key = 'child';
+  //   return PBAttribute(key,
+  //       attributeNodes: [PBIntermediateNode.fromJson(json[key])]);
+  // }
 }
 
 extension PBPointLegacyMethod on Point {
@@ -285,7 +317,7 @@ extension DeserializedRectangle on Rectangle {
   Point get bottomRightCorner => bottomRight;
 
   static Rectangle fromJson(Map<String, dynamic> json) {
-    return Rectangle(json['x'], json['y'], json['width'], json['height']);
+    return Rectangle<num>(json['x'], json['y'], json['width'], json['height']);
   }
 
   static Map toJson(Rectangle rectangle) => {

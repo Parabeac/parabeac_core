@@ -33,10 +33,6 @@ class InheritedOval extends PBVisualIntermediateNode
   String type = 'oval';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
@@ -46,20 +42,19 @@ class InheritedOval extends PBVisualIntermediateNode
     this.originalRef,
     String name,
     Uint8List image,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
-  }) : super(UUID, frame, currentContext, name) {
+  }) : super(UUID, frame, name) {
     generator = PBBitmapGenerator();
-
-    ImageReferenceStorage().addReferenceAndWrite(
-        UUID, '${MainInfo().outputPath}assets/images', image);
+    if (image != null) {
+      ImageReferenceStorage().addReferenceAndWrite(
+          UUID, '${MainInfo().outputPath}assets/images', image);
+    }
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedOvalFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // . .frame.topLeft = Point.topLeftFromJson(json)
+        // . .frame.bottomRight = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

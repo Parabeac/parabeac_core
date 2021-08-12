@@ -10,12 +10,10 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   PBEgg(
     String UUID,
     Rectangle frame,
-    PBContext currentContext,
     String name,
   ) : super(
           UUID,
           frame,
-          currentContext,
           name,
         );
 

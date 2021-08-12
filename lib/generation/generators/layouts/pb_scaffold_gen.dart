@@ -13,10 +13,10 @@ class PBScaffoldGenerator extends PBGenerator {
     generatorContext.sizingContext = generatorContext.configuration.scaling
         ? SizingValueContext.ScaleValue
         : SizingValueContext.PointValue;
-    var appBar = source.getAttributeNamed('appBar')?.attributeNode;
-    var body = source.getAttributeNamed('body')?.attributeNode;
+    var appBar = source.getAttributeNamed('appBar');
+    var body = source.getAttributeNamed('body');
     var bottomNavBar =
-        source.getAttributeNamed('bottomNavigationBar')?.attributeNode;
+        source.getAttributeNamed('bottomNavigationBar');
     if (source is InheritedScaffold) {
       var buffer = StringBuffer();
       buffer.write('Scaffold(\n');

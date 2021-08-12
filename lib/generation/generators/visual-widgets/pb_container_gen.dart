@@ -12,16 +12,16 @@ class PBContainerGenerator extends PBGenerator {
   PBContainerGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     var buffer = StringBuffer();
     buffer.write('Container(');
 
-    buffer.write(PBSizeHelper().generate(source, generatorContext));
+    buffer.write(PBSizeHelper().generate(source, context));
 
     if (source.auxiliaryData.borderInfo != null) {
-      buffer.write(PBBoxDecorationHelper().generate(source, generatorContext));
+      buffer.write(PBBoxDecorationHelper().generate(source, context));
     } else {
-      buffer.write(PBColorGenHelper().generate(source, generatorContext));
+      buffer.write(PBColorGenHelper().generate(source, context));
     }
 
     // if (source.auxiliaryData.alignment != null) {
@@ -30,13 +30,10 @@ class PBContainerGenerator extends PBGenerator {
     // }
 
     if (source.child != null) {
-      source.child.topLeftCorner =
-          Point(source.topLeftCorner.x, source.topLeftCorner.y);
-      source.child.bottomRightCorner =
-          Point(source.bottomRightCorner.x, source.bottomRightCorner.y);
-      source.child.currentContext = source.currentContext;
+      source.child.frame = source.frame;
+      // source.child.currentContext = source.currentContext;
       var statement = source.child != null
-          ? 'child: ${source.child.generator.generate(source.child, generatorContext)}'
+          ? 'child: ${source.child.generator.generate(source.child, context)}'
           : '';
       buffer.write(statement);
     }

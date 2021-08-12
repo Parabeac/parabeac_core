@@ -32,10 +32,10 @@ class PBPaddingGen extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
-    if (generatorContext.sizingContext == SizingValueContext.AppBarChild) {
-      source.child.currentContext = source.currentContext;
-      return source.child.generator.generate(source.child, generatorContext);
+  String generate(PBIntermediateNode source, PBContext context) {
+    if (context.sizingContext == SizingValueContext.AppBarChild) {
+      // source.child.currentContext = source.currentContext;
+      return source.child.generator.generate(source.child, context);
     }
     if (!(source is Padding)) {
       return '';
@@ -76,9 +76,9 @@ class PBPaddingGen extends PBGenerator {
     buffer.write('),');
 
     if (source.child != null) {
-      source.child.currentContext = source.currentContext;
+      // source.child.currentContext = source.currentContext;
       buffer.write(
-          'child: ${source.child.generator.generate(source.child, generatorContext)}');
+          'child: ${source.child.generator.generate(source.child, context)}');
     }
     buffer.write(')');
 

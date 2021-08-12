@@ -33,16 +33,8 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   String type = 'image';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
-
-  @override
-  @JsonKey(ignore: true)
-  List<PBIntermediateNode> get children => super.children;
 
   InheritedShapeGroup(
     String UUID,
@@ -50,13 +42,10 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     this.originalRef,
     String name,
     Uint8List image,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBBitmapGenerator();
@@ -68,8 +57,6 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var group = _$InheritedShapeGroupFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     group.mapRawChildren(json);

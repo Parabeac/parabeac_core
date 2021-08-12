@@ -30,26 +30,15 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   String type = 'group';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   Map<String, dynamic> originalRef;
 
   TempGroupLayoutNode(
     String UUID,
     Rectangle frame, {
     this.originalRef,
-    PBContext currentContext,
     String name,
     this.prototypeNode,
-    this.size,
-  }) : super(UUID, frame, [], [], currentContext, name);
-
-  @override
-  void addChild(node) {
-    addChildToLayout(node);
-  }
+  }) : super(UUID, frame, [], [], name);
 
   @override
   bool satisfyRules(
@@ -67,8 +56,8 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var tempGroup = _$TempGroupLayoutNodeFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // . .frame.topLeft = Point.topLeftFromJson(json)
+      // . .frame.bottomRight = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     tempGroup.mapRawChildren(json);

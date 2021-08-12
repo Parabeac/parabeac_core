@@ -8,49 +8,41 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
-import 'package:uuid/uuid.dart';
 
 class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   @override
   PrototypeNode prototypeNode;
 
-  @override
-  ChildrenStrategy childrenStrategy = OneChildStrategy('child');
-
   Tab(
     String UUID,
     Rectangle frame,
     String name, {
-    PBContext currentContext,
     this.prototypeNode,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBTabGenerator();
+    childrenStrategy = OneChildStrategy('child');
   }
 
   @override
   String semanticName;
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, 
-      PBIntermediateNode originalNode) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode) {
     if (originalNode is PBInheritedIntermediate) {
       var tab = Tab(
         UUID,
         frame,
         originalNode.name,
-        currentContext: currentContext,
         prototypeNode: (originalNode as PBInheritedIntermediate).prototypeNode,
       );
-      if (originalNode != TempGroupLayoutNode) {
+      if (originalNode is! TempGroupLayoutNode) {
         var designNode = _convertWrapper(originalNode);
 
         ///Clean the node so that it doesn't get interpreted as a plugin again.

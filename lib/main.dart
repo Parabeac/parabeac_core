@@ -5,7 +5,9 @@ import 'package:parabeac_core/generation/flutter_project_builder/file_system_ana
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
@@ -23,7 +25,7 @@ final designToPBDLServices = <DesignToPBDLService>[
   FigmaToPBDLService(),
 ];
 FileSystemAnalyzer fileSystemAnalyzer;
-Interpret interpretService;
+Interpret interpretService = Interpret();
 
 ///sets up parser
 final parser = ArgParser()
@@ -107,15 +109,22 @@ ${parser.usage}
     (service) => service.designType == processInfo.designType,
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
-  var intermediateProject = await interpretService.interpretAndOptimize(
-      pbdl, MainInfo().configuration);
+  var pbProject = PBProject.fromJson(pbdl.toJson());
+  pbProject.projectAbsPath =
+      p.join(processInfo.outputPath, processInfo.projectName);
 
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
-      project: intermediateProject, pageWriter: PBFlutterWriter());
-
+      project: pbProject);
+  await fpb.preGenTasks();
   await indexFileFuture;
-  await fpb.genProjectFiles(processInfo.genProjectPath);
+
+  await Future.wait(pbProject.forest.map((tree) {
+    var context = PBContext(processInfo.configuration);
+    return interpretService
+        .interpretAndOptimize(tree, context, pbProject)
+        .then((tree) => fpb.genAITree(tree, context));
+  }).toList());
 
   exitCode = 0;
 }

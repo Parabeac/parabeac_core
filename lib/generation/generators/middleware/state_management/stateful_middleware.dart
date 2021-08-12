@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
@@ -28,7 +29,7 @@ class StatefulMiddleware extends StateManagementMiddleware {
   }
 
   @override
-  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node) {
+  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node, PBContext context) {
     var fileStrategy = configuration.fileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
@@ -37,16 +38,17 @@ class StatefulMiddleware extends StateManagementMiddleware {
     }
 
     fileStrategy.commandCreated(WriteSymbolCommand(
-        node.currentContext.tree.UUID,
+        context.tree.UUID,
         node.name.snakeCase,
-        generationManager.generate(node)));
+        generationManager.generate(node, context)));
 
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      state.variation.node.currentContext.tree.data = node.managerData;
+      // state.variation.node.currentContext.tree.data = node.managerData;
       fileStrategy.commandCreated(WriteSymbolCommand(
-          state.variation.node.currentContext.tree.UUID,
+        'TODO',
+          // state.variation.node.currentContext.tree.UUID,
           state.variation.node.name.snakeCase,
-          generationManager.generate(state.variation.node)));
+          generationManager.generate(state.variation.node, context)));
     });
     return Future.value(null);
   }

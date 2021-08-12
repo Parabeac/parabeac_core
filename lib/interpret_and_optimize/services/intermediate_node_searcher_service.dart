@@ -56,37 +56,36 @@ class PBIntermediateNodeSearcherService {
     while (stack.isNotEmpty) {
       var currentNode = stack.removeLast();
       if (currentNode is InheritedScaffold) {
-        var tabbar =
-            currentNode.getAttributeNamed('bottomNavigationBar')?.attributeNode;
-        var tabs = tabbar?.getAttributeNamed('tabs')?.attributeNodes;
-        if (tabbar != null && tabs?.isNotEmpty ?? false) {
+        var tabbar = currentNode.getAttributeNamed('bottomNavigationBar');
+        var tabs = tabbar?.getAllAtrributeNamed('tabs');
+        if (tabbar != null && tabs.isNotEmpty ?? false) {
           for (var i = 0; i < tabs.length; i++) {
             var child = tabs[i];
             if (child.UUID == uuid) {
-              tabs[i].child = candidate;
+              // tabs[i].child = candidate;
               return true;
             }
-            stack.add(child);
+            // stack.add(child);
           }
         }
       }
-      if (currentNode is PBLayoutIntermediateNode) {
-        for (var i = 0; i < currentNode.children.length; i++) {
-          var child = currentNode.children[i];
-          if (child.UUID == uuid) {
-            currentNode.replaceChildAt(i, candidate);
-            return true;
-          }
-          stack.add(child);
-        }
-      } else if (currentNode is PBVisualIntermediateNode &&
-          currentNode.child != null) {
-        if (currentNode.child.UUID == uuid) {
-          currentNode.child = candidate;
-          return true;
-        }
-        stack.add(currentNode.child);
-      }
+      // if (currentNode is PBLayoutIntermediateNode) {
+      //   for (var i = 0; i < currentNode.children.length; i++) {
+      //     var child = currentNode.children[i];
+      //     if (child.UUID == uuid) {
+      //       currentNode.replaceChildAt(i, candidate);
+      //       return true;
+      //     }
+      //     stack.add(child);
+      //   }
+      // } else if (currentNode is PBVisualIntermediateNode &&
+      //     currentNode.child != null) {
+      //   if (currentNode.child.UUID == uuid) {
+      //     currentNode.child = candidate;
+      //     return true;
+      //   }
+      //   stack.add(currentNode.child);
+      // }
     }
     return false;
   }

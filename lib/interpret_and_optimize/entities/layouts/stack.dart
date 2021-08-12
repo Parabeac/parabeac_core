@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
@@ -21,30 +23,25 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
-
-  PBIntermediateStackLayout(PBContext currentContext,
+  PBIntermediateStackLayout(
       {String name, PBIntermediateConstraints constraints})
-      : super(null, null, STACK_RULES, [], currentContext, name, constraints: constraints) {
+      : super(null, null, STACK_RULES, [], name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
   }
 
   @override
-  void addChild(node) => addChildToLayout(node);
-
-  @override
-  void resize() {
-    var depth = currentContext.tree?.depthOf(this);
+  void resize(PBContext context) {
+    var depth = context.tree?.depthOf(this);
 
     /// Since there are cases where [Stack] are being created, and
     /// childrend are being populated, and consequently [Stack.resize] is being
     /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
     /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
     if (depth != null && depth <= 1 && depth >= 0) {
-      topLeftCorner = currentContext.canvasTLC;
-      bottomRightCorner = currentContext.canvasBRC;
+      frame = context.canvasFrame;
     } else {
-      super.resize();
+      super.resize(context);
     }
   }
 
@@ -52,7 +49,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
-    var stack = PBIntermediateStackLayout(currentContext, name: name);
+    var stack = PBIntermediateStackLayout(name: name);
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;

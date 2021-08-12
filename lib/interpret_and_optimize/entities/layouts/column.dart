@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:math';
 
 import 'package:parabeac_core/generation/generators/layouts/pb_column_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -30,24 +30,19 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
   @override
   AlignStrategy alignStrategy = ColumnAlignment();
 
-  PBIntermediateColumnLayout(PBContext currentContext, Rectangle frame,
-      {String name})
-      : super(null, frame, COLUMN_RULES, COLUMN_EXCEPTIONS, currentContext,
-            name) {
+  PBIntermediateColumnLayout(Rectangle frame, {String name})
+      : super(null, frame, COLUMN_RULES, COLUMN_EXCEPTIONS, name) {
     generator = PBColumnGenerator();
   }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var col = PBIntermediateColumnLayout(currentContext, null, name: name);
+    var col = PBIntermediateColumnLayout(null, name: name);
     col.prototypeNode = prototypeNode;
     children.forEach((child) => col.addChild(child));
     return col;
   }
-
-  @override
-  void addChild(node) => addChildToLayout(node);
 }
 
 class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
@@ -65,38 +60,41 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
   void align(PBContext context, PBIntermediateColumnLayout node) {
     node.checkCrossAxisAlignment();
     _invertAlignment(node);
-    if (node.currentContext.configuration.widgetSpacing == 'Expanded') {
-      _addPerpendicularAlignment(node);
-      _addParallelAlignment(node);
+    if (context.configuration.widgetSpacing == 'Expanded') {
+      _addPerpendicularAlignment(node, context);
+      _addParallelAlignment(node, context);
     } else {
       assert(false,
-          'We don\'t support Configuration [${node.currentContext.configuration.widgetSpacing}] yet.');
+          'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
     }
   }
 
-  void _addParallelAlignment(PBIntermediateColumnLayout node) {
-    var newchildren = handleFlex(true, node.topLeftCorner,
-        node.bottomRightCorner, node.children?.cast<PBIntermediateNode>());
-    node.replaceChildren(newchildren);
+  void _addParallelAlignment(
+      PBIntermediateColumnLayout node, PBContext context) {
+    var newchildren = handleFlex(true, node.frame.topLeft,
+        node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
+    node.replaceChildren(newchildren, context);
   }
 
-  void _addPerpendicularAlignment(PBIntermediateColumnLayout node) {
-    var columnMinX = node.topLeftCorner.x;
-    var columnMaxX = node.bottomRightCorner.x;
+  void _addPerpendicularAlignment(
+      PBIntermediateColumnLayout node, PBContext context) {
+    var columnMinX = node.frame.topLeft.x;
+    var columnMaxX = node.frame.bottomRight.x;
 
     for (var i = 0; i < node.children.length; i++) {
-      var padding = Padding(null, node.frame, node.children[i].constraints,
-          left: node.children[i].topLeftCorner.x - columnMinX ?? 0.0,
-          right: columnMaxX - node.children[i].bottomRightCorner.x ?? 0.0,
-          top: 0.0,
-          bottom: 0.0,
-          currentContext: node.currentContext);
+      var padding = Padding(
+        null,
+        node.frame,
+        node.children[i].constraints,
+        left: node.children[i].frame.topLeft.x - columnMinX ?? 0.0,
+        right: columnMaxX - node.children[i].frame.bottomRight.x ?? 0.0,
+        top: 0.0,
+        bottom: 0.0,
+      );
       padding.addChild(node.children[i]);
 
       //Replace Children.
-      var childrenCopy = node.children;
-      childrenCopy[i] = padding;
-      node.replaceChildren(childrenCopy?.cast<PBIntermediateNode>());
+      node.children[i] = padding;
     }
   }
 

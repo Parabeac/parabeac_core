@@ -23,10 +23,10 @@ class StackReductionVisualRule extends PostConditionRule {
           currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
       var wrapper = (layout as PBIntermediateStackLayout).children.firstWhere(
           (element) =>
-              element is PBVisualIntermediateNode && element.child == null);
+              element is PBVisualIntermediateNode && element.children.isEmpty);
       var child = (layout as PBIntermediateStackLayout).children.firstWhere(
           (element) =>
-              element is PBVisualIntermediateNode && element.child != null);
+              element is PBVisualIntermediateNode && element.children.isEmpty);
 
       wrapper.addChild(child);
       if ((layout as PBIntermediateStackLayout).prototypeNode != null) {
@@ -59,14 +59,16 @@ class StackReductionVisualRule extends PostConditionRule {
         children[0] is PBVisualIntermediateNode &&
         children[1] is PBVisualIntermediateNode) {
       return _overlappingNodesLayoutRule.testRule(children[0], children[1]) &&
-          ((_isEmptyContainer(children[0]) && children[1].child != null) ||
-              (_isEmptyContainer(children[0]) && children[0].child != null));
+          ((_isEmptyContainer(children[0]) &&
+                  children[1].children.isNotEmpty) ||
+              (_isEmptyContainer(children[0]) &&
+                  children[0].children.isNotEmpty));
     }
     return false;
   }
 
   /// Returns true if `node` is a Container with a null child
   bool _isEmptyContainer(PBVisualIntermediateNode node) =>
-      node.child == null &&
+      node.children.isEmpty &&
       (node is InheritedContainer || node is InjectedContainer);
 }

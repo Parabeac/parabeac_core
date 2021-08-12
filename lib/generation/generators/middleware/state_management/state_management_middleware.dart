@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 
@@ -29,20 +30,22 @@ abstract class StateManagementMiddleware extends Middleware {
   /// in which case the tree will return `null`; no other [Middleware] will be applied to the [tree],
   /// making the final result `null`.
   @override
-  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree) {
+  Future<PBIntermediateTree> applyMiddleware(
+      PBIntermediateTree tree, PBContext context) {
     return Future.wait(tree.map((node) {
       if (containsState(node) || containsMasterState(node)) {
-        return handleStatefulNode(node);
+        return handleStatefulNode(node, context);
       }
       return Future.value(node);
     })).then((nodes) {
       tree.rootNode = nodes.first;
-      return handleTree(tree.rootNode == null ? null : tree);
+      return handleTree(tree.rootNode == null ? null : tree, context);
     });
   }
 
   /// Handles the nodes that are stateful(either [containsState] or [containsMasterState]).
-  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node);
+  Future<PBIntermediateNode> handleStatefulNode(
+      PBIntermediateNode node, PBContext context);
 
   /// Checks whether the master of the [PBSharedInstanceIntermediateNode] (if the [node]
   /// is a symbol) [containsState].

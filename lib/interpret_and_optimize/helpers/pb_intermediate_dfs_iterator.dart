@@ -6,7 +6,6 @@ class IntermediateDFSIterator<E extends TraversableNode>
   final PBIntermediateTree _tree;
 
   E _currentElement;
-  E get currentElement => _currentElement;
 
   List<E> _stack;
 

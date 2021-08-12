@@ -24,22 +24,20 @@ class PBSymbolMasterParameter extends PBIntermediateNode
   ChildrenStrategy childrenStrategy = NoChildStrategy();
 
   PBSymbolMasterParameter(
-      String name,
-      this.type,
-      this.parameterID,
-      this.canOverride,
-      this.propertyName,
-      this.parameterDefinition,
-      this.topLeftX,
-      this.topLeftY,
-      this.bottomRightX,
-      this.bottomRightY,
-      {this.context})
-      : super(
+    String name,
+    this.type,
+    this.parameterID,
+    this.canOverride,
+    this.propertyName,
+    this.parameterDefinition,
+    this.topLeftX,
+    this.topLeftY,
+    this.bottomRightX,
+    this.bottomRightY,
+  ) : super(
           null,
           null,
           name,
-          currentContext: context,
         );
 
   static String _typeToJson(type) {

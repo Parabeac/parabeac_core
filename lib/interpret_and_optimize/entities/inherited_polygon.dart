@@ -34,37 +34,32 @@ class InheritedPolygon extends PBVisualIntermediateNode
   String type = 'polygon';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedPolygon(String UUID, Rectangle frame,{
+  InheritedPolygon(
+    String UUID,
+    Rectangle frame, {
     this.originalRef,
     name,
     Uint8List image,
-    PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,
-          currentContext,
           name,
         ) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
 
-    ImageReferenceStorage().addReferenceAndWrite(
-        UUID, '${MainInfo().outputPath}assets/images', image);
+    if (image != null) {
+      ImageReferenceStorage().addReferenceAndWrite(
+          UUID, '${MainInfo().outputPath}assets/images', image);
+    }
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedPolygonFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

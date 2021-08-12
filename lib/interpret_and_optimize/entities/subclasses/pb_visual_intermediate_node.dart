@@ -9,10 +9,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 /// Represents a typical node that the end-user could see, it usually has properties such as size and color. It only contains a single child, unlike PBLayoutIntermediateNode that contains a set of children.
 /// Superclass: PBIntermediateNode
 abstract class PBVisualIntermediateNode extends PBIntermediateNode {
-  
   PBVisualIntermediateNode(
-      String UUID, Rectangle rectangle, PBContext currentContext, String name,
+      String UUID, Rectangle rectangle,  String name,
       {PBIntermediateConstraints constraints})
-      : super(UUID, rectangle, name,
-            currentContext: currentContext, constraints: constraints);
+      : super(UUID, rectangle, name, constraints: constraints);
 }

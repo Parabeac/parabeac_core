@@ -8,7 +8,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -38,129 +37,109 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'artboard';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-  @override
-  @JsonKey(ignore: true)
-  PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+  PBIntermediateNode get navbar => getAttributeNamed('appBar');
+
+  PBIntermediateNode get tabbar => getAttributeNamed('bottomNavigationBar');
 
   @override
-  List<PBIntermediateNode> get children => [child, navbar, tabbar];
-
-  PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
-
-  PBIntermediateNode get tabbar =>
-      getAttributeNamed('bottomNavigationBar')?.attributeNode;
-
-  @override
-  set child(PBIntermediateNode node) {
-    if (!hasAttribute('body')) {
-      addAttribute(PBAttribute('body', attributeNodes: [node]));
-    } else {
-      getAttributeNamed('body').attributeNode = node;
-    }
-  }
-
-  @override
-  @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
   InheritedScaffold(
-    String UUID,
-    Rectangle frame, {
-    this.originalRef,
-    String name,
-    PBContext currentContext,
-    this.isHomeScreen,
-    this.prototypeNode,
-    this.size,
-  }) : super(
-          UUID,
-          frame,
-          currentContext,
-          name,
-        ) {
-    this.name = name
-        ?.replaceAll(RegExp(r'[\W]'), '')
-        ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
-
+      String UUID, Rectangle<num> frame, String name, this.originalRef,
+      {this.isHomeScreen, this.prototypeNode})
+      : super(UUID, frame, name) {
     generator = PBScaffoldGenerator();
-
-    //TODO switch to padding strategy
-
-    // Add body attribute
-    addAttribute(PBAttribute('body'));
   }
+
+  @override
+  void addChild(PBIntermediateNode node) {
+    // if (node is PBSharedInstanceIntermediateNode) {
+    //   if (node.name.contains('<navbar>')) {
+    //     // this.children.add();
+    //     // addAttribute(PBAttribute('appBar', attributeNodes: [node]));
+    //     // currentContext.canvasFrame = Rectangle.fromPoints(
+    //     //     currentContext.screenFrame.topLeft, node.frame.bottomRight);
+    //     return;
+    //   }
+    //   if (node.name.contains('<tabbar>')) {
+    //     // addAttribute(
+    //     //     PBAttribute('bottomNavigationBar', attributeNodes: [node]));
+    //     return;
+    //   }
+    // }
+
+    if (node is InjectedAppbar) {
+      children.add(node..attributeName = 'appBar');
+      // currentContext.canvasFrame = Rectangle.fromPoints(
+      //     currentContext.screenFrame.topLeft, node.frame.bottomRight);
+      return;
+    }
+    if (node is InjectedTabBar) {
+      children.add(node..attributeName = 'bottomNavigationBar');
+      // addAttribute(PBAttribute('bottomNavigationBar', attributeNodes: [node]));
+      return;
+    } else {
+      children.add(node..attributeName = 'body');
+    }
+
+    // if (child is TempGroupLayoutNode) {
+    //   // child.addChild(node);
+    //   return;
+    // }
+    // If there's multiple children add a temp group so that layout service lays the children out.
+    // if (child != null) {
+    // var temp = TempGroupLayoutNode(null, null,
+    //     currentContext: currentContext, name: node.name);
+    // temp.addChild(child);
+    // temp.addChild(node);
+    // child = temp;
+    // } else {
+    // if (child != null) {
+    // child.addChild(node);
+    // } else {
+    // var stack = PBIntermediateStackLayout(currentContext,
+    //     name: node.name,
+    //     constraints: PBIntermediateConstraints(
+    //         pinBottom: false,
+    //         pinLeft: false,
+    //         pinRight: false,
+    //         pinTop: false));
+    // var stack = TempGroupLayoutNode(UUID, frame);
+    // stack.addChild(node);
+    // child = stack;
+    // }
+  }
+
+  @override
+  void handleChildren(PBContext context) {
+    var children = getAllAtrributeNamed('body');
+    var groupAtt = TempGroupLayoutNode(null, null)..attributeName = 'body';
+    children.forEach((att) => groupAtt.addChild(att));
+
+    children = [groupAtt];
+
+    ///get tempgroup
+    ///add all of the rest of children to it
+    ///if temp group is null, create group
+    ///add all of the rest of children
+  }
+
+  // @override
+  // @JsonKey(ignore: true)
+  // PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+
+  // @JsonKey(ignore: true)
+  // @override
+  // List<PBIntermediateNode> get children => [child, navbar, tabbar];
 
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
 
-  @override
-  void addChild(node) {
-    print(this.name);
-    if (this.name == 'ArtboardTRpinnoscale') {
-      print('object');
-    }
-    if (node is PBSharedInstanceIntermediateNode) {
-      if (node.name.contains('<navbar>')) {
-        addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-        currentContext.canvasTLC =
-            Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
-        return;
-      }
-      if (node.name.contains('<tabbar>')) {
-        addAttribute(
-            PBAttribute('bottomNavigationBar', attributeNodes: [node]));
-        return;
-      }
-    }
-
-    if (node is InjectedAppbar) {
-      addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-      currentContext.canvasTLC =
-          Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
-      return;
-    }
-    if (node is InjectedTabBar) {
-      addAttribute(PBAttribute('bottomNavigationBar', attributeNodes: [node]));
-      return;
-    }
-
-    if (child is TempGroupLayoutNode) {
-      child.addChild(node);
-      return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, null,
-          currentContext: currentContext, name: node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    } else {
-      if (child != null) {
-        child.addChild(node);
-      } else {
-        var stack = PBIntermediateStackLayout(currentContext,
-            name: node.name,
-            constraints: PBIntermediateConstraints(
-                pinBottom: false,
-                pinLeft: false,
-                pinRight: false,
-                pinTop: false));
-        stack.addChild(node);
-        child = stack;
-      }
-    }
-  }
+  // }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var artboard = _$InheritedScaffoldFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
-      ..originalRef = json;
+    var artboard = _$InheritedScaffoldFromJson(json)..originalRef = json;
 
     //Map artboard children by calling `addChild` method
     artboard.mapRawChildren(json);
@@ -170,4 +149,38 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
       InheritedScaffold.fromJson(json);
+
+  // @override
+  // set child(PBIntermediateNode node) {
+  //   if (!hasAttribute('body')) {
+  //     addAttribute(PBAttribute('body', attributeNodes: [node]));
+  //   } else {
+  //     getAttributeNamed('body').attributeNode = node;
+  //   }
 }
+
+// InheritedScaffold(
+//   String UUID,
+//   Rectangle frame, {
+//   this.originalRef,
+//   String name,
+//   this.isHomeScreen,
+//   this.prototypeNode,
+// }) : super(
+//         UUID,
+//         frame,
+//         name,
+//       ) {
+//   this.name = name
+//       ?.replaceAll(RegExp(r'[\W]'), '')
+//       ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+
+//   generator = PBScaffoldGenerator();
+
+//   //TODO switch to padding strategy
+
+//   // Add body attribute
+//   addAttribute(PBAttribute('body'));
+// }
+
+

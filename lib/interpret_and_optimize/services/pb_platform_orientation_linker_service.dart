@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
@@ -30,11 +31,11 @@ class PBPlatformOrientationLinkerService {
 
   /// Populates [tree]'s platform and orientation information
   /// and adds [tree] to storage.
-  void addOrientationPlatformInformation(PBIntermediateTree tree) {
+  void addOrientationPlatformInformation(PBIntermediateTree tree, PBContext context) {
     tree.data.platform = _extractPlatform(tree.name);
     tree.data.orientation = _extractOrientation(
-      tree.rootNode.bottomRightCorner,
-      tree.rootNode.topLeftCorner,
+      tree.rootNode .frame.bottomRight,
+      tree.rootNode .frame.topLeft,
     );
 
     _platforms.add(tree.data.platform);
@@ -43,17 +44,17 @@ class PBPlatformOrientationLinkerService {
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
     if (hasMultipleOrientations()) {
-      tree.rootNode.currentContext.configuration.generationConfiguration
+      context.configuration.generationConfiguration
           .commandQueue
           .add(OrientationBuilderCommand(tree.UUID));
     }
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
-      tree.rootNode.currentContext.configuration.generationConfiguration
+      context.configuration.generationConfiguration
           .commandQueue
           .add(ResponsiveLayoutBuilderCommand(tree.UUID));
-      _addBreakpoints(tree);
+      _addBreakpoints(tree, context);
     }
 
     addToMap(tree);
@@ -210,13 +211,13 @@ class PBPlatformOrientationLinkerService {
     return ORIENTATION.VERTICAL;
   }
 
-  void _addBreakpoints(PBIntermediateTree tree) {
+  void _addBreakpoints(PBIntermediateTree tree, PBContext context) {
     if (MainInfo().configuration.breakpoints != null) {
       var bp = MainInfo().configuration.breakpoints.cast<String, num>();
       bp.forEach((key, value) {
         var cmd = AddConstantCommand(
             tree.UUID, key + 'Breakpoint', 'num', value.toString());
-        tree.rootNode.currentContext.configuration.generationConfiguration
+        context.configuration.generationConfiguration
             .commandQueue
             .add(cmd);
       });

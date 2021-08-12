@@ -10,27 +10,13 @@ import 'dart:math';
 class PBContext {
   final PBConfiguration configuration;
 
-  /// These are the original screen mesurements comming from the design values.
-  Point _screenTLC;
-  Point get screenTopLeftCorner => _screenTLC;
-  set screenTopLeftCorner(Point screenTopLeftCorner) {
-    if (_screenTLC == null) {
-      canvasTLC = screenTopLeftCorner;
-    }
-    _screenTLC = screenTopLeftCorner;
+  Rectangle _screenFrame;
+  Rectangle get screenFrame => _screenFrame;
+  set screenFrame(Rectangle frame){
+    canvasFrame ??= Rectangle.fromPoints(frame.topLeft, frame.bottomRight);
+    _screenFrame = frame;
   }
 
-  Point _screenBRC;
-  Point get screenBottomRightCorner => _screenBRC;
-  set screenBottomRightCorner(Point screenBottomRightCorner) {
-    if (_screenBRC == null) {
-      canvasBRC = screenBottomRightCorner;
-    }
-    _screenBRC = screenBottomRightCorner;
-  }
-
-  double get originalScreenWidth => _screenBRC.x - _screenTLC.x;
-  double get originaScreenHeight => _screenBRC.y - _screenTLC.y;
 
   /// These values represent the current "focus area" size as it travels down the
   /// tree.
@@ -40,8 +26,7 @@ class PBContext {
   /// Some of the scenarios the focusAreaWould change:
   /// - When the appbar is used, it should shrink the canvas top point to make room for the appbar
   /// - When another stack is declared, its TLC becomes the new canvas TLC(same for BRC).
-  Point canvasTLC;
-  Point canvasBRC;
+  Rectangle canvasFrame;
 
   /// The [constextConstrains] represents the costraints that would be inherited by a section of the tree.
   ///
@@ -64,8 +49,7 @@ class PBContext {
       this.contextConstraints,
       this.masterNode,
       this.project,
-      this.canvasBRC,
-      this.canvasTLC,
+      this.canvasFrame,
       this.generationManager}) {
     contextConstraints ??= PBIntermediateConstraints();
   }
@@ -86,8 +70,8 @@ class PBContext {
       return size;
     }
     return isHorizontal
-        ? size / originalScreenWidth
-        : size / originaScreenHeight;
+        ? size / screenFrame.width
+        : size / screenFrame.height;
   }
 
   PBContext clone() {
@@ -96,11 +80,9 @@ class PBContext {
         contextConstraints: contextConstraints.clone(),
         masterNode: masterNode,
         project: project,
-        canvasBRC: canvasBRC,
-        canvasTLC: canvasTLC,
+        canvasFrame: canvasFrame,
         generationManager: generationManager);
-    context.screenTopLeftCorner = _screenTLC;
-    context.screenBottomRightCorner = _screenBRC;
+    context.screenFrame = _screenFrame;
     return context;
   }
 }

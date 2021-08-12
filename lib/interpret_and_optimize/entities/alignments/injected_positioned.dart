@@ -17,10 +17,8 @@ class InjectedPositioned extends PBIntermediateNode
     String UUID,
     Rectangle frame, {
     this.valueHolder,
-    PBContext currentContext,
     PBIntermediateConstraints constraints,
-  }) : super(UUID, frame, '',
-            currentContext: currentContext, constraints: constraints) {
+  }) : super(UUID, frame, '', constraints: constraints) {
     generator = PBPositionedGenerator(overrideChildDim: true);
   }
 

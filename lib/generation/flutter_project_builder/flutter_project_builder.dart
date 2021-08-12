@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:archive/archive.dart';
@@ -30,7 +32,7 @@ class FlutterProjectBuilder {
   /// Logger that prints consoles informatio
   static Logger log;
 
-  PBPageWriter pageWriter;
+  // PBPageWriter pageWriter;
 
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
@@ -39,16 +41,18 @@ class FlutterProjectBuilder {
 
   FileSystemAnalyzer fileSystemAnalyzer;
 
+  bool _configured = false;
+
   FlutterProjectBuilder(
     this.generationConfiguration,
     this.fileSystemAnalyzer, {
     this.project,
-    this.pageWriter,
+    // this.pageWriter,
   }) {
     log = Logger(runtimeType.toString());
     fileSystemAnalyzer ??= FileSystemAnalyzer(project.projectAbsPath);
 
-    generationConfiguration.pageWriter = pageWriter;
+    // generationConfiguration.pageWriter = pageWriter;
     generationConfiguration.fileSystemAnalyzer = fileSystemAnalyzer;
   }
 
@@ -107,45 +111,34 @@ class FlutterProjectBuilder {
     });
   }
 
-  Future<void> genProjectFiles(String genProjectPath,
-      {List<ArchiveFile> rawImages}) async {
-    // generate shared Styles if any found
-    // if (project.sharedStyles != null &&
-    //     project.sharedStyles.isNotEmpty &&
-    //     MainInfo().exportStyles) {
-    // try {
-    //   Directory(p.join(genProjectPath, 'lib/document/'))
-    //       .createSync(recursive: true);
+  Future<void> preGenTasks() async {
+    _configured = true;
+    await Future.wait([
+      Future.wait(PBStateManagementLinker().stateQueue, eagerError: true),
+      Process.run('rm', ['-rf', '.dart_tool/build'],
+          runInShell: true,
+          environment: Platform.environment,
+          workingDirectory: MainInfo().outputPath),
+      generationConfiguration.generateProject(project)
+    ]);
 
-    //   WriteStyleClasses(genProjectPath);
+    ;
+  }
 
-    //   var s = File(p.join(genProjectPath, 'lib/document/shared_props.g.dart'))
-    //       .openWrite(mode: FileMode.write, encoding: utf8);
+  Future<void> postGenTask() async {
+    await formatProject(project.projectAbsPath,
+        projectDir: MainInfo().outputPath);
+  }
 
-    //   s.write('''${FlutterImport('dart:ui', null)}
-    //         ${FlutterImport('flutter/material.dart', null)}
+  Future<void> genAITree(PBIntermediateTree tree, PBContext context) async {
+    if (!_configured) {
+      /// Avoid changing the [_configured] from here, it might lead to async changes on the var
+      throw Error();
+    }
 
-    //         ''');
-    //   for (var sharedStyle in project.sharedStyles) {
-    //     s.write(sharedStyle.generate() + '\n');
-    //   }
-    //   await s.close();
-    // } catch (e) {
-    //   log.error(e.toString());
-    // }
-    // }
-    await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
-
-    await generationConfiguration.generateProject(project);
-    generationConfiguration
-        .generatePlatformAndOrientationInstance(project);
-
-    Process.runSync('rm', ['-rf', '.dart_tool/build'],
-        runInShell: true,
-        environment: Platform.environment,
-        workingDirectory: MainInfo().outputPath);
-
-    await formatProject(genProjectPath, projectDir: MainInfo().outputPath);
+    await generationConfiguration.generateTree(tree, project, context, true);
+    await generationConfiguration.generateTree(tree, project, context, false);
+    generationConfiguration.generatePlatformAndOrientationInstance(project);
   }
 }
 

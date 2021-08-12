@@ -26,80 +26,78 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   AlignStrategy alignStrategy = RowAlignment();
 
-  PBIntermediateRowLayout(PBContext currentContext, {String name})
-      : super(null, null, ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
+  PBIntermediateRowLayout({String name})
+      : super(null, null, ROW_RULES, ROW_EXCEPTIONS, name) {
     generator = PBRowGenerator();
   }
 
   @override
-  void addChild(node) => addChildToLayout(node);
-
-  @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(currentContext, name: name);
+    var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;
   }
 
-  @override
-  void sortChildren() => replaceChildren(children
-    ..sort((child0, child1) =>
-        child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+  // @override
+  // void sortChildren() => replaceChildren(children
+  //   ..sort((child0, child1) =>
+  //       child0..frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
 }
 
 class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   @override
   void align(PBContext context, PBIntermediateRowLayout node) {
     node.checkCrossAxisAlignment();
-    if (node.currentContext.configuration.widgetSpacing == 'Expanded') {
-      _addPerpendicularAlignment(node);
-      _addParallelAlignment(node);
+    if (context.configuration.widgetSpacing == 'Expanded') {
+      _addPerpendicularAlignment(node, context);
+      _addParallelAlignment(node, context);
     } else {
       assert(false,
-          'We don\'t support Configuration [${node.currentContext.configuration.widgetSpacing}] yet.');
+          'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
     }
   }
 
-  void _addParallelAlignment(PBIntermediateRowLayout node) {
-    var newchildren = handleFlex(false, node.topLeftCorner,
-        node.bottomRightCorner, node.children?.cast<PBIntermediateNode>());
-    node.replaceChildren(newchildren);
+  void _addParallelAlignment(PBIntermediateRowLayout node, PBContext context) {
+    var newchildren = handleFlex(false, node.frame.topLeft,
+        node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
+    node.replaceChildren(newchildren, context);
   }
 
-  void _addPerpendicularAlignment(PBIntermediateRowLayout node) {
-    var rowMinY = node.topLeftCorner.y;
-    var rowMaxY = node.bottomRightCorner.y;
+  void _addPerpendicularAlignment(
+      PBIntermediateRowLayout node, PBContext context) {
+    var rowMinY = node.frame.topLeft.y;
+    var rowMaxY = node.frame.bottomRight.y;
 
-    if (node.topLeftCorner.y < node.currentContext.screenTopLeftCorner.y) {
-      rowMinY = node.currentContext.screenTopLeftCorner.y;
+    if (node.frame.topLeft.y < context.screenFrame.topLeft.y) {
+      rowMinY = context.screenFrame.topLeft.y;
     }
-    if (node.bottomRightCorner.y >
-        node.currentContext.screenBottomRightCorner.y) {
-      rowMaxY = node.currentContext.screenBottomRightCorner.y;
+    if (node.frame.bottomRight.y > context.screenFrame.bottomRight.y) {
+      rowMaxY = context.screenFrame.bottomRight.y;
     }
 
     for (var i = 0; i < node.children.length; i++) {
-      var padding = Padding(null, node.frame, node.children[i].constraints,
-          top: node.children[i].topLeftCorner.y - rowMinY ?? 0.0,
-          bottom: rowMaxY - node.children[i].bottomRightCorner.y ?? 0.0,
-          left: 0.0,
-          right: 0.0,
-          currentContext: node.currentContext);
+      var padding = Padding(
+        null,
+        node.frame,
+        node.children[i].constraints,
+        top: node.children[i].frame.topLeft.y - rowMinY ?? 0.0,
+        bottom: rowMaxY - node.children[i].frame.bottomRight.y ?? 0.0,
+        left: 0.0,
+        right: 0.0,
+      );
       padding.addChild(node.children[i]);
 
       //Replace Children.
-      var childrenCopy = node.children;
-      childrenCopy[i] = padding;
-      node.replaceChildren(childrenCopy);
+      node.children[i] = padding;
     }
   }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(currentContext, name: name);
+    var row = PBIntermediateRowLayout(name: name);
     // row.prototypeNode = prototypeNode;
     children.forEach((child) => row.addChild(child));
     return row;
@@ -108,7 +106,7 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   // @override
   // void sortChildren() => replaceChildren(children
   //   ..sort((child0, child1) =>
-  //       child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+  //       child0 .frame.topLeft.x.compareTo(child1 .frame.topLeft.x)));
 
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) => null;

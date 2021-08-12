@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
@@ -108,11 +109,11 @@ abstract class FileStructureStrategy implements CommandInvoker {
       _screenDirectoryPath =
           p.join(GENERATED_PROJECT_PATH, RELATIVE_SCREEN_PATH);
       _viewDirectoryPath = p.join(GENERATED_PROJECT_PATH, RELATIVE_VIEW_PATH);
-      _pbProject.forest.forEach((dir) {
-        if (dir.rootNode != null) {
-          addImportsInfo(dir);
-        }
-      });
+      // _pbProject.forest.forEach((dir) {
+      //   if (dir.rootNode != null) {
+      //     addImportsInfo(dir, context);
+      //   }
+      // });
       Directory(_screenDirectoryPath).createSync(recursive: true);
       Directory(_viewDirectoryPath).createSync(recursive: true);
       isSetUp = true;
@@ -120,7 +121,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
   }
 
   ///Add the import information to correctly generate them in the corresponding files.
-  void addImportsInfo(PBIntermediateTree tree) {
+  void addImportsInfo(PBIntermediateTree tree, PBContext context) {
     var poLinker = PBPlatformOrientationLinkerService();
     // Add to cache if node is scaffold or symbol master
     var node = tree.rootNode;
@@ -132,7 +133,7 @@ abstract class FileStructureStrategy implements CommandInvoker {
           : p.join(_screenDirectoryPath, tree.name.snakeCase, name);
       if (poLinker.screenHasMultiplePlatforms(tree.rootNode.name)) {
         path = p.join(_screenDirectoryPath, name,
-            poLinker.stripPlatform(tree.rootNode.managerData.platform), name);
+            poLinker.stripPlatform(context.managerData.platform), name);
       }
 
       PBGenCache().setPathToCache(uuid, path);

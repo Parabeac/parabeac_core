@@ -17,9 +17,11 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
   @override
   AlignStrategy alignStrategy = NoAlignment();
 
-  InjectedBackArrow(String UUID, Rectangle frame, String name,
-      {PBContext currentContext})
-      : super(UUID, frame, currentContext, name) {
+  InjectedBackArrow(
+    String UUID,
+    Rectangle frame,
+    String name,
+  ) : super(UUID, frame, name) {
     generator = PBBackArrowGenerator();
   }
 
@@ -28,8 +30,11 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
-    return InjectedBackArrow(UUID, frame, originalRef.name,
-        currentContext: currentContext);
+    return InjectedBackArrow(
+      UUID,
+      frame,
+      originalRef.name,
+    );
   }
 }
 

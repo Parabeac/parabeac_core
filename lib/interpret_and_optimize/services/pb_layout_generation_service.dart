@@ -6,7 +6,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -44,9 +43,7 @@ class PBLayoutGenerationService extends AITHandler {
       // ),
       // 'row': PBIntermediateRowLayout('', Uuid().v4(),
       //     currentContext: currentContext),
-      'stack': PBIntermediateStackLayout(
-        null,
-      ),
+      'stack': PBIntermediateStackLayout(),
     };
 
     for (var layoutType
@@ -67,27 +64,33 @@ class PBLayoutGenerationService extends AITHandler {
       return Future.value(tree);
     }
     try {
-      // rootNode = (tree
-      //         .map(_removingMeaninglessGroup)
-      //         .map((node) => _layoutConditionalReplacement(node, context))
-      //         .toList()
-      //           ..removeWhere((element) => element == null))
-      // .first;
-      rootNode = _traverseLayersUtil(rootNode, (layer) {
-        return layer
+      var removedList = tree.toList()
+        ..removeWhere((node) => node is TempGroupLayoutNode);
+      tree.rootNode = removedList.first;
+      // tree.forEach((att) => _removingMeaninglessGroup(att.attributeNode));
+      rootNode = (tree
+              .map((node) => _removingMeaninglessGroup(node))
+              .map((node) => _transformGroup(node))
+              .map((node) => _layoutConditionalReplacement(node, context))
+              .toList()
+                ..removeWhere((element) => element == null))
+          .first;
+      // rootNode = _traverseLayersUtil(rootNode, (layer) {
+      //   return layer
+      /// [rootNode -> scaffold], [scaffold, container], [temp, bitmap], [container, bitmap]
 
-            ///Remove the `TempGroupLayout` nodes that only contain one node
-            .map(_removingMeaninglessGroup)
-            .map((node) => _layoutConditionalReplacement(node, context))
-            .toList()
+      //       ///Remove the `TempGroupLayout` nodes that only contain one node
+      //       .map(_removingMeaninglessGroup)
+      //       .map((node) => _layoutConditionalReplacement(node, context))
+      //       .toList()
 
-              /// Filter out the elements that are null in the tree
-              ..removeWhere((element) => element == null);
-      });
+      //         /// Filter out the elements that are null in the tree
+      //         ..removeWhere((element) => element == null);
+      // });
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
-      _applyPostConditionRules(rootNode);
+      _applyPostConditionRules(rootNode, context);
       // return Future.value(tree);
     } catch (e, stackTrace) {
       MainInfo().sentry.captureException(
@@ -101,45 +104,45 @@ class PBLayoutGenerationService extends AITHandler {
     }
   }
 
-  PBIntermediateNode _traverseLayersUtil(
-      PBIntermediateNode rootNode,
-      List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
-          transformation) {
-    ///The stack is going to saving the current layer of tree along with the parent of
-    ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
-    ///of nodes for the current layer in the second layer.
-    var stack = <Tuple2<PBIntermediateNode, List<PBAttribute>>>[];
-    stack.add(Tuple2(null, [
-      PBAttribute('root', attributeNodes: [rootNode])
-    ]));
+  // PBIntermediateNode _traverseLayersUtil(
+  //     PBIntermediateNode rootNode,
+  //     List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
+  //         transformation) {
+  //   ///The stack is going to saving the current layer of tree along with the parent of
+  //   ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
+  //   ///of nodes for the current layer in the second layer.
+  //   var stack = <Tuple2<PBIntermediateNode, List<PBAttribute>>>[];
+  //   stack.add(Tuple2(null, [
+  //     PBAttribute('root', attributeNodes: [rootNode])
+  //   ]));
 
-    while (stack.isNotEmpty) {
-      var currentTuple = stack.removeLast();
-      currentTuple.item2.forEach((currentAttribute) {
-        currentAttribute.attributeNodes =
-            transformation(currentAttribute.attributeNodes);
-        currentAttribute?.attributeNodes?.forEach((currentNode) {
-          currentNode?.attributes?.forEach((attribute) {
-            stack.add(Tuple2(currentNode, [
-              PBAttribute(attribute.attributeName,
-                  attributeNodes: attribute.attributeNodes)
-            ]));
-          });
-        });
-      });
-      var node = currentTuple.item1;
-      if (node != null) {
-        currentTuple.item2.forEach((attribute) {
-          node.addAttribute(attribute, overwrite: true);
-        });
-      } else {
-        ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
-        ///new `rootNode`.
-        rootNode = currentTuple.item2.first.attributeNode;
-      }
-    }
-    return rootNode;
-  }
+  //   while (stack.isNotEmpty) {
+  //     var currentTuple = stack.removeLast();
+  //     currentTuple.item2.forEach((currentAttribute) {
+  //       currentAttribute.attributeNodes =
+  //           transformation(currentAttribute.attributeNodes);
+  //       currentAttribute?.attributeNodes?.forEach((currentNode) {
+  //         currentNode?.attributes?.forEach((attribute) {
+  //           stack.add(Tuple2(currentNode, [
+  //             PBAttribute(attribute.attributeName,
+  //                 attributeNodes: attribute.attributeNodes)
+  //           ]));
+  //         });
+  //       });
+  //     });
+  //     var node = currentTuple.item1;
+  //     if (node != null) {
+  //       currentTuple.item2.forEach((attribute) {
+  //         node.addAttribute(attribute, overwrite: true);
+  //       });
+  //     } else {
+  //       ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
+  //       ///new `rootNode`.
+  //       rootNode = currentTuple.item2.first.attributeNode;
+  //     }
+  //   }
+  //   return rootNode;
+  // }
 
   /// If this node is an unecessary [TempGroupLayoutNode], just return the child or an
   /// [InjectContainer] if the group is empty
@@ -159,6 +162,17 @@ class PBLayoutGenerationService extends AITHandler {
               ));
     }
     return tempGroup;
+  }
+
+  /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
+  PBIntermediateNode _transformGroup(PBIntermediateNode group) {
+    if (group is TempGroupLayoutNode) {
+      var stack = PBIntermediateStackLayout(
+          name: group.name, constraints: group.constraints);
+      stack.children.addAll(group.children);
+      group = stack;
+    }
+    return group;
   }
 
   ///If `node` contains a single or multiple [PBIntermediateNode]s
@@ -220,7 +234,7 @@ class PBLayoutGenerationService extends AITHandler {
         childPointer = reCheck ? 0 : childPointer + 1;
         reCheck = false;
       }
-      parent.replaceChildren(children);
+      parent.replaceChildren(children, context);
       if (children.length == 1) {
         /// With the support for scaling & pinning, Stacks are now responsible for positioning.
         if (parent is PBIntermediateStackLayout) {
@@ -263,15 +277,19 @@ class PBLayoutGenerationService extends AITHandler {
   }
 
   ///Applying [PostConditionRule]s at the end of the [PBLayoutIntermediateNode]
-  PBIntermediateNode _applyPostConditionRules(PBIntermediateNode node) {
+  PBIntermediateNode _applyPostConditionRules(
+      PBIntermediateNode node, PBContext context) {
     if (node == null) {
       return node;
     }
     if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
       node.replaceChildren(
-          node.children.map((node) => _applyPostConditionRules(node)).toList());
+          node.children
+              .map((node) => _applyPostConditionRules(node, context))
+              .toList(),
+          context);
     } else if (node is PBVisualIntermediateNode) {
-      node.child = _applyPostConditionRules(node.child);
+      node.children.map((e) => _applyPostConditionRules(e, context));
     }
 
     for (var postConditionRule in _postLayoutRules) {
