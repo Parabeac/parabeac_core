@@ -8,9 +8,12 @@ class FigmaToPBDLService implements DesignToPBDLService {
   DesignType designType = DesignType.FIGMA;
 
   @override
-  Future<PBDLProject> callPBDL(MainInfo info) => PBDL.fromFigma(
-        info.figmaProjectID,
-        info.figmaKey,
-        outputPath: p.join(info.genProjectPath, 'assets'),
-      );
+  Future<PBDLProject> callPBDL(MainInfo info) {
+    return PBDL.fromFigma(
+      info.figmaProjectID,
+      info.figmaKey,
+      outputPath: p.join(info.genProjectPath, 'assets'),
+      exportPbdlJson: info.exportPBDL,
+    );
+  }
 }

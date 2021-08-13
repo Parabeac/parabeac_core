@@ -75,7 +75,7 @@ class MainInfo {
   /// Exporting the PBDL JSON file instead of generating the actual Flutter code.
   bool exportPBDL;
 
-  Map pbdf;
+  Map pbdl;
 
   /// Type of [DesignType] that is being processed by the current process of
   /// Parabeac Core.

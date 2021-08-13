@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.da
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
@@ -18,6 +19,7 @@ import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
 final designToPBDLServices = <DesignToPBDLService>[
+  JsonToPBDLService(),
   SketchToPBDLService(),
   FigmaToPBDLService(),
 ];
@@ -252,7 +254,7 @@ bool hasTooManyArgs(ArgResults args) {
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
 
-  return hasAll || !(hasSketch ^ hasFigma /*^ hasPbdl*/);
+  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
 }
 
 /// Returns true if `args` does not contain any intake
