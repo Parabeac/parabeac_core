@@ -44,6 +44,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   @JsonKey(ignore: true)
   bool lockData = false;
 
+  @JsonKey(defaultValue: true)
+  bool convert;
+
   PBGenerationViewData _generationViewData;
   @JsonKey(ignore: true)
   PBGenerationViewData get generationViewData => _generationViewData;
@@ -263,12 +266,11 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 /// the [PBIntermediateNode]'s children are removed/added.
 abstract class ChildrenObserver {
   /// Even notification of [children] have been modified.
-  /// 
+  ///
   /// [context] could be `null` when when the [PBIntermediateTree] is being initialized. [ChildrenObserver]
   /// can still modify the [children] but it would be unable to add/remove children.
   void childrenModified(List<PBIntermediateNode> children, [PBContext context]);
 }
-
 
 enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
 
