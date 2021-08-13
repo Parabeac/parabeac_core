@@ -17,7 +17,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
-
+import 'package:path/path.dart' as p;
 part 'inherited_shape_group.g.dart';
 
 @JsonSerializable()
@@ -52,12 +52,11 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     childrenStrategy = NoChildStrategy();
 
     ImageReferenceStorage().addReferenceAndWrite(
-        UUID, '${MainInfo().outputPath}assets/images', image);
+        UUID, p.join(MainInfo().outputPath, 'assets/images'), image);
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var group = _$InheritedShapeGroupFromJson(json)
-      ..originalRef = json;
+    var group = _$InheritedShapeGroupFromJson(json)..originalRef = json;
 
     group.mapRawChildren(json);
 

@@ -121,6 +121,7 @@ ${parser.usage}
 
   await Future.wait(pbProject.forest.map((tree) {
     var context = PBContext(processInfo.configuration);
+    tree.forEach((node) => node.handleChildren(context));
     return interpretService
         .interpretAndOptimize(tree, context, pbProject)
         .then((tree) => fpb.genAITree(tree, context));

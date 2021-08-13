@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:path/path.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
 
@@ -64,91 +65,23 @@ class PBLayoutGenerationService extends AITHandler {
       return Future.value(tree);
     }
     try {
-      // var removedList = tree.toList()
-      //   ..removeWhere((node) => node is TempGroupLayoutNode);
-      // tree
-      //     .whereType<TempGroupLayoutNode>()
-      //     .forEach((group) => group.parent.children.remove(group));
-      // tree.rootNode = removedList.first;
-      // // tree.forEach((att) => _removingMeaninglessGroup(att.attributeNode));
-      // rootNode = (tree
-      //         // .map((node) => _removingMeaninglessGroup(node))
-      //         .map((node) => _transformGroup(node))
-      //         .map((node) => _layoutConditionalReplacement(node, context))
-      //         .toList()
-      //           ..removeWhere((element) => element == null))
-      //     .first;
-
       _removingMeaninglessGroup(tree);
       _transformGroup(tree);
-      // tree.rootNode = l.first;
-      // rootNode = _traverseLayersUtil(rootNode, (layer) {
-      // return layer
-
-      // ///Remove the `TempGroupLayout` nodes that only contain one node
-      // .map(_removingMeaninglessGroup)
-      // .map((node) => _layoutConditionalReplacement(node, context))
-      // .toList()
-
-      //   /// Filter out the elements that are null in the tree
-      //   ..removeWhere((element) => element == null);
-      // });
+      _layoutTransformation(tree, context);
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
       _applyPostConditionRules(rootNode, context);
       // return Future.value(tree);
-    } catch (e, stackTrace) {
-      MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
+    } catch (e) {
+      MainInfo().captureException(
+        e,
+      );
       logger.error(e.toString());
     } finally {
       tree.rootNode = rootNode;
       return Future.value(tree);
     }
-  }
-
-  PBIntermediateNode _traverseLayersUtil(
-      PBIntermediateNode rootNode,
-      List<PBIntermediateNode> Function(List<PBIntermediateNode> layer)
-          transformation) {
-    ///The stack is going to saving the current layer of tree along with the parent of
-    ///the layer. It makes use of a `Tuple2()` to save the parent in the first index and a list
-    ///of nodes for the current layer in the second layer.
-    var stack = <Tuple2<PBIntermediateNode, List<PBIntermediateNode>>>[];
-    stack.add(Tuple2(null, [rootNode]));
-
-    while (stack.isNotEmpty) {
-      var currentTuple = stack.removeLast();
-      var children = currentTuple.item2;
-      var node = currentTuple.item1;
-
-      stack.add(Tuple2(node, node.children));
-      node.children = transformation(node.children);
-      children.forEach((child) {
-        // child = transformation(child);
-
-        // child?.attributeNodes?.forEach((currentNode) {
-        //   currentNode?.attributes?.forEach((attribute) {
-        //     stack.add(Tuple2(currentNode, [
-        //       // currentNode.
-        //     ]));
-        //   });
-        // });
-      });
-      if (node != null) {
-        currentTuple.item2.forEach((attribute) {
-          // node.addAttribute(attribute, overwrite: true);
-        });
-      } else {
-        ///if the `currentTuple.item1` is null, that implies the `currentTuple.item2.first` is the
-        ///new `rootNode`.
-        // rootNode = currentTuple.item2.first.attributeNode;
-      }
-    }
-    return rootNode;
   }
 
   /// If this node is an unecessary [TempGroupLayoutNode], from the [tree]
@@ -187,24 +120,13 @@ class PBLayoutGenerationService extends AITHandler {
     });
   }
 
-  ///If `node` contains a single or multiple [PBIntermediateNode]s
-  bool _containsChildren(PBIntermediateNode node) =>
-      (node is PBVisualIntermediateNode && node.child != null) ||
-      (node is PBLayoutIntermediateNode && node.children.isNotEmpty);
-
-  ///Each of the [TempGroupLayoutNode] could derive multiple [IntermediateLayoutNode]s because
-  ///nodes should be considered into subsections. For example, if child 0 and child 1 statisfy the
-  ///rule of a [Row] but not child 3, then child 0 and child 1 should be placed inside of a [Row]. Therefore,
-  ///there could be many[IntermediateLayoutNodes] derived in the children level of the `group`.
-  PBIntermediateNode _layoutConditionalReplacement(
-      PBIntermediateNode parent, PBContext context,
-      {depth = 1}) {
-    if (parent is PBLayoutIntermediateNode && depth >= 0) {
-      parent.sortChildren();
+  void _layoutTransformation(PBIntermediateTree tree, PBContext context) {
+    for (var parent in tree) {
       var children = parent.children;
+      children.sort((n0, n1) => n0.frame.topLeft.compareTo(n1.frame.topLeft));
+
       var childPointer = 0;
       var reCheck = false;
-
       while (childPointer < children.length - 1) {
         var currentNode = children[childPointer];
         var nextNode = children[childPointer + 1];
@@ -217,14 +139,16 @@ class PBLayoutGenerationService extends AITHandler {
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
+              tree.removeNode(nextNode, eliminateSubTree: true);
               currentNode.addChild(nextNode);
-              currentNode = _layoutConditionalReplacement(currentNode, context,
-                  depth: depth - 1);
+              // tree.replaceNode(nextNode, currentNode..addChild(nextNode));
+
               generatedLayout = currentNode;
             } else if (layout.runtimeType == nextNode.runtimeType) {
+              tree.removeNode(currentNode, eliminateSubTree: true);
               nextNode.addChild(currentNode);
-              nextNode = _layoutConditionalReplacement(nextNode, context,
-                  depth: depth - 1);
+              // tree.replaceNode(currentNode, nextNode..addChild(currentNode));
+
               generatedLayout = nextNode;
             }
 
@@ -246,21 +170,7 @@ class PBLayoutGenerationService extends AITHandler {
         childPointer = reCheck ? 0 : childPointer + 1;
         reCheck = false;
       }
-      parent.replaceChildren(children, context);
-      if (children.length == 1) {
-        /// With the support for scaling & pinning, Stacks are now responsible for positioning.
-        if (parent is PBIntermediateStackLayout) {
-          return parent;
-        }
-        return _replaceNode(parent, children[0]);
-      } else {
-        return parent is! TempGroupLayoutNode
-            ? parent
-            : _replaceNode(parent,
-                _defaultLayout.generateLayout(children, context, parent.name));
-      }
     }
-    return parent;
   }
 
   ///Makes sure all the necessary attributes are recovered before replacing a [PBIntermediateNode]
