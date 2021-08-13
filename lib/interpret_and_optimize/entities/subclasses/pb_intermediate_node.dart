@@ -43,27 +43,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   PBIntermediateConstraints constraints;
 
-  /// Map representing the attributes of [this].
-  /// The key represents the name of the attribute, while the value
-  /// is a List<PBIntermediateNode> representing the nodes under
-  /// that attribute.
-  // @JsonKey(
-  //   name: 'children',
-  //   fromJson: _childrenFromJson,
-  //   toJson: _childrenToJson,
-  //   nullable: true,
-  // )
-  // List<PBAttribute> _attributes;
-
-  // // TODO(eddie) this is a work around that is currently being tested, delete afterwards
-  // @JsonKey(name: 'child', fromJson: _childToJson, nullable: true)
-  // set _child(PBAttribute attribute) {
-  //   _attributes ??= [];
-  //   _attributes.add(attribute);
-  // }
-
-  // @JsonKey(ignore: true)
-  // List<PBAttribute> get attributes => _attributes;
   @override
   @JsonKey(ignore: true)
   PBIntermediateNode parent;
@@ -82,32 +61,12 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   AlignStrategy alignStrategy = NoAlignment();
 
-  /// Gets the [PBIntermediateNode] at attribute `child`
-  // PBIntermediateNode get child => getAttributeNamed('child')?.attributeNode;
-
-  /// Sets the `child` attribute's `attributeNode` to `element`.
-  /// If a `child` attribute does not yet exist, it creates it.
-  // set child(PBIntermediateNode element) {
-  //   if (element == null) {
-  //     return;
-  //   }
-  //   if (!hasAttribute('child')) {
-  //     addAttribute(PBAttribute('child', attributeNodes: [element]));
-  //   } else {
-  //     getAttributeNamed('child').attributeNode = element;
-  //   }
-
-  // }
-
   @JsonKey(
       ignore: false,
       name: 'boundaryRectangle',
       fromJson: DeserializedRectangle.fromJson,
       toJson: DeserializedRectangle.toJson)
   Rectangle frame;
-
-  // @JsonKey(ignore: true)
-  // PBContext currentContext;
 
   // @JsonKey(ignore: true)
   // PBGenerationViewData get managerData => currentContext.tree.data;
@@ -158,30 +117,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
     return children.any((element) => element.attributeName == attributeName);
   }
 
-  /// Adds the [PBAttribute] to this node's `attributes` list.
-  /// When `overwrite` is set to true, if the provided `attribute` has the same
-  /// name as another attribute in `attributes`, it will replace the old one.
-  /// Returns true if the addition was successful, false otherwise.
-  // bool addAttribute(PBAttribute attribute, {bool overwrite = false}) {
-  //   // Iterate through the list of attributes
-  //   for (var i = 0; i < attributes.length; i++) {
-  //     var childAttr = attributes[i];
-
-  //     // If there is a duplicate, replace if `overwrite` is true
-  //     if (childAttr.attributeName == attribute.attributeName) {
-  //       if (overwrite) {
-  //         attributes[i] = attribute;
-  //         return true;
-  //       }
-  //       return false;
-  //     }
-  //   }
-
-  //   // Add attribute, no duplicate found
-  //   attributes.add(attribute);
-  //   return true;
-  // }
-
   /// Adds child to node.
   void addChild(PBIntermediateNode node) {
     childrenStrategy.addChild(this, node);
@@ -222,34 +157,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
       }
     });
   }
-
-  // static List<PBAttribute> _childrenFromJson(Map<String, dynamic> json) {
-  //   var key = 'children';
-  //   var children = json[key] as List;
-  //   return <PBAttribute>[
-  //     PBAttribute(key,
-  //         attributeNodes: children
-  //             .map((child) => PBIntermediateNode.fromJson(child))
-  //             .toList())
-  //   ];
-  // }
-
-  // static Map<String, List> _childrenToJson(List<PBAttribute> attributes) {
-  //   var mapEntries = attributes
-  //       .map((PBAttribute attribute) => MapEntry(
-  //           attribute.attributeName,
-  //           attribute.attributeNode == null
-  //               ? attribute.attributeNodes.map((e) => e.toJson()).toList()
-  //               : [attribute.attributeNode.toJson()]))
-  //       .toList();
-  //   return Map.fromEntries(mapEntries);
-  // }
-
-  // static PBAttribute _childToJson(Map<String, dynamic> json) {
-  //   var key = 'child';
-  //   return PBAttribute(key,
-  //       attributeNodes: [PBIntermediateNode.fromJson(json[key])]);
-  // }
 }
 
 extension PBPointLegacyMethod on Point {
