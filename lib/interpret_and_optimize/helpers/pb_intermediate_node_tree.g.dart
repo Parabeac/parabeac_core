@@ -9,13 +9,17 @@ part of 'pb_intermediate_node_tree.dart';
 PBIntermediateTree _$PBIntermediateTreeFromJson(Map<String, dynamic> json) {
   return PBIntermediateTree(
     name: json['name'] as String,
-  )..rootNode = json['designNode'] == null
-      ? null
-      : PBIntermediateNode.fromJson(json['designNode'] as Map<String, dynamic>);
+  )
+    ..convert = json['convert'] as bool ?? true
+    ..rootNode = json['designNode'] == null
+        ? null
+        : PBIntermediateNode.fromJson(
+            json['designNode'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$PBIntermediateTreeToJson(PBIntermediateTree instance) =>
     <String, dynamic>{
+      'convert': instance.convert,
       'designNode': instance.rootNode,
       'name': instance.name,
     };

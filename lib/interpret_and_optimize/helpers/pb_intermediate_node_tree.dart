@@ -22,6 +22,9 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   String _UUID;
   String get UUID => _UUID;
 
+  @JsonKey(defaultValue: true)
+  bool convert;
+
   /// The [TREE_TYPE] of the [PBIntermediateTree].
   @JsonKey(ignore: true)
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;

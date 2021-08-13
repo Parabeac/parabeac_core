@@ -94,6 +94,7 @@ class PBProject {
         }
         return tree;
       }).toList();
+      screens.removeWhere((element) => !element.convert);
       trees.addAll(screens);
     });
 
