@@ -111,11 +111,6 @@ class PBLayoutGenerationService extends AITHandler {
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
-      // var stack = ;
-      // stack.frame = tempGroup.frame;
-      // stack.children.addAll(tempGroup.children);
-      // tempGroup.children.forEach((element) => element.parent = stack);
-      // tree.replaceNode(tempGroup, stack);
       tree.replaceNode(
           tempGroup,
           PBIntermediateStackLayout(
@@ -143,12 +138,14 @@ class PBLayoutGenerationService extends AITHandler {
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
-              tree.replaceNode(nextNode, currentNode..addChild(nextNode));
+              tree.replaceNode(nextNode, currentNode);
+              currentNode.addChild(nextNode);
             }
             //! This is causing appbar to be removed from scaffold and placed inside scaffold's `body` stack
 
             else if (layout.runtimeType == nextNode.runtimeType) {
-              tree.replaceNode(currentNode, nextNode..addChild(currentNode));
+              tree.replaceNode(currentNode, nextNode);
+              nextNode.addChild(currentNode);
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
               ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside

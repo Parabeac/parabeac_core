@@ -23,7 +23,8 @@ part 'pb_intermediate_node.g.dart';
 @JsonSerializable(
     explicitToJson: true, createFactory: false, ignoreUnannotated: true)
 abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
-    implements TraversableNode<PBIntermediateNode> {
+    implements
+        TraversableNode<PBIntermediateNode> {
   @JsonKey(ignore: true)
   Logger logger;
 
@@ -53,7 +54,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
 
   @JsonKey(ignore: true)
   PBIntermediateNode get child => children.isEmpty ? null : children.first;
-
 
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
@@ -124,6 +124,9 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
     /// Checking the constrains of the [node] being added to the tree, smoe of the
     /// constrains could be inherited to that section of the sub-tree.
   }
+
+  @override
+  int get hashCode => UUID.hashCode;
 
   void handleChildren(PBContext context) {}
 

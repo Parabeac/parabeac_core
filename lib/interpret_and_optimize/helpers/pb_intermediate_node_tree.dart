@@ -152,21 +152,26 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
       {bool acceptChildren = false}) {
     if (target.parent == null) {
       ///TODO: throw correct error/log
-      return false;
+      throw Error();
     }
 
     var parent = target.parent;
-    var orphans = <PBIntermediateNode>[];
     if (acceptChildren) {
-      orphans.addAll(target.children.map((e) {
-        e.parent = parent;
+      replacement.children.addAll(target.children.map((e) {
+        e.parent = replacement;
         return e;
       }));
     }
     removeNode(target, eliminateSubTree: true);
-    replacement.children.addAll(orphans);
-    parent.children.add(replacement);
-    replacement.parent = parent;
+    replacement.attributeName = target.attributeName;
+
+    /// This conditional is for scenarios where both the [target] and the [replacement] are
+    /// under the same [parent]
+    if (!parent.children.contains(replacement)) {
+      parent.children.add(replacement);
+      replacement.parent = parent;
+    }
+
     return true;
   }
 

@@ -50,6 +50,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     }
   }
 
+  // @override
+  // void addChild(node){
+  //   resize(context)
+  //   super.addChild(node);
+  // }
+
   /// Replace the child at `index` for `replacement`.
   /// Returns true if the replacement wsa succesful, false otherwise.
   bool replaceChildAt(int index, PBIntermediateNode replacement) {
@@ -66,29 +72,24 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     super.handleChildren(context);
   }
 
-  ///Add node to child
-  // void addChildToLayout(PBIntermediateNode node) {
-  //   getAttributeNamed('children').attributeNodes.add(node);
-  //   resize();
-  // }
-
   void resize(PBContext context) {
     if (children.isEmpty) {
       logger
           .warning('There should be children in the layout so it can resize.');
       return;
     }
-    var minX = (children[0]).frame.topLeft.x,
-        minY = (children[0]).frame.topLeft.y,
-        maxX = (children[0]).frame.bottomRight.x,
-        maxY = (children[0]).frame.bottomRight.y;
-    for (var child in children) {
-      minX = min((child).frame.topLeft.x, minX);
-      minY = min((child).frame.topLeft.y, minY);
-      maxX = max((child).frame.bottomRight.x, maxX);
-      maxY = max((child).frame.bottomRight.y, maxY);
-    }
-    frame = Rectangle.fromPoints(Point(minX, minY), Point(maxX, maxY));
+    // var minX = (children[0]).frame.topLeft.x,
+    //     minY = (children[0]).frame.topLeft.y,
+    //     maxX = (children[0]).frame.bottomRight.x,
+    //     maxY = (children[0]).frame.bottomRight.y;
+    // for (var child in children) {
+    //   minX = min((child).frame.topLeft.x, minX);
+    //   minY = min((child).frame.topLeft.y, minY);
+    //   maxX = max((child).frame.bottomRight.x, maxX);
+    //   maxY = max((child).frame.bottomRight.y, maxY);
+    // }
+    children.forEach((child) => frame = frame.boundingBox(child.frame));
+    // frame = Rectangle.fromPoints(Point(minX, minY), Point(maxX, maxY));
   }
 
   ///Remove Child
