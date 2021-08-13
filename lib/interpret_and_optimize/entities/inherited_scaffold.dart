@@ -119,12 +119,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     var groupAtt = TempGroupLayoutNode(null, null)..attributeName = 'body';
     children.forEach((att) => groupAtt.addChild(att));
 
-    children = [groupAtt];
-
-    ///get tempgroup
-    ///add all of the rest of children to it
-    ///if temp group is null, create group
-    ///add all of the rest of children
+    this.children = [groupAtt];
   }
 
   // @override

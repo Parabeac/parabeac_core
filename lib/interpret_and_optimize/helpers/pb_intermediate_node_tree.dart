@@ -158,7 +158,10 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
     var parent = target.parent;
     var orphans = <PBIntermediateNode>[];
     if (acceptChildren) {
-      orphans.addAll(target.children);
+      orphans.addAll(target.children.map((e) {
+        e.parent = parent;
+        return e;
+      }));
     }
     removeNode(target, eliminateSubTree: true);
     replacement.children.addAll(orphans);

@@ -111,14 +111,18 @@ class PBLayoutGenerationService extends AITHandler {
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
-      var stack = PBIntermediateStackLayout(
-        name: tempGroup.name,
-        constraints: tempGroup.constraints,
-      );
-      stack.frame = tempGroup.frame;
-      stack.children.addAll(tempGroup.children);
-      tempGroup.children.forEach((element) => element.parent = stack);
-      tree.replaceNode(tempGroup, stack);
+      // var stack = ;
+      // stack.frame = tempGroup.frame;
+      // stack.children.addAll(tempGroup.children);
+      // tempGroup.children.forEach((element) => element.parent = stack);
+      // tree.replaceNode(tempGroup, stack);
+      tree.replaceNode(
+          tempGroup,
+          PBIntermediateStackLayout(
+            name: tempGroup.name,
+            constraints: tempGroup.constraints,
+          )..frame = tempGroup.frame,
+          acceptChildren: true);
     });
   }
 
@@ -136,35 +140,23 @@ class PBLayoutGenerationService extends AITHandler {
         for (var layout in _availableLayouts) {
           if (layout.satisfyRules(currentNode, nextNode) &&
               layout.runtimeType != parent.runtimeType) {
-            var generatedLayout;
-
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
-              tree.removeNode(nextNode, eliminateSubTree: true);
-              currentNode.addChild(nextNode);
-              // tree.replaceNode(nextNode, currentNode..addChild(nextNode));
-
-              generatedLayout = currentNode;
+              tree.replaceNode(nextNode, currentNode..addChild(nextNode));
             } else if (layout.runtimeType == nextNode.runtimeType) {
+              tree.replaceNode(currentNode, nextNode..addChild(currentNode));
+            } else {
+              ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
+              ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
+              ///of the generated layout.
               tree.removeNode(currentNode, eliminateSubTree: true);
-              nextNode.addChild(currentNode);
-              // tree.replaceNode(currentNode, nextNode..addChild(currentNode));
-
-              generatedLayout = nextNode;
+              tree.removeNode(nextNode, eliminateSubTree: true);
+              parent.addChild(layout.generateLayout(
+                  [currentNode, nextNode],
+                  context,
+                  '${currentNode.name}${nextNode.name}${layout.runtimeType}'));
             }
-
-            ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
-            ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
-            ///of the generated layout.
-            generatedLayout ??=
-                layout.generateLayout([currentNode, nextNode], context, '');
-            var start = childPointer, end = childPointer + 2;
-            children.replaceRange(
-                start,
-                (end > children.length ? children.length : end),
-                [generatedLayout]);
-            childPointer = 0;
             reCheck = true;
             break;
           }
