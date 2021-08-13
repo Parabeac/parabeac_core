@@ -65,8 +65,9 @@ class TempChildrenStrategy extends ChildrenStrategy {
 
   @override
   void addChild(PBIntermediateNode target, children) {
-    var group =
-        target.children.firstWhere((element) => element is TempGroupLayoutNode);
+    var group = target.children.firstWhere(
+        (element) => element is TempGroupLayoutNode,
+        orElse: () => null);
     if (group != null && target.children.length == 1) {
       group.addChild(children);
     } else if (target.children.isNotEmpty) {
@@ -78,7 +79,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
       target.children = [temp];
     } else if (children is PBIntermediateNode) {
       children.parent = target;
-      target.addChild(children);
+      target.children.add(children);
     }
   }
 }

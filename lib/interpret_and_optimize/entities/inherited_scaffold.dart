@@ -69,16 +69,19 @@ class InheritedScaffold extends PBVisualIntermediateNode
     // }
 
     if (node is InjectedAppbar) {
+      node.parent = this;
       children.add(node..attributeName = 'appBar');
       // currentContext.canvasFrame = Rectangle.fromPoints(
       //     currentContext.screenFrame.topLeft, node.frame.bottomRight);
       return;
     }
     if (node is InjectedTabBar) {
+      node.parent = this;
       children.add(node..attributeName = 'bottomNavigationBar');
       // addAttribute(PBAttribute('bottomNavigationBar', attributeNodes: [node]));
       return;
     } else {
+      node.parent = this;
       children.add(node..attributeName = 'body');
     }
 

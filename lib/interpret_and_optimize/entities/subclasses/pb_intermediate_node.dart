@@ -204,9 +204,8 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
-    for (var att in children ?? []) {
-      var child = att.attributeNode;
-      child?.align(context.clone());
+    for (var currChild in children ?? []) {
+      currChild?.align(context.clone());
     }
   }
 

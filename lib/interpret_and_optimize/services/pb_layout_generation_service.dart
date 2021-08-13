@@ -79,19 +79,20 @@ class PBLayoutGenerationService extends AITHandler {
       //           ..removeWhere((element) => element == null))
       //     .first;
 
-      tree = _removingMeaninglessGroup(tree);
+      _removingMeaninglessGroup(tree);
+      _transformGroup(tree);
       // tree.rootNode = l.first;
-      rootNode = _traverseLayersUtil(rootNode, (layer) {
-        // return layer
+      // rootNode = _traverseLayersUtil(rootNode, (layer) {
+      // return layer
 
-        // ///Remove the `TempGroupLayout` nodes that only contain one node
-        // .map(_removingMeaninglessGroup)
-        // .map((node) => _layoutConditionalReplacement(node, context))
-        // .toList()
+      // ///Remove the `TempGroupLayout` nodes that only contain one node
+      // .map(_removingMeaninglessGroup)
+      // .map((node) => _layoutConditionalReplacement(node, context))
+      // .toList()
 
-        //   /// Filter out the elements that are null in the tree
-        //   ..removeWhere((element) => element == null);
-      });
+      //   /// Filter out the elements that are null in the tree
+      //   ..removeWhere((element) => element == null);
+      // });
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
@@ -154,7 +155,7 @@ class PBLayoutGenerationService extends AITHandler {
   ///
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
-  PBIntermediateTree _removingMeaninglessGroup(PBIntermediateTree tree) {
+  void _removingMeaninglessGroup(PBIntermediateTree tree) {
     tree
         .where(
             (node) => node is TempGroupLayoutNode && node.children.length <= 1)
@@ -172,18 +173,18 @@ class PBLayoutGenerationService extends AITHandler {
                     // constraints: tempGroup.constraints
                   )));
     });
-    return tree;
   }
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
-  PBIntermediateNode _transformGroup(PBIntermediateNode group) {
-    if (group is TempGroupLayoutNode) {
+  void _transformGroup(PBIntermediateTree tree) {
+    tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
       var stack = PBIntermediateStackLayout(
-          name: group.name, constraints: group.constraints);
-      stack.children.addAll(group.children);
-      group = stack;
-    }
-    return group;
+        name: tempGroup.name,
+        constraints: tempGroup.constraints,
+      );
+      stack.children.addAll(tempGroup.children);
+      tree.replaceNode(tempGroup, stack);
+    });
   }
 
   ///If `node` contains a single or multiple [PBIntermediateNode]s

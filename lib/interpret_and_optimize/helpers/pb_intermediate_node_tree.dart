@@ -133,6 +133,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
       var grandChilds = parent.children
           .where((element) => element.UUID == node.UUID)
           .map((e) => e.children)
+
           ///FIXME: Right now the iterator is returning null insize of a list when iterating the tree.
           .where((element) => element != null)
           .expand((element) => element)
@@ -162,6 +163,7 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
     removeNode(target, eliminateSubTree: true);
     replacement.children.addAll(orphans);
     parent.children.add(replacement);
+    replacement.parent = parent;
     return true;
   }
 
