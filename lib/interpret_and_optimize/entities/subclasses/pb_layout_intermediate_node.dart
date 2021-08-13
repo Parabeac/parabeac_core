@@ -42,6 +42,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children, PBContext context) {
     if (children.isNotEmpty) {
+      this.children = children;
       resize(context);
     } else {
       logger.warning(
@@ -58,7 +59,6 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     }
     return false;
   }
-
 
   @override
   void handleChildren(PBContext context) {

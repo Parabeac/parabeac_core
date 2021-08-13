@@ -144,7 +144,10 @@ class PBLayoutGenerationService extends AITHandler {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               tree.replaceNode(nextNode, currentNode..addChild(nextNode));
-            } else if (layout.runtimeType == nextNode.runtimeType) {
+            }
+            //! This is causing appbar to be removed from scaffold and placed inside scaffold's `body` stack
+
+            else if (layout.runtimeType == nextNode.runtimeType) {
               tree.replaceNode(currentNode, nextNode..addChild(currentNode));
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
