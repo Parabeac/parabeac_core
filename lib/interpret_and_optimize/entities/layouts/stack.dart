@@ -49,7 +49,10 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
-    var stack = PBIntermediateStackLayout(name: name);
+    var frame = children.first.frame;
+    children.forEach((element) => frame.boundingBox(element.frame));
+
+    var stack = PBIntermediateStackLayout(name: name)..frame = frame;
     stack.prototypeNode = prototypeNode;
     children.forEach((child) => stack.addChild(child));
     return stack;
