@@ -3,11 +3,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:quick_log/quick_log.dart';
 
 abstract class ChildrenStrategy {
-  Logger log;
+  Logger logger;
   final String attributeName;
   final bool overwridable;
   ChildrenStrategy(this.attributeName, this.overwridable) {
-    log = Logger(runtimeType.toString());
+    logger = Logger(runtimeType.toString());
   }
   void addChild(PBIntermediateNode target, dynamic children);
 }
@@ -22,7 +22,7 @@ class OneChildStrategy extends ChildrenStrategy {
       child.parent = target;
       target.children = [child];
     } else {
-      log.warning(
+      logger.warning(
           'Tried adding ${child.runtimeType.toString()} to ${target.runtimeType.toString()}');
     }
   }
@@ -40,9 +40,8 @@ class MultipleChildStrategy extends ChildrenStrategy {
         return child;
       }));
     } else if (children is PBIntermediateNode) {
-      var node = children;
-      node.parent = target;
-      node.children.forEach(target.addChild);
+      children.parent = target;
+      target.children.add(children);
     }
   }
 }
@@ -53,7 +52,7 @@ class NoChildStrategy extends ChildrenStrategy {
   @override
   void addChild(PBIntermediateNode target, children) {
     if (children != null) {
-      log.warning(
+      logger.warning(
           'Tried adding ${children.runtimeType.toString()} to ${target.runtimeType.toString()}');
     }
   }
@@ -69,13 +68,26 @@ class TempChildrenStrategy extends ChildrenStrategy {
         (element) => element is TempGroupLayoutNode,
         orElse: () => null);
     if (group != null && target.children.length == 1) {
+      // Calculate new frame based on incoming child
+      var newFrame = group.frame.boundingBox(children.frame);
       group.addChild(children);
+      group.frame = newFrame;
     } else if (target.children.isNotEmpty) {
-      var child = target.children.first;
       var temp = TempGroupLayoutNode(null, null, name: children.name)
-        ..addChild(child)
         ..addChild(children)
         ..parent = target;
+      // Add target's existing children to temp group layout
+      target.children.forEach((child) {
+        temp.addChild(child);
+        child.parent = temp;
+      });
+      // Calculate bounding box from all children
+      var frame = temp.children.first.frame;
+      for (var i = 1; i < temp.children.length; i++) {
+        frame = frame.boundingBox(temp.children[i].frame);
+      }
+
+      temp.frame = frame;
       target.children = [temp];
     } else if (children is PBIntermediateNode) {
       children.parent = target;
