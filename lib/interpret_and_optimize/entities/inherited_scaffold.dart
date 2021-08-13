@@ -116,24 +116,16 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void handleChildren(PBContext context) {
     var children = getAllAtrributeNamed('body');
-    var groupAtt = TempGroupLayoutNode(null, null)..attributeName = 'body';
+    var groupAtt = TempGroupLayoutNode(null, null)
+      ..attributeName = 'body'
+      ..parent = this;
     children.forEach((att) => groupAtt.addChild(att));
 
-    children = [groupAtt];
+    // Top-most stack should have scaffold's frame to align children properly
+    groupAtt.frame = frame;
 
-    ///get tempgroup
-    ///add all of the rest of children to it
-    ///if temp group is null, create group
-    ///add all of the rest of children
+    this.children = [groupAtt];
   }
-
-  // @override
-  // @JsonKey(ignore: true)
-  // PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
-
-  // @JsonKey(ignore: true)
-  // @override
-  // List<PBIntermediateNode> get children => [child, navbar, tabbar];
 
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;

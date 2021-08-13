@@ -114,8 +114,10 @@ class PBLayoutGenerationService extends AITHandler {
       var stack = PBIntermediateStackLayout(
         name: tempGroup.name,
         constraints: tempGroup.constraints,
-      );
-      stack.frame = tempGroup.frame;
+      )
+        ..frame = tempGroup.frame
+        ..parent = tempGroup.parent
+        ..attributeName = tempGroup.attributeName;
       stack.children.addAll(tempGroup.children);
       tempGroup.children.forEach((element) => element.parent = stack);
       tree.replaceNode(tempGroup, stack);

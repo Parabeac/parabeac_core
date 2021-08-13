@@ -94,6 +94,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               right: node.frame.bottomRight.x - child.frame.bottomRight.x,
               width: child.frame.width,
               height: child.frame.height))
+        ..parent = child.parent
         ..addChild(child));
     });
     node.replaceChildren(alignedChildren, context);
