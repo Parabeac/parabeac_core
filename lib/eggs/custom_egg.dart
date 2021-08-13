@@ -22,7 +22,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
     String name,
   ) : super(UUID, frame, name) {
     generator = CustomEggGenerator();
-    childrenStrategy = OneChildStrategy('child');
+    childrenStrategy = TempChildrenStrategy('child');
   }
 
   @override

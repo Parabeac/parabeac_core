@@ -115,7 +115,9 @@ class PBLayoutGenerationService extends AITHandler {
         name: tempGroup.name,
         constraints: tempGroup.constraints,
       );
+      stack.frame = tempGroup.frame;
       stack.children.addAll(tempGroup.children);
+      tempGroup.children.forEach((element) => element.parent = stack);
       tree.replaceNode(tempGroup, stack);
     });
   }

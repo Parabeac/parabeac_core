@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,7 +35,9 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules,
       this._exceptions, String name,
       {this.prototypeNode, PBIntermediateConstraints constraints})
-      : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints);
+      : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints) {
+    childrenStrategy = MultipleChildStrategy('children');
+  }
 
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children, PBContext context) {
@@ -56,10 +59,6 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     return false;
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    super.addChild(node);
-  }
 
   @override
   void handleChildren(PBContext context) {
@@ -102,9 +101,8 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   ///Sort children
-  void sortChildren() =>
-      children.sort((child0, child1) => child0.frame.topLeft
-          .compareTo(child1.frame.topLeft));
+  void sortChildren() => children.sort(
+      (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
 
   ///The [PBLayoutIntermediateNode] contains a series of rules that determines if the children is part of that layout. All the children
   ///are going to have to meet the rules that the [PBLayoutIntermediateNode] presents. This method presents a way of comparing two children [PBIntermediateNode]
