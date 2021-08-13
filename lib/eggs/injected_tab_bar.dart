@@ -49,11 +49,15 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
-    return InjectedTabBar(
+    var tabbar = InjectedTabBar(
       UUID,
       frame,
       originalRef.name,
     );
+
+    originalRef.children.forEach(addChild);
+
+    return tabbar;
   }
 
   @override

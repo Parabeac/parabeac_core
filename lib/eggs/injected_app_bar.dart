@@ -47,12 +47,16 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, originalRef) {
-    return InjectedAppbar(
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+    var appbar = InjectedAppbar(
       UUID,
       frame,
       originalRef.name,
     );
+
+    originalRef.children.forEach(addChild);
+
+    return appbar;
   }
 
   @override
@@ -67,6 +71,10 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
   @override
   void align(PBContext context, InjectedAppbar node) {
+    if (node.middleItem == null) {
+      return;
+    }
+
     /// This align only modifies middleItem
     var tempNode = InjectedContainer(
       node.middleItem.UUID,
