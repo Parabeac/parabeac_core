@@ -133,6 +133,12 @@ class PBLayoutGenerationService extends AITHandler {
         var nextNode = children[childPointer + 1];
 
         for (var layout in _availableLayouts) {
+          /// This conditional statement is to not mixup the elements that pertain to different [currentNode.attributeName].
+          /// For example, if [currentNode.attributeName] is an `appBar` and [nextNode.attributeName] is a `stack`,
+          /// then you would not generate a [PBLayoutIntermediateNode] to encapsulate them both.
+          if (currentNode.attributeName != nextNode.attributeName) {
+            break;
+          }
           if (layout.satisfyRules(currentNode, nextNode) &&
               layout.runtimeType != parent.runtimeType) {
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
@@ -140,10 +146,7 @@ class PBLayoutGenerationService extends AITHandler {
             if (layout.runtimeType == currentNode.runtimeType) {
               tree.replaceNode(nextNode, currentNode);
               currentNode.addChild(nextNode);
-            }
-            //! This is causing appbar to be removed from scaffold and placed inside scaffold's `body` stack
-
-            else if (layout.runtimeType == nextNode.runtimeType) {
+            } else if (layout.runtimeType == nextNode.runtimeType) {
               tree.replaceNode(currentNode, nextNode);
               nextNode.addChild(currentNode);
             } else {
