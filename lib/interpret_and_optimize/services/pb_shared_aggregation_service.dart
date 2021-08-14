@@ -3,6 +3,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -95,8 +96,13 @@ class PBSharedInterAggregationService {
       return;
     }
     if (masterNode?.SYMBOL_ID == instanceIntermediateNode?.SYMBOL_ID) {
-      // instanceIntermediateNode.currentContext
-      //     .addDependent(masterNode.currentContext.tree);
+      var elementStorage = ElementStorage();
+      var masterTree = elementStorage
+          .treeUUIDs[elementStorage.elementToTree[masterNode.UUID]];
+      var tree = elementStorage.treeUUIDs[instanceIntermediateNode.UUID];
+      if (masterTree != tree) {
+        tree.addDependent(masterTree);
+      }
 
       ///Get the attributes of the [masterNode] to the [instanceIntermediateNode] here ([instanceIntermediateNode] attributes)
       instanceIntermediateNode.functionCallName = masterNode.name;

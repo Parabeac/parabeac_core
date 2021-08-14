@@ -20,7 +20,8 @@ class PBSymbolLinkerService extends AITHandler {
 
 // /Linking [PBSharedMasterNode] and [PBSharedInstanceIntermediateNode] together; linking its
 // /parameter and values.
-  Future<PBIntermediateTree> linkSymbols(PBIntermediateTree tree) async {
+  Future<PBIntermediateTree> linkSymbols(
+      PBIntermediateTree tree, PBContext context) async {
     var rootNode = tree.rootNode;
     if (rootNode == null) {
       return Future.value(tree);
@@ -42,6 +43,6 @@ class PBSymbolLinkerService extends AITHandler {
   @override
   Future<PBIntermediateTree> handleTree(
       PBContext context, PBIntermediateTree tree) {
-    return linkSymbols(tree);
+    return linkSymbols(tree, context);
   }
 }

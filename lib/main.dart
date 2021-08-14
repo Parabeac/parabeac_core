@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
@@ -121,6 +123,13 @@ ${parser.usage}
 
   await Future.wait(pbProject.forest.map((tree) {
     var context = PBContext(processInfo.configuration);
+    context.project = pbProject;
+
+    /// Assuming that the [tree.rootNode] has the dimensions of the screen.
+    context.screenFrame = Rectangle.fromPoints(
+        tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+    context.tree = tree;
+    tree.context = context;
     tree.forEach((node) => node.handleChildren(context));
     return interpretService
         .interpretAndOptimize(tree, context, pbProject)

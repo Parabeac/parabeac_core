@@ -37,7 +37,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode) {
     if (originalNode is PBInheritedIntermediate) {
       var tab = Tab(
-        UUID,
+        originalNode.UUID,
         frame,
         originalNode.name,
         prototypeNode: (originalNode as PBInheritedIntermediate).prototypeNode,

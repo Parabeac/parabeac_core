@@ -8,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:path/path.dart';
 
@@ -43,23 +44,29 @@ class PBPrototypeAggregationService {
       screens.add(node);
 
       ///check if any of the [IntermediateNode]s looking for a destination contains their destination.
-      iterateUnregisterNodes(node, context);
+      iterateUnregisterNodes(node);
     } else if (node is PrototypeEnable) {
       var page = _storage.getPageNodeById(
           (node as PrototypeEnable).prototypeNode.destinationUUID);
       if (page == null) {
         _unregNodes.add(node as PrototypeEnable);
       } else {
-        _addDependent(node, page, context);
+        _addDependent(node, page);
       }
     }
     _unregNodes.removeWhere(
         (pNode) => pNode.prototypeNode.destinationUUID == node.UUID);
   }
 
-  void _addDependent(PBIntermediateNode target, PBIntermediateNode dependent,
-      PBContext context) {
-    context.addDependent(context.tree);
+  void _addDependent(PBIntermediateNode target, PBIntermediateNode dependent) {
+    var elementStorage = ElementStorage();
+    var targetTree =
+        elementStorage.treeUUIDs[elementStorage.elementToTree[target.UUID]];
+    var dependentTree =
+        elementStorage.treeUUIDs[elementStorage.elementToTree[dependent.UUID]];
+    if (dependentTree != targetTree) {
+      dependentTree.addDependent(targetTree);
+    }
   }
 
   /// Provide the `pNode` with the necessary attributes it needs from the `iNode`
@@ -106,23 +113,11 @@ class PBPrototypeAggregationService {
     }
   }
 
-  // TODO: change it on the future
-  // This temporal solution solves the issue for topological sorting
-  // when two screens link each other, but one comes first
-  // and does not get linked to the proper button on the screen
-  Future<void> linkDanglingPrototypeNodes(PBContext context) async {
-    if (_unregNodes.isNotEmpty) {
-      for (var screen in screens) {
-        iterateUnregisterNodes(screen, context);
-      }
-    }
-  }
-
-  void iterateUnregisterNodes(PBIntermediateNode node, PBContext context) {
+  void iterateUnregisterNodes(PBIntermediateNode node) {
     for (var _pNode in _unregNodes) {
       if (_pNode.prototypeNode.destinationUUID == node.UUID) {
         _pNode.prototypeNode.destinationName = node.name;
-        _addDependent(_pNode as PBIntermediateNode, node, context);
+        _addDependent(_pNode as PBIntermediateNode, node);
       }
     }
   }

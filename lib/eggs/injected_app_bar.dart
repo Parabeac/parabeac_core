@@ -49,7 +49,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
     var appbar = InjectedAppbar(
-      UUID,
+      originalRef.UUID,
       frame,
       originalRef.name,
     );

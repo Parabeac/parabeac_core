@@ -87,7 +87,7 @@ void main() {
       rootNode = treeBuilder.rootNode;
     });
 
-    test('Replacement of  through [$PBIntermediateNode]', () {
+    test('Replacement of nodes in [$PBIntermediateNode]', () {
       var replacementChild3 = MockContainerBuilder.buildContainer(
           'REPLACEMENT_C3',
           parent: null,

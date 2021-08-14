@@ -17,6 +17,7 @@ import 'package:quick_log/quick_log.dart';
 /// Usually, we work with its subclasses. We normalize several aspects of data that a sketch node presents in order to work better at the intermediate level.
 /// Sometimes, PBNode’s do not have a direct representation of a sketch node. For example, most layout nodes are primarily made through and understanding of a need for a layout.
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'pb_intermediate_node.g.dart';
 
@@ -39,7 +40,8 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   PBGenerator generator;
 
   @JsonKey()
-  final String UUID;
+  String get UUID => _UUID;
+  String _UUID;
 
   @JsonKey(ignore: true)
   PBIntermediateConstraints constraints;
@@ -79,9 +81,14 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: false)
   String name;
 
-  PBIntermediateNode(this.UUID, this.frame, this.name,
+  PBIntermediateNode(this._UUID, this.frame, this.name,
       {this.subsemantic, this.constraints}) {
     logger = Logger(runtimeType.toString());
+    if (_UUID == null) {
+      logger.warning(
+          'Generating UUID for $runtimeType-$name as its UUID is null');
+      _UUID = Uuid().v4();
+    }
     // _attributes = [];
   }
 

@@ -10,6 +10,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -54,20 +55,16 @@ class Interpret {
     handlers ??= aitHandlers;
 
     aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
+    var elementStorage = ElementStorage();
 
     /// This is a workaround for adding missing information to either the [PBContext] or any of the
     /// [PBIntermediateNode]s.
     aitServiceBuilder.addTransformation(
-        (PBContext context, PBIntermediateTree tree) {
-      context.project = project;
-
-      /// Assuming that the [tree.rootNode] has the dimensions of the screen.
-      context.screenFrame = Rectangle.fromPoints(
-          tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
-      context.tree = tree;
-      tree.context = context;
-      return Future.value(tree);
-    }, index: 0, id: 'Assigning $PBContext to $PBIntermediateTree');
+        (PBContext context, PBIntermediateNode node, PBIntermediateTree tree) {
+      elementStorage.treeUUIDs[tree.UUID] = tree;
+      elementStorage.elementToTree[node.UUID] = tree.UUID;
+      return Future.value(node);
+    }, index: 0, id: 'Indexing ${tree.name}');
 
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
