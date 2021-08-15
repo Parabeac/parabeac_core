@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:pbdl/pbdl.dart';
 // import 'dart:math';
 import 'package:quick_log/quick_log.dart';
@@ -60,7 +61,8 @@ class InheritedBitmap extends PBVisualIntermediateNode
         ..originalRef = json;
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
       (InheritedBitmap.fromJson(json) as InheritedBitmap)..originalRef = json;
 
 }

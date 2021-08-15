@@ -1,3 +1,4 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -35,24 +36,28 @@ class AbstractIntermediateNodeFactory {
     PBSharedInstanceIntermediateNode('$PBSharedInstanceIntermediateNode', null),
     PBSharedMasterNode('$PBSharedMasterNode', null),
     TempGroupLayoutNode('$TempGroupLayoutNode', null),
-    PBIntermediateTree(),
   };
 
   AbstractIntermediateNodeFactory();
 
-  static dynamic getIntermediateNode(Map<String, dynamic> json) {
+  static dynamic getIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
     var className = json[INTERMEDIATE_TYPE];
     if (className != null) {
       for (var candidate in _intermediateNodes) {
         if (candidate.type == className) {
-          var iNode = candidate.createIntermediateNode(json);
+          var iNode = candidate.createIntermediateNode(json, parent, tree);
 
           // Check if `iNode` is a tag
           var tag = PBPluginListHelper().returnAllowListNodeIfExists(iNode);
           // Return tag if it exists
           if (tag != null) {
+            tree.addEdges(
+                parent == null ? null : Vertex(parent), [Vertex(tag)]);
             return tag;
           }
+          tree.addEdges(
+              parent == null ? null : Vertex(parent), [Vertex(iNode)]);
           return iNode;
         }
       }
@@ -84,5 +89,6 @@ class AbstractIntermediateNodeFactory {
 
 abstract class IntermediateNodeFactory {
   String type;
-  dynamic createIntermediateNode(Map<String, dynamic> json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree);
 }

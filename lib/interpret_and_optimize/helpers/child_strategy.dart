@@ -70,15 +70,16 @@ class TempChildrenStrategy extends ChildrenStrategy {
     if (group != null && target.children.length == 1) {
       // Calculate new frame based on incoming child
       var newFrame = group.frame.boundingBox(children.frame);
-      group.addChild(children);
+
+     //FIXMEgroup.addChild(children);
       group.frame = newFrame;
     } else if (target.children.isNotEmpty) {
       var temp = TempGroupLayoutNode(null, null, name: children.name)
-        ..addChild(children)
+   //FIXME  ..addChild(children)
         ..parent = target;
       // Add target's existing children to temp group layout
       target.children.forEach((child) {
-        temp.addChild(child);
+ //FIXME  temp.addChild(child);
         child.parent = temp;
       });
       // Calculate bounding box from all children

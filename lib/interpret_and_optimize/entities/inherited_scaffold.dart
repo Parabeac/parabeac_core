@@ -16,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:pbdl/pbdl.dart';
 
@@ -120,7 +121,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     var groupAtt = TempGroupLayoutNode(null, frame)
       ..attributeName = 'body'
       ..parent = this;
-    children.forEach((att) => groupAtt.addChild(att));
+    // children.forEach((att) => groupAtt.addChild(att));
 
     // Keep appbar and tabbar
     var appBar = getAttributeNamed('appBar');
@@ -140,13 +141,14 @@ class InheritedScaffold extends PBVisualIntermediateNode
     var artboard = _$InheritedScaffoldFromJson(json)..originalRef = json;
 
     //Map artboard children by calling `addChild` method
-    artboard.mapRawChildren(json);
+    // artboard.mapRawChildren(json);
     return artboard;
   }
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
-      InheritedScaffold.fromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
+      InheritedScaffold.fromJson(json)..mapRawChildren(json, tree);
 
   // @override
   // set child(PBIntermediateNode node) {

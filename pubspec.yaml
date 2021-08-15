@@ -24,6 +24,7 @@ dependencies:
   file: ^6.1.2
   pbdl:
     path: ./pbdl
+  directed_graph: ^0.2.3
 
 dev_dependencies:
   pedantic: ^1.8.0

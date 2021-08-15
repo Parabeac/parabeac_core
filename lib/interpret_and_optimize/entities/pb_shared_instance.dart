@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -93,7 +94,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
         ..originalRef = json;
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
       PBSharedInstanceIntermediateNode.fromJson(json);
 }
 

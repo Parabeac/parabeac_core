@@ -54,7 +54,7 @@ class ContainerPostRule extends PostConditionRule {
           pbvisual = (layout as PBLayoutIntermediateNode)
               .children
               .firstWhere((element) => element is PBVisualIntermediateNode);
-      pbvisual.addChild(pblayout);
+   //FIXME pbvisual.addChild(pblayout);
       layout = pbvisual;
       return layout;
     }

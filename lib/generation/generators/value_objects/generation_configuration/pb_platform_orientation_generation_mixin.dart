@@ -80,14 +80,14 @@ mixin PBPlatformOrientationGeneration {
 
     if (map.length > 1) {
       var platform = PBPlatformOrientationLinkerService()
-          .stripPlatform(context.tree.data.platform);
+          .stripPlatform(context.tree.generationViewData.platform);
       if (!node.name.contains('_$platform')) {
         node.name += '_$platform';
       }
     }
-    if (map[context.tree.data.platform].length > 1) {
+    if (map[context.tree.generationViewData.platform].length > 1) {
       var orientation = PBPlatformOrientationLinkerService()
-          .stripOrientation(context.tree.data.orientation);
+          .stripOrientation(context.tree.generationViewData.orientation);
       if (!node.name.contains('_$orientation')) {
         node.name += '_$orientation';
       }

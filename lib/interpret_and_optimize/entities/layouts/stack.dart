@@ -32,17 +32,17 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   @override
   void resize(PBContext context) {
-    var depth = context.tree?.depthOf(this);
+    //FIXMEar depth = context.tree?.depthOf(this);
 
     /// Since there are cases where [Stack] are being created, and
     /// childrend are being populated, and consequently [Stack.resize] is being
     /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
     /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
-    if (depth != null && depth <= 1 && depth >= 0) {
-      frame = context.canvasFrame;
-    } else {
-      super.resize(context);
-    }
+ //FIXME if (depth != null && depth <= 1 && depth >= 0) {
+  //FIXME    frame = context.canvasFrame;
+  //FIXME  } else {
+  //FIXME    super.resize(context);
+  //FIXME  }
   }
 
   @override
@@ -53,8 +53,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     children.forEach((element) => frame.boundingBox(element.frame));
 
     var stack = PBIntermediateStackLayout(name: name)..frame = frame;
-    stack.prototypeNode = prototypeNode;
-    children.forEach((child) => stack.addChild(child));
+ //FIXME   stack.prototypeNode = prototypeNode;
+  //FIXME children.forEach((child) => stack.addChild(child));
     return stack;
   }
 

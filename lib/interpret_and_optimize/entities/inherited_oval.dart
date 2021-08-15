@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -58,6 +59,7 @@ class InheritedOval extends PBVisualIntermediateNode
         ..originalRef = json;
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
       InheritedOval.fromJson(json);
 }

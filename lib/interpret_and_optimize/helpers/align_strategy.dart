@@ -1,3 +1,4 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
@@ -54,8 +55,11 @@ class PaddingAlignment extends AlignStrategy {
       top: (child.frame.topLeft.y - node.frame.topLeft.y).abs(),
       bottom: (child.frame.bottomRight.y - node.frame.bottomRight.y).abs(),
     );
-    padding.addChild(child);
-    node.addChild(padding);
+    context.tree.addEdges(Vertex(padding), [Vertex(child)]);
+    context.tree.addEdges(Vertex(node), [Vertex(padding)]);
+
+    // padding.addChild(child);
+    // node.addChild(padding);
     super._setConstraints(context, node);
   }
 }
@@ -73,6 +77,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
   @override
   void align(PBContext context, PBIntermediateStackLayout node) {
     var alignedChildren = <PBIntermediateNode>[];
+    var tree = context.tree;
     node.children.skipWhile((att) {
       var child = att;
 
@@ -85,7 +90,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       return false;
     }).forEach((att) {
       var child = att;
-      alignedChildren.add(InjectedPositioned(null, child.frame,
+      var injectedPositioned = InjectedPositioned(null, child.frame,
           constraints: child.constraints,
           valueHolder: PositionedValueHolder(
               top: child.frame.topLeft.y - node.frame.topLeft.y,
@@ -93,10 +98,12 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               left: child.frame.topLeft.x - node.frame.topLeft.x,
               right: node.frame.bottomRight.x - child.frame.bottomRight.x,
               width: child.frame.width,
-              height: child.frame.height))
-        ..parent = child.parent
-        ..addChild(child));
+              height: child.frame.height));
+      alignedChildren.add(injectedPositioned);
+      tree.addEdges(Vertex(injectedPositioned), [Vertex(child)]);
     });
+
+    tree.removeEdges(Vertex(node));
     node.replaceChildren(alignedChildren, context);
     super._setConstraints(context, node);
   }

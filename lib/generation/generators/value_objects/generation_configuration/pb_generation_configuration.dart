@@ -96,8 +96,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     fileStructureStrategy.addImportsInfo(tree, context);
 
     context.generationManager = generationManager;
-    generationManager.data = tree.data;
-    tree.data.addImport(FlutterImport('material.dart', 'flutter'));
+    generationManager.data = tree.generationViewData;
+    tree.generationViewData.addImport(FlutterImport('material.dart', 'flutter'));
 
     // Relative path to the file to create
     var relPath = p.join(tree.name.snakeCase, tree.identifier);

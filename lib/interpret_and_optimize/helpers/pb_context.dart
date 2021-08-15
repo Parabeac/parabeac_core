@@ -42,7 +42,7 @@ class PBContext {
   ///TODO: This is going to change to the [GenerationConfiguration].
   PBGenerationManager generationManager;
 
-  PBGenerationViewData get managerData => tree?.data;
+  PBGenerationViewData get managerData => tree?.generationViewData;
 
   PBContext(this.configuration,
       {this.tree,

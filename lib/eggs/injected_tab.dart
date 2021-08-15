@@ -47,7 +47,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
 
         ///Clean the node so that it doesn't get interpreted as a plugin again.
         // designNode.interpretNode(currentContext).then(tab.addChild);
-        tab.addChild(designNode);
+        //FIXME tab.addChild(designNode);
       }
       return tab;
     }

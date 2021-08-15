@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
@@ -60,13 +61,14 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
       // . .frame.bottomRight = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
-    tempGroup.mapRawChildren(json);
+   //FIXME tempGroup.mapRawChildren(json);
 
     return tempGroup;
   }
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       (TempGroupLayoutNode.fromJson(json) as TempGroupLayoutNode)
         ..originalRef = json;
 }

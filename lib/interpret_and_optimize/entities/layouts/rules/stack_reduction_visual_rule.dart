@@ -28,7 +28,7 @@ class StackReductionVisualRule extends PostConditionRule {
           (element) =>
               element is PBVisualIntermediateNode && element.children.isEmpty);
 
-      wrapper.addChild(child);
+   //FIXME  wrapper.addChild(child);
       if ((layout as PBIntermediateStackLayout).prototypeNode != null) {
         if (wrapper is PBInheritedIntermediate) {
           (wrapper as PBInheritedIntermediate).prototypeNode =

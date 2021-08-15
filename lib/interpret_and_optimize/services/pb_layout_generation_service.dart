@@ -94,30 +94,30 @@ class PBLayoutGenerationService extends AITHandler {
             (node) => node is TempGroupLayoutNode && node.children.length <= 1)
         .cast<TempGroupLayoutNode>()
         .forEach((tempGroup) {
-      tree.replaceNode(
-          tempGroup,
-          tempGroup.children.isNotEmpty
-              ? _replaceNode(tempGroup, tempGroup.children.first)
-              : _replaceNode(
-                  tempGroup,
-                  InjectedContainer(
-                    tempGroup.UUID, tempGroup.frame,
-                    name: tempGroup.name,
-                    // constraints: tempGroup.constraints
-                  )));
+     //FIXME // tree.replaceNode(
+      //     tempGroup,
+      //     tempGroup.children.isNotEmpty
+      //         ? _replaceNode(tempGroup, tempGroup.children.first)
+      //         : _replaceNode(
+      //             tempGroup,
+      //             InjectedContainer(
+      //               tempGroup.UUID, tempGroup.frame,
+      //               name: tempGroup.name,
+      //               // constraints: tempGroup.constraints
+      //             )));
     });
   }
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
-      tree.replaceNode(
-          tempGroup,
-          PBIntermediateStackLayout(
-            name: tempGroup.name,
-            constraints: tempGroup.constraints,
-          )..frame = tempGroup.frame,
-          acceptChildren: true);
+     //FIXME // tree.replaceNode(
+      //     tempGroup,
+      //     PBIntermediateStackLayout(
+      //       name: tempGroup.name,
+      //       constraints: tempGroup.constraints,
+      //     )..frame = tempGroup.frame,
+      //     acceptChildren: true);
     });
   }
 
@@ -144,17 +144,17 @@ class PBLayoutGenerationService extends AITHandler {
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
-              tree.replaceNode(nextNode, currentNode);
+           //FIXME   tree.replaceNode(nextNode, currentNode);
               currentNode.addChild(nextNode);
             } else if (layout.runtimeType == nextNode.runtimeType) {
-              tree.replaceNode(currentNode, nextNode);
+        //FIXME      tree.replaceNode(currentNode, nextNode);
               nextNode.addChild(currentNode);
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
               ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
               ///of the generated layout.
-              tree.removeNode(currentNode, eliminateSubTree: true);
-              tree.removeNode(nextNode, eliminateSubTree: true);
+        //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
+        //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
               parent.addChild(layout.generateLayout(
                   [currentNode, nextNode],
                   context,

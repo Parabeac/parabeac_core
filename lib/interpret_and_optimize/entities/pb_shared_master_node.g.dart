@@ -45,14 +45,14 @@ Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
 
 PBSharedParameterProp _$PBSharedParameterPropFromJson(
     Map<String, dynamic> json) {
-  return PBSharedParameterProp(
-    json['type'] as String,
-    json['value'] == null
-        ? null
-        : PBIntermediateNode.fromJson(json['value'] as Map<String, dynamic>),
-    PBSharedParameterProp._propertyNameFromJson(json['name'] as String),
-    json['UUID'] as String,
-  );
+ //FIXME // PBSharedParameterProp(
+    // json['type'] as String,
+    // json['value'] == null
+    //     ? null
+    //     : PBIntermediateNode.fromJson(json['value'] as Map<String, dynamic>),
+    // PBSharedParameterProp._propertyNameFromJson(json['name'] as String),
+    // json['UUID'] as String,
+  // );
 }
 
 Map<String, dynamic> _$PBSharedParameterPropToJson(

@@ -13,7 +13,7 @@ class ContainerConstraintRule extends PostConditionRule {
           name: currentNode.name,
           // constraints: currentNode.constraints
           );
-      container.addChild(currentNode);
+    //FIXME container.addChild(currentNode);
       return container;
     }
     return currentNode;

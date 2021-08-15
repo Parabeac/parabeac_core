@@ -40,7 +40,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode {
       PBContext currentContext, String name) {
     var col = PBIntermediateColumnLayout(null, name: name);
     col.prototypeNode = prototypeNode;
-    children.forEach((child) => col.addChild(child));
+    //FIXME children.forEach((child) => col.addChild(child));
     return col;
   }
 }
@@ -91,7 +91,7 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
         top: 0.0,
         bottom: 0.0,
       );
-      padding.addChild(node.children[i]);
+    //FIXME  padding.addChild(node.children[i]);
 
       //Replace Children.
       node.children[i] = padding;

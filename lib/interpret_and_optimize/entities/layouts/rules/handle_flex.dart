@@ -85,5 +85,5 @@ PBIntermediateNode _putChildInFlex(
       : _calculateWidth(child.frame.topLeft, child.frame.bottomRight);
   var flex = _calculateFlex(widgetLength.abs(), parentLength.abs());
 
-  return Flexible(null, child.frame, child: child, flex: flex);
+ //FIXMEreturn Flexible(null, child.frame, child: child, flex: flex);
 }

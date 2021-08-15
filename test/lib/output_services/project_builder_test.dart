@@ -75,7 +75,7 @@ void main() {
 
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
-      when(intermediateTree.data).thenReturn(PBGenerationViewData());
+      when(intermediateTree.generationViewData).thenReturn(PBGenerationViewData());
       when(intermediateTree.dependentsOn)
           .thenReturn(<PBIntermediateTree>[].iterator);
 

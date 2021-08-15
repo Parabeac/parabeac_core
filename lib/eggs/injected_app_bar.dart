@@ -43,7 +43,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       return;
     }
 
-    super.addChild(node);
+    //FIXMEsuper.addChild(node);
   }
 
   @override
@@ -81,7 +81,7 @@ class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
       node.middleItem.frame,
       name: node.middleItem.name,
     )
-      ..addChild(node.middleItem)
+      //FIXME ..addChild(node.middleItem)
       ..attributeName = 'title';
 
     var target =

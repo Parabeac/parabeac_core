@@ -30,7 +30,7 @@ class MiddlewareUtils {
       stateBuffer.write(MiddlewareUtils.generateVariable(node));
     }
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      context.tree.data = context.managerData;
+      context.tree.generationViewData = context.managerData;
       var variationNode = state.variation.node;
 
       if (variationNode is PBSharedMasterNode &&

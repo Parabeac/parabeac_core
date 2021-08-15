@@ -31,11 +31,11 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   void addChild(node) {
     if (node is PBInheritedIntermediate) {
-      if (node.name.contains('<tab>')) {
-        assert(node is! Tab, 'node should be a Tab');
-        node.attributeName = 'tab';
-        children.add(node);
-      }
+      //FIXME // if (node.name.contains('<tab>')) {
+      //   assert(node is! Tab, 'node should be a Tab');
+      //   node.attributeName = 'tab';
+      //   children.add(node);
+      // }
     }
 
     if (node is Tab) {

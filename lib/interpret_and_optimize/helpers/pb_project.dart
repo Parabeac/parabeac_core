@@ -86,7 +86,7 @@ class PBProject {
       var screens = (page['screens'] as Iterable).map((screen) {
         // Generate Intermedite tree
         var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
-        tree.data = PBGenerationViewData();
+        tree.generationViewData = PBGenerationViewData();
 
         if (tree != null) {
           PBProject.log.fine(

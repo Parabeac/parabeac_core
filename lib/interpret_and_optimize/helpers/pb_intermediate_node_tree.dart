@@ -3,14 +3,17 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_layer_iterator.dart';
+import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:tuple/tuple.dart';
 import 'dart:collection';
 import 'package:uuid/uuid.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:directed_graph/directed_graph.dart';
 
 part 'pb_intermediate_node_tree.g.dart';
 
@@ -21,8 +24,8 @@ enum TREE_TYPE {
 }
 
 @JsonSerializable()
-class PBIntermediateTree extends Iterable<PBIntermediateNode>
-    implements IntermediateNodeFactory {
+class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
+  Logger _logger;
   String _UUID;
   String get UUID => _UUID;
 
@@ -46,17 +49,18 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   bool lockData = false;
 
-  PBGenerationViewData _data;
+  PBGenerationViewData _generationViewData;
   @JsonKey(ignore: true)
-  PBGenerationViewData get data => _data;
-  set data(PBGenerationViewData viewData) {
+  PBGenerationViewData get generationViewData => _generationViewData;
+  set generationViewData(PBGenerationViewData viewData) {
     if (!lockData) {
-      _data = viewData;
+      _generationViewData = viewData;
     }
   }
 
+  @JsonKey(ignore: true)
   PBIntermediateNode _rootNode;
-  @JsonKey(name: 'designNode')
+  @JsonKey(ignore: true)
   PBIntermediateNode get rootNode => _rootNode;
   set rootNode(PBIntermediateNode rootNode) {
     if (!lockData) {
@@ -88,6 +92,11 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
     }
   }
 
+  // JsonKey()
+  Map<PBIntermediateNode, List<PBIntermediateNode>> get children => data;
+
+  ElementStorage _elementStorage;
+
   /// [identifier] represents the name of an actual tree or the [DesignScreen],
   /// while [name] originally represented the [name] of a [DesignPage].
   ///
@@ -98,10 +107,36 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   @JsonKey(name: 'name')
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
 
-  PBIntermediateTree({String name, this.context}) {
+  PBIntermediateTree({
+    String name,
+    this.context,
+    Map<PBIntermediateNode, Set<PBIntermediateNode>> edges,
+    Comparator<Vertex<PBIntermediateNode>> comparator,
+  }) : super(edges ?? {}, comparator: comparator) {
     _name = name;
     _dependentsOn = {};
     _UUID = Uuid().v4();
+    _logger = Logger(name ?? runtimeType.toString());
+    _elementStorage = ElementStorage();
+  }
+
+  @override
+  void addEdges(Vertex<PBIntermediateNode> parentVertex,
+      List<Vertex<PBIntermediateNode>> childrenVertices) {
+    var parent = parentVertex.data;
+
+    childrenVertices.forEach((childVertex) {
+      var child = childVertex.data;
+      child.parent = parent;
+      child.attributeName = parent.getAttributeNameOf(child);
+
+      if (!_elementStorage.elementToTree.containsKey(child.UUID)) {
+        _elementStorage.elementToTree[child.UUID] = _UUID;
+      }
+    });
+
+    super.addEdges(parentVertex as AITVertex,
+        childrenVertices.cast<AITVertex>());
   }
 
   /// Adding [PBIntermediateTree] as a dependecy.
@@ -117,63 +152,63 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   ///
   /// The entire subtree (starting with [node]) would be eliminated if specified to [eliminateSubTree],
   /// otherwise, its just going to replace [node] with its [node.children]
-  bool removeNode(PBIntermediateNode node, {bool eliminateSubTree = false}) {
-    if (node.parent == null) {
-      ///TODO: log message
-      return false;
-    }
-    var parent = node.parent;
-    var removeChild = () =>
-        parent.children.removeWhere((element) => element.UUID == node.UUID);
+  // bool removeNode(PBIntermediateNode node, {bool eliminateSubTree = false}) {
+  //   if (node.parent == null) {
+  //     ///TODO: log message
+  //     return false;
+  //   }
+  //   var parent = node.parent;
+  //   var removeChild = () =>
+  //       parent.children.removeWhere((element) => element.UUID == node.UUID);
 
-    if (eliminateSubTree) {
-      removeChild();
-    } else {
-      /// appending the [PBIntermediateNode]s of the removed [node]
-      var grandChilds = parent.children
-          .where((element) => element.UUID == node.UUID)
-          .map((e) => e.children)
+  //   if (eliminateSubTree) {
+  //     removeChild();
+  //   } else {
+  //     /// appending the [PBIntermediateNode]s of the removed [node]
+  //     var grandChilds = parent.children
+  //         .where((element) => element.UUID == node.UUID)
+  //         .map((e) => e.children)
 
-          ///FIXME: Right now the iterator is returning null insize of a list when iterating the tree.
-          .where((element) => element != null)
-          .expand((element) => element)
-          .toList();
-      removeChild();
-      grandChilds.forEach((element) => parent.addChild(element));
-    }
-    return true;
-  }
+  //         ///FIXME: Right now the iterator is returning null insize of a list when iterating the tree.
+  //         .where((element) => element != null)
+  //         .expand((element) => element)
+  //         .toList();
+  //     removeChild();
+  //     grandChilds.forEach((element) => parent.addChild(element));
+  //   }
+  //   return true;
+  // }
 
   /// Replacing [target] with [replacement]
   ///
   /// The entire subtree (starting with [target]) if [replacement] does not [acceptChildren],
   /// otherwise, those children would be appended to [replacement].
-  bool replaceNode(PBIntermediateNode target, PBIntermediateNode replacement,
-      {bool acceptChildren = false}) {
-    if (target.parent == null) {
-      ///TODO: throw correct error/log
-      throw Error();
-    }
+  // bool replaceNode(PBIntermediateNode target, PBIntermediateNode replacement,
+  //     {bool acceptChildren = false}) {
+  //   if (target.parent == null) {
+  //     ///TODO: throw correct error/log
+  //     throw Error();
+  //   }
 
-    var parent = target.parent;
-    if (acceptChildren) {
-      replacement.children.addAll(target.children.map((e) {
-        e.parent = replacement;
-        return e;
-      }));
-    }
-    removeNode(target, eliminateSubTree: true);
-    replacement.attributeName = target.attributeName;
+  //   var parent = target.parent;
+  //   if (acceptChildren) {
+  //     replacement.children.addAll(target.children.map((e) {
+  //       e.parent = replacement;
+  //       return e;
+  //     }));
+  //   }
+  //   removeNode(target, eliminateSubTree: true);
+  //   replacement.attributeName = target.attributeName;
 
-    /// This conditional is for scenarios where both the [target] and the [replacement] are
-    /// under the same [parent]
-    if (!parent.children.contains(replacement)) {
-      parent.children.add(replacement);
-      replacement.parent = parent;
-    }
+  //   /// This conditional is for scenarios where both the [target] and the [replacement] are
+  //   /// under the same [parent]
+  //   if (!parent.children.contains(replacement)) {
+  //     parent.children.add(replacement);
+  //     replacement.parent = parent;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   /// Checks if the [PBIntermediateTree] is a [TREE_TYPE.SCREEN],
   /// meaning that the [rootNode] is of type [InheritedScaffold]
@@ -183,9 +218,9 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
       isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
 
   /// Finding the depth of the [node] in relation to the [rootNode].
-  int depthOf(node) {
-    return dist(rootNode, node);
-  }
+  // int depthOf(node) {
+  //   return dist(rootNode, node);
+  // }
 
   /// Find the distance between [source] and [target], where the [source] is an
   /// ancestor of [target].
@@ -194,59 +229,37 @@ class PBIntermediateTree extends Iterable<PBIntermediateNode>
   /// NOT PRESENT IN THE [PBIntermediateNode], THEN ITS GOING TO RETURN `-1`.
   /// This is because the nodes of the tree dont have an out going edge
   /// pointing towards its parents, all directed edges are going down the tree.
-  int dist(PBIntermediateNode source, PBIntermediateNode target,
-      {int edgeCost = 1}) {
-    if (!contains(target)) {
-      return -1;
-    }
+  int dist(
+    PBIntermediateNode source,
+    PBIntermediateNode target,
+  ) =>
+      shortestPath(Vertex(source), Vertex(target))?.length ?? -1;
 
-    var maxPathLength = length + 1;
+  // @override
+  // Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
 
-    Queue queue = Queue<PBIntermediateNode>();
-    var dist = <PBIntermediateNode, int>{
-      for (var node in toList()) node: maxPathLength
-    };
-
-    queue.add(source);
-    dist[source] = 0;
-
-    while (queue.isNotEmpty) {
-      var node = queue.removeFirst();
-
-      for (var outNode in node?.children ?? []) {
-        if (dist[outNode] != maxPathLength) {
-          continue;
-        }
-
-        var newDist = dist[node] + edgeCost;
-        if (newDist < dist[outNode]) {
-          dist[outNode] = newDist;
-          queue.add(outNode);
-        }
-
-        /// returning the found [target] distance.
-        if (outNode == target) {
-          return dist[target];
-        }
-      }
-    }
-    return -1;
-  }
-
-  @override
-  Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
-
-  Iterator get layerIterator => IntermediateLayerIterator(this);
+  // Iterator get layerIterator => IntermediateLayerIterator(this);
 
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
-  static PBIntermediateTree fromJson(Map<String, dynamic> json) =>
-      _$PBIntermediateTreeFromJson(json)
-        ..tree_type = treeTypeFromJson(json['designNode']);
+  static PBIntermediateTree fromJson(Map<String, dynamic> json) {
+    var tree = _$PBIntermediateTreeFromJson(json);
+    var designNode =
+        PBIntermediateNode.fromJson(json['designNode'], null, tree);
+    tree.addEdges(Vertex(designNode), []);
+    tree._rootNode = designNode;
 
-  @override
-  PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
-      PBIntermediateTree.fromJson(json);
+    List<Map<String, dynamic>> childrenPointer = json['designNode']['children'];
+
+    /// Deserialize the rootNode
+    /// Then make sure rootNode deserializes the rest of the tree.
+    // ..addEdges(child, parentList)
+    // ..tree_type = treeTypeFromJson(json['designNode']);
+  }
+
+  // @override
+  // PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
+  //     PBIntermediateTree.fromJson(json);
 }
 
 /// By extending the class, any node could be used in any iterator to traverse its
@@ -259,6 +272,19 @@ abstract class TraversableNode<E> {
   String attributeName;
   E parent;
   List<E> children;
+}
+
+class AITVertex<T extends PBIntermediateNode> extends Vertex<T> {
+  AITVertex(T data) : super(data);
+
+  @override
+  int get id => data.UUID.hashCode;
+
+  @override
+  int get hashCode => data.UUID.hashCode;
+
+  @override
+  bool operator ==(Object other) => other is AITVertex<T> && other.id == id;
 }
 
 TREE_TYPE treeTypeFromJson(Map<String, dynamic> json) {

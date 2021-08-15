@@ -40,7 +40,7 @@ class CommandGenMiddleware extends Middleware
 
       command = ExportPlatformCommand(
         tree.UUID,
-        context.tree.data.platform,
+        context.tree.generationViewData.platform,
         tree.identifier,
         tree.rootNode.name.snakeCase,
         generationManager.generate(tree.rootNode, context),

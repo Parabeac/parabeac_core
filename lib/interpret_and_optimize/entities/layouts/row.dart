@@ -36,7 +36,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
       PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
-    children.forEach((child) => row.addChild(child));
+   //FIXME children.forEach((child) => row.addChild(child));
     return row;
   }
 
@@ -87,7 +87,7 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
         left: 0.0,
         right: 0.0,
       );
-      padding.addChild(node.children[i]);
+   //FIXME   padding.addChild(node.children[i]);
 
       //Replace Children.
       node.children[i] = padding;
@@ -99,7 +99,7 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
       PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     // row.prototypeNode = prototypeNode;
-    children.forEach((child) => row.addChild(child));
+   //FIXME children.forEach((child) => row.addChild(child));
     return row;
   }
 

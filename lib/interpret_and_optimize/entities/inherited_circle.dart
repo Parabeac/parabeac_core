@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
 part 'inherited_circle.g.dart';
@@ -59,6 +60,7 @@ class InheritedCircle extends PBVisualIntermediateNode
         ..originalRef = json;
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
       InheritedCircle.fromJson(json);
 }

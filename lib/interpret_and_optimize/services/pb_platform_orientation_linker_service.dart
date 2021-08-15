@@ -32,14 +32,14 @@ class PBPlatformOrientationLinkerService {
   /// Populates [tree]'s platform and orientation information
   /// and adds [tree] to storage.
   void addOrientationPlatformInformation(PBIntermediateTree tree, PBContext context) {
-    tree.data.platform = _extractPlatform(tree.name);
-    tree.data.orientation = _extractOrientation(
+    tree.generationViewData.platform = _extractPlatform(tree.name);
+    tree.generationViewData.orientation = _extractOrientation(
       tree.rootNode .frame.bottomRight,
       tree.rootNode .frame.topLeft,
     );
 
-    _platforms.add(tree.data.platform);
-    _orientations.add(tree.data.orientation);
+    _platforms.add(tree.generationViewData.platform);
+    _orientations.add(tree.generationViewData.orientation);
 
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
@@ -71,8 +71,8 @@ class PBPlatformOrientationLinkerService {
         var treeName = key.snakeCase;
         var iterTreeName = currTree.rootNode.name.snakeCase;
         if (treeName == iterTreeName &&
-            tree.data.orientation == currTree.data.orientation &&
-            tree.data.platform == currTree.data.platform) {
+            tree.generationViewData.orientation == currTree.generationViewData.orientation &&
+            tree.generationViewData.platform == currTree.generationViewData.platform) {
           // Rename the tree if both trees have the same orientation and platform
           tree.rootNode.name = treeName + '_${_mapCounter[iterTreeName]}';
           _mapCounter[treeName]++;
@@ -117,13 +117,13 @@ class PBPlatformOrientationLinkerService {
 
       for (var screen in screens) {
         // Add orientation to a platform
-        if (result.containsKey(screen.data.platform)) {
-          result[screen.data.platform][screen.data.orientation] = screen;
+        if (result.containsKey(screen.generationViewData.platform)) {
+          result[screen.generationViewData.platform][screen.generationViewData.orientation] = screen;
         }
         // Create entry for current platform-orientation pair
         else {
-          result[screen.data.platform] = {
-            screen.data.orientation: screen,
+          result[screen.generationViewData.platform] = {
+            screen.generationViewData.orientation: screen,
           };
         }
       }
@@ -172,8 +172,8 @@ class PBPlatformOrientationLinkerService {
       List<PBIntermediateTree> list) {
     var result = <String, List<String>>{};
     list.forEach((value) {
-      var platform = stripPlatform(value.data.platform);
-      var orientation = stripOrientation(value.data.orientation);
+      var platform = stripPlatform(value.generationViewData.platform);
+      var orientation = stripOrientation(value.generationViewData.orientation);
       if (result.containsKey(platform)) {
         result[platform].add(orientation);
       } else {

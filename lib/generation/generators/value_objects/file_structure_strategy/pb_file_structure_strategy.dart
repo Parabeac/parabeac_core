@@ -206,10 +206,10 @@ abstract class FileStructureStrategy implements CommandInvoker {
     fileObservers.forEach((observer) => observer.fileCreated(path, UUID));
   }
 
-  /// Appends [data] into [directory] with the file [name]
+  /// Appends [generationViewData] into [directory] with the file [name]
   ///
   /// The method is going to be identical to [writeDataToFile], however,
-  /// it going to try to append [data] to the file in the [directory]. If
+  /// it going to try to append [generationViewData] to the file in the [directory]. If
   /// no file is found, then its going to run [writeDataToFile]. [appendIfFound] flag
   /// appends the information only if that information does not exist in the file. If no
   /// [ModFile] function is found, its going to append the information at the end of the lines

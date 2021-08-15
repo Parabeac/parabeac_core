@@ -15,7 +15,7 @@ class Flexible extends PBVisualIntermediateNode {
   Flexible(
     String UUID,
     Rectangle frame, {
-    child,
+    // child,
     this.flex,
   }) : super(
           UUID,
@@ -24,9 +24,9 @@ class Flexible extends PBVisualIntermediateNode {
         ) {
     generator = PBFlexibleGenerator();
     childrenStrategy = OneChildStrategy('child');
-    if(child != null){
-      addChild(child);
-    }
+    // if(child != null){
+    //   addChild(child);
+    // }
   }
 
   @override

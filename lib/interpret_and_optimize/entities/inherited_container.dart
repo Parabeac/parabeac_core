@@ -15,6 +15,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
 part 'inherited_container.g.dart';
@@ -62,16 +63,15 @@ class InheritedContainer extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var container = _$InheritedContainerFromJson(json)
-      ..originalRef = json;
-
-    container.mapRawChildren(json);
+    var container = _$InheritedContainerFromJson(json)..originalRef = json;
     container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
 
     return container;
   }
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
-      InheritedContainer.fromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    return InheritedContainer.fromJson(json)..mapRawChildren(json, tree);
+  }
 }

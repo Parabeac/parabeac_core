@@ -22,7 +22,7 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
       FileOwnership ownership = FileOwnership.PBC})
       : super(UUID, code, ownership);
 
-  /// Writes a symbol file containing [data] with [fileName] as its filename.
+  /// Writes a symbol file containing [generationViewData] with [fileName] as its filename.
   ///
   /// Returns path to the file that was created.
   @override

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -125,12 +126,15 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   }
 
   /// Adds child to node.
-  void addChild(PBIntermediateNode node) {
-    childrenStrategy.addChild(this, node);
+  // void addChild(PBIntermediateNode node) {
+  //   childrenStrategy.addChild(this, node);
 
-    /// Checking the constrains of the [node] being added to the tree, smoe of the
-    /// constrains could be inherited to that section of the sub-tree.
-  }
+  //   /// Checking the constrains of the [node] being added to the tree, smoe of the
+  //   /// constrains could be inherited to that section of the sub-tree.
+  // }
+
+  String getAttributeNameOf(PBIntermediateNode node) =>
+      childrenStrategy.attributeName;
 
   @override
   int get hashCode => UUID.hashCode;
@@ -154,16 +158,19 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
     }
   }
 
-  factory PBIntermediateNode.fromJson(Map<String, dynamic> json) =>
-      AbstractIntermediateNodeFactory.getIntermediateNode(json);
+  factory PBIntermediateNode.fromJson(Map<String, dynamic> json,
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
+      AbstractIntermediateNodeFactory.getIntermediateNode(json, parent, tree);
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 
-  void mapRawChildren(Map<String, dynamic> json) {
+  void mapRawChildren(Map<String, dynamic> json, PBIntermediateTree tree) {
     var rawChildren = json['children'] as List;
-    rawChildren?.forEach((child) {
-      if (child != null) {
-        addChild(PBIntermediateNode.fromJson(child));
+    rawChildren?.forEach((rawChild) {
+      if (rawChild != null) {
+        PBIntermediateNode.fromJson(rawChild, this, tree);
+        // tree.addEdges(Vertex(rawChild), [Vertex(parent)]);
+        // addChild();PBIntermediateNode.fromJson(rawChild)
       }
     });
   }

@@ -16,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermedia
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:path/path.dart' as p;
 part 'inherited_shape_group.g.dart';
@@ -58,12 +59,13 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var group = _$InheritedShapeGroupFromJson(json)..originalRef = json;
 
-    group.mapRawChildren(json);
+    // group.mapRawChildren(json);
 
     return group;
   }
 
   @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json) =>
-      InheritedShapeGroup.fromJson(json);
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) =>
+      InheritedShapeGroup.fromJson(json)..mapRawChildren(json, tree);
 }
