@@ -3,6 +3,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visu
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+
 abstract class PBEgg extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
   String semanticName;
@@ -22,7 +24,8 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) =>
       layer;
 
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode);
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode,
+      PBIntermediateTree tree);
 
   void extractInformation(PBIntermediateNode incomingNode);
 }

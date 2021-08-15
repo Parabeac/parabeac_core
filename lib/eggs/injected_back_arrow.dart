@@ -7,6 +7,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+
 class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<back-arrow>';
@@ -29,7 +31,8 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
   void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
     return InjectedBackArrow(
       UUID,
       frame,

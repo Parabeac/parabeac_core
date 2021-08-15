@@ -49,7 +49,10 @@ class AbstractIntermediateNodeFactory {
           var iNode = candidate.createIntermediateNode(json, parent, tree);
 
           // Check if `iNode` is a tag
-          var tag = PBPluginListHelper().returnAllowListNodeIfExists(iNode);
+          //? If `iNode` is a tag, do we have to remove any links that \
+          //? may have been made during `createIntermediateNode()` ?
+          var tag =
+              PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
             tree.addEdges(

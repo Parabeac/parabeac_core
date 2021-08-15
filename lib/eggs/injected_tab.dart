@@ -12,6 +12,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+
 class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   @override
   PrototypeNode prototypeNode;
@@ -34,7 +36,8 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
   String semanticName;
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode,
+      PBIntermediateTree tree) {
     if (originalNode is PBInheritedIntermediate) {
       var tab = Tab(
         originalNode.UUID,
@@ -44,6 +47,8 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
       );
       if (originalNode is! TempGroupLayoutNode) {
         var designNode = _convertWrapper(originalNode);
+
+        tree.addEdges(AITVertex(this), [AITVertex(designNode)]);
 
         ///Clean the node so that it doesn't get interpreted as a plugin again.
         // designNode.interpretNode(currentContext).then(tab.addChild);

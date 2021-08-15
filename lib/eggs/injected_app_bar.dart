@@ -8,6 +8,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
@@ -25,37 +27,38 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
     alignStrategy = CustomAppBarAlignment();
   }
 
+  void addChild(PBIntermediateNode node, PBIntermediateTree tree) {}
+
+  //FIXMEsuper.addChild(node);
+
   @override
-  void addChild(PBIntermediateNode node) {
+  String getAttributeNameOf(PBIntermediateNode node) {
     if (node is PBInheritedIntermediate) {
-      var attName = 'child';
+      // var attName = 'child';
       if (node.name.contains('<leading>')) {
-        attName = 'leading';
+        return 'leading';
       }
       if (node.name.contains('<trailing>')) {
-        attName = 'actions';
+        return 'actions';
       }
       if (node.name.contains('<middle>')) {
-        attName = 'title';
+        return 'title';
       }
-      node.attributeName = attName;
-      children.add(node);
-      return;
     }
 
-    //FIXMEsuper.addChild(node);
+    return super.getAttributeNameOf(node);
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
     var appbar = InjectedAppbar(
       originalRef.UUID,
       frame,
       originalRef.name,
     );
-
-    originalRef.children.forEach(addChild);
-
+    tree.addEdges(AITVertex(appbar),
+        originalRef.children.map((child) => AITVertex(child)).toList());
     return appbar;
   }
 
