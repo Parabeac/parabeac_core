@@ -45,7 +45,7 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
 class PaddingAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
-    var child = node.getAttributeNamed('child');
+    var child = node.getAttributeNamed(context.tree, 'child');
     var padding = Padding(
       null,
       node.frame,
@@ -58,8 +58,6 @@ class PaddingAlignment extends AlignStrategy {
     context.tree.addEdges(Vertex(padding), [Vertex(child)]);
     context.tree.addEdges(Vertex(node), [Vertex(padding)]);
 
-    // padding.addChild(child);
-    // node.addChild(padding);
     super._setConstraints(context, node);
   }
 }
@@ -78,7 +76,8 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
   void align(PBContext context, PBIntermediateStackLayout node) {
     var alignedChildren = <PBIntermediateNode>[];
     var tree = context.tree;
-    node.children.skipWhile((att) {
+    var nodeChildren = context.tree.childrenOf(node);
+    nodeChildren.skipWhile((att) {
       var child = att;
 
       /// if they are the same size then there is no need for adjusting.
@@ -102,9 +101,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       alignedChildren.add(injectedPositioned);
       tree.addEdges(Vertex(injectedPositioned), [Vertex(child)]);
     });
-
-    tree.removeEdges(Vertex(node));
-    node.replaceChildren(alignedChildren, context);
+    tree.replaceChildrenOf(node, [alignedChildren]);
     super._setConstraints(context, node);
   }
 }

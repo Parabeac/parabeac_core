@@ -11,13 +11,14 @@ class PBFlexibleGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is Flexible) {
+      var sourceChildren = context.tree.childrenOf(source);
       var buffer = StringBuffer();
       buffer.write('Flexible(');
       buffer.write('flex: ${source.flex},');
       try {
         // source.child.currentContext = source.currentContext;
         buffer.write(
-            'child: ${source.child.generator.generate(source.child, context)},');
+            'child: ${sourceChildren.first.generator.generate(sourceChildren.first, context)},');
       } catch (e) {
         log.error(e.toString());
       }

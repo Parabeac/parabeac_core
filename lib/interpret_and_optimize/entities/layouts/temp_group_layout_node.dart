@@ -42,7 +42,7 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }) : super(UUID, frame, [], [], name);
 
   @override
-  bool satisfyRules(
+  bool satisfyRules(PBContext context, 
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
     assert(false, 'Attempted to satisfyRules for class type [$runtimeType]');
     return null;

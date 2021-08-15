@@ -70,7 +70,8 @@ class PBPrototypeAggregationService {
   }
 
   /// Provide the `pNode` with the necessary attributes it needs from the `iNode`
-  PBIntermediateNode populatePrototypeNode(PBIntermediateNode iNode) {
+  PBIntermediateNode populatePrototypeNode(
+      PBContext context, PBIntermediateNode iNode) {
     // TODO: refactor the structure
     if (iNode == null) {
       return iNode;
@@ -80,7 +81,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         (iNode as PBInheritedIntermediate).prototypeNode,
       );
-     //FIXME destHolder.addChild(iNode);
+      //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is PBLayoutIntermediateNode) {
       var destHolder = PBDestHolder(
@@ -88,7 +89,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         iNode.prototypeNode,
       );
-     //FIXME destHolder.addChild(iNode);
+      //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is InjectedContainer) {
       var destHolder = PBDestHolder(
@@ -96,7 +97,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         iNode.prototypeNode,
       );
-     //FIXME destHolder.addChild(iNode);
+      //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is Tab) {
       var destHolder = PBDestHolder(
@@ -104,8 +105,8 @@ class PBPrototypeAggregationService {
         iNode.frame,
         iNode.prototypeNode,
       );
-      iNode.children.forEach((element) {
-      //FIXME destHolder.addChild(element);
+      context.tree.childrenOf(iNode).forEach((element) {
+        //FIXME destHolder.addChild(element);
       });
       return destHolder;
     } else {

@@ -20,62 +20,61 @@ class PBPluginControlService extends AITHandler {
   /// @return Returns the root node of the intermediate tree.
   Future<PBIntermediateTree> convertAndModifyPluginNodeTree(
       PBIntermediateTree tree, PBContext context) {
-    var originalRoot = tree.rootNode;
-    if (originalRoot == null) {
-      logger.warning('generate() attempted to generate a non-existing tree.');
-      return null;
-    }
-    var queue = <LayerTuple>[];
-    PBIntermediateNode rootIntermediateNode;
-    queue.add(LayerTuple([originalRoot], null));
-    while (queue.isNotEmpty) {
-      var currentLayer = queue.removeAt(0);
+    // var originalRoot = tree.rootNode;
+    // if (originalRoot == null) {
+    //   logger.warning('generate() attempted to generate a non-existing tree.');
+    //   return null;
+    // }
+    // var queue = <LayerTuple>[];
+    // PBIntermediateNode rootIntermediateNode;
+    // queue.add(LayerTuple([originalRoot], null));
+    // while (queue.isNotEmpty) {
+    //   var currentLayer = queue.removeAt(0);
 
-      for (var currentIntermediateNode in currentLayer.nodeLayer) {
-        if (currentIntermediateNode is PBEgg) {
-          var layerToReplace =
-              currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
-          if (layerToReplace == null && currentLayer.nodeLayer != null) {
-            // print('Deleting an entire layer, was this on purpose?');
-            logger.warning('Deleting an entire layer, was this on purpose?');
+    //   for (var currentIntermediateNode in currentLayer.nodeLayer) {
+    //     if (currentIntermediateNode is PBEgg) {
+    //       var layerToReplace =
+    //           currentIntermediateNode.layoutInstruction(currentLayer.nodeLayer);
+    //       if (layerToReplace == null && currentLayer.nodeLayer != null) {
+    //         // print('Deleting an entire layer, was this on purpose?');
+    //         logger.warning('Deleting an entire layer, was this on purpose?');
 
-            currentLayer.nodeLayer = layerToReplace;
-            break;
-          }
-          currentLayer.nodeLayer = layerToReplace;
-        }
+    //         currentLayer.nodeLayer = layerToReplace;
+    //         break;
+    //       }
+    //       currentLayer.nodeLayer = layerToReplace;
+    //     }
 
-        // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.
-        rootIntermediateNode ??= currentLayer.nodeLayer[0];
+    //     // If we haven't assigned the rootIntermediateNode, this must be the first node, aka root node.
+    //     rootIntermediateNode ??= currentLayer.nodeLayer[0];
 
-        // Add updates regardless if nodes changed. ---- I think this forces the updates to the layer from layoutInstruction.
-        if (currentLayer.parent is PBVisualIntermediateNode) {
-          assert(currentLayer.nodeLayer.length <= 1,
-              '[Plugin Control Service] We are going to end up deleting nodes here, something probably went wrong.');
-          (currentLayer.parent as PBVisualIntermediateNode).replaceAttribute(
-              currentLayer.parent.attributeName, currentLayer.nodeLayer[0]);
-        } else if (currentLayer.parent is PBLayoutIntermediateNode) {
-          (currentLayer.parent as PBLayoutIntermediateNode)
-              .replaceChildren(currentLayer.nodeLayer, context);
-        }
+    //     // Add updates regardless if nodes changed. ---- I think this forces the updates to the layer from layoutInstruction.
+    //     if (currentLayer.parent is PBVisualIntermediateNode) {
+    //       assert(currentLayer.nodeLayer.length <= 1,
+    //           '[Plugin Control Service] We are going to end up deleting nodes here, something probably went wrong.');
+    //       (currentLayer.parent as PBVisualIntermediateNode).replaceAttribute(context.tree,
+    //           currentLayer.parent.attributeName, currentLayer.nodeLayer[0]);
+    //     } else if (currentLayer.parent is PBLayoutIntermediateNode) {
+    //       context.tree.replaceChildrenOf(currentLayer.parent, currentLayer.nodeLayer);
+    //     }
 
-        /// Add next depth layer to queue.
-        if (currentIntermediateNode is PBVisualIntermediateNode &&
-            currentIntermediateNode.child != null) {
-          queue.add(LayerTuple(
-              [currentIntermediateNode.child], currentIntermediateNode));
-        } else if (currentIntermediateNode is PBLayoutIntermediateNode &&
-            currentIntermediateNode.children != null) {
-          queue.add(LayerTuple(
-              currentIntermediateNode.children.cast<PBIntermediateNode>(),
-              currentIntermediateNode));
-        } else {
-          assert(true,
-              '[Plugin Control Service] We don\'t support class type ${currentIntermediateNode.runtimeType} for adding to the queue.');
-        }
-      }
-    }
-    tree.rootNode = rootIntermediateNode;
+    //     /// Add next depth layer to queue.
+    //     if (currentIntermediateNode is PBVisualIntermediateNode &&
+    //         currentIntermediateNode.child != null) {
+    //       queue.add(LayerTuple(
+    //           [currentIntermediateNode.child], currentIntermediateNode));
+    //     } else if (currentIntermediateNode is PBLayoutIntermediateNode &&
+    //         currentIntermediateNode.children != null) {
+    //       queue.add(LayerTuple(
+    //           currentIntermediateNode.children.cast<PBIntermediateNode>(),
+    //           currentIntermediateNode));
+    //     } else {
+    //       assert(true,
+    //           '[Plugin Control Service] We don\'t support class type ${currentIntermediateNode.runtimeType} for adding to the queue.');
+    //     }
+    //   }
+    // }
+    // tree.rootNode = rootIntermediateNode;
     return Future.value(tree);
   }
 

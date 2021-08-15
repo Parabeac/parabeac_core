@@ -58,45 +58,45 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
 
   @override
   void align(PBContext context, PBIntermediateColumnLayout node) {
-    node.checkCrossAxisAlignment();
-    _invertAlignment(node);
-    if (context.configuration.widgetSpacing == 'Expanded') {
-      _addPerpendicularAlignment(node, context);
-      _addParallelAlignment(node, context);
-    } else {
-      assert(false,
-          'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
-    }
+    // node.checkCrossAxisAlignment();
+    // _invertAlignment(node);
+    // if (context.configuration.widgetSpacing == 'Expanded') {
+    //   _addPerpendicularAlignment(node, context);
+    //   _addParallelAlignment(node, context);
+    // } else {
+    //   assert(false,
+    //       'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
+    // }
   }
 
-  void _addParallelAlignment(
-      PBIntermediateColumnLayout node, PBContext context) {
-    var newchildren = handleFlex(true, node.frame.topLeft,
-        node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
-    node.replaceChildren(newchildren, context);
-  }
+  // void _addParallelAlignment(
+  //     PBIntermediateColumnLayout node, PBContext context) {
+  //   var newchildren = handleFlex(true, node.frame.topLeft,
+  //       node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
+  //   node.replaceChildren(newchildren, context);
+  // }
 
-  void _addPerpendicularAlignment(
-      PBIntermediateColumnLayout node, PBContext context) {
-    var columnMinX = node.frame.topLeft.x;
-    var columnMaxX = node.frame.bottomRight.x;
+  // void _addPerpendicularAlignment(
+  //     PBIntermediateColumnLayout node, PBContext context) {
+  //   var columnMinX = node.frame.topLeft.x;
+  //   var columnMaxX = node.frame.bottomRight.x;
 
-    for (var i = 0; i < node.children.length; i++) {
-      var padding = Padding(
-        null,
-        node.frame,
-        node.children[i].constraints,
-        left: node.children[i].frame.topLeft.x - columnMinX ?? 0.0,
-        right: columnMaxX - node.children[i].frame.bottomRight.x ?? 0.0,
-        top: 0.0,
-        bottom: 0.0,
-      );
-    //FIXME  padding.addChild(node.children[i]);
+  //   for (var i = 0; i < node.children.length; i++) {
+  //     var padding = Padding(
+  //       null,
+  //       node.frame,
+  //       node.children[i].constraints,
+  //       left: node.children[i].frame.topLeft.x - columnMinX ?? 0.0,
+  //       right: columnMaxX - node.children[i].frame.bottomRight.x ?? 0.0,
+  //       top: 0.0,
+  //       bottom: 0.0,
+  //     );
+  //   //FIXME  padding.addChild(node.children[i]);
 
-      //Replace Children.
-      node.children[i] = padding;
-    }
-  }
+  //     //Replace Children.
+  //     node.children[i] = padding;
+  //   }
+  // }
 
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) => null;

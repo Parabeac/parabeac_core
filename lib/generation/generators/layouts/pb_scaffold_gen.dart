@@ -9,26 +9,26 @@ class PBScaffoldGenerator extends PBGenerator {
   PBScaffoldGenerator() : super(strategy: StatefulTemplateStrategy());
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
-    generatorContext.sizingContext = generatorContext.configuration.scaling
+  String generate(PBIntermediateNode source, PBContext context) {
+    context.sizingContext = context.configuration.scaling
         ? SizingValueContext.ScaleValue
         : SizingValueContext.PointValue;
-    var appBar = source.getAttributeNamed('appBar');
-    var body = source.getAttributeNamed('body');
-    var bottomNavBar =
-        source.getAttributeNamed('bottomNavigationBar');
+    var tree = context.tree;
+    var appBar = source.getAttributeNamed(tree, 'appBar');
+    var body = source.getAttributeNamed(tree, 'body');
+    var bottomNavBar = source.getAttributeNamed(tree, 'bottomNavigationBar');
     if (source is InheritedScaffold) {
       var buffer = StringBuffer();
       buffer.write('Scaffold(\n');
 
       if (source.auxiliaryData.color != null) {
-        var str = PBColorGenHelper().generate(source, generatorContext);
+        var str = PBColorGenHelper().generate(source, context);
         buffer.write(str);
       }
       if (appBar != null) {
         buffer.write('appBar: ');
         // generatorContext.sizingContext = SizingValueContext.PointValue;
-        var appbarStr = appBar.generator.generate(appBar, generatorContext);
+        var appbarStr = appBar.generator.generate(appBar, context);
 
         buffer.write('$appbarStr,\n');
       }
@@ -36,19 +36,19 @@ class PBScaffoldGenerator extends PBGenerator {
         buffer.write('bottomNavigationBar: ');
         // generatorContext.sizingContext = SizingValueContext.PointValue;
         var navigationBar =
-            bottomNavBar.generator.generate(bottomNavBar, generatorContext);
+            bottomNavBar.generator.generate(bottomNavBar, context);
         buffer.write('$navigationBar, \n');
       }
 
       if (body != null) {
-        generatorContext.sizingContext = generatorContext.configuration.scaling
+        context.sizingContext = context.configuration.scaling
             ? SizingValueContext.ScaleValue
             : SizingValueContext.PointValue;
 
         // hack to pass screen width and height to the child
         buffer.write('body: ');
         // generatorContext.sizingContext = SizingValueContext.ScaleValue;
-        var bodyStr = body.generator.generate(body, generatorContext);
+        var bodyStr = body.generator.generate(body, context);
         buffer.write('$bodyStr, \n');
       }
       buffer.write(')');

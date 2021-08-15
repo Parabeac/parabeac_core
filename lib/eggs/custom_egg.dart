@@ -34,11 +34,11 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
+    var originalChildren = tree.childrenOf(originalRef);
     var egg = CustomEgg(originalRef.UUID, frame,
         originalRef.name.replaceAll('<custom>', '').pascalCase);
-    tree.addEdges(AITVertex(this),
-        originalRef.children.map((e) => AITVertex(e)).toList());
-    //FIXME originalRef.children.forEach((child) => egg.addChild(child));
+    tree.addEdges(
+        AITVertex(this), originalChildren.map((e) => AITVertex(e)).toList());
     return egg;
   }
 }
@@ -46,6 +46,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
 class CustomEggGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
+    var children = context.tree.childrenOf(source);
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
       'egg/${source.name.snakeCase}.dart',
@@ -60,7 +61,7 @@ class CustomEggGenerator extends PBGenerator {
     if (source is CustomEgg) {
       return '''
         ${source.name}(
-          child: ${source.children[0].generator.generate(source.children[0], context)}
+          child: ${children[0].generator.generate(children[0], context)}
         )
       ''';
     }

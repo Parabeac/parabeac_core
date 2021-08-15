@@ -12,9 +12,10 @@ class PBMasterSymbolGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     context.sizingContext = SizingValueContext.LayoutBuilderValue;
+    var sourceChild = context.tree.childrenOf(source)?.first;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
-      if (source.child == null) {
+      if (sourceChild == null) {
         return '';
       }
       // override styles if need be.
@@ -23,7 +24,7 @@ class PBMasterSymbolGenerator extends PBGenerator {
       // source.child.currentContext = source.currentContext;
       // see if widget itself is overridden, need to pass
       var generatedWidget =
-          source.child.generator.generate(source.child, context);
+          sourceChild.generator.generate(sourceChild, context);
 
       context.masterNode = null;
       if (generatedWidget == null || generatedWidget.isEmpty) {

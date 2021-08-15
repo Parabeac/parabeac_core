@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:uuid/uuid.dart';
 
 /// This represents a node that should be a Layout; it contains a set of children arranged in a specific manner. It is also responsible for understanding its main axis spacing, and crossAxisAlignment.
@@ -40,15 +41,15 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   ///Replace the current children with the [children]
-  void replaceChildren(List<PBIntermediateNode> children, PBContext context) {
-    if (children.isNotEmpty) {
-      this.children = children;
-      resize(context);
-    } else {
-      logger.warning(
-          'Trying to add a list of children to the $runtimeType that is either null or empty');
-    }
-  }
+  // void replaceChildren(List<PBIntermediateNode> children, PBContext context) {
+  //   if (children.isNotEmpty) {
+  //     this.children = children;
+  //     resize(context);
+  //   } else {
+  //     logger.warning(
+  //         'Trying to add a list of children to the $runtimeType that is either null or empty');
+  //   }
+  // }
 
   // @override
   // void addChild(node){
@@ -58,21 +59,28 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   /// Replace the child at `index` for `replacement`.
   /// Returns true if the replacement wsa succesful, false otherwise.
-  bool replaceChildAt(int index, PBIntermediateNode replacement) {
-    if (children != null && children.length > index) {
-      children[index] = replacement;
-      return true;
-    }
-    return false;
-  }
+  // bool replaceChildAt(int index, PBIntermediateNode replacement) {
+  //   if (children != null && children.length > index) {
+  //     children[index] = replacement;
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   @override
   void handleChildren(PBContext context) {
-    resize(context);
+    context.tree.addChildrenObeserver(UUID, (modification, children) {
+      if (modification == CHILDREN_MOD.CREATED &&
+          modification == CHILDREN_MOD.REMOVED) {
+        resize(context, children);
+      }
+    });
     super.handleChildren(context);
   }
 
-  void resize(PBContext context) {
+  void resize(PBContext context, [List<PBIntermediateNode> children]) {
+    children =
+        children ?? context.tree.edges(AITVertex(this)).map((e) => e.data);
     if (children.isEmpty) {
       logger
           .warning('There should be children in the layout so it can resize.');
@@ -93,23 +101,23 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   ///Remove Child
-  bool removeChildren(PBIntermediateNode node, PBContext context) {
-    if (children.contains(node)) {
-      children.remove(node);
-    }
-    resize(context);
-    return false;
-  }
+  // bool removeChildren(PBIntermediateNode node, PBContext context) {
+  //   if (children.contains(node)) {
+  //     children.remove(node);
+  //   }
+  //   resize(context);
+  //   return false;
+  // }
 
   ///Sort children
-  void sortChildren() => children.sort(
-      (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
+  // void sortChildren() => children.sort(
+  //     (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
 
   ///The [PBLayoutIntermediateNode] contains a series of rules that determines if the children is part of that layout. All the children
   ///are going to have to meet the rules that the [PBLayoutIntermediateNode] presents. This method presents a way of comparing two children [PBIntermediateNode]
   ///the method is returning a boolean value that demonstrates if the two nodes satisfies the rules of the [PBLayoutIntermediateNode]. If
   ///a list of children need to be compared, use `allSatisfiesRules()`.
-  bool satisfyRules(
+  bool satisfyRules(PBContext context, 
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
     ///First check if there is an exception then check that is satisfies all the rules.
     for (var exception in _exceptions) {
@@ -118,7 +126,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       }
     }
     for (var rule in _layoutRules) {
-      if (!rule.testRule(currentNode, nextNode)) {
+      if (!rule.testRule(context, currentNode, nextNode)) {
         return false;
       }
     }

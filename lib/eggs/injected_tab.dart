@@ -49,10 +49,6 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
         var designNode = _convertWrapper(originalNode);
 
         tree.addEdges(AITVertex(this), [AITVertex(designNode)]);
-
-        ///Clean the node so that it doesn't get interpreted as a plugin again.
-        // designNode.interpretNode(currentContext).then(tab.addChild);
-        //FIXME tab.addChild(designNode);
       }
       return tab;
     }
@@ -95,8 +91,9 @@ class PBTabGenerator extends PBGenerator {
     if (source is Tab) {
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBarItem(');
-      buffer.write(source.child != null
-          ? 'icon: ${source.child.generator.generate(source.child, generatorContext)}'
+      var child = generatorContext.tree.edges(AITVertex(source)).first;
+      buffer.write(child != null
+          ? 'icon: ${child.data.generator.generate(child.data, generatorContext)}'
           : '');
       buffer.write(')');
       return buffer.toString();

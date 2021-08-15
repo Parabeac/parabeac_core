@@ -13,6 +13,7 @@ class PBContainerGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
+    var sourceChildren = context.tree.childrenOf(source);
     var buffer = StringBuffer();
     buffer.write('Container(');
 
@@ -28,12 +29,12 @@ class PBContainerGenerator extends PBGenerator {
     //   buffer.write(
     //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
     // }
-
-    if (source.child != null) {
-      source.child.frame = source.frame;
+    var child = sourceChildren.first;
+    if (child != null) {
+      child.frame = source.frame;
       // source.child.currentContext = source.currentContext;
-      var statement = source.child != null
-          ? 'child: ${source.child.generator.generate(source.child, context)}'
+      var statement = child != null
+          ? 'child: ${child.generator.generate(child, context)}'
           : '';
       buffer.write(statement);
     }

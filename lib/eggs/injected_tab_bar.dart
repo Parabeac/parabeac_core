@@ -16,7 +16,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<tabbar>';
 
-  List<PBIntermediateNode> get tabs => getAllAtrributeNamed('tabs');
+  // List<PBIntermediateNode> get tabs => getAllAtrributeNamed('tabs');
 
   @override
   AlignStrategy alignStrategy = NoAlignment();
@@ -27,22 +27,6 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
     String name,
   ) : super(UUID, frame, name) {
     generator = PBTabBarGenerator();
-  }
-
-  void addChild(PBIntermediateNode node, PBIntermediateTree tree) {
-    //TODO: Solve if statements; node should always be one of the two types
-    if (node is PBInheritedIntermediate) {
-      if (node.name.contains('<tab>')) {
-        assert(node is! Tab, 'node should be a Tab');
-        node.attributeName = 'tab';
-        tree.addEdges(AITVertex(this), [AITVertex(node)]);
-      }
-    }
-
-    if (node is Tab) {
-      node.attributeName = 'tab';
-      tree.addEdges(AITVertex(this), [AITVertex(node)]);
-    }
   }
 
   @override
@@ -70,13 +54,14 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
+    var originalChildren = tree.childrenOf(originalRef);
     var tabbar = InjectedTabBar(
       originalRef.UUID,
       frame,
       originalRef.name,
     );
     tree.addEdges(AITVertex(tabbar),
-        originalRef.children.map((child) => AITVertex(child)).toList());
+        originalChildren.map((child) => AITVertex(child)).toList());
 
     return tabbar;
   }
@@ -94,7 +79,8 @@ class PBTabBarGenerator extends PBGenerator {
   String generate(PBIntermediateNode source, PBContext context) {
     // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
-      var tabs = source.tabs;
+      // var tabs = source.tabs;
+      var tabs = source.getAllAtrributeNamed(context.tree, 'tabs');
 
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
@@ -102,9 +88,10 @@ class PBTabBarGenerator extends PBGenerator {
       try {
         buffer.write('items:[');
         for (var i = 0; i < tabs.length; i++) {
+          var tabChildren = context.tree.childrenOf(tabs[i]);
           buffer.write('BottomNavigationBarItem(');
-          var res = context.generationManager
-              .generate(tabs[i].children.first, context);
+          var res =
+              context.generationManager.generate(tabChildren.first, context);
           buffer.write('icon: $res,');
           buffer.write('title: Text(""),');
           buffer.write('),');

@@ -30,8 +30,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     alignStrategy = PositionedAlignment();
   }
 
-  @override
-  void resize(PBContext context) {
+  // @override
+  // void resize(PBContext context) {
     //FIXMEar depth = context.tree?.depthOf(this);
 
     /// Since there are cases where [Stack] are being created, and
@@ -43,7 +43,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   //FIXME  } else {
   //FIXME    super.resize(context);
   //FIXME  }
-  }
+  // }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,

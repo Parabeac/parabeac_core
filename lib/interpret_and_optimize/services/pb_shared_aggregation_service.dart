@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 import 'intermediate_node_searcher_service.dart';
 
@@ -47,12 +48,12 @@ class PBSharedInterAggregationService {
   ///Within its [rootChildNode], look for the [PBSharedParameterProp] of the [PBSharedMasterNode],
   ///if one of the values is a [PBSharedInstanceIntermediateNode] then we
   ///are going to look for its [PBSharedParameterValue] if it does not have one.
-  void gatherSharedParameters(
-      PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
+  void gatherSharedParameters(PBSharedMasterNode sharedMasterNode,
+      PBIntermediateNode rootChildNode, PBContext context) {
     for (var prop in sharedMasterNode.overridableProperties) {
       var targetUUID = PBInputFormatter.findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, targetUUID);
+          rootChildNode, targetUUID, context.tree);
       if (prop.value == null) {
         // add Designer Warning here, not even sure if this is the designers fault or not
         log.warning('UUID: $targetUUID not found in searchNodeByUUID');

@@ -25,12 +25,10 @@ part 'pb_intermediate_node.g.dart';
 @JsonSerializable(
     explicitToJson: true, createFactory: false, ignoreUnannotated: true)
 abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
-    implements
-        TraversableNode<PBIntermediateNode> {
+{
   @JsonKey(ignore: true)
   Logger logger;
 
-  @override
   @JsonKey(ignore: true)
   String attributeName;
 
@@ -47,16 +45,15 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   PBIntermediateConstraints constraints;
 
-  @override
   @JsonKey(ignore: true)
   PBIntermediateNode parent;
 
-  @override
-  @JsonKey(ignore: true)
-  List<PBIntermediateNode> children = [];
+  // @override
+  // @JsonKey(ignore: true)
+  // List<PBIntermediateNode> children = [];
 
-  @JsonKey(ignore: true)
-  PBIntermediateNode get child => children.isEmpty ? null : children.first;
+  // @JsonKey(ignore: true)
+  // PBIntermediateNode get child => children.isEmpty ? null : children.first;
 
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
@@ -95,34 +92,43 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
 
   /// Returns the [PBAttribute] named `attributeName`. Returns
   /// null if the [PBAttribute] does not exist.
-  PBIntermediateNode getAttributeNamed(String attributeName) {
-    return children.firstWhere(
-        (element) => element.attributeName == attributeName,
-        orElse: () => null);
+  PBIntermediateNode getAttributeNamed(
+      PBIntermediateTree tree, String attributeName) {
+    return tree
+        .edges(AITVertex(this))
+        .firstWhere((element) => element.data.attributeName == attributeName,
+            orElse: () => null)
+        ?.data;
   }
 
-  List<PBIntermediateNode> getAllAtrributeNamed(String attributeName) {
-    return children
-        .where((element) => element.attributeName == attributeName)
+  List<PBIntermediateNode> getAllAtrributeNamed(
+      PBIntermediateTree tree, String attributeName) {
+    return tree
+        .edges(AITVertex(this))
+        .where((element) => element.data.attributeName == attributeName)
+        .map((vertex) => vertex.data)
         .toList();
   }
 
-  void replaceAttribute(String attributeName, PBIntermediateNode node,
+  void replaceAttribute(
+      PBIntermediateTree tree, String attributeName, PBIntermediateNode node,
       {bool allApperences = true}) {
-    if (hasAttribute(attributeName)) {
-      allApperences
-          ? children
-              .removeWhere((element) => element.attributeName == attributeName)
-          : children.remove(children
-              .firstWhere((element) => element.attributeName == attributeName));
-      children.add(node);
+    if (hasAttribute(tree, attributeName)) {
+      tree.removeEdges(
+          AITVertex(this),
+          allApperences
+              ? tree
+                  .edges(AITVertex(this))
+                  .map((child) => child.data.attributeName = attributeName)
+              : tree.edges(AITVertex(this)).first);
+      tree.addEdges(AITVertex(this), [AITVertex(node)]);
     }
   }
 
   /// Returns true if there is an attribute in the node's `attributes`
   /// that matches `attributeName`. Returns false otherwise.
-  bool hasAttribute(String attributeName) {
-    return children.any((element) => element.attributeName == attributeName);
+  bool hasAttribute(PBIntermediateTree tree, String attributeName) {
+    return tree.edges(AITVertex(this)).any((vertex) => vertex.data.attributeName == attributeName);
   }
 
   /// Adds child to node.
@@ -153,9 +159,9 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
-    for (var currChild in children ?? []) {
-      currChild?.align(context.clone());
-    }
+    ///FIXME for (var currChild in children ?? []) {
+    ///FIXME currChild?.align(context.clone());
+    ///FIXME }
   }
 
   factory PBIntermediateNode.fromJson(Map<String, dynamic> json,

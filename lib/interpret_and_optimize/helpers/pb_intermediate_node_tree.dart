@@ -92,8 +92,10 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     }
   }
 
+  final _childrenModObservers = <String, List<ChildrenModification>>{};
+
   // JsonKey()
-  Map<PBIntermediateNode, List<PBIntermediateNode>> get children => data;
+  // Map<PBIntermediateNode, List<PBIntermediateNode>> get children => data;
 
   ElementStorage _elementStorage;
 
@@ -120,6 +122,15 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     _elementStorage = ElementStorage();
   }
 
+  void addChildrenObeserver(String UUID, ChildrenModification oberver) {
+    var mods = _childrenModObservers[UUID] ?? [];
+    mods.add(oberver);
+    _childrenModObservers[UUID] = mods;
+  }
+
+  List<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
+      edges(AITVertex(node)).map((e) => e.data);
+
   @override
   void addEdges(Vertex<PBIntermediateNode> parentVertex,
       List<Vertex<PBIntermediateNode>> childrenVertices) {
@@ -134,9 +145,23 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         _elementStorage.elementToTree[child.UUID] = _UUID;
       }
     });
+    if (_childrenModObservers.containsKey(parentVertex.data.UUID)) {
+      _childrenModObservers[UUID].forEach((listener) =>
+          listener(CHILDREN_MOD.CREATED, childrenVertices.map((e) => e.data)));
+    }
+    super.addEdges(
+        parentVertex as AITVertex, childrenVertices.cast<AITVertex>());
+  }
 
-    super.addEdges(parentVertex as AITVertex,
-        childrenVertices.cast<AITVertex>());
+  @override
+  void removeEdges(Vertex<PBIntermediateNode> parent,
+      [List<Vertex<PBIntermediateNode>> children]) {
+    if (_childrenModObservers.containsKey(parent.data.UUID)) {
+      _childrenModObservers[UUID].forEach((listener) => listener(
+          CHILDREN_MOD.REMOVED,
+          children?.map((e) => e.data) ?? edges(parent).map((e) => e.data)));
+    }
+    super.removeEdges(parent, children);
   }
 
   /// Adding [PBIntermediateTree] as a dependecy.
@@ -179,36 +204,44 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   //   return true;
   // }
 
+  void replaceChildrenOf(
+      PBIntermediateNode parent, List<PBIntermediateNode> children) {
+    var parentVertex = AITVertex(parent);
+    removeEdges(parentVertex);
+    addEdges(parentVertex, children.map((child) => AITVertex(child)).toList());
+  }
+
   /// Replacing [target] with [replacement]
   ///
   /// The entire subtree (starting with [target]) if [replacement] does not [acceptChildren],
   /// otherwise, those children would be appended to [replacement].
-  // bool replaceNode(PBIntermediateNode target, PBIntermediateNode replacement,
-  //     {bool acceptChildren = false}) {
-  //   if (target.parent == null) {
-  //     ///TODO: throw correct error/log
-  //     throw Error();
-  //   }
+  bool replaceNode(PBIntermediateNode target, PBIntermediateNode replacement,
+      {bool acceptChildren = false}) {
+    if (target.parent == null) {
+      throw Error();
+    }
 
-  //   var parent = target.parent;
-  //   if (acceptChildren) {
-  //     replacement.children.addAll(target.children.map((e) {
-  //       e.parent = replacement;
-  //       return e;
-  //     }));
-  //   }
-  //   removeNode(target, eliminateSubTree: true);
-  //   replacement.attributeName = target.attributeName;
+    // var parent = target.parent;
+    if (acceptChildren) {
+      addEdges(AITVertex(replacement), edges(AITVertex(target)));
+      // replacement.children.addAll(target.children.map((e) {
+      //   e.parent = replacement;
+      //   return e;
+      // }));
+    }
+    remove(AITVertex(target));
+    // removeNode(target, eliminateSubTree: true);
+    // replacement.attributeName = target.attributeName;
 
-  //   /// This conditional is for scenarios where both the [target] and the [replacement] are
-  //   /// under the same [parent]
-  //   if (!parent.children.contains(replacement)) {
-  //     parent.children.add(replacement);
-  //     replacement.parent = parent;
-  //   }
+    /// This conditional is for scenarios where both the [target] and the [replacement] are
+    /// under the same [parent]
+    // if (!parent.children.contains(replacement)) {
+    //   parent.children.add(replacement);
+    //   replacement.parent = parent;
+    // }
 
-  //   return true;
-  // }
+    return true;
+  }
 
   /// Checks if the [PBIntermediateTree] is a [TREE_TYPE.SCREEN],
   /// meaning that the [rootNode] is of type [InheritedScaffold]
@@ -273,6 +306,11 @@ abstract class TraversableNode<E> {
   E parent;
   List<E> children;
 }
+
+enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
+
+typedef ChildrenModification = void Function(
+    CHILDREN_MOD, List<PBIntermediateNode>);
 
 class AITVertex<T extends PBIntermediateNode> extends Vertex<T> {
   AITVertex(T data) : super(data);

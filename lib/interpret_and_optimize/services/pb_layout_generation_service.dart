@@ -90,28 +90,29 @@ class PBLayoutGenerationService extends AITHandler {
   /// and that group contained the visual nodes.
   void _removingMeaninglessGroup(PBIntermediateTree tree) {
     tree
-        .where(
-            (node) => node is TempGroupLayoutNode && node.children.length <= 1)
+        .where((node) =>
+            node is TempGroupLayoutNode && tree.childrenOf(node).length <= 1)
         .cast<TempGroupLayoutNode>()
         .forEach((tempGroup) {
-     //FIXME // tree.replaceNode(
-      //     tempGroup,
-      //     tempGroup.children.isNotEmpty
-      //         ? _replaceNode(tempGroup, tempGroup.children.first)
-      //         : _replaceNode(
-      //             tempGroup,
-      //             InjectedContainer(
-      //               tempGroup.UUID, tempGroup.frame,
-      //               name: tempGroup.name,
-      //               // constraints: tempGroup.constraints
-      //             )));
+      var tempChildren = tree.childrenOf(tempGroup);
+      tree.replaceNode(
+          tempGroup,
+          tempChildren.isNotEmpty
+              ? _replaceNode(tempGroup, tempChildren.first)
+              : _replaceNode(
+                  tempGroup,
+                  InjectedContainer(
+                    tempGroup.UUID, tempGroup.frame,
+                    name: tempGroup.name,
+                    // constraints: tempGroup.constraints
+                  )));
     });
   }
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
-     //FIXME // tree.replaceNode(
+      //FIXME // tree.replaceNode(
       //     tempGroup,
       //     PBIntermediateStackLayout(
       //       name: tempGroup.name,
@@ -139,22 +140,22 @@ class PBLayoutGenerationService extends AITHandler {
           if (currentNode.attributeName != nextNode.attributeName) {
             break;
           }
-          if (layout.satisfyRules(currentNode, nextNode) &&
+          if (layout.satisfyRules(context, currentNode, nextNode) &&
               layout.runtimeType != parent.runtimeType) {
             ///If either `currentNode` or `nextNode` is of the same `runtimeType` as the satified [PBLayoutIntermediateNode],
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
-           //FIXME   tree.replaceNode(nextNode, currentNode);
+              //FIXME   tree.replaceNode(nextNode, currentNode);
               currentNode.addChild(nextNode);
             } else if (layout.runtimeType == nextNode.runtimeType) {
-        //FIXME      tree.replaceNode(currentNode, nextNode);
+              //FIXME      tree.replaceNode(currentNode, nextNode);
               nextNode.addChild(currentNode);
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
               ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
               ///of the generated layout.
-        //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
-        //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
+              //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
+              //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
               parent.addChild(layout.generateLayout(
                   [currentNode, nextNode],
                   context,
@@ -201,19 +202,18 @@ class PBLayoutGenerationService extends AITHandler {
     if (node == null) {
       return node;
     }
-    if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
-      node.replaceChildren(
-          node.children
-              .map((node) => _applyPostConditionRules(node, context))
-              .toList(),
-          context);
+    var tree = context.tree;
+    var nodeChildren = tree.childrenOf(node);
+    if (node is PBLayoutIntermediateNode && nodeChildren.isNotEmpty) {
+      tree.replaceChildrenOf(
+          node, nodeChildren.map((e) => _applyPostConditionRules(e, context)));
     } else if (node is PBVisualIntermediateNode) {
-      node.children.map((e) => _applyPostConditionRules(e, context));
+      nodeChildren.map((e) => _applyPostConditionRules(e, context));
     }
 
     for (var postConditionRule in _postLayoutRules) {
-      if (postConditionRule.testRule(node, null)) {
-        var result = postConditionRule.executeAction(node, null);
+      if (postConditionRule.testRule(context, node, null)) {
+        var result = postConditionRule.executeAction(context, node, null);
         if (result != null) {
           return _replaceNode(node, result);
         }

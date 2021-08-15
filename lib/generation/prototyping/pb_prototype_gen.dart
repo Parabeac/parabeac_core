@@ -13,8 +13,10 @@ class PBPrototypeGenerator extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     var name = _storage.getPageNodeById(prototypeNode.destinationUUID)?.name;
+    var tree = context.tree;
+    var sourceChildren = tree.childrenOf(source);
     if (name != null && name.isNotEmpty) {
       return '''GestureDetector(
       onTap: () {
@@ -23,11 +25,11 @@ class PBPrototypeGenerator extends PBGenerator {
           MaterialPageRoute(builder: (context) => $name()),
         );
       },
-      child: ${source.children.first.generator.generate(source.children.first, generatorContext)},
+      child: ${sourceChildren.first.generator.generate(sourceChildren.first, context)},
       )''';
     } else {
-      return source.children.first.generator
-          .generate(source.children.first, generatorContext);
+      return sourceChildren.first.generator
+          .generate(sourceChildren.first, context);
     }
   }
 }

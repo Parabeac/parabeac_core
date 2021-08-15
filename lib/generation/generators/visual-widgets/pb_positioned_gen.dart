@@ -19,6 +19,8 @@ class PBPositionedGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InjectedPositioned) {
+      var sourceChildren = context.tree.childrenOf(source);
+
       var buffer = StringBuffer('Positioned(');
 
       var boilerplate = _getBoilerplate(context.sizingContext);
@@ -81,7 +83,7 @@ class PBPositionedGenerator extends PBGenerator {
 
         // source.child.currentContext = source.currentContext;
         buffer.write(
-            'child: ${source.child.generator.generate(source.child, context)},');
+            'child: ${sourceChildren.first.generator.generate(sourceChildren.first, context)},');
       } catch (e) {
         logger.error(e.toString());
         MainInfo().captureException(

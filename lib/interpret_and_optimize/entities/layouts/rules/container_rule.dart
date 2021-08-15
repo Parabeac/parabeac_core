@@ -4,6 +4,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class ContainerPostRule extends PostConditionRule {
   OverlappingNodesLayoutRule overlappingNodesLayoutRule;
@@ -16,13 +18,15 @@ class ContainerPostRule extends PostConditionRule {
   /// children: a [PBVisualIntermediateNode] and [PBLayoutIntermediateNode] that
   /// have overlapping coordinates.
   @override
-  bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
+  bool testRule(PBContext context, PBIntermediateNode currentNode,
+      PBIntermediateNode nextNode) {
     var layout =
         currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
+    var tree = context.tree;
     if (layout == null || layout is! PBIntermediateStackLayout) {
       return false;
     }
-    var children = (layout as PBLayoutIntermediateNode).children;
+    var children = tree.childrenOf(layout);
     if (children.length == 2) {
       if ((children[0] is PBVisualIntermediateNode &&
               children[1] is PBLayoutIntermediateNode) ||
@@ -32,8 +36,8 @@ class ContainerPostRule extends PostConditionRule {
                 .firstWhere((element) => element is PBLayoutIntermediateNode),
             pbvisual = children
                 .firstWhere((element) => element is PBVisualIntermediateNode);
-        return overlappingNodesLayoutRule.testRule(pbvisual, pblayout) &&
-            (pbvisual as PBVisualIntermediateNode).children.isNotEmpty;
+        return overlappingNodesLayoutRule.testRule(context, pbvisual, pblayout) &&
+            tree.childrenOf(pbvisual).isNotEmpty;
       }
     }
     return false;
@@ -43,18 +47,19 @@ class ContainerPostRule extends PostConditionRule {
   /// [PBLayoutIntermediateNode] child with the [PBVisualIntermediateNode]
   /// child.
   @override
-  dynamic executeAction(
-      PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
-    if (testRule(currentNode, nextNode)) {
+  dynamic executeAction(PBContext context, PBIntermediateNode currentNode,
+      PBIntermediateNode nextNode) {
+    if (testRule(context, currentNode, nextNode)) {
       var layout =
           currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
-      var pblayout = (layout as PBLayoutIntermediateNode)
-              .children
+      var tree = context.tree;
+      var layoutChildren = tree.childrenOf(layout);
+      var pblayout = layoutChildren
               .firstWhere((element) => element is PBLayoutIntermediateNode),
-          pbvisual = (layout as PBLayoutIntermediateNode)
-              .children
+          pbvisual = layoutChildren
               .firstWhere((element) => element is PBVisualIntermediateNode);
-   //FIXME pbvisual.addChild(pblayout);
+      tree.addEdges(AITVertex(pbvisual), [AITVertex(pblayout)]);
+      //FIXME pbvisual.addChild(pblayout);
       layout = pbvisual;
       return layout;
     }

@@ -7,11 +7,12 @@ class PBColumnGenerator extends PBLayoutGenerator {
   PBColumnGenerator() : super();
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is PBIntermediateColumnLayout) {
       var buffer = StringBuffer();
+      var children = context.tree.childrenOf(source);
       buffer.write('Column(');
-      if (source.children.isNotEmpty) {
+      if (children.isNotEmpty) {
         var attributes = source.alignment;
         if (attributes != null && attributes.isNotEmpty) {
           if (attributes['crossAxisAlignment'] != null) {
@@ -22,9 +23,9 @@ class PBColumnGenerator extends PBLayoutGenerator {
           }
         }
         buffer.write('\nchildren: [');
-        for (var index = 0; index < source.children.length; index++) {
-          var element = source.children[index].generator
-              .generate(source.children[index], generatorContext);
+        for (var index = 0; index < children.length; index++) {
+          var element = children[index].generator
+              .generate(children[index], context);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

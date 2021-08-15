@@ -14,9 +14,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
 
-  PBIntermediateNode get leadingItem => getAttributeNamed('leading');
-  PBIntermediateNode get middleItem => getAttributeNamed('title');
-  PBIntermediateNode get trailingItem => getAttributeNamed('actions');
+  // PBIntermediateNode get leadingItem => getAttributeNamed('leading');
+  // PBIntermediateNode get middleItem => getAttributeNamed('title');
+  // PBIntermediateNode get trailingItem => getAttributeNamed('actions');
 
   InjectedAppbar(
     String UUID,
@@ -26,10 +26,6 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
     generator = PBAppBarGenerator();
     alignStrategy = CustomAppBarAlignment();
   }
-
-  void addChild(PBIntermediateNode node, PBIntermediateTree tree) {}
-
-  //FIXMEsuper.addChild(node);
 
   @override
   String getAttributeNameOf(PBIntermediateNode node) {
@@ -57,8 +53,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       frame,
       originalRef.name,
     );
+    var originalChildren = tree.childrenOf(originalRef);
     tree.addEdges(AITVertex(appbar),
-        originalRef.children.map((child) => AITVertex(child)).toList());
+        originalChildren.map((child) => AITVertex(child)).toList());
     return appbar;
   }
 
@@ -74,22 +71,18 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
   @override
   void align(PBContext context, InjectedAppbar node) {
-    if (node.middleItem == null) {
+    var middleItem = node.getAttributeNamed(context.tree, 'title');
+    if (middleItem == null) {
       return;
     }
 
     /// This align only modifies middleItem
     var tempNode = InjectedContainer(
-      node.middleItem.UUID,
-      node.middleItem.frame,
-      name: node.middleItem.name,
-    )
-      //FIXME ..addChild(node.middleItem)
-      ..attributeName = 'title';
-
-    var target =
-        node.children.firstWhere((element) => element.attributeName == 'title');
-    target = tempNode;
+      middleItem.UUID,
+      middleItem.frame,
+      name: middleItem.name,
+    )..attributeName = 'title';
+    context.tree.addEdges(AITVertex(tempNode), [AITVertex(middleItem)]);
   }
 }
 
@@ -104,9 +97,10 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      source.children.forEach((child) {
+      var children = generatorContext.tree.edges(AITVertex(source));
+      children.forEach((child) {
         buffer.write(
-            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child == 'actions', child == 'leading')},');
+            '${child.data.attributeName}: ${_wrapOnBrackets(child.data.generator.generate(child.data, generatorContext), child == 'actions', child == 'leading')},');
       });
 
       buffer.write(')');

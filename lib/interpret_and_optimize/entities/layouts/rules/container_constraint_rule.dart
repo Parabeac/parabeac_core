@@ -2,13 +2,14 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_container
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:uuid/uuid.dart';
 
 class ContainerConstraintRule extends PostConditionRule {
   @override
-  dynamic executeAction(
+  dynamic executeAction(PBContext context,
       PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
-    if (testRule(currentNode, nextNode)) {
+    if (testRule(context, currentNode, nextNode)) {
       var container = InjectedContainer(null, currentNode.frame,
           name: currentNode.name,
           // constraints: currentNode.constraints
@@ -20,6 +21,6 @@ class ContainerConstraintRule extends PostConditionRule {
   }
 
   @override
-  bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
+  bool testRule(PBContext context, PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (currentNode != null && currentNode is PBLayoutIntermediateNode);
 }
