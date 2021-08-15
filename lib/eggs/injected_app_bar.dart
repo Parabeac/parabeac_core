@@ -8,6 +8,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
@@ -25,8 +27,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
     alignStrategy = CustomAppBarAlignment();
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
+  void addChild(PBIntermediateNode node, PBIntermediateTree tree) {
     if (node is PBInheritedIntermediate) {
       var attName = 'child';
       if (node.name.contains('<leading>')) {
@@ -39,7 +40,9 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
         attName = 'title';
       }
       node.attributeName = attName;
-      children.add(node);
+
+      tree.addEdges(AITVertex(this), [AITVertex(node)]);
+      // children.add(node);
       return;
     }
 
@@ -47,14 +50,14 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
     var appbar = InjectedAppbar(
       originalRef.UUID,
       frame,
       originalRef.name,
     );
-
-    originalRef.children.forEach(addChild);
+    originalRef.children.forEach((child) => addChild(child, tree));
 
     return appbar;
   }

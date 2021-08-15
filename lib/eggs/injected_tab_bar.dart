@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'dart:math';
 
 import 'injected_tab.dart';
@@ -28,19 +29,19 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
     generator = PBTabBarGenerator();
   }
 
-  @override
-  void addChild(node) {
+  void addChild(PBIntermediateNode node, PBIntermediateTree tree) {
+    //TODO: Solve if statements; node should always be one of the two types
     if (node is PBInheritedIntermediate) {
-      //FIXME // if (node.name.contains('<tab>')) {
-      //   assert(node is! Tab, 'node should be a Tab');
-      //   node.attributeName = 'tab';
-      //   children.add(node);
-      // }
+      if (node.name.contains('<tab>')) {
+        assert(node is! Tab, 'node should be a Tab');
+        node.attributeName = 'tab';
+        tree.addEdges(AITVertex(this), [AITVertex(node)]);
+      }
     }
 
     if (node is Tab) {
       node.attributeName = 'tab';
-      children.add(node);
+      tree.addEdges(AITVertex(this), [AITVertex(node)]);
     }
   }
 
@@ -48,14 +49,15 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
     var tabbar = InjectedTabBar(
       originalRef.UUID,
       frame,
       originalRef.name,
     );
 
-    originalRef.children.forEach(addChild);
+    originalRef.children.forEach((child) => addChild(child, tree));
 
     return tabbar;
   }

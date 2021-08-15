@@ -24,13 +24,16 @@ void main() {
     test('', () {
       var parent = InheritedContainer('PARENT', null);
       var child = InheritedCircle('CHILD', null);
+      var child2 = InheritedCircle('child2', null);
+      var child3 = InheritedCircle('CHILD3', null);
 
       // var vParent =;
       // var vChild = ;
 
-      tree.addEdges(AITVertex(parent), [AITVertex(child)]);
-      print(tree);
+      tree.addEdges(AITVertex(parent),
+          [AITVertex(child), AITVertex(child2), AITVertex(child3)]);
       var edges = tree.edges(AITVertex(parent));
+      tree.removeEdges(AITVertex(parent));
       print(tree);
     });
   });

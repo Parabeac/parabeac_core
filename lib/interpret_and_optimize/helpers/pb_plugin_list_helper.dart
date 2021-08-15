@@ -5,6 +5,7 @@ import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 
@@ -84,11 +85,12 @@ class PBPluginListHelper {
 
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
-  PBEgg returnAllowListNodeIfExists(PBIntermediateNode node) {
+  PBEgg returnAllowListNodeIfExists(
+      PBIntermediateNode node, PBIntermediateTree tree) {
     if (node != null) {
       for (var key in allowListNames.keys) {
         if (node.name?.contains(key) ?? false) {
-          return allowListNames[key].generatePluginNode(node.frame, node);
+          return allowListNames[key].generatePluginNode(node.frame, node, tree);
         }
       }
     }

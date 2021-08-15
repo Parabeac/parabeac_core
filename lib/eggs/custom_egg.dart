@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -31,9 +32,12 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef) {
+  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
     var egg = CustomEgg(originalRef.UUID, frame,
         originalRef.name.replaceAll('<custom>', '').pascalCase);
+    tree.addEdges(AITVertex(this),
+        originalRef.children.map((e) => AITVertex(e)).toList());
     //FIXME originalRef.children.forEach((child) => egg.addChild(child));
     return egg;
   }
