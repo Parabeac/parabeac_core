@@ -121,7 +121,9 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// Returns true if there is an attribute in the node's `attributes`
   /// that matches `attributeName`. Returns false otherwise.
   bool hasAttribute(PBIntermediateTree tree, String attributeName) {
-    return tree.edges(AITVertex(this)).any((vertex) => vertex.data.attributeName == attributeName);
+    return tree
+        .edges(AITVertex(this))
+        .any((vertex) => vertex.data.attributeName == attributeName);
   }
 
   /// Adds child to node.
@@ -152,9 +154,15 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
     alignStrategy.align(context, this);
+
     ///FIXME for (var currChild in children ?? []) {
     ///FIXME currChild?.align(context.clone());
     ///FIXME }
+  }
+
+  @override
+  String toString() {
+    return name ?? runtimeType;
   }
 
   factory PBIntermediateNode.fromJson(Map<String, dynamic> json,

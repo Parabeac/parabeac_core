@@ -42,8 +42,8 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   }) : super(UUID, frame, [], [], name);
 
   @override
-  bool satisfyRules(PBContext context, 
-      PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
+  bool satisfyRules(PBContext context, PBIntermediateNode currentNode,
+      PBIntermediateNode nextNode) {
     assert(false, 'Attempted to satisfyRules for class type [$runtimeType]');
     return null;
   }
@@ -55,20 +55,13 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var tempGroup = _$TempGroupLayoutNodeFromJson(json)
-      // . .frame.topLeft = Point.topLeftFromJson(json)
-      // . .frame.bottomRight = Point.bottomRightFromJson(json)
-      ..originalRef = json;
-
-   //FIXME tempGroup.mapRawChildren(json);
-
-    return tempGroup;
-  }
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
+      _$TempGroupLayoutNodeFromJson(json);
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
           PBIntermediateNode parent, PBIntermediateTree tree) =>
       (TempGroupLayoutNode.fromJson(json) as TempGroupLayoutNode)
+        ..mapRawChildren(json, tree)
         ..originalRef = json;
 }

@@ -73,7 +73,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
       addChild(group, targetChildren);
       group.frame = newFrame;
     } else if (targetChildren.isNotEmpty) {
-      var temp = TempGroupLayoutNode(null, null, name: children.name);
+      var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
       addChild(temp, targetChildren);
 
       var tempChildren = tree.childrenOf(temp);
