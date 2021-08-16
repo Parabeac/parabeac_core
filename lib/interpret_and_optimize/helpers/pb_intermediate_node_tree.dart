@@ -152,8 +152,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         _childrenModObservers[UUID].forEach((listener) => listener(
             CHILDREN_MOD.CREATED, childrenVertices.map((e) => e.data)));
       }
-      return super.addEdges(
-          AITVertex(parent), childrenVertices);
+      return super.addEdges(AITVertex(parent), childrenVertices);
     };
     parent.childrenStrategy.addChild(parent, children, addChildren, this);
   }
@@ -198,6 +197,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       addEdges(AITVertex(replacement), edges(AITVertex(target)));
     }
     remove(AITVertex(target));
+    addEdges(AITVertex(target.parent), [AITVertex(target)]);
     return true;
   }
 

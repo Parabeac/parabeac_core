@@ -34,12 +34,8 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
-    var originalChildren = tree.childrenOf(originalRef);
-    var egg = CustomEgg(originalRef.UUID, frame,
+    return CustomEgg(originalRef.UUID, frame,
         originalRef.name.replaceAll('<custom>', '').pascalCase);
-    // tree.addEdges(
-    //     AITVertex(this), originalChildren.map((e) => AITVertex(e)).toList());
-    return egg;
   }
 }
 
