@@ -35,10 +35,6 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   @JsonKey(ignore: true)
   TREE_TYPE tree_type = TREE_TYPE.SCREEN;
 
-  @override
-  @JsonKey(ignore: true)
-  String type = 'tree';
-
   /// This flag makes the data in the [PBIntermediateTree] unmodifiable. Therefore,
   /// if a change is made and [lockData] is `true`, the change is going to be ignored.
   ///
@@ -92,10 +88,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     }
   }
 
-  final _childrenModObservers = <String, List<ChildrenModification>>{};
-
-  // JsonKey()
-  // Map<PBIntermediateNode, List<PBIntermediateNode>> get children => data;
+  final _childrenModObservers = <String, List<ChildrenModEventHandler>>{};
 
   ElementStorage _elementStorage;
 
@@ -122,35 +115,47 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     _elementStorage = ElementStorage();
   }
 
-  void addChildrenObeserver(String UUID, ChildrenModification oberver) {
+  /// These are observers of [Vertex<PBIntermediateNode>] that will be added into [this]
+  void addChildrenObeserver(String UUID, ChildrenModEventHandler oberver) {
     var mods = _childrenModObservers[UUID] ?? [];
     mods.add(oberver);
     _childrenModObservers[UUID] = mods;
   }
 
   List<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
-      edges(AITVertex(node)).map((e) => e.data);
+      edges(AITVertex(node)).map((e) => e.data).toList();
 
   @override
   void addEdges(Vertex<PBIntermediateNode> parentVertex,
-      List<Vertex<PBIntermediateNode>> childrenVertices) {
+      [List<Vertex<PBIntermediateNode>> childrenVertices]) {
     var parent = parentVertex.data;
+    if (childrenVertices == null) {}
+    var children = childrenVertices.map((e) => e.data).toList();
 
-    childrenVertices.forEach((childVertex) {
-      var child = childVertex.data;
-      child.parent = parent;
-      child.attributeName = parent.getAttributeNameOf(child);
+    /// Passing the responsability of acctually adding the [PBIntermediateNode] into
+    /// the [tree] to the [parent.childStrategy]. The main reason for this is to enforce
+    /// the strict policy that some [PBIntermediateNode] have when adding a node. Some
+    /// nodes might just be allowed to have a single child, while others are can have more that
+    /// one child.
+    // ignore: omit_local_variable_types
+    ChildrenMod<PBIntermediateNode> addChildren =
+        (PBIntermediateNode parent, List<PBIntermediateNode> children) {
+      children.forEach((child) {
+        child.parent = parent;
+        child.attributeName = parent.getAttributeNameOf(child);
 
-      if (!_elementStorage.elementToTree.containsKey(child.UUID)) {
-        _elementStorage.elementToTree[child.UUID] = _UUID;
+        if (!_elementStorage.elementToTree.containsKey(child.UUID)) {
+          _elementStorage.elementToTree[child.UUID] = _UUID;
+        }
+      });
+      if (_childrenModObservers.containsKey(parentVertex.data.UUID)) {
+        _childrenModObservers[UUID].forEach((listener) => listener(
+            CHILDREN_MOD.CREATED, childrenVertices.map((e) => e.data)));
       }
-    });
-    if (_childrenModObservers.containsKey(parentVertex.data.UUID)) {
-      _childrenModObservers[UUID].forEach((listener) =>
-          listener(CHILDREN_MOD.CREATED, childrenVertices.map((e) => e.data)));
-    }
-    super.addEdges(
-        parentVertex as AITVertex, childrenVertices.cast<AITVertex>());
+      return super.addEdges(
+          AITVertex(parent), childrenVertices);
+    };
+    parent.childrenStrategy.addChild(parent, children, addChildren, this);
   }
 
   @override
@@ -173,37 +178,6 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     }
   }
 
-  /// Removing the [node] from the [PBIntermediateTree]
-  ///
-  /// The entire subtree (starting with [node]) would be eliminated if specified to [eliminateSubTree],
-  /// otherwise, its just going to replace [node] with its [node.children]
-  // bool removeNode(PBIntermediateNode node, {bool eliminateSubTree = false}) {
-  //   if (node.parent == null) {
-  //     ///TODO: log message
-  //     return false;
-  //   }
-  //   var parent = node.parent;
-  //   var removeChild = () =>
-  //       parent.children.removeWhere((element) => element.UUID == node.UUID);
-
-  //   if (eliminateSubTree) {
-  //     removeChild();
-  //   } else {
-  //     /// appending the [PBIntermediateNode]s of the removed [node]
-  //     var grandChilds = parent.children
-  //         .where((element) => element.UUID == node.UUID)
-  //         .map((e) => e.children)
-
-  //         ///FIXME: Right now the iterator is returning null insize of a list when iterating the tree.
-  //         .where((element) => element != null)
-  //         .expand((element) => element)
-  //         .toList();
-  //     removeChild();
-  //     grandChilds.forEach((element) => parent.addChild(element));
-  //   }
-  //   return true;
-  // }
-
   void replaceChildrenOf(
       PBIntermediateNode parent, List<PBIntermediateNode> children) {
     var parentVertex = AITVertex(parent);
@@ -220,26 +194,10 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     if (target.parent == null) {
       throw Error();
     }
-
-    // var parent = target.parent;
     if (acceptChildren) {
       addEdges(AITVertex(replacement), edges(AITVertex(target)));
-      // replacement.children.addAll(target.children.map((e) {
-      //   e.parent = replacement;
-      //   return e;
-      // }));
     }
     remove(AITVertex(target));
-    // removeNode(target, eliminateSubTree: true);
-    // replacement.attributeName = target.attributeName;
-
-    /// This conditional is for scenarios where both the [target] and the [replacement] are
-    /// under the same [parent]
-    // if (!parent.children.contains(replacement)) {
-    //   parent.children.add(replacement);
-    //   replacement.parent = parent;
-    // }
-
     return true;
   }
 
@@ -251,9 +209,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
 
   /// Finding the depth of the [node] in relation to the [rootNode].
-  // int depthOf(node) {
-  //   return dist(rootNode, node);
-  // }
+  int depthOf(node) {
+    return dist(rootNode, node);
+  }
 
   /// Find the distance between [source] and [target], where the [source] is an
   /// ancestor of [target].
@@ -268,11 +226,6 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   ) =>
       shortestPath(Vertex(source), Vertex(target))?.length ?? -1;
 
-  // @override
-  // Iterator<PBIntermediateNode> get iterator => IntermediateDFSIterator(this);
-
-  // Iterator get layerIterator => IntermediateLayerIterator(this);
-
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
   static PBIntermediateTree fromJson(Map<String, dynamic> json) {
@@ -281,18 +234,15 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
     tree.addEdges(Vertex(designNode), []);
     tree._rootNode = designNode;
+    return tree;
 
-    List<Map<String, dynamic>> childrenPointer = json['designNode']['children'];
+    // List<Map<String, dynamic>> childrenPointer = json['designNode']['children'];
 
     /// Deserialize the rootNode
     /// Then make sure rootNode deserializes the rest of the tree.
     // ..addEdges(child, parentList)
     // ..tree_type = treeTypeFromJson(json['designNode']);
   }
-
-  // @override
-  // PBIntermediateTree createIntermediateNode(Map<String, dynamic> json) =>
-  //     PBIntermediateTree.fromJson(json);
 }
 
 /// By extending the class, any node could be used in any iterator to traverse its
@@ -309,8 +259,9 @@ abstract class TraversableNode<E> {
 
 enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
 
-typedef ChildrenModification = void Function(
+typedef ChildrenModEventHandler = void Function(
     CHILDREN_MOD, List<PBIntermediateNode>);
+typedef ChildrenMod<T> = void Function(T parent, List<T> children);
 
 class AITVertex<T extends PBIntermediateNode> extends Vertex<T> {
   AITVertex(T data) : super(data);

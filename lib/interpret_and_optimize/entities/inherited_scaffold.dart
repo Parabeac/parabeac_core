@@ -6,6 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -42,6 +43,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
       {this.isHomeScreen, this.prototypeNode})
       : super(UUID, frame, name) {
     generator = PBScaffoldGenerator();
+    childrenStrategy = MultipleChildStrategy('body');
   }
 
   @override

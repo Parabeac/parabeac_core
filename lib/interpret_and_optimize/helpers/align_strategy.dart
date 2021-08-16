@@ -101,7 +101,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       alignedChildren.add(injectedPositioned);
       tree.addEdges(Vertex(injectedPositioned), [Vertex(child)]);
     });
-    tree.replaceChildrenOf(node, [alignedChildren]);
+    tree.replaceChildrenOf(node, alignedChildren);
     super._setConstraints(context, node);
   }
 }

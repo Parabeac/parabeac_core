@@ -40,12 +40,10 @@ class PBPrototypeLinkerService {
   void addAndPopulatePrototypeNode(
       var currentNode, var rootNode, PBContext context) async {
     await _prototypeStorage.addPrototypeInstance(currentNode, context);
-    currentNode =
-        _aggregationService.populatePrototypeNode(context, currentNode) ?? currentNode;
-
-    context.tree.replaceNode(, replacement);
-    
-    // PBIntermediateNodeSearcherService.replaceNodeInTree(
-    //     rootNode, currentNode, currentNode.UUID);
+    var pNode =
+        _aggregationService.populatePrototypeNode(context, currentNode);
+    if(pNode != null){
+      context.tree.replaceNode(currentNode, pNode);
+    }
   }
 }

@@ -48,13 +48,6 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   @JsonKey(ignore: true)
   PBIntermediateNode parent;
 
-  // @override
-  // @JsonKey(ignore: true)
-  // List<PBIntermediateNode> children = [];
-
-  // @JsonKey(ignore: true)
-  // PBIntermediateNode get child => children.isEmpty ? null : children.first;
-
   @JsonKey(ignore: true)
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 

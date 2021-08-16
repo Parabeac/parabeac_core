@@ -51,16 +51,20 @@ class AbstractIntermediateNodeFactory {
           // Check if `iNode` is a tag
           //? If `iNode` is a tag, do we have to remove any links that \
           //? may have been made during `createIntermediateNode()` ?
-          var tag =
+          var egg =
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
-          if (tag != null) {
-            tree.addEdges(
-                parent == null ? null : Vertex(parent), [Vertex(tag)]);
-            return tag;
+          if (egg != null) {
+            if (parent != null) {
+              tree.addEdges(Vertex(parent), [Vertex(egg)]);
+            }
+
+            return egg;
           }
-          tree.addEdges(
-              parent == null ? null : Vertex(parent), [Vertex(iNode)]);
+          if (parent != null) {
+            tree.addEdges(Vertex(parent), [Vertex(iNode)]);
+          }
+
           return iNode;
         }
       }
