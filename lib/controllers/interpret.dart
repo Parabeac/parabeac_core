@@ -139,7 +139,7 @@ class AITServiceBuilder {
       try {
         if (transformation is AITNodeTransformation) {
           for (var node in _intermediateTree) {
-            node = await transformation(context, node, _intermediateTree);
+            node = await transformation(context, node.data, _intermediateTree);
           }
         } else if (transformation is AITTransformation) {
           _intermediateTree = await transformation(context, _intermediateTree);

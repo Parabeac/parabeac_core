@@ -13,4 +13,5 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
+      'hashCode': instance.hashCode,
     };

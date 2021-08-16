@@ -130,7 +130,7 @@ ${parser.usage}
         tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
     context.tree = tree;
     tree.context = context;
-    tree.forEach((node) => node.handleChildren(context));
+    tree.forEach((node) => node.data.handleChildren(context));
     return interpretService
         .interpretAndOptimize(tree, context, pbProject)
         .then((tree) => fpb.genAITree(tree, context));

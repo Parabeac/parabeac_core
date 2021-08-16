@@ -14,6 +14,5 @@ PBIntermediateTree _$PBIntermediateTreeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBIntermediateTreeToJson(PBIntermediateTree instance) =>
     <String, dynamic>{
-      'designNode': instance.rootNode,
       'name': instance.name,
     };

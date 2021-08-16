@@ -29,6 +29,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   String _UUID;
   String get UUID => _UUID;
 
+  @JsonKey(ignore: true)
   PBContext context;
 
   /// The [TREE_TYPE] of the [PBIntermediateTree].
@@ -101,6 +102,10 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   String _identifier;
   @JsonKey(name: 'name')
   String get identifier => _identifier?.snakeCase ?? 'no_name_found';
+
+  @override
+  @JsonKey(ignore: true)
+  Comparator<Vertex<PBIntermediateNode>> get comparator => super.comparator;
 
   PBIntermediateTree({
     String name,

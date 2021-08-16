@@ -41,7 +41,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
-  @JsonKey(name: 'overrideProperties')
+  @JsonKey(ignore: true)
   List<PBSharedParameterProp> overridableProperties;
   String friendlyName;
 
@@ -89,20 +89,37 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedMasterNodeFromJson(json)
-        ..originalRef = json;
-        // ..mapRawChildren(json);
+      _$PBSharedMasterNodeFromJson(json)..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
-      PBSharedMasterNode.fromJson(json)..mapRawChildren(json, tree);
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    var master = PBSharedMasterNode.fromJson(json)..mapRawChildren(json, tree);
+
+    /// Map overridableProperties which need parent and tree
+    (master as PBSharedMasterNode).overridableProperties =
+        (json['overrideProperties'] as List)
+                ?.map(
+                  (prop) => prop == null
+                      ? null
+                      : PBSharedParameterProp.createSharedParameter(
+                          prop as Map<String, dynamic>,
+                          parent,
+                          tree,
+                        ),
+                )
+                ?.toList() ??
+            [];
+
+    return master;
+  }
 }
 
 @JsonSerializable()
 class PBSharedParameterProp {
   final String type;
 
+  @JsonKey(ignore: true)
   PBIntermediateNode value;
 
   @JsonKey(name: 'name', fromJson: _propertyNameFromJson)
@@ -112,10 +129,21 @@ class PBSharedParameterProp {
 
   PBSharedParameterProp(
     this.type,
-    this.value,
     this.propertyName,
     this.UUID,
   );
+
+  static PBSharedParameterProp createSharedParameter(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    var fromJson = PBSharedParameterProp.fromJson(json);
+
+    // Populate `value` of Override Property since it is an [IntermediateNode]
+    fromJson.value = json['value'] == null
+        ? null
+        : PBIntermediateNode.fromJson(json, parent, tree);
+
+    return fromJson;
+  }
 
   factory PBSharedParameterProp.fromJson(Map<String, dynamic> json) =>
       _$PBSharedParameterPropFromJson(json);
