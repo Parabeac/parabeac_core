@@ -237,7 +237,6 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
-    tree.addEdges(designNode, []);
     tree._rootNode = designNode;
     return tree;
 

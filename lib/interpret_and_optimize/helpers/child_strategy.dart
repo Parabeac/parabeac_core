@@ -19,8 +19,8 @@ class OneChildStrategy extends ChildrenStrategy {
       : super(attributeName, overridable);
 
   @override
-  void addChild(
-      PBIntermediateNode target, dynamic child, ChildrenMod<PBIntermediateNode> addChild, tree) {
+  void addChild(PBIntermediateNode target, dynamic child,
+      ChildrenMod<PBIntermediateNode> addChild, tree) {
     if (child is PBIntermediateNode) {
       addChild(target, [child]);
     } else {
@@ -35,8 +35,8 @@ class MultipleChildStrategy extends ChildrenStrategy {
       : super(attributeName, overridable);
 
   @override
-  void addChild(
-      PBIntermediateNode target, children, ChildrenMod<PBIntermediateNode> addChild, tree) {
+  void addChild(PBIntermediateNode target, children,
+      ChildrenMod<PBIntermediateNode> addChild, tree) {
     if (children is List<PBIntermediateNode>) {
       addChild(target, children);
     } else if (children is PBIntermediateNode) {
@@ -49,8 +49,8 @@ class NoChildStrategy extends ChildrenStrategy {
   NoChildStrategy([bool overridable]) : super('N/A', overridable);
 
   @override
-  void addChild(
-      PBIntermediateNode target, children, ChildrenMod<PBIntermediateNode> addChild, tree) {
+  void addChild(PBIntermediateNode target, children,
+      ChildrenMod<PBIntermediateNode> addChild, tree) {
     logger.warning(
         'Tried adding ${children.runtimeType.toString()} to ${target.runtimeType.toString()}');
   }
@@ -61,18 +61,26 @@ class TempChildrenStrategy extends ChildrenStrategy {
       : super(attributeName, overwridable);
 
   @override
-  void addChild(
-      PBIntermediateNode target, children, ChildrenMod<PBIntermediateNode> addChild, tree) {
+  void addChild(PBIntermediateNode target, children,
+      ChildrenMod<PBIntermediateNode> addChild, tree) {
     var targetChildren = tree.childrenOf(target);
     var group = targetChildren.firstWhere(
         (element) => element is TempGroupLayoutNode,
         orElse: () => null);
+    // TempGroup is the only child inside `target`
     if (group != null && targetChildren.length == 1) {
       // Calculate new frame based on incoming child
-      var newFrame = group.frame.boundingBox(children.frame);
+      var newFrame;
+      if (children is List) {
+        newFrame = group.frame.boundingBox(children.first.frame);
+      } else {
+        newFrame = group.frame.boundingBox(children.frame);
+      }
       addChild(group, targetChildren);
       group.frame = newFrame;
-    } else if (targetChildren.isNotEmpty) {
+    }
+    // Have no TempGroupLayoutNode but `target` already has children
+    else if (targetChildren.isNotEmpty) {
       var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
       addChild(temp, targetChildren);
 
@@ -85,9 +93,16 @@ class TempChildrenStrategy extends ChildrenStrategy {
       }
 
       temp.frame = frame;
+      tree.removeEdges(target);
       addChild(target, [temp]);
-    } else if (children is PBIntermediateNode) {
+    }
+    // Adding a single child to empty `target`
+    else if (children is PBIntermediateNode) {
       addChild(target, [children]);
+    } 
+    // Adding a list of `children`
+    else if (children is List<PBIntermediateNode>) {
+      addChild(target, children);
     }
   }
 }
