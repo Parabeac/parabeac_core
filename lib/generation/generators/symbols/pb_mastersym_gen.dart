@@ -12,7 +12,8 @@ class PBMasterSymbolGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     context.sizingContext = SizingValueContext.LayoutBuilderValue;
-    var sourceChild = context.tree.childrenOf(source)?.first;
+    var children = context.tree.childrenOf(source);
+    var sourceChild = children.isNotEmpty ? children.first : null;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
       if (sourceChild == null) {

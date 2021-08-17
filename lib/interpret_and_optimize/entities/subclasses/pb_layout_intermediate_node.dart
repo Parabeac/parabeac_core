@@ -80,7 +80,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   void resize(PBContext context, [List<PBIntermediateNode> children]) {
     children =
-        children ?? context.tree.edges(AITVertex(this)).map((e) => e.data);
+        children ?? context.tree.edges(this);
     if (children.isEmpty) {
       logger
           .warning('There should be children in the layout so it can resize.');

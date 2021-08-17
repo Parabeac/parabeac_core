@@ -32,7 +32,7 @@ class StackReductionVisualRule extends PostConditionRule {
           element is PBVisualIntermediateNode &&
           currentTree.childrenOf(element).isEmpty);
 
-      currentTree.addEdges(AITVertex(wrapper), [AITVertex(child)]);
+      currentTree.addEdges(wrapper, [child]);
       if ((layout as PBIntermediateStackLayout).prototypeNode != null) {
         if (wrapper is PBInheritedIntermediate) {
           (wrapper as PBInheritedIntermediate).prototypeNode =
@@ -64,7 +64,8 @@ class StackReductionVisualRule extends PostConditionRule {
     if (children.length == 2 &&
         children[0] is PBVisualIntermediateNode &&
         children[1] is PBVisualIntermediateNode) {
-      return _overlappingNodesLayoutRule.testRule(context, children[0], children[1]) &&
+      return _overlappingNodesLayoutRule.testRule(
+              context, children[0], children[1]) &&
           ((_isEmptyContainer(currTree, children[0]) &&
                   currTree.childrenOf(children[1]).isNotEmpty) ||
               (_isEmptyContainer(currTree, children[0]) &&

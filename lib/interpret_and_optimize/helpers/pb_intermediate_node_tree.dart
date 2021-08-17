@@ -128,14 +128,13 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   }
 
   List<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
-      edges(AITVertex(node)).map((e) => e.data).toList();
+      edges(node).cast<PBIntermediateNode>();
 
   @override
-  void addEdges(Vertex<PBIntermediateNode> parentVertex,
-      [List<Vertex<PBIntermediateNode>> childrenVertices]) {
-    var parent = parentVertex.data;
-    if (childrenVertices == null) {}
-    var children = childrenVertices.map((e) => e.data).toList();
+  void addEdges(Vertex<PBIntermediateNode> parent,
+      [List<Vertex<PBIntermediateNode>> children]) {
+    if (children == null) {}
+    // var children = childrenVertices.map((e) => e).toList();
 
     /// Passing the responsability of acctually adding the [PBIntermediateNode] into
     /// the [tree] to the [parent.childStrategy]. The main reason for this is to enforce
@@ -153,22 +152,23 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
           _elementStorage.elementToTree[child.UUID] = _UUID;
         }
       });
-      if (_childrenModObservers.containsKey(parentVertex.data.UUID)) {
-        _childrenModObservers[UUID].forEach((listener) => listener(
-            CHILDREN_MOD.CREATED, childrenVertices.map((e) => e.data)));
+      if (_childrenModObservers.containsKey(parent.id)) {
+        _childrenModObservers[parent.id].forEach((listener) => listener(
+            CHILDREN_MOD.CREATED, children.toList()));
       }
-      return super.addEdges(AITVertex(parent), childrenVertices);
+      return super.addEdges(parent, children);
     };
-    parent.childrenStrategy.addChild(parent, children, addChildren, this);
+    (parent as PBIntermediateNode)
+        .childrenStrategy
+        .addChild(parent, children.cast<PBIntermediateNode>(), addChildren, this);
   }
 
   @override
   void removeEdges(Vertex<PBIntermediateNode> parent,
       [List<Vertex<PBIntermediateNode>> children]) {
-    if (_childrenModObservers.containsKey(parent.data.UUID)) {
-      _childrenModObservers[UUID].forEach((listener) => listener(
-          CHILDREN_MOD.REMOVED,
-          children?.map((e) => e.data) ?? edges(parent).map((e) => e.data)));
+    if (_childrenModObservers.containsKey(parent.id)) {
+      _childrenModObservers[parent.id].forEach((listener) => listener(
+          CHILDREN_MOD.REMOVED, children?.toList() ?? edges(parent).toList()));
     }
     super.removeEdges(parent, children);
   }
@@ -184,9 +184,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 
   void replaceChildrenOf(
       PBIntermediateNode parent, List<PBIntermediateNode> children) {
-    var parentVertex = AITVertex(parent);
+    var parentVertex = parent;
     removeEdges(parentVertex);
-    addEdges(parentVertex, children.map((child) => AITVertex(child)).toList());
+    addEdges(parentVertex, children.toList());
   }
 
   /// Replacing [target] with [replacement]
@@ -199,10 +199,10 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       throw Error();
     }
     if (acceptChildren) {
-      addEdges(AITVertex(replacement), edges(AITVertex(target)));
+      addEdges(replacement, edges(target));
     }
-    remove(AITVertex(target));
-    addEdges(AITVertex(target.parent), [AITVertex(target)]);
+    remove(target);
+    addEdges(target.parent, [replacement]);
     return true;
   }
 
@@ -229,7 +229,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     PBIntermediateNode source,
     PBIntermediateNode target,
   ) =>
-      shortestPath(Vertex(source), Vertex(target))?.length ?? -1;
+      shortestPath(source, target)?.length ?? -1;
 
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
@@ -237,7 +237,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
-    tree.addEdges(Vertex(designNode), []);
+    tree.addEdges(designNode, []);
     tree._rootNode = designNode;
     return tree;
 
@@ -267,19 +267,6 @@ enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
 typedef ChildrenModEventHandler = void Function(
     CHILDREN_MOD, List<PBIntermediateNode>);
 typedef ChildrenMod<T> = void Function(T parent, List<T> children);
-
-class AITVertex<T extends PBIntermediateNode> extends Vertex<T> {
-  AITVertex(T data) : super(data);
-
-  @override
-  int get id => data.UUID.hashCode;
-
-  @override
-  int get hashCode => data.UUID.hashCode;
-
-  @override
-  bool operator ==(Object other) => other is AITVertex<T> && other.id == id;
-}
 
 TREE_TYPE treeTypeFromJson(Map<String, dynamic> json) {
   switch (json['type']) {

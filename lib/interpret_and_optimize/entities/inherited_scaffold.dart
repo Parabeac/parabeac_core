@@ -51,10 +51,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
     var children = getAllAtrributeNamed(context.tree, 'body');
     // Top-most stack should have scaffold's frame to align children properly
     var groupAtt = TempGroupLayoutNode(null, frame)
+      ..name = '$name-Group'
       ..attributeName = 'body'
       ..parent = this;
-    context.tree.addEdges(AITVertex(groupAtt),
-        children.map((child) => AITVertex(child)).toList());
+    context.tree.addEdges(groupAtt, children.map((child) => child).toList());
 
     // Keep appbar and tabbar
     var appBar = getAttributeNamed(context.tree, 'appBar');

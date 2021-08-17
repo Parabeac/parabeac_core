@@ -25,13 +25,13 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
   /// When [context.fixedWidth] is not `null`, se assign the [context.fixedWidth] to subtree and
   /// we make [node.constraints.pinLeft] = `true` and [node.constraints.pingRight] = `false`.
   void _setConstraints(PBContext context, T node) {
-    context.contextConstraints.fixedHeight ??= node.constraints.fixedHeight;
-    context.contextConstraints.fixedWidth ??= node.constraints.fixedWidth;
+    context.contextConstraints?.fixedHeight ??= node.constraints?.fixedHeight;
+    context.contextConstraints?.fixedWidth ??= node.constraints?.fixedWidth;
 
     if (context.contextConstraints.fixedHeight != null) {
-      node.constraints.fixedHeight = context.contextConstraints.fixedHeight;
-      node.constraints.pinTop = true;
-      node.constraints.pinBottom = false;
+      node.constraints?.fixedHeight = context.contextConstraints?.fixedHeight;
+      node.constraints?.pinTop = true;
+      node.constraints?.pinBottom = false;
     }
 
     if (context.contextConstraints.fixedWidth != null) {
@@ -55,8 +55,8 @@ class PaddingAlignment extends AlignStrategy {
       top: (child.frame.topLeft.y - node.frame.topLeft.y).abs(),
       bottom: (child.frame.bottomRight.y - node.frame.bottomRight.y).abs(),
     );
-    context.tree.addEdges(Vertex(padding), [Vertex(child)]);
-    context.tree.addEdges(Vertex(node), [Vertex(padding)]);
+    context.tree.addEdges(padding, [child]);
+    context.tree.addEdges(node, [padding]);
 
     super._setConstraints(context, node);
   }
@@ -99,7 +99,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               width: child.frame.width,
               height: child.frame.height));
       alignedChildren.add(injectedPositioned);
-      tree.addEdges(Vertex(injectedPositioned), [Vertex(child)]);
+      tree.addEdges(injectedPositioned, [child]);
     });
     tree.replaceChildrenOf(node, alignedChildren);
     super._setConstraints(context, node);

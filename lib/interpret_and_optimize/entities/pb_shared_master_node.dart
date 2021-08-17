@@ -85,7 +85,11 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     generator = PBMasterSymbolGenerator();
     childrenStrategy = TempChildrenStrategy('child');
 
-    overridableProperties.forEach(OverrideHelper.addProperty);
+    overridableProperties
+
+        /// FIXME for some reason some of the elements are null
+        .where((element) => element != null)
+        .forEach(OverrideHelper.addProperty);
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>

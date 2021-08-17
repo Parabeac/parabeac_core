@@ -113,7 +113,7 @@ class InheritedText extends PBVisualIntermediateNode
       name: inheritedText.name,
       originalRef: json,
     );
-    tree.addEdges(Vertex(container), [Vertex(inheritedText)]);
+    tree.addEdges(container, [inheritedText]);
 
     // Return an [InheritedContainer] that wraps this text
     return container;

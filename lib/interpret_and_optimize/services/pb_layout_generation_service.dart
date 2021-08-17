@@ -111,20 +111,22 @@ class PBLayoutGenerationService extends AITHandler {
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
-    tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
-      //FIXME // tree.replaceNode(
-      //     tempGroup,
-      //     PBIntermediateStackLayout(
-      //       name: tempGroup.name,
-      //       constraints: tempGroup.constraints,
-      //     )..frame = tempGroup.frame,
-      //     acceptChildren: true);
+    tree
+        .whereType<TempGroupLayoutNode>()
+        .forEach((tempGroup) {
+      tree.replaceNode(
+          tempGroup,
+          PBIntermediateStackLayout(
+            name: tempGroup.name,
+            constraints: tempGroup.constraints,
+          )..frame = tempGroup.frame,
+          acceptChildren: true);
     });
   }
 
   void _layoutTransformation(PBIntermediateTree tree, PBContext context) {
     for (var parent in tree) {
-      var children = parent.children;
+      var children = tree.childrenOf(parent);
       children.sort((n0, n1) => n0.frame.topLeft.compareTo(n1.frame.topLeft));
 
       var childPointer = 0;
@@ -146,20 +148,23 @@ class PBLayoutGenerationService extends AITHandler {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               //FIXME   tree.replaceNode(nextNode, currentNode);
-              currentNode.addChild(nextNode);
+              tree.addEdges(currentNode, [nextNode]);
+              tree.removeEdges(parent, [nextNode]);
             } else if (layout.runtimeType == nextNode.runtimeType) {
               //FIXME      tree.replaceNode(currentNode, nextNode);
-              nextNode.addChild(currentNode);
+              tree.addEdges(nextNode, [currentNode]);
+              tree.removeEdges(parent, [currentNode]);
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
               ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
               ///of the generated layout.
               //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
               //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
-              parent.addChild(layout.generateLayout(
-                  [currentNode, nextNode],
-                  context,
-                  '${currentNode.name}${nextNode.name}${layout.runtimeType}'));
+              tree.removeEdges(parent);
+              tree.addEdges(parent, [
+                layout.generateLayout([currentNode, nextNode], context,
+                    '${currentNode.name}${nextNode.name}${layout.runtimeType}')
+              ]);
             }
             reCheck = true;
             break;

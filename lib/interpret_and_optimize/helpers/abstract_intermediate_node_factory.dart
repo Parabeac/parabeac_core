@@ -62,7 +62,7 @@ class AbstractIntermediateNodeFactory {
             return tag;
           }
           if (parent != null) {
-            tree.addEdges(Vertex(parent), [Vertex(iNode)]);
+            tree.addEdges(parent, [iNode]);
           }
 
           return iNode;
