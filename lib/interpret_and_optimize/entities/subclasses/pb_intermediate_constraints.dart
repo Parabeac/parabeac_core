@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'pb_intermediate_constraints.g.dart';
@@ -39,6 +38,15 @@ class PBIntermediateConstraints {
 
   factory PBIntermediateConstraints.fromJson(Map<String, dynamic> json) =>
       _$PBIntermediateConstraintsFromJson(json);
+
+  factory PBIntermediateConstraints.defaultConstraints() =>
+      PBIntermediateConstraints(
+          pinBottom: false,
+          pinRight: false,
+          pinLeft: false,
+          pinTop: false,
+          fixedHeight: false,
+          fixedWidth: false);
 
   Map<String, dynamic> toJson() => _$PBIntermediateConstraintsToJson(this);
 

@@ -29,7 +29,7 @@ class PBContainerGenerator extends PBGenerator {
     //   buffer.write(
     //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
     // }
-    var child = sourceChildren.first;
+    var child = sourceChildren.isEmpty ? null : sourceChildren.first;
     if (child != null) {
       child.frame = source.frame;
       // source.child.currentContext = source.currentContext;

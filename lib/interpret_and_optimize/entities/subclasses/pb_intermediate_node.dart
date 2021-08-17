@@ -85,6 +85,11 @@ abstract class PBIntermediateNode
           'Generating UUID for $runtimeType-$name as its UUID is null');
       _UUID = Uuid().v4();
     }
+
+    if(constraints == null){
+      logger.debug('Constraints are null for $runtimeType, assigning it default constraints');
+      constraints = PBIntermediateConstraints.defaultConstraints();
+    }
     // _attributes = [];
   }
 

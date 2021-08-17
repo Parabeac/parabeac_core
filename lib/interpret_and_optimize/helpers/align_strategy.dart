@@ -35,9 +35,9 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
     }
 
     if (context.contextConstraints.fixedWidth != null) {
-      node.constraints.fixedWidth = context.contextConstraints.fixedWidth;
-      node.constraints.pinLeft = true;
-      node.constraints.pinRight = false;
+      node.constraints?.fixedWidth = context.contextConstraints.fixedWidth;
+      node.constraints?.pinLeft = true;
+      node.constraints?.pinRight = false;
     }
   }
 }

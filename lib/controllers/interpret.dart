@@ -45,7 +45,7 @@ class Interpret {
     PBSymbolLinkerService(),
     // PBPluginControlService(),
     PBLayoutGenerationService(),
-    PBConstraintGenerationService(),
+    // PBConstraintGenerationService(),
     PBAlignGenerationService()
   ];
 
