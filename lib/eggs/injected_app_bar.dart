@@ -54,8 +54,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       originalRef.name,
     );
     var originalChildren = tree.childrenOf(originalRef);
-    tree.addEdges(AITVertex(appbar),
-        originalChildren.map((child) => AITVertex(child)).toList());
+    tree.addEdges(appbar, originalChildren);
     return appbar;
   }
 
@@ -82,7 +81,7 @@ class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
       middleItem.frame,
       name: middleItem.name,
     )..attributeName = 'title';
-    context.tree.addEdges(AITVertex(tempNode), [AITVertex(middleItem)]);
+    context.tree.addEdges(tempNode, [middleItem]);
   }
 }
 
@@ -97,10 +96,11 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      var children = generatorContext.tree.edges(AITVertex(source));
+      var children =
+          generatorContext.tree.edges(source).cast<PBIntermediateNode>();
       children.forEach((child) {
         buffer.write(
-            '${child.data.attributeName}: ${_wrapOnBrackets(child.data.generator.generate(child.data, generatorContext), child == 'actions', child == 'leading')},');
+            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child == 'actions', child == 'leading')},');
       });
 
       buffer.write(')');

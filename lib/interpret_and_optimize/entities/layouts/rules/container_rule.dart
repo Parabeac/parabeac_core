@@ -36,7 +36,8 @@ class ContainerPostRule extends PostConditionRule {
                 .firstWhere((element) => element is PBLayoutIntermediateNode),
             pbvisual = children
                 .firstWhere((element) => element is PBVisualIntermediateNode);
-        return overlappingNodesLayoutRule.testRule(context, pbvisual, pblayout) &&
+        return overlappingNodesLayoutRule.testRule(
+                context, pbvisual, pblayout) &&
             tree.childrenOf(pbvisual).isNotEmpty;
       }
     }
@@ -58,7 +59,7 @@ class ContainerPostRule extends PostConditionRule {
               .firstWhere((element) => element is PBLayoutIntermediateNode),
           pbvisual = layoutChildren
               .firstWhere((element) => element is PBVisualIntermediateNode);
-      tree.addEdges(AITVertex(pbvisual), [AITVertex(pblayout)]);
+      tree.addEdges(pbvisual, [pblayout]);
       //FIXME pbvisual.addChild(pblayout);
       layout = pbvisual;
       return layout;

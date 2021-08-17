@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
@@ -130,7 +131,7 @@ ${parser.usage}
         tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
     context.tree = tree;
     tree.context = context;
-    tree.forEach((node) => node.data.handleChildren(context));
+    tree.forEach((child) => child.handleChildren(context));
     return interpretService
         .interpretAndOptimize(tree, context, pbProject)
         .then((tree) => fpb.genAITree(tree, context));

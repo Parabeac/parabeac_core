@@ -25,7 +25,8 @@ part 'pb_intermediate_node.g.dart';
 
 @JsonSerializable(
     explicitToJson: true, createFactory: false, ignoreUnannotated: true)
-abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
+abstract class PBIntermediateNode
+    extends Vertex<PBIntermediateNode> //extends Iterable<PBIntermediateNode>
 {
   @JsonKey(ignore: true)
   Logger logger;
@@ -63,7 +64,7 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   Rectangle frame;
 
   // @JsonKey(ignore: true)
-  // PBGenerationViewData get managerData => currentContext.tree.data;
+  // PBGenerationViewData get managerData => currentContext.tree;
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
   @JsonKey(name: 'style')
@@ -74,7 +75,11 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   String name;
 
   PBIntermediateNode(this._UUID, this.frame, this.name,
-      {this.subsemantic, this.constraints}) {
+      {this.subsemantic, this.constraints})
+      :
+
+        /// We are not using the [Vertex] attribute as it represents the [PBIntermediateNode]
+        super(null) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
       logger.warning(
@@ -88,19 +93,17 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// null if the [PBAttribute] does not exist.
   PBIntermediateNode getAttributeNamed(
       PBIntermediateTree tree, String attributeName) {
-    return tree
-        .edges(AITVertex(this))
-        .firstWhere((element) => element.data.attributeName == attributeName,
-            orElse: () => null)
-        ?.data;
+    return tree.edges(this).cast<PBIntermediateNode>().firstWhere(
+        (child) => child.attributeName == attributeName,
+        orElse: () => null);
   }
 
   List<PBIntermediateNode> getAllAtrributeNamed(
       PBIntermediateTree tree, String attributeName) {
     return tree
-        .edges(AITVertex(this))
-        .where((element) => element.data.attributeName == attributeName)
-        .map((vertex) => vertex.data)
+        .edges(this)
+        .cast<PBIntermediateNode>()
+        .where((child) => child.attributeName == attributeName)
         .toList();
   }
 
@@ -109,13 +112,14 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
       {bool allApperences = true}) {
     if (hasAttribute(tree, attributeName)) {
       tree.removeEdges(
-          AITVertex(this),
+          this,
           allApperences
               ? tree
-                  .edges(AITVertex(this))
-                  .map((child) => child.data.attributeName = attributeName)
-              : tree.edges(AITVertex(this)).first);
-      tree.addEdges(AITVertex(this), [AITVertex(node)]);
+                  .edges(this)
+                  .cast<PBIntermediateNode>()
+                  .map((child) => child.attributeName = attributeName)
+              : tree.edges(this).first);
+      tree.addEdges(this, [node]);
     }
   }
 
@@ -123,8 +127,9 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
   /// that matches `attributeName`. Returns false otherwise.
   bool hasAttribute(PBIntermediateTree tree, String attributeName) {
     return tree
-        .edges(AITVertex(this))
-        .any((vertex) => vertex.data.attributeName == attributeName);
+        .edges(this)
+        .cast<PBIntermediateNode>()
+        .any((child) => child.attributeName == attributeName);
   }
 
   /// Adds child to node.
@@ -140,6 +145,13 @@ abstract class PBIntermediateNode //extends Iterable<PBIntermediateNode>
 
   @override
   int get hashCode => UUID.hashCode;
+
+  @override
+  int get id => UUID.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is PBIntermediateNode && other.id == id;
 
   void handleChildren(PBContext context) {}
 

@@ -73,7 +73,7 @@ class MiddlewareUtils {
   ) {
     // Pass down manager data to states
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      // context.tree.data = node.managerData;
+      // context.tree = node.managerData;
     });
     return '''
       ${manager.generateImports()}

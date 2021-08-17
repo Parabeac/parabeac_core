@@ -60,8 +60,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
       frame,
       originalRef.name,
     );
-    tree.addEdges(AITVertex(tabbar),
-        originalChildren.map((child) => AITVertex(child)).toList());
+    tree.addEdges(tabbar, originalChildren);
 
     return tabbar;
   }

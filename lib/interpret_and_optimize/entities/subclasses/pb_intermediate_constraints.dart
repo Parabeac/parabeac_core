@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 
 part 'pb_intermediate_constraints.g.dart';
 

@@ -138,8 +138,13 @@ class AITServiceBuilder {
       log.debug('Started running $name...');
       try {
         if (transformation is AITNodeTransformation) {
-          for (var node in _intermediateTree) {
-            node = await transformation(context, node.data, _intermediateTree);
+
+          for (var child in _intermediateTree) {
+            var dVertex =
+                await transformation(context, child, _intermediateTree);
+            if (dVertex.UUID != child.UUID) {
+              tree.replaceNode(child, dVertex);
+            }
           }
         } else if (transformation is AITTransformation) {
           _intermediateTree = await transformation(context, _intermediateTree);

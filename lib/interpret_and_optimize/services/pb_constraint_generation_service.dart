@@ -23,12 +23,13 @@ class PBConstraintGenerationService extends AITHandler {
 
     for (var node
         in tree.where((element) => element != null).toList().reversed) {
+          var child = tree.childrenOf(node)?.first;
       if (node.constraints == null) {
-        if (node.child?.constraints == null) {
+        if (child.constraints == null) {
           node.constraints = PBIntermediateConstraints(
               pinBottom: false, pinLeft: false, pinRight: false, pinTop: false);
         } else {
-          node.constraints = node.child.constraints;
+          node.constraints = child.constraints;
         }
       }
     }
