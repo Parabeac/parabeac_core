@@ -14,8 +14,11 @@ TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
+    constraints: json['constraints'] == null
+        ? null
+        : PBIntermediateConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -26,8 +29,8 @@ TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$TempGroupLayoutNodeToJson(
         TempGroupLayoutNode instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
+      'constraints': instance.constraints?.toJson(),
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,

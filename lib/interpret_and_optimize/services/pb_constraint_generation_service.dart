@@ -123,33 +123,33 @@ class PBConstraintGenerationService extends AITHandler {
   PBIntermediateConstraints _inheritConstraintsFromChild(
       {PBIntermediateConstraints constraints,
       PBIntermediateConstraints childConstraints}) {
-    if (childConstraints.pinLeft) {
-      constraints.pinLeft = true;
-    }
-    if (childConstraints.pinRight) {
-      constraints.pinRight = true;
-    }
-    if (childConstraints.pinTop) {
-      constraints.pinTop = true;
-    }
-    if (childConstraints.pinBottom) {
-      constraints.pinBottom = true;
-    }
-    if (childConstraints.fixedHeight != null) {
-      if (constraints.fixedHeight == null) {
-        constraints.fixedHeight = childConstraints.fixedHeight;
-      } else if (constraints.fixedHeight < childConstraints.fixedHeight) {
-        constraints.fixedHeight = childConstraints.fixedHeight;
-      }
-    }
-    if (childConstraints.fixedWidth != null) {
-      if (constraints.fixedWidth == null) {
-        constraints.fixedWidth = childConstraints.fixedWidth;
-      } else if (constraints.fixedWidth < childConstraints.fixedWidth) {
-        constraints.fixedWidth = childConstraints.fixedWidth;
-      }
-    }
-    return constraints;
+    // if (childConstraints.pinLeft) {
+    //   constraints.pinLeft = true;
+    // }
+    // if (childConstraints.pinRight) {
+    //   constraints.pinRight = true;
+    // }
+    // if (childConstraints.pinTop) {
+    //   constraints.pinTop = true;
+    // }
+    // if (childConstraints.pinBottom) {
+    //   constraints.pinBottom = true;
+    // }
+    // if (childConstraints.fixedHeight != null) {
+    //   if (constraints.fixedHeight == null) {
+    //     constraints.fixedHeight = childConstraints.fixedHeight;
+    //   } else if (constraints.fixedHeight < childConstraints.fixedHeight) {
+    //     constraints.fixedHeight = childConstraints.fixedHeight;
+    //   }
+    // }
+    // if (childConstraints.fixedWidth != null) {
+    //   if (constraints.fixedWidth == null) {
+    //     constraints.fixedWidth = childConstraints.fixedWidth;
+    //   } else if (constraints.fixedWidth < childConstraints.fixedWidth) {
+    //     constraints.fixedWidth = childConstraints.fixedWidth;
+    //   }
+    // }
+    // return constraints;
   }
 
   @override

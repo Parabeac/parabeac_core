@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
@@ -44,7 +43,7 @@ abstract class PBIntermediateNode
   String get UUID => _UUID;
   String _UUID;
 
-  @JsonKey(ignore: true)
+  @JsonKey(ignore: false)
   PBIntermediateConstraints constraints;
 
   @JsonKey(ignore: true)

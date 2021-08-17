@@ -10,8 +10,10 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
+      'constraints': instance.constraints?.toJson(),
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
       'hashCode': instance.hashCode,
+      'id': instance.id,
     };

@@ -57,8 +57,8 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var tempGroup = _$TempGroupLayoutNodeFromJson(json);
-    tempGroup.constraints = PBIntermediateConstraints.fromConstraints(
-        json['constraints'], tempGroup.frame.height, tempGroup.frame.width);
+    // tempGroup.constraints = PBIntermediateConstraints.fromConstraints(
+    //     json['constraints'], tempGroup.frame.height, tempGroup.frame.width);
     return tempGroup;
   }
 

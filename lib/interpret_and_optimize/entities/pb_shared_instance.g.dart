@@ -22,7 +22,10 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         json['prototypeNodeUUID'] as String),
     name: json['name'] as String,
   )
-    ..subsemantic = json['subsemantic'] as String
+    ..constraints = json['constraints'] == null
+        ? null
+        : PBIntermediateConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>)
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -33,8 +36,8 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
 Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
         PBSharedInstanceIntermediateNode instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
+      'constraints': instance.constraints?.toJson(),
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,

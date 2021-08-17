@@ -15,7 +15,10 @@ InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
   )
-    ..subsemantic = json['subsemantic'] as String
+    ..constraints = json['constraints'] == null
+        ? null
+        : PBIntermediateConstraints.fromJson(
+            json['constraints'] as Map<String, dynamic>)
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -25,8 +28,8 @@ InheritedOval _$InheritedOvalFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedOvalToJson(InheritedOval instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
+      'constraints': instance.constraints,
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,

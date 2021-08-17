@@ -13,8 +13,8 @@ PBIntermediateConstraints _$PBIntermediateConstraintsFromJson(
     pinRight: json['pinRight'] as bool,
     pinTop: json['pinTop'] as bool,
     pinBottom: json['pinBottom'] as bool,
-    fixedHeight: (json['fixedHeight'] as num)?.toDouble(),
-    fixedWidth: (json['fixedWidth'] as num)?.toDouble(),
+    fixedHeight: json['fixedHeight'] as bool,
+    fixedWidth: json['fixedWidth'] as bool,
   );
 }
 
