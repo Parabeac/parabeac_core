@@ -39,7 +39,8 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     this.originalRef,
     String name,
     this.prototypeNode,
-  }) : super(UUID, frame, [], [], name);
+    PBIntermediateConstraints constraints,
+  }) : super(UUID, frame, [], [], name, constraints: constraints);
 
   @override
   bool satisfyRules(PBContext context, PBIntermediateNode currentNode,
@@ -55,8 +56,12 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$TempGroupLayoutNodeFromJson(json);
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var tempGroup = _$TempGroupLayoutNodeFromJson(json);
+    tempGroup.constraints = PBIntermediateConstraints.fromConstraints(
+        json['constraints'], tempGroup.frame.height, tempGroup.frame.width);
+    return tempGroup;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,

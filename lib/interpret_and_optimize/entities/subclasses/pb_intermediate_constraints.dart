@@ -1,10 +1,14 @@
 import 'dart:developer';
 
+import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pbdl_constraints.dart';
+
+part 'pb_intermediate_constraints.g.dart';
 
 /// Named PBDL in anticipation of the refactor where PBDL becomes the design standard.
 /// Each property must be set.
 /// TODO: Use https://pub.dev/packages/meta to make these named parameters required.
+@JsonSerializable()
 class PBIntermediateConstraints {
   bool pinLeft;
   bool pinRight;
@@ -24,19 +28,21 @@ class PBIntermediateConstraints {
       this.fixedHeight,
       this.fixedWidth});
 
-  PBIntermediateConstraints.fromConstraints(
-      PBDLConstraints constraints, double height, double width) {
-    pinLeft = constraints.pinLeft ?? false;
-    pinRight = constraints.pinRight ?? false;
-    pinTop = constraints.pinTop ?? false;
-    pinBottom = constraints.pinBottom ?? false;
-    if (constraints.fixedHeight) {
-      fixedHeight = height;
-    }
-    if (constraints.fixedWidth) {
-      fixedWidth = width;
-    }
-  }
+  factory PBIntermediateConstraints.fromConstraints(
+          Map<String, dynamic> json, double height, double width) =>
+      PBIntermediateConstraints(
+        pinLeft: json['pinLeft'],
+        pinRight: json['pinRight'],
+        pinTop: json['pinTop'],
+        pinBottom: json['pinBottom'],
+        fixedHeight: json['fixedHeight'] ? height : null,
+        fixedWidth: json['fixedWidth'] ? width : null,
+      );
+
+  factory PBIntermediateConstraints.fromJson(Map<String, dynamic> json) =>
+      _$PBIntermediateConstraintsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PBIntermediateConstraintsToJson(this);
 
   PBIntermediateConstraints clone() {
     return PBIntermediateConstraints(
