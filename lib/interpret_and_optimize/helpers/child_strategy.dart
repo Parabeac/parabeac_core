@@ -41,13 +41,17 @@ class OneChildStrategy extends ChildrenStrategy {
     }
 
     if (candidate is PBIntermediateNode) {
+      /// replacing the children of [target] with the single element
       if (targetChildren.length > 1) {
         logger.warning(
             'Replacing children of ${target.runtimeType.toString()} with ${candidate.runtimeType.toString()}');
+        tree.replaceChildrenOf(target, [candidate]);
       }
 
-      /// replacing the children of [target] with the single element
-      tree.replaceChildrenOf(target, [candidate]);
+      /// Adding [candidate] to [target]
+      else {
+        addChild(target, [candidate]);
+      }
     } else {
       logger.warning(
           'Tried adding ${child.runtimeType.toString()} to ${target.runtimeType.toString()}');
