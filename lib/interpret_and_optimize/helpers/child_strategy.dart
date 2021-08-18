@@ -60,6 +60,22 @@ class TempChildrenStrategy extends ChildrenStrategy {
   TempChildrenStrategy(String attributeName, [bool overwridable])
       : super(attributeName, overwridable);
 
+  /// Rezising the [target.frame] basedon on the total [children.frame] area.
+  void _resizeFrameBasedOn(var children, PBIntermediateNode target) {
+    assert(children != null);
+    if (children is List<PBIntermediateNode>) {
+      target.frame ??= children.first.frame;
+      children.forEach(
+          (child) => target.frame = target.frame.boundingBox(child.frame));
+    } else if (children is PBIntermediateNode) {
+      target.frame = target.frame.boundingBox(children.frame);
+    }
+  }
+
+  bool _containsSingleGroup(
+          PBIntermediateNode group, List<PBIntermediateNode> children) =>
+      group is TempGroupLayoutNode && children.length == 1;
+
   @override
   void addChild(PBIntermediateNode target, children,
       ChildrenMod<PBIntermediateNode> addChild, tree) {
@@ -67,41 +83,29 @@ class TempChildrenStrategy extends ChildrenStrategy {
     var group = targetChildren.firstWhere(
         (element) => element is TempGroupLayoutNode,
         orElse: () => null);
+    children = children is List ? children : [children];
+
     // TempGroup is the only child inside `target`
-    if (group != null && targetChildren.length == 1) {
+    if (_containsSingleGroup(group, children)) {
       // Calculate new frame based on incoming child
-      var newFrame;
-      if (children is List) {
-        newFrame = group.frame.boundingBox(children.first.frame);
-      } else {
-        newFrame = group.frame.boundingBox(children.frame);
-      }
-      addChild(group, targetChildren);
-      group.frame = newFrame;
+      _resizeFrameBasedOn(children, group);
+      addChild(group, children);
     }
-    // Have no TempGroupLayoutNode but `target` already has children
+
+    /// Have no TempGroupLayoutNode but `target` already has children
     else if (targetChildren.isNotEmpty) {
       var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
       addChild(temp, targetChildren);
+      addChild(temp, children);
 
-      var tempChildren = tree.childrenOf(temp);
+      _resizeFrameBasedOn(targetChildren, temp);
+      _resizeFrameBasedOn(children, temp);
 
-      // Calculate bounding box from all children
-      var frame = tempChildren.first.frame;
-      for (var i = 1; i < tempChildren.length; i++) {
-        frame = frame.boundingBox(tempChildren[i].frame);
-      }
-
-      temp.frame = frame;
       tree.removeEdges(target);
       addChild(target, [temp]);
     }
     // Adding a single child to empty `target`
-    else if (children is PBIntermediateNode) {
-      addChild(target, [children]);
-    } 
-    // Adding a list of `children`
-    else if (children is List<PBIntermediateNode>) {
+    else {
       addChild(target, children);
     }
   }

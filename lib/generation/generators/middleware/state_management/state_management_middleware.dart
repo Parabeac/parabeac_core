@@ -38,9 +38,6 @@ abstract class StateManagementMiddleware extends Middleware {
       }
       return Future.value(node);
     })).then((nodes) {
-      if (nodes.isNotEmpty) {
-        tree.rootNode = nodes.first;
-      }
       return handleTree(tree.rootNode == null ? null : tree, context);
     });
   }
