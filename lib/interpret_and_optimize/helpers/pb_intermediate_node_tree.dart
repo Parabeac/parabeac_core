@@ -196,18 +196,14 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     if (target.parent == null) {
       throw Error();
     }
-    if (acceptChildren) {
-      /// In the eyes of the [PBIntermediateTree], two [PBIntermediateNodes] with the same [UUID]
-      /// are the same vertex, and thus have the same edges. Therefore we do not want to add more edges
-      /// pointing to the same children. We simply want to update the existing edges' pointers.
-      if (target.UUID == replacement.UUID) {
-        // Change pointers of `target`'s `children` to point to `replacement`
-        childrenOf(target).forEach((child) => child.parent = replacement);
-      } else {
-        addEdges(replacement, edges(target));
-      }
-    }
+
+    var children = childrenOf(target);
+
     remove(target);
+
+    if (acceptChildren) {
+      addEdges(replacement, children);
+    }
     addEdges(target.parent, [replacement]);
     return true;
   }
