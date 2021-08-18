@@ -23,9 +23,9 @@ class PBPositionedGenerator extends PBGenerator {
 
       var buffer = StringBuffer('Positioned(');
 
-      var boilerplate = _getBoilerplate(context.sizingContext);
-      var xAxisBoilerplate = boilerplate.item1;
-      var yAxisBoilerplate = boilerplate.item2;
+      // var boilerplate = _getBoilerplate(context.sizingContext);
+      // var xAxisBoilerplate = boilerplate.item1;
+      // var yAxisBoilerplate = boilerplate.item2;
 
       /// Since the generation phase is going to run multiple times, we are going to have to
       /// create a copy/clone of the [PositionedValueHolder] instead of assigning the values
@@ -41,7 +41,9 @@ class PBPositionedGenerator extends PBGenerator {
           width: source.valueHolder.width,
           height: source.valueHolder.height);
 
-      var positionalAtt = _getPositionalAtt(valueHolder, source.constraints);
+      var positionalAtt = _getPositionalAtt(valueHolder, source.constraints)
+        ..forEach((pos) =>
+            pos.boilerplate = _getBoilerplate(context.sizingContext, pos));
 
       if (!(context.sizingContext == SizingValueContext.PointValue)) {
         /// [SizingValueContext.PointValue] is the only value in which dont change based on another scale/sizing
@@ -53,29 +55,12 @@ class PBPositionedGenerator extends PBGenerator {
                 ratio(attribute.value, isHorizontal: attribute.isXAxis);
           }
         }
-        // valueHolder.left = ratio(source.valueHolder.left, isHorizontal: true);
-        // valueHolder.right = ratio(source.valueHolder.right, isHorizontal: true);
-        // valueHolder.top = ratio(source.valueHolder.top, isHorizontal: false);
-        // valueHolder.bottom =
-        //     ratio(source.valueHolder.bottom, isHorizontal: false);
-
-        // valueHolder.height = ratio(source.frame.height, isHorizontal: false);
-        // valueHolder.width = ratio(source.frame.width, isHorizontal: true);
       }
       try {
         for (var attribute in positionalAtt) {
           buffer.write(
-              '${attribute.attributeName}: ${_normalizeValue(attribute.isXAxis ? xAxisBoilerplate : yAxisBoilerplate, attribute)},');
+              '${attribute.attributeName}: ${_normalizeValue(attribute.boilerplate, attribute)},');
         }
-        // buffer.write(
-        //     'left: ${_normalizeValue(xAxisBoilerplate, valueHolder.left)}, top: ${_normalizeValue(yAxisBoilerplate, valueHolder.top)},');
-        // if (overrideChildDim) {
-        //   buffer.write(
-        //       'width: ${_normalizeValue(xAxisBoilerplate, valueHolder.width)}, height: ${_normalizeValue(yAxisBoilerplate, valueHolder.height)},');
-        // } else {
-        //   buffer.write(
-        //       'right: ${_normalizeValue(xAxisBoilerplate, valueHolder.right)}, bottom: ${_normalizeValue(yAxisBoilerplate, valueHolder.bottom)},');
-        // }
 
         // source.child.currentContext = source.currentContext;
         buffer.write(
@@ -93,16 +78,26 @@ class PBPositionedGenerator extends PBGenerator {
   }
 
   /// Getting the boilerplate needed to fill in the generation depending on the [sizingValueContext].
-  Tuple2<String, String> _getBoilerplate(
-      SizingValueContext sizingValueContext) {
-    if (sizingValueContext == SizingValueContext.ScaleValue) {
-      return Tuple2('${PBGenerator.MEDIAQUERY_HORIZONTAL_BOILERPLATE} * ',
-          '${PBGenerator.MEDIAQUERY_VERTICAL_BOILERPLATE} * ');
-    }
+  String _getBoilerplate(SizingValueContext sizingValueContext,
+      _PositionedValue _positionedValue) {
     if (sizingValueContext == SizingValueContext.LayoutBuilderValue) {
-      return Tuple2('constraints.maxWidth * ', 'constraints.maxHeight * ');
+      if (_positionedValue.isXAxis) {
+        return 'constraints.maxWidth *';
+      } else {
+        return 'constraints.maxHeight *';
+      }
     }
-    return Tuple2('', '');
+
+    if (_positionedValue.remainPointValue ||
+        sizingValueContext != SizingValueContext.ScaleValue) {
+      return '';
+    }
+
+    if (_positionedValue.isXAxis) {
+      return '${PBGenerator.MEDIAQUERY_HORIZONTAL_BOILERPLATE} * ';
+    } else {
+      return '${PBGenerator.MEDIAQUERY_VERTICAL_BOILERPLATE} * ';
+    }
   }
 
   /// Going to return the value without the [preValueStatement] if the [positionalValue]
@@ -129,26 +124,24 @@ class PBPositionedGenerator extends PBGenerator {
       PositionedValueHolder positionedValueHolder,
       PBIntermediateConstraints constraints) {
     var attributes = <_PositionedValue>[];
-    var fixedWidth = constraints.fixedWidth != null;
-    var fixedHeight = constraints.fixedHeight != null;
     if (!constraints.pinLeft && !constraints.pinRight) {
       ///use [positionedValueHolder.left]
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', false));
-      attributes.add(
-          _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
+      attributes.add(_PositionedValue(
+          positionedValueHolder.width, 'width', constraints.fixedWidth));
     } else if (constraints.pinLeft && !constraints.pinRight) {
       ///use [positionedValueHolder.left]
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', true));
-      attributes.add(
-          _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
+      attributes.add(_PositionedValue(
+          positionedValueHolder.width, 'width', constraints.fixedWidth));
     } else if (!constraints.pinLeft && constraints.pinRight) {
       /// use [positionedValueHolder.right]
       attributes
           .add(_PositionedValue(positionedValueHolder.right, 'right', true));
-      attributes.add(
-          _PositionedValue(positionedValueHolder.width, 'width', fixedWidth));
+      attributes.add(_PositionedValue(
+          positionedValueHolder.width, 'width', constraints.fixedWidth));
     } else if (constraints.pinLeft && constraints.pinRight) {
       attributes
           .add(_PositionedValue(positionedValueHolder.left, 'left', true));
@@ -160,19 +153,19 @@ class PBPositionedGenerator extends PBGenerator {
     if (!constraints.pinTop && !constraints.pinBottom) {
       attributes.add(
           _PositionedValue(positionedValueHolder.top, 'top', false, false));
-      attributes.add(_PositionedValue(
-          positionedValueHolder.height, 'height', fixedHeight, false));
+      attributes.add(_PositionedValue(positionedValueHolder.height, 'height',
+          constraints.fixedHeight, false));
     } else if (constraints.pinTop && !constraints.pinBottom) {
       attributes
           .add(_PositionedValue(positionedValueHolder.top, 'top', true, false));
-      attributes.add(_PositionedValue(
-          positionedValueHolder.height, 'height', fixedHeight, false));
+      attributes.add(_PositionedValue(positionedValueHolder.height, 'height',
+          constraints.fixedHeight, false));
     } else if (!constraints.pinTop && constraints.pinBottom) {
       /// use [positionedValueHolder.right]
       attributes.add(_PositionedValue(
           positionedValueHolder.bottom, 'bottom', true, false));
-      attributes.add(_PositionedValue(
-          positionedValueHolder.height, 'height', fixedHeight, false));
+      attributes.add(_PositionedValue(positionedValueHolder.height, 'height',
+          constraints.fixedHeight, false));
     } else if (constraints.pinTop && constraints.pinBottom) {
       attributes
           .add(_PositionedValue(positionedValueHolder.top, 'top', true, false));
@@ -187,6 +180,8 @@ class _PositionedValue {
   final String attributeName;
   final bool remainPointValue;
   final bool isXAxis;
+
+  String boilerplate;
   double value;
 
   _PositionedValue(this.value, this.attributeName, this.remainPointValue,
