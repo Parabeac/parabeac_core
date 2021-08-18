@@ -53,8 +53,11 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       frame,
       originalRef.name,
     );
-    var originalChildren = tree.childrenOf(originalRef);
-    tree.addEdges(appbar, originalChildren);
+
+    tree.childrenOf(appbar).forEach((element) {
+      element.attributeName = getAttributeNameOf(element);
+    });
+
     return appbar;
   }
 
