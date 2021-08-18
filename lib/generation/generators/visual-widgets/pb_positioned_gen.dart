@@ -27,10 +27,6 @@ class PBPositionedGenerator extends PBGenerator {
       var xAxisBoilerplate = boilerplate.item1;
       var yAxisBoilerplate = boilerplate.item2;
 
-      if (context.tree.first.name == 'ArtboardTRpinnoscale') {
-        print('asdf');
-      }
-
       /// Since the generation phase is going to run multiple times, we are going to have to
       /// create a copy/clone of the [PositionedValueHolder] instead of assigning the values
       /// directly to the [source.valueHolder]. This would causse the [source.valueHolder.getRatioPercentage]
@@ -63,8 +59,8 @@ class PBPositionedGenerator extends PBGenerator {
         // valueHolder.bottom =
         //     ratio(source.valueHolder.bottom, isHorizontal: false);
 
-        // valueHolder.height = ratio(source.height, isHorizontal: false);
-        // valueHolder.width = ratio(source.width, isHorizontal: true);
+        // valueHolder.height = ratio(source.frame.height, isHorizontal: false);
+        // valueHolder.width = ratio(source.frame.width, isHorizontal: true);
       }
       try {
         for (var attribute in positionalAtt) {

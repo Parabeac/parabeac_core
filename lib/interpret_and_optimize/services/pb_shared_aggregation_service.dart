@@ -100,7 +100,7 @@ class PBSharedInterAggregationService {
       var elementStorage = ElementStorage();
       var masterTree = elementStorage
           .treeUUIDs[elementStorage.elementToTree[masterNode.UUID]];
-      var tree = elementStorage.treeUUIDs[instanceIntermediateNode.UUID];
+      var tree = elementStorage.treeUUIDs[elementStorage.elementToTree[instanceIntermediateNode.UUID]];
       if (masterTree != tree) {
         tree.addDependent(masterTree);
       }

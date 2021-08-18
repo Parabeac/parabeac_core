@@ -86,8 +86,9 @@ abstract class PBIntermediateNode
       _UUID = Uuid().v4();
     }
 
-    if(constraints == null){
-      logger.debug('Constraints are null for $runtimeType, assigning it default constraints');
+    if (constraints == null) {
+      logger.debug(
+          'Constraints are null for $runtimeType, assigning it default constraints');
       constraints = PBIntermediateConstraints.defaultConstraints();
     }
     // _attributes = [];
@@ -172,9 +173,9 @@ abstract class PBIntermediateNode
   void align(PBContext context) {
     alignStrategy.align(context, this);
 
-    ///FIXME for (var currChild in children ?? []) {
-    ///FIXME currChild?.align(context.clone());
-    ///FIXME }
+    for (var currChild in context.tree.childrenOf(this) ?? []) {
+      currChild?.align(context.clone());
+    }
   }
 
   @override

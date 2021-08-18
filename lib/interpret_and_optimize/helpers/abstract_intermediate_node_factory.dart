@@ -56,8 +56,9 @@ class AbstractIntermediateNodeFactory {
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
+            /// [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
             iNode.parent = parent;
-            tree.replaceNode(iNode, tag, acceptChildren: false);
+            tree.replaceNode(iNode, tag, acceptChildren: true);
 
             return tag;
           }

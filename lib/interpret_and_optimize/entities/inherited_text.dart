@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -17,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'package:uuid/uuid.dart';
 
 part 'inherited_text.g.dart';
 
@@ -107,7 +107,7 @@ class InheritedText extends PBVisualIntermediateNode
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var inheritedText = InheritedText.fromJson(json);
     var container = InheritedContainer(
-      inheritedText.UUID,
+      null,
       inheritedText.frame,
       // topLeftCorner: inheritedText .frame.topLeft,
       // bottomRightCorner: inheritedText .frame.bottomRight,

@@ -153,14 +153,13 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         }
       });
       if (_childrenModObservers.containsKey(parent.id)) {
-        _childrenModObservers[parent.id].forEach((listener) => listener(
-            CHILDREN_MOD.CREATED, children.toList()));
+        _childrenModObservers[parent.id].forEach(
+            (listener) => listener(CHILDREN_MOD.CREATED, children.toList()));
       }
       return super.addEdges(parent, children);
     };
-    (parent as PBIntermediateNode)
-        .childrenStrategy
-        .addChild(parent, children.cast<PBIntermediateNode>(), addChildren, this);
+    (parent as PBIntermediateNode).childrenStrategy.addChild(
+        parent, children.cast<PBIntermediateNode>(), addChildren, this);
   }
 
   @override
@@ -184,9 +183,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 
   void replaceChildrenOf(
       PBIntermediateNode parent, List<PBIntermediateNode> children) {
-    var parentVertex = parent;
-    removeEdges(parentVertex);
-    addEdges(parentVertex, children.toList());
+    removeEdges(parent);
+    addEdges(parent, children.toList());
   }
 
   /// Replacing [target] with [replacement]
@@ -199,7 +197,15 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       throw Error();
     }
     if (acceptChildren) {
-      addEdges(replacement, edges(target));
+      /// In the eyes of the [PBIntermediateTree], two [PBIntermediateNodes] with the same [UUID]
+      /// are the same vertex, and thus have the same edges. Therefore we do not want to add more edges
+      /// pointing to the same children. We simply want to update the existing edges' pointers.
+      if (target.UUID == replacement.UUID) {
+        // Change pointers of `target`'s `children` to point to `replacement`
+        childrenOf(target).forEach((child) => child.parent = replacement);
+      } else {
+        addEdges(replacement, edges(target));
+      }
     }
     remove(target);
     addEdges(target.parent, [replacement]);

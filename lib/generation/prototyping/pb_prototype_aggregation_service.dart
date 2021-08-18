@@ -81,6 +81,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         (iNode as PBInheritedIntermediate).prototypeNode,
       );
+      context.tree.addEdges(iNode);
       //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is PBLayoutIntermediateNode) {
@@ -89,6 +90,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         iNode.prototypeNode,
       );
+      context.tree.addEdges(iNode);
       //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is InjectedContainer) {
@@ -97,6 +99,7 @@ class PBPrototypeAggregationService {
         iNode.frame,
         iNode.prototypeNode,
       );
+      context.tree.addEdges(iNode);
       //FIXME destHolder.addChild(iNode);
       return destHolder;
     } else if (iNode is Tab) {
@@ -106,6 +109,7 @@ class PBPrototypeAggregationService {
         iNode.prototypeNode,
       );
       context.tree.childrenOf(iNode).forEach((element) {
+        context.tree.addEdges(element);
         //FIXME destHolder.addChild(element);
       });
       return destHolder;

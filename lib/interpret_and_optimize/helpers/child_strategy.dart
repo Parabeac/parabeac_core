@@ -21,8 +21,33 @@ class OneChildStrategy extends ChildrenStrategy {
   @override
   void addChild(PBIntermediateNode target, dynamic child,
       ChildrenMod<PBIntermediateNode> addChild, tree) {
-    if (child is PBIntermediateNode) {
-      addChild(target, [child]);
+    var candidate;
+    var targetChildren = tree.childrenOf(target);
+
+    if (child is Iterable && child.isNotEmpty) {
+      if (child.length > 1) {
+        logger.warning(
+            'Only considering the first child of ${child.runtimeType.toString()} since it can only add one child to ${target.runtimeType.toString()}');
+      }
+      candidate = child.first;
+    } else if (child is PBIntermediateNode) {
+      candidate ??= child;
+    }
+
+    if (targetChildren.contains(candidate)) {
+      logger.warning(
+          'Tried adding ${candidate.runtimeType.toString()} again to ${target.runtimeType.toString()}');
+      return;
+    }
+
+    if (candidate is PBIntermediateNode) {
+      if (targetChildren.length > 1) {
+        logger.warning(
+            'Replacing children of ${target.runtimeType.toString()} with ${candidate.runtimeType.toString()}');
+      }
+
+      /// replacing the children of [target] with the single element
+      tree.replaceChildrenOf(target, [candidate]);
     } else {
       logger.warning(
           'Tried adding ${child.runtimeType.toString()} to ${target.runtimeType.toString()}');
