@@ -85,12 +85,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
     generator = PBMasterSymbolGenerator();
     childrenStrategy = TempChildrenStrategy('child');
-
-    overridableProperties
-
-        /// FIXME for some reason some of the elements are null
-        .where((element) => element != null)
-        .forEach(OverrideHelper.addProperty);
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
@@ -115,6 +109,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
                 )
                 ?.toList() ??
             [];
+
+    // Add override properties to the [OverrideHelper]
+    (master as PBSharedMasterNode)
+        .overridableProperties
+        .where((element) => element != null)
+        .forEach((OverrideHelper.addProperty));
 
     return master;
   }
