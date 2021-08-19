@@ -68,7 +68,7 @@ class StackReductionVisualRule extends PostConditionRule {
               context, children[0], children[1]) &&
           ((_isEmptyContainer(currTree, children[0]) &&
                   currTree.childrenOf(children[1]).isNotEmpty) ||
-              (_isEmptyContainer(currTree, children[0]) &&
+              (_isEmptyContainer(currTree, children[1]) &&
                   currTree.childrenOf(children[0]).isNotEmpty));
     }
     return false;
