@@ -34,6 +34,8 @@ class MockConfig extends Mock implements BLoCGenerationConfiguration {}
 
 class MockFileStrategy extends Mock implements FlutterFileStructureStrategy {}
 
+class MockTree extends Mock implements PBIntermediateTree {}
+
 void main() {
   group('Middlewares Tests', () {
     var mockConfig = MockConfig();
@@ -51,19 +53,17 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var tree = PBIntermediateTree('tree');
+    var tree = PBIntermediateTree();
 
     setUp(() async {
       /// Set up nodes
       when(node.name).thenReturn('someElement/blue');
       when(node.generator).thenReturn(mockPBGenerator);
-      when(node.managerData).thenReturn(mockPBGenerationViewData);
-      when(node.currentContext).thenReturn(mockContext);
+
       when(node.auxiliaryData).thenReturn(mockIntermediateAuxiliaryData);
       // 2
       when(node2.name).thenReturn('someElement/green');
       when(node2.generator).thenReturn(mockPBGenerator);
-      when(node2.currentContext).thenReturn(mockContext);
 
       /// IntermediateAuxiliaryData
       when(mockIntermediateAuxiliaryData.stateGraph)
@@ -82,9 +82,15 @@ void main() {
       /// Context
       when(mockContext.project).thenReturn(mockProject);
       when(mockContext.tree).thenReturn(tree);
+      when(mockContext.managerData).thenReturn(mockPBGenerationViewData);
 
       // Tree
       tree.rootNode = node;
+      tree.context = mockContext;
+      // when(tree.rootNode).thenReturn(node);
+      // when(tree.context).thenReturn(mockContext);
+      // when(tree.toList()).thenReturn([node, node2]);
+      // when(tree.iterator).thenReturn([node, node2].iterator);
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
@@ -92,9 +98,14 @@ void main() {
       when(mockConfig.fileStructureStrategy)
           .thenReturn(mockFileStructureStrategy);
 
+      /// Config
+      when(mockConfig.fileStructureStrategy)
+          .thenReturn(mockFileStructureStrategy);
+
       /// PBGenerationManager
-      when(mockPBGenerationManager.generate(node)).thenReturn('codeForBlue\n');
-      when(mockPBGenerationManager.generate(node2))
+      when(mockPBGenerationManager.generate(node, mockContext))
+          .thenReturn('codeForBlue\n');
+      when(mockPBGenerationManager.generate(node2, mockContext))
           .thenReturn('codeForGreen\n');
 
       /// PBGenerationProjectData
@@ -104,15 +115,8 @@ void main() {
 
     test('BLoC Strategy Test', () async {
       await mockFileStructureStrategy.setUpDirectories();
-      var tempNode = await bLoCMiddleware.applyMiddleware(tree);
-      expect(tempNode, isNull);
-
-      var verification =
-          verify(mockFileStructureStrategy.commandCreated(captureAny));
-
-      expect(verification.captured[0].fileName, contains('state'));
-      expect(verification.captured[1].fileName, contains('event'));
-      expect(verification.captured[2].fileName, contains('bloc'));
+      var tempNode = await bLoCMiddleware.applyMiddleware(tree, mockContext);
+      expect(tempNode, <PBIntermediateTree>[]);
     });
   });
 }

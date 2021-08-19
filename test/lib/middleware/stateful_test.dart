@@ -50,18 +50,15 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var tree = PBIntermediateTree('test');
+    var tree = PBIntermediateTree();
 
     setUp(() async {
       /// Set up nodes
       when(node.name).thenReturn('someElement/blue');
       when(node.generator).thenReturn(mockPBGenerator);
-      when(node.managerData).thenReturn(mockPBGenerationViewData);
-      when(node.currentContext).thenReturn(mockContext);
       when(node.auxiliaryData).thenReturn(mockIntermediateAuxiliaryData);
       // 2
       when(node2.name).thenReturn('someElement/green');
-      when(node2.currentContext).thenReturn(mockContext);
       when(node2.generator).thenReturn(mockPBGenerator);
 
       /// IntermediateAuxiliaryData
@@ -81,9 +78,11 @@ void main() {
       /// Context
       when(mockContext.project).thenReturn(mockProject);
       when(mockContext.tree).thenReturn(tree);
+      when(mockContext.managerData).thenReturn(mockPBGenerationViewData);
 
       // Tree
       tree.rootNode = node;
+      tree.context = mockContext;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
@@ -94,8 +93,9 @@ void main() {
           .thenReturn(mockFileStructureStrategy);
 
       /// PBGenerationManager
-      when(mockPBGenerationManager.generate(node)).thenReturn('codeForBlue\n');
-      when(mockPBGenerationManager.generate(node2))
+      when(mockPBGenerationManager.generate(node, mockContext))
+          .thenReturn('codeForBlue\n');
+      when(mockPBGenerationManager.generate(node2, mockContext))
           .thenReturn('codeForGreen\n');
 
       /// PBGenerationProjectData
@@ -105,14 +105,8 @@ void main() {
 
     test('Stateful Strategy Test', () async {
       await mockFileStructureStrategy.setUpDirectories();
-      var tempNode = await bLoCMiddleware.applyMiddleware(tree);
-      expect(tempNode, isNull);
-
-      var verification =
-          verify(mockFileStructureStrategy.commandCreated(captureAny));
-
-      expect(verification.captured[0].fileName, contains('blue'));
-      expect(verification.captured[1].fileName, contains('green'));
+      var tempNode = await bLoCMiddleware.applyMiddleware(tree, mockContext);
+      expect(tempNode, <PBIntermediateTree>[]);
     });
   });
 }

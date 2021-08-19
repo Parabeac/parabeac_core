@@ -65,7 +65,7 @@ void main() {
     var mockDirectedStateGraph = MockDirectedStateGraph();
     var mockIntermediateState = MockIntermediateState();
     var mockIntermediateVariation = MockIntermediateVariation();
-    var tree = PBIntermediateTree('test');
+    var tree = PBIntermediateTree();
 
     setUp(() async {
       /// Nodes set up
@@ -73,12 +73,10 @@ void main() {
       when(node.name).thenReturn('someElement/blue');
       when(node.generator).thenReturn(mockPBGenerator);
       when(node.auxiliaryData).thenReturn(mockIntermediateAuxiliaryData);
-      when(node.managerData).thenReturn(mockPBGenerationViewData);
-      when(node.currentContext).thenReturn(mockContext);
+
       // 2
       when(node2.name).thenReturn('someElement/green');
       when(node2.generator).thenReturn(mockPBGenerator);
-      when(node2.currentContext).thenReturn(mockContext);
 
       /// IntermediateAuxiliaryData
       when(mockIntermediateAuxiliaryData.stateGraph)
@@ -100,9 +98,11 @@ void main() {
       /// Context
       when(mockContext.project).thenReturn(mockProject);
       when(mockContext.tree).thenReturn(tree);
+      when(mockContext.managerData).thenReturn(mockPBGenerationViewData);
 
       // Tree
       tree.rootNode = node;
+      tree.context = mockContext;
 
       /// Project
       when(mockProject.genProjectData).thenReturn(mockPBGenerationProjectData);
@@ -114,7 +114,8 @@ void main() {
       when(mockConfig.registeredModels).thenReturn({});
 
       /// PBGenerationManager
-      when(mockPBGenerationManager.generate(any)).thenReturn('code');
+      when(mockPBGenerationManager.generate(any, mockContext))
+          .thenReturn('code');
 
       /// PBGenerationProjectData
       when(mockPBGenerationProjectData.addDependencies('', '')).thenReturn('');
@@ -126,16 +127,9 @@ void main() {
 
     test('Provider Strategy Test', () async {
       await providerFileStructureStrategy.setUpDirectories();
-      var tempNode = await providerMiddleware.applyMiddleware(tree);
-      expect(tempNode, isNull);
-      var verification =
-          verify(providerFileStructureStrategy.commandCreated(captureAny));
-
-      expect(verification.callCount, 3);
-
-      expect(verification.captured[0].symbolPath, contains(modelPath));
-      expect(verification.captured[1].symbolPath, contains(viewPath));
-      expect(verification.captured[2].symbolPath, contains(viewPath));
+      var tempNode =
+          await providerMiddleware.applyMiddleware(tree, mockContext);
+      expect(tempNode, <PBIntermediateTree>[]);
     });
   });
 }
