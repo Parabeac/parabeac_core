@@ -51,8 +51,8 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// PageWriter to be used for generation
   PBPageWriter pageWriter = PBFlutterWriter();
 
-  final Map<String, String> _dependencies = {};
-  Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
+  // final Map<String, String> _dependencies = {};
+  // Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
 
   /// List of observers that will be notified when a new command is added.
   final commandObservers = <CommandInvoker>[];
@@ -91,13 +91,15 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   /// that generate the code for each tree in the [trees].
   Future<void> generateTree(PBIntermediateTree tree, PBProject project,
       PBContext context, bool lockData) async {
+    var processInfo = MainInfo();
     fileStructureStrategy.dryRunMode = lockData;
     tree.lockData = lockData;
     fileStructureStrategy.addImportsInfo(tree, context);
 
     context.generationManager = generationManager;
     generationManager.data = tree.generationViewData;
-    tree.generationViewData.addImport(FlutterImport('material.dart', 'flutter'));
+    tree.generationViewData
+        .addImport(FlutterImport('material.dart', 'flutter'));
 
     // Relative path to the file to create
     var relPath = p.join(tree.name.snakeCase, tree.identifier);
@@ -111,11 +113,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       await _setMainScreen(tree, relPath, MainInfo().projectName);
     }
     await applyMiddleware(tree, context);
+    await _commitDependencies(processInfo.genProjectPath, project);
   }
 
   ///Generates the [PBIntermediateTree]s within the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
-    var processInfo = MainInfo();
     _head = CommandGenMiddleware(
         generationManager, this, _importProcessor, MainInfo().projectName);
 
@@ -138,8 +140,6 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     // commandQueue.forEach(fileStructureStrategy.commandCreated);
     commandQueue.clear();
     // await generateTrees(pb_project.forest, pb_project, context);
-
-    await _commitDependencies(processInfo.genProjectPath);
   }
 
   void registerMiddleware(Middleware middleware) {
@@ -154,8 +154,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   }
 
   ///Configure the required classes for the [PBGenerationConfiguration]
-  Future<void> setUpConfiguration(
-      PBProject pbProject) async {
+  Future<void> setUpConfiguration(PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
         pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
     commandObservers.add(fileStructureStrategy);
@@ -164,10 +163,12 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     await fileStructureStrategy.setUpDirectories();
   }
 
-  Future<void> _commitDependencies(String projectPath) async {
+  Future<void> _commitDependencies(
+      String projectPath, PBProject project) async {
     var writer = pageWriter;
     if (writer is PBFlutterWriter) {
-      writer.submitDependencies(p.join(projectPath, 'pubspec.yaml'));
+      writer.submitDependencies(p.join(projectPath, 'pubspec.yaml'),
+          project.genProjectData.dependencies);
     }
   }
 
