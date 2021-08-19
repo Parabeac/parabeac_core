@@ -4,7 +4,6 @@ import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:test/test.dart';
@@ -20,17 +19,17 @@ void main() {
   group('[PBIntermediateTree] process order test', () {
     PBIntermediateTree tree0, tree1, tree2;
     setUp(() {
-      tree0 = PBIntermediateTree('Tree0');
+      tree0 = PBIntermediateTree(name: 'Tree0');
       tree0.rootNode = NodeMock();
       when(tree0.rootNode.UUID).thenReturn('00-00-01');
       when(tree0.rootNode.name).thenReturn('Tree0');
 
-      tree1 = PBIntermediateTree('Tree1');
+      tree1 = PBIntermediateTree(name: 'Tree1');
       tree1.rootNode = NodeMock();
       when(tree1.rootNode.UUID).thenReturn('00-00-02');
       when(tree1.rootNode.name).thenReturn('Tree1');
 
-      tree2 = PBIntermediateTree('Tree2');
+      tree2 = PBIntermediateTree(name: 'Tree2');
       tree2.rootNode = NodeMock();
       when(tree2.rootNode.UUID).thenReturn('00-00-03');
       when(tree2.rootNode.name).thenReturn('Tree2');
@@ -89,32 +88,20 @@ void main() {
   group('Import paths extraction test', () {
     FileStructureStrategy _fileStructureStrategy;
     ImportHelper importHelper;
-    var completePath =
-        'desktop/project/lib/screens/homescreen/some_dart_page.dart';
     var genPath = 'desktop/project/';
     setUp(() {
       _fileStructureStrategy = FileStructureStrategyMock();
       importHelper = ImportHelper();
 
-      when(_fileStructureStrategy.writeDataToFile(any, any, any,
-              UUID: anyNamed('UUID')))
-          .thenAnswer((invocation) {
-        var dir = invocation.positionalArguments[1];
-        var name = invocation.positionalArguments[2];
-        var uuid = invocation.namedArguments['UUID'] ?? 'UUID';
-        importHelper.fileCreated(
-            FlutterFileStructureStrategy(genPath, null, null)
-                .getFile(dir, name)
-                .path,
-            uuid);
-      });
+      importHelper.fileCreated(genPath, 'testUUID');
+
       when(_fileStructureStrategy.GENERATED_PROJECT_PATH).thenReturn(genPath);
     });
     test('Testing import generation when imports are generated', () async {
       var command = WriteScreenCommand(
           'UUID', 'some_dart_page.dart', 'homescreen/', 'dummy code');
       await command.write(_fileStructureStrategy);
-      expect(importHelper.getImport('UUID').first, completePath);
+      expect(importHelper.getImport('testUUID').first, genPath);
     });
   });
 }
