@@ -11,11 +11,6 @@ class PBFlutterWriter implements PBPageWriter {
 
   factory PBFlutterWriter() => _instance;
 
-  @override
-  Map<String, String> dependencies = {};
-  @override
-  void addDependency(String packageName, String version) =>
-      dependencies[packageName] = version;
 
   ///[fileAbsPath] should be the absolute path of the file
   @override
@@ -80,7 +75,8 @@ class MyApp extends StatelessWidget {
     await mainFile.close();
   }
 
-  void submitDependencies(String yamlAbsPath) async {
+  void submitDependencies(
+      String yamlAbsPath, Map<String, String> dependencies) async {
     var line = 0;
     var readYaml = File(yamlAbsPath).readAsLinesSync();
     if (dependencies.isNotEmpty) {
@@ -101,11 +97,6 @@ class MyApp extends StatelessWidget {
         readYaml.insert(++line, '  assets:\n    - assets/images/');
       }
     }
-    var writeYaml = File(yamlAbsPath).openWrite(mode: FileMode.write);
-
-    for (var i = 0; i < readYaml.length; ++i) {
-      writeYaml.writeln(readYaml[i]);
-    }
-    await writeYaml.flush();
+    File(yamlAbsPath).writeAsStringSync(readYaml.join('\n'));
   }
 }

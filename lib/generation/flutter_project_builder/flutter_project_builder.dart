@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
+import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:path/path.dart' as p;
@@ -52,7 +53,7 @@ class FlutterProjectBuilder {
     log = Logger(runtimeType.toString());
     fileSystemAnalyzer ??= FileSystemAnalyzer(project.projectAbsPath);
 
-    // generationConfiguration.pageWriter = pageWriter;
+    generationConfiguration.pageWriter = PBFlutterWriter();
     generationConfiguration.fileSystemAnalyzer = fileSystemAnalyzer;
   }
 
@@ -125,11 +126,6 @@ class FlutterProjectBuilder {
     ;
   }
 
-  Future<void> postGenTask() async {
-    await formatProject(project.projectAbsPath,
-        projectDir: MainInfo().outputPath);
-  }
-
   Future<void> genAITree(PBIntermediateTree tree, PBContext context) async {
     if (!_configured) {
       /// Avoid changing the [_configured] from here, it might lead to async changes on the var
@@ -139,6 +135,7 @@ class FlutterProjectBuilder {
     await generationConfiguration.generateTree(tree, project, context, true);
     await generationConfiguration.generateTree(tree, project, context, false);
     generationConfiguration.generatePlatformAndOrientationInstance(project);
+    await formatProject(project.projectAbsPath, projectDir: MainInfo().outputPath);
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/riverpod_middleware.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
@@ -16,7 +17,7 @@ class RiverpodGenerationConfiguration extends GenerationConfiguration {
     logger.info(
         'Thanks for trying our state management configuration that is now in Beta!\nIf you run into any issues please feel free to post it in Github or in our Discord!');
     fileStructureStrategy = RiverpodFileStructureStrategy(
-        pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
+        pbProject.projectAbsPath,pageWriter, pbProject, fileSystemAnalyzer);
     registerMiddleware(RiverpodMiddleware(generationManager, this));
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
