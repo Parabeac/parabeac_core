@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
@@ -8,7 +7,9 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:test/test.dart';
@@ -32,6 +33,10 @@ class MockGenProjectData extends Mock implements PBGenerationProjectData {}
 
 class MockPBGenViewData extends Mock implements PBGenerationViewData {}
 
+class MockPBITree extends Mock implements PBIntermediateTree {}
+
+class MockFrame extends Mock implements Rectangle {}
+
 void main() {
   group('Generator test', () {
     var mockManager, mockGenerator, mockTextGenerator;
@@ -41,6 +46,8 @@ void main() {
     var mockProject;
     var mockGenProjectData;
     var mockGenViewData;
+    var mockTree;
+    var mockFrame;
     setUp(() {
       mockInheritedContainer = MockInheritedContainer();
       mockInheritedText = MockInheritedText();
@@ -50,27 +57,38 @@ void main() {
       mockProject = MockProject();
       mockGenProjectData = MockGenProjectData();
       mockGenViewData = MockPBGenViewData();
+      mockTree = MockPBITree();
+      mockFrame = MockFrame();
+      mockManager = PBFlutterGenerator(ImportHelper());
+      mockGenerator = PBContainerGenerator();
 
-      when(mockInheritedContainer.child).thenReturn(mockInheritedText);
+      when(mockContext.tree).thenReturn(mockTree);
+
+      when(mockContext.project).thenReturn(mockProject);
+
+      when(mockContext.managerData).thenReturn(mockGenViewData);
+
+      when(mockTree.childrenOf(mockInheritedContainer))
+          .thenReturn(<PBIntermediateNode>[mockInheritedText]);
 
       when((mockInheritedContainer as MockInheritedContainer).auxiliaryData)
           .thenReturn(mockData);
-
-      when((mockInheritedText as MockInheritedText).currentContext)
-          .thenReturn(mockPBContext);
 
       when((mockPBContext as MockPBContext).project).thenReturn(mockProject);
 
       when((mockProject as MockProject).genProjectData)
           .thenReturn(mockGenProjectData);
 
-      when((mockInheritedText as MockInheritedText).managerData)
-          .thenReturn(mockGenViewData);
-
       when(mockInheritedContainer.topLeftCorner).thenReturn(Point(0, 0));
 
       when(mockInheritedContainer.bottomRightCorner)
           .thenReturn(Point(100, 100));
+
+      when(mockInheritedContainer.frame).thenReturn(mockFrame);
+
+      when(mockFrame.height).thenReturn(100.0);
+
+      when(mockFrame.width).thenReturn(100.0);
 
       when(mockInheritedText.name).thenReturn('Test Name');
       when(mockInheritedText.auxiliaryData).thenReturn(mockData);
@@ -82,9 +100,6 @@ void main() {
       when(mockInheritedText.isTextParameter).thenReturn(false);
 
       when(mockInheritedText.text).thenReturn('Test Text');
-
-      mockManager = PBFlutterGenerator(ImportHelper());
-      mockGenerator = PBContainerGenerator();
     });
 
     test('', () {
@@ -95,7 +110,8 @@ void main() {
       expect(result is String, true);
 
       // Do not modify
-      expect(result, '''Container(child: AutoSizeText(
+      expect(result,
+          '''Container(width: 100.000,height: 100.000,child: AutoSizeText(
 'Test Text',
 style: TextStyle(
 ),
