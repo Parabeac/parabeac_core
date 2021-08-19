@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'temp_group_layout_node.dart';
+part of 'group.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
-  return TempGroupLayoutNode(
+Group _$GroupFromJson(Map<String, dynamic> json) {
+  return Group(
     json['UUID'] as String,
     DeserializedRectangle.fromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
@@ -27,9 +27,7 @@ TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String;
 }
 
-Map<String, dynamic> _$TempGroupLayoutNodeToJson(
-        TempGroupLayoutNode instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),

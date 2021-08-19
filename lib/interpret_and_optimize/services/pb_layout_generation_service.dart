@@ -5,7 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/cont
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -31,7 +31,7 @@ class PBLayoutGenerationService extends AITHandler {
     ContainerConstraintRule()
   ];
 
-  ///Going to replace the [TempGroupLayoutNode]s by [PBLayoutIntermediateNode]s
+  ///Going to replace the [Group]s by [PBLayoutIntermediateNode]s
   ///The default [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode _defaultLayout;
 
@@ -84,15 +84,15 @@ class PBLayoutGenerationService extends AITHandler {
     }
   }
 
-  /// If this node is an unecessary [TempGroupLayoutNode], from the [tree]
+  /// If this node is an unecessary [Group], from the [tree]
   ///
   /// Ex: Designer put a group with one child that was a group
   /// and that group contained the visual nodes.
   void _removingMeaninglessGroup(PBIntermediateTree tree) {
     tree
         .where((node) =>
-            node is TempGroupLayoutNode && tree.childrenOf(node).length <= 1)
-        .cast<TempGroupLayoutNode>()
+            node is Group && tree.childrenOf(node).length <= 1)
+        .cast<Group>()
         .forEach((tempGroup) {
       var tempChildren = tree.childrenOf(tempGroup);
       tree.replaceNode(
@@ -109,9 +109,9 @@ class PBLayoutGenerationService extends AITHandler {
     });
   }
 
-  /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
+  /// Transforming the [Group] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
-    tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
+    tree.whereType<Group>().forEach((tempGroup) {
       tree.replaceNode(
           tempGroup,
           PBIntermediateStackLayout(

@@ -4,7 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -45,7 +45,7 @@ class Tab extends PBEgg implements PBInjectedIntermediate, PrototypeEnable {
         originalNode.name,
         prototypeNode: (originalNode as PBInheritedIntermediate).prototypeNode,
       );
-      if (originalNode is! TempGroupLayoutNode) {
+      if (originalNode is! Group) {
         var designNode = _convertWrapper(originalNode);
 
         tree.addEdges(this, [designNode]);

@@ -1,4 +1,4 @@
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -104,7 +104,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
 
   bool _containsSingleGroup(
           PBIntermediateNode group, List<PBIntermediateNode> children) =>
-      group is TempGroupLayoutNode && children.length == 1;
+      group is Group && children.length == 1;
 
   @override
   void addChild(PBIntermediateNode target, children,
@@ -125,7 +125,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
     /// Have no TempGroupLayoutNode but `target` already has children
     /// <OR> we are adding multiple children to an empty `target` 
     else if (targetChildren.isNotEmpty || children.length > 1) {
-      var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
+      var temp = Group(null, null, name: '${target.name}Group');
       addChild(temp, children);
 
       if (targetChildren.isNotEmpty) {
