@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 ///Row contains nodes that are all `overlapping` to each other, without overlapping eachother
@@ -32,13 +33,13 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   // @override
   // void resize(PBContext context) {
-    //FIXMEar depth = context.tree?.depthOf(this);
+  //FIXMEar depth = context.tree?.depthOf(this);
 
-    /// Since there are cases where [Stack] are being created, and
-    /// childrend are being populated, and consequently [Stack.resize] is being
-    /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
-    /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
- //FIXME if (depth != null && depth <= 1 && depth >= 0) {
+  /// Since there are cases where [Stack] are being created, and
+  /// childrend are being populated, and consequently [Stack.resize] is being
+  /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
+  /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
+  //FIXME if (depth != null && depth <= 1 && depth >= 0) {
   //FIXME    frame = context.canvasFrame;
   //FIXME  } else {
   //FIXME    super.resize(context);
@@ -53,8 +54,9 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     children.forEach((element) => frame.boundingBox(element.frame));
 
     var stack = PBIntermediateStackLayout(name: name)..frame = frame;
- //FIXME   stack.prototypeNode = prototypeNode;
-  //FIXME children.forEach((child) => stack.addChild(child));
+    //FIXME   stack.prototypeNode = prototypeNode;
+    //FIXME children.forEach((child) => stack.addChild(child));
+    currentContext.tree.addEdges(stack, children);
     return stack;
   }
 

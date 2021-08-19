@@ -1,5 +1,6 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -110,7 +111,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
       ChildrenMod<PBIntermediateNode> addChild, tree) {
     var targetChildren = tree.childrenOf(target);
     var group = targetChildren.firstWhere(
-        (element) => element is TempGroupLayoutNode,
+        (element) => element is PBLayoutIntermediateNode,
         orElse: () => null);
     children = children is List ? children : [children];
 
@@ -122,15 +123,18 @@ class TempChildrenStrategy extends ChildrenStrategy {
     }
 
     /// Have no TempGroupLayoutNode but `target` already has children
-    else if (targetChildren.isNotEmpty) {
+    /// <OR> we are adding multiple children to an empty `target` 
+    else if (targetChildren.isNotEmpty || children.length > 1) {
       var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
-      addChild(temp, targetChildren);
       addChild(temp, children);
 
-      _resizeFrameBasedOn(targetChildren, temp);
-      _resizeFrameBasedOn(children, temp);
+      if (targetChildren.isNotEmpty) {
+        addChild(temp, targetChildren);
+        _resizeFrameBasedOn(targetChildren, temp);
+        tree.removeEdges(target);
+      }
 
-      tree.removeEdges(target);
+      _resizeFrameBasedOn(children, temp);
       addChild(target, [temp]);
     }
     // Adding a single child to empty `target`

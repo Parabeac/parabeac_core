@@ -111,9 +111,7 @@ class PBLayoutGenerationService extends AITHandler {
 
   /// Transforming the [TempGroupLayoutNode] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
-    tree
-        .whereType<TempGroupLayoutNode>()
-        .forEach((tempGroup) {
+    tree.whereType<TempGroupLayoutNode>().forEach((tempGroup) {
       tree.replaceNode(
           tempGroup,
           PBIntermediateStackLayout(
@@ -160,7 +158,7 @@ class PBLayoutGenerationService extends AITHandler {
               ///of the generated layout.
               //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
               //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
-              tree.removeEdges(parent);
+              tree.removeEdges(parent, [currentNode, nextNode]);
               tree.addEdges(parent, [
                 layout.generateLayout([currentNode, nextNode], context,
                     '${currentNode.name}${nextNode.name}${layout.runtimeType}')

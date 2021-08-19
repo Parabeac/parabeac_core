@@ -29,7 +29,8 @@ class PBBitmapGenerator extends PBGenerator {
     }
 
     var imagePath = source is InheritedBitmap
-        ? p.relative(source.referenceImage, from: MainInfo().genProjectPath)
+        // ? p.relative(source.referenceImage, from: MainInfo().genProjectPath)
+        ? 'assets/${source.referenceImage}' // Assuming PBDL will give us reference to image in the form of `image/<image_name>.png`
         : ('assets/images/' + source.UUID + '.png');
 
     buffer.write(

@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
 
@@ -13,6 +14,15 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
+
+  /// String representing what the <leading> tag maps to
+  final LEADING_ATTR_NAME = 'leading';
+
+  /// String representing what the <middle> tag maps to
+  final MIDDLE_ATTR_NAME = 'title';
+
+  /// String representing what the <middle> tag maps to
+  final TRAILING_ATTR_NAME = 'actions';
 
   // PBIntermediateNode get leadingItem => getAttributeNamed('leading');
   // PBIntermediateNode get middleItem => getAttributeNamed('title');
@@ -24,21 +34,20 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
     String name,
   ) : super(UUID, frame, name) {
     generator = PBAppBarGenerator();
-    alignStrategy = CustomAppBarAlignment();
+    childrenStrategy = MultipleChildStrategy('children');
   }
 
   @override
   String getAttributeNameOf(PBIntermediateNode node) {
-    if (node is PBInheritedIntermediate) {
-      // var attName = 'child';
+    if (node is PBIntermediateNode) {
       if (node.name.contains('<leading>')) {
-        return 'leading';
+        return LEADING_ATTR_NAME;
       }
       if (node.name.contains('<trailing>')) {
-        return 'actions';
+        return TRAILING_ATTR_NAME;
       }
       if (node.name.contains('<middle>')) {
-        return 'title';
+        return MIDDLE_ATTR_NAME;
       }
     }
 
@@ -54,11 +63,29 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       originalRef.name,
     );
 
-    tree.childrenOf(appbar).forEach((element) {
-      element.attributeName = getAttributeNameOf(element);
-    });
+    tree
+        .childrenOf(appbar)
+        .forEach((child) => child.attributeName = getAttributeNameOf(child));
 
     return appbar;
+  }
+
+  @override
+  void handleChildren(PBContext context) {
+    var children = context.tree.childrenOf(this);
+
+    // Remove children that have an invalid `attributeName`
+    var validChildren = children.where(_isValidNode).toList();
+
+    context.tree.replaceChildrenOf(this, validChildren);
+  }
+
+  /// Returns [true] if `node` has a valid `attributeName` in the eyes of the [InjectedAppbar].
+  /// Returns [false] otherwise.
+  bool _isValidNode(PBIntermediateNode node) {
+    var validNames = [LEADING_ATTR_NAME, MIDDLE_ATTR_NAME, TRAILING_ATTR_NAME];
+
+    return validNames.any((name) => name == node.attributeName);
   }
 
   @override
@@ -68,24 +95,6 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   void extractInformation(PBIntermediateNode incomingNode) {}
-}
-
-class CustomAppBarAlignment extends AlignStrategy<InjectedAppbar> {
-  @override
-  void align(PBContext context, InjectedAppbar node) {
-    var middleItem = node.getAttributeNamed(context.tree, 'title');
-    if (middleItem == null) {
-      return;
-    }
-
-    /// This align only modifies middleItem
-    var tempNode = InjectedContainer(
-      middleItem.UUID,
-      middleItem.frame,
-      name: middleItem.name,
-    )..attributeName = 'title';
-    context.tree.addEdges(tempNode, [middleItem]);
-  }
 }
 
 class PBAppBarGenerator extends PBGenerator {
@@ -99,11 +108,10 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      var children =
-          generatorContext.tree.edges(source).cast<PBIntermediateNode>();
+      var children = generatorContext.tree.childrenOf(source);
       children.forEach((child) {
         buffer.write(
-            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child == 'actions', child == 'leading')},');
+            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child.attributeName == 'actions', child.attributeName == 'leading')},');
       });
 
       buffer.write(')');
