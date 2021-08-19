@@ -15,6 +15,7 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
   )
+    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -28,6 +29,7 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),

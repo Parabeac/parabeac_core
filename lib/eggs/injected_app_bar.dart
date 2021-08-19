@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_container
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -108,24 +109,36 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      var children = generatorContext.tree.childrenOf(source);
-      children.forEach((child) {
+      var actions = generatorContext.tree
+          .childrenOf(source)
+          .where((child) => child.attributeName == source.TRAILING_ATTR_NAME);
+      var children = generatorContext.tree
+          .childrenOf(source)
+          .where((child) => child.attributeName != source.TRAILING_ATTR_NAME);
+
+      // [actions] require special handling due to being a list
+      if (actions.isNotEmpty) {
         buffer.write(
-            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child.attributeName == 'actions', child.attributeName == 'leading')},');
-      });
+            '${source.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
+      }
+      children.forEach((child) => buffer.write(
+          '${child.attributeName}: ${_wrapOnIconButton(child.generator.generate(child, generatorContext))},'));
 
       buffer.write(')');
       return buffer.toString();
     }
   }
 
-  String _wrapOnBrackets(String body, bool isActions, bool isLeading) {
-    if (isActions) {
-      return '[${_wrapOnIconButton(body)}]';
-    } else if (isLeading) {
-      return _wrapOnIconButton(body);
-    }
-    return '$body';
+  /// Returns list ot `actions` as individual [PBIntermediateNodes]
+  String _getActions(Iterable<PBIntermediateNode> actions, PBContext context) {
+    var buffer = StringBuffer();
+
+    buffer.write('[');
+    actions.forEach((action) => buffer.write(
+        '${_wrapOnIconButton(action.generator.generate(action, context))},'));
+    buffer.write(']');
+
+    return buffer.toString();
   }
 
   String _wrapOnIconButton(String body) {
