@@ -2,15 +2,13 @@ import 'package:parabeac_core/controllers/main_info.dart';
 
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'dart:math';
-
-import 'injected_tab.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
@@ -27,47 +25,50 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
     String name,
   ) : super(UUID, frame, name) {
     generator = PBTabBarGenerator();
+    childrenStrategy = MultipleChildStrategy('children');
   }
 
   @override
   String getAttributeNameOf(PBIntermediateNode node) {
-    if (node is PBInheritedIntermediate) {
-      if (node.name.contains('<tab>')) {
-        assert(node is! Tab, 'node should be a Tab');
-        return 'tab';
-        // node.attributeName = 'tab';
-        // tree.addEdges(AITVertex(this), [AITVertex(node)]);
-      }
-    }
-
-    if (node is Tab) {
-      return 'tab';
-      // node.attributeName = 'tab';
-      // tree.addEdges(AITVertex(this), [AITVertex(node)]);
+    if (node.name.contains('<tab>')) {
+      return 'tabs';
     }
     return super.getAttributeNameOf(node);
   }
 
   @override
-  List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
+  List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
+    return layer;
+  }
+
+  @override
+  void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
   PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
-    var originalChildren = tree.childrenOf(originalRef);
     var tabbar = InjectedTabBar(
       originalRef.UUID,
       frame,
       originalRef.name,
     );
-    tree.addEdges(tabbar, originalChildren);
+
+    tree
+        .childrenOf(tabbar)
+        .forEach((child) => child.attributeName = getAttributeNameOf(child));
 
     return tabbar;
   }
 
   @override
-  void extractInformation(PBIntermediateNode incomingNode) {
-    // TODO: implement extractInformation
+  void handleChildren(PBContext context) {
+    var children = context.tree.childrenOf(this);
+
+    var validChildren =
+        children.where((child) => child.attributeName == 'tabs').toList();
+
+    // Ensure only nodes with `tab` remain
+    context.tree.replaceChildrenOf(this, validChildren);
   }
 }
 
@@ -86,11 +87,9 @@ class PBTabBarGenerator extends PBGenerator {
       buffer.write('type: BottomNavigationBarType.fixed,');
       try {
         buffer.write('items:[');
-        for (var i = 0; i < tabs.length; i++) {
-          var tabChildren = context.tree.childrenOf(tabs[i]);
+        for (var tab in tabs) {
           buffer.write('BottomNavigationBarItem(');
-          var res =
-              context.generationManager.generate(tabChildren.first, context);
+          var res = context.generationManager.generate(tab, context);
           buffer.write('icon: $res,');
           buffer.write('title: Text(""),');
           buffer.write('),');

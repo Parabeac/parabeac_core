@@ -24,26 +24,24 @@ class PBPrototypeLinkerService {
     }
     for (var element in tree) {
       if (element is InheritedScaffold) {
-        if (element is InheritedScaffold) {
-          await _prototypeStorage.addPageNode(element, context);
-        } else if (element is PrototypeEnable) {
-          if (((element)).prototypeNode?.destinationUUID != null &&
-              (element).prototypeNode.destinationUUID.isNotEmpty) {
-            addAndPopulatePrototypeNode(element, rootNode, context);
-          }
+        await _prototypeStorage.addPageNode(element, context);
+      } else if (element is PrototypeEnable) {
+        if (((element)).prototypeNode?.destinationUUID != null &&
+            (element).prototypeNode.destinationUUID.isNotEmpty) {
+          await addAndPopulatePrototypeNode(element, rootNode, context);
         }
       }
     }
     return rootNode;
   }
 
-  void addAndPopulatePrototypeNode(
+  Future<void> addAndPopulatePrototypeNode(
       var currentNode, var rootNode, PBContext context) async {
     await _prototypeStorage.addPrototypeInstance(currentNode, context);
-    var pNode =
-        _aggregationService.populatePrototypeNode(context, currentNode);
-    if(pNode != null){
-      context.tree.replaceNode(currentNode, pNode);
+    var pNode = _aggregationService.populatePrototypeNode(context, currentNode);
+    if (pNode != null) {
+      context.tree.addEdges(pNode.parent, [pNode]);
+      context.tree.removeEdges(pNode.parent, [currentNode]);
     }
   }
 }

@@ -73,6 +73,7 @@ class Interpret {
       return Future.value(tree);
     }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
+    await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);

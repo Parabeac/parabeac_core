@@ -55,7 +55,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is InjectedAppbar) {
       return 'appBar';
     } else if (node is InjectedTabBar) {
-      return 'tabBar';
+      return 'bottomNavigationBar';
     }
     return super.getAttributeNameOf(node);
   }
