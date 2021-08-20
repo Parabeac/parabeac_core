@@ -32,13 +32,12 @@ class PBScaffoldGenerator extends PBGenerator {
 
         buffer.write('$appbarStr,\n');
       }
-      // if (bottomNavBar != null) {
-      //   buffer.write('bottomNavigationBar: ');
-      //   // generatorContext.sizingContext = SizingValueContext.PointValue;
-      //   var navigationBar =
-      //       bottomNavBar.generator.generate(bottomNavBar, context);
-      //   buffer.write('$navigationBar, \n');
-      // }
+      if (bottomNavBar != null) {
+        buffer.write('bottomNavigationBar: ');
+        var navigationBar =
+            bottomNavBar.generator.generate(bottomNavBar, context);
+        buffer.write('$navigationBar, \n');
+      }
 
       if (body != null) {
         context.sizingContext = context.configuration.scaling
