@@ -66,6 +66,7 @@ class Interpret {
       return Future.value(node);
     }, index: 0, id: 'Indexing ${tree.name}');
 
+    await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);
@@ -138,7 +139,6 @@ class AITServiceBuilder {
       log.debug('Started running $name...');
       try {
         if (transformation is AITNodeTransformation) {
-
           for (var child in _intermediateTree) {
             var dVertex =
                 await transformation(context, child, _intermediateTree);
