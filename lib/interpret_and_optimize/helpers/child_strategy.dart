@@ -1,4 +1,5 @@
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -125,7 +126,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
     /// Have no TempGroupLayoutNode but `target` already has children
     /// <OR> we are adding multiple children to an empty `target` 
     else if (targetChildren.isNotEmpty || children.length > 1) {
-      var temp = Group(null, null, name: '${target.name}Group');
+      var temp = FrameGroup(null, null, name: '${target.name}Group');
       addChild(temp, children);
 
       if (targetChildren.isNotEmpty) {

@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'group.dart';
+part of 'frame_group.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Group _$GroupFromJson(Map<String, dynamic> json) {
-  return Group(
+FrameGroup _$FrameGroupFromJson(Map<String, dynamic> json) {
+  return FrameGroup(
     json['UUID'] as String,
     DeserializedRectangle.fromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
@@ -27,13 +27,14 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String;
 }
 
-Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+Map<String, dynamic> _$FrameGroupToJson(FrameGroup instance) =>
+    <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
-      'constraints': instance.constraints?.toJson(),
+      'constraints': instance.constraints,
       'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
-      'style': instance.auxiliaryData?.toJson(),
+      'style': instance.auxiliaryData,
       'name': instance.name,
-      'prototypeNodeUUID': instance.prototypeNode?.toJson(),
+      'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
     };

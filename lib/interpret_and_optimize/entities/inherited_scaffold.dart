@@ -4,7 +4,8 @@ import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -63,7 +64,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   void handleChildren(PBContext context) {
     var children = getAllAtrributeNamed(context.tree, 'body');
     // Top-most stack should have scaffold's frame to align children properly
-    var groupAtt = Group(null, frame)
+    var groupAtt = FrameGroup(null, frame)
       ..name = '$name-Group'
       ..attributeName = 'body'
       ..parent = this;

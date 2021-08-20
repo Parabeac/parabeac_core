@@ -12,59 +12,34 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
-part 'group.g.dart';
+import 'group.dart';
 
-@JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
+part 'base_group.g.dart';
+
+@JsonSerializable(ignoreUnannotated: true, createToJson: true)
 
 /// A temporary node that must be removed
-class Group extends PBLayoutIntermediateNode
+class BaseGroup extends Group
     implements PBInheritedIntermediate, IntermediateNodeFactory {
-  @override
-  @JsonKey(
-      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
-  PrototypeNode prototypeNode;
-
-  @override
-  @JsonKey()
-  String type = 'group';
-
-  @override
-  Map<String, dynamic> originalRef;
-
-  Group(
+  BaseGroup(
     String UUID,
     Rectangle frame, {
-    this.originalRef,
+    Map<String, dynamic> originalRef,
     String name,
-    this.prototypeNode,
+    PrototypeNode prototypeNode,
     PBIntermediateConstraints constraints,
-  }) : super(UUID, frame, [], [], name, constraints: constraints);
-
-  @override
-  bool satisfyRules(PBContext context, PBIntermediateNode currentNode,
-      PBIntermediateNode nextNode) {
-    assert(false, 'Attempted to satisfyRules for class type [$runtimeType]');
-    return null;
-  }
-
-  @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
-    assert(false, 'Attempted to generateLayout for class type [$runtimeType]');
-    return null;
-  }
-
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var tempGroup = _$GroupFromJson(json);
-    // tempGroup.constraints = PBIntermediateConstraints.fromConstraints(
-    //     json['constraints'], tempGroup.frame.height, tempGroup.frame.width);
-    return tempGroup;
-  }
+  }) : super(
+          UUID,
+          frame,
+          name: name,
+          prototypeNode: prototypeNode,
+          originalRef: originalRef,
+        );
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
           PBIntermediateNode parent, PBIntermediateTree tree) =>
-      (Group.fromJson(json) as Group)
+      _$BaseGroupFromJson(json)
         ..mapRawChildren(json, tree)
         ..originalRef = json;
 }

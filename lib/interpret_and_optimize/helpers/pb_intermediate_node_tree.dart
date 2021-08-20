@@ -172,6 +172,18 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     super.removeEdges(parent, children);
   }
 
+  @override
+
+  /// Essentially [super.remove()], however, if [keepChildren] is `true`, its going
+  /// to add the [edges(vertex)] into the [vertex.parent]; preventing the lost of the
+  /// [edges(vertex)].
+  void remove(Vertex<PBIntermediateNode> vertex, {bool keepChildren = false}) {
+    if (keepChildren && vertex is PBIntermediateNode) {
+      addEdges(vertex.parent, edges(vertex));
+    }
+    super.remove(vertex);
+  }
+
   /// Adding [PBIntermediateTree] as a dependecy.
   ///
   /// The [dependent] or its [dependent.rootNode] can not be `null`

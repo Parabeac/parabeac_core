@@ -7,7 +7,8 @@ import 'dart:convert';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
@@ -64,7 +65,13 @@ class Interpret {
       elementStorage.treeUUIDs[tree.UUID] = tree;
       elementStorage.elementToTree[node.UUID] = tree.UUID;
       return Future.value(node);
-    }, index: 0, id: 'Indexing ${tree.name}');
+    }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
+        (PBContext context, PBIntermediateTree tree) {
+      tree
+          .whereType<BaseGroup>()
+          .forEach((node) => tree.remove(node, keepChildren: true));
+      return Future.value(tree);
+    }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
@@ -138,7 +145,6 @@ class AITServiceBuilder {
       log.debug('Started running $name...');
       try {
         if (transformation is AITNodeTransformation) {
-
           for (var child in _intermediateTree) {
             var dVertex =
                 await transformation(context, child, _intermediateTree);
