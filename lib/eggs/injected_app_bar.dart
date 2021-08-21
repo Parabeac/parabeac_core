@@ -31,7 +31,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 
   InjectedAppbar(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     String name,
   ) : super(UUID, frame, name) {
     generator = PBAppBarGenerator();
@@ -56,7 +56,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     var appbar = InjectedAppbar(
       originalRef.UUID,

@@ -9,7 +9,7 @@ class PBDestHolder extends PBIntermediateNode {
   PrototypeNode pNode;
 
   PBDestHolder(
-      String UUID, Rectangle frame, this.pNode)
+      String UUID, Rectangle3D frame, this.pNode)
       : super(UUID, frame, '') {
     generator = PBPrototypeGenerator(pNode);
     childrenStrategy = OneChildStrategy('child');

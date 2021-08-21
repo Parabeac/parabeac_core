@@ -41,7 +41,7 @@ class InheritedStar extends PBVisualIntermediateNode
 
   InheritedStar(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     name,
     Uint8List image,

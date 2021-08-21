@@ -35,7 +35,7 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   InheritedCircle(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     Point alignX,

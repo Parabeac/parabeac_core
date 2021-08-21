@@ -16,7 +16,7 @@ class Padding extends PBVisualIntermediateNode {
   
   Padding(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     this.childToParentConstraints, {
     this.left = 0,
     this.right = 0,

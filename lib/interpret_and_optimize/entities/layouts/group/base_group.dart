@@ -23,7 +23,7 @@ class BaseGroup extends Group
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   BaseGroup(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     Map<String, dynamic> originalRef,
     String name,
     PrototypeNode prototypeNode,

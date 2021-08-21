@@ -23,6 +23,8 @@ import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
+import 'interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+
 final designToPBDLServices = <DesignToPBDLService>[
   SketchToPBDLService(),
   FigmaToPBDLService(),
@@ -127,7 +129,7 @@ ${parser.usage}
     context.project = pbProject;
 
     /// Assuming that the [tree.rootNode] has the dimensions of the screen.
-    context.screenFrame = Rectangle.fromPoints(
+    context.screenFrame = Rectangle3D.fromPoints(
         tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
     context.tree = tree;
     tree.context = context;

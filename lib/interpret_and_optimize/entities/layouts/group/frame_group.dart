@@ -25,7 +25,7 @@ class FrameGroup extends Group {
   @JsonKey()
   String type = 'frame';
 
-  FrameGroup(String UUID, Rectangle<num> frame,
+  FrameGroup(String UUID, Rectangle3D<num> frame,
       {String name,
       PrototypeNode prototypeNode,
       PBIntermediateConstraints constraints})

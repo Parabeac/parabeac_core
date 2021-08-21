@@ -21,7 +21,7 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
 
   InjectedBackArrow(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     String name,
   ) : super(UUID, frame, name) {
     generator = PBBackArrowGenerator();
@@ -31,7 +31,7 @@ class InjectedBackArrow extends PBEgg implements PBInjectedIntermediate {
   void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     return InjectedBackArrow(
       UUID,

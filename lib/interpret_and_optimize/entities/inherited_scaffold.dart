@@ -43,7 +43,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
   Map<String, dynamic> originalRef;
 
   InheritedScaffold(
-      String UUID, Rectangle<num> frame, String name, this.originalRef,
+      String UUID, Rectangle3D<num> frame, String name, this.originalRef,
       {this.isHomeScreen, this.prototypeNode})
       : super(UUID, frame, name) {
     generator = PBScaffoldGenerator();
@@ -106,7 +106,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
 // InheritedScaffold(
 //   String UUID,
-//   Rectangle frame, {
+//   Rectangle3D frame, {
 //   this.originalRef,
 //   String name,
 //   this.isHomeScreen,

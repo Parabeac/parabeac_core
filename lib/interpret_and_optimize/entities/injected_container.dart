@@ -36,7 +36,7 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   InjectedContainer(
     UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     String name,
     double alignX,
     double alignY,

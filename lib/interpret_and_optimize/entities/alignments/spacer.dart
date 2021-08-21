@@ -10,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class Spacer extends PBVisualIntermediateNode {
   int flex;
 
-  Spacer(String UUID, Rectangle frame, {this.flex, PBContext currentContext})
+  Spacer(String UUID, Rectangle3D frame, {this.flex, PBContext currentContext})
       : super(
           UUID,
           frame,

@@ -32,7 +32,7 @@ abstract class Group extends PBLayoutIntermediateNode
 
   Group(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     this.prototypeNode,

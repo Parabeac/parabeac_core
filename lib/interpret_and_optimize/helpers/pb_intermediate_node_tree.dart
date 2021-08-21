@@ -5,8 +5,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_layer_iterator.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:tuple/tuple.dart';
@@ -152,9 +150,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
           _elementStorage.elementToTree[child.UUID] = _UUID;
         }
       });
-      if (_childrenModObservers.containsKey(parent.id)) {
-        _childrenModObservers[parent.id].forEach(
-            (listener) => listener(CHILDREN_MOD.CREATED, children.toList()));
+
+      if (parent is ChildrenObserver && context != null) {
+        (parent as ChildrenObserver).childrenModified(children, context);
       }
       return super.addEdges(parent, children);
     };
@@ -165,9 +163,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   @override
   void removeEdges(Vertex<PBIntermediateNode> parent,
       [List<Vertex<PBIntermediateNode>> children]) {
-    if (_childrenModObservers.containsKey(parent.id)) {
-      _childrenModObservers[parent.id].forEach((listener) => listener(
-          CHILDREN_MOD.REMOVED, children?.toList() ?? edges(parent).toList()));
+    if (parent is ChildrenObserver) {
+      (parent as ChildrenObserver).childrenModified(children, context);
     }
     super.removeEdges(parent, children);
   }
@@ -256,27 +253,22 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
     tree._rootNode = designNode;
     return tree;
-
-    // List<Map<String, dynamic>> childrenPointer = json['designNode']['children'];
-
-    /// Deserialize the rootNode
-    /// Then make sure rootNode deserializes the rest of the tree.
-    // ..addEdges(child, parentList)
-    // ..tree_type = treeTypeFromJson(json['designNode']);
   }
 }
 
-/// By extending the class, any node could be used in any iterator to traverse its
-/// internals.
+/// This interface serves as a communication channel between the [PBIntermediateNTree] and [PBIntermediateNode].
 ///
-/// In the example of the [PBIntermediateNode], you can traverse the [PBIntermediateNode]s
-/// children by using the [IntermediateDFSIterator]. Furthermore, this allows the
-/// [PBIntermediateTree] to traverse through its nodes, leveraging the dart methods.
-abstract class TraversableNode<E> {
-  String attributeName;
-  E parent;
-  List<E> children;
+/// Any [PBIntermediateNode] that wants to peform any additional logic based on its children modification
+/// has to implement [ChildrenObserver]. The method [childrenModified(children)] is going to be called anytime
+/// the [PBIntermediateNode]'s children are removed/added.
+abstract class ChildrenObserver {
+  /// Even notification of [children] have been modified.
+  /// 
+  /// [context] could be `null` when when the [PBIntermediateTree] is being initialized. [ChildrenObserver]
+  /// can still modify the [children] but it would be unable to add/remove children.
+  void childrenModified(List<PBIntermediateNode> children, [PBContext context]);
 }
+
 
 enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
 

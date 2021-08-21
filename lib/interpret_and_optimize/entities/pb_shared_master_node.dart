@@ -52,7 +52,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   PBSharedMasterNode(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     this.SYMBOL_ID,
     String name,

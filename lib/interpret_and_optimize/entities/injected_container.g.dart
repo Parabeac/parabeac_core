@@ -9,8 +9,7 @@ part of 'injected_container.dart';
 InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
   return InjectedContainer(
     json['UUID'],
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
     prototypeNode:
         PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
@@ -32,7 +31,7 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,

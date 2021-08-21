@@ -33,7 +33,7 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'rectangle';
+  String type = 'Rectangle3D';
 
   @override
   @JsonKey(ignore: true)
@@ -41,7 +41,7 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   InheritedContainer(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     double alignX,

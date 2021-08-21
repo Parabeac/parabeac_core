@@ -23,10 +23,6 @@ class PBPositionedGenerator extends PBGenerator {
 
       var buffer = StringBuffer('Positioned(');
 
-      // var boilerplate = _getBoilerplate(context.sizingContext);
-      // var xAxisBoilerplate = boilerplate.item1;
-      // var yAxisBoilerplate = boilerplate.item2;
-
       /// Since the generation phase is going to run multiple times, we are going to have to
       /// create a copy/clone of the [PositionedValueHolder] instead of assigning the values
       /// directly to the [source.valueHolder]. This would causse the [source.valueHolder.getRatioPercentage]

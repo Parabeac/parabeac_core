@@ -11,7 +11,7 @@ abstract class PBEgg extends PBVisualIntermediateNode {
 
   PBEgg(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     String name,
   ) : super(
           UUID,
@@ -24,7 +24,7 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) =>
       layer;
 
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalNode,
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalNode,
       PBIntermediateTree tree);
 
   void extractInformation(PBIntermediateNode incomingNode);

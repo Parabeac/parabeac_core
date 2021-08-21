@@ -47,6 +47,11 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   // }
 
   @override
+  void sortChildren(List<PBIntermediateNode> children) =>
+    children.sort((c0, c1) => c0.frame.z.compareTo(c1.frame.z));
+  
+
+  @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
