@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
@@ -10,10 +11,10 @@ import 'dart:math';
 class PBContext {
   final PBConfiguration configuration;
 
-  Rectangle _screenFrame;
-  Rectangle get screenFrame => _screenFrame;
-  set screenFrame(Rectangle frame){
-    canvasFrame ??= Rectangle.fromPoints(frame.topLeft, frame.bottomRight);
+  Rectangle3D _screenFrame;
+  Rectangle3D get screenFrame => _screenFrame;
+  set screenFrame(Rectangle3D frame){
+    canvasFrame ??= Rectangle3D.fromPoints(frame.topLeft, frame.bottomRight);
     _screenFrame = frame;
   }
 
@@ -26,7 +27,7 @@ class PBContext {
   /// Some of the scenarios the focusAreaWould change:
   /// - When the appbar is used, it should shrink the canvas top point to make room for the appbar
   /// - When another stack is declared, its TLC becomes the new canvas TLC(same for BRC).
-  Rectangle canvasFrame;
+  Rectangle3D canvasFrame;
 
   /// The [constextConstrains] represents the costraints that would be inherited by a section of the tree.
   ///

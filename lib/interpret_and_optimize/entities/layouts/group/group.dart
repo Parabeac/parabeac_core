@@ -5,7 +5,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -13,12 +12,11 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
-part 'temp_group_layout_node.g.dart';
 
-@JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
+// @JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 
 /// A temporary node that must be removed
-class TempGroupLayoutNode extends PBLayoutIntermediateNode
+abstract class Group extends PBLayoutIntermediateNode
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey(
@@ -32,9 +30,9 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   @override
   Map<String, dynamic> originalRef;
 
-  TempGroupLayoutNode(
+  Group(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     this.prototypeNode,
@@ -55,17 +53,10 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     return null;
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
-    var tempGroup = _$TempGroupLayoutNodeFromJson(json);
-    // tempGroup.constraints = PBIntermediateConstraints.fromConstraints(
-    //     json['constraints'], tempGroup.frame.height, tempGroup.frame.width);
-    return tempGroup;
-  }
-
-  @override
-  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-          PBIntermediateNode parent, PBIntermediateTree tree) =>
-      (TempGroupLayoutNode.fromJson(json) as TempGroupLayoutNode)
-        ..mapRawChildren(json, tree)
-        ..originalRef = json;
+  // @override
+  // PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+  //         PBIntermediateNode parent, PBIntermediateTree tree) =>
+  //     (Group.fromJson(json) as Group)
+  //       ..mapRawChildren(json, tree)
+  //       ..originalRef = json;
 }

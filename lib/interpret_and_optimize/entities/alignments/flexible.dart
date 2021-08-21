@@ -14,7 +14,7 @@ class Flexible extends PBVisualIntermediateNode {
   //without breaking the json serializable
   Flexible(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     // child,
     this.flex,
   }) : super(

@@ -8,7 +8,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_dfs_iterator.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 // import 'dart:math';
@@ -58,9 +57,9 @@ abstract class PBIntermediateNode
   @JsonKey(
       ignore: false,
       name: 'boundaryRectangle',
-      fromJson: DeserializedRectangle.fromJson,
-      toJson: DeserializedRectangle.toJson)
-  Rectangle frame;
+      fromJson: Rectangle3D.fromJson,
+      toJson: Rectangle3D.toJson)
+  Rectangle3D frame;
 
   // @JsonKey(ignore: true)
   // PBGenerationViewData get managerData => currentContext.tree;
@@ -88,7 +87,7 @@ abstract class PBIntermediateNode
 
     if (constraints == null) {
       logger.debug(
-          'Constraints are null for $runtimeType, assigning it default constraints');
+          'Constraints are null for $runtimeType-$name, assigning it default constraints');
       constraints = PBIntermediateConstraints.defaultConstraints();
     }
     // _attributes = [];
@@ -136,14 +135,6 @@ abstract class PBIntermediateNode
         .cast<PBIntermediateNode>()
         .any((child) => child.attributeName == attributeName);
   }
-
-  /// Adds child to node.
-  // void addChild(PBIntermediateNode node) {
-  //   childrenStrategy.addChild(this, node);
-
-  //   /// Checking the constrains of the [node] being added to the tree, smoe of the
-  //   /// constrains could be inherited to that section of the sub-tree.
-  // }
 
   String getAttributeNameOf(PBIntermediateNode node) =>
       childrenStrategy.attributeName;
@@ -204,8 +195,6 @@ abstract class PBIntermediateNode
 extension PBPointLegacyMethod on Point {
   Point clone() => Point(x, y);
 
-  // TODO: This is a temporal fix ----- Not sure why there some sort of safe area for the y-axis??
-  // (y.abs() - anotherPoint.y.abs()).abs() < 3
   int compareTo(Point anotherPoint) =>
       y == anotherPoint.y || (y.abs() - anotherPoint.y.abs()).abs() < 3
           ? x.compareTo(anotherPoint.x)
@@ -225,40 +214,53 @@ extension PBPointLegacyMethod on Point {
     return false;
   }
 
-  static Point topLeftFromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    var x, y;
-    if (json.containsKey('boundaryRectangle')) {
-      x = json['boundaryRectangle']['x'];
-      y = json['boundaryRectangle']['y'];
-    } else {
-      x = json['x'];
-      y = json['y'];
-    }
-    return Point(x, y);
-  }
-
-  static Point bottomRightFromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    var x, y;
-    if (json.containsKey('boundaryRectangle')) {
-      x = json['boundaryRectangle']['x'] + json['boundaryRectangle']['width'];
-      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['height'];
-    } else {
-      x = json['x'] + json['width'];
-      y = json['y'] + json['height'];
-    }
-    return Point(x, y);
-  }
-
   static Map toJson(Point point) => {'x': point.x, 'y': point.y};
 }
 
-extension DeserializedRectangle on Rectangle {
+class Rectangle3D<T extends num> extends Rectangle<T> {
+  ///For now we are unable to make any comparison in the z-axis, this
+  ///is primarly for sorting elements in [PBStackIntermediateLayout] to
+  ///place to correct [PBIntermediateNode]s on top.
+  num z;
+  Rectangle3D(num left, num top, num width, num height, this.z)
+      : super(left, top, width, height);
+
+  @override
+  Rectangle<T> boundingBox(Rectangle<T> frame) {
+    var z = 0;
+    if (frame is Rectangle3D) {
+      z = max(z, (frame as Rectangle3D).z.toInt());
+    }
+    return Rectangle3D.from2DRectangle(super.boundingBox(frame), z: z);
+  }
+
+  factory Rectangle3D.from2DRectangle(Rectangle rectangle, {int z = 0}) =>
+      Rectangle3D(
+          rectangle.left, rectangle.top, rectangle.width, rectangle.height, z);
+
+  static Rectangle3D fromJson(Map<String, dynamic> json) {
+    return Rectangle3D(
+        json['x'], json['y'], json['width'], json['height'], json['z'] ?? 0);
+  }
+
+  factory Rectangle3D.fromPoints(Point<T> a, Point<T> b, {T z}) {
+    var left = min(a.x, b.x);
+    var width = (max(a.x, b.x) - left) as T;
+    var top = min(a.y, b.y);
+    var height = (max(a.y, b.y) - top) as T;
+    return Rectangle3D<T>(left, top, width, height, z);
+  }
+
+  static Map toJson(Rectangle3D Rectangle3D) => {
+        'height': Rectangle3D.height,
+        'width': Rectangle3D.width,
+        'x': Rectangle3D.left,
+        'y': Rectangle3D.top,
+        'z': Rectangle3D.z
+      };
+}
+
+extension DeserializedRectangle3D on Rectangle3D {
   bool _areXCoordinatesOverlapping(
           Point topLeftCorner0,
           Point bottomRightCorner0,
@@ -279,35 +281,24 @@ extension DeserializedRectangle on Rectangle {
       bottomRightCorner1.y <= bottomRightCorner0.y &&
           bottomRightCorner1.y >= topLeftCorner0.y;
 
-  bool isHorizontalTo(Rectangle frame) {
+  bool isHorizontalTo(Rectangle3D frame) {
     return (!(_areXCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
         _areYCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight);
   }
 
-  bool isVerticalTo(Rectangle frame) {
+  bool isVerticalTo(Rectangle3D frame) {
     return (!(_areYCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
         _areXCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight);
   }
 
-  bool isOverlappingTo(Rectangle frame) {
+  bool isOverlappingTo(Rectangle3D frame) {
     return (_areXCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight)) &&
         _areYCoordinatesOverlapping(
             topLeft, bottomRight, frame.topLeft, frame.bottomRight);
   }
-
-  static Rectangle fromJson(Map<String, dynamic> json) {
-    return Rectangle(json['x'], json['y'], json['width'], json['height']);
-  }
-
-  static Map toJson(Rectangle rectangle) => {
-        'height': rectangle.height,
-        'width': rectangle.width,
-        'x': rectangle.left,
-        'y': rectangle.top
-      };
 }

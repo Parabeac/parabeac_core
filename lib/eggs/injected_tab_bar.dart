@@ -27,7 +27,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 
   InjectedTabBar(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     String name,
   ) : super(UUID, frame, name) {
     generator = PBTabBarGenerator();
@@ -55,7 +55,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     var tabbar = InjectedTabBar(
       originalRef.UUID,

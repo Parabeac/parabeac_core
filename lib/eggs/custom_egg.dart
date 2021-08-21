@@ -19,7 +19,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   String semanticName = '<custom>';
   CustomEgg(
     String UUID,
-    Rectangle frame,
+    Rectangle3D frame,
     String name,
   ) : super(UUID, frame, name) {
     generator = CustomEggGenerator();
@@ -32,7 +32,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle frame, PBIntermediateNode originalRef,
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     return CustomEgg(originalRef.UUID, frame,
         originalRef.name.replaceAll('<custom>', '').pascalCase);

@@ -9,8 +9,7 @@ part of 'inherited_bitmap.dart';
 InheritedBitmap _$InheritedBitmapFromJson(Map<String, dynamic> json) {
   return InheritedBitmap(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
     referenceImage: json['imageReference'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
@@ -33,7 +32,7 @@ Map<String, dynamic> _$InheritedBitmapToJson(InheritedBitmap instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,

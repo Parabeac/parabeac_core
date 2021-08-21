@@ -9,8 +9,7 @@ part of 'inherited_polygon.dart';
 InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
   return InheritedPolygon(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'],
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
@@ -32,7 +31,7 @@ Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,

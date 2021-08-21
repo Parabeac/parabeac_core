@@ -60,7 +60,7 @@ class InheritedText extends PBVisualIntermediateNode
 
   InheritedText(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     name,
     this.alignmenttype,

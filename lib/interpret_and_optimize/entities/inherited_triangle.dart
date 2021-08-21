@@ -40,7 +40,7 @@ class InheritedTriangle extends PBVisualIntermediateNode
 
   InheritedTriangle(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     Uint8List image,

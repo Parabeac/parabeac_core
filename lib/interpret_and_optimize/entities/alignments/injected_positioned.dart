@@ -15,7 +15,7 @@ class InjectedPositioned extends PBIntermediateNode
 
   InjectedPositioned(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.valueHolder,
     PBIntermediateConstraints constraints,
   }) : super(UUID, frame, '', constraints: constraints) {

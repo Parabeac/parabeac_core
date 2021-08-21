@@ -1,16 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'temp_group_layout_node.dart';
+part of 'frame_group.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
-  return TempGroupLayoutNode(
+FrameGroup _$FrameGroupFromJson(Map<String, dynamic> json) {
+  return FrameGroup(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
@@ -27,15 +26,14 @@ TempGroupLayoutNode _$TempGroupLayoutNodeFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String;
 }
 
-Map<String, dynamic> _$TempGroupLayoutNodeToJson(
-        TempGroupLayoutNode instance) =>
+Map<String, dynamic> _$FrameGroupToJson(FrameGroup instance) =>
     <String, dynamic>{
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
-      'constraints': instance.constraints?.toJson(),
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
-      'style': instance.auxiliaryData?.toJson(),
+      'constraints': instance.constraints,
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
+      'style': instance.auxiliaryData,
       'name': instance.name,
-      'prototypeNodeUUID': instance.prototypeNode?.toJson(),
+      'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
     };

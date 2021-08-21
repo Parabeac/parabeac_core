@@ -41,7 +41,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   InheritedShapePath(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     Uint8List image,

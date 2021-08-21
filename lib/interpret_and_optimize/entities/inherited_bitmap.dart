@@ -40,7 +40,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedBitmap(String UUID, Rectangle frame,
+  InheritedBitmap(String UUID, Rectangle3D frame,
       {this.originalRef, String name, this.referenceImage, this.prototypeNode})
       : super(
           UUID,

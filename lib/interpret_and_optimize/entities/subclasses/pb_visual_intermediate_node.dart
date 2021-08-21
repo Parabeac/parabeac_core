@@ -10,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 /// Superclass: PBIntermediateNode
 abstract class PBVisualIntermediateNode extends PBIntermediateNode {
   PBVisualIntermediateNode(
-      String UUID, Rectangle rectangle,  String name,
+      String UUID, Rectangle3D Rectangle3D,  String name,
       {PBIntermediateConstraints constraints})
-      : super(UUID, rectangle, name, constraints: constraints);
+      : super(UUID, Rectangle3D, name, constraints: constraints);
 }

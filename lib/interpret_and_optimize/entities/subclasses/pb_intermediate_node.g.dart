@@ -11,7 +11,7 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
       'hashCode': instance.hashCode,
