@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/flutter_project_builder/flutter_project
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
@@ -122,20 +123,27 @@ ${parser.usage}
   await fpb.preGenTasks();
   await indexFileFuture;
 
-  await Future.wait(pbProject.forest.map((tree) {
+  var trees = <PBIntermediateTree>[];
+
+  for (var tree in pbProject.forest) {
     var context = PBContext(processInfo.configuration);
     context.project = pbProject;
 
-    /// Assuming that the [tree.rootNode] has the dimensions of the screen.
     context.screenFrame = Rectangle.fromPoints(
         tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+
     context.tree = tree;
     tree.context = context;
+
     tree.forEach((child) => child.handleChildren(context));
-    return interpretService
-        .interpretAndOptimize(tree, context, pbProject)
-        .then((tree) => fpb.genAITree(tree, context));
-  }).toList());
+
+    trees.add(
+        await interpretService.interpretAndOptimize(tree, context, pbProject));
+  }
+
+  for (var tree in trees) {
+    await fpb.genAITree(tree, tree.context);
+  }
 
   exitCode = 0;
 }

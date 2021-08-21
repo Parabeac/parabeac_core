@@ -63,7 +63,9 @@ class PBPrototypeAggregationService {
         elementStorage.treeUUIDs[elementStorage.elementToTree[target.UUID]];
     var dependentTree =
         elementStorage.treeUUIDs[elementStorage.elementToTree[dependent.UUID]];
-    if (dependentTree != targetTree) {
+    if (targetTree != null &&
+        dependentTree != null &&
+        dependentTree != targetTree) {
       dependentTree.addDependent(targetTree);
     }
   }
@@ -74,8 +76,8 @@ class PBPrototypeAggregationService {
     // TODO: refactor the structure
     if (iNode == null) {
       return iNode;
-    } else{
-         var destHolder = PBDestHolder(
+    } else {
+      var destHolder = PBDestHolder(
         null,
         iNode.frame,
         (iNode as PBInheritedIntermediate).prototypeNode,
@@ -85,7 +87,7 @@ class PBPrototypeAggregationService {
       context.tree.addEdges(destHolder, [iNode]);
       return destHolder;
     }
-    
+
     // else if (iNode is PBInheritedIntermediate) {
     //   var destHolder = PBDestHolder(
     //     null,
@@ -139,7 +141,7 @@ class PBPrototypeAggregationService {
     for (var _pNode in _unregNodes) {
       if (_pNode.prototypeNode.destinationUUID == node.UUID) {
         _pNode.prototypeNode.destinationName = node.name;
-        _addDependent(_pNode as PBIntermediateNode, node);
+        _addDependent(node, _pNode as PBIntermediateNode);
       }
     }
   }

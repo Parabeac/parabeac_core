@@ -57,6 +57,9 @@ class Interpret {
     aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
     var elementStorage = ElementStorage();
 
+    elementStorage.elementToTree[tree.rootNode.UUID] = tree.UUID;
+    elementStorage.treeUUIDs[tree.UUID] = tree;
+
     /// This is a workaround for adding missing information to either the [PBContext] or any of the
     /// [PBIntermediateNode]s.
     aitServiceBuilder.addTransformation(
