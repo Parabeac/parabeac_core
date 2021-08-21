@@ -14,7 +14,13 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<tabbar>';
 
-  // List<PBIntermediateNode> get tabs => getAllAtrributeNamed('tabs');
+  static final TAB_ATTR_NAME = 'tabs';
+  static final BACKGROUND_ATTR_NAME = 'background';
+
+  final nameToAttr = {
+    '<tab>': TAB_ATTR_NAME,
+    '<background>': BACKGROUND_ATTR_NAME,
+  };
 
   @override
   AlignStrategy alignStrategy = NoAlignment();
@@ -30,9 +36,13 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
 
   @override
   String getAttributeNameOf(PBIntermediateNode node) {
-    if (node.name.contains('<tab>')) {
-      return 'tabs';
+    var matchingKey = nameToAttr.keys
+        .firstWhere((key) => node.name.contains(key), orElse: () => null);
+
+    if (matchingKey != null) {
+      return nameToAttr[matchingKey];
     }
+
     return super.getAttributeNameOf(node);
   }
 
@@ -64,8 +74,11 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   void handleChildren(PBContext context) {
     var children = context.tree.childrenOf(this);
 
-    var validChildren =
-        children.where((child) => child.attributeName == 'tabs').toList();
+    var validChildren = children
+        .where((child) =>
+            child.attributeName == TAB_ATTR_NAME ||
+            child.attributeName == BACKGROUND_ATTR_NAME)
+        .toList();
 
     // Ensure only nodes with `tab` remain
     context.tree.replaceChildrenOf(this, validChildren);
@@ -80,10 +93,21 @@ class PBTabBarGenerator extends PBGenerator {
     // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
       // var tabs = source.tabs;
-      var tabs = source.getAllAtrributeNamed(context.tree, 'tabs');
+      var tabs = source.getAllAtrributeNamed(
+          context.tree, InjectedTabBar.TAB_ATTR_NAME);
+      var background = context.tree.childrenOf(source).firstWhere(
+          (child) => child.attributeName == InjectedTabBar.BACKGROUND_ATTR_NAME,
+          orElse: () => null);
 
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
+
+      if (background != null) {
+        // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
+        buffer.write(
+            'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      }
+
       buffer.write('type: BottomNavigationBarType.fixed,');
       try {
         buffer.write('items:[');

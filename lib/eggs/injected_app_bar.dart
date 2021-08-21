@@ -1,11 +1,8 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -17,17 +14,23 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   String semanticName = '<navbar>';
 
   /// String representing what the <leading> tag maps to
-  final LEADING_ATTR_NAME = 'leading';
+  static final LEADING_ATTR_NAME = 'leading';
 
   /// String representing what the <middle> tag maps to
-  final MIDDLE_ATTR_NAME = 'title';
+  static final MIDDLE_ATTR_NAME = 'title';
 
-  /// String representing what the <middle> tag maps to
-  final TRAILING_ATTR_NAME = 'actions';
+  /// String representing what the <trailing> tag maps to
+  static final TRAILING_ATTR_NAME = 'actions';
 
-  // PBIntermediateNode get leadingItem => getAttributeNamed('leading');
-  // PBIntermediateNode get middleItem => getAttributeNamed('title');
-  // PBIntermediateNode get trailingItem => getAttributeNamed('actions');
+  /// String representing what the <background> tag maps to
+  static final BACKGROUND_ATTR_NAME = 'background';
+
+  final tagToName = {
+    '<leading>': LEADING_ATTR_NAME,
+    '<middle>': MIDDLE_ATTR_NAME,
+    '<trailing>': TRAILING_ATTR_NAME,
+    '<background>': BACKGROUND_ATTR_NAME
+  };
 
   InjectedAppbar(
     String UUID,
@@ -41,14 +44,12 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   String getAttributeNameOf(PBIntermediateNode node) {
     if (node is PBIntermediateNode) {
-      if (node.name.contains('<leading>')) {
-        return LEADING_ATTR_NAME;
-      }
-      if (node.name.contains('<trailing>')) {
-        return TRAILING_ATTR_NAME;
-      }
-      if (node.name.contains('<middle>')) {
-        return MIDDLE_ATTR_NAME;
+      /// Iterate `keys` of [tagToName] to see if
+      /// any `key` matches [node.name]
+      for (var key in tagToName.keys) {
+        if (node.name.contains(key)) {
+          return tagToName[key];
+        }
       }
     }
 
@@ -83,11 +84,8 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
 
   /// Returns [true] if `node` has a valid `attributeName` in the eyes of the [InjectedAppbar].
   /// Returns [false] otherwise.
-  bool _isValidNode(PBIntermediateNode node) {
-    var validNames = [LEADING_ATTR_NAME, MIDDLE_ATTR_NAME, TRAILING_ATTR_NAME];
-
-    return validNames.any((name) => name == node.attributeName);
-  }
+  bool _isValidNode(PBIntermediateNode node) =>
+      tagToName.values.any((name) => name == node.attributeName);
 
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
@@ -109,17 +107,24 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      var actions = generatorContext.tree
-          .childrenOf(source)
-          .where((child) => child.attributeName == source.TRAILING_ATTR_NAME);
-      var children = generatorContext.tree
-          .childrenOf(source)
-          .where((child) => child.attributeName != source.TRAILING_ATTR_NAME);
+      // Get necessary attributes that need to be processed separately
+      var background = generatorContext.tree.childrenOf(source).firstWhere(
+          (child) => child.attributeName == InjectedAppbar.BACKGROUND_ATTR_NAME,
+          orElse: () => null);
+      var actions = generatorContext.tree.childrenOf(source).where(
+          (child) => child.attributeName == InjectedAppbar.TRAILING_ATTR_NAME);
+      var children = generatorContext.tree.childrenOf(source).where((child) =>
+          child.attributeName != InjectedAppbar.TRAILING_ATTR_NAME &&
+          child.attributeName != InjectedAppbar.BACKGROUND_ATTR_NAME);
 
-      // [actions] require special handling due to being a list
+      if (background != null) {
+        // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
+        buffer.write(
+            'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      }
       if (actions.isNotEmpty) {
         buffer.write(
-            '${source.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
+            '${InjectedAppbar.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
       }
       children.forEach((child) => buffer.write(
           '${child.attributeName}: ${_wrapOnIconButton(child.generator.generate(child, generatorContext))},'));
