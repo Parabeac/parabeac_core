@@ -81,7 +81,7 @@ class PBPrototypeAggregationService {
         null,
         iNode.frame,
         (iNode as PBInheritedIntermediate).prototypeNode,
-      );
+      )..name = 'Dest_${iNode.name}';
       // Save parent pointer of `iNode`
       destHolder.parent = iNode.parent;
       context.tree.addEdges(destHolder, [iNode]);
