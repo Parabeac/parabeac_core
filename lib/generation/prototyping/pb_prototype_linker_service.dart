@@ -41,7 +41,7 @@ class PBPrototypeLinkerService {
     var pNode = _aggregationService.populatePrototypeNode(context, currentNode);
     if (pNode != null) {
       context.tree.addEdges(pNode.parent, [pNode]);
-      context.tree.removeEdges(pNode.parent, [currentNode]);
+      context.tree.removeEdges(pNode.parent, <PBIntermediateNode>[currentNode]);
     }
   }
 }
