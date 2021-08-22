@@ -33,7 +33,7 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   @override
   @JsonKey()
-  String type = 'Rectangle3D';
+  String type = 'rectangle';
 
   @override
   @JsonKey(ignore: true)
