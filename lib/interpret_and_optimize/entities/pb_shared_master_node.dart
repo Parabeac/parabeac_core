@@ -58,10 +58,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     String name,
     this.overridableProperties,
     this.prototypeNode,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     overridableProperties ??= [];
     try {

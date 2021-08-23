@@ -44,7 +44,8 @@ class InheritedOval extends PBVisualIntermediateNode
     String name,
     Uint8List image,
     this.prototypeNode,
-  }) : super(UUID, frame, name) {
+    PBIntermediateConstraints constraints
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     if (image != null) {
       ImageReferenceStorage().addReferenceAndWrite(

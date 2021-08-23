@@ -15,12 +15,12 @@ InheritedScaffold _$InheritedScaffoldFromJson(Map<String, dynamic> json) {
     isHomeScreen: json['isFlowHome'] as bool ?? false,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-  )
-    ..subsemantic = json['subsemantic'] as String
-    ..constraints = json['constraints'] == null
+    constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>)
+            json['constraints'] as Map<String, dynamic>),
+  )
+    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(

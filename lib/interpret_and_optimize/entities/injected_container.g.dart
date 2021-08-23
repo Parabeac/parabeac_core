@@ -14,12 +14,12 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
     prototypeNode:
         PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     type: json['type'] as String,
-  )
-    ..subsemantic = json['subsemantic'] as String
-    ..constraints = json['constraints'] == null
+    constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>)
+            json['constraints'] as Map<String, dynamic>),
+  )
+    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(

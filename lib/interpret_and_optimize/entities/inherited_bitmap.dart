@@ -41,11 +41,12 @@ class InheritedBitmap extends PBVisualIntermediateNode
   Map<String, dynamic> originalRef;
 
   InheritedBitmap(String UUID, Rectangle3D frame,
-      {this.originalRef, String name, this.referenceImage, this.prototypeNode})
+      {this.originalRef, String name, this.referenceImage, this.prototypeNode, PBIntermediateConstraints constraints})
       : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();

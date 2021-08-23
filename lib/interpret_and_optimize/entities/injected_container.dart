@@ -43,6 +43,7 @@ class InjectedContainer extends PBVisualIntermediateNode
     String color,
     this.prototypeNode,
     this.type,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,

@@ -13,12 +13,12 @@ InheritedShapePath _$InheritedShapePathFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-  )
-    ..subsemantic = json['subsemantic'] as String
-    ..constraints = json['constraints'] == null
+    constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>)
+            json['constraints'] as Map<String, dynamic>),
+  )
+    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(

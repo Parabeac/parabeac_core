@@ -34,7 +34,6 @@ class InheritedStar extends PBVisualIntermediateNode
   String type = 'star';
 
  
-
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
@@ -46,10 +45,12 @@ class InheritedStar extends PBVisualIntermediateNode
     name,
     Uint8List image,
     this.prototypeNode,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
