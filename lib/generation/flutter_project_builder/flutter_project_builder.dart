@@ -126,16 +126,18 @@ class FlutterProjectBuilder {
     ;
   }
 
-  Future<void> genAITree(PBIntermediateTree tree, PBContext context) async {
+  Future<void> genAITree(
+      PBIntermediateTree tree, PBContext context, bool isDryRun) async {
     if (!_configured) {
       /// Avoid changing the [_configured] from here, it might lead to async changes on the var
       throw Error();
     }
 
-    await generationConfiguration.generateTree(tree, project, context, true);
-    await generationConfiguration.generateTree(tree, project, context, false);
+    await generationConfiguration.generateTree(
+        tree, project, context, isDryRun);
     generationConfiguration.generatePlatformAndOrientationInstance(project);
-    await formatProject(project.projectAbsPath, projectDir: MainInfo().outputPath);
+    await formatProject(project.projectAbsPath,
+        projectDir: MainInfo().outputPath);
   }
 }
 

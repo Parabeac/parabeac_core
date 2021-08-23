@@ -145,7 +145,7 @@ class PBSharedParameterProp {
     // Populate `value` of Override Property since it is an [IntermediateNode]
     fromJson.value = json['value'] == null
         ? null
-        : PBIntermediateNode.fromJson(json, parent, tree);
+        : PBIntermediateNode.fromJson(json['value'], parent, tree);
 
     return fromJson;
   }

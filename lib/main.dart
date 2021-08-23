@@ -145,7 +145,11 @@ ${parser.usage}
   }
 
   for (var tree in trees) {
-    await fpb.genAITree(tree, tree.context);
+    await fpb.genAITree(tree, tree.context, true);
+  }
+
+  for (var tree in trees) {
+    await fpb.genAITree(tree, tree.context, false);
   }
 
   exitCode = 0;
