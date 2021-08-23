@@ -50,7 +50,7 @@ class PBPrototypeAggregationService {
       if (page == null) {
         _unregNodes.add(node as PrototypeEnable);
       } else {
-        _addDependent(node, page);
+        _addDependent(page, node);
       }
     }
     _unregNodes.removeWhere(

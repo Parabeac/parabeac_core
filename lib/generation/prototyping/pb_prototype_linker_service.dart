@@ -26,7 +26,7 @@ class PBPrototypeLinkerService {
       if (element is InheritedScaffold) {
         await _prototypeStorage.addPageNode(element, context);
       } else if (element is PrototypeEnable) {
-        if (((element)).prototypeNode?.destinationUUID != null &&
+        if (element.prototypeNode?.destinationUUID != null &&
             (element).prototypeNode.destinationUUID.isNotEmpty) {
           await addAndPopulatePrototypeNode(element, rootNode, context);
         }
