@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:parabeac_core/controllers/interpret.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
@@ -40,7 +44,8 @@ class PBStateManagementLinker {
   /// Adds the `node` variation to the [DirectedStateGraph] of the
   /// default [PBIntermediateNode], or sets up `node` as default
   /// to receive [IntermediateStates] in its state graph.
-  void processVariation(PBIntermediateNode node, String rootNodeName) async {
+  void processVariation(PBIntermediateNode node, String rootNodeName,
+      PBIntermediateTree tree) async {
     // Assign `node` as default
     if (!containsElement(rootNodeName)) {
       _statemap[rootNodeName] = node;
@@ -55,8 +60,8 @@ class PBStateManagementLinker {
           .forEach((state) => node.auxiliaryData.stateGraph.addState(state));
 
       // Add old default node as state of new default node
-      stateQueue
-          .add(_interpretVariationNode(instanceNode).then((processedNode) {
+      stateQueue.add(
+          _interpretVariationNode(instanceNode, tree).then((processedNode) {
         var intermediateState =
             IntermediateState(variation: IntermediateVariation(processedNode));
         node.auxiliaryData.stateGraph.addState(intermediateState);
@@ -72,7 +77,7 @@ class PBStateManagementLinker {
             PBSymbolStorage().getSharedInstanceNodeBySymbolID(node.SYMBOL_ID);
         tempSym?.forEach((element) => element.isMasterState = true);
       }
-      stateQueue.add(_interpretVariationNode(node).then((processedNode) {
+      stateQueue.add(_interpretVariationNode(node, tree).then((processedNode) {
         var intermediateState =
             IntermediateState(variation: IntermediateVariation(processedNode));
         _statemap[rootNodeName]
@@ -86,20 +91,28 @@ class PBStateManagementLinker {
   /// Runs the state management [PBIntermediateNode] through
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
-      PBIntermediateNode node) async {
+      PBIntermediateNode node, PBIntermediateTree tree) async {
+    var builder = AITServiceBuilder();
+    builder
+        .addTransformation((PBIntermediateTree tree) {
+          var context = PBContext(MainInfo().configuration);
+          context.screenFrame = Rectangle3D.fromPoints(
+              tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
 
-    // var builder = AITServiceBuilder(
-    //     node.currentContext, (node as PBInheritedIntermediate).originalRef);
-    // builder
-    //     .addTransformation(visualGenerationService.getIntermediateTree)
-    //     .addTransformation((PBIntermediateTree tree, context) {
-    //       /// Making sure the name of the tree was changed back
-    //       tree.name = node.name;
-    //     })
-    //     .addTransformation(
-    //         PBPluginControlService().convertAndModifyPluginNodeTree)
-    //     .addTransformation(PBLayoutGenerationService().extractLayouts)
-    //     .addTransformation(PBAlignGenerationService().addAlignmentToLayouts);
-    // return builder.build().then((tree) => tree.rootNode);
+          context.tree = tree;
+          tree.context = context;
+
+          tree.forEach((element) => element.handleChildren(context));
+        })
+        // .addTransformation(visualGenerationService.getIntermediateTree)
+        .addTransformation((PBIntermediateTree tree, context) {
+          // / Making sure the name of the tree was changed back
+          tree.name = node.name;
+        })
+        .addTransformation(
+            PBPluginControlService().convertAndModifyPluginNodeTree)
+        .addTransformation(PBLayoutGenerationService().extractLayouts)
+        .addTransformation(PBAlignGenerationService().addAlignmentToLayouts);
+    return builder.build(tree: tree).then((tree) => tree.rootNode);
   }
 }

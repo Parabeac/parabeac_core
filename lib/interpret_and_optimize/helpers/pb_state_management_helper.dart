@@ -1,5 +1,7 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 
 /// Class that interprets state management nodes
@@ -15,12 +17,13 @@ class PBStateManagementHelper {
     linker = PBStateManagementLinker();
   }
 
-  void interpretStateManagementNode(PBIntermediateNode node) {
+  void interpretStateManagementNode(
+      PBIntermediateNode node, PBIntermediateTree tree) {
     if (isValidStateNode(node.name)) {
       var nodeName = _getNodeName(node.name);
       // TODO: these states will be used for phase 2 of state management
       var states = _getStates(node.name);
-      linker.processVariation(node, nodeName);
+      linker.processVariation(node, nodeName, tree);
     }
   }
 
