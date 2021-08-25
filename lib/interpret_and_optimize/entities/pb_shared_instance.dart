@@ -50,7 +50,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'shared_instance';
 
-
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
@@ -74,9 +73,10 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
           name,
         ) {
     generator = PBSymbolInstanceGenerator();
-    
+
     childrenStrategy = NoChildStrategy();
     alignStrategy = NoAlignment();
+
     /// if [sharedParamValues] sets [overrideValues], then only pass one
     // overrideValues = sharedParamValues.map((v) {
     //   var symOvrValue =
@@ -95,8 +95,20 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
-      PBSharedInstanceIntermediateNode.fromJson(json);
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    var instance = PBSharedInstanceIntermediateNode.fromJson(json);
+    _formatOverrideVals(
+        (instance as PBSharedInstanceIntermediateNode).sharedParamValues);
+    return instance;
+  }
+
+  void _formatOverrideVals(List<PBSharedParameterValue> vals) {
+    vals.forEach((overrideValue) {
+      if (overrideValue.type == 'stringValue') {
+        overrideValue.value = overrideValue.value.replaceAll('\$', '\\\$');
+      }
+    });
+  }
 }
 
 @JsonSerializable()
