@@ -24,7 +24,7 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
   /// assign the [node.constraints.pinTop] = `true` and [node.constraints.pinBottom] = `false`.
   /// When [context.fixedWidth] is not `null`, se assign the [context.fixedWidth] to subtree and
   /// we make [node.constraints.pinLeft] = `true` and [node.constraints.pingRight] = `false`.
-  void _setConstraints(PBContext context, T node) {
+  void setConstraints(PBContext context, T node) {
     if (context.contextConstraints.fixedHeight) {
       node.constraints?.fixedHeight = context.contextConstraints?.fixedHeight;
       node.constraints?.pinTop = true;
@@ -62,14 +62,14 @@ class PaddingAlignment extends AlignStrategy {
     context.tree.addEdges(padding, [child]);
     context.tree.addEdges(node, [padding]);
 
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }
 
 class NoAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }
 
@@ -103,6 +103,6 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       tree.addEdges(injectedPositioned, [child]);
     });
     tree.replaceChildrenOf(node, alignedChildren);
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }
