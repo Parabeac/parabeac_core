@@ -99,13 +99,7 @@ class PBStateManagementLinker {
       PBIntermediateNode node, PBIntermediateTree tree) async {
     var builder = AITServiceBuilder();
 
-    builder
-        // .addTransformation(visualGenerationService.getIntermediateTree)
-        .addTransformation((PBContext context, PBIntermediateTree tree) {
-      // / Making sure the name of the tree was changed back
-      tree.name = node.name;
-      return Future.value(tree);
-    }).addTransformation((PBContext context, PBIntermediateTree tree) {
+    builder.addTransformation((PBContext context, PBIntermediateTree tree) {
       return PBPluginControlService()
           .convertAndModifyPluginNodeTree(tree, context);
     }).addTransformation((PBContext context, PBIntermediateTree tree) {

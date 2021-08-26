@@ -22,6 +22,7 @@ class StateManagementNodeInterpreter extends AITHandler {
         smHelper.interpretStateManagementNode(node, tree);
         return Future.value(tree);
       } else {
+        /// Remove tree entirely
         smHelper.interpretStateManagementNode(node, tree);
         return Future.value(tree);
       }
