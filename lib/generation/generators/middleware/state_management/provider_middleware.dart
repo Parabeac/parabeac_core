@@ -5,6 +5,7 @@ import 'package:parabeac_core/generation/generators/middleware/state_management/
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
@@ -110,6 +111,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
         parentDirectory,
         code,
         symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
+        ownership: FileOwnership.DEV,
       ),
       // Generate default node's view page
       WriteSymbolCommand(context.tree.UUID, node.name.snakeCase,
