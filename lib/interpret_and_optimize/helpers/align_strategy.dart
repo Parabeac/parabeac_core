@@ -24,14 +24,7 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
   /// assign the [node.constraints.pinTop] = `true` and [node.constraints.pinBottom] = `false`.
   /// When [context.fixedWidth] is not `null`, se assign the [context.fixedWidth] to subtree and
   /// we make [node.constraints.pinLeft] = `true` and [node.constraints.pingRight] = `false`.
-  void _setConstraints(PBContext context, T node) {  
-    if(node.constraints.fixedHeight){
-      context.contextConstraints.fixedHeight = true;
-    }
-    if(node.constraints.fixedWidth){
-      context.contextConstraints.fixedWidth = true;
-    }
-
+  void _setConstraints(PBContext context, T node) {
     if (context.contextConstraints.fixedHeight) {
       node.constraints?.fixedHeight = context.contextConstraints?.fixedHeight;
       node.constraints?.pinTop = true;
@@ -42,6 +35,13 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
       node.constraints?.fixedWidth = context.contextConstraints.fixedWidth;
       node.constraints?.pinLeft = true;
       node.constraints?.pinRight = false;
+    }
+
+    if (node.constraints.fixedHeight) {
+      context.contextConstraints.fixedHeight = true;
+    }
+    if (node.constraints.fixedWidth) {
+      context.contextConstraints.fixedWidth = true;
     }
   }
 }
