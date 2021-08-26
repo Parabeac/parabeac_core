@@ -139,6 +139,11 @@ class FlutterProjectBuilder {
     await formatProject(project.projectAbsPath,
         projectDir: MainInfo().outputPath);
   }
+
+  void runCommandQueue() {
+    generationConfiguration.commandQueue
+        .forEach(generationConfiguration.fileStructureStrategy.commandCreated);
+  }
 }
 
 void WriteStyleClasses(String pathToFlutterProject) {

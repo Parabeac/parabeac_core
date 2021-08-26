@@ -138,7 +138,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     // fileStructureStrategy.dryRunMode = false;
 
     // commandQueue.forEach(fileStructureStrategy.commandCreated);
-    commandQueue.clear();
+    // commandQueue.clear();
     // await generateTrees(pb_project.forest, pb_project, context);
   }
 
@@ -223,6 +223,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           platformsMap, screenName, fileStructureStrategy, rawImports);
 
       if (newCommand != null) {
+        newCommand.write(fileStructureStrategy);
         setMainForPlatform(newCommand, screenName);
       }
     });

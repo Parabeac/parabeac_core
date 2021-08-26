@@ -144,6 +144,8 @@ ${parser.usage}
         await interpretService.interpretAndOptimize(tree, context, pbProject));
   }
 
+  fpb.runCommandQueue();
+
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, true);
   }
