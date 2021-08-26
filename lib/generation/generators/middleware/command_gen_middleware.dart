@@ -28,7 +28,8 @@ class CommandGenMiddleware extends Middleware
   }
 
   @override
-  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> applyMiddleware(
+      PBIntermediateTree tree, PBContext context) {
     if (tree == null) {
       return Future.value(tree);
     }
@@ -70,7 +71,8 @@ class CommandGenMiddleware extends Middleware
   /// If an import path is found, it will be added to the `tree`'s data. The package format
   /// for imports is going to be enforced, therefore, [packageName] is going to be
   /// a required parameter.
-  void _addDependencyImports(PBIntermediateTree tree, String packageName, PBContext context) {
+  void _addDependencyImports(
+      PBIntermediateTree tree, String packageName, PBContext context) {
     var iter = tree.dependentsOn;
     var addImport = context.managerData.addImport;
 

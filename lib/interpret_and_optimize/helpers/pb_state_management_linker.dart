@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generati
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
+import 'package:path/path.dart';
 
 class PBStateManagementLinker {
   Interpret interpret;
@@ -93,26 +94,32 @@ class PBStateManagementLinker {
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node, PBIntermediateTree tree) async {
     var builder = AITServiceBuilder();
-    builder
-        .addTransformation((PBIntermediateTree tree) {
-          var context = PBContext(MainInfo().configuration);
-          context.screenFrame = Rectangle3D.fromPoints(
-              tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+    tree.rootNode = node;
+    var tempContext = PBContext(MainInfo().configuration);
+    tempContext.screenFrame = Rectangle3D.fromPoints(
+        tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+    tempContext.tree = tree;
+    tree.context = tempContext;
 
-          context.tree = tree;
-          tree.context = context;
+    builder.addTransformation((PBContext context, PBIntermediateTree tree) {
+      tree.forEach((element) => element.handleChildren(context));
 
-          tree.forEach((element) => element.handleChildren(context));
-        })
+      return tree;
+    })
         // .addTransformation(visualGenerationService.getIntermediateTree)
-        .addTransformation((PBIntermediateTree tree, context) {
-          // / Making sure the name of the tree was changed back
-          tree.name = node.name;
-        })
-        .addTransformation(
-            PBPluginControlService().convertAndModifyPluginNodeTree)
-        .addTransformation(PBLayoutGenerationService().extractLayouts)
-        .addTransformation(PBAlignGenerationService().addAlignmentToLayouts);
-    return builder.build(tree: tree).then((tree) => tree.rootNode);
+        .addTransformation((PBContext context, PBIntermediateTree tree) {
+      // / Making sure the name of the tree was changed back
+      tree.name = node.name;
+      return tree;
+    }).addTransformation((PBContext context, PBIntermediateTree tree) {
+      return PBPluginControlService()
+          .convertAndModifyPluginNodeTree(tree, context);
+    }).addTransformation((PBContext context, PBIntermediateTree tree) {
+      return PBLayoutGenerationService().extractLayouts(tree, context);
+    }).addTransformation((PBContext context, PBIntermediateTree tree) {
+      return PBAlignGenerationService().addAlignmentToLayouts(tree, context);
+    });
+    await builder.build(tree: tree, context: tempContext);
+    return tree.rootNode;
   }
 }

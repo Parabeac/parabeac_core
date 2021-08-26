@@ -20,7 +20,9 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
       {this.relativePath = '',
       this.symbolPath = DEFAULT_SYMBOL_PATH,
       FileOwnership ownership = FileOwnership.PBC})
-      : super(UUID, code, ownership);
+      : super(UUID, code, ownership) {
+    // print('');
+  }
 
   /// Writes a symbol file containing [generationViewData] with [fileName] as its filename.
   ///
@@ -31,7 +33,8 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
         ? p.join(strategy.GENERATED_PROJECT_PATH, symbolPath)
         : p.join(strategy.GENERATED_PROJECT_PATH, symbolPath, relativePath);
 
-    strategy.writeDataToFile(code, absPath, fileName, UUID: UUID, ownership: ownership);
+    strategy.writeDataToFile(code, absPath, fileName,
+        UUID: UUID, ownership: ownership);
     return Future.value(p.join(absPath, fileName));
   }
 }
