@@ -53,7 +53,8 @@ class CommandGenMiddleware extends Middleware
         tree.name,
         generationManager.generate(tree.rootNode, context),
       );
-    } else {
+    } else if (tree.rootNode.auxiliaryData.stateGraph.states.isEmpty) {
+      // TODO: Find a more optimal way to exclude state management nodes
       command = WriteSymbolCommand(
         tree.UUID,
         tree.identifier,
@@ -61,7 +62,9 @@ class CommandGenMiddleware extends Middleware
         relativePath: tree.name,
       );
     }
-    configuration.fileStructureStrategy.commandCreated(command);
+    if (command != null) {
+      configuration.fileStructureStrategy.commandCreated(command);
+    }
     return Future.value(tree);
   }
 

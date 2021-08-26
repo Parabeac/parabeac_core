@@ -124,22 +124,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     ///First we are going to perform a dry run in the generation to
     ///gather all the necessary information
     await setUpConfiguration(pb_project);
-
-    // fileStructureStrategy.dryRunMode = true;
+    
     fileStructureStrategy.addFileObserver(_importProcessor);
-    // pb_project.fileStructureStrategy = fileStructureStrategy;
-
-    // pb_project.lockData = true;
-    // commandQueue.forEach(fileStructureStrategy.commandCreated);
-    // await generateTrees(pb_project.forest, pb_project, context);
-    // pb_project.lockData = false;
-
-    ///After the dry run is complete, then we are able to create the actual files.
-    // fileStructureStrategy.dryRunMode = false;
-
-    // commandQueue.forEach(fileStructureStrategy.commandCreated);
     commandQueue.clear();
-    // await generateTrees(pb_project.forest, pb_project, context);
   }
 
   void registerMiddleware(Middleware middleware) {

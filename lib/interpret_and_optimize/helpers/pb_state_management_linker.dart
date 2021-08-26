@@ -1,7 +1,5 @@
-import 'dart:io';
 
 import 'package:parabeac_core/controllers/interpret.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -11,9 +9,9 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.d
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_state.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_variation.dart';
-import 'package:path/path.dart';
 
 class PBStateManagementLinker {
   Interpret interpret;
@@ -97,7 +95,7 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node, PBIntermediateTree tree) async {
-    var builder = AITServiceBuilder();
+    var builder = AITServiceBuilder([PBSymbolLinkerService()]);
 
     builder.addTransformation((PBContext context, PBIntermediateTree tree) {
       return PBPluginControlService()

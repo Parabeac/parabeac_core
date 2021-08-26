@@ -143,14 +143,14 @@ class AITServiceBuilder {
               tree.replaceNode(child, dVertex);
             }
           }
-        } else if (transformation is AITTransformation) {
+        } else if (transformation is AITTransformation && _intermediateTree != null) {
           _intermediateTree = await transformation(context, _intermediateTree);
         }
 
         if (_intermediateTree == null || _intermediateTree.rootNode == null) {
-          log.error(
+          log.warning(
               'The $name returned a null \"$treeName\" $PBIntermediateTree (or its rootnode is null)\n after its transformation, this will remove the tree from the process!');
-          throw NullThrownError();
+          // throw NullThrownError();
         }
       } catch (e) {
         MainInfo().captureException(e);
