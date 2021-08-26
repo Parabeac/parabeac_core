@@ -63,8 +63,10 @@ class PBStateManagementLinker {
       // Add old default node as state of new default node
       stateQueue.add(
           _interpretVariationNode(instanceNode, tree).then((processedNode) {
-        var intermediateState =
-            IntermediateState(variation: IntermediateVariation(processedNode));
+        var intermediateState = IntermediateState(
+          variation: IntermediateVariation(processedNode),
+          context: tree.context,
+        );
         node.auxiliaryData.stateGraph.addState(intermediateState);
       }));
 
@@ -79,8 +81,10 @@ class PBStateManagementLinker {
         tempSym?.forEach((element) => element.isMasterState = true);
       }
       stateQueue.add(_interpretVariationNode(node, tree).then((processedNode) {
-        var intermediateState =
-            IntermediateState(variation: IntermediateVariation(processedNode));
+        var intermediateState = IntermediateState(
+          variation: IntermediateVariation(processedNode),
+          context: tree.context,
+        );
         _statemap[rootNodeName]
             .auxiliaryData
             .stateGraph
@@ -94,23 +98,13 @@ class PBStateManagementLinker {
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node, PBIntermediateTree tree) async {
     var builder = AITServiceBuilder();
-    tree.rootNode = node;
-    var tempContext = PBContext(MainInfo().configuration);
-    tempContext.screenFrame = Rectangle3D.fromPoints(
-        tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
-    tempContext.tree = tree;
-    tree.context = tempContext;
 
-    builder.addTransformation((PBContext context, PBIntermediateTree tree) {
-      tree.forEach((element) => element.handleChildren(context));
-
-      return tree;
-    })
+    builder
         // .addTransformation(visualGenerationService.getIntermediateTree)
         .addTransformation((PBContext context, PBIntermediateTree tree) {
       // / Making sure the name of the tree was changed back
       tree.name = node.name;
-      return tree;
+      return Future.value(tree);
     }).addTransformation((PBContext context, PBIntermediateTree tree) {
       return PBPluginControlService()
           .convertAndModifyPluginNodeTree(tree, context);
@@ -119,7 +113,7 @@ class PBStateManagementLinker {
     }).addTransformation((PBContext context, PBIntermediateTree tree) {
       return PBAlignGenerationService().addAlignmentToLayouts(tree, context);
     });
-    await builder.build(tree: tree, context: tempContext);
+    await builder.build(tree: tree, context: tree.context);
     return tree.rootNode;
   }
 }

@@ -64,7 +64,6 @@ class AbstractIntermediateNodeFactory {
 
             return tag;
           }
-          interpretStateManagement(iNode, tree);
           if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);
           }
@@ -74,28 +73,6 @@ class AbstractIntermediateNodeFactory {
       }
     }
     return null;
-  }
-
-  /// Checks whether `node` is a state management node, and interprets it accordingly.
-  ///
-  /// Returns `null` if `node` is a non-default state management node, effectively removing `node` from the tree.
-  /// Returns `node` if it is a default state management node or a non-state management node.
-  static PBIntermediateNode interpretStateManagement(
-      PBIntermediateNode node, PBIntermediateTree tree) {
-    if (node is! PBSharedMasterNode) {
-      return node;
-    }
-    var smHelper = PBStateManagementHelper();
-    if (smHelper.isValidStateNode(node.name)) {
-      if (smHelper.isDefaultNode(node)) {
-        smHelper.interpretStateManagementNode(node, tree);
-        return node;
-      } else {
-        smHelper.interpretStateManagementNode(node, tree);
-        return null;
-      }
-    }
-    return node;
   }
 }
 

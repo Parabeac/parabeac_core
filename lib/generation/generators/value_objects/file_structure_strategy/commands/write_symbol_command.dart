@@ -20,9 +20,7 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
       {this.relativePath = '',
       this.symbolPath = DEFAULT_SYMBOL_PATH,
       FileOwnership ownership = FileOwnership.PBC})
-      : super(UUID, code, ownership) {
-    // print('');
-  }
+      : super(UUID, code, ownership);
 
   /// Writes a symbol file containing [generationViewData] with [fileName] as its filename.
   ///

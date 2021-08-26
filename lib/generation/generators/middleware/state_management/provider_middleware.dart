@@ -124,10 +124,10 @@ class ProviderMiddleware extends StateManagementMiddleware {
     // Generate node's states' view pages
     node.auxiliaryData?.stateGraph?.states?.forEach((state) {
       fileStrategy.commandCreated(WriteSymbolCommand(
-        context.tree.UUID,
+        state.context.tree.UUID,
         // state.variation.node.currentContext.tree.UUID,
         state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node, context),
+        generationManager.generate(state.variation.node, state.context),
         relativePath: parentDirectory,
       ));
     });

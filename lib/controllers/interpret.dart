@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/state_management_node_interpreter.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
 
@@ -28,11 +29,12 @@ class Interpret {
   PBPrototypeLinkerService _pbPrototypeLinkerService;
 
   final List<AITHandler> aitHandlers = [
+    StateManagementNodeInterpreter(),
     PBSymbolLinkerService(),
     // PBPluginControlService(),
     PBLayoutGenerationService(),
     // PBConstraintGenerationService(),
-    PBAlignGenerationService()
+    PBAlignGenerationService(),
   ];
 
   Future<PBIntermediateTree> interpretAndOptimize(
