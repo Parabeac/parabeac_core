@@ -81,15 +81,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     var alignedChildren = <PBIntermediateNode>[];
     var tree = context.tree;
     var nodeChildren = context.tree.childrenOf(node);
-    nodeChildren.skipWhile((child) {
-      /// if they are the same size then there is no need for adjusting.
-      if (child.frame.topLeft == node.frame.topLeft &&
-          child.frame.bottomRight == node.frame.bottomRight) {
-        alignedChildren.add(child);
-        return true;
-      }
-      return false;
-    }).forEach((child) {
+    nodeChildren.forEach((child) {
       var injectedPositioned = InjectedPositioned(null, child.frame,
           constraints: child.constraints,
           valueHolder: PositionedValueHolder(
