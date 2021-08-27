@@ -80,7 +80,7 @@ abstract class PBIntermediateNode
         super(null) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
-      logger.warning(
+      logger.debug(
           'Generating UUID for $runtimeType-$name as its UUID is null');
       _UUID = Uuid().v4();
     }

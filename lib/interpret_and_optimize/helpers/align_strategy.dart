@@ -1,6 +1,8 @@
 import 'package:directed_graph/directed_graph.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_center.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -90,8 +92,10 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       }
       return false;
     }).forEach((child) {
+      var centerY = false;
+      var centerX = false;
       var injectedPositioned = InjectedPositioned(null, child.frame,
-          constraints: child.constraints,
+          constraints: child.constraints.clone(),
           valueHolder: PositionedValueHolder(
               top: child.frame.topLeft.y - node.frame.topLeft.y,
               bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
@@ -99,8 +103,32 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               right: node.frame.bottomRight.x - child.frame.bottomRight.x,
               width: child.frame.width,
               height: child.frame.height));
+      if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
+          child.constraints.fixedWidth) {
+        injectedPositioned.constraints.fixedWidth = false;
+        centerX = true;
+      }
+      if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
+          child.constraints.fixedHeight) {
+        injectedPositioned.constraints.fixedHeight = false;
+        centerY = true;
+      }
       alignedChildren.add(injectedPositioned);
-      tree.addEdges(injectedPositioned, [child]);
+      if (!(centerX || centerY)) {
+        /// we are no center, since there is no need in either axis
+        tree.addEdges(injectedPositioned, [child]);
+      } else {
+        var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
+            '$InjectedCenter-${child.name}');
+
+        /// The container is going to be used to control the point value height/width
+        var container = InjectedContainer(
+            null, child.frame.boundingBox(child.frame),
+            pointValueHeight: centerY, pointValueWidth: centerX);
+        tree.addEdges(container, [child]);
+        tree.addEdges(center, [container]);
+        tree.addEdges(injectedPositioned, [center]);
+      }
     });
     tree.replaceChildrenOf(node, alignedChildren);
     // super.setConstraints(context, node);

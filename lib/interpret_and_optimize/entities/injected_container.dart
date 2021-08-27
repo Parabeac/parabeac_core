@@ -34,17 +34,20 @@ class InjectedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'injected_container';
 
-  InjectedContainer(
-    UUID,
-    Rectangle3D frame, {
-    String name,
-    double alignX,
-    double alignY,
-    String color,
-    this.prototypeNode,
-    this.type,
-    PBIntermediateConstraints constraints
-  }) : super(
+  bool pointValueWidth;
+  bool pointValueHeight;
+
+  InjectedContainer(UUID, Rectangle3D frame,
+      {String name,
+      double alignX,
+      double alignY,
+      String color,
+      this.prototypeNode,
+      this.type,
+      this.pointValueHeight = false,
+      this.pointValueWidth = false,
+      PBIntermediateConstraints constraints})
+      : super(
           UUID,
           frame,
           name,
@@ -58,6 +61,6 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       InjectedContainer.fromJson(json);
 }
