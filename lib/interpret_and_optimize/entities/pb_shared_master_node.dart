@@ -3,7 +3,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -52,16 +52,18 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   PBSharedMasterNode(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     this.SYMBOL_ID,
     String name,
     this.overridableProperties,
     this.prototypeNode,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     overridableProperties ??= [];
     try {
@@ -145,7 +147,7 @@ class PBSharedParameterProp {
     // Populate `value` of Override Property since it is an [IntermediateNode]
     fromJson.value = json['value'] == null
         ? null
-        : PBIntermediateNode.fromJson(json, parent, tree);
+        : PBIntermediateNode.fromJson(json['value'], parent, tree);
 
     return fromJson;
   }

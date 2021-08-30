@@ -1,5 +1,7 @@
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:quick_log/quick_log.dart';
 
@@ -103,14 +105,14 @@ class TempChildrenStrategy extends ChildrenStrategy {
 
   bool _containsSingleGroup(
           PBIntermediateNode group, List<PBIntermediateNode> children) =>
-      group is TempGroupLayoutNode && children.length == 1;
+      group is Group && children.length == 1;
 
   @override
   void addChild(PBIntermediateNode target, children,
       ChildrenMod<PBIntermediateNode> addChild, tree) {
     var targetChildren = tree.childrenOf(target);
     var group = targetChildren.firstWhere(
-        (element) => element is TempGroupLayoutNode,
+        (element) => element is PBLayoutIntermediateNode,
         orElse: () => null);
     children = children is List ? children : [children];
 
@@ -122,15 +124,18 @@ class TempChildrenStrategy extends ChildrenStrategy {
     }
 
     /// Have no TempGroupLayoutNode but `target` already has children
-    else if (targetChildren.isNotEmpty) {
-      var temp = TempGroupLayoutNode(null, null, name: '${target.name}Group');
-      addChild(temp, targetChildren);
+    /// <OR> we are adding multiple children to an empty `target` 
+    else if (targetChildren.isNotEmpty || children.length > 1) {
+      var temp = FrameGroup(null, null, name: '${target.name}Group');
       addChild(temp, children);
 
-      _resizeFrameBasedOn(targetChildren, temp);
-      _resizeFrameBasedOn(children, temp);
+      if (targetChildren.isNotEmpty) {
+        addChild(temp, targetChildren);
+        _resizeFrameBasedOn(targetChildren, temp);
+        tree.removeEdges(target);
+      }
 
-      tree.removeEdges(target);
+      _resizeFrameBasedOn(children, temp);
       addChild(target, [temp]);
     }
     // Adding a single child to empty `target`

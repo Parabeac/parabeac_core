@@ -10,8 +10,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     Map<String, dynamic> json) {
   return PBSharedInstanceIntermediateNode(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     SYMBOL_ID: json['symbolID'] as String,
     sharedParamValues: (json['overrideValues'] as List)
         ?.map((e) => e == null
@@ -22,6 +21,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         json['prototypeNodeUUID'] as String),
     name: json['name'] as String,
   )
+    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -36,9 +36,10 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
 Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
         PBSharedInstanceIntermediateNode instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
       'symbolID': instance.SYMBOL_ID,

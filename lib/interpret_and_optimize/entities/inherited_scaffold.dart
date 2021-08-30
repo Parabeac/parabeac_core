@@ -4,7 +4,8 @@ import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -42,9 +43,11 @@ class InheritedScaffold extends PBVisualIntermediateNode
   Map<String, dynamic> originalRef;
 
   InheritedScaffold(
-      String UUID, Rectangle<num> frame, String name, this.originalRef,
-      {this.isHomeScreen, this.prototypeNode})
-      : super(UUID, frame, name) {
+      String UUID, Rectangle3D<num> frame, String name, this.originalRef,
+      {this.isHomeScreen,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
+      : super(UUID, frame, name, constraints: constraints) {
     generator = PBScaffoldGenerator();
     childrenStrategy = MultipleChildStrategy('body');
   }
@@ -54,7 +57,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is InjectedAppbar) {
       return 'appBar';
     } else if (node is InjectedTabBar) {
-      return 'tabBar';
+      return 'bottomNavigationBar';
     }
     return super.getAttributeNameOf(node);
   }
@@ -62,16 +65,36 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void handleChildren(PBContext context) {
     var children = getAllAtrributeNamed(context.tree, 'body');
+
+    var appBar = getAttributeNamed(context.tree, 'appBar');
+    if (appBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        appBar.frame.bottomRight.y,
+        context.canvasFrame.width,
+        context.canvasFrame.height - appBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
+    if (tabBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        context.canvasFrame.top,
+        context.canvasFrame.width,
+        context.canvasFrame.height - tabBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+
     // Top-most stack should have scaffold's frame to align children properly
-    var groupAtt = TempGroupLayoutNode(null, frame)
+    var groupAtt = FrameGroup(null, frame)
       ..name = '$name-Group'
       ..attributeName = 'body'
       ..parent = this;
     context.tree.addEdges(groupAtt, children.map((child) => child).toList());
-
-    // Keep appbar and tabbar
-    var appBar = getAttributeNamed(context.tree, 'appBar');
-    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
 
     context.tree.replaceChildrenOf(this,
         [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));
@@ -105,7 +128,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
 // InheritedScaffold(
 //   String UUID,
-//   Rectangle frame, {
+//   Rectangle3D frame, {
 //   this.originalRef,
 //   String name,
 //   this.isHomeScreen,

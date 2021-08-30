@@ -1,3 +1,4 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:json_annotation/json_annotation.dart';
 

@@ -1,5 +1,6 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -7,6 +8,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
@@ -31,7 +33,8 @@ class Interpret {
     // PBPluginControlService(),
     PBLayoutGenerationService(),
     // PBConstraintGenerationService(),
-    PBAlignGenerationService()
+    PBAlignGenerationService(),
+    PBPlatformOrientationLinkerService(),
   ];
 
   Future<PBIntermediateTree> interpretAndOptimize(
@@ -42,6 +45,9 @@ class Interpret {
     aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
     var elementStorage = ElementStorage();
 
+    elementStorage.elementToTree[tree.rootNode.UUID] = tree.UUID;
+    elementStorage.treeUUIDs[tree.UUID] = tree;
+
     /// This is a workaround for adding missing information to either the [PBContext] or any of the
     /// [PBIntermediateNode]s.
     aitServiceBuilder.addTransformation(
@@ -49,8 +55,15 @@ class Interpret {
       elementStorage.treeUUIDs[tree.UUID] = tree;
       elementStorage.elementToTree[node.UUID] = tree.UUID;
       return Future.value(node);
-    }, index: 0, id: 'Indexing ${tree.name}');
+    }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
+        (PBContext context, PBIntermediateTree tree) {
+      tree
+          .whereType<BaseGroup>()
+          .forEach((node) => tree.remove(node, keepChildren: true));
+      return Future.value(tree);
+    }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
+    await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);

@@ -9,17 +9,17 @@ part of 'pb_shared_master_node.dart';
 PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
   return PBSharedMasterNode(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
+    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     SYMBOL_ID: json['symbolID'] as String,
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-  )
-    ..constraints = json['constraints'] == null
+    constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>)
+            json['constraints'] as Map<String, dynamic>),
+  )
+    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -29,9 +29,10 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
-      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode?.toJson(),

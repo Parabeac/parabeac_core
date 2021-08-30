@@ -1,4 +1,3 @@
-import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/generation/prototyping/pb_dest_holder.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_storage.dart';
@@ -51,7 +50,7 @@ class PBPrototypeAggregationService {
       if (page == null) {
         _unregNodes.add(node as PrototypeEnable);
       } else {
-        _addDependent(node, page);
+        _addDependent(page, node);
       }
     }
     _unregNodes.removeWhere(
@@ -64,7 +63,9 @@ class PBPrototypeAggregationService {
         elementStorage.treeUUIDs[elementStorage.elementToTree[target.UUID]];
     var dependentTree =
         elementStorage.treeUUIDs[elementStorage.elementToTree[dependent.UUID]];
-    if (dependentTree != targetTree) {
+    if (targetTree != null &&
+        dependentTree != null &&
+        dependentTree != targetTree) {
       dependentTree.addDependent(targetTree);
     }
   }
@@ -75,54 +76,72 @@ class PBPrototypeAggregationService {
     // TODO: refactor the structure
     if (iNode == null) {
       return iNode;
-    } else if (iNode is PBInheritedIntermediate) {
+    } else {
       var destHolder = PBDestHolder(
-        iNode.UUID,
+        null,
         iNode.frame,
         (iNode as PBInheritedIntermediate).prototypeNode,
-      );
-      context.tree.addEdges(iNode);
-      //FIXME destHolder.addChild(iNode);
+      )..name = 'Dest_${iNode.name}';
+      // Save parent pointer of `iNode`
+      destHolder.parent = iNode.parent;
+      context.tree.addEdges(destHolder, [iNode]);
       return destHolder;
-    } else if (iNode is PBLayoutIntermediateNode) {
-      var destHolder = PBDestHolder(
-        iNode.UUID,
-        iNode.frame,
-        iNode.prototypeNode,
-      );
-      context.tree.addEdges(iNode);
-      //FIXME destHolder.addChild(iNode);
-      return destHolder;
-    } else if (iNode is InjectedContainer) {
-      var destHolder = PBDestHolder(
-        iNode.UUID,
-        iNode.frame,
-        iNode.prototypeNode,
-      );
-      context.tree.addEdges(iNode);
-      //FIXME destHolder.addChild(iNode);
-      return destHolder;
-    } else if (iNode is Tab) {
-      var destHolder = PBDestHolder(
-        iNode.UUID,
-        iNode.frame,
-        iNode.prototypeNode,
-      );
-      context.tree.childrenOf(iNode).forEach((element) {
-        context.tree.addEdges(element);
-        //FIXME destHolder.addChild(element);
-      });
-      return destHolder;
-    } else {
-      return iNode;
     }
+
+    // else if (iNode is PBInheritedIntermediate) {
+    //   var destHolder = PBDestHolder(
+    //     null,
+    //     iNode.frame,
+    //     (iNode as PBInheritedIntermediate).prototypeNode,
+    //   );
+    //   // Save parent pointer of `iNode`
+    //   destHolder.parent = iNode.parent;
+    //   context.tree.addEdges(destHolder, [iNode]);
+    //   //FIXME destHolder.addChild(iNode);
+    //   return destHolder;
+    // } else if (iNode is PBLayoutIntermediateNode) {
+    //   var destHolder = PBDestHolder(
+    //     null,
+    //     iNode.frame,
+    //     iNode.prototypeNode,
+    //   );
+    //   // Save parent pointer of `iNode`
+    //   destHolder.parent = iNode.parent;
+    //   context.tree.addEdges(destHolder, [iNode]);
+    //   return destHolder;
+    // } else if (iNode is InjectedContainer) {
+    //   var destHolder = PBDestHolder(
+    //     null,
+    //     iNode.frame,
+    //     iNode.prototypeNode,
+    //   );
+    //   // Save parent pointer of `iNode`
+    //   destHolder.parent = iNode.parent;
+    //   context.tree.addEdges(destHolder, [iNode]);
+    //   return destHolder;
+    // }
+    // else if (iNode is Tab) {
+    // var destHolder = PBDestHolder(
+    //   iNode.UUID,
+    //   iNode.frame,
+    //   iNode.prototypeNode,
+    // );
+    // context.tree.childrenOf(iNode).forEach((element) {
+    //   context.tree.addEdges(element);
+    //   //FIXME destHolder.addChild(element);
+    // });
+    // return destHolder;
+    // }
+    // else {
+    //   return iNode;
+    // }
   }
 
   void iterateUnregisterNodes(PBIntermediateNode node) {
     for (var _pNode in _unregNodes) {
       if (_pNode.prototypeNode.destinationUUID == node.UUID) {
         _pNode.prototypeNode.destinationName = node.name;
-        _addDependent(_pNode as PBIntermediateNode, node);
+        _addDependent(node, _pNode as PBIntermediateNode);
       }
     }
   }

@@ -41,15 +41,17 @@ class InheritedShapePath extends PBVisualIntermediateNode
 
   InheritedShapePath(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     Uint8List image,
     this.prototypeNode,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();

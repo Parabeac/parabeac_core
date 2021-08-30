@@ -1,6 +1,5 @@
 import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
-import 'package:parabeac_core/eggs/injected_tab.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -16,11 +15,6 @@ class PBPluginListHelper {
     allowListNames = {
       '<tabbar>': InjectedTabBar(null, null, ''),
       '<navbar>': InjectedAppbar(null, null, ''),
-      '<tab>': Tab(
-        null,
-        null,
-        '',
-      ),
       '<custom>': CustomEgg(null, null, ''),
     };
   }
@@ -39,11 +33,6 @@ class PBPluginListHelper {
         null,
         '',
       ),
-      '<tab>': Tab(
-        null,
-        null,
-        '',
-      ),
       '<custom>': CustomEgg(null, null, ''),
     };
   }
@@ -55,7 +44,6 @@ class PBPluginListHelper {
     '<background>',
     '<navbar>',
     '<tabbar>',
-    '<tab>',
     '<custom>',
   ];
 
@@ -63,7 +51,6 @@ class PBPluginListHelper {
     '<background>',
     '<navbar>',
     '<tabbar>',
-    '<tab>',
     '<custom>',
   ];
 

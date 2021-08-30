@@ -4,7 +4,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -34,16 +34,20 @@ class InjectedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'injected_container';
 
-  InjectedContainer(
-    UUID,
-    Rectangle frame, {
-    String name,
-    double alignX,
-    double alignY,
-    String color,
-    this.prototypeNode,
-    this.type,
-  }) : super(
+  bool pointValueWidth;
+  bool pointValueHeight;
+
+  InjectedContainer(UUID, Rectangle3D frame,
+      {String name,
+      double alignX,
+      double alignY,
+      String color,
+      this.prototypeNode,
+      this.type,
+      this.pointValueHeight = false,
+      this.pointValueWidth = false,
+      PBIntermediateConstraints constraints})
+      : super(
           UUID,
           frame,
           name,
@@ -57,6 +61,6 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       InjectedContainer.fromJson(json);
 }

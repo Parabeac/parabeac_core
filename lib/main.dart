@@ -9,10 +9,12 @@ import 'package:parabeac_core/generation/flutter_project_builder/flutter_project
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:uuid/uuid.dart';
@@ -23,7 +25,10 @@ import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
+import 'interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+
 final designToPBDLServices = <DesignToPBDLService>[
+  JsonToPBDLService(),
   SketchToPBDLService(),
   FigmaToPBDLService(),
 ];
@@ -122,20 +127,34 @@ ${parser.usage}
   await fpb.preGenTasks();
   await indexFileFuture;
 
-  await Future.wait(pbProject.forest.map((tree) {
+  var trees = <PBIntermediateTree>[];
+
+  for (var tree in pbProject.forest) {
     var context = PBContext(processInfo.configuration);
     context.project = pbProject;
 
     /// Assuming that the [tree.rootNode] has the dimensions of the screen.
-    context.screenFrame = Rectangle.fromPoints(
+    context.screenFrame = Rectangle3D.fromPoints(
         tree.rootNode.frame.topLeft, tree.rootNode.frame.bottomRight);
+
     context.tree = tree;
     tree.context = context;
+
     tree.forEach((child) => child.handleChildren(context));
-    return interpretService
-        .interpretAndOptimize(tree, context, pbProject)
-        .then((tree) => fpb.genAITree(tree, context));
-  }).toList());
+
+    trees.add(
+        await interpretService.interpretAndOptimize(tree, context, pbProject));
+  }
+
+  fpb.runCommandQueue();
+
+  for (var tree in trees) {
+    await fpb.genAITree(tree, tree.context, true);
+  }
+
+  for (var tree in trees) {
+    await fpb.genAITree(tree, tree.context, false);
+  }
 
   exitCode = 0;
 }
@@ -281,7 +300,7 @@ bool hasTooManyArgs(ArgResults args) {
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
 
-  return hasAll || !(hasSketch ^ hasFigma /*^ hasPbdl*/);
+  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
 }
 
 /// Returns true if `args` does not contain any intake

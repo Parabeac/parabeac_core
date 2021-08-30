@@ -12,7 +12,7 @@ class PBDenyListNode extends PBIntermediateNode {
   ChildrenStrategy childrenStrategy = NoChildStrategy();
   PBDenyListNode(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     String name,
   }) : super(
           UUID,

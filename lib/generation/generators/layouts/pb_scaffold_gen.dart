@@ -34,7 +34,6 @@ class PBScaffoldGenerator extends PBGenerator {
       }
       if (bottomNavBar != null) {
         buffer.write('bottomNavigationBar: ');
-        // generatorContext.sizingContext = SizingValueContext.PointValue;
         var navigationBar =
             bottomNavBar.generator.generate(bottomNavBar, context);
         buffer.write('$navigationBar, \n');

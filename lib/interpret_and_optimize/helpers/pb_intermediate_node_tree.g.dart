@@ -9,10 +9,11 @@ part of 'pb_intermediate_node_tree.dart';
 PBIntermediateTree _$PBIntermediateTreeFromJson(Map<String, dynamic> json) {
   return PBIntermediateTree(
     name: json['name'] as String,
-  );
+  )..convert = json['convert'] as bool ?? true;
 }
 
 Map<String, dynamic> _$PBIntermediateTreeToJson(PBIntermediateTree instance) =>
     <String, dynamic>{
+      'convert': instance.convert,
       'name': instance.name,
     };

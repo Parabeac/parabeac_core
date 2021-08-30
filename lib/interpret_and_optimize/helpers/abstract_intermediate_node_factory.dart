@@ -10,7 +10,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_pa
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_star.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -35,7 +37,8 @@ class AbstractIntermediateNodeFactory {
     InheritedTriangle('$InheritedTriangle', null),
     PBSharedInstanceIntermediateNode('$PBSharedInstanceIntermediateNode', null),
     PBSharedMasterNode('$PBSharedMasterNode', null),
-    TempGroupLayoutNode('$TempGroupLayoutNode', null),
+    BaseGroup('$Group', null),
+    FrameGroup('$FrameGroup', null),
   };
 
   AbstractIntermediateNodeFactory();

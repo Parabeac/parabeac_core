@@ -5,7 +5,7 @@ import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -41,17 +41,19 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   InheritedContainer(
     String UUID,
-    Rectangle frame, {
+    Rectangle3D frame, {
     this.originalRef,
     String name,
     double alignX,
     double alignY,
     this.isBackgroundVisible = true,
     this.prototypeNode,
+    PBIntermediateConstraints constraints
   }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints
         ) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');

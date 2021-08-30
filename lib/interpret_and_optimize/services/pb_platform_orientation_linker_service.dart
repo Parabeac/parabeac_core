@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -9,7 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'dart:math';
 import 'package:recase/recase.dart';
 
-class PBPlatformOrientationLinkerService {
+class PBPlatformOrientationLinkerService extends AITHandler {
   static final PBPlatformOrientationLinkerService _pbPlatformLinkerService =
       PBPlatformOrientationLinkerService._internal();
 
@@ -31,11 +32,12 @@ class PBPlatformOrientationLinkerService {
 
   /// Populates [tree]'s platform and orientation information
   /// and adds [tree] to storage.
-  void addOrientationPlatformInformation(PBIntermediateTree tree, PBContext context) {
+  void addOrientationPlatformInformation(
+      PBIntermediateTree tree, PBContext context) {
     tree.generationViewData.platform = _extractPlatform(tree.name);
     tree.generationViewData.orientation = _extractOrientation(
-      tree.rootNode .frame.bottomRight,
-      tree.rootNode .frame.topLeft,
+      tree.rootNode.frame.bottomRight,
+      tree.rootNode.frame.topLeft,
     );
 
     _platforms.add(tree.generationViewData.platform);
@@ -44,15 +46,13 @@ class PBPlatformOrientationLinkerService {
     // Add orientation builder template to the project
     // if there are more than 1 orientation on the project
     if (hasMultipleOrientations()) {
-      context.configuration.generationConfiguration
-          .commandQueue
+      context.configuration.generationConfiguration.commandQueue
           .add(OrientationBuilderCommand(tree.UUID));
     }
     // Add responsive layout builder template to the project
     // if there are more than 1 plataform on the project
     if (hasMultiplePlatforms()) {
-      context.configuration.generationConfiguration
-          .commandQueue
+      context.configuration.generationConfiguration.commandQueue
           .add(ResponsiveLayoutBuilderCommand(tree.UUID));
       _addBreakpoints(tree, context);
     }
@@ -71,8 +71,10 @@ class PBPlatformOrientationLinkerService {
         var treeName = key.snakeCase;
         var iterTreeName = currTree.rootNode.name.snakeCase;
         if (treeName == iterTreeName &&
-            tree.generationViewData.orientation == currTree.generationViewData.orientation &&
-            tree.generationViewData.platform == currTree.generationViewData.platform) {
+            tree.generationViewData.orientation ==
+                currTree.generationViewData.orientation &&
+            tree.generationViewData.platform ==
+                currTree.generationViewData.platform) {
           // Rename the tree if both trees have the same orientation and platform
           tree.rootNode.name = treeName + '_${_mapCounter[iterTreeName]}';
           _mapCounter[treeName]++;
@@ -118,7 +120,8 @@ class PBPlatformOrientationLinkerService {
       for (var screen in screens) {
         // Add orientation to a platform
         if (result.containsKey(screen.generationViewData.platform)) {
-          result[screen.generationViewData.platform][screen.generationViewData.orientation] = screen;
+          result[screen.generationViewData.platform]
+              [screen.generationViewData.orientation] = screen;
         }
         // Create entry for current platform-orientation pair
         else {
@@ -217,11 +220,16 @@ class PBPlatformOrientationLinkerService {
       bp.forEach((key, value) {
         var cmd = AddConstantCommand(
             tree.UUID, key + 'Breakpoint', 'num', value.toString());
-        context.configuration.generationConfiguration
-            .commandQueue
-            .add(cmd);
+        context.configuration.generationConfiguration.commandQueue.add(cmd);
       });
     }
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    addOrientationPlatformInformation(tree, context);
+    return Future.value(tree);
   }
 }
 

@@ -28,7 +28,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
       // recursively generate Symbol Instance constructors with overrides
       buffer.write(genSymbolInstance(
-        source.UUID,
+        source.SYMBOL_ID,
         source.sharedParamValues,
         generatorContext,
       ));
