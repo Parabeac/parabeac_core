@@ -14,6 +14,7 @@ class FigmaToPBDLService implements DesignToPBDLService {
       info.figmaKey,
       outputPath: p.join(info.genProjectPath, 'assets'),
       exportPbdlJson: info.exportPBDL,
+      projectName: info.projectName,
     );
   }
 }
