@@ -14,6 +14,8 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
     prototypeNode:
         PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
     type: json['type'] as String,
+    pointValueHeight: json['pointValueHeight'] as bool,
+    pointValueWidth: json['pointValueWidth'] as bool,
     constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -36,4 +38,6 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,
       'type': instance.type,
+      'pointValueWidth': instance.pointValueWidth,
+      'pointValueHeight': instance.pointValueHeight,
     };

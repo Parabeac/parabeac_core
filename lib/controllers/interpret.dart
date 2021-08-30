@@ -77,7 +77,12 @@ class Interpret {
       return Future.value(tree);
     }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
-    await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
+    // TODO: We should dynamically add the [PBPrototypeLinkerService] to `aitHandlers`
+    // somewhere else so that it does not check the configuration every time
+    // we process a tree
+    if (MainInfo().configuration.enablePrototyping) {
+      await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
+    }
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);

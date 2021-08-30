@@ -49,8 +49,19 @@ class PBConfiguration {
   @JsonKey(name: 'breakpoints')
   final Map breakpoints;
 
-  PBConfiguration(this.widgetStyle, this.widgetType, this.widgetSpacing,
-      this.stateManagement, this.layoutPrecedence, this.breakpoints, this.scaling);
+  @JsonKey(defaultValue: false)
+  final bool enablePrototyping;
+
+  PBConfiguration(
+    this.widgetStyle,
+    this.widgetType,
+    this.widgetSpacing,
+    this.stateManagement,
+    this.layoutPrecedence,
+    this.breakpoints,
+    this.scaling,
+    this.enablePrototyping,
+  );
 
   /// Converting the [json] into a [PBConfiguration] object.
   ///
