@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
@@ -21,6 +22,7 @@ class AddConstantCommand extends FileStructureCommand {
       _addConstant,
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
       CONST_FILE_NAME,
+      ownership: FileOwnership.DEV,
     );
   }
 

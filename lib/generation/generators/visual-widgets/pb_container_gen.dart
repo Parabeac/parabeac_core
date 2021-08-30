@@ -2,6 +2,8 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_box_deco
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -13,32 +15,48 @@ class PBContainerGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    var sourceChildren = context.tree.childrenOf(source);
-    var buffer = StringBuffer();
-    buffer.write('Container(');
+    if (source is InjectedContainer || source is InheritedContainer) {
+      var sourceChildren = context.tree.childrenOf(source);
+      var buffer = StringBuffer();
+      buffer.write('Container(');
 
-    buffer.write(PBSizeHelper().generate(source, context));
+      //TODO(ivanV): please clean my if statement :(
+      if (source is InjectedContainer) {
+        if (source.pointValueHeight) {
+          buffer.write('height: ${source.frame.height},');
+        }
+        if (source.pointValueWidth) {
+          buffer.write('width: ${source.frame.width},');
+        }
+        if (!source.pointValueHeight && !source.pointValueWidth) {
+          buffer.write(PBSizeHelper().generate(source, context));
+        }
+      }else {
+        buffer.write(PBSizeHelper().generate(source, context));
+      }
 
-    if (source.auxiliaryData.borderInfo != null) {
-      buffer.write(PBBoxDecorationHelper().generate(source, context));
-    } else {
-      buffer.write(PBColorGenHelper().generate(source, context));
+      if (source.auxiliaryData.borderInfo != null) {
+        buffer.write(PBBoxDecorationHelper().generate(source, context));
+      } else {
+        buffer.write(PBColorGenHelper().generate(source, context));
+      }
+
+      // if (source.auxiliaryData.alignment != null) {
+      //   buffer.write(
+      //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
+      // }
+      var child = sourceChildren.isEmpty ? null : sourceChildren.first;
+      if (child != null) {
+        child.frame = source.frame;
+        // source.child.currentContext = source.currentContext;
+        var statement = child != null
+            ? 'child: ${child.generator.generate(child, context)}'
+            : '';
+        buffer.write(statement);
+      }
+      buffer.write(')');
+      return buffer.toString();
     }
-
-    // if (source.auxiliaryData.alignment != null) {
-    //   buffer.write(
-    //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
-    // }
-    var child = sourceChildren.isEmpty ? null : sourceChildren.first;
-    if (child != null) {
-      child.frame = source.frame;
-      // source.child.currentContext = source.currentContext;
-      var statement = child != null
-          ? 'child: ${child.generator.generate(child, context)}'
-          : '';
-      buffer.write(statement);
-    }
-    buffer.write(')');
-    return buffer.toString();
+    return '';
   }
 }

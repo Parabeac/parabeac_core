@@ -69,10 +69,21 @@ class InheritedScaffold extends PBVisualIntermediateNode
     var appBar = getAttributeNamed(context.tree, 'appBar');
     if (appBar != null) {
       context.canvasFrame = Rectangle3D(
-        context.screenFrame.left,
+        context.canvasFrame.left,
         appBar.frame.bottomRight.y,
-        context.screenFrame.width,
-        context.screenFrame.height - appBar.frame.height,
+        context.canvasFrame.width,
+        context.canvasFrame.height - appBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
+    if (tabBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        context.canvasFrame.top,
+        context.canvasFrame.width,
+        context.canvasFrame.height - tabBar.frame.height,
         0,
       );
       frame = context.canvasFrame;
@@ -84,9 +95,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
       ..attributeName = 'body'
       ..parent = this;
     context.tree.addEdges(groupAtt, children.map((child) => child).toList());
-
-    // Keep appbar and tabbar
-    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
 
     context.tree.replaceChildrenOf(this,
         [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));
