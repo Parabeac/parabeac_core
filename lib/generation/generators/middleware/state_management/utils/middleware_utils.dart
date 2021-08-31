@@ -1,4 +1,3 @@
-
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -6,12 +5,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 
 class MiddlewareUtils {
-  static String generateChangeNotifierClass(
-    String defaultStateName,
-    PBGenerationManager manager,
-    PBIntermediateNode node,
-    PBContext context
-  ) {
+  static String generateChangeNotifierClass(String defaultStateName,
+      PBGenerationManager manager, PBIntermediateNode node, PBContext context) {
     var overrideVars = ''; // Variables outside of initializer
     var overrideAttr = ''; // Attributes that will be part of initializer
     var stateInitializers = StringBuffer();
@@ -25,9 +20,9 @@ class MiddlewareUtils {
       });
       stateBuffer.write(MiddlewareUtils.generateEmptyVariable(node));
       stateInitializers.write(
-          '${node.name.camelCase} = ${MiddlewareUtils.generateVariableBody(node)}');
+          '${node.name.camelCase} = ${MiddlewareUtils.generateVariableBody(node, context)}');
     } else {
-      stateBuffer.write(MiddlewareUtils.generateVariable(node));
+      stateBuffer.write(MiddlewareUtils.generateVariable(node, context));
     }
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       context.tree.generationViewData = context.managerData;
@@ -42,9 +37,10 @@ class MiddlewareUtils {
         });
         stateBuffer.write(MiddlewareUtils.generateEmptyVariable(variationNode));
         stateInitializers.write(
-            '${variationNode.name.camelCase} = ${MiddlewareUtils.generateVariableBody(variationNode)}');
+            '${variationNode.name.camelCase} = ${MiddlewareUtils.generateVariableBody(variationNode, context)}');
       } else {
-        stateBuffer.writeln(MiddlewareUtils.generateVariable(variationNode));
+        stateBuffer
+            .writeln(MiddlewareUtils.generateVariable(variationNode, context));
       }
     });
 
@@ -65,12 +61,8 @@ class MiddlewareUtils {
       ''';
   }
 
-  static String generateModelChangeNotifier(
-    String defaultStateName,
-    PBGenerationManager manager,
-    PBIntermediateNode node,
-    PBContext context
-  ) {
+  static String generateModelChangeNotifier(String defaultStateName,
+      PBGenerationManager manager, PBIntermediateNode node, PBContext context) {
     // Pass down manager data to states
     node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
       // context.tree = node.managerData;
@@ -93,18 +85,19 @@ class MiddlewareUtils {
       ''';
   }
 
-  static String generateVariable(PBIntermediateNode node,
+  static String generateVariable(PBIntermediateNode node, PBContext context,
       {String type = 'var'}) {
-    return '$type ${node.name.camelCase} = ${generateVariableBody(node)};';
+    return '$type ${node.name.camelCase} = ${generateVariableBody(node, context)};';
   }
 
   static String generateEmptyVariable(PBIntermediateNode node,
           {String type = 'var'}) =>
       '$type ${node.name.camelCase};';
 
-  static String generateVariableBody(PBIntermediateNode node) {
-    // node.currentContext.sizingContext = SizingValueContext.PointValue;
-    // return (node?.generator?.generate(node ?? '', node.currentContext) ?? '');
+  static String generateVariableBody(
+      PBIntermediateNode node, PBContext context) {
+    context.sizingContext = SizingValueContext.PointValue;
+    return (node?.generator?.generate(node ?? '', context) ?? '');
   }
 
   static String wrapOnLayout(String className) {
