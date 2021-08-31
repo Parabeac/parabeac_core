@@ -69,7 +69,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
               $modelName(), 
           child: LayoutBuilder(
             builder: (context, constraints) {
-              var widget = ${MiddlewareUtils.generateVariableBody(node)};
+              var widget = ${MiddlewareUtils.generateVariableBody(node, context)};
               
               context
                   .read<$modelName>()

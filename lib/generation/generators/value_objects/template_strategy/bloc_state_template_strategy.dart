@@ -9,8 +9,8 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
   String abstractClassName;
   BLoCStateTemplateStrategy({this.isFirst, this.abstractClassName});
   @override
-  String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      PBContext context,
+  String generateTemplate(
+      PBIntermediateNode node, PBGenerationManager manager, PBContext context,
       {args}) {
     context.managerData.hasParams = true;
     context.managerData.hasParams = false;

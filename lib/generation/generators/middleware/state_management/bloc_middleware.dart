@@ -4,6 +4,7 @@ import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/bloc_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
@@ -61,7 +62,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
   }
 
   @override
-  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node, PBContext context) {
+  Future<PBIntermediateNode> handleStatefulNode(
+      PBIntermediateNode node, PBContext context) {
     // var managerData = node.managerData;
     context.project.genProjectData
         .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
@@ -73,7 +75,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
-      context.managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+      context.managerData
+          .addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
       if (node.generator is! StringGeneratorAdapter) {
         var nameWithCubit = '${generalStateName.pascalCase}Cubit';
         var nameWithState = '${generalStateName.pascalCase}State';
@@ -133,28 +136,31 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
     /// Creates state page
     fileStrategy.commandCreated(WriteSymbolCommand(
-
-        /// modified the [UUID] to prevent adding import because the state is
-        /// using `part of` syntax already when importing the bloc
-        'STATE${context.tree.UUID}',
-        '${generalName}_state',
-        stateBuffer.toString(),
-        symbolPath: blocDirectory,));
+      /// modified the [UUID] to prevent adding import because the state is
+      /// using `part of` syntax already when importing the bloc
+      'STATE${context.tree.UUID}',
+      '${generalName}_state',
+      stateBuffer.toString(),
+      symbolPath: blocDirectory,
+      ownership: FileOwnership.DEV,
+    ));
 
     /// Creates map page
     mapBuffer.write(_makeStateToWidgetFunction(node));
     fileStrategy.commandCreated(WriteSymbolCommand(
-
-        /// modified the [UUID] to prevent adding import because the event is
-        /// using `part of` syntax already when importing the bloc
-        '${context.tree.UUID}',
-        '${generalName}_map',
-        mapBuffer.toString(),
-        symbolPath: blocDirectory));
+      /// modified the [UUID] to prevent adding import because the event is
+      /// using `part of` syntax already when importing the bloc
+      '${context.tree.UUID}',
+      '${generalName}_map',
+      mapBuffer.toString(),
+      symbolPath: blocDirectory,
+      ownership: FileOwnership.DEV,
+    ));
 
     // Generate node's states' view pages
     node.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      fileStrategy.commandCreated(WriteSymbolCommand('TODO',
+      fileStrategy.commandCreated(WriteSymbolCommand(
+        'TODO',
         // 'SYMBOL${state.variation.node.currentContext.tree.UUID}',
         state.variation.node.name.snakeCase,
         generationManager.generate(state.variation.node, context),
@@ -163,23 +169,24 @@ class BLoCMiddleware extends StateManagementMiddleware {
     });
 
     // Generate default node's view page
-    fileStrategy.commandCreated(WriteSymbolCommand(
-        'SYMBOL${context.tree.UUID}',
-        node.name.snakeCase,
-        generationManager.generate(node, context),
+    fileStrategy.commandCreated(WriteSymbolCommand('SYMBOL${context.tree.UUID}',
+        node.name.snakeCase, generationManager.generate(node, context),
         relativePath: generalName));
 
     /// Creates cubit page
     context.managerData.addImport(FlutterImport('meta.dart', 'meta'));
-    context.managerData.addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+    context.managerData
+        .addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
     fileStrategy.commandCreated(WriteSymbolCommand(
-        context.tree.UUID,
-        '${generalName}_cubit',
-        _createBlocPage(
-          parentState,
-          node.name,
-        ),
-        symbolPath: blocDirectory));
+      context.tree.UUID,
+      '${generalName}_cubit',
+      _createBlocPage(
+        parentState,
+        node.name,
+      ),
+      symbolPath: blocDirectory,
+      ownership: FileOwnership.DEV,
+    ));
 
     return Future.value(null);
   }
