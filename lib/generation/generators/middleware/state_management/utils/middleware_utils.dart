@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:recase/recase.dart';
 
 class MiddlewareUtils {
@@ -24,23 +25,24 @@ class MiddlewareUtils {
     } else {
       stateBuffer.write(MiddlewareUtils.generateVariable(node, context));
     }
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      context.tree.generationViewData = context.managerData;
-      var variationNode = state.variation.node;
 
-      if (variationNode is PBSharedMasterNode &&
-          (variationNode.overridableProperties?.isNotEmpty ?? false)) {
-        variationNode.overridableProperties.forEach((prop) {
+    var stmgHelper = PBStateManagementHelper();
+
+    stmgHelper.getStateGraphOfNode(node).states?.forEach((state) {
+      context.tree.generationViewData = context.managerData;
+
+      if (state is PBSharedMasterNode &&
+          (state.overridableProperties?.isNotEmpty ?? false)) {
+        state.overridableProperties.forEach((prop) {
           var friendlyName = prop.propertyName;
           overrideVars += 'final $friendlyName;';
           overrideAttr += 'this.$friendlyName, ';
         });
-        stateBuffer.write(MiddlewareUtils.generateEmptyVariable(variationNode));
+        stateBuffer.write(MiddlewareUtils.generateEmptyVariable(state));
         stateInitializers.write(
-            '${variationNode.name.camelCase} = ${MiddlewareUtils.generateVariableBody(variationNode, context)}');
+            '${state.name.camelCase} = ${MiddlewareUtils.generateVariableBody(state, context)}');
       } else {
-        stateBuffer
-            .writeln(MiddlewareUtils.generateVariable(variationNode, context));
+        stateBuffer.writeln(MiddlewareUtils.generateVariable(state, context));
       }
     });
 
@@ -64,7 +66,10 @@ class MiddlewareUtils {
   static String generateModelChangeNotifier(String defaultStateName,
       PBGenerationManager manager, PBIntermediateNode node, PBContext context) {
     // Pass down manager data to states
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    PBStateManagementHelper()
+        .getStateGraphOfNode(node)
+        .states
+        ?.forEach((state) {
       // context.tree = node.managerData;
     });
     return '''

@@ -10,6 +10,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/provider_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/provider_generation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
@@ -51,13 +52,23 @@ class ProviderMiddleware extends StateManagementMiddleware {
     var managerData = context.managerData;
     var fileStrategy =
         configuration.fileStructureStrategy as ProviderFileStructureStrategy;
+    var elementStorage = ElementStorage();
+
     if (node is PBSharedInstanceIntermediateNode) {
       context.project.genProjectData
           .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
       managerData.addImport(FlutterImport('provider.dart', 'provider'));
       watcherName = getVariableName(node.name.snakeCase + '_notifier');
 
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+      /// Get the default node's tree in order to add to dependent of the current tree.
+      ///
+      /// This ensures we have the correct modoel imports when generating the tree.
+      var defaultNodeTreeUUID = elementStorage
+          .elementToTree[stmgHelper.getStateGraphOfNode(node).defaultNode.UUID];
+      var defaultNodeTree = elementStorage.treeUUIDs[defaultNodeTreeUUID];
+
+      context.tree.addDependent(defaultNodeTree);
+
       PBGenCache().appendToCache(node.SYMBOL_ID,
           getImportPath(node, fileStrategy, generateModelPath: false));
 
@@ -124,11 +135,14 @@ class ProviderMiddleware extends StateManagementMiddleware {
         .add(watcherName);
 
     // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    var nodeStateGraph = stmgHelper.getStateGraphOfNode(node);
+    nodeStateGraph?.states?.forEach((state) {
+      var treeUUID = elementStorage.elementToTree[state.UUID];
+      var tree = elementStorage.treeUUIDs[treeUUID];
       fileStrategy.commandCreated(WriteSymbolCommand(
-        state.context.tree.UUID,
-        state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node, state.context),
+        tree.UUID,
+        state.name.snakeCase,
+        generationManager.generate(state, tree.context),
         relativePath: parentDirectory,
       ));
     });

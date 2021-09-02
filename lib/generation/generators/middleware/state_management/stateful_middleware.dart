@@ -29,7 +29,8 @@ class StatefulMiddleware extends StateManagementMiddleware {
   }
 
   @override
-  Future<PBIntermediateNode> handleStatefulNode(PBIntermediateNode node, PBContext context) {
+  Future<PBIntermediateNode> handleStatefulNode(
+      PBIntermediateNode node, PBContext context) {
     var fileStrategy = configuration.fileStructureStrategy;
 
     if (node is PBSharedInstanceIntermediateNode) {
@@ -37,18 +38,16 @@ class StatefulMiddleware extends StateManagementMiddleware {
       return Future.value(node);
     }
 
-    fileStrategy.commandCreated(WriteSymbolCommand(
-        context.tree.UUID,
-        node.name.snakeCase,
-        generationManager.generate(node, context)));
+    fileStrategy.commandCreated(WriteSymbolCommand(context.tree.UUID,
+        node.name.snakeCase, generationManager.generate(node, context)));
 
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    stmgHelper.getStateGraphOfNode(node).states?.forEach((state) {
       // state.variation.node.currentContext.tree.data = node.managerData;
       fileStrategy.commandCreated(WriteSymbolCommand(
-        'TODO',
+          'TODO',
           // state.variation.node.currentContext.tree.UUID,
-          state.variation.node.name.snakeCase,
-          generationManager.generate(state.variation.node, context)));
+          state.name.snakeCase,
+          generationManager.generate(state, context)));
     });
     return Future.value(null);
   }

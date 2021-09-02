@@ -11,6 +11,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generator_adap
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_flutter_generator.dart';
@@ -105,13 +106,18 @@ class RiverpodMiddleware extends StateManagementMiddleware {
           relativePath: parentDirectory),
     ].forEach(fileStrategy.commandCreated);
 
+    var stateGraph = stmgHelper.getStateGraphOfNode(node);
+
+    var elementStorage = ElementStorage();
     // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    stateGraph?.states?.forEach((state) {
+      var treeUUID = elementStorage.elementToTree[node];
+      var tree = elementStorage.treeUUIDs[treeUUID];
       fileStrategy.commandCreated(WriteSymbolCommand(
-        state.context.tree.UUID,
+        tree.UUID,
         // state.variation.node.currentContext.tree.UUID,
-        state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node, state.context),
+        state.name.snakeCase,
+        generationManager.generate(state, tree.context),
         relativePath: parentDirectory,
       ));
     });

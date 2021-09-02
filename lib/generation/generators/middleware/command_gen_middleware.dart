@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generation_con
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:recase/recase.dart';
 
@@ -53,7 +54,11 @@ class CommandGenMiddleware extends Middleware
         tree.name,
         generationManager.generate(tree.rootNode, context),
       );
-    } else if (tree.rootNode.auxiliaryData.stateGraph.states.isEmpty) {
+    } else if (PBStateManagementHelper()
+            .getStateGraphOfNode(tree.rootNode)
+            ?.states
+            ?.isEmpty ??
+        true) {
       // TODO: Find a more optimal way to exclude state management nodes
       command = WriteSymbolCommand(
         tree.UUID,

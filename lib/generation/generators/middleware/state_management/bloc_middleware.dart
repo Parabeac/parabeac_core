@@ -12,7 +12,6 @@ import 'package:parabeac_core/generation/generators/value_objects/template_strat
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import '../../pb_generation_manager.dart';
@@ -112,9 +111,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var stateBuffer = StringBuffer();
     var mapBuffer = StringBuffer();
 
-    node?.auxiliaryData?.stateGraph?.states?.forEach((state) {
-      states.add(state.variation.node);
-    });
+    var stateGraph = stmgHelper.getStateGraphOfNode(node);
+    stateGraph?.states?.forEach(states.add);
 
     var isFirst = true;
     states.forEach((element) {
@@ -158,12 +156,12 @@ class BLoCMiddleware extends StateManagementMiddleware {
     ));
 
     // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    stateGraph?.states?.forEach((state) {
       fileStrategy.commandCreated(WriteSymbolCommand(
         'TODO',
         // 'SYMBOL${state.variation.node.currentContext.tree.UUID}',
-        state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node, context),
+        state.name.snakeCase,
+        generationManager.generate(state, context),
         relativePath: generalName, //Generate view files separately
       ));
     });
@@ -194,6 +192,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
   String _makeStateToWidgetFunction(PBIntermediateNode element) {
     var stateBuffer = StringBuffer();
     var importBuffer = StringBuffer();
+    var stateGraph = stmgHelper.getStateGraphOfNode(element);
     var elementName =
         element.name.substring(0, element.name.lastIndexOf('/')).snakeCase;
     importBuffer.write("import 'package:flutter/material.dart'; \n");
@@ -202,8 +201,8 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
     stateBuffer.write(
         'Widget ${elementName.camelCase}StateToWidget( ${elementName.pascalCase}State state, BoxConstraints constraints) {');
-    for (var i = 0; i < element.auxiliaryData.stateGraph.states.length; i++) {
-      var node = element.auxiliaryData.stateGraph.states[i].variation.node;
+    for (var i = 0; i < stateGraph.states.length; i++) {
+      var node = stateGraph.states[i];
       if (i == 0) {
         stateBuffer.write(_getStateLogic(node, 'if'));
       } else {

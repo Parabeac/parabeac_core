@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 
 /// This [Middleware] is going to focus on the [PBIntermediateNode]s that
@@ -14,9 +15,13 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.d
 /// [PBIntermediateTree], the [StateManagementMiddleware] is going to handle each
 /// individual [PBIntermediateNode].
 abstract class StateManagementMiddleware extends Middleware {
+  PBStateManagementHelper stmgHelper;
+
   StateManagementMiddleware(PBGenerationManager generationManager,
       GenerationConfiguration configuration)
-      : super(generationManager, configuration);
+      : super(generationManager, configuration) {
+    stmgHelper = PBStateManagementHelper();
+  }
 
   /// Forwards all of the nodes of the tree to the [handleStatefulNode],
   /// the method overridden by the [StateManagementMiddleware].
@@ -59,5 +64,5 @@ abstract class StateManagementMiddleware extends Middleware {
 
   /// Checks wheather the [node] contains any states.
   bool containsState(PBIntermediateNode node) =>
-      node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;
+      stmgHelper.getStateGraphOfNode(node)?.states?.isNotEmpty ?? false;
 }
