@@ -43,7 +43,7 @@ class PBStateManagementHelper {
 
   /// Returns true if `name` is a valid state management name
   bool isValidStateNode(String name) =>
-      RegExp(r'^\w*\/(\w*,?\s?)*[\w]$').hasMatch(name);
+      RegExp(r'^\w*\/(\w*,?\s?)*[\w]$').hasMatch(name ?? '');
 
   /// Returns the [DirectedStateGraph] of `node`.
   ///

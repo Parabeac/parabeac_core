@@ -75,7 +75,7 @@ class MainInfo {
   /// Exporting the PBDL JSON file instead of generating the actual Flutter code.
   bool exportPBDL;
 
-  Map pbdf;
+  Map pbdl;
 
   /// Type of [DesignType] that is being processed by the current process of
   /// Parabeac Core.
@@ -117,6 +117,6 @@ enum DesignType { SKETCH, FIGMA, PBDL, UNKNOWN }
 class DummySentry {
   /// Decoupling the exception capture client from the services that report the [exception]
   void captureException({exception, stackTrace}) {
-    print('dummy sentry');
+    print('');
   }
 }

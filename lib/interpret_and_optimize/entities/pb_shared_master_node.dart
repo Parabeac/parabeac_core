@@ -105,7 +105,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
                       ? null
                       : PBSharedParameterProp.createSharedParameter(
                           prop as Map<String, dynamic>,
-                          parent,
+                          this,
                           tree,
                         ),
                 )

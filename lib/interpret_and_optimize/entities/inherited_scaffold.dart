@@ -44,7 +44,9 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   InheritedScaffold(
       String UUID, Rectangle3D<num> frame, String name, this.originalRef,
-      {this.isHomeScreen, this.prototypeNode, PBIntermediateConstraints constraints})
+      {this.isHomeScreen,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
       : super(UUID, frame, name, constraints: constraints) {
     generator = PBScaffoldGenerator();
     childrenStrategy = MultipleChildStrategy('body');
@@ -63,16 +65,36 @@ class InheritedScaffold extends PBVisualIntermediateNode
   @override
   void handleChildren(PBContext context) {
     var children = getAllAtrributeNamed(context.tree, 'body');
+
+    var appBar = getAttributeNamed(context.tree, 'appBar');
+    if (appBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        appBar.frame.bottomRight.y,
+        context.canvasFrame.width,
+        context.canvasFrame.height - appBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
+    if (tabBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        context.canvasFrame.top,
+        context.canvasFrame.width,
+        context.canvasFrame.height - tabBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+
     // Top-most stack should have scaffold's frame to align children properly
     var groupAtt = FrameGroup(null, frame)
       ..name = '$name-Group'
       ..attributeName = 'body'
       ..parent = this;
     context.tree.addEdges(groupAtt, children.map((child) => child).toList());
-
-    // Keep appbar and tabbar
-    var appBar = getAttributeNamed(context.tree, 'appBar');
-    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
 
     context.tree.replaceChildrenOf(this,
         [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));

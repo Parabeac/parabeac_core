@@ -126,7 +126,19 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     await setUpConfiguration(pb_project);
     
     fileStructureStrategy.addFileObserver(_importProcessor);
-    commandQueue.clear();
+    // pb_project.fileStructureStrategy = fileStructureStrategy;
+
+    // pb_project.lockData = true;
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // await generateTrees(pb_project.forest, pb_project, context);
+    // pb_project.lockData = false;
+
+    ///After the dry run is complete, then we are able to create the actual files.
+    // fileStructureStrategy.dryRunMode = false;
+
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // commandQueue.clear();
+    // await generateTrees(pb_project.forest, pb_project, context);
   }
 
   void registerMiddleware(Middleware middleware) {
@@ -210,6 +222,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
           platformsMap, screenName, fileStructureStrategy, rawImports);
 
       if (newCommand != null) {
+        newCommand.write(fileStructureStrategy);
         setMainForPlatform(newCommand, screenName);
       }
     });

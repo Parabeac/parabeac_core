@@ -1,6 +1,8 @@
 import 'package:directed_graph/directed_graph.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_center.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -24,20 +26,24 @@ abstract class AlignStrategy<T extends PBIntermediateNode> {
   /// assign the [node.constraints.pinTop] = `true` and [node.constraints.pinBottom] = `false`.
   /// When [context.fixedWidth] is not `null`, se assign the [context.fixedWidth] to subtree and
   /// we make [node.constraints.pinLeft] = `true` and [node.constraints.pingRight] = `false`.
-  void _setConstraints(PBContext context, T node) {
-    context.contextConstraints?.fixedHeight ??= node.constraints?.fixedHeight;
-    context.contextConstraints?.fixedWidth ??= node.constraints?.fixedWidth;
-
-    if (context.contextConstraints.fixedHeight != null) {
+  void setConstraints(PBContext context, T node) {
+    if (context.contextConstraints.fixedHeight) {
       node.constraints?.fixedHeight = context.contextConstraints?.fixedHeight;
       node.constraints?.pinTop = true;
       node.constraints?.pinBottom = false;
     }
 
-    if (context.contextConstraints.fixedWidth != null) {
+    if (context.contextConstraints.fixedWidth) {
       node.constraints?.fixedWidth = context.contextConstraints.fixedWidth;
       node.constraints?.pinLeft = true;
       node.constraints?.pinRight = false;
+    }
+
+    if (node.constraints.fixedHeight) {
+      context.contextConstraints.fixedHeight = true;
+    }
+    if (node.constraints.fixedWidth) {
+      context.contextConstraints.fixedWidth = true;
     }
   }
 }
@@ -58,14 +64,14 @@ class PaddingAlignment extends AlignStrategy {
     context.tree.addEdges(padding, [child]);
     context.tree.addEdges(node, [padding]);
 
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }
 
 class NoAlignment extends AlignStrategy {
   @override
   void align(PBContext context, PBIntermediateNode node) {
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }
 
@@ -77,17 +83,11 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     var alignedChildren = <PBIntermediateNode>[];
     var tree = context.tree;
     var nodeChildren = context.tree.childrenOf(node);
-    nodeChildren.skipWhile((child) {
-      /// if they are the same size then there is no need for adjusting.
-      if (child.frame.topLeft == node.frame.topLeft &&
-          child.frame.bottomRight == node.frame.bottomRight) {
-        alignedChildren.add(child);
-        return true;
-      }
-      return false;
-    }).forEach((child) {
+    nodeChildren.forEach((child) {
+      var centerY = false;
+      var centerX = false;
       var injectedPositioned = InjectedPositioned(null, child.frame,
-          constraints: child.constraints,
+          constraints: child.constraints.clone(),
           valueHolder: PositionedValueHolder(
               top: child.frame.topLeft.y - node.frame.topLeft.y,
               bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
@@ -95,10 +95,34 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
               right: node.frame.bottomRight.x - child.frame.bottomRight.x,
               width: child.frame.width,
               height: child.frame.height));
+      if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
+          child.constraints.fixedWidth) {
+        injectedPositioned.constraints.fixedWidth = false;
+        centerX = true;
+      }
+      if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
+          child.constraints.fixedHeight) {
+        injectedPositioned.constraints.fixedHeight = false;
+        centerY = true;
+      }
       alignedChildren.add(injectedPositioned);
-      tree.addEdges(injectedPositioned, [child]);
+      if (!(centerX || centerY)) {
+        /// we are no center, since there is no need in either axis
+        tree.addEdges(injectedPositioned, [child]);
+      } else {
+        var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
+            '$InjectedCenter-${child.name}');
+
+        /// The container is going to be used to control the point value height/width
+        var container = InjectedContainer(
+            null, child.frame.boundingBox(child.frame),
+            pointValueHeight: centerY, pointValueWidth: centerX);
+        tree.addEdges(container, [child]);
+        tree.addEdges(center, [container]);
+        tree.addEdges(injectedPositioned, [center]);
+      }
     });
     tree.replaceChildrenOf(node, alignedChildren);
-    super._setConstraints(context, node);
+    // super.setConstraints(context, node);
   }
 }

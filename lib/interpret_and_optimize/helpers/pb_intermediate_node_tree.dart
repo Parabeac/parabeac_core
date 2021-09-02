@@ -44,6 +44,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   @JsonKey(ignore: true)
   bool lockData = false;
 
+  @JsonKey(defaultValue: true)
+  bool convert;
+
   PBGenerationViewData _generationViewData;
   @JsonKey(ignore: true)
   PBGenerationViewData get generationViewData => _generationViewData;

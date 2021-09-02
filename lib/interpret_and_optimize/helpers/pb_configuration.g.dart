@@ -16,6 +16,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
         ['column', 'row', 'stack'],
     json['breakpoints'] as Map<String, dynamic>,
     json['scaling'] as bool ?? true,
+    json['enablePrototyping'] as bool ?? false,
   );
 }
 
@@ -28,4 +29,5 @@ Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
       'state-management': instance.stateManagement,
       'layoutPrecedence': instance.layoutPrecedence,
       'breakpoints': instance.breakpoints,
+      'enablePrototyping': instance.enablePrototyping,
     };

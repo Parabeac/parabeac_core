@@ -99,6 +99,9 @@ class PBTabBarGenerator extends PBGenerator {
           (child) => child.attributeName == InjectedTabBar.BACKGROUND_ATTR_NAME,
           orElse: () => null);
 
+      // Sort tabs from Left to Right
+      tabs.sort((a, b) => a.frame.left.compareTo(b.frame.left));
+
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
 

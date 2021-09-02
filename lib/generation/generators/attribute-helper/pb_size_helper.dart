@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribute_gen_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -25,16 +26,15 @@ class PBSizeHelper extends PBAttributesHelper {
       screenHeight = context.screenFrame.height;
     }
 
-    relativeHeight =
-        (relativeHeight != null && screenHeight != null && screenHeight > 0.0)
-            ? relativeHeight / screenHeight
-            : relativeHeight;
-    relativeWidth =
-        (relativeWidth != null && screenWidth != null && screenWidth > 0.0)
-            ? relativeWidth / screenWidth
-            : relativeWidth;
-
     if (context.sizingContext == SizingValueContext.ScaleValue) {
+      relativeHeight =
+          (relativeHeight != null && screenHeight != null && screenHeight > 0.0)
+              ? relativeHeight / screenHeight
+              : relativeHeight;
+      relativeWidth =
+          (relativeWidth != null && screenWidth != null && screenWidth > 0.0)
+              ? relativeWidth / screenWidth
+              : relativeWidth;
       var height = source.constraints.fixedHeight != null
           ? relativeHeight.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.height * ${relativeHeight.toStringAsFixed(3)}';

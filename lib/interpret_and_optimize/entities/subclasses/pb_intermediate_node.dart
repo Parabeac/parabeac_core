@@ -80,7 +80,7 @@ abstract class PBIntermediateNode
         super(null) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
-      logger.warning(
+      logger.debug(
           'Generating UUID for $runtimeType-$name as its UUID is null');
       _UUID = Uuid().v4();
     }
@@ -162,7 +162,8 @@ abstract class PBIntermediateNode
   ///
   /// INFO: there might be a more straight fowards backtracking way of preventing these side effects.
   void align(PBContext context) {
-    alignStrategy.align(context, this);
+    // alignStrategy.setConstraints(context, this);
+    alignStrategy.align(context.clone(), this);
 
     for (var currChild in context.tree.childrenOf(this) ?? []) {
       currChild?.align(context.clone());
