@@ -39,22 +39,15 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedContainer(
-    String UUID,
-    Rectangle3D frame, {
-    this.originalRef,
-    String name,
-    double alignX,
-    double alignY,
-    this.isBackgroundVisible = true,
-    this.prototypeNode,
-    PBIntermediateConstraints constraints
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+  InheritedContainer(String UUID, Rectangle3D frame,
+      {this.originalRef,
+      String name,
+      double alignX,
+      double alignY,
+      this.isBackgroundVisible = true,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
+      : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');
     //TODO switch alignment to Padding alignment
@@ -66,7 +59,7 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)..originalRef = json;
-    container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
+    container.auxiliaryData?.borderInfo?.borderRadius = json['fixedRadius'];
 
     return container;
   }
