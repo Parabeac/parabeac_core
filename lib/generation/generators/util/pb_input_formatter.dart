@@ -31,13 +31,14 @@ class PBInputFormatter {
     var result = input;
     // TODO: set a temporal name
     result = (result.isEmpty) ? 'tempName' : result;
-    result = removeFirstDigits(result);
+
     result = result.trim();
     var spaceChar = (spaceToUnderscore) ? '_' : '';
     result = result.replaceAll(r'[\s\./_+?]+', spaceChar);
     result = result.replaceAll(RegExp(r'\s+'), spaceChar);
-    result = (destroyDigits) ? result.replaceAll(RegExp(r'\d+'), '') : result;
     result = result.replaceAll(' ', '').replaceAll(RegExp(r'[^\s\w]'), '');
+    result = removeFirstDigits(result);
+    result = (destroyDigits) ? result.replaceAll(RegExp(r'\d+'), '') : result;
     return result;
   }
 
@@ -53,5 +54,15 @@ class PBInputFormatter {
       return '';
     }
     return target.split(delimeter).last;
+  }
+
+  static String removeFirstSpecials(String str) {
+    while (str.startsWith(RegExp(r'[^\s\w]')) ||
+        str.startsWith(RegExp(r'^[\d]+'))) {
+      str = str.startsWith(RegExp(r'^[\d]+'))
+          ? str.replaceFirstMapped(RegExp(r'^[\d]+'), (e) => '')
+          : str.replaceFirstMapped(RegExp(r'[^\s\w]'), (e) => '');
+    }
+    return str;
   }
 }
