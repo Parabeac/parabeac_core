@@ -67,16 +67,11 @@ class PBStateManagementLinker {
   /// the necessary interpretation services.
   Future<PBIntermediateNode> _interpretVariationNode(
       PBIntermediateNode node, PBIntermediateTree tree) async {
-    var builder = AITServiceBuilder([PBSymbolLinkerService()]);
-
-    builder.addTransformation((PBContext context, PBIntermediateTree tree) {
-      return PBPluginControlService()
-          .convertAndModifyPluginNodeTree(tree, context);
-    }).addTransformation((PBContext context, PBIntermediateTree tree) {
-      return PBLayoutGenerationService().extractLayouts(tree, context);
-    }).addTransformation((PBContext context, PBIntermediateTree tree) {
-      return PBAlignGenerationService().addAlignmentToLayouts(tree, context);
-    });
+    var builder = AITServiceBuilder([
+      PBSymbolLinkerService(),
+      PBLayoutGenerationService(),
+      PBAlignGenerationService(),
+    ]);
     await builder.build(tree: tree, context: tree.context);
     return tree.rootNode;
   }

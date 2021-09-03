@@ -139,10 +139,17 @@ class ProviderMiddleware extends StateManagementMiddleware {
     nodeStateGraph?.states?.forEach((state) {
       var treeUUID = elementStorage.elementToTree[state.UUID];
       var tree = elementStorage.treeUUIDs[treeUUID];
+      // generate imports for state view
+      var data = PBGenerationViewData()
+        ..addImport(FlutterImport('material.dart', 'flutter'));
+      tree.generationViewData.importsList.forEach(data.addImport);
+      tree.context.generationManager =
+          PBFlutterGenerator(ImportHelper(), data: data);
+
       fileStrategy.commandCreated(WriteSymbolCommand(
         tree.UUID,
         state.name.snakeCase,
-        generationManager.generate(state, tree.context),
+        tree.context.generationManager.generate(state, tree.context),
         relativePath: parentDirectory,
       ));
     });

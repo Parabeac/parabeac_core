@@ -7,10 +7,12 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 import 'package:recase/recase.dart';
 
 class CommandGenMiddleware extends Middleware
@@ -84,11 +86,30 @@ class CommandGenMiddleware extends Middleware
     var iter = tree.dependentsOn;
     var addImport = context.managerData.addImport;
 
+    /// Check if [tree] has states. If states are present, we need to check
+    /// each of the states for dependencies.
+    var smHelper = PBStateManagementHelper();
+    var stateGraph = smHelper.getStateGraphOfNode(tree.rootNode);
+    if (stateGraph != null && tree.rootNode == stateGraph.defaultNode) {
+      _checkStateGraphImports(stateGraph, packageName);
+    }
+
     while (iter.moveNext()) {
       _importProcessor.getFormattedImports(
         iter.current.UUID,
         importMapper: (import) => addImport(FlutterImport(import, packageName)),
       );
     }
+  }
+
+  void _checkStateGraphImports(DirectedStateGraph graph, String packageName) {
+    var elementStorage = ElementStorage();
+    graph.states.forEach((state) {
+      // Get state's graph
+      var stateTreeUUID = elementStorage.elementToTree[state.UUID];
+      var stateTree = elementStorage.treeUUIDs[stateTreeUUID];
+
+      _addDependencyImports(stateTree, packageName, stateTree.context);
+    });
   }
 }
