@@ -55,14 +55,4 @@ class PBInputFormatter {
     }
     return target.split(delimeter).last;
   }
-
-  static String removeFirstSpecials(String str) {
-    while (str.startsWith(RegExp(r'[^\s\w]')) ||
-        str.startsWith(RegExp(r'^[\d]+'))) {
-      str = str.startsWith(RegExp(r'^[\d]+'))
-          ? str.replaceFirstMapped(RegExp(r'^[\d]+'), (e) => '')
-          : str.replaceFirstMapped(RegExp(r'[^\s\w]'), (e) => '');
-    }
-    return str;
-  }
 }
