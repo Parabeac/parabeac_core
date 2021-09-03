@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -251,6 +252,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
   static PBIntermediateTree fromJson(Map<String, dynamic> json) {
+    json['name'] = PBInputFormatter.removeFirstSpecials(json['name']);
+    json['designNode']['name'] =
+        PBInputFormatter.removeFirstSpecials(json['designNode']['name']);
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
