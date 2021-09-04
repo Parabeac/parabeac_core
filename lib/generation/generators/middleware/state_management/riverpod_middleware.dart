@@ -53,6 +53,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
     var managerData = context.managerData;
     var fileStrategy =
         configuration.fileStructureStrategy as RiverpodFileStructureStrategy;
+    var elementStorage = ElementStorage();
 
     if (node is PBSharedInstanceIntermediateNode) {
       context.project.genProjectData
@@ -70,7 +71,14 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         managerData.addMethodVariable(watcher);
       }
 
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+      /// Get the default node's tree in order to add to dependent of the current tree.
+      ///
+      /// This ensures we have the correct model imports when generating the tree.
+      var defaultNodeTreeUUID = elementStorage
+          .elementToTree[stmgHelper.getStateGraphOfNode(node).defaultNode.UUID];
+      var defaultNodeTree = elementStorage.treeUUIDs[defaultNodeTreeUUID];
+
+      context.tree.addDependent(defaultNodeTree);
 
       if (node.generator is! StringGeneratorAdapter) {
         node.generator = StringGeneratorAdapter(getConsumer(
@@ -106,18 +114,21 @@ class RiverpodMiddleware extends StateManagementMiddleware {
           relativePath: parentDirectory),
     ].forEach(fileStrategy.commandCreated);
 
-    var stateGraph = stmgHelper.getStateGraphOfNode(node);
-
-    var elementStorage = ElementStorage();
-    // Generate node's states' view pages
-    stateGraph?.states?.forEach((state) {
-      var treeUUID = elementStorage.elementToTree[node];
+    var nodeStateGraph = stmgHelper.getStateGraphOfNode(node);
+    nodeStateGraph?.states?.forEach((state) {
+      var treeUUID = elementStorage.elementToTree[state.UUID];
       var tree = elementStorage.treeUUIDs[treeUUID];
+      // generate imports for state view
+      var data = PBGenerationViewData()
+        ..addImport(FlutterImport('material.dart', 'flutter'));
+      tree.generationViewData.importsList.forEach(data.addImport);
+      tree.context.generationManager =
+          PBFlutterGenerator(ImportHelper(), data: data);
+
       fileStrategy.commandCreated(WriteSymbolCommand(
         tree.UUID,
-        // state.variation.node.currentContext.tree.UUID,
         state.name.snakeCase,
-        generationManager.generate(state, tree.context),
+        tree.context.generationManager.generate(state, tree.context),
         relativePath: parentDirectory,
       ));
     });

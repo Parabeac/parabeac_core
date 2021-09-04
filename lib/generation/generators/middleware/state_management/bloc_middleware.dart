@@ -2,6 +2,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/middleware/state_management/state_management_middleware.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/bloc_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
@@ -11,9 +12,11 @@ import 'package:parabeac_core/generation/generators/value_objects/generator_adap
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/bloc_state_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
+import '../../pb_flutter_generator.dart';
 import '../../pb_generation_manager.dart';
 import 'package:path/path.dart' as p;
 
@@ -70,12 +73,23 @@ class BLoCMiddleware extends StateManagementMiddleware {
     var fileStrategy =
         configuration.fileStructureStrategy as BLoCFileStructureStrategy;
 
+    var elementStorage = ElementStorage();
+
     /// Incase of SymbolInstance
     if (node is PBSharedInstanceIntermediateNode) {
       var generalStateName = node.functionCallName
           .substring(0, node.functionCallName.lastIndexOf('/'));
       context.managerData
           .addImport(FlutterImport('flutter_bloc.dart', 'flutter_bloc'));
+
+      /// Get the default node's tree in order to add to dependent of the current tree.
+      ///
+      /// This ensures we have the correct modoel imports when generating the tree.
+      var defaultNodeTreeUUID = elementStorage
+          .elementToTree[stmgHelper.getStateGraphOfNode(node).defaultNode.UUID];
+      var defaultNodeTree = elementStorage.treeUUIDs[defaultNodeTreeUUID];
+
+      context.tree.addDependent(defaultNodeTree);
       if (node.generator is! StringGeneratorAdapter) {
         var nameWithCubit = '${generalStateName.pascalCase}Cubit';
         var nameWithState = '${generalStateName.pascalCase}State';
@@ -157,17 +171,25 @@ class BLoCMiddleware extends StateManagementMiddleware {
 
     // Generate node's states' view pages
     stateGraph?.states?.forEach((state) {
+      var treeUUID = elementStorage.elementToTree[state.UUID];
+      var tree = elementStorage.treeUUIDs[treeUUID];
+      // generate imports for state view
+      var data = PBGenerationViewData()
+        ..addImport(FlutterImport('material.dart', 'flutter'));
+      tree.generationViewData.importsList.forEach(data.addImport);
+      tree.context.generationManager =
+          PBFlutterGenerator(ImportHelper(), data: data);
+
       fileStrategy.commandCreated(WriteSymbolCommand(
-        'TODO',
-        // 'SYMBOL${state.variation.node.currentContext.tree.UUID}',
+        tree.UUID,
         state.name.snakeCase,
-        generationManager.generate(state, context),
-        relativePath: generalName, //Generate view files separately
+        tree.context.generationManager.generate(state, tree.context),
+        relativePath: generalName,
       ));
     });
 
     // Generate default node's view page
-    fileStrategy.commandCreated(WriteSymbolCommand('SYMBOL${context.tree.UUID}',
+    fileStrategy.commandCreated(WriteSymbolCommand('${context.tree.UUID}',
         node.name.snakeCase, generationManager.generate(node, context),
         relativePath: generalName));
 
@@ -210,11 +232,12 @@ class BLoCMiddleware extends StateManagementMiddleware {
           stateBuffer.write(_getStateLogic(node, 'else if'));
         }
       }
+      //TODO: leverage the imports system to generate these imports
       importBuffer.write(
-          "import 'package:${MainInfo().projectName}/widgets/$elementName/${node.name.snakeCase}.dart'; \n");
+          "import 'package:${MainInfo().projectName}/widgets/$elementName/${node.name.snakeCase}.g.dart'; \n");
     }
     importBuffer.write(
-        "import 'package:${MainInfo().projectName}/widgets/$elementName/${element.name.snakeCase}.dart'; \n");
+        "import 'package:${MainInfo().projectName}/widgets/$elementName/${element.name.snakeCase}.g.dart'; \n");
     stateBuffer.write('return ${element.name.pascalCase}(constraints); \n }');
 
     return importBuffer.toString() + stateBuffer.toString();

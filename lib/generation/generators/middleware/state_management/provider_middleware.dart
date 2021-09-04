@@ -62,7 +62,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
 
       /// Get the default node's tree in order to add to dependent of the current tree.
       ///
-      /// This ensures we have the correct modoel imports when generating the tree.
+      /// This ensures we have the correct model imports when generating the tree.
       var defaultNodeTreeUUID = elementStorage
           .elementToTree[stmgHelper.getStateGraphOfNode(node).defaultNode.UUID];
       var defaultNodeTree = elementStorage.treeUUIDs[defaultNodeTreeUUID];
