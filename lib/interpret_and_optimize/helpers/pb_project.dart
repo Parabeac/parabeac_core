@@ -83,18 +83,27 @@ class PBProject {
       List<Map<String, dynamic>> pages) {
     var trees = <PBIntermediateTree>[];
     pages.forEach((page) {
-      var screens = (page['screens'] as Iterable).map((screen) {
-        // Generate Intermedite tree
-        var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
-        tree.generationViewData = PBGenerationViewData();
+      // This avoid to generate pages set to not convert
+      if (page.containsKey('convert') && page['convert']) {
+        var screens = (page['screens'] as Iterable).map((screen) {
+          // This avoid to generate screens set to not convert
+          if (screen.containsKey('convert') && screen['convert']) {
+            // Generate Intermedite tree
+            var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
 
-        if (tree != null) {
-          PBProject.log.fine(
-              'Processed \'${tree.name}\' in page \'${tree.identifier}\' with item type: \'${tree.tree_type}\'');
-        }
-        return tree;
-      }).toList();
-      trees.addAll(screens);
+            tree.generationViewData = PBGenerationViewData();
+
+            if (tree != null) {
+              PBProject.log.fine(
+                  'Processed \'${tree.name}\' in page \'${tree.identifier}\' with item type: \'${tree.tree_type}\'');
+            }
+            return tree;
+          }
+        }).toList();
+        // Remove screens so they do not get added
+        screens.removeWhere((element) => element == null);
+        trees.addAll(screens);
+      }
     });
 
     return trees;
