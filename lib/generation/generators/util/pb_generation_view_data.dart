@@ -12,7 +12,6 @@ class PBGenerationViewData {
   bool _isDataLocked = false;
   bool hasParams = false;
 
-
   PLATFORM platform;
   ORIENTATION orientation;
 
@@ -30,6 +29,8 @@ class PBGenerationViewData {
 
   ///Imports for the current page
   Iterator<FlutterImport> get imports => _imports.iterator;
+
+  List<FlutterImport> get importsList => _imports.toList();
 
   String get methodVariableStr {
     var buffer = StringBuffer();

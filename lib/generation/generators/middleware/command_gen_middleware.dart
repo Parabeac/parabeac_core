@@ -7,9 +7,12 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 import 'package:recase/recase.dart';
 
 class CommandGenMiddleware extends Middleware
@@ -28,7 +31,8 @@ class CommandGenMiddleware extends Middleware
   }
 
   @override
-  Future<PBIntermediateTree> applyMiddleware(PBIntermediateTree tree, PBContext context) {
+  Future<PBIntermediateTree> applyMiddleware(
+      PBIntermediateTree tree, PBContext context) {
     if (tree == null) {
       return Future.value(tree);
     }
@@ -52,7 +56,12 @@ class CommandGenMiddleware extends Middleware
         tree.name,
         generationManager.generate(tree.rootNode, context),
       );
-    } else {
+    } else if (PBStateManagementHelper()
+            .getStateGraphOfNode(tree.rootNode)
+            ?.states
+            ?.isEmpty ??
+        true) {
+      // TODO: Find a more optimal way to exclude state management nodes
       command = WriteSymbolCommand(
         tree.UUID,
         tree.identifier,
@@ -60,7 +69,9 @@ class CommandGenMiddleware extends Middleware
         relativePath: tree.name,
       );
     }
-    configuration.fileStructureStrategy.commandCreated(command);
+    if (command != null) {
+      configuration.fileStructureStrategy.commandCreated(command);
+    }
     return Future.value(tree);
   }
 
@@ -70,9 +81,18 @@ class CommandGenMiddleware extends Middleware
   /// If an import path is found, it will be added to the `tree`'s data. The package format
   /// for imports is going to be enforced, therefore, [packageName] is going to be
   /// a required parameter.
-  void _addDependencyImports(PBIntermediateTree tree, String packageName, PBContext context) {
+  void _addDependencyImports(
+      PBIntermediateTree tree, String packageName, PBContext context) {
     var iter = tree.dependentsOn;
     var addImport = context.managerData.addImport;
+
+    /// Check if [tree] has states. If states are present, we need to check
+    /// each of the states for dependencies.
+    var smHelper = PBStateManagementHelper();
+    var stateGraph = smHelper.getStateGraphOfNode(tree.rootNode);
+    if (stateGraph != null && tree.rootNode == stateGraph.defaultNode) {
+      _checkStateGraphImports(stateGraph, packageName);
+    }
 
     while (iter.moveNext()) {
       _importProcessor.getFormattedImports(
@@ -80,5 +100,16 @@ class CommandGenMiddleware extends Middleware
         importMapper: (import) => addImport(FlutterImport(import, packageName)),
       );
     }
+  }
+
+  void _checkStateGraphImports(DirectedStateGraph graph, String packageName) {
+    var elementStorage = ElementStorage();
+    graph.states.forEach((state) {
+      // Get state's graph
+      var stateTreeUUID = elementStorage.elementToTree[state.UUID];
+      var stateTree = elementStorage.treeUUIDs[stateTreeUUID];
+
+      _addDependencyImports(stateTree, packageName, stateTree.context);
+    });
   }
 }

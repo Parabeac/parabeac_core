@@ -17,7 +17,7 @@ class AddConstantCommand extends FileStructureCommand {
 
   /// Adds a constant containing `type`, `name` and `value` to `constants.dart` file
   @override
-  Future<void> write(FileStructureStrategy strategy) {
+  Future<void> write(FileStructureStrategy strategy) async {
     strategy.appendDataToFile(
       _addConstant,
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),

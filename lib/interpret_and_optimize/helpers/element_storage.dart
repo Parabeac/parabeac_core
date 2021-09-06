@@ -1,9 +1,8 @@
-import 'dart:collection';
-
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class ElementStorage {
-  static final ElementStorage _elementStorageInstance = ElementStorage._internal();
+  static final ElementStorage _elementStorageInstance =
+      ElementStorage._internal();
 
   /// This [Map] contains the [PBIntermediateNode.UUID] to [PBIntermediateTree.UUID].
   ///

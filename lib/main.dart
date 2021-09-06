@@ -142,8 +142,12 @@ ${parser.usage}
 
     tree.forEach((child) => child.handleChildren(context));
 
-    trees.add(
-        await interpretService.interpretAndOptimize(tree, context, pbProject));
+    var candidateTree =
+        await interpretService.interpretAndOptimize(tree, context, pbProject);
+
+    if (candidateTree != null) {
+      trees.add(candidateTree);
+    }
   }
 
   fpb.runCommandQueue();

@@ -1,4 +1,3 @@
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -65,7 +64,7 @@ class AbstractIntermediateNodeFactory {
 
             return tag;
           }
-          if (parent != null) {
+          if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);
           }
 
@@ -74,27 +73,6 @@ class AbstractIntermediateNodeFactory {
       }
     }
     return null;
-  }
-
-  /// Checks whether `node` is a state management node, and interprets it accordingly.
-  ///
-  /// Returns `null` if `node` is a non-default state management node, effectively removing `node` from the tree.
-  /// Returns `node` if it is a default state management node or a non-state management node.
-  static PBIntermediateNode interpretStateManagement(PBIntermediateNode node) {
-    if (node is! PBSharedMasterNode) {
-      return node;
-    }
-    var smHelper = PBStateManagementHelper();
-    if (smHelper.isValidStateNode(node.name)) {
-      if (smHelper.isDefaultNode(node)) {
-        smHelper.interpretStateManagementNode(node);
-        return node;
-      } else {
-        smHelper.interpretStateManagementNode(node);
-        return null;
-      }
-    }
-    return node;
   }
 }
 

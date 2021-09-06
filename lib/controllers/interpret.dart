@@ -1,31 +1,18 @@
-import 'dart:io';
-import 'dart:math';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
-import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
-import 'dart:convert';
-import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_constraint_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_plugin_control_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
-import 'package:pbdl/pbdl.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/state_management_node_interpreter.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
-import 'package:path/path.dart' as p;
 
 class Interpret {
   Logger log;
@@ -43,6 +30,7 @@ class Interpret {
   PBPrototypeLinkerService _pbPrototypeLinkerService;
 
   final List<AITHandler> aitHandlers = [
+    StateManagementNodeInterpreter(),
     PBSymbolLinkerService(),
     // PBPluginControlService(),
     PBLayoutGenerationService(),
@@ -162,14 +150,14 @@ class AITServiceBuilder {
               tree.replaceNode(child, dVertex);
             }
           }
-        } else if (transformation is AITTransformation) {
+        } else if (transformation is AITTransformation && _intermediateTree != null) {
           _intermediateTree = await transformation(context, _intermediateTree);
         }
 
         if (_intermediateTree == null || _intermediateTree.rootNode == null) {
-          log.error(
+          log.warning(
               'The $name returned a null \"$treeName\" $PBIntermediateTree (or its rootnode is null)\n after its transformation, this will remove the tree from the process!');
-          throw NullThrownError();
+          // throw NullThrownError();
         }
       } catch (e) {
         MainInfo().captureException(e);

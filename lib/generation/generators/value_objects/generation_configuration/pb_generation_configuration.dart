@@ -124,8 +124,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     ///First we are going to perform a dry run in the generation to
     ///gather all the necessary information
     await setUpConfiguration(pb_project);
-
-    // fileStructureStrategy.dryRunMode = true;
+    
     fileStructureStrategy.addFileObserver(_importProcessor);
     // pb_project.fileStructureStrategy = fileStructureStrategy;
 
