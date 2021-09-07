@@ -106,6 +106,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     vals.forEach((overrideValue) {
       if (overrideValue.type == 'stringValue') {
         overrideValue.value = overrideValue.value.replaceAll('\$', '\\\$');
+      } else if (overrideValue.type == 'image') {
+        overrideValue.value = 'assets/' + overrideValue.value;
       }
     });
   }
