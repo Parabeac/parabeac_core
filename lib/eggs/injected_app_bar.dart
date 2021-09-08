@@ -117,10 +117,13 @@ class PBAppBarGenerator extends PBGenerator {
           child.attributeName != InjectedAppbar.TRAILING_ATTR_NAME &&
           child.attributeName != InjectedAppbar.BACKGROUND_ATTR_NAME);
 
-      if (background != null) {
+      if (background != null && background.auxiliaryData?.color != null) {
         // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
         buffer.write(
             'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      } else {
+        buffer.write(
+            'backgroundColor: Color(${generatorContext.tree.rootNode.auxiliaryData.color.toString()}),');
       }
       if (actions.isNotEmpty) {
         buffer.write(
