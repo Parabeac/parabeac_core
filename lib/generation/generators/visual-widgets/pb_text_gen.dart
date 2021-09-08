@@ -12,6 +12,8 @@ class PBTextGen extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
+      var cleanText =
+          source.text?.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
       context.project.genProjectData
           .addDependencies('auto_size_text', '^2.1.0');
 
@@ -29,8 +31,7 @@ class PBTextGen extends PBGenerator {
         if (textOverride != null) {
           buffer.write('${textOverride.propertyName} ?? ');
         }
-        buffer
-            .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
+        buffer.write(('\'$cleanText\'') + ',\n');
       }
       buffer.write('style: ');
       var styleOverride = OverrideHelper.getProperty(source.UUID, 'textStyle');
