@@ -22,7 +22,6 @@ class PBMasterSymbolGenerator extends PBGenerator {
       // override styles if need be.
       context.masterNode = source;
 
-      // source.child.currentContext = source.currentContext;
       // see if widget itself is overridden, need to pass
       var generatedWidget =
           sourceChild.generator.generate(sourceChild, context);
