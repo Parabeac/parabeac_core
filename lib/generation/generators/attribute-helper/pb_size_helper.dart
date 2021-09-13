@@ -35,12 +35,15 @@ class PBSizeHelper extends PBAttributesHelper {
           (relativeWidth != null && screenWidth != null && screenWidth > 0.0)
               ? relativeWidth / screenWidth
               : relativeWidth;
-      var height = source.constraints.fixedHeight != null
-          ? relativeHeight.toStringAsFixed(3)
+      var height = source.constraints.fixedHeight
+          ? source.frame.height.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.height * ${relativeHeight.toStringAsFixed(3)}';
-      var width = source.constraints.fixedWidth != null
-          ? relativeWidth.toStringAsFixed(3)
+      var width = source.constraints.fixedWidth
+          ? source.frame.width.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.width * ${relativeWidth.toStringAsFixed(3)}';
+
+      buffer.write('height: $height,');
+      buffer.write('width: $width,');
 
       // buffer.write(
       //     'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
