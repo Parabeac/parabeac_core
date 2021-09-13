@@ -11,6 +11,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -59,7 +60,13 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)..originalRef = json;
-    container.auxiliaryData?.borderInfo?.borderRadius = json['fixedRadius'];
+
+    container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
+
+    if (container.frame.height == 0) {
+      container.frame = Rectangle3D(container.frame.left, container.frame.top,
+          container.frame.width, 1.0, container.frame.z);
+    }
 
     return container;
   }
