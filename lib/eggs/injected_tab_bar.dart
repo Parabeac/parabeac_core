@@ -118,7 +118,7 @@ class PBTabBarGenerator extends PBGenerator {
           buffer.write('BottomNavigationBarItem(');
           var res = context.generationManager.generate(tab, context);
           buffer.write('icon: $res,');
-          buffer.write('title: Text(""),');
+          buffer.write('label: "",');
           buffer.write('),');
         }
       } catch (e, stackTrace) {
