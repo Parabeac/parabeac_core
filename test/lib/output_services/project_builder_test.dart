@@ -2,13 +2,16 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
@@ -24,6 +27,10 @@ class MockContainer extends Mock implements InheritedContainer {}
 class MockProject extends Mock implements PBProject {}
 
 class MockData extends Mock implements IntermediateAuxiliaryData {}
+
+class MockContext extends Mock implements PBContext {}
+
+class MockConfig extends Mock implements GenerationConfiguration {}
 
 void main() {
   group('Project Builder Test', () {
@@ -48,7 +55,10 @@ void main() {
 
     FileStructureStrategy fss;
 
+    MockContext context;
+
     setUp(() async {
+      var mockConfig = MockConfig();
       MainInfo().cwd = Directory.current;
       MainInfo().outputPath =
           '${Directory.current.path}/test/lib/output_services/';
@@ -58,20 +68,25 @@ void main() {
       scaffold = MockScaffold();
       container = MockContainer();
       mockData = MockData();
+      context = MockContext();
 
       containerGenerator = PBContainerGenerator();
       scaffoldGenerator = PBScaffoldGenerator();
 
-      MainInfo().configurations = {'state-management': 'none'};
-
       when(intermediateTree.rootNode).thenReturn(scaffold);
       when(intermediateTree.name).thenReturn('testTree');
-      when(intermediateTree.data).thenReturn(PBGenerationViewData());
+      when(intermediateTree.generationViewData).thenReturn(PBGenerationViewData());
+      when(intermediateTree.dependentsOn)
+          .thenReturn(<PBIntermediateTree>[].iterator);
 
       when(project.projectName).thenReturn(
           '${Directory.current.path}/test/lib/output_services/temp2/');
       when(project.forest).thenReturn([intermediateTree]);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
       when(project.projectAbsPath).thenReturn(outputPath);
+      when(project.genProjectData).thenReturn(PBGenerationProjectData());
+
+      when(context.project).thenReturn(project);
 
       when(scaffold.child).thenReturn(container);
       when(scaffold.isHomeScreen).thenReturn(false);
@@ -79,6 +94,7 @@ void main() {
       when(scaffold.name).thenReturn('testingPage');
       when(scaffold.managerData).thenReturn(PBGenerationViewData());
       when(scaffold.auxiliaryData).thenReturn(mockData);
+      when(scaffold.currentContext).thenReturn(context);
 
       when(container.generator).thenReturn(containerGenerator);
       when(container.auxiliaryData).thenReturn(mockData);
@@ -87,11 +103,11 @@ void main() {
       fss =
           FlutterFileStructureStrategy(outputPath, PBFlutterWriter(), project);
       await fss.setUpDirectories();
-      when(project.fileStructureStrategy).thenReturn(fss);
+      when(mockConfig.fileStructureStrategy).thenReturn(fss);
 
-      projectBuilder = await FlutterProjectBuilder(
-          projectName: outputPath,
-          mainTree: project,
+      projectBuilder = FlutterProjectBuilder(mockConfig,
+          // genProjectAbsPath: Directory.current.path,
+          project: project,
           pageWriter: PBFlutterWriter());
     });
     test(
@@ -100,7 +116,7 @@ void main() {
         /// Check that the Dart file was created
         /// It should be a file named `testingPage`
         /// Stafefulwidget with a Scaffold and a Container
-        await projectBuilder.convertToFlutterProject();
+        await projectBuilder.genProjectFiles();
       },
       timeout: Timeout(
         Duration(minutes: 1),

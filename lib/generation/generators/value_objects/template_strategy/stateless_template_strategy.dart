@@ -1,28 +1,26 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 
 class StatelessTemplateStrategy extends TemplateStrategy {
   @override
-  String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      GeneratorContext generatorContext,
+  String generateTemplate(
+      PBIntermediateNode node, PBGenerationManager manager, PBContext context,
       {args}) {
     var widgetName = node.name;
-    node.managerData.hasParams = true;
-    var returnStatement = node.generator.generate(node, generatorContext);
-    node.managerData.hasParams = false;
+    context.managerData.hasParams = true;
+    var returnStatement = node.generator.generate(node, context);
+    context.managerData.hasParams = false;
     var overrides = '';
     var overrideVars = '';
 
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
-        overrides += 'this.${prop.friendlyName}, ';
-        overrideVars += 'final ${prop.friendlyName};';
+        overrides += 'this.${prop.propertyName}, ';
+        overrideVars += 'final ${prop.propertyName};';
       });
     }
     return '''
@@ -36,7 +34,7 @@ class ${widgetName.pascalCase} extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return ${returnStatement};
+    return $returnStatement;
   }
 }''';
   }

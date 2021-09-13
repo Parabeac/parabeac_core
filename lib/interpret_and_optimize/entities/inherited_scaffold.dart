@@ -1,130 +1,153 @@
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
+import 'dart:math';
 import 'package:parabeac_core/eggs/injected_app_bar.dart';
 import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'package:pbdl/pbdl.dart';
 
-import 'interfaces/pb_inherited_intermediate.dart';
+part 'inherited_scaffold.g.dart';
 
+@JsonSerializable()
 class InheritedScaffold extends PBVisualIntermediateNode
-    with
-        PBColorMixin
-    implements
-        /* with GeneratePBTree */ /* PropertySearchable,*/ PBInheritedIntermediate {
+    with PBColorMixin
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  var originalRef;
-  @override
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
+  @JsonKey(defaultValue: false, name: 'isFlowHome')
   bool isHomeScreen = false;
 
-  PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
+  @override
+  @JsonKey()
+  String type = 'artboard';
 
-  PBIntermediateNode get navbar => getAttributeNamed('appBar')?.attributeNode;
+  // PBIntermediateNode get navbar => getAttributeNamed('appBar');
 
-  PBIntermediateNode get tabbar =>
-      getAttributeNamed('bottomNavigationBar')?.attributeNode;
+  // PBIntermediateNode get tabbar => getAttributeNamed('bottomNavigationBar');
 
-  set child(PBIntermediateNode node) {
-    if (!hasAttribute('body')) {
-      addAttribute(PBAttribute('body', attributeNodes: [node]));
-    } else {
-      getAttributeNamed('body').attributeNode = node;
-    }
-  }
+  @override
+  Map<String, dynamic> originalRef;
 
-  InheritedScaffold(this.originalRef,
-      {Point topLeftCorner,
-      Point bottomRightCorner,
-      String name,
-      PBContext currentContext,
-      this.isHomeScreen})
-      : super(
-            Point(originalRef.boundaryRectangle.x,
-                originalRef.boundaryRectangle.y),
-            Point(
-                originalRef.boundaryRectangle.x +
-                    originalRef.boundaryRectangle.width,
-                originalRef.boundaryRectangle.y +
-                    originalRef.boundaryRectangle.height),
-            currentContext,
-            name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
-    this.name = name
-        ?.replaceAll(RegExp(r'[\W]'), '')
-        ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
-
+  InheritedScaffold(
+      String UUID, Rectangle3D<num> frame, String name, this.originalRef,
+      {this.isHomeScreen,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
+      : super(UUID, frame, name, constraints: constraints) {
     generator = PBScaffoldGenerator();
-
-    auxiliaryData.color = toHex(originalRef.backgroundColor);
-
-    // Add body attribute
-    addAttribute(PBAttribute('body'));
+    childrenStrategy = MultipleChildStrategy('body');
   }
 
   @override
+  String getAttributeNameOf(PBIntermediateNode node) {
+    if (node is InjectedAppbar) {
+      return 'appBar';
+    } else if (node is InjectedTabBar) {
+      return 'bottomNavigationBar';
+    }
+    return super.getAttributeNameOf(node);
+  }
+
+  @override
+  void handleChildren(PBContext context) {
+    var children = getAllAtrributeNamed(context.tree, 'body');
+
+    var appBar = getAttributeNamed(context.tree, 'appBar');
+    if (appBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        appBar.frame.bottomRight.y,
+        context.canvasFrame.width,
+        context.canvasFrame.height - appBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
+    if (tabBar != null) {
+      context.canvasFrame = Rectangle3D(
+        context.canvasFrame.left,
+        context.canvasFrame.top,
+        context.canvasFrame.width,
+        context.canvasFrame.height - tabBar.frame.height,
+        0,
+      );
+      frame = context.canvasFrame;
+    }
+
+    // Top-most stack should have scaffold's frame to align children properly
+    var groupAtt = FrameGroup(null, frame)
+      ..name = '$name-Group'
+      ..attributeName = 'body'
+      ..parent = this;
+    context.tree.addEdges(groupAtt, children.map((child) => child).toList());
+
+    context.tree.replaceChildrenOf(this,
+        [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));
+  }
+
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
     return layer;
   }
 
-  @override
-  void addChild(PBIntermediateNode node) {
-    if (node is PBSharedInstanceIntermediateNode) {
-      if (node.originalRef.name.contains('<navbar>')) {
-        addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-        return;
-      }
-      if (node.originalRef.name.contains('<tabbar>')) {
-        addAttribute(
-            PBAttribute('bottomNavigationBar', attributeNodes: [node]));
-        return;
-      }
-    }
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var artboard = _$InheritedScaffoldFromJson(json)..originalRef = json;
 
-    if (node is InjectedAppbar) {
-      addAttribute(PBAttribute('appBar', attributeNodes: [node]));
-      return;
-    }
-    if (node is InjectedTabBar) {
-      addAttribute(PBAttribute('bottomNavigationBar', attributeNodes: [node]));
-      return;
-    }
-
-    if (child is TempGroupLayoutNode) {
-      child.addChild(node);
-      return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    } else {
-      child = node;
-    }
+    //Map artboard children by calling `addChild` method
+    // artboard.mapRawChildren(json);
+    return artboard;
   }
 
   @override
-  void alignChild() {
-    if (child != null) {
-      var align =
-          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-      align.addChild(child);
-      align.alignChild();
-      child = align;
-    }
-  }
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
+      InheritedScaffold.fromJson(json)..mapRawChildren(json, tree);
+
+  // @override
+  // set child(PBIntermediateNode node) {
+  //   if (!hasAttribute('body')) {
+  //     addAttribute(PBAttribute('body', attributeNodes: [node]));
+  //   } else {
+  //     getAttributeNamed('body').attributeNode = node;
+  //   }
 }
+
+// InheritedScaffold(
+//   String UUID,
+//   Rectangle3D frame, {
+//   this.originalRef,
+//   String name,
+//   this.isHomeScreen,
+//   this.prototypeNode,
+// }) : super(
+//         UUID,
+//         frame,
+//         name,
+//       ) {
+//   this.name = name
+//       ?.replaceAll(RegExp(r'[\W]'), '')
+//       ?.replaceFirst(RegExp(r'^([\d]|_)+'), '');
+
+//   generator = PBScaffoldGenerator();
+
+//   //TODO switch to padding strategy
+
+//   // Add body attribute
+//   addAttribute(PBAttribute('body'));
+// }
+
+

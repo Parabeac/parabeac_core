@@ -6,6 +6,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 
 class StackReductionVisualRule extends PostConditionRule {
   OverlappingNodesLayoutRule _overlappingNodesLayoutRule;
@@ -16,19 +18,21 @@ class StackReductionVisualRule extends PostConditionRule {
   /// Removes the [PBIntermediateStackLayout] and wraps the [PBVisualIntermediateNode]
   /// that has a child with the node that does not have a child.
   @override
-  dynamic executeAction(
-      PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
-    if (testRule(currentNode, nextNode)) {
+  dynamic executeAction(PBContext context, PBIntermediateNode currentNode,
+      PBIntermediateNode nextNode) {
+    var currentTree = context.tree;
+    if (testRule(context, currentNode, nextNode)) {
       var layout =
           currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
-      var wrapper = (layout as PBIntermediateStackLayout).children.firstWhere(
-          (element) =>
-              element is PBVisualIntermediateNode && element.child == null);
-      var child = (layout as PBIntermediateStackLayout).children.firstWhere(
-          (element) =>
-              element is PBVisualIntermediateNode && element.child != null);
+      var children = currentTree.childrenOf(layout);
+      var wrapper = children.firstWhere((element) =>
+          element is PBVisualIntermediateNode &&
+          currentTree.childrenOf(element).isEmpty);
+      var child = children.firstWhere((element) =>
+          element is PBVisualIntermediateNode &&
+          currentTree.childrenOf(element).isEmpty);
 
-      wrapper.addChild(child);
+      currentTree.addEdges(wrapper, [child]);
       if ((layout as PBIntermediateStackLayout).prototypeNode != null) {
         if (wrapper is PBInheritedIntermediate) {
           (wrapper as PBInheritedIntermediate).prototypeNode =
@@ -47,26 +51,32 @@ class StackReductionVisualRule extends PostConditionRule {
   /// two [PBVisualIntermediateNode]s, where one visual node should wrap the
   /// other.
   @override
-  bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) {
+  bool testRule(PBContext context, PBIntermediateNode currentNode,
+      PBIntermediateNode nextNode) {
+    var currTree = context.tree;
     var layout =
         currentNode is PBIntermediateStackLayout ? currentNode : nextNode;
     if (layout == null || layout is! PBIntermediateStackLayout) {
       return false;
     }
 
-    var children = (layout as PBIntermediateStackLayout).children;
+    var children = currTree.childrenOf(layout);
     if (children.length == 2 &&
         children[0] is PBVisualIntermediateNode &&
         children[1] is PBVisualIntermediateNode) {
-      return _overlappingNodesLayoutRule.testRule(children[0], children[1]) &&
-          ((_isEmptyContainer(children[0]) && children[1].child != null) ||
-              (_isEmptyContainer(children[0]) && children[0].child != null));
+      return _overlappingNodesLayoutRule.testRule(
+              context, children[0], children[1]) &&
+          ((_isEmptyContainer(currTree, children[0]) &&
+                  currTree.childrenOf(children[1]).isNotEmpty) ||
+              (_isEmptyContainer(currTree, children[0]) &&
+                  currTree.childrenOf(children[0]).isNotEmpty));
     }
     return false;
   }
 
   /// Returns true if `node` is a Container with a null child
-  bool _isEmptyContainer(PBVisualIntermediateNode node) =>
-      node.child == null &&
+  bool _isEmptyContainer(
+          PBIntermediateTree tree, PBVisualIntermediateNode node) =>
+      tree.childrenOf(node).isEmpty &&
       (node is InheritedContainer || node is InjectedContainer);
 }

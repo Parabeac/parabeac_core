@@ -1,100 +1,72 @@
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group_layout_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
+part 'inherited_container.g.dart';
+
+@JsonSerializable()
 class InheritedContainer extends PBVisualIntermediateNode
-    with PBColorMixin
-    implements PBInheritedIntermediate {
+    implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
-  final originalRef;
-
-  @override
+  @JsonKey(
+      fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
   PrototypeNode prototypeNode;
 
+  @JsonKey(defaultValue: true)
   bool isBackgroundVisible = true;
 
-  InheritedContainer(
-    this.originalRef,
-    Point topLeftCorner,
-    Point bottomRightCorner,
-    String name, {
-    double alignX,
-    double alignY,
-    PBContext currentContext,
-    Map borderInfo,
-    this.isBackgroundVisible = true,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name,
-            UUID: originalRef.UUID ?? '') {
-    if (originalRef is DesignNode && originalRef.prototypeNodeUUID != null) {
-      prototypeNode = PrototypeNode(originalRef?.prototypeNodeUUID);
-    }
+  @override
+  @JsonKey()
+  String type = 'rectangle';
+
+  @override
+  @JsonKey(ignore: true)
+  Map<String, dynamic> originalRef;
+
+  InheritedContainer(String UUID, Rectangle3D frame,
+      {this.originalRef,
+      String name,
+      double alignX,
+      double alignY,
+      this.isBackgroundVisible = true,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
+      : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
-
-    borderInfo ??= {};
-
-    size = {
-      'width': originalRef.boundaryRectangle.width,
-      'height': originalRef.boundaryRectangle.height,
-    };
-
-    // have to save this in case it is overridden
-    auxiliaryData.style = originalRef.style;
-
-    if (originalRef.style != null && originalRef.style.fills.isNotEmpty) {
-      for (var fill in originalRef.style.fills) {
-        if (fill.isEnabled) {
-          auxiliaryData.color = toHex(fill.color);
-          // use the first one found.
-          break;
-        }
-      }
-    }
+    childrenStrategy = TempChildrenStrategy('child');
+    //TODO switch alignment to Padding alignment
 
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
+  }
 
-    auxiliaryData.borderInfo = borderInfo;
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    var container = _$InheritedContainerFromJson(json)..originalRef = json;
+    container.auxiliaryData?.borderInfo?.borderRadius = json['fixedRadius'];
 
-    assert(originalRef != null,
-        'A null original reference was sent to an PBInheritedIntermediate Node');
+    return container;
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
-    if (child is TempGroupLayoutNode) {
-      child.addChild(node);
-      return;
-    }
-    // If there's multiple children add a temp group so that layout service lays the children out.
-    if (child != null) {
-      var temp = TempGroupLayoutNode(null, currentContext, node.name);
-      temp.addChild(child);
-      temp.addChild(node);
-      child = temp;
-    }
-    child = node;
-  }
-
-  /// Should add positional info ONLY to parent node. This should only be sent here if the parent and child node is only one-to-one.
-  ///
-  /// alignCenterX/y = ((childCenter - parentCenter) / max) if > 0.5 subtract 0.5 if less than 0.5 multiply times -1
-  @override
-  void alignChild() {
-    if (child != null) {
-      var align =
-          InjectedAlign(topLeftCorner, bottomRightCorner, currentContext, '');
-      align.addChild(child);
-      align.alignChild();
-      child = align;
-    }
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    return InheritedContainer.fromJson(json)..mapRawChildren(json, tree);
   }
 }

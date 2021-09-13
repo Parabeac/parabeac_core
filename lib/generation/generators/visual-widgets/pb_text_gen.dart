@@ -1,22 +1,24 @@
-import 'package:parabeac_core/design_logic/color.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
-class PBTextGen extends PBGenerator with PBColorMixin {
+class PBTextGen extends PBGenerator {
   PBTextGen() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
-      source.currentContext.project.genProjectData
+      var cleanText =
+          source.text?.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
+      context.project.genProjectData
           .addDependencies('auto_size_text', '^2.1.0');
 
-      source.managerData
-          .addImport('package:auto_size_text/auto_size_text.dart');
+      context.managerData
+          .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
       var buffer = StringBuffer();
       buffer.write('AutoSizeText(\n');
       var isTextParameter = source.isTextParameter;
@@ -24,15 +26,17 @@ class PBTextGen extends PBGenerator with PBColorMixin {
         var text = source.text;
         buffer.write('$text, \n');
       } else {
-        if (SN_UUIDtoVarName.containsKey('${source.UUID}_stringValue')) {
-          buffer.write('${SN_UUIDtoVarName[source.UUID + '_stringValue']} ?? ');
+        var textOverride =
+            OverrideHelper.getProperty(source.UUID, 'stringValue');
+        if (textOverride != null) {
+          buffer.write('${textOverride.propertyName} ?? ');
         }
-        buffer
-            .write(('\'${source.text?.replaceAll('\n', ' ') ?? ''}\'') + ',\n');
+        buffer.write(('\'$cleanText\'') + ',\n');
       }
       buffer.write('style: ');
-      if (SN_UUIDtoVarName.containsKey('${source.UUID}_textStyle')) {
-        buffer.write(SN_UUIDtoVarName[source.UUID + '_textStyle'] + ' ?? ');
+      var styleOverride = OverrideHelper.getProperty(source.UUID, 'textStyle');
+      if (styleOverride != null) {
+        buffer.write('${styleOverride.propertyName} ?? ');
       }
 
       buffer.write('TextStyle(\n');
@@ -53,12 +57,7 @@ class PBTextGen extends PBGenerator with PBColorMixin {
         buffer.write('letterSpacing: ${source.letterSpacing},\n');
       }
       if (source.auxiliaryData.color != null) {
-        if (findDefaultColor(source.auxiliaryData.color) == null) {
-          buffer.write('color: Color(${source.auxiliaryData.color}),');
-        } else {
-          buffer
-              .write('color: ${findDefaultColor(source.auxiliaryData.color)},');
-        }
+        buffer.write(PBColorGenHelper().generate(source, context));
       }
 
       buffer.write('),');

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/figma/helper/figma_asset_processor.dart';
@@ -18,7 +19,7 @@ void main() async {
 
   group('Local Sketch PNG Testing:', () {
     setUpAll(() async {
-      MainInfo().sketchPath =
+      MainInfo().designFilePath =
           '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch';
       uuids = [
         '85D93FCD-5A69-4DAF-AE90-351CD9B64554', // Shape Group
@@ -57,7 +58,7 @@ void main() async {
 
   group('Github Sketch PNG Testing:', () {
     setUpAll(() async {
-      MainInfo().sketchPath =
+      MainInfo().designFilePath =
           '${Directory.current.path}/test/assets/parabeac_demo_alt.sketch';
       uuids = [
         '85D93FCD-5A69-4DAF-AE90-351CD9B64554', // Shape Group
@@ -93,7 +94,8 @@ void main() async {
       await FigmaAssetProcessor().processImageQueue();
       for (var uuid in FigmaAssetProcessor().uuidQueue) {
         expect(
-            File('${MainInfo().outputPath}pngs/$uuid.png'.replaceAll(':', '_'))
+            File(p.join(MainInfo().pngPath,
+                    '$uuid.png'.replaceAll(':', '_')))
                 .existsSync(),
             true);
       }

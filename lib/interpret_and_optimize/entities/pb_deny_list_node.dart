@@ -1,23 +1,25 @@
+import 'dart:math';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
 
 /// A node that should not be converted to intermediate.
 class PBDenyListNode extends PBIntermediateNode {
-  PBDenyListNode(Point topLeftCorner, Point bottomRightCorner,
-      PBContext currentContext, String name,
-      {String UUID})
-      : super(
-          topLeftCorner,
-          bottomRightCorner,
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
+  PBDenyListNode(
+    String UUID,
+    Rectangle3D frame, {
+    String name,
+  }) : super(
           UUID,
+          frame,
           name,
-          currentContext: currentContext,
         );
 
   @override
-  void addChild(PBIntermediateNode node) {
-    // Unclear whether we should even go into the children if we run into a Deny List node.
-    return;
-  }
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

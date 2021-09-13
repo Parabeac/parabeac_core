@@ -8,9 +8,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/hand
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:uuid/uuid.dart';
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
 
@@ -21,82 +20,94 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
     RowOverlappingException()
   ];
 
-  //TODO: remove all overriden UUID
-  @override
-  final String UUID;
-
-  // @override
-  // PBContext currentContext;
-
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateRowLayout(String name, this.UUID, {PBContext currentContext})
-      : super(ROW_RULES, ROW_EXCEPTIONS, currentContext, name) {
+  @override
+  AlignStrategy alignStrategy = RowAlignment();
+
+  PBIntermediateRowLayout({String name})
+      : super(null, null, ROW_RULES, ROW_EXCEPTIONS, name) {
     generator = PBRowGenerator();
-  }
-
-  @override
-  void addChild(PBIntermediateNode node) => addChildToLayout(node);
-
-  @override
-  void alignChildren() {
-    checkCrossAxisAlignment();
-    if (currentContext.configuration.widgetSpacing == 'Expanded') {
-      _addPerpendicularAlignment();
-      _addParallelAlignment();
-    } else {
-      assert(false,
-          'We don\'t support Configuration [${currentContext.configuration.widgetSpacing}] yet.');
-    }
-  }
-
-  void _addParallelAlignment() {
-    var newchildren = handleFlex(false, topLeftCorner, bottomRightCorner,
-        children?.cast<PBIntermediateNode>());
-    replaceChildren(newchildren);
-  }
-
-  void _addPerpendicularAlignment() {
-    var rowMinY = topLeftCorner.y;
-    var rowMaxY = bottomRightCorner.y;
-
-    if (topLeftCorner.y < currentContext.screenTopLeftCorner.y) {
-      rowMinY = currentContext.screenTopLeftCorner.y;
-    }
-    if (bottomRightCorner.y > currentContext.screenBottomRightCorner.y) {
-      rowMaxY = currentContext.screenBottomRightCorner.y;
-    }
-
-    for (var i = 0; i < children.length; i++) {
-      //TODO: Check to see if the left or right padding or both is equal to 0 or even negative if that's even possible.
-      var padding = Padding(Uuid().v4(),
-          top: children[i].topLeftCorner.y - rowMinY,
-          bottom: rowMaxY - children[i].bottomRightCorner.y,
-          topLeftCorner: children[i].topLeftCorner,
-          bottomRightCorner: children[i].bottomRightCorner,
-          currentContext: currentContext);
-      padding.addChild(children[i]);
-
-      //Replace Children.
-      var childrenCopy = children;
-      childrenCopy[i] = padding;
-      replaceChildren(childrenCopy);
-    }
   }
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(name, Uuid().v4(),
-        currentContext: currentContext);
+    var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
-    children.forEach((child) => row.addChild(child));
+   //FIXME children.forEach((child) => row.addChild(child));
     return row;
   }
 
+  // @override
+  // void sortChildren() => replaceChildren(children
+  //   ..sort((child0, child1) =>
+  //       child0..frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
+}
+
+class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   @override
-  void sortChildren() => replaceChildren(children
-    ..sort((child0, child1) =>
-        child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+  void align(PBContext context, PBIntermediateRowLayout node) {
+    // node.checkCrossAxisAlignment();
+    // if (context.configuration.widgetSpacing == 'Expanded') {
+    //   _addPerpendicularAlignment(node, context);
+    //   _addParallelAlignment(node, context);
+    // } else {
+    //   assert(false,
+    //       'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
+    // }
+  }
+
+  // void _addParallelAlignment(PBIntermediateRowLayout node, PBContext context) {
+  //   var newchildren = handleFlex(false, node.frame.topLeft,
+  //       node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
+  //   node.replaceChildren(newchildren, context);
+  // }
+
+  // void _addPerpendicularAlignment(
+  //     PBIntermediateRowLayout node, PBContext context) {
+  //   var rowMinY = node.frame.topLeft.y;
+  //   var rowMaxY = node.frame.bottomRight.y;
+
+  //   if (node.frame.topLeft.y < context.screenFrame.topLeft.y) {
+  //     rowMinY = context.screenFrame.topLeft.y;
+  //   }
+  //   if (node.frame.bottomRight.y > context.screenFrame.bottomRight.y) {
+  //     rowMaxY = context.screenFrame.bottomRight.y;
+  //   }
+
+  //   for (var i = 0; i < node.children.length; i++) {
+  //     var padding = Padding(
+  //       null,
+  //       node.frame,
+  //       node.children[i].constraints,
+  //       top: node.children[i].frame.topLeft.y - rowMinY ?? 0.0,
+  //       bottom: rowMaxY - node.children[i].frame.bottomRight.y ?? 0.0,
+  //       left: 0.0,
+  //       right: 0.0,
+  //     );
+  //  //FIXME   padding.addChild(node.children[i]);
+
+  //     //Replace Children.
+  //     node.children[i] = padding;
+  //   }
+  // }
+
+  @override
+  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
+      PBContext currentContext, String name) {
+    var row = PBIntermediateRowLayout(name: name);
+    // row.prototypeNode = prototypeNode;
+   //FIXME children.forEach((child) => row.addChild(child));
+    return row;
+  }
+
+  // @override
+  // void sortChildren() => replaceChildren(children
+  //   ..sort((child0, child1) =>
+  //       child0 .frame.topLeft.x.compareTo(child1 .frame.topLeft.x)));
+
+  @override
+  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

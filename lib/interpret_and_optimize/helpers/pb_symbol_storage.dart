@@ -37,7 +37,7 @@ class PBSymbolStorage {
     if (_pbSharedInstanceNodes.containsKey(symbolInstance.UUID)) {
       return false;
     }
-    await PBSharedInterAggregationService().analyzeSharedNode(symbolInstance);
+    PBSharedInterAggregationService().analyzeSharedNode(symbolInstance);
     _pbSharedInstanceNodes['${symbolInstance.UUID}'] = symbolInstance;
     return true;
   }
@@ -48,7 +48,7 @@ class PBSymbolStorage {
     if (_pbSharedMasterNodes.containsKey(masterNode.UUID)) {
       return false;
     }
-    await PBSharedInterAggregationService().analyzeSharedNode(masterNode);
+    PBSharedInterAggregationService().analyzeSharedNode(masterNode);
     _pbSharedMasterNodes['${masterNode.UUID}'] = masterNode;
     return true;
   }
@@ -71,17 +71,15 @@ class PBSymbolStorage {
   ///Looks for the symbol in both the [_pbSharedMasterNodes] and
   ///the [pageSymbols] maps
   PBIntermediateNode getSymbol(String id) {
-    var node = getSharedInstaceNode(id);
-    node ??= getSharedMasterNode(id) as PBIntermediateNode;
+    PBIntermediateNode node = getSharedInstaceNode(id);
+    node ??= getSharedMasterNode(id);
     return node;
   }
 
-  /**
-   * Removes the symbol with given [id].
-   * 
-   * Returns [true] if the object was successfuly removed,
-   * [false] if the object did not exist.
-   */
+  /// Removes the symbol with given [id].
+  ///
+  /// Returns [true] if the object was successfuly removed,
+  /// [false] if the object did not exist.
   bool removeSymbolWithId(String id) {
     return (_pbSharedMasterNodes.remove(id) != null);
   }
@@ -107,7 +105,7 @@ class PBSymbolStorage {
 
   String getNameOfSymbolWithID(String id) {
     return _pbSharedMasterNodes.containsKey(id)
-        ? _pbSharedMasterNodes[id].originalRef.name
+        ? _pbSharedMasterNodes[id].name
         : null;
   }
 }

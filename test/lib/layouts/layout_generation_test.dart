@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
@@ -5,9 +7,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/temp_group
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:test/test.dart';
 
 class TempGroupMock extends Mock implements TempGroupLayoutNode {}
@@ -22,27 +24,13 @@ void main() {
 
     TempGroupMock tempGroup;
     MainInfo().configurationType = 'default';
-    PBContext currentContext = PBContext(jsonConfigurations: {
-      "default": {
-        "widgetStyle": "Material",
-        "widgetType": "Stateless",
-        "widgetSpacing": "Expanded",
-        "layoutPrecedence": ["column", "row", "stack"]
-      },
-      "stack": {
-        "widgetStyle": "Material",
-        "widgetType": "Stateless",
-        "widgetSpacing": "Expanded",
-        "layoutPrecedence": ["stack"]
-      },
-      "This will be replaced by a Object ID to determine specific configurations for each page":
-          {
-        "widgetStyle": "Material",
-        "widgetType": "Stateless",
-        "widgetSpacing": "Expanded"
-      },
-      "root": "AC2E7423-4609-4F37-8BCA-7E915944FFE2"
-    });
+    var currentContext = PBContext(PBConfiguration.fromJson({
+      'widgetStyle': 'Material',
+      'widgetType': 'Stateless',
+      'widgetSpacing': 'Expanded',
+      'layoutPrecedence': ['column', 'row', 'stack'],
+      'state-management': 'none'
+    }));
 
     setUp(() {
       leftItem = PBIntermediateNodeMock();
