@@ -67,6 +67,7 @@ class FrameGroup extends Group {
       gateKeeper = true;
     }
     if (json['style']['borders'][0]['isEnabled']) {
+      tempChild.auxiliaryData.borderInfo ??= IntermediateBorderInfo();
       tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
       tempChild.auxiliaryData.borderInfo.color =
           PBColor.fromJson(json['style']['borders'][0]['color']);
