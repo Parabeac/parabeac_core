@@ -56,14 +56,15 @@ class FrameGroup extends Group {
       name: json['name'],
     );
     var gateKeeper = false;
-    if (json['fixedRadius'] != null) {
-      tempChild.auxiliaryData.borderInfo =
-          IntermediateBorderInfo(borderRadius: json['fixedRadius']);
+    if (json['style']['borderOptions']['cornerRadius'] != null) {
+      tempChild.auxiliaryData.borderInfo = IntermediateBorderInfo(
+          borderRadius: json['style']['borderOptions']['cornerRadius']);
       tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
       gateKeeper = true;
     }
-    if (json['background'] != null) {
-      tempChild.auxiliaryData.color = PBColor.fromJson(json['background']);
+    if (json['style']['backgroundColor'] != null) {
+      tempChild.auxiliaryData.color =
+          PBColor.fromJson(json['style']['backgroundColor']);
       gateKeeper = true;
     }
     if (json['style']['borders'][0]['isEnabled']) {
