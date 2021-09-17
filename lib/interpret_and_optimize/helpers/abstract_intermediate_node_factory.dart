@@ -45,7 +45,7 @@ class AbstractIntermediateNodeFactory {
   static dynamic getIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var className = json[INTERMEDIATE_TYPE];
-    if (className != null && json['isVisible']) {
+    if (className != null && (json['isVisible'] ?? true)) {
       for (var candidate in _intermediateNodes) {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json, parent, tree);
