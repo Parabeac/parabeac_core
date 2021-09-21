@@ -109,7 +109,6 @@ void main() {
       expect(result != null, true);
       expect(result is String, true);
 
-      // Do not modify
       expect(result,
           '''Container(width: 100.000,height: 100.000,child: AutoSizeText(
 'Test Text',
