@@ -118,6 +118,11 @@ ${parser.usage}
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
   var pbProject = PBProject.fromJson(pbdl.toJson());
+  // Exit if only generating PBDL
+  if (MainInfo().exportPBDL) {
+    exitCode = 0;
+    return;
+  }
   pbProject.projectAbsPath =
       p.join(processInfo.outputPath, processInfo.projectName);
 
