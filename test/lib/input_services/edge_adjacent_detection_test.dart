@@ -46,10 +46,10 @@ void main() {
         borders: [
           Border(
             color: Color(
-              alpha: 1,
-              red: 1,
-              green: 1,
-              blue: 1,
+              a: 1,
+              r: 1,
+              g: 1,
+              b: 1,
             ),
           ),
         ],
@@ -90,10 +90,10 @@ void main() {
         borders: [
           Border(
             color: Color(
-              alpha: 1,
-              red: 1,
-              green: 1,
-              blue: 1,
+              a: 1,
+              r: 1,
+              g: 1,
+              b: 1,
             ),
           ),
         ],
@@ -133,7 +133,6 @@ void main() {
       when(sketchNode.UUID).thenReturn('');
       shapePath =
           InheritedShapePath(sketchNode, 'testName', currentContext: context);
-      
     });
 
     test('Detecting Shape', () {

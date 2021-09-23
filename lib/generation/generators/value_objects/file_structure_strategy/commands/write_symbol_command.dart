@@ -31,7 +31,8 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
         ? p.join(strategy.GENERATED_PROJECT_PATH, symbolPath)
         : p.join(strategy.GENERATED_PROJECT_PATH, symbolPath, relativePath);
 
-    strategy.writeDataToFile(code, absPath, fileName, UUID: UUID, ownership: ownership);
+    strategy.writeDataToFile(code, absPath, fileName,
+        UUID: UUID, ownership: ownership);
     return Future.value(p.join(absPath, fileName));
   }
 }

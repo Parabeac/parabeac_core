@@ -6,16 +6,16 @@ part 'pb_color.g.dart';
 
 @JsonSerializable()
 class PBColor {
-  num alpha;
-  num red;
-  num green;
-  num blue;
+  num a;
+  num r;
+  num g;
+  num b;
 
   PBColor(
-    this.alpha,
-    this.red,
-    this.green,
-    this.blue,
+    this.a,
+    this.r,
+    this.g,
+    this.b,
   );
 
   factory PBColor.fromJson(Map<String, dynamic> json) =>
@@ -31,10 +31,10 @@ class ColorUtils {
   static String toHex(PBColor color) {
     if (color != null) {
       int a, r, g, b;
-      a = ((color.alpha ?? 0) * 255).round();
-      r = ((color.red ?? 0) * 255).round();
-      g = ((color.green ?? 0) * 255).round();
-      b = ((color.blue ?? 0) * 255).round();
+      a = ((color.a ?? 0) * 255).round();
+      r = ((color.r ?? 0) * 255).round();
+      g = ((color.g ?? 0) * 255).round();
+      b = ((color.b ?? 0) * 255).round();
       return '0x' + HEX.encode([a, r, g, b]);
     } else {
       return '0x' + HEX.encode([0, 0, 0, 0]);
@@ -53,7 +53,7 @@ class ColorUtils {
     return null;
   }
 
-  /// Returns a json representation of color assuming we receive a PBSL `style` in json format
+  /// Returns a json representation of color assuming we receive a PBDL `style` in json format
   static PBColor pbColorFromJsonFills(List<Map<String, dynamic>> json) {
     var fills = IndexWalker(json).value;
 

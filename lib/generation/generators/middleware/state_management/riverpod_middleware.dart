@@ -4,12 +4,14 @@ import 'package:parabeac_core/generation/generators/middleware/state_management/
 import 'package:parabeac_core/generation/generators/middleware/state_management/utils/middleware_utils.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/riverpod_file_structure_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/riverpod_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generator_adapter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import '../../pb_flutter_generator.dart';
@@ -51,6 +53,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
     var managerData = context.managerData;
     var fileStrategy =
         configuration.fileStructureStrategy as RiverpodFileStructureStrategy;
+    var elementStorage = ElementStorage();
 
     if (node is PBSharedInstanceIntermediateNode) {
       context.project.genProjectData
@@ -68,7 +71,14 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         managerData.addMethodVariable(watcher);
       }
 
-      addImportToCache(node.SYMBOL_ID, getImportPath(node, fileStrategy));
+      /// Get the default node's tree in order to add to dependent of the current tree.
+      ///
+      /// This ensures we have the correct model imports when generating the tree.
+      var defaultNodeTreeUUID = elementStorage
+          .elementToTree[stmgHelper.getStateGraphOfNode(node).defaultNode.UUID];
+      var defaultNodeTree = elementStorage.treeUUIDs[defaultNodeTreeUUID];
+
+      context.tree.addDependent(defaultNodeTree);
 
       if (node.generator is! StringGeneratorAdapter) {
         node.generator = StringGeneratorAdapter(getConsumer(
@@ -96,6 +106,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         parentDirectory,
         code,
         symbolPath: fileStrategy.RELATIVE_MODEL_PATH,
+        ownership: FileOwnership.DEV,
       ),
       // Generate default node's view page
       WriteSymbolCommand(context.tree.UUID, node.name.snakeCase,
@@ -103,13 +114,21 @@ class RiverpodMiddleware extends StateManagementMiddleware {
           relativePath: parentDirectory),
     ].forEach(fileStrategy.commandCreated);
 
-    // Generate node's states' view pages
-    node.auxiliaryData?.stateGraph?.states?.forEach((state) {
+    var nodeStateGraph = stmgHelper.getStateGraphOfNode(node);
+    nodeStateGraph?.states?.forEach((state) {
+      var treeUUID = elementStorage.elementToTree[state.UUID];
+      var tree = elementStorage.treeUUIDs[treeUUID];
+      // generate imports for state view
+      var data = PBGenerationViewData()
+        ..addImport(FlutterImport('material.dart', 'flutter'));
+      tree.generationViewData.importsList.forEach(data.addImport);
+      tree.context.generationManager =
+          PBFlutterGenerator(ImportHelper(), data: data);
+
       fileStrategy.commandCreated(WriteSymbolCommand(
-        'TODO',
-        // state.variation.node.currentContext.tree.UUID,
-        state.variation.node.name.snakeCase,
-        generationManager.generate(state.variation.node, context),
+        tree.UUID,
+        state.name.snakeCase,
+        tree.context.generationManager.generate(state, tree.context),
         relativePath: parentDirectory,
       ));
     });

@@ -118,6 +118,11 @@ ${parser.usage}
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
   var pbProject = PBProject.fromJson(pbdl.toJson());
+  // Exit if only generating PBDL
+  if (MainInfo().exportPBDL) {
+    exitCode = 0;
+    return;
+  }
   pbProject.projectAbsPath =
       p.join(processInfo.outputPath, processInfo.projectName);
 
@@ -142,8 +147,12 @@ ${parser.usage}
 
     tree.forEach((child) => child.handleChildren(context));
 
-    trees.add(
-        await interpretService.interpretAndOptimize(tree, context, pbProject));
+    var candidateTree =
+        await interpretService.interpretAndOptimize(tree, context, pbProject);
+
+    if (candidateTree != null) {
+      trees.add(candidateTree);
+    }
   }
 
   fpb.runCommandQueue();

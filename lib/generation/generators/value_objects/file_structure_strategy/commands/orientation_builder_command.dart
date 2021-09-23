@@ -2,6 +2,8 @@ import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
+import '../file_ownership_policy.dart';
+
 class OrientationBuilderCommand extends FileStructureCommand {
   static final DIR_TO_ORIENTATION_BUILDER = 'lib/widgets/';
   static final NAME_TO_ORIENTAION_BUILDER =
@@ -58,6 +60,7 @@ class OrientationBuilderCommand extends FileStructureCommand {
       p.join(strategy.GENERATED_PROJECT_PATH, DIR_TO_ORIENTATION_BUILDER),
       NAME_TO_ORIENTAION_BUILDER,
       UUID: UUID,
+      ownership: FileOwnership.DEV,
     );
   }
 }

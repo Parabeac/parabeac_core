@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_gener
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/state_management_node_interpreter.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
 
@@ -29,6 +30,7 @@ class Interpret {
   PBPrototypeLinkerService _pbPrototypeLinkerService;
 
   final List<AITHandler> aitHandlers = [
+    StateManagementNodeInterpreter(),
     PBSymbolLinkerService(),
     // PBPluginControlService(),
     PBLayoutGenerationService(),
@@ -63,7 +65,12 @@ class Interpret {
       return Future.value(tree);
     }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
-    await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
+    // TODO: We should dynamically add the [PBPrototypeLinkerService] to `aitHandlers`
+    // somewhere else so that it does not check the configuration every time
+    // we process a tree
+    if (MainInfo().configuration.enablePrototyping) {
+      await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
+    }
     // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);
@@ -143,14 +150,15 @@ class AITServiceBuilder {
               tree.replaceNode(child, dVertex);
             }
           }
-        } else if (transformation is AITTransformation) {
+        } else if (transformation is AITTransformation &&
+            _intermediateTree != null) {
           _intermediateTree = await transformation(context, _intermediateTree);
         }
 
         if (_intermediateTree == null || _intermediateTree.rootNode == null) {
-          log.error(
+          log.warning(
               'The $name returned a null \"$treeName\" $PBIntermediateTree (or its rootnode is null)\n after its transformation, this will remove the tree from the process!');
-          throw NullThrownError();
+          // throw NullThrownError();
         }
       } catch (e) {
         MainInfo().captureException(e);

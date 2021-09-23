@@ -117,17 +117,20 @@ class PBAppBarGenerator extends PBGenerator {
           child.attributeName != InjectedAppbar.TRAILING_ATTR_NAME &&
           child.attributeName != InjectedAppbar.BACKGROUND_ATTR_NAME);
 
-      if (background != null) {
+      if (background != null && background.auxiliaryData?.color != null) {
         // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
         buffer.write(
             'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      } else {
+        buffer.write(
+            'backgroundColor: Color(${generatorContext.tree.rootNode.auxiliaryData.color.toString()}),');
       }
       if (actions.isNotEmpty) {
         buffer.write(
             '${InjectedAppbar.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
       }
       children.forEach((child) => buffer.write(
-          '${child.attributeName}: ${_wrapOnIconButton(child.generator.generate(child, generatorContext))},'));
+          '${child.attributeName}: ${child.generator.generate(child, generatorContext)},'));
 
       buffer.write(')');
       return buffer.toString();
@@ -139,21 +142,21 @@ class PBAppBarGenerator extends PBGenerator {
     var buffer = StringBuffer();
 
     buffer.write('[');
-    actions.forEach((action) => buffer.write(
-        '${_wrapOnIconButton(action.generator.generate(action, context))},'));
+    actions.forEach((action) =>
+        buffer.write('${action.generator.generate(action, context)},'));
     buffer.write(']');
 
     return buffer.toString();
   }
 
-  String _wrapOnIconButton(String body) {
-    return ''' 
-      IconButton(
-        icon: $body,
-        onPressed: () {
-          // TODO: Fill action
-        }
-      )
-    ''';
-  }
+  // String _wrapOnIconButton(String body) {
+  //   return '''
+  //     IconButton(
+  //       icon: $body,
+  //       onPressed: () {
+  //         // TODO: Fill action
+  //       }
+  //     )
+  //   ''';
+  // }
 }
