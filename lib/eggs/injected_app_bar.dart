@@ -1,13 +1,17 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'dart:math';
+import 'package:recase/recase.dart';
 
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:uuid/uuid.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
@@ -133,8 +137,61 @@ class PBAppBarGenerator extends PBGenerator {
           '${child.attributeName}: ${child.generator.generate(child, generatorContext)},'));
 
       buffer.write(')');
-      return buffer.toString();
+
+      var className = source.parent.name + 'Appbar';
+
+      // TODO: correct import
+      generatorContext.managerData.addImport(FlutterImport(
+        'controller/${className.snakeCase}.dart',
+        MainInfo().projectName,
+      ));
+
+      generatorContext
+          .configuration.generationConfiguration.fileStructureStrategy
+          .commandCreated(WriteSymbolCommand(
+        Uuid().v4(),
+        className.snakeCase,
+        appBarBody(className, buffer.toString(),
+            generatorContext.managerData.importsList),
+        relativePath: 'controller',
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ));
+
+      return '$className()';
     }
+  }
+
+  String appBarBody(
+      String className, String body, List<FlutterImport> importsList) {
+    var imports = '';
+
+    importsList.forEach((import) {
+      if (import.package != MainInfo().projectName) {
+        imports += import.toString() + '\n';
+      }
+    });
+    return '''
+      $imports
+
+      class $className extends StatefulWidget implements PreferredSizeWidget{
+        final Widget child;
+        $className({Key key, this.child}) : super (key: key);
+
+        @override
+        _${className}State createState() => _${className}State();
+
+        @override
+        Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+      }
+
+      class _${className}State extends State<$className> {
+        @override
+        Widget build(BuildContext context){
+          return $body;
+        }
+      }
+      ''';
   }
 
   /// Returns list ot `actions` as individual [PBIntermediateNodes]
