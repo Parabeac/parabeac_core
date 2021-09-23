@@ -8,16 +8,16 @@ part of 'pb_color.dart';
 
 PBColor _$PBColorFromJson(Map<String, dynamic> json) {
   return PBColor(
-    json['alpha'] as num,
-    json['red'] as num,
-    json['green'] as num,
-    json['blue'] as num,
+    json['a'] as num,
+    json['r'] as num,
+    json['g'] as num,
+    json['b'] as num,
   );
 }
 
 Map<String, dynamic> _$PBColorToJson(PBColor instance) => <String, dynamic>{
-      'alpha': instance.alpha,
-      'red': instance.red,
-      'green': instance.green,
-      'blue': instance.blue,
+      'a': instance.a,
+      'r': instance.r,
+      'g': instance.g,
+      'b': instance.b,
     };

@@ -130,7 +130,7 @@ class PBAppBarGenerator extends PBGenerator {
             '${InjectedAppbar.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
       }
       children.forEach((child) => buffer.write(
-          '${child.attributeName}: ${_wrapOnIconButton(child.generator.generate(child, generatorContext))},'));
+          '${child.attributeName}: ${child.generator.generate(child, generatorContext)},'));
 
       buffer.write(')');
       return buffer.toString();
@@ -142,21 +142,21 @@ class PBAppBarGenerator extends PBGenerator {
     var buffer = StringBuffer();
 
     buffer.write('[');
-    actions.forEach((action) => buffer.write(
-        '${_wrapOnIconButton(action.generator.generate(action, context))},'));
+    actions.forEach((action) =>
+        buffer.write('${action.generator.generate(action, context)},'));
     buffer.write(']');
 
     return buffer.toString();
   }
 
-  String _wrapOnIconButton(String body) {
-    return ''' 
-      IconButton(
-        icon: $body,
-        onPressed: () {
-          // TODO: Fill action
-        }
-      )
-    ''';
-  }
+  // String _wrapOnIconButton(String body) {
+  //   return '''
+  //     IconButton(
+  //       icon: $body,
+  //       onPressed: () {
+  //         // TODO: Fill action
+  //       }
+  //     )
+  //   ''';
+  // }
 }
