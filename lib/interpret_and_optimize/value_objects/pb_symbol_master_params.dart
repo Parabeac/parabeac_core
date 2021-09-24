@@ -2,12 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'dart:math';
 
 ///TODO: Need another class for elements that generate but are not visuals.
 
-class PBSymbolMasterParameter extends PBVisualIntermediateNode
+class PBSymbolMasterParameter extends PBIntermediateNode
     implements PBInjectedIntermediate {
   final Type type;
   final String parameterID;
@@ -18,19 +20,25 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
 
   PBContext context;
 
+  @override
+  ChildrenStrategy childrenStrategy = NoChildStrategy();
+
   PBSymbolMasterParameter(
-      String name,
-      this.type,
-      this.parameterID,
-      this.canOverride,
-      this.propertyName,
-      this.parameterDefinition,
-      this.topLeftX,
-      this.topLeftY,
-      this.bottomRightX,
-      this.bottomRightY,
-      {this.context})
-      : super(Point(0, 0), Point(0, 0), context, name);
+    String name,
+    this.type,
+    this.parameterID,
+    this.canOverride,
+    this.propertyName,
+    this.parameterDefinition,
+    this.topLeftX,
+    this.topLeftY,
+    this.bottomRightX,
+    this.bottomRightY,
+  ) : super(
+          null,
+          null,
+          name,
+        );
 
   static String _typeToJson(type) {
     return type.toString();
@@ -40,10 +48,4 @@ class PBSymbolMasterParameter extends PBVisualIntermediateNode
     //TODO: return a more specified Type
     return PBIntermediateNode;
   }
-
-  @override
-  void addChild(PBIntermediateNode node) {}
-
-  @override
-  void alignChild() {}
 }

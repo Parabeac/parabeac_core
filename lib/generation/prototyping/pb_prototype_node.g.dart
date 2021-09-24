@@ -8,7 +8,7 @@ part of 'pb_prototype_node.dart';
 
 PrototypeNode _$PrototypeNodeFromJson(Map<String, dynamic> json) {
   return PrototypeNode(
-    json['destinationUUID'] as String,
+    destinationUUID: json['destinationUUID'] as String,
     destinationName: json['destinationName'] as String,
   );
 }

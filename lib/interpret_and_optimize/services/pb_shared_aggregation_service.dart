@@ -1,10 +1,14 @@
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/intermediate_node_searcher_service.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+
+import 'intermediate_node_searcher_service.dart';
 
 class PBSharedInterAggregationService {
   PBSymbolStorage _symbolStorage;
@@ -44,22 +48,25 @@ class PBSharedInterAggregationService {
   ///Within its [rootChildNode], look for the [PBSharedParameterProp] of the [PBSharedMasterNode],
   ///if one of the values is a [PBSharedInstanceIntermediateNode] then we
   ///are going to look for its [PBSharedParameterValue] if it does not have one.
-  void gatherSharedParameters(
-      PBSharedMasterNode sharedMasterNode, PBIntermediateNode rootChildNode) {
+  void gatherSharedParameters(PBSharedMasterNode sharedMasterNode,
+      PBIntermediateNode rootChildNode, PBContext context) {
     for (var prop in sharedMasterNode.overridableProperties) {
-      var targetUUID = _findLastOf(prop?.UUID, '/');
+      var targetUUID = PBInputFormatter.findLastOf(prop?.UUID, '/');
       prop.value = PBIntermediateNodeSearcherService.searchNodeByUUID(
-          rootChildNode, targetUUID);
+          rootChildNode, targetUUID, context.tree);
       if (prop.value == null) {
         // add Designer Warning here, not even sure if this is the designers fault or not
-        log.warning('UUID: ${targetUUID} not found in searchNodeByUUID');
+        log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
-      if ((prop.value != null) && (prop.type == PBSharedInstanceIntermediateNode)) {
+      if ((prop.value != null) && (prop.type == 'symbolID')) {
+        // prop.value.currentContext = rootChildNode.currentContext;
+
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters
         ///then its going gather the information of its [PBSharedMasterNode].
         gatherSharedValues(prop.value);
       }
     }
+
     sharedMasterNode.overridableProperties
         .removeWhere((prop) => prop == null || prop.value == null);
   }
@@ -90,17 +97,14 @@ class PBSharedInterAggregationService {
       return;
     }
     if (masterNode?.SYMBOL_ID == instanceIntermediateNode?.SYMBOL_ID) {
-      instanceIntermediateNode.sharedParamValues =
-          instanceIntermediateNode.sharedParamValues.map((v) {
-        for (var symParam in masterNode.overridableProperties) {
-          if (symParam.propertyName == v.overrideName) {
-            return PBSharedParameterValue(
-                symParam.type, v.value, symParam.UUID, symParam.propertyName);
-          }
-        }
-        return null;
-      }).toList()
-            ..removeWhere((v) => v == null || v.value == null);
+      var elementStorage = ElementStorage();
+      var masterTree = elementStorage
+          .treeUUIDs[elementStorage.elementToTree[masterNode.UUID]];
+      var tree = elementStorage.treeUUIDs[
+          elementStorage.elementToTree[instanceIntermediateNode.UUID]];
+      if (masterTree != tree) {
+        tree.addDependent(masterTree);
+      }
 
       ///Get the attributes of the [masterNode] to the [instanceIntermediateNode] here ([instanceIntermediateNode] attributes)
       instanceIntermediateNode.functionCallName = masterNode.name;
@@ -110,13 +114,4 @@ class PBSharedInterAggregationService {
 
   PBSharedMasterNode _searchMasterNode(String masterUUID) =>
       _symbolStorage.getSharedMasterNodeBySymbolID(masterUUID);
-
-  /// Method that splits `target` according to `delimeter`
-  /// and returns the last entry in the list.
-  String _findLastOf(String target, String delimeter) {
-    if (target == null || delimeter == null) {
-      return '';
-    }
-    return target.split(delimeter).last;
-  }
 }

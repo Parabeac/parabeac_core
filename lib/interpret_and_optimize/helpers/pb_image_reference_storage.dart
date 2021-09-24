@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/controllers/main_info.dart';
 
@@ -24,17 +25,20 @@ class ImageReferenceStorage {
   /// Adds the reference to the image and writes the png to the assets folder.
   /// Returns true if the image was written successfully, false otherwise
   bool addReferenceAndWrite(String name, String path, Uint8List image) {
+    if(image == null){
+      return false;
+    }
+    var imgPath = p.join(MainInfo().pngPath, '$name.png');
     if (image == null &&
         File('${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
             .existsSync() &&
         addReference(name,
             '${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')) {
       File('${MainInfo().cwd?.path}/lib/input/assets/image-conversion-error.png')
-          .copySync('${MainInfo().outputPath}pngs/${name}.png');
+          .copySync(imgPath);
       return true;
     }
     if (addReference(name, path)) {
-      var imgPath = '${MainInfo().outputPath}pngs/${name}.png';
       if (!File(imgPath).existsSync()) {
         File(imgPath).createSync(recursive: true);
       }

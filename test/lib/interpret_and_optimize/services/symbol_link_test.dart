@@ -1,12 +1,15 @@
+import 'dart:math';
+
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_instance.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/symbol_master.dart';
 import 'package:parabeac_core/input/sketch/entities/objects/frame.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -41,6 +44,13 @@ void main() {
         width: 200,
         height: 200,
       ));
+      var configurations = PBConfiguration.fromJson({
+        'widgetStyle': 'Material',
+        'widgetType': 'Stateless',
+        'widgetSpacing': 'Expanded',
+        'layoutPrecedence': ['column', 'row', 'stack'],
+        'state-management': 'none'
+      });
 
       masterNode = PBSharedMasterNode(
         mockReference,
@@ -49,35 +59,17 @@ void main() {
         Point(0, 0),
         Point(0, 0),
         overridableProperties: [],
-        currentContext: PBContext(jsonConfigurations: {
-          "default": {
-            "widgetStyle": "Material",
-            "widgetType": "Stateless",
-            "widgetSpacing": "Expanded",
-            "layoutPrecedence": ["column", "row", "stack"]
-          },
-          "stack": {
-            "widgetStyle": "Material",
-            "widgetType": "Stateless",
-            "widgetSpacing": "Expanded",
-            "layoutPrecedence": ["stack"]
-          },
-          "This will be replaced by a Object ID to determine specific configurations for each page":
-              {
-            "widgetStyle": "Material",
-            "widgetType": "Stateless",
-            "widgetSpacing": "Expanded"
-          },
-          "root": "AC2E7423-4609-4F37-8BCA-7E915944FFE2"
-        }),
+        currentContext: PBContext(configurations,
+            tree: PBIntermediateTree('Symbol Master')),
       );
-      instanceNode = PBSharedInstanceIntermediateNode(
-        secondReference,
-        '02353',
-        sharedParamValues: [],
-      );
+      instanceNode = PBSharedInstanceIntermediateNode(secondReference, '02353',
+          sharedParamValues: [],
+          currentContext: PBContext(configurations,
+              tree: PBIntermediateTree('SymbolInstance')));
     });
-    test('', () async {
+    test(
+        'Testing the linking of [PBSharedMasterNode] and [PBSharedInstanceIntermediateNode]',
+        () async {
       await pbSymbolLinkerService.linkSymbols(masterNode);
       PBSharedInstanceIntermediateNode result =
           await pbSymbolLinkerService.linkSymbols(instanceNode);

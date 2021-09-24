@@ -1,14 +1,16 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/empty_page_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBFlutterGenerator extends PBGenerationManager {
   var log = Logger('Flutter Generator');
   final DEFAULT_STRATEGY = EmptyPageTemplateStrategy();
-  PBFlutterGenerator({PBGenerationViewData data}) : super(data: data) {
+  PBFlutterGenerator(ImportHelper importHelper, {PBGenerationViewData data})
+      : super(importHelper, data: data) {
     body = StringBuffer();
   }
 
@@ -75,12 +77,13 @@ class PBFlutterGenerator extends PBGenerationManager {
     var buffer = StringBuffer();
     var it = data.imports;
     while (it.moveNext()) {
-      buffer.write('import \'${it.current}\';\n');
+      buffer.write(it.current.toString());
     }
     return buffer.toString();
   }
 
   /// Generates the dispose method
+  @override
   String generateDispose() {
     var buffer = StringBuffer();
     var it = data.toDispose;
@@ -99,21 +102,21 @@ class PBFlutterGenerator extends PBGenerationManager {
   @override
   String generate(
     PBIntermediateNode rootNode,
+    PBContext context,
   ) {
     if (rootNode == null) {
       return null;
     }
-    rootNode.generator.manager = this;
+
     if (rootNode.generator == null) {
-      log.error('Generator not registered for ${rootNode}');
+      log.error('Generator not registered for $rootNode');
     }
-    return rootNode.generator?.templateStrategy?.generateTemplate(
-            rootNode,
-            this,
-            GeneratorContext(sizingContext: SizingValueContext.PointValue)) ??
+    context.sizingContext = SizingValueContext.PointValue;
+    return rootNode.generator?.templateStrategy
+            ?.generateTemplate(rootNode, this, context) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
-        DEFAULT_STRATEGY.generateTemplate(rootNode, this,
-            GeneratorContext(sizingContext: SizingValueContext.PointValue));
+        DEFAULT_STRATEGY.generateTemplate(
+            rootNode, this, context);
   }
 }

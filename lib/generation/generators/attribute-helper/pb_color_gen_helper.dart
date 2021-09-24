@@ -1,55 +1,57 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribute_gen_helper.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBColorGenHelper extends PBAttributesHelper {
   PBColorGenHelper() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
-    var statement = '';
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source == null) {
-      return statement;
+      return '';
     }
-    if (source is InheritedScaffold) {
-      var scaffold = source;
-      if (scaffold.auxiliaryData.color == null) {
-        statement = '';
-      } else {
-        statement = findDefaultColor(scaffold.auxiliaryData.color) != null
-            ? 'backgroundColor: ${findDefaultColor(scaffold.auxiliaryData.color)},'
-            : 'backgroundColor: Color(${scaffold.auxiliaryData.color}),\n';
-      }
-    } else if (source.auxiliaryData.color == null) {
-      statement = '';
-    } else {
-      if (source is! InheritedContainer) {
-        statement = findDefaultColor(source.auxiliaryData.color) != null
-            ? 'color: ${findDefaultColor(source.auxiliaryData.color)},'
-            : 'color: Color(${source.auxiliaryData.color}),\n';
-      } else if ((source as InheritedContainer).isBackgroundVisible) {
-        statement = findDefaultColor(source.auxiliaryData.color) != null
-            ? 'color: ${findDefaultColor(source.auxiliaryData.color)},'
-            : 'color: Color(${source.auxiliaryData.color}),\n';
-      } else {
-        statement = '';
-      }
+
+    var color = source.auxiliaryData.color?.toString();
+    if (color == null) {
+      return '';
     }
-    return statement;
+
+    var defaultColor = findDefaultColor(color);
+
+    // Check type of source to determine in which attribute to place the color
+    switch (source.runtimeType) {
+      case InheritedScaffold:
+        return defaultColor != null
+            ? 'backgroundColor: $defaultColor,\n'
+            : 'backgroundColor: Color($color),\n';
+
+      case InheritedContainer:
+        if ((source as InheritedContainer).isBackgroundVisible) {
+          return defaultColor != null
+              ? 'color: $defaultColor,\n'
+              : 'color: Color($color),\n';
+        }
+        return '';
+      default:
+        return defaultColor != null
+            ? 'color: $defaultColor,\n'
+            : 'color: Color($color),\n';
+    }
   }
 
+  /// Finds default color based on common hex patterns.
+  ///
+  /// Returns `null` if no pattern was found
   String findDefaultColor(String hex) {
     switch (hex) {
       case '0xffffffff':
         return 'Colors.white';
-        break;
       case '0xff000000':
         return 'Colors.black';
-        break;
+      default:
+        return null;
     }
-    return null;
   }
 }

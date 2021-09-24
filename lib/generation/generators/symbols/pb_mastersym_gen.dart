@@ -1,8 +1,8 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateless_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:quick_log/quick_log.dart';
 
 class PBMasterSymbolGenerator extends PBGenerator {
@@ -10,19 +10,23 @@ class PBMasterSymbolGenerator extends PBGenerator {
 
   var log = Logger('Symbol Master Generator');
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.LayoutBuilderValue;
+  String generate(PBIntermediateNode source, PBContext context) {
+    context.sizingContext = SizingValueContext.LayoutBuilderValue;
+    var children = context.tree.childrenOf(source);
+    var sourceChild = children.isNotEmpty ? children.first : null;
     var buffer = StringBuffer();
     if (source is PBSharedMasterNode) {
-      if (source.child == null) {
+      if (sourceChild == null) {
         return '';
       }
-      source.child.currentContext = source.currentContext;
+      // override styles if need be.
+      context.masterNode = source;
+
       // see if widget itself is overridden, need to pass
       var generatedWidget =
-          source.child.generator.generate(source.child, generatorContext);
+          sourceChild.generator.generate(sourceChild, context);
 
+      context.masterNode = null;
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }

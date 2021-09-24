@@ -1,17 +1,12 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
-import 'package:parabeac_core/input/sketch/entities/style/shared_style.dart';
-import 'package:parabeac_core/input/sketch/entities/style/text_style.dart';
-import 'package:parabeac_core/input/sketch/helper/symbol_node_mixin.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:quick_log/quick_log.dart';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:recase/recase.dart';
 
 class PBSymbolInstanceGenerator extends PBGenerator {
@@ -20,60 +15,26 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   var log = Logger('Symbol Instance Generator');
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
-      var method_signature = source.functionCallName?.pascalCase;
-      if (method_signature == null) {
-        log.error(' Could not find master name on: $source');
-        return 'Container(/** This Symbol was not found **/)';
-      }
-
-      var overrideProp = SN_UUIDtoVarName[source.UUID + '_symbolID'];
-
-      method_signature = PBInputFormatter.formatLabel(method_signature,
-          destroyDigits: false, spaceToUnderscore: false, isTitle: true);
       var buffer = StringBuffer();
-
       buffer.write('LayoutBuilder( \n');
       buffer.write('  builder: (context, constraints) {\n');
       buffer.write('    return ');
 
-      if (overrideProp != null) {
-        buffer.write('${overrideProp} ?? ');
-      }
+      // If storage found an instance, get its master
+      var masterSymbol =
+          PBSymbolStorage().getSharedMasterNodeBySymbolID(source.SYMBOL_ID);
 
-      buffer.write(method_signature);
-      buffer.write('(');
-      buffer.write('constraints,');
+      // recursively generate Symbol Instance constructors with overrides
+      buffer.write(genSymbolInstance(
+        source.SYMBOL_ID,
+        source.sharedParamValues,
+        generatorContext,
+      ));
 
-      for (var param in source.sharedParamValues ?? []) {
-        switch (param.type) {
-          case PBSharedInstanceIntermediateNode:
-            String siString = genSymbolInstance(
-                param.UUID, param.value, source.overrideValues);
-            if (siString != '') {
-              buffer.write('${param.name}: ');
-              buffer.write(siString);
-            }
-            break;
-          case InheritedBitmap:
-            buffer.write('${param.name}: \"assets/${param.value["_ref"]}\",');
-            break;
-          case TextStyle:
-            // hack to include import
-            source.currentContext.treeRoot.data.addImport(
-                'package:${MainInfo().projectName}/document/shared_props.g.dart');
-            buffer.write(
-                '${param.name}: ${SharedStyle_UUIDToName[param.value] ?? "TextStyle()"},');
-            break;
-          default:
-            buffer.write('${param.name}: \"${param.value}\",');
-            break;
-        }
-      }
-      // end of return function();
-      buffer.write(');\n');
+      // end of return <genSymbolInstance>();
+      buffer.write(';\n');
       // end of builder: (context, constraints) {
       buffer.write('}\n');
       // end of LayoutBuilder()
@@ -83,13 +44,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     return '';
   }
 
-  String genSymbolInstance(String overrideUUID, String UUID,
-      List<PBSymbolInstanceOverridableValue> overrideValues,
-      {int depth = 1}) {
-    if ((UUID == null) || (UUID == '')) {
-      return '';
-    }
-
+  PBSharedMasterNode getMasterSymbol(String UUID) {
     var masterSymbol;
     var nodeFound = PBSymbolStorage().getAllSymbolById(UUID);
     if (nodeFound is PBSharedMasterNode) {
@@ -102,43 +57,85 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       // Try to find master by looking for the master's SYMBOL_ID
       masterSymbol = PBSymbolStorage().getSharedMasterNodeBySymbolID(UUID);
     }
-    // file could have override names that don't exist?  That's really odd, but we have a file that does that.
-    if (masterSymbol == null) {
+
+    return masterSymbol;
+  }
+
+  String genSymbolInstance(
+    String UUID,
+    List<PBSharedParameterValue> overrideValues,
+    PBContext context, {
+    bool topLevel = true,
+    String UUIDPath = '',
+  }) {
+    if ((UUID == null) || (UUID == '')) {
       return '';
     }
 
-    assert(masterSymbol != null,
-        'Could not find master symbol with UUID: ${UUID}');
     var buffer = StringBuffer();
-    buffer.write('${masterSymbol.friendlyName}(constraints, ');
-    for (var ovrValue in overrideValues) {
-      var ovrUUIDStrings = ovrValue.UUID.split('/');
-      if ((ovrUUIDStrings.length == depth + 1) &&
-          (ovrUUIDStrings[depth - 1] == overrideUUID)) {
-        var ovrUUID = ovrUUIDStrings[depth];
-        switch (ovrValue.type) {
-          case PBSharedInstanceIntermediateNode:
-            buffer.write(genSymbolInstance(
-                ovrValue.value, ovrUUID, overrideValues,
-                depth: depth + 1));
-            break;
-          case InheritedBitmap:
-            var name = SN_UUIDtoVarName[ovrUUID + '_image'];
-            buffer.write('${name}: \"assets/${ovrValue.value["_ref"]}\",');
-            break;
-          case TextStyle:
-            var name = SN_UUIDtoVarName[ovrUUID + '_textStyle'];
-            buffer.write(
-                '${name}: ${SharedStyle_UUIDToName[ovrValue.value] ?? "TextStyle()"},');
-            break;
-          default:
-            var name = SN_UUIDtoVarName[ovrUUID];
-            buffer.write('${name}: \"${ovrValue.value}\",');
-            break;
+    var masterSymbol = getMasterSymbol(UUID);
+
+    // file could have override names that don't exist?  That's really odd, but we have a file that does that.
+    if (masterSymbol == null) {
+      log.error(' Could not find master symbol for UUID:: $UUID');
+      return 'Container(/** This Symbol was not found **/)});';
+    }
+
+    var symName = masterSymbol.name.snakeCase;
+    if (symName == null) {
+      log.error(' Could not find master name on: $masterSymbol');
+      return 'Container(/** This Symbol was not found **/)});';
+    }
+
+    symName = PBInputFormatter.formatLabel(symName,
+        destroyDigits: false, spaceToUnderscore: false, isTitle: true);
+
+    buffer.write(symName.pascalCase);
+    buffer.write('(\n');
+    buffer.write('constraints,\n');
+
+    // Make sure override property of every value is overridable
+    overrideValues.removeWhere((value) {
+      var override = OverrideHelper.getProperty(value.UUID, value.type);
+      return override == null || override.value == null;
+    });
+    _formatNameAndValues(overrideValues, context);
+    overrideValues.forEach((element) {
+      if (element.overrideName != null && element.initialValue != null) {
+        buffer.write('${element.overrideName}: ${element.value},');
+      }
+    });
+
+    buffer.write(')\n');
+
+    return buffer.toString();
+  }
+
+  /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
+  void _formatNameAndValues(
+      List<PBSharedParameterValue> params, PBContext context) {
+    params.forEach((param) {
+      var overrideProp = OverrideHelper.getProperty(param.UUID, param.type);
+
+      if (overrideProp != null) {
+        param.overrideName = overrideProp.propertyName;
+        // Find and reference symbol master if overriding a symbol
+        if (param.type == 'symbolID') {
+          var instance = PBSharedInstanceIntermediateNode(
+            param.UUID,
+            null,
+            SYMBOL_ID: param.initialValue,
+            name: param.overrideName,
+            overrideValues: [],
+            sharedParamValues: [],
+          );
+          var code = instance.generator.generate(instance, context);
+          param.value = code;
+          // Add single quotes to parameter value for override
+        } else if (!param.value.contains('\'')) {
+          param.value = '\'${param.value}\'';
         }
       }
-    }
-    buffer.write('),');
-    return buffer.toString();
+    });
   }
 }

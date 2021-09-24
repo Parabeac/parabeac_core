@@ -19,8 +19,8 @@ then
     currentCom=`git rev-parse HEAD`
     echo "Downloading submodule SketchAssetConverter"
 else
-    masterCom=`git rev-parse @:./SketchAssetConverter`
-    # echo $masterCom
+    cd ..
+    masterCom=`git rev-parse @:SketchAssetConverter`
 
     if [ $masterCom == $currentCom ]
     then

@@ -1,22 +1,20 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_layout_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBRowGenerator extends PBLayoutGenerator {
   PBRowGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
+  String generate(PBIntermediateNode source, PBContext context) {
     if (source is PBIntermediateRowLayout) {
       var buffer = StringBuffer();
       var counter = 0;
-      List<PBIntermediateNode> children = source.children;
+      var children = context.tree.childrenOf(source);
 
       for (var child in children) {
-        child.currentContext = source.currentContext;
-        buffer.write(child.generator.generate(child, generatorContext));
+        buffer.write(child.generator.generate(child, context));
         var trailing_comma = (counter + 1) == children.length ? '' : ',';
         buffer.write(trailing_comma);
         counter++;

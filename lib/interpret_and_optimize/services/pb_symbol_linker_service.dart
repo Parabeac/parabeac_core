@@ -1,12 +1,15 @@
+import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_shared_aggregation_service.dart';
 
-class PBSymbolLinkerService {
+class PBSymbolLinkerService extends AITHandler {
   PBSymbolStorage _symbolStorage;
   PBSharedInterAggregationService _aggregationService;
 
@@ -17,34 +20,31 @@ class PBSymbolLinkerService {
 
 // /Linking [PBSharedMasterNode] and [PBSharedInstanceIntermediateNode] together; linking its
 // /parameter and values.
-  Future<PBIntermediateNode> linkSymbols(PBIntermediateNode rootNode) async{
-    if(rootNode == null){
-      return rootNode;
+  Future<PBIntermediateTree> linkSymbols(
+      PBIntermediateTree tree, PBContext context) async {
+    var rootNode = tree.rootNode;
+    if (rootNode == null) {
+      return Future.value(tree);
     }
 
-    var stack = <PBIntermediateNode>[];
-    PBIntermediateNode rootIntermediateNode;
-    stack.add(rootNode);
-
-    while(stack.isNotEmpty){
-      var currentNode = stack.removeLast();
-      if(currentNode is PBLayoutIntermediateNode){
-        currentNode.children.forEach(stack.add);
-      } else if (currentNode is PBVisualIntermediateNode && currentNode.child != null){
-        stack.add(currentNode.child);
+    for (var vertex in tree) {
+      var node = vertex;
+      if (node is PBSharedMasterNode) {
+        await _symbolStorage.addSharedMasterNode(node);
+        _aggregationService.gatherSharedParameters(
+            node, context.tree.childrenOf(node).first, context);
+      } else if (node is PBSharedInstanceIntermediateNode) {
+        await _symbolStorage.addSharedInstance(node);
+        _aggregationService.gatherSharedValues(node);
       }
-
-      if(currentNode is PBSharedMasterNode){
-        await _symbolStorage.addSharedMasterNode(currentNode);
-        _aggregationService.gatherSharedParameters(currentNode, currentNode.child);
-
-      } else if (currentNode is PBSharedInstanceIntermediateNode){
-        await _symbolStorage.addSharedInstance(currentNode);
-        _aggregationService.gatherSharedValues(currentNode);
-      }
-
-      rootIntermediateNode ??= currentNode;
     }
-    return rootIntermediateNode;
+
+    return Future.value(tree);
+  }
+
+  @override
+  Future<PBIntermediateTree> handleTree(
+      PBContext context, PBIntermediateTree tree) {
+    return linkSymbols(tree, context);
   }
 }

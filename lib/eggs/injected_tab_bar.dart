@@ -1,70 +1,91 @@
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
-import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:recase/recase.dart';
 
-import 'injected_tab.dart';
+import 'package:uuid/uuid.dart';
 
 class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
-  final String UUID;
-  PBContext currentContext;
+  @override
   String semanticName = '<tabbar>';
 
-  List<PBIntermediateNode> get tabs => getAttributeNamed('tabs').attributeNodes;
+  static final TAB_ATTR_NAME = 'tabs';
+  static final BACKGROUND_ATTR_NAME = 'background';
+
+  final nameToAttr = {
+    '<tab>': TAB_ATTR_NAME,
+    '<background>': BACKGROUND_ATTR_NAME,
+  };
+
+  @override
+  AlignStrategy alignStrategy = NoAlignment();
 
   InjectedTabBar(
-    Point topLeftCorner,
-    Point bottomRightCorner,
+    String UUID,
+    Rectangle3D frame,
     String name,
-    this.UUID, {
-    this.currentContext,
-  }) : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+  ) : super(UUID, frame, name) {
     generator = PBTabBarGenerator();
-    addAttribute(PBAttribute('tabs'));
+    childrenStrategy = MultipleChildStrategy('children');
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
-    if (node is PBInheritedIntermediate) {
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<tab>')) {
-        assert(node is! Tab, 'node should be a Tab');
-        getAttributeNamed('tabs').attributeNodes.add(node);
-      }
+  String getAttributeNameOf(PBIntermediateNode node) {
+    var matchingKey = nameToAttr.keys
+        .firstWhere((key) => node.name.contains(key), orElse: () => null);
+
+    if (matchingKey != null) {
+      return nameToAttr[matchingKey];
     }
 
-    if (node is Tab) {
-      getAttributeNamed('tabs').attributeNodes.add(node);
-    }
+    return super.getAttributeNameOf(node);
   }
 
   @override
-  List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {}
-
-  @override
-  void alignChild() {}
-
-  @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, DesignNode originalRef) {
-    return InjectedTabBar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
-        currentContext: currentContext);
+  List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
+    return layer;
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {
-    // TODO: implement extractInformation
+  void extractInformation(PBIntermediateNode incomingNode) {}
+
+  @override
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
+    var tabbar = InjectedTabBar(
+      originalRef.UUID,
+      frame,
+      originalRef.name,
+    );
+
+    tree
+        .childrenOf(tabbar)
+        .forEach((child) => child.attributeName = getAttributeNameOf(child));
+
+    return tabbar;
+  }
+
+  @override
+  void handleChildren(PBContext context) {
+    var children = context.tree.childrenOf(this);
+
+    var validChildren = children
+        .where((child) =>
+            child.attributeName == TAB_ATTR_NAME ||
+            child.attributeName == BACKGROUND_ATTR_NAME)
+        .toList();
+
+    // Ensure only nodes with `tab` remain
+    context.tree.replaceChildrenOf(this, validChildren);
   }
 }
 
@@ -72,22 +93,36 @@ class PBTabBarGenerator extends PBGenerator {
   PBTabBarGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+  String generate(PBIntermediateNode source, PBContext context) {
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
-      var tabs = source.tabs;
+      // var tabs = source.tabs;
+      var tabs = source.getAllAtrributeNamed(
+          context.tree, InjectedTabBar.TAB_ATTR_NAME);
+      var background = context.tree.childrenOf(source).firstWhere(
+          (child) => child.attributeName == InjectedTabBar.BACKGROUND_ATTR_NAME,
+          orElse: () => null);
+
+      // Sort tabs from Left to Right
+      tabs.sort((a, b) => a.frame.left.compareTo(b.frame.left));
 
       var buffer = StringBuffer();
       buffer.write('BottomNavigationBar(');
+
+      if (background != null) {
+        // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
+        buffer.write(
+            'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      }
+
       buffer.write('type: BottomNavigationBarType.fixed,');
       try {
         buffer.write('items:[');
-        for (var i = 0; i < tabs.length; i++) {
+        for (var tab in tabs) {
           buffer.write('BottomNavigationBarItem(');
-          var res = manager.generate(tabs[i].child);
+          var res = context.generationManager.generate(tab, context);
           buffer.write('icon: $res,');
-          buffer.write('title: Text(""),');
+          buffer.write('label: "",');
           buffer.write('),');
         }
       } catch (e, stackTrace) {
@@ -99,7 +134,48 @@ class PBTabBarGenerator extends PBGenerator {
       }
       buffer.write('],');
       buffer.write(')');
-      return buffer.toString();
+
+      var className = source.parent.name + 'Tabbar';
+
+      // TODO: correct import
+      context.managerData.addImport(FlutterImport(
+        'controller/${className.snakeCase}.dart',
+        MainInfo().projectName,
+      ));
+
+      context.configuration.generationConfiguration.fileStructureStrategy
+          .commandCreated(WriteSymbolCommand(
+        Uuid().v4(),
+        className.snakeCase,
+        tabBarBody(className, buffer.toString()),
+        relativePath: 'controller',
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ));
+
+      return '$className()';
     }
+  }
+
+  String tabBarBody(String className, String body) {
+    return '''
+      import 'package:flutter/material.dart';
+
+      class $className extends StatefulWidget {
+        final Widget child;
+        $className({Key key, this.child}) : super (key: key);
+
+        @override
+        _${className}State createState() => _${className}State();
+
+      }
+
+      class _${className}State extends State<$className> {
+        @override
+        Widget build(BuildContext context){
+          return $body;
+        }
+      }
+      ''';
   }
 }

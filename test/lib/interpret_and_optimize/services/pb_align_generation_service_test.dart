@@ -1,73 +1,93 @@
+import 'dart:math';
+
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-class MockContext extends Mock implements PBContext {
-  @override
-  PBConfiguration configuration;
+import '../dfs_iterator_test.dart';
 
-  @override
-  Map jsonConfigurations;
-
-  @override
-  Point screenBottomRightCorner;
-
-  @override
-  Point screenTopLeftCorner;
-}
+class MockContext extends Mock implements PBContext {}
 
 class MockContainer extends Mock implements InjectedContainer {}
+
+var containerList;
+PBIntermediateTree tree;
+PBAlignGenerationService alignGenerationService;
+PBContext context;
 
 void main() {
   group('Testing the Positions generated for stacks', () {
     PBIntermediateStackLayout stack;
     setUp(() {
-      stack = PBIntermediateStackLayout('Testing Stack', Uuid().v4(),
-          currentContext: MockContext());
+      context = PBContext(null);
+
+      tree = TreeBuilder(10, nodeBuilder: (index) {
+
+        /// Constructing the [PBIntermediateTree] with real [InjectedContainer] rather than
+        /// using the [Mock]
+        var origin = Point(0, 0);
+        var container = InjectedContainer(
+            origin, origin, 'P_$index', 'P_$index',
+            constraints: PBIntermediateConstraints());
+        container.childrenStrategy = OneChildStrategy('child');
+
+        var containerChild = InjectedContainer(
+            origin, origin, 'C_$index', 'C_$index',
+            constraints: PBIntermediateConstraints());
+        containerChild.childrenStrategy = OneChildStrategy('child');
+
+        container.addChild(containerChild);
+        return container;
+      }, rootNodeBuilder: (children) {
+
+        /// Constructing a real [InjectedContainer] as [PBIntermediateTree.rootNode] rather
+        /// than using a [Mock]
+        var rootNode = PBIntermediateStackLayout(context);
+        rootNode.constraints = PBIntermediateConstraints();
+        rootNode.alignStrategy = NoAlignment();
+
+        rootNode.replaceChildren(children);
+        return rootNode;
+      }).build();
+
+      context.tree = tree;
+      alignGenerationService = PBAlignGenerationService();
     });
 
-    test('Testing the stack alignment algorithm', () {
-      var isYPositive = true, isXPositive = true;
+    test(
+        'When given a node contains contraints that are inheritable after [PBAlignGenerationService]',
+        () {
+      var inheritedFixedHeight = 2.0;
+      var inheritedFixedWidth = 3.0;
 
-      stack.topLeftCorner = Point(-200, -200);
-      stack.bottomRightCorner = Point(200, 200);
-      var startingTLC = Point(100, 100), startingBTC = Point(150, 150);
+      var parent = tree.firstWhere((child) => child?.UUID == 'P_0');
+      parent.constraints.fixedHeight = inheritedFixedHeight;
+      parent.constraints.fixedWidth = inheritedFixedWidth;
+      alignGenerationService.addAlignmentToLayouts(tree, context);
 
-      var containers = List.generate(4, (index) {
-        var mockContainer = MockContainer();
-        when(mockContainer.topLeftCorner).thenReturn(Point(
-            isXPositive ? startingTLC.x : (startingTLC.x * -1),
-            (isYPositive ? startingTLC.y : startingTLC.y * -1)));
-        when(mockContainer.bottomRightCorner).thenReturn(Point(
-            isXPositive ? startingBTC.x : (startingBTC.x * -1),
-            (isYPositive ? startingBTC.y : startingBTC.y * -1)));
-        index % 2 == 0
-            ? isYPositive = !isYPositive
-            : isXPositive = !isXPositive;
-        return mockContainer;
-      }).cast<PBIntermediateNode>();
 
-      stack.replaceChildren(containers);
-      stack.alignChildren();
-      containers = stack.children;
-      expect(containers.length, 4, reason: 'numbers of children change');
+      var inheritedConstrainsChild0 =
+          tree.firstWhere((child) => child.UUID == 'C_0');
+      var nonInheritedConstrainsChild =
+          tree.firstWhere((child) => child.UUID == 'C_1');
 
-      isXPositive = true;
-      isYPositive = true;
-      for (var i = 0; i < containers.length; i++) {
-        var container = containers[i];
-        expect(container.runtimeType, InjectedPositioned,
-            reason: 'should be of type InjectedPositioned');
-
-        i % 2 == 0 ? isYPositive = !isYPositive : isXPositive = !isXPositive;
-      }
+      expect(inheritedConstrainsChild0.constraints.fixedHeight,
+          inheritedFixedHeight);
+      expect(
+          inheritedConstrainsChild0.constraints.fixedWidth, inheritedFixedWidth);
+      expect(nonInheritedConstrainsChild.constraints.fixedHeight, isNull);
+      expect(nonInheritedConstrainsChild.constraints.fixedWidth, isNull);
     });
   });
 }

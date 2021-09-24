@@ -1,4 +1,6 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'dart:math';
+
+import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -9,7 +11,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dar
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -19,7 +20,7 @@ class MockInheritedText extends Mock implements InheritedText {}
 
 class MockManager extends Mock implements PBFlutterGenerator {}
 
-class MockContext extends Mock implements GeneratorContext {}
+class MockContext extends Mock implements PBContext {}
 
 class MockData extends Mock implements IntermediateAuxiliaryData {}
 
@@ -82,10 +83,8 @@ void main() {
 
       when(mockInheritedText.text).thenReturn('Test Text');
 
-      mockManager = PBFlutterGenerator();
+      mockManager = PBFlutterGenerator(ImportHelper());
       mockGenerator = PBContainerGenerator();
-
-      mockGenerator.manager = mockManager;
     });
 
     test('', () {

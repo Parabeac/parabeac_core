@@ -1,4 +1,5 @@
 import 'package:mockito/mockito.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/input/sketch/entities/layers/abstract_layer.dart';
@@ -26,6 +27,8 @@ void main() {
     setUp(() {
       sketchNode = ShapePathMock();
       context = ContextMock();
+      MainInfo().outputPath = '';
+      MainInfo().pngPath = '';
 
       when(sketchNode.points).thenReturn([
         {
@@ -43,10 +46,10 @@ void main() {
         borders: [
           Border(
             color: Color(
-              alpha: 1,
-              red: 1,
-              green: 1,
-              blue: 1,
+              a: 1,
+              r: 1,
+              g: 1,
+              b: 1,
             ),
           ),
         ],
@@ -87,10 +90,10 @@ void main() {
         borders: [
           Border(
             color: Color(
-              alpha: 1,
-              red: 1,
-              green: 1,
-              blue: 1,
+              a: 1,
+              r: 1,
+              g: 1,
+              b: 1,
             ),
           ),
         ],

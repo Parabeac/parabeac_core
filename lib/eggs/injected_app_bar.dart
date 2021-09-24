@@ -1,88 +1,95 @@
-import 'package:parabeac_core/controllers/interpret.dart';
-import 'package:parabeac_core/design_logic/design_node.dart';
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_attribute.dart';
+import 'package:recase/recase.dart';
+
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:uuid/uuid.dart';
 
 class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
-  PBContext currentContext;
-
   @override
   String semanticName = '<navbar>';
 
-  String UUID;
+  /// String representing what the <leading> tag maps to
+  static final LEADING_ATTR_NAME = 'leading';
 
-  PBIntermediateNode get leadingItem =>
-      getAttributeNamed('leading')?.attributeNode;
-  PBIntermediateNode get middleItem =>
-      getAttributeNamed('title')?.attributeNode;
-  PBIntermediateNode get trailingItem =>
-      getAttributeNamed('actions')?.attributeNode;
+  /// String representing what the <middle> tag maps to
+  static final MIDDLE_ATTR_NAME = 'title';
+
+  /// String representing what the <trailing> tag maps to
+  static final TRAILING_ATTR_NAME = 'actions';
+
+  /// String representing what the <background> tag maps to
+  static final BACKGROUND_ATTR_NAME = 'background';
+
+  final tagToName = {
+    '<leading>': LEADING_ATTR_NAME,
+    '<middle>': MIDDLE_ATTR_NAME,
+    '<trailing>': TRAILING_ATTR_NAME,
+    '<background>': BACKGROUND_ATTR_NAME
+  };
 
   InjectedAppbar(
-      Point topLeftCorner, Point bottomRightCorner, this.UUID, String name,
-      {this.currentContext})
-      : super(topLeftCorner, bottomRightCorner, currentContext, name) {
+    String UUID,
+    Rectangle3D frame,
+    String name,
+  ) : super(UUID, frame, name) {
     generator = PBAppBarGenerator();
-    addAttribute(PBAttribute('leading'));
-    addAttribute(PBAttribute('title'));
-    addAttribute(PBAttribute('actions'));
+    childrenStrategy = MultipleChildStrategy('children');
   }
 
   @override
-  void addChild(PBIntermediateNode node) {
-    if (node is PBInheritedIntermediate) {
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<leading>')) {
-        getAttributeNamed('leading').attributeNode = node;
-      }
-
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<trailing>')) {
-        getAttributeNamed('actions').attributeNode = node;
-      }
-      if ((node as PBInheritedIntermediate)
-          .originalRef
-          .name
-          .contains('<middle>')) {
-        getAttributeNamed('title').attributeNode = node;
+  String getAttributeNameOf(PBIntermediateNode node) {
+    if (node is PBIntermediateNode) {
+      /// Iterate `keys` of [tagToName] to see if
+      /// any `key` matches [node.name]
+      for (var key in tagToName.keys) {
+        if (node.name.contains(key)) {
+          return tagToName[key];
+        }
       }
     }
 
-    return;
+    return super.getAttributeNameOf(node);
   }
 
   @override
-  void alignChild() {
-    /// This align only modifies middleItem
-    var tempNode = InjectedContainer(
-      middleItem.bottomRightCorner,
-      middleItem.topLeftCorner,
-      middleItem.name,
-      middleItem.UUID,
-    )..addChild(middleItem);
+  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
+      PBIntermediateTree tree) {
+    var appbar = InjectedAppbar(
+      originalRef.UUID,
+      frame,
+      originalRef.name,
+    );
 
-    getAttributeNamed('title').attributeNode = tempNode;
+    tree
+        .childrenOf(appbar)
+        .forEach((child) => child.attributeName = getAttributeNameOf(child));
+
+    return appbar;
   }
 
   @override
-  PBEgg generatePluginNode(
-      Point topLeftCorner, Point bottomRightCorner, originalRef) {
-    return InjectedAppbar(
-        topLeftCorner, bottomRightCorner, UUID, originalRef.name,
-        currentContext: currentContext);
+  void handleChildren(PBContext context) {
+    var children = context.tree.childrenOf(this);
+
+    // Remove children that have an invalid `attributeName`
+    var validChildren = children.where(_isValidNode).toList();
+
+    context.tree.replaceChildrenOf(this, validChildren);
   }
+
+  /// Returns [true] if `node` has a valid `attributeName` in the eyes of the [InjectedAppbar].
+  /// Returns [false] otherwise.
+  bool _isValidNode(PBIntermediateNode node) =>
+      tagToName.values.any((name) => name == node.attributeName);
 
   @override
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
@@ -90,49 +97,123 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  void extractInformation(DesignNode incomingNode) {}
+  void extractInformation(PBIntermediateNode incomingNode) {}
 }
 
 class PBAppBarGenerator extends PBGenerator {
   PBAppBarGenerator() : super();
 
   @override
-  String generate(
-      PBIntermediateNode source, GeneratorContext generatorContext) {
-    generatorContext.sizingContext = SizingValueContext.PointValue;
+  String generate(PBIntermediateNode source, PBContext generatorContext) {
+    // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();
 
       buffer.write('AppBar(');
 
-      source.attributes.forEach((attribute) {
-        attribute.attributeNode.currentContext = source.currentContext;
+      // Get necessary attributes that need to be processed separately
+      var background = generatorContext.tree.childrenOf(source).firstWhere(
+          (child) => child.attributeName == InjectedAppbar.BACKGROUND_ATTR_NAME,
+          orElse: () => null);
+      var actions = generatorContext.tree.childrenOf(source).where(
+          (child) => child.attributeName == InjectedAppbar.TRAILING_ATTR_NAME);
+      var children = generatorContext.tree.childrenOf(source).where((child) =>
+          child.attributeName != InjectedAppbar.TRAILING_ATTR_NAME &&
+          child.attributeName != InjectedAppbar.BACKGROUND_ATTR_NAME);
+
+      if (background != null && background.auxiliaryData?.color != null) {
+        // TODO: PBColorGen may need a refactor in order to support `backgroundColor` when inside this tag
         buffer.write(
-            '${attribute.attributeName}: ${_wrapOnBrackets(attribute.attributeNode.generator.generate(attribute.attributeNode, generatorContext), attribute.attributeName == 'actions', attribute.attributeName == 'leading')},');
-      });
+            'backgroundColor: Color(${background.auxiliaryData?.color?.toString()}),');
+      } else {
+        buffer.write(
+            'backgroundColor: Color(${generatorContext.tree.rootNode.auxiliaryData.color.toString()}),');
+      }
+      if (actions.isNotEmpty) {
+        buffer.write(
+            '${InjectedAppbar.TRAILING_ATTR_NAME}: ${_getActions(actions, generatorContext)},');
+      }
+      children.forEach((child) => buffer.write(
+          '${child.attributeName}: ${child.generator.generate(child, generatorContext)},'));
 
       buffer.write(')');
-      return buffer.toString();
+
+      var className = source.parent.name + 'Appbar';
+
+      // TODO: correct import
+      generatorContext.managerData.addImport(FlutterImport(
+        'controller/${className.snakeCase}.dart',
+        MainInfo().projectName,
+      ));
+
+      generatorContext
+          .configuration.generationConfiguration.fileStructureStrategy
+          .commandCreated(WriteSymbolCommand(
+        Uuid().v4(),
+        className.snakeCase,
+        appBarBody(className, buffer.toString(),
+            generatorContext.managerData.importsList),
+        relativePath: 'controller',
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ));
+
+      return '$className()';
     }
   }
 
-  String _wrapOnBrackets(String body, bool isActions, bool isLeading) {
-    if (isActions) {
-      return '[${_wrapOnIconButton(body)}]';
-    } else if (isLeading) {
-      return _wrapOnIconButton(body);
-    }
-    return '$body';
-  }
+  String appBarBody(
+      String className, String body, List<FlutterImport> importsList) {
+    var imports = '';
 
-  String _wrapOnIconButton(String body) {
-    return ''' 
-      IconButton(
-        icon: ${body},
-        onPressed: () {
-          // TODO: Fill action
+    importsList.forEach((import) {
+      if (import.package != MainInfo().projectName) {
+        imports += import.toString() + '\n';
+      }
+    });
+    return '''
+      $imports
+
+      class $className extends StatefulWidget implements PreferredSizeWidget{
+        final Widget child;
+        $className({Key key, this.child}) : super (key: key);
+
+        @override
+        _${className}State createState() => _${className}State();
+
+        @override
+        Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+      }
+
+      class _${className}State extends State<$className> {
+        @override
+        Widget build(BuildContext context){
+          return $body;
         }
-      )
-    ''';
+      }
+      ''';
   }
+
+  /// Returns list ot `actions` as individual [PBIntermediateNodes]
+  String _getActions(Iterable<PBIntermediateNode> actions, PBContext context) {
+    var buffer = StringBuffer();
+
+    buffer.write('[');
+    actions.forEach((action) =>
+        buffer.write('${action.generator.generate(action, context)},'));
+    buffer.write(']');
+
+    return buffer.toString();
+  }
+
+  // String _wrapOnIconButton(String body) {
+  //   return '''
+  //     IconButton(
+  //       icon: $body,
+  //       onPressed: () {
+  //         // TODO: Fill action
+  //       }
+  //     )
+  //   ''';
+  // }
 }

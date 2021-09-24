@@ -1,6 +1,7 @@
 import 'package:parabeac_core/generation/prototyping/pb_prototype_aggregation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBPrototypeStorage {
   static final PBPrototypeStorage _singleInstance =
@@ -24,22 +25,25 @@ class PBPrototypeStorage {
 
   Iterable<String> get prototypeIDs => _pbPrototypeInstanceNodes.keys;
 
-  Future<bool> addPrototypeInstance(PBIntermediateNode prototypeNode) async {
+  Future<bool> addPrototypeInstance(
+      PBIntermediateNode prototypeNode, PBContext context) async {
     if (_pbPrototypeInstanceNodes.containsKey(prototypeNode.UUID)) {
       return false;
     }
 
     await PBPrototypeAggregationService()
-        .analyzeIntermediateNode(prototypeNode);
+        .analyzeIntermediateNode(prototypeNode, context);
     _pbPrototypeInstanceNodes['${prototypeNode.UUID}'] = prototypeNode;
     return true;
   }
 
-  Future<bool> addPageNode(PBIntermediateNode pageNode) async {
+  Future<bool> addPageNode(
+      PBIntermediateNode pageNode, PBContext context) async {
     if (_pbPages.containsKey(pageNode.UUID)) {
       return false;
     }
-    // await TODO:
+    await PBPrototypeAggregationService()
+        .analyzeIntermediateNode(pageNode, context);
     _pbPages['${pageNode.UUID}'] = pageNode;
     return true;
   }

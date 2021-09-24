@@ -1,180 +1,276 @@
+import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
+import 'package:parabeac_core/generation/generators/import_generator.dart';
+import 'package:parabeac_core/generation/generators/middleware/command_gen_middleware.dart';
 import 'package:parabeac_core/generation/generators/middleware/middleware.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/command_invoker.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/entry_file_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/orientation_builder_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/responsive_layout_builder_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_screen_command.dart';
+import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/flutter_file_structure_strategy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/flutter_file_structure_strategy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy.dart/pb_file_structure_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_gen_cache.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
-abstract class GenerationConfiguration {
+abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
 
   Logger logger;
 
-  final Set<Middleware> _middleware = {};
-  Set<Middleware> get middlewares => _middleware;
-
-  ///The project that contains the node for all the pages.
-  PBProject pbProject;
+  /// The [_head] of a [Middlware] link list.
+  Middleware _head;
 
   ///The manager in charge of the independent [PBGenerator]s by providing an interface for adding imports, global variables, etc.
   ///
   ///The default [PBGenerationManager] will be [PBFlutterGenerator]
-  PBGenerationManager _generationManager;
+  PBGenerationManager generationManager;
+
+  PBPlatformOrientationLinkerService poLinker;
+
+  ImportHelper _importProcessor;
+
+  @Deprecated('Use [FileStructureCommands instead of using the pageWriter.]')
 
   /// PageWriter to be used for generation
-  PBPageWriter _pageWriter = PBFlutterWriter(); // Default to Flutter
-  PBPageWriter get pageWriter => _pageWriter;
+  PBPageWriter pageWriter = PBFlutterWriter();
 
-  set pageWriter(PBPageWriter pageWriter) => _pageWriter = pageWriter;
+  // final Map<String, String> _dependencies = {};
+  // Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
+
+  /// List of observers that will be notified when a new command is added.
+  final commandObservers = <CommandInvoker>[];
+
+  /// Queue where [FileStructureCommand]s can be placed for later execution.
+  ///
+  /// Specifically, once the [setUpConfiguration] has been called and finished executing
+  /// for the [GenerationConfiguration]. The purpose of this list, is for callers that might want
+  /// to execute [FileStructureCommand]s before the [GenerationConfiguration] is done with [setUpConfiguration].
+  /// Those [FileStructureCommand]s could just be added to the list.
+  final List<FileStructureCommand> commandQueue = [];
+
+  FileSystemAnalyzer fileSystemAnalyzer;
 
   GenerationConfiguration() {
     logger = Logger(runtimeType.toString());
-    _generationManager = PBFlutterGenerator(data: PBGenerationViewData());
+    _importProcessor ??= ImportHelper();
+    generationManager ??=
+        PBFlutterGenerator(_importProcessor, data: PBGenerationViewData());
+    poLinker ??= PBPlatformOrientationLinkerService();
   }
-
-  PBGenerationManager get generationManager => _generationManager;
-  set generationManager(PBGenerationManager manager) =>
-      _generationManager = manager;
-
-  final Map<String, String> _dependencies = {};
-  Iterable<MapEntry<String, String>> get dependencies => _dependencies.entries;
 
   ///This is going to modify the [PBIntermediateNode] in order to affect the structural patterns or file structure produced.
-  Future<PBIntermediateNode> applyMiddleware(PBIntermediateNode node) async {
-    var it = _middleware.iterator;
-    while (it.moveNext()) {
-      node = await it.current.applyMiddleware(node);
+  Future<PBIntermediateTree> applyMiddleware(
+          PBIntermediateTree tree, PBContext context) =>
+      _head.applyMiddleware(tree, context);
+
+  /// It is generating the [List] of [trees] by passing them through the link list
+  /// of [Middleware].
+  ///
+  /// Before passing through the [Middleware],
+  /// each of the [PBIntermediateTree] is going to be analyzed by the [poLinker].
+  /// The result should be the segregation of platforms and their orientation.
+  /// Finally, if the [PBIntermediateTree.isHomeScreen], it will modify the main file to
+  /// reflect that information. At the end, the [Middleware] should be executing [FileStructureCommands]
+  /// that generate the code for each tree in the [trees].
+  Future<void> generateTree(PBIntermediateTree tree, PBProject project,
+      PBContext context, bool lockData) async {
+    var processInfo = MainInfo();
+    fileStructureStrategy.dryRunMode = lockData;
+    tree.lockData = lockData;
+    fileStructureStrategy.addImportsInfo(tree, context);
+
+    context.generationManager = generationManager;
+    generationManager.data = tree.generationViewData;
+    tree.generationViewData
+        .addImport(FlutterImport('material.dart', 'flutter'));
+
+    // Relative path to the file to create
+    var relPath = p.join(tree.name.snakeCase, tree.identifier);
+
+    // Change relative path if current tree is part of multi-platform setup
+    if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
+      var platformFolder = poLinker.stripPlatform(context.managerData.platform);
+      relPath = p.join(tree.identifier, platformFolder, tree.identifier);
     }
-    return node;
+    if (tree.isHomeScreen()) {
+      await _setMainScreen(tree, relPath, MainInfo().projectName);
+    }
+    await applyMiddleware(tree, context);
+    await _commitDependencies(processInfo.genProjectPath, project);
   }
 
-  Future<PBIntermediateNode> conditionsToApplyMiddleware(
-      PBIntermediateNode node) async {
-    if ((node is PBSharedInstanceIntermediateNode && _isMasterState(node)) ||
-        (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false)) {
-      return await applyMiddleware(node);
-    }
-    return node;
-  }
-
-  bool _isMasterState(PBSharedInstanceIntermediateNode node) {
-    if (node.isMasterState) {
-      return true;
-    }
-    var symbolMaster =
-        PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
-    return symbolMaster?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false;
-  }
-
-  Future<PBIntermediateNode> _iterateNode(PBIntermediateNode node) async {
-    var stack = <PBIntermediateNode>[node];
-    while (stack.isNotEmpty) {
-      var currentNode = stack.removeLast();
-
-      /// Add all children to the stack
-      if (currentNode.child != null) {
-        stack.add(currentNode.child);
-      } else if (currentNode is PBLayoutIntermediateNode) {
-        currentNode.children.forEach((node) {
-          stack.add(node);
-        });
-      }
-
-      /// Apply incoming function to all nodes
-      await conditionsToApplyMiddleware(currentNode);
-    }
-    return node;
-  }
-
-  ///generates the Project based on the [pb_project]
+  ///Generates the [PBIntermediateTree]s within the [pb_project]
   Future<void> generateProject(PBProject pb_project) async {
-    pbProject = pb_project;
+    _head = CommandGenMiddleware(
+        generationManager, this, _importProcessor, MainInfo().projectName);
 
-    await setUpConfiguration();
-    pbProject.fileStructureStrategy = fileStructureStrategy;
-    for (var tree in pbProject.forest) {
-      tree.data.addImport('package:flutter/material.dart');
-      _generationManager.data = tree.data;
-      var fileName = tree.rootNode?.name?.snakeCase ?? 'no_name_found';
-      if (tree.rootNode is InheritedScaffold &&
-          (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(
-            tree.rootNode, '${tree.name.snakeCase}/${fileName}.dart');
-      }
-      await _iterateNode(tree.rootNode);
+    ///First we are going to perform a dry run in the generation to
+    ///gather all the necessary information
+    await setUpConfiguration(pb_project);
+    
+    fileStructureStrategy.addFileObserver(_importProcessor);
+    // pb_project.fileStructureStrategy = fileStructureStrategy;
 
-      _commitImports(tree.rootNode, tree.name.snakeCase, fileName);
+    // pb_project.lockData = true;
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // await generateTrees(pb_project.forest, pb_project, context);
+    // pb_project.lockData = false;
 
-      await _generateNode(tree.rootNode, '${tree.name.snakeCase}/${fileName}');
-    }
-    await _commitDependencies(pb_project.projectName);
+    ///After the dry run is complete, then we are able to create the actual files.
+    // fileStructureStrategy.dryRunMode = false;
+
+    // commandQueue.forEach(fileStructureStrategy.commandCreated);
+    // commandQueue.clear();
+    // await generateTrees(pb_project.forest, pb_project, context);
   }
 
   void registerMiddleware(Middleware middleware) {
     if (middleware != null) {
-      middleware.generationManager = _generationManager;
-      _middleware.add(middleware);
+      if (_head == null) {
+        _head = middleware;
+      } else {
+        middleware.nextMiddleware = _head;
+        _head = middleware;
+      }
     }
   }
 
-  Future<void> setUpConfiguration() async {
+  ///Configure the required classes for the [PBGenerationConfiguration]
+  Future<void> setUpConfiguration(PBProject pbProject) async {
     fileStructureStrategy = FlutterFileStructureStrategy(
-        pbProject.projectAbsPath, _pageWriter, pbProject);
+        pbProject.projectAbsPath, pageWriter, pbProject, fileSystemAnalyzer);
+    commandObservers.add(fileStructureStrategy);
+
     logger.info('Setting up the directories');
     await fileStructureStrategy.setUpDirectories();
   }
 
-  void _commitImports(
-      PBIntermediateNode node, String directoryName, String fileName) {
-    var nodePaths = PBGenCache()
-        .getPaths(node is PBSharedMasterNode ? node.SYMBOL_ID : node.UUID);
+  Future<void> _commitDependencies(
+      String projectPath, PBProject project) async {
+    var writer = pageWriter;
+    if (writer is PBFlutterWriter) {
+      writer.submitDependencies(p.join(projectPath, 'pubspec.yaml'),
+          project.genProjectData.dependencies);
+    }
+  }
+
+  Future<void> _setMainScreen(
+      PBIntermediateTree tree, String outputMain, String packageName) async {
+    var nodeInfo = _determineNode(tree, outputMain);
+    fileStructureStrategy.commandCreated(EntryFileCommand(
+        entryScreenName: nodeInfo[0],
+        entryScreenImport: _importProcessor
+            .getFormattedImports(tree.UUID,
+                importMapper: (import) => FlutterImport(import, packageName))
+            .join('\n')));
+  }
+
+  List<String> _determineNode(PBIntermediateTree tree, String outputMain) {
+    var rootName = tree.rootNode.name;
+    if (rootName.contains('_')) {
+      rootName = rootName.split('_')[0].pascalCase;
+    }
+    var currentMap = poLinker.getPlatformOrientationData(rootName.snakeCase);
+    var className = [rootName.pascalCase, ''];
+    if (currentMap.length > 1) {
+      className[0] += 'PlatformBuilder';
+      className[1] =
+          rootName.snakeCase + '/${rootName.snakeCase}_platform_builder.dart';
+    }
+    return className;
+  }
+
+  /// Generate platform and orientation instances for all the
+  /// screens that requireds and change main.dart if need it
+  void generatePlatformAndOrientationInstance(PBProject mainTree) {
+    var currentMap = poLinker.getWhoNeedsAbstractInstance();
+
+    currentMap.forEach((screenName, platformsMap) {
+      var rawImports = getPlatformImports(screenName);
+
+      rawImports.add(p.join(
+        fileStructureStrategy.GENERATED_PROJECT_PATH,
+        OrientationBuilderCommand.DIR_TO_ORIENTATION_BUILDER,
+        OrientationBuilderCommand.NAME_TO_ORIENTAION_BUILDER,
+      ));
+      rawImports.add(p.join(
+        fileStructureStrategy.GENERATED_PROJECT_PATH,
+        ResponsiveLayoutBuilderCommand.DIR_TO_RESPONSIVE_LAYOUT,
+        ResponsiveLayoutBuilderCommand.NAME_TO_RESPONSIVE_LAYOUT,
+      ));
+
+      // TODO: Find a more effective way to do this, since there are a lot
+      // of assumptions happening in the code.
+      var newCommand = generatePlatformInstance(
+          platformsMap, screenName, fileStructureStrategy, rawImports);
+
+      if (newCommand != null) {
+        newCommand.write(fileStructureStrategy);
+        setMainForPlatform(newCommand, screenName);
+      }
+    });
+  }
+
+  /// Gets all the screen imports for the builder
+  Set<String> getPlatformImports(String screenName) {
+    var platformOrientationMap =
+        poLinker.getPlatformOrientationData(screenName);
     var imports = <String>{};
-    // Fetch imports for each path
-    nodePaths.forEach(
-        (path) => imports.addAll(ImportHelper.findImports(node, path)));
-    imports.forEach(node.managerData.addImport);
+    platformOrientationMap.forEach((key, map) {
+      map.forEach((key, tree) {
+        var uuidImport = _importProcessor.getImport(tree.UUID);
+        if (uuidImport == null) {
+          MainInfo().sentry.captureException(
+              exception: Exception(
+                  'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
+        } else {
+          imports.addAll(_importProcessor.getImport(tree.UUID));
+        }
+      });
+    });
+    return imports;
   }
 
-  Future<void> _commitDependencies(String projectName) async {
-    var writer = _pageWriter;
-    if (writer is PBFlutterWriter) {
-      writer.submitDependencies(projectName + '/pubspec.yaml');
-    }
-  }
+  /// This method takes a command and checks if one of its child screens
+  /// is the home screen for the project, if so modify main
+  /// to redirect to the proper builder
+  bool setMainForPlatform(WriteScreenCommand newCommand, String screenName) {
+    var platformOrientationMap =
+        poLinker.getPlatformOrientationData(screenName);
 
-  void _setMainScreen(InheritedScaffold node, String outputMain) async {
-    var writer = _pageWriter;
-    if (writer is PBFlutterWriter) {
-      await writer.writeMainScreenWithHome(
-          node.name,
-          fileStructureStrategy.GENERATED_PROJECT_PATH + 'lib/main.dart',
-          'screens/${outputMain}');
-    }
-  }
-
-  Future<void> _generateNode(PBIntermediateNode node, String filename) async {
-    if (node?.auxiliaryData?.stateGraph?.states?.isNotEmpty ?? false) {
-      /// Since these nodes are being processed on the middlewares
-      /// we can ignore them here
-      /// TODO: change it
-    } else {
-      await pbProject.fileStructureStrategy.generatePage(
-          await _generationManager.generate(node), filename,
-          args: node is InheritedScaffold ? 'SCREEN' : 'VIEW');
-    }
+    platformOrientationMap.forEach((key, map) {
+      map.forEach((key, tree) {
+        if (tree.rootNode is InheritedScaffold &&
+            (tree.rootNode as InheritedScaffold).isHomeScreen) {
+          fileStructureStrategy.commandCreated(EntryFileCommand(
+              entryScreenName:
+                  newCommand.name.replaceAll('.dart', '').pascalCase,
+              entryScreenImport: _importProcessor
+                  .getFormattedImports(newCommand.UUID,
+                      importMapper: (import) =>
+                          FlutterImport(import, MainInfo().projectName))
+                  .join('\n')));
+          return true;
+        }
+      });
+    });
+    return false;
   }
 }

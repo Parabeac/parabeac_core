@@ -1,8 +1,7 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_generator_context.dart';
 import 'package:parabeac_core/generation/generators/pb_generation_manager.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:recase/recase.dart';
 
 class BLoCStateTemplateStrategy extends TemplateStrategy {
@@ -10,44 +9,25 @@ class BLoCStateTemplateStrategy extends TemplateStrategy {
   String abstractClassName;
   BLoCStateTemplateStrategy({this.isFirst, this.abstractClassName});
   @override
-  String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
-      GeneratorContext generatorContext,
+  String generateTemplate(
+      PBIntermediateNode node, PBGenerationManager manager, PBContext context,
       {args}) {
-    var widgetName = retrieveNodeName(node);
-    var returnStatement = node.generator.generate(node, generatorContext);
-    var overrides = '';
-    var overrideVars = '';
-    if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
-      node.overridableProperties.forEach((prop) {
-        overrides += '${prop.friendlyName}, ';
-        overrideVars += 'var ${prop.friendlyName};';
-      });
-    }
+    context.managerData.hasParams = true;
+    context.managerData.hasParams = false;
 
     return '''
 ${isFirst ? _getHeader(manager) : ''}
 
-class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{
-  ${manager.generateGlobalVariables()}
-
-  ${overrideVars}
-  
-
-  ${widgetName + 'State'}(${(overrides.isNotEmpty ? '{$overrides}' : '')}){}
-
-  @override
-  Widget get widget => ${returnStatement};
-
-}''';
+class ${node.name.pascalCase}State extends ${abstractClassName.pascalCase}State{}''';
   }
 
   String _getHeader(manager) {
     return '''
-    part of '${abstractClassName.snakeCase}_bloc.dart';
+    part of '${abstractClassName.snakeCase}_cubit.dart';
 
     @immutable
     abstract class ${abstractClassName.pascalCase}State{
-      Widget get widget;
+      
     }
     ''';
   }
