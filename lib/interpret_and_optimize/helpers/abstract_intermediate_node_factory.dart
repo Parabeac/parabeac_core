@@ -1,3 +1,5 @@
+import 'package:directed_graph/directed_graph.dart';
+import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -18,6 +20,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
+import 'package:uuid/uuid.dart';
+import 'package:recase/recase.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
@@ -58,11 +62,26 @@ class AbstractIntermediateNodeFactory {
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
-            /// [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
-            iNode.parent = parent;
-            tree.replaceNode(iNode, tag, acceptChildren: true);
+            if (iNode is PBSharedMasterNode) {
+              iNode.name = iNode.name.replaceAll('<custom>', '');
+              var tempGroup = CustomEgg(
+                Uuid().v4(),
+                iNode.frame,
+                iNode.name.pascalCase + 'Custom',
+              );
 
-            return tag;
+              tree.addEdges(tempGroup,
+                  tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
+
+              tree.replaceChildrenOf(iNode, [tempGroup]);
+              return iNode;
+            } else {
+              //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
+              iNode.parent = parent;
+              tree.replaceNode(iNode, tag, acceptChildren: true);
+
+              return tag;
+            }
           }
           if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);
