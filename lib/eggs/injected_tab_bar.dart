@@ -147,7 +147,8 @@ class PBTabBarGenerator extends PBGenerator {
           .commandCreated(WriteSymbolCommand(
         Uuid().v4(),
         className.snakeCase,
-        tabBarBody(className, buffer.toString()),
+        tabBarBody(
+            className, buffer.toString(), context.managerData.importsList),
         relativePath: 'controller',
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
@@ -157,9 +158,17 @@ class PBTabBarGenerator extends PBGenerator {
     }
   }
 
-  String tabBarBody(String className, String body) {
+  String tabBarBody(
+      String className, String body, List<FlutterImport> importsList) {
+    var imports = '';
+
+    importsList.forEach((import) {
+      if (import.package != MainInfo().projectName) {
+        imports += import.toString() + '\n';
+      }
+    });
     return '''
-      import 'package:flutter/material.dart';
+      $imports
 
       class $className extends StatefulWidget {
         final Widget child;
