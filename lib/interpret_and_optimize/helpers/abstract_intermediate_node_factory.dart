@@ -19,7 +19,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -54,10 +53,6 @@ class AbstractIntermediateNodeFactory {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json, parent, tree);
 
-          // Check if `iNode` is a tag
-          //? If `iNode` is a tag, do we have to remove any links that \
-          //? may have been made during `createIntermediateNode()` ?
-
           var tag =
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
@@ -65,7 +60,7 @@ class AbstractIntermediateNodeFactory {
             if (iNode is PBSharedMasterNode) {
               iNode.name = iNode.name.replaceAll('<custom>', '');
               var tempGroup = CustomEgg(
-                Uuid().v4(),
+                null,
                 iNode.frame,
                 iNode.name.pascalCase + 'Custom',
               );
@@ -81,8 +76,6 @@ class AbstractIntermediateNodeFactory {
                 iNode.frame,
                 tag.name + 'Custom',
               );
-
-              // tag.name += 'Custom';
 
               iNode.parent = parent;
 

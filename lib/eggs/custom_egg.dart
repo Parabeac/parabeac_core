@@ -15,7 +15,6 @@ import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
 class CustomEgg extends PBEgg implements PBInjectedIntermediate {
-  // PBIntermediateNode originalRef;
   @override
   String semanticName = '<custom>';
   CustomEgg(String UUID, Rectangle3D frame, String name)
