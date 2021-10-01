@@ -75,6 +75,22 @@ class AbstractIntermediateNodeFactory {
 
               tree.replaceChildrenOf(iNode, [tempGroup]);
               return iNode;
+            } else if (iNode is PBSharedInstanceIntermediateNode) {
+              var tempGroup = CustomEgg(
+                null,
+                iNode.frame,
+                tag.name + 'Custom',
+              );
+
+              // tag.name += 'Custom';
+
+              iNode.parent = parent;
+
+              tree.replaceNode(iNode, tempGroup);
+
+              tree.addEdges(tempGroup, [iNode]);
+
+              return tempGroup;
             } else {
               //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
               iNode.parent = parent;
