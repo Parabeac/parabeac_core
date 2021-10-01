@@ -1,22 +1,14 @@
-import 'dart:math';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
-import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:recase/recase.dart';
@@ -45,46 +37,29 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   ///The properties that could be be overridable on a [PBSharedMasterNode]
   @JsonKey(ignore: true)
   List<PBSharedParameterProp> overridableProperties;
-  String friendlyName;
+  String _friendlyName;
+
+  //Remove any special characters and leading numbers from the method name
+  //Make first letter of method name capitalized using PascalCase
+  String get friendlyName => name
+      .replaceAll(RegExp(r'[^\w]+'), '')
+      .replaceAll(RegExp(r'/'), '')
+      .replaceFirst(RegExp(r'^[\d]+'), '')
+      .pascalCase;
 
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  PBSharedMasterNode(
-    String UUID,
-    Rectangle3D frame, {
-    this.originalRef,
-    this.SYMBOL_ID,
-    String name,
-    this.overridableProperties,
-    this.prototypeNode,
-    PBIntermediateConstraints constraints
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+  PBSharedMasterNode(String UUID, Rectangle3D frame,
+      {this.originalRef,
+      this.SYMBOL_ID,
+      String name,
+      this.overridableProperties,
+      this.prototypeNode,
+      PBIntermediateConstraints constraints})
+      : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
-    try {
-      if (name != null) {
-        //Remove any special characters and leading numbers from the method name
-        friendlyName = name
-            .replaceAll(RegExp(r'[^\w]+'), '')
-            .replaceAll(RegExp(r'/'), '')
-            .replaceFirst(RegExp(r'^[\d]+'), '');
-        //Make first letter of method name capitalized
-        friendlyName =
-            friendlyName[0].toUpperCase() + friendlyName.substring(1);
-      }
-    } catch (e, stackTrace) {
-      MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      logger.error(e.toString());
-    }
 
     generator = PBMasterSymbolGenerator();
     childrenStrategy = TempChildrenStrategy('child');
