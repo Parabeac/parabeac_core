@@ -15,13 +15,11 @@ import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
 class CustomEgg extends PBEgg implements PBInjectedIntermediate {
+  // PBIntermediateNode originalRef;
   @override
   String semanticName = '<custom>';
-  CustomEgg(
-    String UUID,
-    Rectangle3D frame,
-    String name,
-  ) : super(UUID, frame, name) {
+  CustomEgg(String UUID, Rectangle3D frame, String name)
+      : super(UUID, frame, name) {
     generator = CustomEggGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
@@ -34,8 +32,11 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
-    return CustomEgg(originalRef.UUID, frame,
-        originalRef.name.replaceAll('<custom>', '').pascalCase);
+    return CustomEgg(
+      originalRef.UUID,
+      frame,
+      originalRef.name.replaceAll('<custom>', '').pascalCase,
+    );
   }
 }
 
