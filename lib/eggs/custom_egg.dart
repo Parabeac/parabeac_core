@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart'
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -17,8 +18,16 @@ import 'package:recase/recase.dart';
 class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
-  CustomEgg(String UUID, Rectangle3D frame, String name)
-      : super(UUID, frame, name) {
+
+  @override
+  PBIntermediateConstraints constraints;
+
+  CustomEgg(
+    String UUID,
+    Rectangle3D frame,
+    String name, {
+    this.constraints,
+  }) : super(UUID, frame, name) {
     generator = CustomEggGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
@@ -35,6 +44,7 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       originalRef.UUID,
       frame,
       originalRef.name.replaceAll('<custom>', '').pascalCase,
+      constraints: originalRef.constraints.clone(),
     );
   }
 }
