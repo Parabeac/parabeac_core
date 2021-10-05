@@ -57,33 +57,9 @@ class AbstractIntermediateNodeFactory {
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
-            if (iNode is PBSharedMasterNode) {
-              iNode.name = iNode.name.replaceAll('<custom>', '');
-              var tempGroup = CustomEgg(
-                null,
-                iNode.frame,
-                iNode.name.pascalCase + 'Custom',
-              );
-
-              tree.addEdges(tempGroup,
-                  tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
-
-              tree.replaceChildrenOf(iNode, [tempGroup]);
-              return iNode;
-            } else if (iNode is PBSharedInstanceIntermediateNode) {
-              var tempGroup = CustomEgg(
-                null,
-                iNode.frame,
-                tag.name + 'Custom',
-              );
-
-              iNode.parent = parent;
-
-              tree.replaceNode(iNode, tempGroup);
-
-              tree.addEdges(tempGroup, [iNode]);
-
-              return tempGroup;
+            /// TODO: Each Tag could potentially implement how it should handle converting from PBIntermediate to a PBTag
+            if (tag is CustomEgg) {
+              return tag.handleIntermediateNode(iNode, parent, tag, tree);
             } else {
               //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
               iNode.parent = parent;
