@@ -18,6 +18,11 @@ class PBInputFormatter {
     return result;
   }
 
+  /// Removes all non alphabet characters at the beggining of the string, and remove spaces
+  static String formatPageName(String input) {
+    return input.replaceAll(RegExp(r'^[^a-zA-Z]*'), '').replaceAll(' ', '');
+  }
+
   ///Formats `input` to destroy spaces and other intrusive characters.
   ///
   ///Returns a camelCase string.
