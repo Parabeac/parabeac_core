@@ -168,7 +168,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   void removeEdges(Vertex<PBIntermediateNode> parent,
       [List<Vertex<PBIntermediateNode>> children]) {
     if (parent is ChildrenObserver) {
-      (parent as ChildrenObserver).childrenModified(children, context);
+      (parent as ChildrenObserver).childrenModified(children?.cast<PBIntermediateNode>(), context);
     }
     super.removeEdges(parent, children);
   }

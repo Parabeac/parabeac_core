@@ -117,6 +117,6 @@ enum DesignType { SKETCH, FIGMA, PBDL, UNKNOWN }
 class DummySentry {
   /// Decoupling the exception capture client from the services that report the [exception]
   void captureException({exception, stackTrace}) {
-    print('');
+    return;
   }
 }
