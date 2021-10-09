@@ -253,10 +253,12 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 
   static PBIntermediateTree fromJson(Map<String, dynamic> json) {
     if (!json['name'].contains('<custom>')) {
-      json['name'] = PBInputFormatter.formatLabel(json['name'], isTitle: true);
-      json['designNode']['name'] = PBInputFormatter.formatLabel(
-          json['designNode']['name'],
-          isTitle: true);
+      json['name'] = PBInputFormatter.formatPageName(
+        json['name'],
+      );
+      json['designNode']['name'] = PBInputFormatter.formatPageName(
+        json['designNode']['name'],
+      );
     }
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
