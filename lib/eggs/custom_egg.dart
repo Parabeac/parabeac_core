@@ -89,8 +89,10 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
           iNode.frame,
           tag.name,
         );
+        /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
         tree.removeEdges(iNode.parent, [iNode]);
         tree.addEdges(newTag, [iNode]);
+        tree.addEdges(parent, [newTag]);
         return newTag;
       }
       tree.replaceNode(iNode, tag, acceptChildren: true);
