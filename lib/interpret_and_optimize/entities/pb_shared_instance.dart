@@ -1,4 +1,5 @@
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
@@ -91,6 +92,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var instance = PBSharedInstanceIntermediateNode.fromJson(json);
+    instance.name = PBInputFormatter.formatPageName(instance.name);
     _formatOverrideVals(
         (instance as PBSharedInstanceIntermediateNode).sharedParamValues);
     return instance;
