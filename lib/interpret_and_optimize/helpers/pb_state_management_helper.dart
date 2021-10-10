@@ -49,10 +49,13 @@ class PBStateManagementHelper {
   ///
   /// Returns `null` if `node` has no `DirectedStateGraph`
   DirectedStateGraph getStateGraphOfNode(PBIntermediateNode node) {
-    if (isValidStateNode(node.name) &&
+    var identifier = node is PBSharedInstanceIntermediateNode
+        ? node.functionCallName
+        : node.name;
+    if (isValidStateNode(identifier) &&
         (node is PBSharedMasterNode ||
             node is PBSharedInstanceIntermediateNode)) {
-      var rootNodeName = _getNodeName(node.name);
+      var rootNodeName = _getNodeName(identifier);
       return linker.getDirectedStateGraphOfName(rootNodeName);
     }
     return null;
