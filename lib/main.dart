@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:directed_graph/directed_graph.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
@@ -25,6 +27,7 @@ import 'controllers/main_info.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
+import 'interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 final designToPBDLServices = <DesignToPBDLService>[
@@ -126,6 +129,26 @@ ${parser.usage}
   pbProject.projectAbsPath =
       p.join(processInfo.outputPath, processInfo.projectName);
 
+  /// Scan the forest to detect any MasterNode inside a tree
+  /// if that's the case, extract that Master
+  /// add it to the forest and replace it with an instance
+
+  var tempForest = <PBIntermediateTree>[];
+
+  for (var tree in pbProject.forest) {
+    var manyTrees = await treeHasMaster(tree);
+
+    tree = manyTrees.removeAt(0);
+
+    if (manyTrees.isNotEmpty) {
+      tempForest.addAll(manyTrees);
+    }
+  }
+
+  pbProject.forest.addAll(tempForest);
+
+  ///
+
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
@@ -166,6 +189,43 @@ ${parser.usage}
   }
 
   exitCode = 0;
+}
+
+Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
+  var forest = [tree];
+  tree.forEach((element) {
+    if (element is PBSharedMasterNode && element.parent != null) {
+      var tempTree = PBIntermediateTree(name: element.name)
+        ..rootNode = element
+        ..tree_type = TREE_TYPE.SCREEN
+        ..generationViewData = PBGenerationViewData();
+
+      var stack = <PBIntermediateNode>[];
+      stack.add(element);
+
+      // Passing all Component's children and their children's children
+      while (stack.isNotEmpty) {
+        var currentNode = stack.removeLast();
+        var tempChildren = tree.childrenOf(currentNode);
+        stack.addAll(tempChildren);
+
+        tempTree.addEdges(currentNode, tempChildren);
+      }
+
+      forest.add(tempTree);
+
+      var newInstance = PBSharedInstanceIntermediateNode(
+        Uuid().v4(),
+        element.frame,
+        SYMBOL_ID: element.SYMBOL_ID,
+        prototypeNode: element.prototypeNode,
+        name: element.name,
+      )..constraints = element.constraints;
+      tree.replaceNode(element, newInstance);
+    }
+  });
+
+  return forest;
 }
 
 /// Populates the corresponding fields of the [MainInfo] object with the
