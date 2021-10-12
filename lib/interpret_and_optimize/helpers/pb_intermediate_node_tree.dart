@@ -168,7 +168,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   void removeEdges(Vertex<PBIntermediateNode> parent,
       [List<Vertex<PBIntermediateNode>> children]) {
     if (parent is ChildrenObserver) {
-      (parent as ChildrenObserver).childrenModified(children?.cast<PBIntermediateNode>(), context);
+      (parent as ChildrenObserver)
+          .childrenModified(children?.cast<PBIntermediateNode>(), context);
     }
     super.removeEdges(parent, children);
   }
@@ -228,8 +229,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// meaning that the [rootNode] is of type [InheritedScaffold]
   bool isScreen() => tree_type == TREE_TYPE.SCREEN;
 
-  bool isHomeScreen() =>
-      isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
+  bool isHomeScreen() => isScreen() && rootNode is InheritedScaffold
+      ? (rootNode as InheritedScaffold).isHomeScreen
+      : false;
 
   /// Finding the depth of the [node] in relation to the [rootNode].
   int depthOf(node) {
