@@ -191,6 +191,7 @@ ${parser.usage}
   exitCode = 0;
 }
 
+// TODO: Find way to optimize
 Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
   var forest = [tree];
   tree.forEach((element) {
@@ -223,7 +224,10 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
         SYMBOL_ID: element.SYMBOL_ID,
         prototypeNode: element.prototypeNode,
         name: element.name,
-      )..constraints = element.constraints;
+        originalRef: element.originalRef,
+      )
+        ..constraints = element.constraints
+        ..auxiliaryData = element.auxiliaryData;
       tree.replaceNode(element, newInstance);
     }
   });
