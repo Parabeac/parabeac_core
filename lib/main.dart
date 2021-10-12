@@ -204,12 +204,15 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
       stack.add(element);
 
       // Passing all Component's children and their children's children
+      // Also remove all of them from the old tree
       while (stack.isNotEmpty) {
         var currentNode = stack.removeLast();
         var tempChildren = tree.childrenOf(currentNode);
         stack.addAll(tempChildren);
-
-        tempTree.addEdges(currentNode, tempChildren);
+        if (tempChildren.isNotEmpty) {
+          tempTree.addEdges(currentNode, tempChildren);
+        }
+        tree.remove(currentNode);
       }
 
       forest.add(tempTree);
