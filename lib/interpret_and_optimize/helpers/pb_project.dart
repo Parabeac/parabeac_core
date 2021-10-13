@@ -87,7 +87,8 @@ class PBProject {
       if (page.containsKey('convert') && page['convert']) {
         var screens = (page['screens'] as Iterable).map((screen) {
           // This avoid to generate screens set to not convert
-          if (screen.containsKey('convert') && screen['convert']) {
+          if ((screen.containsKey('convert') && screen['convert']) &&
+              (screen.containsKey('isVisible') && screen['isVisible'])) {
             // Generate Intermedite tree
             var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
 
