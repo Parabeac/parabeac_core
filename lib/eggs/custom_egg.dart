@@ -58,12 +58,16 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
     CustomEgg tag,
     PBIntermediateTree tree,
   ) {
+    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
+    // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
+    // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
       iNode.name = iNode.name.replaceAll('<custom>', '');
       var tempGroup = CustomEgg(
         null,
         iNode.frame,
         iNode.name.pascalCase + 'Custom',
+        constraints: iNode.constraints.clone(),
       );
 
       tree.addEdges(
@@ -72,10 +76,12 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       tree.replaceChildrenOf(iNode, [tempGroup]);
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
+      iNode.name = iNode.name.replaceAll('<custom>', '');
       var tempGroup = CustomEgg(
         null,
         iNode.frame,
         tag.name + 'Custom',
+        constraints: iNode.constraints.clone(),
       );
 
       iNode.parent = parent;
@@ -91,11 +97,11 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
       if (tree.childrenOf(iNode).isEmpty) {
         // Generate new [CustomEgg] with a new UUID to prevent cycles.
-        //? TODO: should every [CustomEgg] have unique UUID or inherit from iNode like it is currently doing in `generatePluginNode`?
         var newTag = CustomEgg(
           null,
           iNode.frame,
           tag.name,
+          constraints: iNode.constraints.clone(),
         );
 
         /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
