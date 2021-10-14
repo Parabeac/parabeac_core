@@ -65,7 +65,6 @@ class PBLayoutGenerationService extends AITHandler {
       return Future.value(tree);
     }
     try {
-      _removingMeaninglessGroup(tree);
       _transformGroup(tree);
       _layoutTransformation(tree, context);
 
@@ -90,8 +89,7 @@ class PBLayoutGenerationService extends AITHandler {
   /// and that group contained the visual nodes.
   void _removingMeaninglessGroup(PBIntermediateTree tree) {
     tree
-        .where((node) =>
-            node is Group && tree.childrenOf(node).length <= 1)
+        .where((node) => node is Group && tree.childrenOf(node).length <= 1)
         .cast<Group>()
         .forEach((tempGroup) {
       var tempChildren = tree.childrenOf(tempGroup);
