@@ -63,6 +63,7 @@ abstract class StateManagementMiddleware extends Middleware {
   }
 
   /// Checks wheather the [node] contains any states.
-  bool containsState(PBIntermediateNode node) =>
-      stmgHelper.getStateGraphOfNode(node)?.states?.isNotEmpty ?? false;
+  bool containsState(PBIntermediateNode node) => node == null
+      ? false
+      : stmgHelper.getStateGraphOfNode(node)?.states?.isNotEmpty ?? false;
 }

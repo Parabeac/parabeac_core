@@ -95,16 +95,19 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     buffer.write('constraints,\n');
 
     // Make sure override property of every value is overridable
-    overrideValues.removeWhere((value) {
-      var override = OverrideHelper.getProperty(value.UUID, value.type);
-      return override == null || override.value == null;
-    });
-    _formatNameAndValues(overrideValues, context);
-    overrideValues.forEach((element) {
-      if (element.overrideName != null && element.initialValue != null) {
-        buffer.write('${element.overrideName}: ${element.value},');
-      }
-    });
+    if (overrideValues != null) {
+      overrideValues.removeWhere((value) {
+        var override = OverrideHelper.getProperty(value.UUID, value.type);
+        return override == null || override.value == null;
+      });
+
+      _formatNameAndValues(overrideValues, context);
+      overrideValues.forEach((element) {
+        if (element.overrideName != null && element.initialValue != null) {
+          buffer.write('${element.overrideName}: ${element.value},');
+        }
+      });
+    }
 
     buffer.write(')\n');
 

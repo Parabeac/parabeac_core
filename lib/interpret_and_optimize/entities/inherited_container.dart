@@ -63,11 +63,6 @@ class InheritedContainer extends PBVisualIntermediateNode
 
     container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
 
-    if (container.frame.height == 0) {
-      container.frame = Rectangle3D(container.frame.left, container.frame.top,
-          container.frame.width, 1.0, container.frame.z);
-    }
-
     return container;
   }
 
