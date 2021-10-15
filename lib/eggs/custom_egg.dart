@@ -3,6 +3,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
@@ -121,20 +122,27 @@ class CustomEggGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     var children = context.tree.childrenOf(source);
+    var titleName = PBInputFormatter.formatLabel(
+      source.name,
+      isTitle: true,
+      destroySpecialSym: true,
+    );
+    var cleanName = PBInputFormatter.formatLabel(source.name);
+
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
-      'egg/${source.name.snakeCase}.dart',
+      'egg/${cleanName}.dart',
       MainInfo().projectName,
     ));
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
-            Uuid().v4(), source.name.snakeCase, customBoilerPlate(source.name),
+            Uuid().v4(), cleanName, customBoilerPlate(titleName),
             relativePath: 'egg',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
     if (source is CustomEgg) {
       return '''
-        ${source.name}(
+        ${titleName}(
           child: ${children[0].generator.generate(children[0], context)}
         )
       ''';
