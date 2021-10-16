@@ -71,28 +71,27 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
-    var master = PBSharedMasterNode.fromJson(json)..mapRawChildren(json, tree);
+    PBSharedMasterNode master = PBSharedMasterNode.fromJson(json)
+      ..mapRawChildren(json, tree);
 
     /// Map overridableProperties which need parent and tree
-    (master as PBSharedMasterNode).overridableProperties =
-        (json['overrideProperties'] as List)
-                ?.map(
-                  (prop) => prop == null
-                      ? null
-                      : PBSharedParameterProp.createSharedParameter(
-                          prop as Map<String, dynamic>,
-                          this,
-                          tree,
-                        ),
-                )
-                ?.toList() ??
-            [];
+    master.overridableProperties = (json['overrideProperties'] as List)
+            ?.map(
+              (prop) => prop == null
+                  ? null
+                  : PBSharedParameterProp.createSharedParameter(
+                      prop as Map<String, dynamic>,
+                      master,
+                      tree,
+                    ),
+            )
+            ?.toList() ??
+        [];
+
+    master.overridableProperties.removeWhere((element) => element == null);
 
     // Add override properties to the [OverrideHelper]
-    (master as PBSharedMasterNode)
-        .overridableProperties
-        .where((element) => element != null)
-        .forEach((OverrideHelper.addProperty));
+    master.overridableProperties.forEach((OverrideHelper.addProperty));
 
     return master;
   }
@@ -118,12 +117,16 @@ class PBSharedParameterProp {
 
   static PBSharedParameterProp createSharedParameter(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
+    // Override properties with <custom> as name will create issues since their
+    // PBIntermediateNode counterparts will have already been interpreted
+    if (json['name'].contains('<custom>')) {
+      return null;
+    }
     var fromJson = PBSharedParameterProp.fromJson(json);
 
     // Populate `value` of Override Property since it is an [IntermediateNode]
-    fromJson.value = json['value'] == null
-        ? null
-        : PBIntermediateNode.fromJson(json['value'], parent, tree);
+    fromJson.value = tree.firstWhere((element) => element.UUID == json['UUID'],
+        orElse: () => null);
 
     return fromJson;
   }

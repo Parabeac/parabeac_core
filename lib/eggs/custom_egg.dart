@@ -3,6 +3,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
@@ -58,12 +59,16 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
     CustomEgg tag,
     PBIntermediateTree tree,
   ) {
+    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
+    // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
+    // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
       iNode.name = iNode.name.replaceAll('<custom>', '');
       var tempGroup = CustomEgg(
         null,
         iNode.frame,
         iNode.name.pascalCase + 'Custom',
+        constraints: iNode.constraints.clone(),
       );
 
       tree.addEdges(
@@ -72,10 +77,12 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       tree.replaceChildrenOf(iNode, [tempGroup]);
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
+      iNode.name = iNode.name.replaceAll('<custom>', '');
       var tempGroup = CustomEgg(
         null,
         iNode.frame,
         tag.name + 'Custom',
+        constraints: iNode.constraints.clone(),
       );
 
       iNode.parent = parent;
@@ -91,11 +98,11 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
       // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
       if (tree.childrenOf(iNode).isEmpty) {
         // Generate new [CustomEgg] with a new UUID to prevent cycles.
-        //? TODO: should every [CustomEgg] have unique UUID or inherit from iNode like it is currently doing in `generatePluginNode`?
         var newTag = CustomEgg(
           null,
           iNode.frame,
           tag.name,
+          constraints: iNode.constraints.clone(),
         );
 
         /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
@@ -115,20 +122,27 @@ class CustomEggGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     var children = context.tree.childrenOf(source);
+    var titleName = PBInputFormatter.formatLabel(
+      source.name,
+      isTitle: true,
+      destroySpecialSym: true,
+    );
+    var cleanName = PBInputFormatter.formatLabel(source.name);
+
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
-      'egg/${source.name.snakeCase}.dart',
+      'egg/${cleanName}.dart',
       MainInfo().projectName,
     ));
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
-            Uuid().v4(), source.name.snakeCase, customBoilerPlate(source.name),
+            Uuid().v4(), cleanName, customBoilerPlate(titleName),
             relativePath: 'egg',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
     if (source is CustomEgg) {
       return '''
-        ${source.name}(
+        ${titleName}(
           child: ${children[0].generator.generate(children[0], context)}
         )
       ''';
