@@ -1,12 +1,10 @@
-import 'package:parabeac_core/eggs/custom_egg.dart';
-import 'package:parabeac_core/eggs/injected_app_bar.dart';
-import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'dart:math';
-import 'package:uuid/uuid.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
+import 'package:parabeac_core/tags/injected_app_bar.dart';
+import 'package:parabeac_core/tags/injected_tab_bar.dart';
 
 /// Helping understand indirect and direct semantics that should remove a node from a tree.
 class PBPluginListHelper {
@@ -15,7 +13,7 @@ class PBPluginListHelper {
     allowListNames = {
       '<tabbar>': InjectedTabBar(null, null, ''),
       '<navbar>': InjectedAppbar(null, null, ''),
-      '<custom>': CustomEgg(null, null, ''),
+      '<custom>': CustomTag(null, null, ''),
     };
   }
 
@@ -33,11 +31,11 @@ class PBPluginListHelper {
         null,
         '',
       ),
-      '<custom>': CustomEgg(null, null, ''),
+      '<custom>': CustomTag(null, null, ''),
     };
   }
 
-  Map<String, PBEgg> allowListNames;
+  Map<String, PBTag> allowListNames;
 
   /// List of static plugin names used for Amplitude
   static List<String> names = [
@@ -56,7 +54,7 @@ class PBPluginListHelper {
 
   /// Adds `node` to the list of plugin nodes if the semantic
   ///  name does not exist
-  void addNode(PBEgg node) {
+  void addNode(PBTag node) {
     if (!allowListNames.containsKey(node.semanticName)) {
       allowListNames[node.semanticName] = node;
     }
@@ -64,7 +62,7 @@ class PBPluginListHelper {
 
   /// Remove `node` from list if not part of internal plugin nodes
   /// and if the node is present in the list.
-  void removeNode(PBEgg node) {
+  void removeNode(PBTag node) {
     if (!baseNames.contains(node.semanticName)) {
       allowListNames.remove(node.semanticName);
     }
@@ -72,7 +70,7 @@ class PBPluginListHelper {
 
   /// Iterates through Plugin List and checks for a match of `node.name`.
   /// Returns the PluginNode associated if it exists.
-  PBEgg returnAllowListNodeIfExists(
+  PBTag returnAllowListNodeIfExists(
       PBIntermediateNode node, PBIntermediateTree tree) {
     if (node != null) {
       for (var key in allowListNames.keys) {

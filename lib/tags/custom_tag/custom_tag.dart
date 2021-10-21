@@ -17,14 +17,14 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
-class CustomEgg extends PBEgg implements PBInjectedIntermediate {
+class CustomTag extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
 
   @override
   PBIntermediateConstraints constraints;
 
-  CustomEgg(
+  CustomTag(
     String UUID,
     Rectangle3D frame,
     String name, {
@@ -40,9 +40,9 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
+  PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
-    return CustomEgg(
+    return CustomTag(
       originalRef.UUID,
       frame,
       originalRef.name.replaceAll('<custom>', '').pascalCase,
@@ -50,61 +50,47 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
     );
   }
 
-  /// Handles `iNode` to convert into a [CustomEgg].
+  /// Handles `iNode` to convert into a [CustomTag].
   ///
   /// Returns the [PBIntermediateNode] that should go into the [PBIntermediateTree]
   PBIntermediateNode handleIntermediateNode(
     PBIntermediateNode iNode,
     PBIntermediateNode parent,
-    CustomEgg tag,
+    CustomTag tag,
     PBIntermediateTree tree,
   ) {
+    iNode.name = iNode.name.replaceAll('<custom>', '');
+    var newTag = CustomTag(
+      null,
+      iNode.frame,
+      iNode.name.pascalCase + 'Custom',
+      constraints: iNode.constraints.clone(),
+    );
+
+    
+
     // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
     // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
-      iNode.name = iNode.name.replaceAll('<custom>', '');
-      var tempGroup = CustomEgg(
-        null,
-        iNode.frame,
-        iNode.name.pascalCase + 'Custom',
-        constraints: iNode.constraints.clone(),
-      );
-
       tree.addEdges(
-          tempGroup, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
+          newTag, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
 
-      tree.replaceChildrenOf(iNode, [tempGroup]);
+      tree.replaceChildrenOf(iNode, [newTag]);
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
-      iNode.name = iNode.name.replaceAll('<custom>', '');
-      var tempGroup = CustomEgg(
-        null,
-        iNode.frame,
-        tag.name + 'Custom',
-        constraints: iNode.constraints.clone(),
-      );
-
       iNode.parent = parent;
 
-      tree.replaceNode(iNode, tempGroup);
+      tree.replaceNode(iNode, newTag);
 
-      tree.addEdges(tempGroup, [iNode]);
+      tree.addEdges(newTag, [iNode]);
 
-      return tempGroup;
+      return newTag;
     } else {
       // [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
       iNode.parent = parent;
       // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
       if (tree.childrenOf(iNode).isEmpty) {
-        // Generate new [CustomEgg] with a new UUID to prevent cycles.
-        var newTag = CustomEgg(
-          null,
-          iNode.frame,
-          tag.name,
-          constraints: iNode.constraints.clone(),
-        );
-
         /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
         tree.removeEdges(iNode.parent, [iNode]);
         tree.addEdges(newTag, [iNode]);
@@ -140,7 +126,7 @@ class CustomEggGenerator extends PBGenerator {
             relativePath: 'egg',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
-    if (source is CustomEgg) {
+    if (source is CustomTag) {
       return '''
         ${titleName}(
           child: ${children[0].generator.generate(children[0], context)}
