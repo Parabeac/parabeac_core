@@ -21,41 +21,64 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
       destroySpecialSym: true,
     );
     var cleanName = PBInputFormatter.formatLabel(source.name.snakeCase);
+    var packageName = MainInfo().projectName;
+
+    var blocRelativePath = p.join('bloc', '$cleanName');
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
       '${CustomTagGenerator.DIRECTORY_GEN}/$cleanName.dart',
-      MainInfo().projectName,
+      packageName,
     ));
 
     var fss =
         context.configuration.generationConfiguration.fileStructureStrategy;
+
+    /// Generate State
+    var stateName = '${cleanName}_state';
+    fss.commandCreated(
+      WriteSymbolCommand(
+        Uuid().v4(),
+        stateName,
+        _generateStateBoilerplate(titleName),
+        relativePath: blocRelativePath,
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ),
+    );
+    var stateImport = FlutterImport.importFormat(
+      p.join(packageName, blocRelativePath, '$stateName.dart'),
+      isPackage: true,
+    );
+
+    /// Generate Cubit
+    var cubitName = '${cleanName}_cubit';
+    fss.commandCreated(
+      WriteSymbolCommand(
+        Uuid().v4(),
+        cubitName,
+        _generateCubitBoilerplate(titleName, stateImport),
+        relativePath: blocRelativePath,
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ),
+    );
+    var cubitImport = FlutterImport.importFormat(
+      p.join(packageName, blocRelativePath, '$cubitName.dart'),
+      isPackage: true,
+    );
 
     /// Generate custom file
     fss.commandCreated(
       WriteSymbolCommand(
         Uuid().v4(),
         cleanName,
-        customBoilerPlate(titleName),
+        _customBoilerPlate(titleName, cubitImport, stateImport),
         relativePath: CustomTagGenerator.DIRECTORY_GEN,
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
       ),
     );
-
-    /// Generate State
-    fss.commandCreated(
-      WriteSymbolCommand(
-        Uuid().v4(),
-        '${cleanName}_state',
-        generateStateBoilerplate(titleName),
-        relativePath: p.join('bloc', '$cleanName'),
-        symbolPath: 'lib',
-        ownership: FileOwnership.DEV,
-      ),
-    );
-
-    /// Generate Cubit
 
     if (source is CustomTag) {
       return '''
@@ -67,11 +90,13 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     return '';
   }
 
-  @override
-  String customBoilerPlate(String className) {
+  String _customBoilerPlate(
+      String className, String cubitImport, String stateImport) {
     return '''
       import 'package:flutter/material.dart';
       import 'package:flutter_bloc/flutter_bloc.dart';
+      $cubitImport
+      $stateImport
 
       class $className extends StatefulWidget{
         final Widget child;
@@ -85,7 +110,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         @override
         Widget build(BuildContext context){
           return BlocProvider(
-            create: (_) => ${className}Cubit(),
+            create: (_) => ${className}Cubit(${className}Initial()),
             child: BlocBuilder<${className}Cubit, ${className}State>(
               builder: (context, state) {
                 /// TODO: @developer implement bloc and map the states to widgets as desired.
@@ -105,7 +130,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
       ''';
   }
 
-  String generateStateBoilerplate(String className) {
+  String _generateStateBoilerplate(String className) {
     return '''
       abstract class ${className}State {}
 
@@ -119,6 +144,24 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
 
       class ${className}Initial extends ${className}State {}
 
+    ''';
+  }
+
+  String _generateCubitBoilerplate(String className, String stateImport) {
+    return '''
+      import 'package:flutter_bloc/flutter_bloc.dart';
+      $stateImport
+
+      class ${className}Cubit extends Cubit<${className}State> {
+        ${className}Cubit(${className}State initialState) : super(initialState);
+
+        /// TODO: @developer add functions here that emit a different state.
+        ///
+        /// For example, if you're coding a counter, you may want to have a function that 
+        /// when called, does the following:
+        /// 
+        /// void increment() => emit(CounterActive(state.value + 1));
+      }
     ''';
   }
 }

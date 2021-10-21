@@ -131,7 +131,7 @@ class CustomTagGenerator extends PBGenerator {
     ));
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
-            Uuid().v4(), cleanName, customBoilerPlate(titleName),
+            Uuid().v4(), cleanName, _customBoilerPlate(titleName),
             relativePath: '$DIRECTORY_GEN',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
@@ -145,7 +145,7 @@ class CustomTagGenerator extends PBGenerator {
     return '';
   }
 
-  String customBoilerPlate(String className) {
+  String _customBoilerPlate(String className) {
     return '''
       import 'package:flutter/material.dart';
 
