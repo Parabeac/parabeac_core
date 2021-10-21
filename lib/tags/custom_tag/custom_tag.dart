@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag_bloc_generator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -30,14 +31,21 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
     String name, {
     this.constraints,
   }) : super(UUID, frame, name) {
-    generator = CustomEggGenerator();
+    generator ??= _getGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
 
-  @override
-  void extractInformation(PBIntermediateNode incomingNode) {
-    // TODO: implement extractInformation
+  /// Function that examines the configuration and assigns a generator
+  /// to `this` [CustomTag] and assigns it a State management generator
+  PBGenerator _getGenerator() {
+    if (MainInfo().configuration.stateManagement.toLowerCase() == 'bloc') {
+      return CustomTagBlocGenerator();
+    }
+    return CustomTagGenerator();
   }
+
+  @override
+  void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
   PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
@@ -66,8 +74,6 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       iNode.name.pascalCase + 'Custom',
       constraints: iNode.constraints.clone(),
     );
-
-    
 
     // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
@@ -104,7 +110,10 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   }
 }
 
-class CustomEggGenerator extends PBGenerator {
+class CustomTagGenerator extends PBGenerator {
+  /// Variable that dictates in what directory the tag will be generated.
+  static const DIRECTORY_GEN = 'controller';
+
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     var children = context.tree.childrenOf(source);
@@ -117,28 +126,27 @@ class CustomEggGenerator extends PBGenerator {
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
-      'egg/${cleanName}.dart',
+      '$DIRECTORY_GEN/$cleanName.dart',
       MainInfo().projectName,
     ));
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
             Uuid().v4(), cleanName, customBoilerPlate(titleName),
-            relativePath: 'egg',
+            relativePath: '$DIRECTORY_GEN',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
     if (source is CustomTag) {
       return '''
-        ${titleName}(
+        $titleName(
           child: ${children[0].generator.generate(children[0], context)}
         )
       ''';
     }
     return '';
   }
-}
 
-String customBoilerPlate(String className) {
-  return '''
+  String customBoilerPlate(String className) {
+    return '''
       import 'package:flutter/material.dart';
 
       class $className extends StatefulWidget{
@@ -156,4 +164,5 @@ String customBoilerPlate(String className) {
         }
       }
       ''';
+  }
 }
