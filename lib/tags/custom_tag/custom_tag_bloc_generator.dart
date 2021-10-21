@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
+import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as p;
 
@@ -19,7 +20,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
       isTitle: true,
       destroySpecialSym: true,
     );
-    var cleanName = PBInputFormatter.formatLabel(source.name);
+    var cleanName = PBInputFormatter.formatLabel(source.name.snakeCase);
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
@@ -36,13 +37,23 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         Uuid().v4(),
         cleanName,
         customBoilerPlate(titleName),
-        relativePath: p.join('${CustomTagGenerator.DIRECTORY_GEN}', cleanName),
+        relativePath: CustomTagGenerator.DIRECTORY_GEN,
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
       ),
     );
 
     /// Generate State
+    fss.commandCreated(
+      WriteSymbolCommand(
+        Uuid().v4(),
+        '${cleanName}_state',
+        generateStateBoilerplate(titleName),
+        relativePath: p.join('bloc', '$cleanName'),
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ),
+    );
 
     /// Generate Cubit
 
@@ -92,5 +103,22 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         }
       }
       ''';
+  }
+
+  String generateStateBoilerplate(String className) {
+    return '''
+      abstract class ${className}State {}
+
+
+      /// TODO: @developer Add states that extend the abstract state above. 
+      /// For example, if you are coding a counter, you may want to add something like:
+      /// 
+      /// class CounterInProgress extends CounterState{
+      ///   CounterInProgress(int value): super(value);
+      /// }
+
+      class ${className}Initial extends ${className}State {}
+
+    ''';
   }
 }
