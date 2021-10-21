@@ -15,7 +15,7 @@ import 'package:recase/recase.dart';
 
 import 'package:uuid/uuid.dart';
 
-class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
+class InjectedTabBar extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<tabbar>';
 
@@ -60,7 +60,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
   void extractInformation(PBIntermediateNode incomingNode) {}
 
   @override
-  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
+  PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     var tabbar = InjectedTabBar(
       originalRef.UUID,
