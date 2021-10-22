@@ -1,5 +1,3 @@
-import 'package:directed_graph/directed_graph.dart';
-import 'package:parabeac_core/eggs/custom_egg.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -19,8 +17,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
-import 'package:uuid/uuid.dart';
-import 'package:recase/recase.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
@@ -58,7 +55,7 @@ class AbstractIntermediateNodeFactory {
           // Return tag if it exists
           if (tag != null) {
             /// TODO: Each Tag could potentially implement how it should handle converting from PBIntermediate to a PBTag
-            if (tag is CustomEgg) {
+            if (tag is CustomTag) {
               return tag.handleIntermediateNode(iNode, parent, tag, tree);
             } else {
               //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]

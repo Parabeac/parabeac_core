@@ -1,11 +1,7 @@
-import 'dart:math';
-import 'package:parabeac_core/eggs/injected_app_bar.dart';
-import 'package:parabeac_core/eggs/injected_tab_bar.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_scaffold_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
@@ -15,6 +11,8 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'package:parabeac_core/tags/injected_app_bar.dart';
+import 'package:parabeac_core/tags/injected_tab_bar.dart';
 import 'package:pbdl/pbdl.dart';
 
 part 'inherited_scaffold.g.dart';
