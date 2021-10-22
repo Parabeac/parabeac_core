@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
 import 'package:recase/recase.dart';
 import '../../pb_flutter_generator.dart';
@@ -27,6 +28,14 @@ class BLoCMiddleware extends StateManagementMiddleware {
   BLoCMiddleware(PBGenerationManager generationManager,
       GenerationConfiguration configuration)
       : super(generationManager, configuration);
+
+  @override
+  Future<PBIntermediateTree> applyMiddleware(
+      PBIntermediateTree tree, PBContext context) async {
+    context.project.genProjectData
+        .addDependencies(PACKAGE_NAME, PACKAGE_VERSION);
+    return await super.applyMiddleware(tree, context);
+  }
 
   String _createBlocPage(String name, String initialStateName) {
     var pascalName = name.pascalCase;
