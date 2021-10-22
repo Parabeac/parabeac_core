@@ -2,6 +2,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -155,7 +156,9 @@ class PBTabBarGenerator extends PBGenerator {
       buffer.write('],');
       buffer.write(')');
 
-      var className = source.parent.name + 'Tabbar';
+      var className =
+          PBInputFormatter.formatLabel(source.parent.name, isTitle: true) +
+              'Tabbar';
 
       // TODO: correct import
       context.managerData.addImport(FlutterImport(
