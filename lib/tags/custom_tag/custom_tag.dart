@@ -112,7 +112,7 @@ class CustomTagGenerator extends PBGenerator {
       isTitle: true,
       destroySpecialSym: true,
     );
-    var cleanName = PBInputFormatter.formatLabel(source.name);
+    var cleanName = PBInputFormatter.formatLabel(source.name.snakeCase);
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
