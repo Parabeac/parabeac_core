@@ -3,7 +3,10 @@ import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 import 'package:recase/recase.dart';
@@ -34,13 +37,27 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     var fss =
         context.configuration.generationConfiguration.fileStructureStrategy;
 
+    /// If [PBTag] is [PBSharedInstanceIntermediateNode], we can extract its overrides
+    /// and list them in the initial state
+    var initialStates = <PBSharedParameterProp>[];
+    var firstChild = context.tree.childrenOf(source).first;
+    if (firstChild is PBSharedInstanceIntermediateNode) {
+      firstChild.sharedParamValues.forEach((value) {
+        var prop = OverrideHelper.getProperty(value.UUID, value.type);
+
+        if (prop != null) {
+          initialStates.add(prop);
+        }
+      });
+    }
+
     /// Generate State
     var stateName = '${cleanName}_state';
     fss.commandCreated(
       WriteSymbolCommand(
         Uuid().v4(),
         stateName,
-        _generateStateBoilerplate(titleName),
+        _generateStateBoilerplate(titleName, initialStates),
         relativePath: blocRelativePath,
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
@@ -130,9 +147,24 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
       ''';
   }
 
-  String _generateStateBoilerplate(String className) {
+  String _generateStateBoilerplate(String className,
+      [List<PBSharedParameterProp> initialStates = const []]) {
+    var thisVars = StringBuffer();
+    var classVars = StringBuffer();
+    var defaultValues = StringBuffer();
+
+    initialStates.forEach((state) {
+      classVars.write('var ${state.propertyName};');
+      thisVars.write('this.${state.propertyName},');
+      defaultValues.write('\'${state.value}\',');
+    });
+
     return '''
-      abstract class ${className}State {}
+      abstract class ${className}State {
+        $classVars
+
+        ${className}State($thisVars);
+      }
 
 
       /// TODO: @developer Add states that extend the abstract state above. 
@@ -142,7 +174,9 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
       ///   CounterInProgress(int value): super(value);
       /// }
 
-      class ${className}Initial extends ${className}State {}
+      class ${className}Initial extends ${className}State {
+        ${className}Initial(): super($defaultValues);
+      }
 
     ''';
   }
