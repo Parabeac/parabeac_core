@@ -40,15 +40,17 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedContainer(String UUID, Rectangle3D frame,
-      {this.originalRef,
-      String name,
-      double alignX,
-      double alignY,
-      this.isBackgroundVisible = true,
-      this.prototypeNode,
-      PBIntermediateConstraints constraints})
-      : super(UUID, frame, name, constraints: constraints) {
+  InheritedContainer(
+    String UUID,
+    Rectangle3D frame, {
+    this.originalRef,
+    String name,
+    double alignX,
+    double alignY,
+    this.isBackgroundVisible = true,
+    this.prototypeNode,
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');
     //TODO switch alignment to Padding alignment

@@ -27,13 +27,14 @@ class BaseGroup extends Group
     Map<String, dynamic> originalRef,
     String name,
     PrototypeNode prototypeNode,
-    PBIntermediateConstraints constraints,
+    constraints,
   }) : super(
           UUID,
           frame,
           name: name,
           prototypeNode: prototypeNode,
           originalRef: originalRef,
+          constraints: constraints,
         );
 
   @override

@@ -116,7 +116,6 @@ class PBFlutterGenerator extends PBGenerationManager {
             ?.generateTemplate(rootNode, this, context) ??
 
         ///if there is no [TemplateStrategy] we are going to use `DEFAULT_STRATEGY`
-        DEFAULT_STRATEGY.generateTemplate(
-            rootNode, this, context);
+        DEFAULT_STRATEGY.generateTemplate(rootNode, this, context);
   }
 }

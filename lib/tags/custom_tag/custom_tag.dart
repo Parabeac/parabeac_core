@@ -21,15 +21,17 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
 
-  @override
-  PBIntermediateConstraints constraints;
-
   CustomTag(
     String UUID,
     Rectangle3D frame,
     String name, {
-    this.constraints,
-  }) : super(UUID, frame, name) {
+    constraints,
+  }) : super(
+          UUID,
+          frame,
+          name,
+          contraints: constraints,
+        ) {
     generator = CustomTagGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
@@ -69,10 +71,11 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
     // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
-      tree.addEdges(
-          newTag, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
+      // TODO: temporal fix, uncomment later
+      // tree.addEdges(
+      //     newTag, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
 
-      tree.replaceChildrenOf(iNode, [newTag]);
+      // tree.replaceChildrenOf(iNode, [newTag]);
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
       iNode.parent = parent;
@@ -125,6 +128,7 @@ class CustomTagGenerator extends PBGenerator {
             relativePath: '$DIRECTORY_GEN',
             symbolPath: 'lib',
             ownership: FileOwnership.DEV));
+
     if (source is CustomTag) {
       return '''
         $titleName(

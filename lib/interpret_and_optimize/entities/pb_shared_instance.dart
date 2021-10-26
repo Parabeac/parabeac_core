@@ -86,7 +86,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       _$PBSharedInstanceIntermediateNodeFromJson(json)
         // . .frame.topLeft = Point.topLeftFromJson(json)
         // . .frame.bottomRight = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+        ..originalRef = json
+        ..name;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,

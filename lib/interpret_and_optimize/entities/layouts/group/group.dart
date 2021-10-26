@@ -9,7 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermedia
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-
 // @JsonSerializable(ignoreUnannotated: true, explicitToJson: true)
 
 /// A temporary node that must be removed
@@ -33,7 +32,7 @@ abstract class Group extends PBLayoutIntermediateNode
     this.originalRef,
     String name,
     this.prototypeNode,
-    PBIntermediateConstraints constraints,
+    constraints,
   }) : super(
           UUID,
           frame,

@@ -30,20 +30,23 @@ class InjectedContainer extends PBVisualIntermediateNode
   bool pointValueWidth;
   bool pointValueHeight;
 
-  InjectedContainer(UUID, Rectangle3D frame,
-      {String name,
-      double alignX,
-      double alignY,
-      String color,
-      this.prototypeNode,
-      this.type,
-      this.pointValueHeight = false,
-      this.pointValueWidth = false,
-      PBIntermediateConstraints constraints})
-      : super(
+  InjectedContainer(
+    UUID,
+    Rectangle3D frame, {
+    String name,
+    double alignX,
+    double alignY,
+    String color,
+    this.prototypeNode,
+    this.type,
+    this.pointValueHeight = false,
+    this.pointValueWidth = false,
+    constraints,
+  }) : super(
           UUID,
           frame,
           name,
+          constraints: constraints,
         ) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');

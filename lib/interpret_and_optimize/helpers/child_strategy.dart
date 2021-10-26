@@ -127,7 +127,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
     /// <OR> we are adding multiple children to an empty `target`
     else if (targetChildren.isNotEmpty || children.length > 1) {
       var temp = FrameGroup(null, target.frame,
-          name: '${target.name}Group', constraints: target.constraints);
+          name: '${target.name}Group', constraints: target.constraints.clone());
       addChild(temp, children);
 
       if (targetChildren.isNotEmpty) {

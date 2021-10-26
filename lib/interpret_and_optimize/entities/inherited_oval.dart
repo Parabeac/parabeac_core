@@ -44,7 +44,7 @@ class InheritedOval extends PBVisualIntermediateNode
     String name,
     Uint8List image,
     this.prototypeNode,
-    PBIntermediateConstraints constraints
+    constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     if (image != null) {
@@ -61,6 +61,6 @@ class InheritedOval extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       InheritedOval.fromJson(json);
 }

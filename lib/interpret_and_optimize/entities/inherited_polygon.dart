@@ -45,13 +45,8 @@ class InheritedPolygon extends PBVisualIntermediateNode
     name,
     Uint8List image,
     this.prototypeNode,
-    PBIntermediateConstraints constraints
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
 
@@ -62,11 +57,10 @@ class InheritedPolygon extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedPolygonFromJson(json)
-        ..originalRef = json;
+      _$InheritedPolygonFromJson(json)..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       InheritedPolygon.fromJson(json);
 }

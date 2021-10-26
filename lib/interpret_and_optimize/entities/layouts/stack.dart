@@ -24,9 +24,10 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
-  PBIntermediateStackLayout(
-      {String name, PBIntermediateConstraints constraints})
-      : super(null, null, STACK_RULES, [], name, constraints: constraints) {
+  PBIntermediateStackLayout({
+    String name,
+    constraints,
+  }) : super(null, null, STACK_RULES, [], name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
   }
@@ -48,8 +49,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   @override
   void sortChildren(List<PBIntermediateNode> children) =>
-    children.sort((c0, c1) => c0.frame.z.compareTo(c1.frame.z));
-  
+      children.sort((c0, c1) => c0.frame.z.compareTo(c1.frame.z));
 
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
