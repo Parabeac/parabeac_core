@@ -265,7 +265,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
-    tree._rootNode = designNode;
+    tree.rootNode = designNode;
     return tree;
   }
 }
