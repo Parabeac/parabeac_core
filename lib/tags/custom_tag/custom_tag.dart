@@ -43,9 +43,9 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     return CustomTag(
-      originalRef.UUID,
+      null,
       frame,
-      originalRef.name.replaceAll('<custom>', '').pascalCase,
+      originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
       constraints: originalRef.constraints.clone(),
     );
   }
@@ -60,12 +60,6 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
     PBIntermediateTree tree,
   ) {
     iNode.name = iNode.name.replaceAll('<custom>', '');
-    var newTag = CustomTag(
-      null,
-      iNode.frame,
-      iNode.name.pascalCase + 'Custom',
-      constraints: iNode.constraints.clone(),
-    );
 
     // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
@@ -75,16 +69,16 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       // tree.addEdges(
       //     newTag, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
 
-      // tree.replaceChildrenOf(iNode, [newTag]);
+      // tree.replaceChildrenOf(iNode, [tag]);
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
       iNode.parent = parent;
 
-      tree.replaceNode(iNode, newTag);
+      tree.replaceNode(iNode, tag);
 
-      tree.addEdges(newTag, [iNode]);
+      tree.addEdges(tag, [iNode]);
 
-      return newTag;
+      return tag;
     } else {
       // [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
       iNode.parent = parent;
@@ -92,9 +86,9 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       if (tree.childrenOf(iNode).isEmpty) {
         /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
         tree.removeEdges(iNode.parent, [iNode]);
-        tree.addEdges(newTag, [iNode]);
-        tree.addEdges(parent, [newTag]);
-        return newTag;
+        tree.addEdges(tag, [iNode]);
+        tree.addEdges(parent, [tag]);
+        return tag;
       }
       tree.replaceNode(iNode, tag, acceptChildren: true);
 
