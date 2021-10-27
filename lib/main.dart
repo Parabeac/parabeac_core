@@ -194,7 +194,7 @@ ${parser.usage}
 // TODO: Find way to optimize
 Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
   var forest = [tree];
-  tree.forEach((element) {
+  for (var element in tree) {
     if (element is PBSharedMasterNode && element.parent != null) {
       var tempTree = PBIntermediateTree(name: element.name)
         ..rootNode = element
@@ -230,7 +230,7 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
         ..auxiliaryData = element.auxiliaryData;
       tree.replaceNode(element, newInstance);
     }
-  });
+  }
 
   return forest;
 }
