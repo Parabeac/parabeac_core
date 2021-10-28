@@ -78,13 +78,13 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     // file could have override names that don't exist?  That's really odd, but we have a file that does that.
     if (masterSymbol == null) {
       log.error(' Could not find master symbol for UUID:: $UUID');
-      return 'Container(/** This Symbol was not found **/)});';
+      return 'Container(/** This Symbol was not found **/)';
     }
 
     var symName = masterSymbol.name.snakeCase;
     if (symName == null) {
       log.error(' Could not find master name on: $masterSymbol');
-      return 'Container(/** This Symbol was not found **/)});';
+      return 'Container(/** This Symbol was not found **/)';
     }
 
     symName = PBInputFormatter.formatLabel(symName,
