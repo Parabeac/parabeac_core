@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -102,11 +103,23 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       });
 
       _formatNameAndValues(overrideValues, context);
-      overrideValues.forEach((element) {
+      for (var element in overrideValues) {
         if (element.overrideName != null && element.initialValue != null) {
-          buffer.write('${element.overrideName}: ${element.value},');
+          // If the type is image, we should print the whole widget
+          // so the end user can place whatever kind of widget
+          // TODO: Refactor so it place the image from the instance not from component
+          if (element.type == 'image') {
+            var property =
+                OverrideHelper.getProperty(element.UUID, element.type);
+
+            var propertyCode = (property.value.generator as PBBitmapGenerator)
+                .generate(property.value, context, generateAsOverride: false);
+            buffer.write('${element.overrideName}: $propertyCode,');
+          } else {
+            buffer.write('${element.overrideName}: ${element.value},');
+          }
         }
-      });
+      }
     }
 
     buffer.write(')\n');
