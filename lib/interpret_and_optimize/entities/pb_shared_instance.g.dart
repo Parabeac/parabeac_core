@@ -15,7 +15,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     sharedParamValues: (json['overrideValues'] as List)
         ?.map((e) => e == null
             ? null
-            : PBSharedParameterValue.fromJson(e as Map<String, dynamic>))
+            : PBInstanceOverride.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
@@ -49,9 +49,8 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'type': instance.type,
     };
 
-PBSharedParameterValue _$PBSharedParameterValueFromJson(
-    Map<String, dynamic> json) {
-  return PBSharedParameterValue(
+PBInstanceOverride _$PBInstanceOverrideFromJson(Map<String, dynamic> json) {
+  return PBInstanceOverride(
     json['type'] as String,
     json['value'],
     json['UUID'] as String,
@@ -59,8 +58,7 @@ PBSharedParameterValue _$PBSharedParameterValueFromJson(
   );
 }
 
-Map<String, dynamic> _$PBSharedParameterValueToJson(
-        PBSharedParameterValue instance) =>
+Map<String, dynamic> _$PBInstanceOverrideToJson(PBInstanceOverride instance) =>
     <String, dynamic>{
       'type': instance.type,
       'value': instance.initialValue,

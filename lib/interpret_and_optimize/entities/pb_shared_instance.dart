@@ -27,7 +27,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   ///The parameters that are going to be overriden in the [PBSharedMasterNode].
 
   @JsonKey(name: 'overrideValues')
-  List<PBSharedParameterValue> sharedParamValues;
+  List<PBInstanceOverride> sharedParamValues;
 
   ///The name of the function call that the [PBSharedInstanceIntermediateNode] is
   ///going to use; the name of the [PBSharedMasterNode].
@@ -99,7 +99,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     return instance;
   }
 
-  void _formatOverrideVals(List<PBSharedParameterValue> vals) {
+  void _formatOverrideVals(List<PBInstanceOverride> vals) {
     vals.forEach((overrideValue) {
       if (overrideValue.type == 'stringValue') {
         overrideValue.value =
@@ -112,14 +112,14 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 }
 
 @JsonSerializable()
-class PBSharedParameterValue {
+class PBInstanceOverride {
   final String type;
 
-  /// Initial value of [PBSharedParameterValue]
+  /// Initial value of [PBInstanceOverride]
   @JsonKey(name: 'value')
   dynamic initialValue;
 
-  /// Current value of [PBSharedParameterValue]
+  /// Current value of [PBInstanceOverride]
   ///
   /// This is useful when we need to do something to `initialValue`
   /// in order to correctly export the Override
@@ -131,7 +131,7 @@ class PBSharedParameterValue {
   @JsonKey(name: 'name')
   String overrideName;
 
-  PBSharedParameterValue(
+  PBInstanceOverride(
     this.type,
     this.initialValue,
     this.UUID,
@@ -141,8 +141,8 @@ class PBSharedParameterValue {
   }
 
   @override
-  factory PBSharedParameterValue.fromJson(Map<String, dynamic> json) =>
-      _$PBSharedParameterValueFromJson(json);
+  factory PBInstanceOverride.fromJson(Map<String, dynamic> json) =>
+      _$PBInstanceOverrideFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PBSharedParameterValueToJson(this);
+  Map<String, dynamic> toJson() => _$PBInstanceOverrideToJson(this);
 }

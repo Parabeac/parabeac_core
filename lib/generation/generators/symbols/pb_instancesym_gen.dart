@@ -64,7 +64,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
   String genSymbolInstance(
     String UUID,
-    List<PBSharedParameterValue> overrideValues,
+    List<PBInstanceOverride> overrideValues,
     PBContext context, {
     bool topLevel = true,
     String UUIDPath = '',
@@ -129,7 +129,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
   /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
   void _formatNameAndValues(
-      List<PBSharedParameterValue> params, PBContext context) {
+      List<PBInstanceOverride> params, PBContext context) {
     params.forEach((param) {
       var overrideProp = OverrideHelper.getProperty(param.UUID, param.type);
 
