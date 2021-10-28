@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -37,8 +38,8 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     var fss =
         context.configuration.generationConfiguration.fileStructureStrategy;
 
-    /// If [PBTag] is [PBSharedInstanceIntermediateNode], we can extract its overrides
-    /// and list them in the initial state
+    /// If [PBTag] is [PBSharedInstanceIntermediateNode] or [PBSharedInstanceIntermediateNode],
+    /// we can extract its overrides and list them in the initial state
     var initialStates = <PBSharedParameterProp>[];
     var firstChild = context.tree.childrenOf(source).first;
     if (firstChild is PBSharedInstanceIntermediateNode) {
@@ -49,6 +50,10 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
           initialStates.add(prop);
         }
       });
+    } else if (source.parent is PBSharedMasterNode) {
+      (source.parent as PBSharedMasterNode)
+          .overridableProperties
+          .forEach(initialStates.add);
     }
 
     /// Generate State
@@ -156,7 +161,13 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     initialStates.forEach((state) {
       classVars.write('var ${state.propertyName};');
       thisVars.write('this.${state.propertyName},');
-      defaultValues.write('\'${state.value}\',');
+      if (state.type == 'stringValue' && state.value is InheritedText) {
+        defaultValues.write(
+          '\'${(state.value as InheritedText).text}\',',
+        );
+      } else {
+        defaultValues.write('\'${state.value}\',');
+      }
     });
 
     return '''
