@@ -40,14 +40,15 @@ class InheritedBitmap extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  InheritedBitmap(String UUID, Rectangle3D frame,
-      {this.originalRef, String name, this.referenceImage, this.prototypeNode, PBIntermediateConstraints constraints})
-      : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+  InheritedBitmap(
+    String UUID,
+    Rectangle3D frame, {
+    this.originalRef,
+    String name,
+    this.referenceImage,
+    this.prototypeNode,
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
 
@@ -63,7 +64,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       (InheritedBitmap.fromJson(json) as InheritedBitmap)..originalRef = json;
-
 }
