@@ -109,12 +109,10 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           // so the end user can place whatever kind of widget
           // TODO: Refactor so it place the image from the instance not from component
           if (element.type == 'image') {
-            var property =
-                OverrideHelper.getProperty(element.UUID, element.type);
+            var elementCode =
+                element.value.generator.generate(element.value, context);
 
-            var propertyCode = (property.value.generator as PBBitmapGenerator)
-                .generate(property.value, context, generateAsOverride: false);
-            buffer.write('${element.overrideName}: $propertyCode,');
+            buffer.write('${element.overrideName}: $elementCode,');
           } else {
             buffer.write('${element.overrideName}: ${element.value},');
           }
@@ -140,16 +138,16 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           var instance = PBSharedInstanceIntermediateNode(
             param.UUID,
             null,
-            SYMBOL_ID: param.initialValue,
+            SYMBOL_ID: param.initialValue['name'],
             name: param.overrideName,
             overrideValues: [],
             sharedParamValues: [],
           );
           var code = instance.generator.generate(instance, context);
-          param.value = code;
+          param.initialValue['name'] = code;
           // Add single quotes to parameter value for override
-        } else if (!param.value.contains('\'')) {
-          param.value = '\'${param.value}\'';
+        } else if (!param.initialValue['name'].contains('\'')) {
+          param.initialValue['name'] = '\'${param.initialValue["name"]}\'';
         }
       }
     });

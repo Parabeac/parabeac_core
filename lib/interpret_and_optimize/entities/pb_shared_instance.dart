@@ -95,18 +95,17 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     var instance = PBSharedInstanceIntermediateNode.fromJson(json);
     instance.name = PBInputFormatter.formatPageName(instance.name);
     _formatOverrideVals(
-        (instance as PBSharedInstanceIntermediateNode).sharedParamValues);
+        (instance as PBSharedInstanceIntermediateNode).sharedParamValues, tree);
+
     return instance;
   }
 
-  void _formatOverrideVals(List<PBInstanceOverride> vals) {
+  void _formatOverrideVals(
+      List<PBInstanceOverride> vals, PBIntermediateTree tree) {
     vals.forEach((overrideValue) {
-      if (overrideValue.type == 'stringValue') {
-        overrideValue.value =
-            overrideValue.value.replaceAll('\$', '\\\$').replaceAll('\n', '');
-      } else if (overrideValue.type == 'image') {
-        overrideValue.value = 'assets/' + overrideValue.value;
-      }
+      overrideValue.initialValue;
+      overrideValue.value =
+          PBIntermediateNode.fromJson(overrideValue.initialValue, parent, tree);
     });
   }
 }
@@ -117,14 +116,14 @@ class PBInstanceOverride {
 
   /// Initial value of [PBInstanceOverride]
   @JsonKey(name: 'value')
-  dynamic initialValue;
+  Map initialValue;
 
   /// Current value of [PBInstanceOverride]
   ///
   /// This is useful when we need to do something to `initialValue`
   /// in order to correctly export the Override
   @JsonKey(ignore: true)
-  String value;
+  PBIntermediateNode value;
 
   final String UUID;
 
@@ -137,7 +136,7 @@ class PBInstanceOverride {
     this.UUID,
     this.overrideName,
   ) {
-    value = initialValue;
+    print('Fabi');
   }
 
   @override

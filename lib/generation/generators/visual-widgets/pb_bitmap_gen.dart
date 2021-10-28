@@ -15,11 +15,13 @@ class PBBitmapGenerator extends PBGenerator {
   }
 
   @override
-  String generate(PBIntermediateNode source, PBContext generatorContext,
-      {bool generateAsOverride = true}) {
+  String generate(
+    PBIntermediateNode source,
+    PBContext generatorContext,
+  ) {
     var buffer = StringBuffer();
     var imageOverride = OverrideHelper.getProperty(source.UUID, 'image');
-    if (imageOverride != null && generateAsOverride) {
+    if (imageOverride != null) {
       buffer.write('${imageOverride.propertyName} ?? ');
     }
 
