@@ -1,3 +1,4 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 
@@ -10,11 +11,13 @@ abstract class PBTag extends PBVisualIntermediateNode {
   PBTag(
     String UUID,
     Rectangle3D frame,
-    String name,
-  ) : super(
+    String name, {
+    contraints,
+  }) : super(
           UUID,
           frame,
           name,
+          constraints: contraints,
         );
 
   /// Override this function if you want to make tree modification prior to the layout service.

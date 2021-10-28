@@ -33,17 +33,23 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   Map alignment = {};
 
-  PBLayoutIntermediateNode(String UUID, Rectangle3D frame, this._layoutRules,
-      this._exceptions, String name,
-      {this.prototypeNode, PBIntermediateConstraints constraints})
-      : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints) {
+  PBLayoutIntermediateNode(
+    String UUID,
+    Rectangle3D frame,
+    this._layoutRules,
+    this._exceptions,
+    String name, {
+    this.prototypeNode,
+    constraints,
+  }) : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints) {
     childrenStrategy = MultipleChildStrategy('children');
   }
 
   @override
-  void childrenModified(List<PBIntermediateNode> children, [PBContext context]) {
+  void childrenModified(List<PBIntermediateNode> children,
+      [PBContext context]) {
     if (children != null && children.isNotEmpty) {
-      if(context != null){
+      if (context != null) {
         resize(context, children);
       }
       sortChildren(children);

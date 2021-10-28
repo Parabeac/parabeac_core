@@ -51,22 +51,25 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
-  PBSharedMasterNode(String UUID, Rectangle3D frame,
-      {this.originalRef,
-      this.SYMBOL_ID,
-      String name,
-      this.overridableProperties,
-      this.prototypeNode,
-      PBIntermediateConstraints constraints})
-      : super(UUID, frame, name, constraints: constraints) {
+  PBSharedMasterNode(
+    String UUID,
+    Rectangle3D frame, {
+    this.originalRef,
+    this.SYMBOL_ID,
+    String name,
+    this.overridableProperties,
+    this.prototypeNode,
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
 
     generator = PBMasterSymbolGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedMasterNodeFromJson(json)..originalRef = json;
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    return _$PBSharedMasterNodeFromJson(json)..originalRef = json;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
