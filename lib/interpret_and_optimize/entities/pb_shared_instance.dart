@@ -105,7 +105,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     vals.forEach((overrideValue) {
       overrideValue.initialValue;
       overrideValue.value =
-          PBIntermediateNode.fromJson(overrideValue.initialValue, parent, tree);
+          PBIntermediateNode.fromJson(overrideValue.initialValue, this, tree);
     });
   }
 }
@@ -135,9 +135,7 @@ class PBInstanceOverride {
     this.initialValue,
     this.UUID,
     this.overrideName,
-  ) {
-    print('Fabi');
-  }
+  );
 
   @override
   factory PBInstanceOverride.fromJson(Map<String, dynamic> json) =>
