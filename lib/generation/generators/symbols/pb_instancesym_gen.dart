@@ -114,7 +114,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
             buffer.write('${element.overrideName}: $elementCode,');
           } else {
-            buffer.write('${element.overrideName}: ${element.value},');
+            buffer.write('${element.overrideName}: ${element.valueName},');
           }
         }
       }
@@ -138,16 +138,16 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           var instance = PBSharedInstanceIntermediateNode(
             param.UUID,
             null,
-            SYMBOL_ID: param.initialValue['name'],
-            name: param.overrideName,
+            SYMBOL_ID: param.valueName,
+            name: param.initialValue['name'],
             overrideValues: [],
             sharedParamValues: [],
           );
           var code = instance.generator.generate(instance, context);
-          param.initialValue['name'] = code;
+          param.valueName = code;
           // Add single quotes to parameter value for override
-        } else if (!param.initialValue['name'].contains('\'')) {
-          param.initialValue['name'] = '\'${param.initialValue["name"]}\'';
+        } else if (!param.valueName.contains('\'')) {
+          param.valueName = '\'${param.valueName}\'';
         }
       }
     });

@@ -52,9 +52,10 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
 PBInstanceOverride _$PBInstanceOverrideFromJson(Map<String, dynamic> json) {
   return PBInstanceOverride(
     json['type'] as String,
-    json['value'],
+    json['value'] as Map<String, dynamic>,
     json['UUID'] as String,
     json['name'] as String,
+    json['valueName'] as String,
   );
 }
 
@@ -64,4 +65,5 @@ Map<String, dynamic> _$PBInstanceOverrideToJson(PBInstanceOverride instance) =>
       'value': instance.initialValue,
       'UUID': instance.UUID,
       'name': instance.overrideName,
+      'valueName': instance.valueName,
     };

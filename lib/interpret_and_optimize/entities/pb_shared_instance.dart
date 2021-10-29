@@ -103,6 +103,13 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   void _formatOverrideVals(
       List<PBInstanceOverride> vals, PBIntermediateTree tree) {
     vals.forEach((overrideValue) {
+      if (overrideValue.type == 'stringValue') {
+        overrideValue.valueName = overrideValue.valueName
+            .replaceAll('\$', '\\\$')
+            .replaceAll('\n', '');
+      } else if (overrideValue.type == 'image') {
+        overrideValue.valueName = 'assets/' + overrideValue.valueName;
+      }
       overrideValue.initialValue;
       overrideValue.value =
           PBIntermediateNode.fromJson(overrideValue.initialValue, this, tree);
@@ -130,12 +137,17 @@ class PBInstanceOverride {
   @JsonKey(name: 'name')
   String overrideName;
 
+  String valueName;
+
   PBInstanceOverride(
     this.type,
     this.initialValue,
     this.UUID,
     this.overrideName,
-  );
+    this.valueName,
+  ) {
+    print('Fabi');
+  }
 
   @override
   factory PBInstanceOverride.fromJson(Map<String, dynamic> json) =>
