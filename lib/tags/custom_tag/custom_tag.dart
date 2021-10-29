@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag_bloc_generator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -25,15 +26,24 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
     String UUID,
     Rectangle3D frame,
     String name, {
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(
           UUID,
           frame,
           name,
           contraints: constraints,
         ) {
-    generator = CustomTagGenerator();
+    generator ??= _getGenerator();
     childrenStrategy = TempChildrenStrategy('child');
+  }
+
+  /// Function that examines the configuration and assigns a generator
+  /// to `this` [CustomTag] and assigns it a State management generator
+  PBGenerator _getGenerator() {
+    if (MainInfo().configuration.stateManagement.toLowerCase() == 'bloc') {
+      return CustomTagBlocGenerator();
+    }
+    return CustomTagGenerator();
   }
 
   @override
