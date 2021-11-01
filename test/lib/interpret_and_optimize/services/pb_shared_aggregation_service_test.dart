@@ -24,8 +24,8 @@ void main() {
     PBSharedInterAggregationService pbSharedInterAggregationService;
     PBSharedInstanceIntermediateNode instanceNode0;
     PBSharedMasterNode masterNode0, masterNode1;
-    List<PBSharedParameterProp> masterParameters;
-    List<PBSharedParameterValue> instaceValues;
+    List<PBMasterOverride> masterParameters;
+    List<PBInstanceOverride> instaceValues;
     TempGroupLayoutNode rootNode;
 
     setUp(() {
@@ -46,7 +46,7 @@ void main() {
       instaceValues = [];
 
       for (var i = 0; i < 2; i++) {
-        var masterParameter = PBSharedParameterProp(
+        var masterParameter = PBMasterOverride(
           'masterParam',
           parameterAlternator ? String : PBSharedInstanceIntermediateNode,
           parameterAlternator ? null : instanceNode0,
@@ -55,7 +55,7 @@ void main() {
           parameterAlternator ? 'uuid0' : INSTANCE0_UUID,
           null,
         );
-        var instaceParameter = PBSharedParameterValue(
+        var instaceParameter = PBInstanceOverride(
           parameterAlternator ? String : PBSharedInstanceIntermediateNode,
           parameterAlternator ? 'test' : instanceNode0,
           null,

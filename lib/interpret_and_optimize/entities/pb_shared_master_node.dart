@@ -36,7 +36,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
   @JsonKey(ignore: true)
-  List<PBSharedParameterProp> overridableProperties;
+  List<PBMasterOverride> overridableProperties;
   String _friendlyName;
 
   //Remove any special characters and leading numbers from the method name
@@ -82,7 +82,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
             ?.map(
               (prop) => prop == null
                   ? null
-                  : PBSharedParameterProp.createSharedParameter(
+                  : PBMasterOverride.createSharedParameter(
                       prop as Map<String, dynamic>,
                       master,
                       tree,
@@ -101,7 +101,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 }
 
 @JsonSerializable()
-class PBSharedParameterProp {
+class PBMasterOverride {
   final String type;
 
   @JsonKey(ignore: true)
@@ -112,20 +112,20 @@ class PBSharedParameterProp {
 
   final String UUID;
 
-  PBSharedParameterProp(
+  PBMasterOverride(
     this.type,
     this.propertyName,
     this.UUID,
   );
 
-  static PBSharedParameterProp createSharedParameter(Map<String, dynamic> json,
+  static PBMasterOverride createSharedParameter(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     // Override properties with <custom> as name will create issues since their
     // PBIntermediateNode counterparts will have already been interpreted
     if (json['name'].contains('<custom>')) {
       return null;
     }
-    var fromJson = PBSharedParameterProp.fromJson(json);
+    var fromJson = PBMasterOverride.fromJson(json);
 
     // Populate `value` of Override Property since it is an [IntermediateNode]
     fromJson.value = tree.firstWhere((element) => element.UUID == json['UUID'],
@@ -134,10 +134,10 @@ class PBSharedParameterProp {
     return fromJson;
   }
 
-  factory PBSharedParameterProp.fromJson(Map<String, dynamic> json) =>
-      _$PBSharedParameterPropFromJson(json);
+  factory PBMasterOverride.fromJson(Map<String, dynamic> json) =>
+      _$PBMasterOverrideFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PBSharedParameterPropToJson(this);
+  Map<String, dynamic> toJson() => _$PBMasterOverrideToJson(this);
 
   static String _propertyNameFromJson(String name) =>
       name.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').camelCase;

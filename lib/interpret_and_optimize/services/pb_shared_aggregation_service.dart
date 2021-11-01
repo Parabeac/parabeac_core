@@ -32,7 +32,7 @@ class PBSharedInterAggregationService {
     _unregSymQueue = <PBSharedInstanceIntermediateNode>[];
   }
 
-  ///Within the [PBSymbolStorage], look for the [PBSharedParameterValue] of the [PBSharedInstanceIntermediateNode].
+  ///Within the [PBSymbolStorage], look for the [PBInstanceOverride] of the [PBSharedInstanceIntermediateNode].
   ///Those properties are going to be in a registered [PBSharedMasterNode], otherwise,
   ///it's going to enter in a queue where it waits until that instance is registered.
   void gatherSharedValues(
@@ -45,9 +45,9 @@ class PBSharedInterAggregationService {
     }
   }
 
-  ///Within its [rootChildNode], look for the [PBSharedParameterProp] of the [PBSharedMasterNode],
+  ///Within its [rootChildNode], look for the [PBMasterOverride] of the [PBSharedMasterNode],
   ///if one of the values is a [PBSharedInstanceIntermediateNode] then we
-  ///are going to look for its [PBSharedParameterValue] if it does not have one.
+  ///are going to look for its [PBInstanceOverride] if it does not have one.
   void gatherSharedParameters(PBSharedMasterNode sharedMasterNode,
       PBIntermediateNode rootChildNode, PBContext context) {
     for (var prop in sharedMasterNode.overridableProperties) {
