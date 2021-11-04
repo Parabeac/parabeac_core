@@ -40,7 +40,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
 
     /// If [PBTag] is [PBSharedInstanceIntermediateNode] or [PBSharedInstanceIntermediateNode],
     /// we can extract its overrides and list them in the initial state
-    var initialStates = <PBSharedParameterProp>[];
+    var initialStates = <PBMasterOverride>[];
     var firstChild = context.tree.childrenOf(source).first;
     if (firstChild is PBSharedInstanceIntermediateNode) {
       firstChild.sharedParamValues.forEach((value) {
@@ -153,7 +153,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
   }
 
   String _generateStateBoilerplate(String className,
-      [List<PBSharedParameterProp> initialStates = const []]) {
+      [List<PBMasterOverride> initialStates = const []]) {
     var thisVars = StringBuffer();
     var classVars = StringBuffer();
     var defaultValues = StringBuffer();
