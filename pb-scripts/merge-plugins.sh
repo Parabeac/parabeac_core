@@ -6,7 +6,7 @@ project=parabeac_core
 
 cat pb-scripts/parabird.txt
 
-cd lib/eggs
+cd lib/tags
 
 # ==========================================
 # Download eggs if link is provided
