@@ -40,9 +40,9 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   /// Function that examines the configuration and assigns a generator
   /// to `this` [CustomTag] and assigns it a State management generator
   PBGenerator _getGenerator() {
-    if (MainInfo().configuration.stateManagement.toLowerCase() == 'bloc') {
-      return CustomTagBlocGenerator();
-    }
+    // if (MainInfo().configuration.stateManagement.toLowerCase() == 'bloc') {
+    //   return CustomTagBlocGenerator();
+    // }
     return CustomTagGenerator();
   }
 
