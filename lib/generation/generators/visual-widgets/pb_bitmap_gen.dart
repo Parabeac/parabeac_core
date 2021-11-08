@@ -45,12 +45,15 @@ class PBBitmapGenerator extends PBGenerator {
   }
 
   String _getBoxFit(PBIntermediateConstraints constraints) {
-    if (constraints.fixedHeight && constraints.fixedWidth) {
+    if (constraints.pinLeft &&
+        constraints.pinRight &&
+        constraints.pinTop &&
+        constraints.pinBottom) {
       return 'fit: BoxFit.fill,';
-    } else if (constraints.fixedHeight) {
-      return 'fit: BoxFit.fitHeight,';
-    } else if (constraints.fixedWidth) {
+    } else if (constraints.pinLeft && constraints.pinRight) {
       return 'fit: BoxFit.fitWidth,';
+    } else if (constraints.pinTop && constraints.pinBottom) {
+      return 'fit: BoxFit.fitHeight,';
     } else {
       return '';
     }
