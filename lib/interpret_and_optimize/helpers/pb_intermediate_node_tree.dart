@@ -91,6 +91,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     }
   }
 
+  String get platformName => _name;
+
   final _childrenModObservers = <String, List<ChildrenModEventHandler>>{};
 
   ElementStorage _elementStorage;

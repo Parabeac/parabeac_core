@@ -34,7 +34,7 @@ class PBPlatformOrientationLinkerService extends AITHandler {
   /// and adds [tree] to storage.
   void addOrientationPlatformInformation(
       PBIntermediateTree tree, PBContext context) {
-    tree.generationViewData.platform = _extractPlatform(tree.name);
+    tree.generationViewData.platform = _extractPlatform(tree.platformName);
     tree.generationViewData.orientation = _extractOrientation(
       tree.rootNode.frame.bottomRight,
       tree.rootNode.frame.topLeft,
