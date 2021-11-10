@@ -45,20 +45,28 @@ class PBBitmapGenerator extends PBGenerator {
   }
 
   String _getBoxFit(PBIntermediateConstraints constraints) {
-    if ((constraints.pinLeft &&
-            constraints.pinRight &&
-            constraints.pinTop &&
-            constraints.pinBottom) ||
-        (constraints.fixedHeight && constraints.fixedWidth)) {
-      return 'fit: BoxFit.fill,';
-    } else if ((constraints.pinLeft && constraints.pinRight) ||
-        constraints.fixedWidth) {
+    if (constraints.pinLeft &&
+        constraints.pinBottom &&
+        constraints.pinRight &&
+        constraints.pinTop) {
+      // In case all pins are set
+      return 'fit: BoxFit.contain,';
+    } else if (constraints.pinLeft && constraints.pinRight) {
+      // In case it has set both horizontal pins
       return 'fit: BoxFit.fitWidth,';
-    } else if ((constraints.pinTop && constraints.pinBottom) ||
-        constraints.fixedHeight) {
+    } else if (constraints.pinBottom && constraints.pinTop) {
+      // In case it has set both vertical pins
       return 'fit: BoxFit.fitHeight,';
+    } else if ((constraints.pinLeft || constraints.pinRight) &&
+        (constraints.pinTop || constraints.pinBottom)) {
+      // In case it has set one pin per side
+      return 'fit: BoxFit.none,';
+    } else if (constraints.fixedHeight && constraints.fixedWidth) {
+      // In case scale is set on both directions
+      return 'fit: BoxFit.scaleDown,';
     } else {
-      return '';
+      // In case everything is false, scale it on both directions
+      return 'fit: BoxFit.fill,';
     }
   }
 }
