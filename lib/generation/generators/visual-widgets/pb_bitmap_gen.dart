@@ -57,8 +57,8 @@ class PBBitmapGenerator extends PBGenerator {
     } else if (constraints.pinBottom && constraints.pinTop) {
       // In case it has set both vertical pins
       return 'fit: BoxFit.fitHeight,';
-    } else if ((constraints.pinLeft || constraints.pinRight) &&
-        (constraints.pinTop || constraints.pinBottom)) {
+    } else if ((constraints.pinLeft ^ constraints.pinRight) &&
+        (constraints.pinTop ^ constraints.pinBottom)) {
       // In case it has set one pin per side
       return 'fit: BoxFit.none,';
     } else if (constraints.fixedHeight && constraints.fixedWidth) {

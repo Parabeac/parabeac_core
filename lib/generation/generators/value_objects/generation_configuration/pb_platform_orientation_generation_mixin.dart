@@ -25,7 +25,10 @@ mixin PBPlatformOrientationGeneration {
           formatedName,
           '${formatedName}_platform_builder.dart',
         ));
-    if (platformsMap.length > 1) {
+
+    /// Check if we have multiple platforms or orientations for any platform
+    if (platformsMap.length > 1 ||
+        platformsMap.values.any((orientations) => orientations.length > 1)) {
       return WriteScreenCommand(
         Uuid().v4(),
         formatedName + '_platform_builder.dart',
@@ -59,7 +62,8 @@ mixin PBPlatformOrientationGeneration {
       Map<String, List<String>> platformsMap, String className) {
     var result = '';
     platformsMap.forEach((platform, value) {
-      var nameWithPlatform = className + platform.titleCase;
+      var nameWithPlatform =
+          platformsMap.length > 1 ? className + platform.titleCase : className;
       if (value.length > 1) {
         result += '''
         ${platform}Widget: ResponsiveOrientationBuilder(
