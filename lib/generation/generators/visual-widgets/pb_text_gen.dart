@@ -14,8 +14,7 @@ class PBTextGen extends PBGenerator {
     if (source is InheritedText) {
       var cleanText =
           source.text?.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
-      context.project.genProjectData
-          .addDependencies('auto_size_text', '^2.1.0');
+      context.project.genProjectData.addDependencies('auto_size_text', '3.0.0');
 
       context.managerData
           .addImport(FlutterImport('auto_size_text.dart', 'auto_size_text'));
