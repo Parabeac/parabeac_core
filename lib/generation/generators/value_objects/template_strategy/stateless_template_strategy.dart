@@ -19,8 +19,12 @@ class StatelessTemplateStrategy extends TemplateStrategy {
 
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
+        var overrideType = 'Widget?';
+        if (prop.type == 'stringValue') {
+          overrideType = 'String?';
+        }
         overrides += 'this.${prop.propertyName}, ';
-        overrideVars += 'final ${prop.propertyName};';
+        overrideVars += 'final $overrideType ${prop.propertyName};';
       });
     }
     return '''
@@ -29,7 +33,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
 class ${widgetName.pascalCase} extends StatelessWidget{
   ${node is PBSharedMasterNode ? 'final constraints;' : ''}
   ${overrideVars.isNotEmpty ? overrideVars : ''}
-  ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
+  const ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
   ${manager.generateGlobalVariables()}
 
   @override

@@ -18,7 +18,7 @@ class StatefulTemplateStrategy extends TemplateStrategy {
 ${manager.generateImports()}
 
 class $widgetName extends StatefulWidget{
-  const $widgetName() : super();
+  const $widgetName({Key? key}) : super(key: key);
   @override
   _$widgetName createState() => _$widgetName();
 }
