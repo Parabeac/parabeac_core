@@ -48,9 +48,10 @@ mixin PBPlatformOrientationGeneration {
     ${_serveImports(cookedImports)}
 
     class ${className}PlatformBuilder extends StatelessWidget {
+      const ${className}PlatformBuilder({Key? key}) : super(key: key);
       @override
       Widget build(BuildContext context) {
-        return ResponsiveLayoutBuilder(
+        return const ResponsiveLayoutBuilder(
           ${_getPlatformsWidgets(platformsMap, className)}
         );
       }

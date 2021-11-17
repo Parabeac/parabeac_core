@@ -12,7 +12,7 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is InheritedContainer || source is InjectedContainer) {
       final buffer = StringBuffer();
-      buffer.write('decoration: BoxDecoration(');
+      buffer.write('decoration: const BoxDecoration(');
       var borderInfo = source.auxiliaryData.borderInfo;
       if (source.auxiliaryData.color != null) {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
