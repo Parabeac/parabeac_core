@@ -194,8 +194,8 @@ class PBTabBarGenerator extends PBGenerator {
       $imports
 
       class $className extends StatefulWidget {
-        final Widget child;
-        $className({Key key, this.child}) : super (key: key);
+        final Widget? child;
+        $className({Key? key, this.child}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();

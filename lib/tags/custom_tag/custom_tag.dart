@@ -148,8 +148,8 @@ class CustomTagGenerator extends PBGenerator {
       import 'package:flutter/material.dart';
 
       class $className extends StatefulWidget{
-        final Widget child;
-        $className({Key key, this.child}) : super (key: key);
+        final Widget? child;
+        $className({Key? key, this.child}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();
@@ -158,7 +158,7 @@ class CustomTagGenerator extends PBGenerator {
       class _${className}State extends State<$className> {
         @override
         Widget build(BuildContext context){
-          return widget.child;
+          return widget.child!;
         }
       }
       ''';
