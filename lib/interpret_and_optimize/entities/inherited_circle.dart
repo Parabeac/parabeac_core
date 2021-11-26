@@ -28,7 +28,7 @@ class InheritedCircle extends PBVisualIntermediateNode
   @override
   @JsonKey()
   String type = 'circle';
- 
+
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
@@ -41,13 +41,8 @@ class InheritedCircle extends PBVisualIntermediateNode
     Point alignX,
     Point alignY,
     this.prototypeNode,
-    PBIntermediateConstraints constraints
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = TempChildrenStrategy('child');
 
@@ -59,11 +54,10 @@ class InheritedCircle extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedCircleFromJson(json)
-        ..originalRef = json;
+      _$InheritedCircleFromJson(json)..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
-      PBIntermediateNode parent, PBIntermediateTree tree) =>
+          PBIntermediateNode parent, PBIntermediateTree tree) =>
       InheritedCircle.fromJson(json);
 }

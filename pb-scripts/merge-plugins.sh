@@ -6,7 +6,7 @@ project=parabeac_core
 
 cat pb-scripts/parabird.txt
 
-cd lib/eggs
+cd lib/tags
 
 # ==========================================
 # Download eggs if link is provided
@@ -36,7 +36,7 @@ counter=0
 for f in *.dart 
 do
     # -> To get import of file
-    saved[counter]="import@'package:$project/eggs/$f';"
+    saved[counter]="import@'package:$project/tags/$f';"
     # echo ${saved[counter]} # Uncomment to debug
 
     # -> To get file semantics

@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -63,7 +64,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
   String genSymbolInstance(
     String UUID,
-    List<PBSharedParameterValue> overrideValues,
+    List<PBInstanceOverride> overrideValues,
     PBContext context, {
     bool topLevel = true,
     String UUIDPath = '',
@@ -78,13 +79,13 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     // file could have override names that don't exist?  That's really odd, but we have a file that does that.
     if (masterSymbol == null) {
       log.error(' Could not find master symbol for UUID:: $UUID');
-      return 'Container(/** This Symbol was not found **/)});';
+      return 'Container(/** This Symbol was not found **/)';
     }
 
     var symName = masterSymbol.name.snakeCase;
     if (symName == null) {
       log.error(' Could not find master name on: $masterSymbol');
-      return 'Container(/** This Symbol was not found **/)});';
+      return 'Container(/** This Symbol was not found **/)';
     }
 
     symName = PBInputFormatter.formatLabel(symName,
@@ -95,16 +96,29 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     buffer.write('constraints,\n');
 
     // Make sure override property of every value is overridable
-    overrideValues.removeWhere((value) {
-      var override = OverrideHelper.getProperty(value.UUID, value.type);
-      return override == null || override.value == null;
-    });
-    _formatNameAndValues(overrideValues, context);
-    overrideValues.forEach((element) {
-      if (element.overrideName != null && element.initialValue != null) {
-        buffer.write('${element.overrideName}: ${element.value},');
+    if (overrideValues != null) {
+      overrideValues.removeWhere((value) {
+        var override = OverrideHelper.getProperty(value.UUID, value.type);
+        return override == null || override.value == null;
+      });
+
+      _formatNameAndValues(overrideValues, context);
+      for (var element in overrideValues) {
+        if (element.overrideName != null && element.initialValue != null) {
+          // If the type is image, we should print the whole widget
+          // so the end user can place whatever kind of widget
+          // TODO: Refactor so it place the image from the instance not from component
+          if (element.type == 'image') {
+            var elementCode =
+                element.value.generator.generate(element.value, context);
+
+            buffer.write('${element.overrideName}: $elementCode,');
+          } else {
+            buffer.write('${element.overrideName}: ${element.valueName},');
+          }
+        }
       }
-    });
+    }
 
     buffer.write(')\n');
 
@@ -113,7 +127,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
   /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
   void _formatNameAndValues(
-      List<PBSharedParameterValue> params, PBContext context) {
+      List<PBInstanceOverride> params, PBContext context) {
     params.forEach((param) {
       var overrideProp = OverrideHelper.getProperty(param.UUID, param.type);
 
@@ -124,16 +138,16 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           var instance = PBSharedInstanceIntermediateNode(
             param.UUID,
             null,
-            SYMBOL_ID: param.initialValue,
-            name: param.overrideName,
+            SYMBOL_ID: param.valueName,
+            name: param.initialValue['name'],
             overrideValues: [],
             sharedParamValues: [],
           );
           var code = instance.generator.generate(instance, context);
-          param.value = code;
+          param.valueName = code;
           // Add single quotes to parameter value for override
-        } else if (!param.value.contains('\'')) {
-          param.value = '\'${param.value}\'';
+        } else if (!param.valueName.contains('\'')) {
+          param.valueName = '\'${param.valueName}\'';
         }
       }
     });

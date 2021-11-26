@@ -1,22 +1,14 @@
-import 'dart:math';
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
-import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_master_params.dart';
-import 'package:quick_log/quick_log.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:recase/recase.dart';
@@ -44,8 +36,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
   ///The properties that could be be overridable on a [PBSharedMasterNode]
   @JsonKey(ignore: true)
-  List<PBSharedParameterProp> overridableProperties;
-  String friendlyName;
+  List<PBMasterOverride> overridableProperties;
+  String _friendlyName;
+
+  //Remove any special characters and leading numbers from the method name
+  //Make first letter of method name capitalized using PascalCase
+  String get friendlyName => name
+      .replaceAll(RegExp(r'[^\w]+'), '')
+      .replaceAll(RegExp(r'/'), '')
+      .replaceFirst(RegExp(r'^[\d]+'), '')
+      .pascalCase;
 
   @override
   @JsonKey(ignore: true)
@@ -59,72 +59,49 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     String name,
     this.overridableProperties,
     this.prototypeNode,
-    PBIntermediateConstraints constraints
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints
-        ) {
+    constraints,
+  }) : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
-    try {
-      if (name != null) {
-        //Remove any special characters and leading numbers from the method name
-        friendlyName = name
-            .replaceAll(RegExp(r'[^\w]+'), '')
-            .replaceAll(RegExp(r'/'), '')
-            .replaceFirst(RegExp(r'^[\d]+'), '');
-        //Make first letter of method name capitalized
-        friendlyName =
-            friendlyName[0].toUpperCase() + friendlyName.substring(1);
-      }
-    } catch (e, stackTrace) {
-      MainInfo().sentry.captureException(
-            exception: e,
-            stackTrace: stackTrace,
-          );
-      logger.error(e.toString());
-    }
 
     generator = PBMasterSymbolGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }
 
-  static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$PBSharedMasterNodeFromJson(json)..originalRef = json;
+  static PBIntermediateNode fromJson(Map<String, dynamic> json) {
+    return _$PBSharedMasterNodeFromJson(json)..originalRef = json;
+  }
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
-    var master = PBSharedMasterNode.fromJson(json)..mapRawChildren(json, tree);
+    PBSharedMasterNode master = PBSharedMasterNode.fromJson(json)
+      ..mapRawChildren(json, tree);
 
     /// Map overridableProperties which need parent and tree
-    (master as PBSharedMasterNode).overridableProperties =
-        (json['overrideProperties'] as List)
-                ?.map(
-                  (prop) => prop == null
-                      ? null
-                      : PBSharedParameterProp.createSharedParameter(
-                          prop as Map<String, dynamic>,
-                          this,
-                          tree,
-                        ),
-                )
-                ?.toList() ??
-            [];
+    master.overridableProperties = (json['overrideProperties'] as List)
+            ?.map(
+              (prop) => prop == null
+                  ? null
+                  : PBMasterOverride.createSharedParameter(
+                      prop as Map<String, dynamic>,
+                      master,
+                      tree,
+                    ),
+            )
+            ?.toList() ??
+        [];
+
+    master.overridableProperties.removeWhere((element) => element == null);
 
     // Add override properties to the [OverrideHelper]
-    (master as PBSharedMasterNode)
-        .overridableProperties
-        .where((element) => element != null)
-        .forEach((OverrideHelper.addProperty));
+    master.overridableProperties.forEach((OverrideHelper.addProperty));
 
     return master;
   }
 }
 
 @JsonSerializable()
-class PBSharedParameterProp {
+class PBMasterOverride {
   final String type;
 
   @JsonKey(ignore: true)
@@ -135,28 +112,32 @@ class PBSharedParameterProp {
 
   final String UUID;
 
-  PBSharedParameterProp(
+  PBMasterOverride(
     this.type,
     this.propertyName,
     this.UUID,
   );
 
-  static PBSharedParameterProp createSharedParameter(Map<String, dynamic> json,
+  static PBMasterOverride createSharedParameter(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
-    var fromJson = PBSharedParameterProp.fromJson(json);
+    // Override properties with <custom> as name will create issues since their
+    // PBIntermediateNode counterparts will have already been interpreted
+    if (json['name'].contains('<custom>')) {
+      return null;
+    }
+    var fromJson = PBMasterOverride.fromJson(json);
 
     // Populate `value` of Override Property since it is an [IntermediateNode]
-    fromJson.value = json['value'] == null
-        ? null
-        : PBIntermediateNode.fromJson(json['value'], parent, tree);
+    fromJson.value = tree.firstWhere((element) => element.UUID == json['UUID'],
+        orElse: () => null);
 
     return fromJson;
   }
 
-  factory PBSharedParameterProp.fromJson(Map<String, dynamic> json) =>
-      _$PBSharedParameterPropFromJson(json);
+  factory PBMasterOverride.fromJson(Map<String, dynamic> json) =>
+      _$PBMasterOverrideFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PBSharedParameterPropToJson(this);
+  Map<String, dynamic> toJson() => _$PBMasterOverrideToJson(this);
 
   static String _propertyNameFromJson(String name) =>
       name.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').camelCase;

@@ -91,6 +91,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     }
   }
 
+  String get platformName => _name;
+
   final _childrenModObservers = <String, List<ChildrenModEventHandler>>{};
 
   ElementStorage _elementStorage;
@@ -168,7 +170,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   void removeEdges(Vertex<PBIntermediateNode> parent,
       [List<Vertex<PBIntermediateNode>> children]) {
     if (parent is ChildrenObserver) {
-      (parent as ChildrenObserver).childrenModified(children, context);
+      (parent as ChildrenObserver)
+          .childrenModified(children?.cast<PBIntermediateNode>(), context);
     }
     super.removeEdges(parent, children);
   }
@@ -228,8 +231,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// meaning that the [rootNode] is of type [InheritedScaffold]
   bool isScreen() => tree_type == TREE_TYPE.SCREEN;
 
-  bool isHomeScreen() =>
-      isScreen() && (rootNode as InheritedScaffold).isHomeScreen;
+  bool isHomeScreen() => isScreen() && rootNode is InheritedScaffold
+      ? (rootNode as InheritedScaffold).isHomeScreen
+      : false;
 
   /// Finding the depth of the [node] in relation to the [rootNode].
   int depthOf(node) {
@@ -252,13 +256,18 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   Map<String, dynamic> toJson() => _$PBIntermediateTreeToJson(this);
 
   static PBIntermediateTree fromJson(Map<String, dynamic> json) {
-    json['name'] = PBInputFormatter.formatLabel(json['name'], isTitle: true);
-    json['designNode']['name'] =
-        PBInputFormatter.formatLabel(json['designNode']['name'], isTitle: true);
+    if (!json['name'].contains('<custom>')) {
+      json['name'] = PBInputFormatter.formatPageName(
+        json['name'],
+      );
+      json['designNode']['name'] = PBInputFormatter.formatPageName(
+        json['designNode']['name'],
+      );
+    }
     var tree = _$PBIntermediateTreeFromJson(json);
     var designNode =
         PBIntermediateNode.fromJson(json['designNode'], null, tree);
-    tree._rootNode = designNode;
+    tree.rootNode = designNode;
     return tree;
   }
 }

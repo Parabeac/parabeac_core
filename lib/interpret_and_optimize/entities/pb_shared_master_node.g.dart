@@ -40,17 +40,15 @@ Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
       'type': instance.type,
     };
 
-PBSharedParameterProp _$PBSharedParameterPropFromJson(
-    Map<String, dynamic> json) {
-  return PBSharedParameterProp(
+PBMasterOverride _$PBMasterOverrideFromJson(Map<String, dynamic> json) {
+  return PBMasterOverride(
     json['type'] as String,
-    PBSharedParameterProp._propertyNameFromJson(json['name'] as String),
+    PBMasterOverride._propertyNameFromJson(json['name'] as String),
     json['UUID'] as String,
   );
 }
 
-Map<String, dynamic> _$PBSharedParameterPropToJson(
-        PBSharedParameterProp instance) =>
+Map<String, dynamic> _$PBMasterOverrideToJson(PBMasterOverride instance) =>
     <String, dynamic>{
       'type': instance.type,
       'name': instance.propertyName,

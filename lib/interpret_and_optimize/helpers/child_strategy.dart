@@ -124,9 +124,14 @@ class TempChildrenStrategy extends ChildrenStrategy {
     }
 
     /// Have no TempGroupLayoutNode but `target` already has children
-    /// <OR> we are adding multiple children to an empty `target` 
+    /// <OR> we are adding multiple children to an empty `target`
     else if (targetChildren.isNotEmpty || children.length > 1) {
-      var temp = FrameGroup(null, null, name: '${target.name}Group');
+      var temp = FrameGroup(
+        null,
+        target.frame,
+        name: '${target.name}Group',
+        constraints: target.constraints.clone(),
+      );
       addChild(temp, children);
 
       if (targetChildren.isNotEmpty) {

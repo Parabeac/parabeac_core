@@ -13,7 +13,7 @@ import 'package:recase/recase.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:uuid/uuid.dart';
 
-class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
+class InjectedAppbar extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<navbar>';
 
@@ -61,7 +61,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   }
 
   @override
-  PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
+  PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
     var appbar = InjectedAppbar(
       originalRef.UUID,
@@ -175,8 +175,8 @@ class PBAppBarGenerator extends PBGenerator {
       $imports
 
       class $className extends StatefulWidget implements PreferredSizeWidget{
-        final Widget child;
-        $className({Key key, this.child}) : super (key: key);
+        final Widget? child;
+        $className({Key? key, this.child}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();

@@ -17,7 +17,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_helper.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 
 class AbstractIntermediateNodeFactory {
   static final String INTERMEDIATE_TYPE = 'type';
@@ -50,19 +50,20 @@ class AbstractIntermediateNodeFactory {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json, parent, tree);
 
-          // Check if `iNode` is a tag
-          //? If `iNode` is a tag, do we have to remove any links that \
-          //? may have been made during `createIntermediateNode()` ?
-
           var tag =
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
-            /// [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
-            iNode.parent = parent;
-            tree.replaceNode(iNode, tag, acceptChildren: true);
+            /// TODO: Each Tag could potentially implement how it should handle converting from PBIntermediate to a PBTag
+            if (tag is CustomTag) {
+              return tag.handleIntermediateNode(iNode, parent, tag, tree);
+            } else {
+              //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
+              iNode.parent = parent;
+              tree.replaceNode(iNode, tag, acceptChildren: true);
 
-            return tag;
+              return tag;
+            }
           }
           if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);

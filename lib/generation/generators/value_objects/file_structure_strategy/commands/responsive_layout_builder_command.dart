@@ -29,7 +29,7 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
 
       const ResponsiveLayoutBuilder(
         {
-          Key key,
+          Key? key,
           $widgetInit
         }
       );
@@ -58,7 +58,8 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
 
   String _generatePlatformWidgets(List<String> platforms) {
     var result = '';
-    platforms.forEach((platform) => result += 'final ${platform}Widget;');
+    platforms
+        .forEach((platform) => result += 'final Widget? ${platform}Widget;');
     return result;
   }
 
@@ -70,7 +71,7 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
 
   String _generateBreakpointStatements(List<String> platforms) {
     if (platforms.length == 1) {
-      return 'if(${platforms[0]} != null){return ${platforms[0]}Widget;}';
+      return 'if(${platforms[0]} != null){return ${platforms[0]}Widget!;}';
     }
     // Get breakpoints from configurations and sort by value
     var breakpoints = MainInfo().configuration.breakpoints;
@@ -86,10 +87,10 @@ class ResponsiveLayoutBuilderCommand extends FileStructureCommand {
       var platform = platforms[i];
       if (breakpoints.containsKey(platform)) {
         if (i == platforms.length - 1) {
-          result += 'if(${platform}Widget != null){return ${platform}Widget;}';
+          result += 'if(${platform}Widget != null){return ${platform}Widget!;}';
         } else {
           result +=
-              'if(${platform}Widget != null && width < ${platforms[i + 1]}Breakpoint) {return ${platform}Widget;}';
+              'if(${platform}Widget != null && width < ${platforms[i + 1]}Breakpoint) {return ${platform}Widget!;}';
         }
       }
     }

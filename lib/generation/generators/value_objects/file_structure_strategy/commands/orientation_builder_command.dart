@@ -17,8 +17,8 @@ class OrientationBuilderCommand extends FileStructureCommand {
       import 'package:flutter/material.dart';
 
       class ResponsiveOrientationBuilder extends StatelessWidget {
-        final Widget verticalPage;
-        final Widget horizontalPage;
+        final Widget? verticalPage;
+        final Widget? horizontalPage;
 
         const ResponsiveOrientationBuilder({
           this.verticalPage,
@@ -30,10 +30,10 @@ class OrientationBuilderCommand extends FileStructureCommand {
           return OrientationBuilder(builder: (context, orientation) {
             switch (orientation) {
               case Orientation.portrait:
-                return verticalPage;
+                return verticalPage!;
                 break;
               case Orientation.landscape:
-                return horizontalPage;
+                return horizontalPage!;
               default:
                 return ErrorScreen();
             }
@@ -45,7 +45,7 @@ class OrientationBuilderCommand extends FileStructureCommand {
         // TODO: Change this screen to match your project
         @override
         Widget build(BuildContext context) {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: Text('Something went wrong!'),
             ),

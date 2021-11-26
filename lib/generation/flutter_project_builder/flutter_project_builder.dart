@@ -68,12 +68,12 @@ class FlutterProjectBuilder {
   static Future<Tuple2> createFlutterProject(String flutterProjectName,
       {String projectDir,
       bool createAssetsDir = true,
-      String assetsDir = 'assets/images/'}) {
-    return Process.run('flutter', ['create', flutterProjectName],
-            workingDirectory: projectDir, runInShell: true)
-        .then((result) => Tuple2(p.join(projectDir, flutterProjectName),
-            result.exitCode == 2 ? result.stderr : result.stdout))
-        .then((tuple) async {
+      String assetsDir = 'assets/images/'}) async {
+    try {
+      var result = await Process.run('flutter', ['create', flutterProjectName],
+          workingDirectory: projectDir, runInShell: true);
+      var tuple = Tuple2(p.join(projectDir, flutterProjectName),
+          result.exitCode == 2 ? result.stderr : result.stdout);
       if (createAssetsDir) {
         await Directory(p.join(tuple.item1, assetsDir))
             .create(recursive: true)
@@ -82,10 +82,10 @@ class FlutterProjectBuilder {
         });
       }
       return tuple;
-    }).catchError((onError) {
-      MainInfo().captureException(onError);
-      log.error(onError.toString());
-    });
+    } catch (e) {
+      MainInfo().captureException(e);
+      log.error(e.toString());
+    }
   }
 
   /// Formatting the flutter project that is at [projectPath].

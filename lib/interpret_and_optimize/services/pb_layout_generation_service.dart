@@ -12,9 +12,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:path/path.dart';
-import 'package:quick_log/quick_log.dart';
-import 'package:tuple/tuple.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -60,18 +57,16 @@ class PBLayoutGenerationService extends AITHandler {
 
   Future<PBIntermediateTree> extractLayouts(
       PBIntermediateTree tree, PBContext context) {
-    var rootNode = tree.rootNode;
-    if (rootNode == null) {
+    if (tree.rootNode == null) {
       return Future.value(tree);
     }
     try {
-      _removingMeaninglessGroup(tree);
       _transformGroup(tree);
       _layoutTransformation(tree, context);
 
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
-      _applyPostConditionRules(rootNode, context);
+      _applyPostConditionRules(tree.rootNode, context);
       // return Future.value(tree);
     } catch (e) {
       MainInfo().captureException(
@@ -79,7 +74,6 @@ class PBLayoutGenerationService extends AITHandler {
       );
       logger.error(e.toString());
     } finally {
-      tree.rootNode = rootNode;
       return Future.value(tree);
     }
   }
@@ -90,8 +84,7 @@ class PBLayoutGenerationService extends AITHandler {
   /// and that group contained the visual nodes.
   void _removingMeaninglessGroup(PBIntermediateTree tree) {
     tree
-        .where((node) =>
-            node is Group && tree.childrenOf(node).length <= 1)
+        .where((node) => node is Group && tree.childrenOf(node).length <= 1)
         .cast<Group>()
         .forEach((tempGroup) {
       var tempChildren = tree.childrenOf(tempGroup);
@@ -116,7 +109,7 @@ class PBLayoutGenerationService extends AITHandler {
           tempGroup,
           PBIntermediateStackLayout(
             name: tempGroup.name,
-            constraints: tempGroup.constraints,
+            constraints: tempGroup.constraints.clone(),
           )..frame = tempGroup.frame,
           acceptChildren: true);
     });
@@ -227,7 +220,7 @@ class PBLayoutGenerationService extends AITHandler {
 
   @override
   Future<PBIntermediateTree> handleTree(
-      PBContext context, PBIntermediateTree tree) {
-    return extractLayouts(tree, context);
+      PBContext context, PBIntermediateTree tree) async {
+    return await extractLayouts(tree, context);
   }
 }

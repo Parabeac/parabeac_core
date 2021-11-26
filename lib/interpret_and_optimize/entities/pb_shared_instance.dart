@@ -1,21 +1,15 @@
-import 'dart:math';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/value_objects/pb_symbol_instance_overridable_value.dart';
-import 'alignments/injected_align.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
@@ -33,7 +27,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   ///The parameters that are going to be overriden in the [PBSharedMasterNode].
 
   @JsonKey(name: 'overrideValues')
-  List<PBSharedParameterValue> sharedParamValues;
+  List<PBInstanceOverride> sharedParamValues;
 
   ///The name of the function call that the [PBSharedInstanceIntermediateNode] is
   ///going to use; the name of the [PBSharedMasterNode].
@@ -92,60 +86,70 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       _$PBSharedInstanceIntermediateNodeFromJson(json)
         // . .frame.topLeft = Point.topLeftFromJson(json)
         // . .frame.bottomRight = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+        ..originalRef = json
+        ..name;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var instance = PBSharedInstanceIntermediateNode.fromJson(json);
+    instance.name = PBInputFormatter.formatPageName(instance.name);
     _formatOverrideVals(
-        (instance as PBSharedInstanceIntermediateNode).sharedParamValues);
+        (instance as PBSharedInstanceIntermediateNode).sharedParamValues, tree);
+
     return instance;
   }
 
-  void _formatOverrideVals(List<PBSharedParameterValue> vals) {
+  void _formatOverrideVals(
+      List<PBInstanceOverride> vals, PBIntermediateTree tree) {
     vals.forEach((overrideValue) {
       if (overrideValue.type == 'stringValue') {
-        overrideValue.value = overrideValue.value.replaceAll('\$', '\\\$');
+        overrideValue.valueName = overrideValue.valueName
+            .replaceAll('\$', '\\\$')
+            .replaceAll('\n', '');
       } else if (overrideValue.type == 'image') {
-        overrideValue.value = 'assets/' + overrideValue.value;
+        overrideValue.valueName = 'assets/' + overrideValue.valueName;
       }
+      overrideValue.initialValue;
+      overrideValue.value =
+          PBIntermediateNode.fromJson(overrideValue.initialValue, this, tree);
     });
   }
 }
 
 @JsonSerializable()
-class PBSharedParameterValue {
+class PBInstanceOverride {
   final String type;
 
-  /// Initial value of [PBSharedParameterValue]
+  /// Initial value of [PBInstanceOverride]
   @JsonKey(name: 'value')
-  dynamic initialValue;
+  Map initialValue;
 
-  /// Current value of [PBSharedParameterValue]
+  /// Current value of [PBInstanceOverride]
   ///
   /// This is useful when we need to do something to `initialValue`
   /// in order to correctly export the Override
   @JsonKey(ignore: true)
-  String value;
+  PBIntermediateNode value;
 
   final String UUID;
 
   @JsonKey(name: 'name')
   String overrideName;
 
-  PBSharedParameterValue(
+  String valueName;
+
+  PBInstanceOverride(
     this.type,
     this.initialValue,
     this.UUID,
     this.overrideName,
-  ) {
-    value = initialValue;
-  }
+    this.valueName,
+  );
 
   @override
-  factory PBSharedParameterValue.fromJson(Map<String, dynamic> json) =>
-      _$PBSharedParameterValueFromJson(json);
+  factory PBInstanceOverride.fromJson(Map<String, dynamic> json) =>
+      _$PBInstanceOverrideFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PBSharedParameterValueToJson(this);
+  Map<String, dynamic> toJson() => _$PBInstanceOverrideToJson(this);
 }
