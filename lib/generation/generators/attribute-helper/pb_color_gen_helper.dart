@@ -24,8 +24,8 @@ class PBColorGenHelper extends PBAttributesHelper {
     switch (source.runtimeType) {
       case InheritedScaffold:
         return defaultColor != null
-            ? 'backgroundColor: $defaultColor,\n'
-            : 'backgroundColor: Color($color),\n';
+            ? 'color: $defaultColor,\n'
+            : 'color: Color($color),\n';
 
       case InheritedContainer:
         if ((source as InheritedContainer).isBackgroundVisible) {
