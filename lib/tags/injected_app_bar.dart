@@ -105,6 +105,9 @@ class PBAppBarGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
+    // TODO: this ignores the creation of appbar
+    // TODO: fix it on later iterations
+    return null;
     // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedAppbar) {
       var buffer = StringBuffer();
