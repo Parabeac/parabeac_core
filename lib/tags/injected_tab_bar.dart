@@ -115,9 +115,6 @@ class PBTabBarGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    // TODO: this ignores the creation of appbar
-    // TODO: fix it on later iterations
-    return null;
     // generatorContext.sizingContext = SizingValueContext.PointValue;
     if (source is InjectedTabBar) {
       // var tabs = source.tabs;
