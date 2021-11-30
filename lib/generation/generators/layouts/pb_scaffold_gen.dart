@@ -19,25 +19,25 @@ class PBScaffoldGenerator extends PBGenerator {
     var bottomNavBar = source.getAttributeNamed(tree, 'bottomNavigationBar');
     if (source is InheritedScaffold) {
       var buffer = StringBuffer();
-      buffer.write('Material(\n');
+      buffer.write('Scaffold(\n');
 
       if (source.auxiliaryData.color != null) {
         var str = PBColorGenHelper().generate(source, context);
         buffer.write(str);
       }
-      // if (appBar != null) {
-      //   buffer.write('appBar: ');
-      //   // generatorContext.sizingContext = SizingValueContext.PointValue;
-      //   var appbarStr = appBar.generator.generate(appBar, context);
+      if (appBar != null) {
+        buffer.write('appBar: ');
+        // generatorContext.sizingContext = SizingValueContext.PointValue;
+        var appbarStr = appBar.generator.generate(appBar, context);
 
-      //   buffer.write('$appbarStr,\n');
-      // }
-      // if (bottomNavBar != null) {
-      //   buffer.write('bottomNavigationBar: ');
-      //   var navigationBar =
-      //       bottomNavBar.generator.generate(bottomNavBar, context);
-      //   buffer.write('$navigationBar, \n');
-      // }
+        buffer.write('$appbarStr,\n');
+      }
+      if (bottomNavBar != null) {
+        buffer.write('bottomNavigationBar: ');
+        var navigationBar =
+            bottomNavBar.generator.generate(bottomNavBar, context);
+        buffer.write('$navigationBar, \n');
+      }
 
       if (body != null) {
         context.sizingContext = context.configuration.scaling
@@ -45,13 +45,9 @@ class PBScaffoldGenerator extends PBGenerator {
             : SizingValueContext.PointValue;
 
         // hack to pass screen width and height to the child
-        buffer.write('child: ');
+        buffer.write('body: ');
         // generatorContext.sizingContext = SizingValueContext.ScaleValue;
         var bodyStr = body.generator.generate(body, context);
-
-        // TODO: Fix on later iterations
-        // this was done to ignore adding Scaffold
-        // return bodyStr;
         buffer.write('$bodyStr, \n');
       }
       buffer.write(')');
