@@ -14,7 +14,7 @@ class PBMaterialGenerator extends PBGenerator {
         ? SizingValueContext.ScaleValue
         : SizingValueContext.PointValue;
     var tree = context.tree;
-    var body = source.getAttributeNamed(tree, 'body');
+    var body = source.getAttributeNamed(tree, 'child');
     if (source is InheritedMaterial) {
       var buffer = StringBuffer();
       buffer.write('Material(\n');

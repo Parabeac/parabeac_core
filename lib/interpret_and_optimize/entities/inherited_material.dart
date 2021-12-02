@@ -45,55 +45,22 @@ class InheritedMaterial extends PBVisualIntermediateNode
     constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBMaterialGenerator();
-    childrenStrategy = MultipleChildStrategy('body');
-  }
-
-  @override
-  String getAttributeNameOf(PBIntermediateNode node) {
-    if (node is InjectedAppbar) {
-      return 'appBar';
-    } else if (node is InjectedTabBar) {
-      return 'bottomNavigationBar';
-    }
-    return super.getAttributeNameOf(node);
+    childrenStrategy = MultipleChildStrategy('child');
   }
 
   @override
   void handleChildren(PBContext context) {
-    var children = getAllAtrributeNamed(context.tree, 'body');
-
-    var appBar = getAttributeNamed(context.tree, 'appBar');
-    if (appBar != null) {
-      context.canvasFrame = Rectangle3D(
-        context.canvasFrame.left,
-        appBar.frame.bottomRight.y,
-        context.canvasFrame.width,
-        context.canvasFrame.height - appBar.frame.height,
-        0,
-      );
-      frame = context.canvasFrame;
-    }
-    var tabBar = getAttributeNamed(context.tree, 'bottomNavigationBar');
-    if (tabBar != null) {
-      context.canvasFrame = Rectangle3D(
-        context.canvasFrame.left,
-        context.canvasFrame.top,
-        context.canvasFrame.width,
-        context.canvasFrame.height - tabBar.frame.height,
-        0,
-      );
-      frame = context.canvasFrame;
-    }
+    var children = getAllAtrributeNamed(context.tree, 'child');
 
     // Top-most stack should have scaffold's frame to align children properly
     var groupAtt = FrameGroup(null, frame)
       ..name = '$name-Group'
-      ..attributeName = 'body'
+      ..attributeName = 'child'
       ..parent = this;
     context.tree.addEdges(groupAtt, children.map((child) => child).toList());
 
-    context.tree.replaceChildrenOf(this,
-        [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));
+    context.tree.replaceChildrenOf(
+        this, [groupAtt]..removeWhere((element) => element == null));
   }
 
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {
@@ -102,9 +69,6 @@ class InheritedMaterial extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var artboard = _$InheritedMaterialFromJson(json)..originalRef = json;
-
-    //Map artboard children by calling `addChild` method
-    // artboard.mapRawChildren(json);
     return artboard;
   }
 
