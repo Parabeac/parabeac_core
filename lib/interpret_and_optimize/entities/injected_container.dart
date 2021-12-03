@@ -41,7 +41,7 @@ class InjectedContainer extends PBVisualIntermediateNode
     this.type,
     this.pointValueHeight = false,
     this.pointValueWidth = false,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(
           UUID,
           frame,

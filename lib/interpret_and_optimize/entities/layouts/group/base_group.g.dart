@@ -18,7 +18,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -27,7 +26,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),

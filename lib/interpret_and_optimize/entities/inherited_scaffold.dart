@@ -47,7 +47,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     this.originalRef, {
     this.isHomeScreen,
     this.prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBScaffoldGenerator();
     childrenStrategy = MultipleChildStrategy('body');

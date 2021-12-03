@@ -19,7 +19,6 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -29,7 +28,6 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),

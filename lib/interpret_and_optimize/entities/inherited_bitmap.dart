@@ -40,7 +40,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
     String name,
     this.referenceImage,
     this.prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();

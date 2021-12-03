@@ -49,7 +49,7 @@ class InheritedContainer extends PBVisualIntermediateNode
     double alignY,
     this.isBackgroundVisible = true,
     this.prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');

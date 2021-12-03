@@ -32,7 +32,7 @@ abstract class Group extends PBLayoutIntermediateNode
     this.originalRef,
     String name,
     this.prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(
           UUID,
           frame,
