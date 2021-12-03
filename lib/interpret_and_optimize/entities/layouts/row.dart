@@ -6,14 +6,25 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/handle_flex.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'layout_properties.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'row.g.dart';
+
+@JsonSerializable(createToJson: true)
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
 
-class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
+class PBIntermediateRowLayout extends PBLayoutIntermediateNode
+    implements IntermediateNodeFactory {
   static final List<LayoutRule> ROW_RULES = [HorizontalNodesLayoutRule()];
 
   static final List<LayoutException> ROW_EXCEPTIONS = [
@@ -36,8 +47,24 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
       PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
-   //FIXME children.forEach((child) => row.addChild(child));
+    //FIXME children.forEach((child) => row.addChild(child));
     return row;
+  }
+
+  @JsonKey(name: 'autoLayoutOptions')
+  LayoutProperties layoutProperties;
+
+  @override
+  String type = 'row';
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    // TODO: inject a container on top of this in case
+    // it needs coloring or padding
+    var tempRow = _$PBIntermediateRowLayoutFromJson(json)
+      ..mapRawChildren(json, tree);
+    return tempRow;
   }
 
   // @override
@@ -99,7 +126,7 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
       PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     // row.prototypeNode = prototypeNode;
-   //FIXME children.forEach((child) => row.addChild(child));
+    //FIXME children.forEach((child) => row.addChild(child));
     return row;
   }
 
