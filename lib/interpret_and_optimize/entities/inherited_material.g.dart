@@ -17,6 +17,7 @@ InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
         json['prototypeNodeUUID'] as String),
     constraints: json['constraints'],
   )
+    ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -26,6 +27,7 @@ InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedMaterialToJson(InheritedMaterial instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),

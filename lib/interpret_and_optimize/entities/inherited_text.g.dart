@@ -16,6 +16,7 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
         json['prototypeNodeUUID'] as String),
     text: json['content'] as String,
   )
+    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -29,6 +30,7 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
