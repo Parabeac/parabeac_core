@@ -45,8 +45,8 @@ class OrientationBuilderCommand extends FileStructureCommand {
         // TODO: Change this screen to match your project
         @override
         Widget build(BuildContext context) {
-          return const Scaffold(
-            body: Center(
+          return const Material(
+            child: Center(
               child: Text('Something went wrong!'),
             ),
           );
