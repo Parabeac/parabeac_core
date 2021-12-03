@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_pa
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_star.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
@@ -38,6 +39,7 @@ class AbstractIntermediateNodeFactory {
     PBSharedMasterNode('$PBSharedMasterNode', null),
     BaseGroup('$Group', null),
     FrameGroup('$FrameGroup', null),
+    PBIntermediateColumnLayout(null),
   };
 
   AbstractIntermediateNodeFactory();
