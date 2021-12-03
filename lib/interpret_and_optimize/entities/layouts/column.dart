@@ -41,6 +41,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
   @override
   PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
       PBContext currentContext, String name) {
+    // TODO: fix this method
     var col = PBIntermediateColumnLayout(null, name: name);
     col.prototypeNode = prototypeNode;
     //FIXME children.forEach((child) => col.addChild(child));
@@ -57,8 +58,10 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
-    var tempCol = _$PBIntermediateColumnLayoutFromJson(json);
-    print('Fabi');
+    // TODO: inject a container on top of this in case
+    // it needs coloring or padding
+    var tempCol = _$PBIntermediateColumnLayoutFromJson(json)
+      ..mapRawChildren(json, tree);
     return tempCol;
   }
 }
