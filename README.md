@@ -15,6 +15,10 @@ Parabeac-Core converts design files into isolated & responsive Flutter code, con
   <a href="https://dev.to/parabeac">Dev.to</a>
   <span> · </span>
   <a href="https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w">Youtube</a>
+    <span> · </span>
+    <a href="https://docs.parabeac.com">Tutorials</a>
+  <span> · </span>
+<a href="https://docs.parabeac.com">Reference Docs</a>
 
 </h3>
 
