@@ -44,7 +44,7 @@ final parser = ArgParser()
       help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
   ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
   ..addOption('project-name',
-      help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')
+      help: 'The name of the project', abbr: 'n', defaultsTo: 'foo')
   ..addOption('config-path',
       help: 'Path of the configuration file',
       abbr: 'c',
