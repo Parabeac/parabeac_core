@@ -22,6 +22,10 @@ class PBContainerGenerator extends PBGenerator {
 
       //TODO(ivanV): please clean my if statement :(
       if (source is InjectedContainer) {
+        if (source.padding != null) {
+          buffer.write(getPadding(source.padding));
+        }
+
         if (source.pointValueHeight) {
           buffer.write('height: ${source.frame.height},');
         }
@@ -31,7 +35,7 @@ class PBContainerGenerator extends PBGenerator {
         if (!source.pointValueHeight && !source.pointValueWidth) {
           buffer.write(PBSizeHelper().generate(source, context));
         }
-      }else {
+      } else {
         buffer.write(PBSizeHelper().generate(source, context));
       }
 
@@ -58,5 +62,26 @@ class PBContainerGenerator extends PBGenerator {
       return buffer.toString();
     }
     return '';
+  }
+
+  String getPadding(InjectedPadding padding) {
+    var buffer = StringBuffer();
+
+    buffer.write('EdgeInsets.only(');
+
+    if (padding.left != null) {
+      buffer.write('left: ${padding.left},');
+    }
+    if (padding.right != null) {
+      buffer.write('right: ${padding.right},');
+    }
+    if (padding.top != null) {
+      buffer.write('top: ${padding.top},');
+    }
+    if (padding.bottom != null) {
+      buffer.write('bottom: ${padding.bottom},');
+    }
+    buffer.write('),');
+    return buffer.toString();
   }
 }
