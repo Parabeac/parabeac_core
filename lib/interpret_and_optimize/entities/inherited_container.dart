@@ -19,6 +19,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
+import 'injected_container.dart';
+
 part 'inherited_container.g.dart';
 
 @JsonSerializable()
@@ -39,6 +41,9 @@ class InheritedContainer extends PBVisualIntermediateNode
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
+
+  @JsonKey(ignore: true)
+  InjectedPadding padding;
 
   InheritedContainer(
     String UUID,
