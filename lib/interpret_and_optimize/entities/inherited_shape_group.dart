@@ -45,16 +45,7 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
     Uint8List image,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints,
-          layoutMainAxisSizing: layoutMainAxisSizing,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-        ) {
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
 

@@ -46,16 +46,7 @@ class InheritedShapePath extends PBVisualIntermediateNode
     Uint8List image,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-          layoutMainAxisSizing: layoutMainAxisSizing,
-        ) {
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
 

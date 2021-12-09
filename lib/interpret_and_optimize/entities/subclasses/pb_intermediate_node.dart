@@ -54,11 +54,6 @@ abstract class PBIntermediateNode
   @JsonKey(ignore: true)
   AlignStrategy alignStrategy = NoAlignment();
 
-  @JsonKey(ignore: false)
-  ParentLayoutSizing layoutMainAxisSizing;
-  @JsonKey(ignore: false)
-  ParentLayoutSizing layoutCrossAxisSizing;
-
   @JsonKey(
       ignore: false,
       name: 'boundaryRectangle',
@@ -77,22 +72,16 @@ abstract class PBIntermediateNode
   @JsonKey(ignore: false)
   String name;
 
-  PBIntermediateNode(
-    this._UUID,
-    this.frame,
-    this.name, {
-    this.subsemantic,
-    this.constraints,
-    this.layoutMainAxisSizing,
-    this.layoutCrossAxisSizing,
-  }) :
+  PBIntermediateNode(this._UUID, this.frame, this.name,
+      {this.subsemantic, this.constraints})
+      :
 
         /// We are not using the [Vertex] attribute as it represents the [PBIntermediateNode]
         super(null) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
-      logger
-          .debug('Generating UUID for $runtimeType-$name as its UUID is null');
+      logger.debug(
+          'Generating UUID for $runtimeType-$name as its UUID is null');
       _UUID = Uuid().v4();
     }
 
@@ -314,5 +303,3 @@ extension DeserializedRectangle3D on Rectangle3D {
             topLeft, bottomRight, frame.topLeft, frame.bottomRight);
   }
 }
-
-enum ParentLayoutSizing { INHERIT, STRETCH }

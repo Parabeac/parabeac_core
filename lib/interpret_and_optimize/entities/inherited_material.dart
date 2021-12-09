@@ -12,13 +12,13 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 import 'package:parabeac_core/tags/injected_app_bar.dart';
 import 'package:parabeac_core/tags/injected_tab_bar.dart';
-import 'package:pbdl/pbdl.dart' as pbdl;
+import 'package:pbdl/pbdl.dart';
 
 part 'inherited_material.g.dart';
 
 @JsonSerializable()
 class InheritedMaterial extends PBVisualIntermediateNode
-    with pbdl.PBColorMixin
+    with PBColorMixin
     implements PBInheritedIntermediate, IntermediateNodeFactory {
   @override
   @JsonKey(
@@ -43,16 +43,7 @@ class InheritedMaterial extends PBVisualIntermediateNode
     this.isHomeScreen,
     this.prototypeNode,
     constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints,
-          layoutMainAxisSizing: layoutMainAxisSizing,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-        ) {
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBMaterialGenerator();
     childrenStrategy = MultipleChildStrategy('body');
   }

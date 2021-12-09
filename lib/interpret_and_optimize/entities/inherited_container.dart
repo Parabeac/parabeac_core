@@ -55,16 +55,7 @@ class InheritedContainer extends PBVisualIntermediateNode
     this.isBackgroundVisible = true,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-  }) : super(
-          UUID,
-          frame,
-          name,
-          constraints: constraints,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-          layoutMainAxisSizing: layoutMainAxisSizing,
-        ) {
+  }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');
     //TODO switch alignment to Padding alignment

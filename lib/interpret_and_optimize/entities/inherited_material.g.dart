@@ -16,10 +16,6 @@ InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
     constraints: json['constraints'],
-    layoutMainAxisSizing: _$enumDecodeNullable(
-        _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing']),
-    layoutCrossAxisSizing: _$enumDecodeNullable(
-        _$ParentLayoutSizingEnumMap, json['layoutCrossAxisSizing']),
   )
     ..subsemantic = json['subsemantic'] as String
     ..auxiliaryData = json['style'] == null
@@ -34,10 +30,6 @@ Map<String, dynamic> _$InheritedMaterialToJson(InheritedMaterial instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
-      'layoutMainAxisSizing':
-          _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
-      'layoutCrossAxisSizing':
-          _$ParentLayoutSizingEnumMap[instance.layoutCrossAxisSizing],
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
@@ -46,40 +38,3 @@ Map<String, dynamic> _$InheritedMaterialToJson(InheritedMaterial instance) =>
       'type': instance.type,
       'originalRef': instance.originalRef,
     };
-
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
-}
-
-const _$ParentLayoutSizingEnumMap = {
-  ParentLayoutSizing.INHERIT: 'INHERIT',
-  ParentLayoutSizing.STRETCH: 'STRETCH',
-};

@@ -30,9 +30,6 @@ class InjectedContainer extends PBVisualIntermediateNode
   bool pointValueWidth;
   bool pointValueHeight;
 
-  @JsonKey(ignore: true)
-  InjectedPadding padding;
-
   InjectedContainer(
     UUID,
     Rectangle3D frame, {
@@ -45,16 +42,11 @@ class InjectedContainer extends PBVisualIntermediateNode
     this.pointValueHeight = false,
     this.pointValueWidth = false,
     PBIntermediateConstraints constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-    this.padding,
   }) : super(
           UUID,
           frame,
           name,
           constraints: constraints,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-          layoutMainAxisSizing: layoutMainAxisSizing,
         ) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');
@@ -67,15 +59,4 @@ class InjectedContainer extends PBVisualIntermediateNode
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
           PBIntermediateNode parent, PBIntermediateTree tree) =>
       InjectedContainer.fromJson(json);
-}
-
-// Class for injected container to inject padding
-class InjectedPadding {
-  num left, right, top, bottom;
-  InjectedPadding({
-    this.left,
-    this.right,
-    this.top,
-    this.bottom,
-  });
 }

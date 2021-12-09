@@ -16,16 +16,7 @@ class InjectedPositioned extends PBIntermediateNode
     Rectangle3D frame, {
     this.valueHolder,
     constraints,
-    ParentLayoutSizing layoutMainAxisSizing,
-    ParentLayoutSizing layoutCrossAxisSizing,
-  }) : super(
-          UUID,
-          frame,
-          '',
-          constraints: constraints,
-          layoutMainAxisSizing: layoutMainAxisSizing,
-          layoutCrossAxisSizing: layoutCrossAxisSizing,
-        ) {
+  }) : super(UUID, frame, '', constraints: constraints) {
     generator = PBPositionedGenerator(overrideChildDim: true);
   }
 
