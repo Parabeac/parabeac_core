@@ -25,7 +25,6 @@ class PBContainerGenerator extends PBGenerator {
         if (source.padding != null) {
           buffer.write(getPadding(source.padding));
         }
-
         if (source.pointValueHeight) {
           buffer.write('height: ${source.frame.height},');
         }
@@ -35,7 +34,10 @@ class PBContainerGenerator extends PBGenerator {
         if (!source.pointValueHeight && !source.pointValueWidth) {
           buffer.write(PBSizeHelper().generate(source, context));
         }
-      } else {
+      } else if (source is InheritedContainer) {
+        if (source.padding != null) {
+          buffer.write(getPadding(source.padding));
+        }
         buffer.write(PBSizeHelper().generate(source, context));
       }
 
@@ -67,20 +69,16 @@ class PBContainerGenerator extends PBGenerator {
   String getPadding(InjectedPadding padding) {
     var buffer = StringBuffer();
 
-    buffer.write('EdgeInsets.only(');
+    buffer.write('padding: EdgeInsets.only(');
 
-    if (padding.left != null) {
-      buffer.write('left: ${padding.left},');
-    }
-    if (padding.right != null) {
-      buffer.write('right: ${padding.right},');
-    }
-    if (padding.top != null) {
-      buffer.write('top: ${padding.top},');
-    }
-    if (padding.bottom != null) {
-      buffer.write('bottom: ${padding.bottom},');
-    }
+    buffer.write('left: ${padding.left ?? 0},');
+
+    buffer.write('right: ${padding.right ?? 0},');
+
+    buffer.write('top: ${padding.top ?? 0},');
+
+    buffer.write('bottom: ${padding.bottom ?? 0},');
+
     buffer.write('),');
     return buffer.toString();
   }
