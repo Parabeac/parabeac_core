@@ -41,7 +41,16 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     String name, {
     this.prototypeNode,
     constraints,
-  }) : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints) {
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  }) : super(
+          UUID ?? Uuid().v4(),
+          frame,
+          name,
+          constraints: constraints,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+        ) {
     childrenStrategy = MultipleChildStrategy('children');
   }
 

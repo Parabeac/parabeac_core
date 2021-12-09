@@ -2,10 +2,8 @@ import 'package:parabeac_core/generation/generators/visual-widgets/pb_padding_ge
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'dart:math';
 
 class Padding extends PBVisualIntermediateNode {
   double left, right, top, bottom, screenWidth, screenHeight;
@@ -13,7 +11,7 @@ class Padding extends PBVisualIntermediateNode {
   Map padding;
 
   PBIntermediateConstraints childToParentConstraints;
-  
+
   Padding(
     String UUID,
     Rectangle3D frame,
@@ -22,10 +20,14 @@ class Padding extends PBVisualIntermediateNode {
     this.right = 0,
     this.top = 0,
     this.bottom = 0,
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
   }) : super(
           UUID,
           frame,
           '',
+          layoutMainAxisSizing: layoutMainAxisSizing,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
         ) {
     generator = PBPaddingGen();
     childrenStrategy = OneChildStrategy('child');

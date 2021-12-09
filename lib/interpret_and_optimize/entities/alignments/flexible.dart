@@ -17,10 +17,14 @@ class Flexible extends PBVisualIntermediateNode {
     Rectangle3D frame, {
     // child,
     this.flex,
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
   }) : super(
           UUID,
           frame,
           '',
+          layoutMainAxisSizing: layoutMainAxisSizing,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
         ) {
     generator = PBFlexibleGenerator();
     childrenStrategy = OneChildStrategy('child');

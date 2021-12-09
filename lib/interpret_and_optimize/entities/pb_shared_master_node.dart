@@ -60,7 +60,16 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.overridableProperties,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
-  }) : super(UUID, frame, name, constraints: constraints) {
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  }) : super(
+          UUID,
+          frame,
+          name,
+          constraints: constraints,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+        ) {
     overridableProperties ??= [];
 
     generator = PBMasterSymbolGenerator();

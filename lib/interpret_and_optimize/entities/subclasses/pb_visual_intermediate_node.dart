@@ -8,5 +8,14 @@ abstract class PBVisualIntermediateNode extends PBIntermediateNode {
     Rectangle3D Rectangle3D,
     String name, {
     constraints,
-  }) : super(UUID, Rectangle3D, name, constraints: constraints);
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  }) : super(
+          UUID,
+          Rectangle3D,
+          name,
+          constraints: constraints,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+        );
 }

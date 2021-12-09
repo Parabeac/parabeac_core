@@ -62,10 +62,14 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.prototypeNode,
     this.overrideValues,
     String name,
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
   }) : super(
           UUID,
           frame,
           name,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
         ) {
     generator = PBSymbolInstanceGenerator();
 

@@ -13,8 +13,19 @@ class InjectedAlign extends PBVisualIntermediateNode
   double alignX;
   double alignY;
 
-  InjectedAlign(String UUID, Rectangle3D frame, String name)
-      : super(UUID, frame, name) {
+  InjectedAlign(
+    String UUID,
+    Rectangle3D frame,
+    String name,
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  ) : super(
+          UUID,
+          frame,
+          name,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+        ) {
     generator = PBAlignGenerator();
     childrenStrategy = TempChildrenStrategy('child');
   }

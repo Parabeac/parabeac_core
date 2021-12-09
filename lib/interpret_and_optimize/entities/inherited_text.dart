@@ -73,10 +73,14 @@ class InheritedText extends PBVisualIntermediateNode
     this.prototypeNode,
     this.text,
     this.textAlignment,
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
   }) : super(
           UUID,
           frame,
           name,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+          layoutMainAxisSizing: layoutMainAxisSizing,
         ) {
     generator = PBTextGen();
     childrenStrategy = NoChildStrategy();
@@ -114,6 +118,8 @@ class InheritedText extends PBVisualIntermediateNode
       name: inheritedText.name,
       originalRef: json,
       constraints: inheritedText.constraints.clone(),
+      layoutCrossAxisSizing: inheritedText.layoutCrossAxisSizing,
+      layoutMainAxisSizing: inheritedText.layoutMainAxisSizing,
     )..attributeName = inheritedText.attributeName;
     tree.addEdges(container, [inheritedText]);
 

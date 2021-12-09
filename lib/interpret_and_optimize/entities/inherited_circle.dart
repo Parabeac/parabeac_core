@@ -42,7 +42,16 @@ class InheritedCircle extends PBVisualIntermediateNode
     Point alignY,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
-  }) : super(UUID, frame, name, constraints: constraints) {
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  }) : super(
+          UUID,
+          frame,
+          name,
+          constraints: constraints,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+        ) {
     generator = PBBitmapGenerator();
     childrenStrategy = TempChildrenStrategy('child');
 

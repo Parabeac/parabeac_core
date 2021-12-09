@@ -13,7 +13,16 @@ class InjectedCenter extends PBIntermediateNode
     Rectangle3D<num> frame,
     String name, {
     constraints,
-  }) : super(UUID, frame, name, constraints: constraints) {
+    ParentLayoutSizing layoutMainAxisSizing,
+    ParentLayoutSizing layoutCrossAxisSizing,
+  }) : super(
+          UUID,
+          frame,
+          name,
+          constraints: constraints,
+          layoutCrossAxisSizing: layoutCrossAxisSizing,
+          layoutMainAxisSizing: layoutMainAxisSizing,
+        ) {
     generator = PBCenterGenerator();
     childrenStrategy = OneChildStrategy('child');
     alignStrategy = NoAlignment();
