@@ -3,10 +3,10 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
-class PBSizedBox extends PBVisualIntermediateNode {
+class IntermediateSizedBox extends PBVisualIntermediateNode {
   num height, width;
 
-  PBSizedBox({
+  IntermediateSizedBox({
     String UUID,
     Rectangle3D<num> Rectangle3D,
     String name,
@@ -20,7 +20,7 @@ class PBSizedBox extends PBVisualIntermediateNode {
 class PBSizedBoxGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    if (source is PBSizedBox) {
+    if (source is IntermediateSizedBox) {
       var buffer = StringBuffer();
 
       buffer.write('SizedBox(');
