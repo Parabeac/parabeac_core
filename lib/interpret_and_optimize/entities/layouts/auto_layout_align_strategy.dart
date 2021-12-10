@@ -19,8 +19,6 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
         _insertBoxes(context, node, false);
       }
     }
-
-    print('Fabi');
   }
 
   void _insertBoxes(PBContext context, node, bool isVertical) {
