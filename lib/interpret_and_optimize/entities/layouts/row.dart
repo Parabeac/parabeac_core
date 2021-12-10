@@ -14,6 +14,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'auto_layout_align_strategy.dart';
 import 'layout_properties.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -35,7 +36,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode
   PrototypeNode prototypeNode;
 
   @override
-  AlignStrategy alignStrategy = RowAlignment();
+  AlignStrategy alignStrategy = AutoLayoutAlignStrategy();
 
   PBIntermediateRowLayout({String name})
       : super(null, null, ROW_RULES, ROW_EXCEPTIONS, name) {

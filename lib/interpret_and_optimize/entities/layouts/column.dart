@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'auto_layout_align_strategy.dart';
 import 'layout_properties.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -31,7 +32,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
   ];
 
   @override
-  AlignStrategy alignStrategy = ColumnAlignment();
+  AlignStrategy alignStrategy = AutoLayoutAlignStrategy();
 
   PBIntermediateColumnLayout(Rectangle3D frame, {String name})
       : super(null, frame, COLUMN_RULES, COLUMN_EXCEPTIONS, name) {
