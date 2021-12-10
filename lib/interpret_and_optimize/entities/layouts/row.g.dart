@@ -11,7 +11,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
   return PBIntermediateRowLayout(
     name: json['name'] as String,
   )
-    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -26,7 +25,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
         ? null
         : IntermediateAuxiliaryData.fromJson(
             json['style'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
     ..prototypeNode = json['prototypeNode'] == null
         ? null
         : PrototypeNode.fromJson(json['prototypeNode'] as Map<String, dynamic>)
@@ -40,7 +38,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
 Map<String, dynamic> _$PBIntermediateRowLayoutToJson(
         PBIntermediateRowLayout instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
           _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
@@ -49,7 +46,6 @@ Map<String, dynamic> _$PBIntermediateRowLayoutToJson(
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
-      'alignment': instance.alignment,
       'prototypeNode': instance.prototypeNode,
       'autoLayoutOptions': instance.layoutProperties,
       'type': instance.type,

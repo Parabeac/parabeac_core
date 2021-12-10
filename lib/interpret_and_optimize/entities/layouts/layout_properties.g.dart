@@ -77,6 +77,7 @@ const _$IntermediateAxisAlignmentEnumMap = {
   IntermediateAxisAlignment.START: 'START',
   IntermediateAxisAlignment.CENTER: 'CENTER',
   IntermediateAxisAlignment.END: 'END',
+  IntermediateAxisAlignment.SPACE_BETWEEN: 'SPACE_BETWEEN',
 };
 
 const _$IntermediateAxisModeEnumMap = {

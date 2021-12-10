@@ -38,6 +38,6 @@ class LayoutProperties {
   Map<String, dynamic> toJson() => _$LayoutPropertiesToJson(this);
 }
 
-enum IntermediateAxisAlignment { START, CENTER, END }
+enum IntermediateAxisAlignment { START, CENTER, END, SPACE_BETWEEN }
 
 enum IntermediateAxisMode { FIXED, HUGGED }

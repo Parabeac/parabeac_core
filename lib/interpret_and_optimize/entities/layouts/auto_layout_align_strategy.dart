@@ -1,4 +1,5 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -11,15 +12,20 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
   @override
   void align(PBContext context, node) {
     if (node is PBIntermediateColumnLayout) {
-      if (node.layoutProperties.spacing != null) {
+      if (needsSpacing(node)) {
         _insertBoxes(context, node, true);
       }
     } else if (node is PBIntermediateRowLayout) {
-      if (node.layoutProperties.spacing != null) {
+      if (needsSpacing(node)) {
         _insertBoxes(context, node, false);
       }
     }
   }
+
+  bool needsSpacing(node) =>
+      node.layoutProperties.spacing != null &&
+      node.layoutProperties.primaryAxisAlignment !=
+          IntermediateAxisAlignment.SPACE_BETWEEN;
 
   void _insertBoxes(PBContext context, node, bool isVertical) {
     var children = context.tree.childrenOf(node);
@@ -35,7 +41,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     var boxSpace = 1;
     var length = children.length - 1;
     for (var i = 0; i < length; i++) {
-      var newBox = PBSizedBox(
+      var newBox = IntermediateSizedBox(
         height: isVertical ? space : null,
         width: isVertical ? null : space,
       );
