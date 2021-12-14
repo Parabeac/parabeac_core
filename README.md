@@ -8,7 +8,7 @@ Parabeac-Core converts design files into isolated & responsive Flutter code, con
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
-  <a href="https://docs.parabeac.com">Hello World</a>
+  <a href="https://docs.parabeac.com/docs/hello-world-guide">Hello World</a>
   <span> · </span>
   <a href="https://discord.gg/qUrghes">Discord Community/Support</a>
   <span> · </span>
@@ -16,14 +16,14 @@ Parabeac-Core converts design files into isolated & responsive Flutter code, con
   <span> · </span>
   <a href="https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w">Youtube</a>
     <span> · </span>
-    <a href="https://docs.parabeac.com">Tutorials</a>
+    <a href="https://docs.parabeac.com/docs/creating-a-production-app/fundamental-laws-of-parabeac">Tutorials</a>
   <span> · </span>
-<a href="https://docs.parabeac.com">Reference Docs</a>
+<a href="https://parabeac.notion.site/Parabeac-Reference-519a159f65cd4087b2672eea1807b721">Reference Docs</a>
 
 </h3>
 
 # Why are we here?
-The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. Parabeac-Core solves this by generating isolated & responsive Flutter code by interpreting designs created in tools like Figma. By creating isolated UI, design changes & updates are supported forever.
+The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. Parabeac-Core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
 # Table of Contents
   * [Dependencies](#dependencies)
   * [Cloning parabeac_core](#cloning-parabeac_core)
@@ -91,7 +91,7 @@ Due to the lack of requested support for Sketch and the major updates to this pr
 
 
 # Running the generated code
-We recommend following our [Hello World guide](https://github.com/Parabeac/parabeac_generated_counter_app) but if you feel experienced enough with Flutter, feel free to jump right in here:
+We recommend following our [Hello World guide](https://docs.parabeac.com/docs/hello-world-guide) but if you feel experienced enough with Flutter, feel free to jump right in here:
 
 
 ### Running a Figma Frame/Screen
