@@ -63,7 +63,7 @@ git pull --recurse-submodules
 ```
 ## Running parabeac_core
 ### Figma
-  In your terminal, change your directory to the root paarabeac_core directory and run:
+  In your terminal, change your directory to the root parabeac_core directory and run:
 
 ``` bash
  $ pub get
@@ -82,7 +82,7 @@ git pull --recurse-submodules
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: ```64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed```)
 
 #### Name (Optional): -n
-Sets the name of the exported project. For instance, if you want to name your project "cool_project", set the `-n` flag to `cool_project`. *Note: parabeac_core can only use valid Flutter project names.* 
+Sets the name of the exported project. For instance, if you want to name your project "cool_project", set the `-n` flag to `cool_project`. *Note: parabeac_core can only use [valid Flutter project names](https://dart.dev/tools/pub/pubspec#name).* 
 #### Absolute Path (Optional): -o
 Specifies the absolute path of the exported Flutter Project to be created. For instance, to export your Flutter project in the Documents folder, set your `-o` flag to `/Users/ParabeacUser/Documents/` Not setting this will export the project in the parabeac_core directory.
 
