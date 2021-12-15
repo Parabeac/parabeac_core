@@ -9,6 +9,8 @@ class PBColumnGenerator extends PBLayoutGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is PBIntermediateColumnLayout) {
+      // TODO: mainAxisSize: MainAxisSize.min
+      // source.layoutProperties.primaryAxisSizing;
       var buffer = StringBuffer();
       var children = context.tree.childrenOf(source);
       buffer.write('Column(');
@@ -24,8 +26,8 @@ class PBColumnGenerator extends PBLayoutGenerator {
         }
         buffer.write('\nchildren: [');
         for (var index = 0; index < children.length; index++) {
-          var element = children[index].generator
-              .generate(children[index], context);
+          var element =
+              children[index].generator.generate(children[index], context);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

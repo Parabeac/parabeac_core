@@ -3,6 +3,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injecte
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -110,16 +112,23 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         /// we are no center, since there is no need in either axis
         tree.addEdges(injectedPositioned, [child]);
       } else {
-        var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
-            '$InjectedCenter-${child.name}');
+        if (child is! PBIntermediateColumnLayout &&
+            child is! PBIntermediateRowLayout) {
+          var center = InjectedCenter(
+              null,
+              child.frame.boundingBox(child.frame),
+              '$InjectedCenter-${child.name}');
 
-        /// The container is going to be used to control the point value height/width
-        var container = InjectedContainer(
-            null, child.frame.boundingBox(child.frame),
-            pointValueHeight: centerY, pointValueWidth: centerX);
-        tree.addEdges(container, [child]);
-        tree.addEdges(center, [container]);
-        tree.addEdges(injectedPositioned, [center]);
+          /// The container is going to be used to control the point value height/width
+          var container = InjectedContainer(
+              null, child.frame.boundingBox(child.frame),
+              pointValueHeight: centerY, pointValueWidth: centerX);
+          tree.addEdges(container, [child]);
+          tree.addEdges(center, [container]);
+          tree.addEdges(injectedPositioned, [center]);
+        } else {
+          tree.addEdges(injectedPositioned, [child]);
+        }
       }
     });
     tree.replaceChildrenOf(node, alignedChildren);

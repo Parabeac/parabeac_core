@@ -1,6 +1,11 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
@@ -67,7 +72,9 @@ class PBLayoutGenerationService extends AITHandler {
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
       _applyPostConditionRules(tree.rootNode, context);
-      // return Future.value(tree);
+
+      _wrapLayout(tree, context);
+      return Future.value(tree);
     } catch (e) {
       MainInfo().captureException(
         e,
@@ -75,6 +82,74 @@ class PBLayoutGenerationService extends AITHandler {
       logger.error(e.toString());
     } finally {
       return Future.value(tree);
+    }
+  }
+
+  void _wrapLayout(PBIntermediateTree tree, PBContext context) {
+    tree.whereType<PBLayoutIntermediateNode>().forEach((tempGroup) {
+      if (tempGroup is! PBIntermediateStackLayout) {
+        var tempLayout;
+        var isVertical = true;
+        if (tempGroup is PBIntermediateColumnLayout) {
+          tempLayout = tempGroup;
+        } else if (tempGroup is PBIntermediateRowLayout) {
+          tempLayout = tempGroup;
+          isVertical = false;
+        }
+        if (tempLayout.layoutProperties != null) {
+          num width, height;
+
+          if (isVertical) {
+            height = _getSizingMode(
+                tempLayout.layoutProperties.primaryAxisSizing,
+                tempGroup.frame.height);
+
+            width = _getSizingMode(tempLayout.layoutProperties.crossAxisSizing,
+                tempGroup.frame.width);
+          } else {
+            width = _getSizingMode(
+                tempLayout.layoutProperties.primaryAxisSizing,
+                tempGroup.frame.width);
+
+            height = _getSizingMode(tempLayout.layoutProperties.crossAxisSizing,
+                tempGroup.frame.height);
+          }
+
+          var wrapper = InjectedContainer(
+            null,
+            Rectangle3D<num>(
+              tempGroup.frame.left,
+              tempGroup.frame.top,
+              width,
+              height,
+              tempGroup.frame.z,
+            ),
+            padding: InjectedPadding(
+              left: tempLayout.layoutProperties.leftPadding,
+              right: tempLayout.layoutProperties.rightPadding,
+              top: tempLayout.layoutProperties.topPadding,
+              bottom: tempLayout.layoutProperties.bottomPadding,
+            ),
+          );
+
+          var children = tree.childrenOf(tempGroup);
+
+          tree.replaceNode(tempGroup, wrapper);
+          tree.addEdges(wrapper, [tempGroup]);
+          tree.addEdges(tempGroup, children);
+        }
+      }
+    });
+  }
+
+  num _getSizingMode(IntermediateAxisMode mode, num size) {
+    switch (mode) {
+      case IntermediateAxisMode.FIXED:
+        return size;
+      case IntermediateAxisMode.HUGGED:
+        return 0.0;
+      default:
+        return 0.0;
     }
   }
 

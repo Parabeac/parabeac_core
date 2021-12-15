@@ -41,23 +41,31 @@ class PBSizeHelper extends PBAttributesHelper {
           ? source.frame.width.toStringAsFixed(3)
           : 'MediaQuery.of(context).size.width * ${relativeWidth.toStringAsFixed(3)}';
 
-      buffer.write('height: $height,');
-      buffer.write('width: $width,');
+      if (relativeHeight > 0) {
+        buffer.write('height: $height,');
+      }
+      if (relativeWidth > 0) {
+        buffer.write('width: $width,');
+      }
 
       // buffer.write(
       //     'constraints: BoxConstraints(maxHeight: ${height}, maxWidth: ${width}),');
     } else if (context.sizingContext == SizingValueContext.LayoutBuilderValue) {
-      buffer.write(
-          'width: constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},');
-      buffer.write(
-          'height: constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},');
+      if (relativeWidth > 0) {
+        buffer.write(
+            'width: constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},');
+      }
+      if (relativeHeight > 0) {
+        buffer.write(
+            'height: constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},');
+      }
     } else {
       // relativeHeight = body['height'];
       // relativeWidth = body['width'];
-      if (relativeWidth != null) {
+      if (relativeWidth != null && relativeWidth > 0) {
         buffer.write('width: ${relativeWidth.toStringAsFixed(3)},');
       }
-      if (relativeHeight != null) {
+      if (relativeHeight != null && relativeHeight > 0) {
         buffer.write('height: ${relativeHeight.toStringAsFixed(3)},');
       }
     }

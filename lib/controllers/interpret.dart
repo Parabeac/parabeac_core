@@ -150,7 +150,8 @@ class AITServiceBuilder {
               tree.replaceNode(child, dVertex);
             }
           }
-        } else if (transformation is AITTransformation && _intermediateTree != null) {
+        } else if (transformation is AITTransformation &&
+            _intermediateTree != null) {
           _intermediateTree = await transformation(context, _intermediateTree);
         }
 

@@ -25,10 +25,10 @@ class PBContainerGenerator extends PBGenerator {
         if (source.padding != null) {
           buffer.write(getPadding(source.padding));
         }
-        if (source.pointValueHeight) {
+        if (source.pointValueHeight && source.frame.height > 0) {
           buffer.write('height: ${source.frame.height},');
         }
-        if (source.pointValueWidth) {
+        if (source.pointValueWidth && source.frame.width > 0) {
           buffer.write('width: ${source.frame.width},');
         }
         if (!source.pointValueHeight && !source.pointValueWidth) {
