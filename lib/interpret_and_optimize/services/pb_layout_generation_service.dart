@@ -86,38 +86,24 @@ class PBLayoutGenerationService extends AITHandler {
   }
 
   void _wrapLayout(PBIntermediateTree tree, PBContext context) {
+    // Get all the LayoutIntermediateNodes from the tree
     tree.whereType<PBLayoutIntermediateNode>().forEach((tempGroup) {
+      // Ignore Stacks
+      // We will get only Columns and Rows
       if (tempGroup is! PBIntermediateStackLayout) {
+        // Let tempLayout be Column or Row
         var tempLayout;
-        var isVertical = true;
         if (tempGroup is PBIntermediateColumnLayout) {
           tempLayout = tempGroup;
         } else if (tempGroup is PBIntermediateRowLayout) {
           tempLayout = tempGroup;
-          isVertical = false;
         }
         if (tempLayout.layoutProperties != null) {
-          num width, height;
-
-          if (isVertical) {
-            height = _getSizingMode(
-                tempLayout.layoutProperties.primaryAxisSizing,
-                tempGroup.frame.height);
-
-            width = _getSizingMode(tempLayout.layoutProperties.crossAxisSizing,
-                tempGroup.frame.width);
-          } else {
-            width = _getSizingMode(
-                tempLayout.layoutProperties.primaryAxisSizing,
-                tempGroup.frame.width);
-
-            height = _getSizingMode(tempLayout.layoutProperties.crossAxisSizing,
-                tempGroup.frame.height);
-          }
-
+          // Create the injected container to wrap the layout
           var wrapper = InjectedContainer(
             null,
             tempGroup.frame.copyWith(),
+            // Add padding
             padding: InjectedPadding(
               left: tempLayout.layoutProperties.leftPadding,
               right: tempLayout.layoutProperties.rightPadding,
@@ -125,27 +111,25 @@ class PBLayoutGenerationService extends AITHandler {
               bottom: tempLayout.layoutProperties.bottomPadding,
             ),
             constraints: tempGroup.constraints.copyWith(),
+            // Let the Container know if it is going to show
+            // the width or height on the generation process
+            showHeight: tempLayout.layoutProperties.primaryAxisAlignment ==
+                IntermediateAxisMode.FIXED,
+            showWidth: tempLayout.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED,
           );
 
+          // Get layout children in order to not miss them
           var children = tree.childrenOf(tempGroup);
 
+          // Let the tree know that the layout will be
+          // wrapped by the Container
           tree.replaceNode(tempGroup, wrapper);
           tree.addEdges(wrapper, [tempGroup]);
           tree.addEdges(tempGroup, children);
         }
       }
     });
-  }
-
-  num _getSizingMode(IntermediateAxisMode mode, num size) {
-    switch (mode) {
-      case IntermediateAxisMode.FIXED:
-        return size;
-      case IntermediateAxisMode.HUGGED:
-        return 0.0;
-      default:
-        return 0.0;
-    }
   }
 
   /// If this node is an unecessary [Group], from the [tree]

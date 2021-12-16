@@ -61,81 +61,14 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
-    // TODO: inject a container on top of this in case
-    // it needs coloring or padding
     var tempRow = _$PBIntermediateRowLayoutFromJson(json)
       ..mapRawChildren(json, tree);
     return tempRow;
   }
 
-  // @override
-  // void sortChildren() => replaceChildren(children
-  //   ..sort((child0, child1) =>
-  //       child0..frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
-}
-
-class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   @override
-  void align(PBContext context, PBIntermediateRowLayout node) {
-    // node.checkCrossAxisAlignment();
-    // if (context.configuration.widgetSpacing == 'Expanded') {
-    //   _addPerpendicularAlignment(node, context);
-    //   _addParallelAlignment(node, context);
-    // } else {
-    //   assert(false,
-    //       'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
-    // }
+  void sortChildren(List<PBIntermediateNode> children) {
+    children.sort((child0, child1) =>
+        child0.frame.topLeft.x.compareTo(child1.frame.topLeft.x));
   }
-
-  // void _addParallelAlignment(PBIntermediateRowLayout node, PBContext context) {
-  //   var newchildren = handleFlex(false, node.frame.topLeft,
-  //       node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
-  //   node.replaceChildren(newchildren, context);
-  // }
-
-  // void _addPerpendicularAlignment(
-  //     PBIntermediateRowLayout node, PBContext context) {
-  //   var rowMinY = node.frame.topLeft.y;
-  //   var rowMaxY = node.frame.bottomRight.y;
-
-  //   if (node.frame.topLeft.y < context.screenFrame.topLeft.y) {
-  //     rowMinY = context.screenFrame.topLeft.y;
-  //   }
-  //   if (node.frame.bottomRight.y > context.screenFrame.bottomRight.y) {
-  //     rowMaxY = context.screenFrame.bottomRight.y;
-  //   }
-
-  //   for (var i = 0; i < node.children.length; i++) {
-  //     var padding = Padding(
-  //       null,
-  //       node.frame,
-  //       node.children[i].constraints,
-  //       top: node.children[i].frame.topLeft.y - rowMinY ?? 0.0,
-  //       bottom: rowMaxY - node.children[i].frame.bottomRight.y ?? 0.0,
-  //       left: 0.0,
-  //       right: 0.0,
-  //     );
-  //  //FIXME   padding.addChild(node.children[i]);
-
-  //     //Replace Children.
-  //     node.children[i] = padding;
-  //   }
-  // }
-
-  @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(name: name);
-    // row.prototypeNode = prototypeNode;
-    //FIXME children.forEach((child) => row.addChild(child));
-    return row;
-  }
-
-  // @override
-  // void sortChildren() => replaceChildren(children
-  //   ..sort((child0, child1) =>
-  //       child0 .frame.topLeft.x.compareTo(child1 .frame.topLeft.x)));
-
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }
