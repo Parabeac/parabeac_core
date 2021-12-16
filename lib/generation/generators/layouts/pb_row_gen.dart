@@ -9,23 +9,9 @@ class PBRowGenerator extends PBLayoutGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is PBIntermediateRowLayout) {
-      var buffer = StringBuffer();
-      var counter = 0;
-      var children = context.tree.childrenOf(source);
-
-      for (var child in children) {
-        buffer.write(child.generator.generate(child, context));
-        var trailing_comma = (counter + 1) == children.length ? '' : ',';
-        buffer.write(trailing_comma);
-        counter++;
-      }
-
-      return generateBodyBoilerplate(
-        buffer.toString(),
-        layoutName: 'Row',
-        crossAxisAlignment: source.alignment['crossAxisAlignment'],
-        mainAxisAlignment: source.alignment['mainAxisAlignment'],
-      );
+      // Generate layout with the template
+      return layoutTemplate(source, 'Row', context);
     }
+    return '';
   }
 }
