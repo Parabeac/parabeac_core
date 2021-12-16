@@ -30,6 +30,9 @@ class InjectedContainer extends PBVisualIntermediateNode
   bool pointValueWidth;
   bool pointValueHeight;
 
+  bool showWidth;
+  bool showHeight;
+
   @JsonKey(ignore: true)
   InjectedPadding padding;
 
@@ -45,6 +48,8 @@ class InjectedContainer extends PBVisualIntermediateNode
     this.pointValueHeight = false,
     this.pointValueWidth = false,
     PBIntermediateConstraints constraints,
+    this.showWidth = true,
+    this.showHeight = true,
     this.padding,
   }) : super(
           UUID,
