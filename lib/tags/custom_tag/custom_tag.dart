@@ -56,7 +56,7 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       null,
       frame,
       originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
-      constraints: originalRef.constraints.clone(),
+      constraints: originalRef.constraints.copyWith(),
     );
   }
 

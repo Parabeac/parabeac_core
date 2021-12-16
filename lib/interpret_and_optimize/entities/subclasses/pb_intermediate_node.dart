@@ -264,6 +264,22 @@ class Rectangle3D<T extends num> extends Rectangle<T> {
         'y': Rectangle3D.top,
         'z': Rectangle3D.z
       };
+
+  Rectangle3D copyWith({
+    num left,
+    num top,
+    num width,
+    num height,
+    num z,
+  }) {
+    return Rectangle3D(
+      left ?? this.left,
+      top ?? this.top,
+      width ?? this.width,
+      height ?? this.height,
+      z ?? this.z,
+    );
+  }
 }
 
 extension DeserializedRectangle3D on Rectangle3D {

@@ -89,7 +89,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       var centerY = false;
       var centerX = false;
       var injectedPositioned = InjectedPositioned(null, child.frame,
-          constraints: child.constraints.clone(),
+          constraints: child.constraints.copyWith(),
           valueHolder: PositionedValueHolder(
               top: child.frame.topLeft.y - node.frame.topLeft.y,
               bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,

@@ -117,19 +117,14 @@ class PBLayoutGenerationService extends AITHandler {
 
           var wrapper = InjectedContainer(
             null,
-            Rectangle3D<num>(
-              tempGroup.frame.left,
-              tempGroup.frame.top,
-              width,
-              height,
-              tempGroup.frame.z,
-            ),
+            tempGroup.frame.copyWith(),
             padding: InjectedPadding(
               left: tempLayout.layoutProperties.leftPadding,
               right: tempLayout.layoutProperties.rightPadding,
               top: tempLayout.layoutProperties.topPadding,
               bottom: tempLayout.layoutProperties.bottomPadding,
             ),
+            constraints: tempGroup.constraints.copyWith(),
           );
 
           var children = tree.childrenOf(tempGroup);
@@ -184,7 +179,7 @@ class PBLayoutGenerationService extends AITHandler {
           tempGroup,
           PBIntermediateStackLayout(
             name: tempGroup.name,
-            constraints: tempGroup.constraints.clone(),
+            constraints: tempGroup.constraints.copyWith(),
           )..frame = tempGroup.frame,
           acceptChildren: true);
     });

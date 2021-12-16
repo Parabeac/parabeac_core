@@ -113,7 +113,7 @@ class InheritedText extends PBVisualIntermediateNode
       // bottomRightCorner: inheritedText .frame.bottomRight,
       name: inheritedText.name,
       originalRef: json,
-      constraints: inheritedText.constraints.clone(),
+      constraints: inheritedText.constraints.copyWith(),
     )
       ..attributeName = inheritedText.attributeName
       ..layoutCrossAxisSizing = inheritedText.layoutCrossAxisSizing

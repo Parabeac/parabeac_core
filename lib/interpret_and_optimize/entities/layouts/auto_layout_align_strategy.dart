@@ -38,16 +38,45 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
 
   List<PBIntermediateNode> _addBoxes(
       List<PBIntermediateNode> children, bool isVertical, num space) {
-    var boxSpace = 1;
-    var length = children.length - 1;
-    for (var i = 0; i < length; i++) {
-      var newBox = IntermediateSizedBox(
-        height: isVertical ? space : null,
-        width: isVertical ? null : space,
-      );
-      children.insert(boxSpace, newBox);
-      boxSpace += 2;
+    var spacedChildren = <PBIntermediateNode>[];
+
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+
+      /// Do not add spacing for first and last child.
+      /// This is not allowed
+      if (i > 0 && i < children.length) {
+        var tHeight = isVertical ? space : null;
+        var tWidth = isVertical ? null : space;
+
+        /// Creating sized box
+        var newBox = IntermediateSizedBox(
+          height: tHeight,
+          width: tWidth,
+
+          /// Calculating the Frame properties based
+          /// on the current and previous children's frame
+          frame: child.frame.copyWith(
+            left: isVertical
+                ? 0
+                : children[i - 1].frame.left + children[i - 1].frame.width,
+            top: isVertical
+                ? children[i - 1].frame.top + children[i - 1].frame.height
+                : 0,
+            height: tHeight,
+            width: tWidth,
+            z: 1,
+          ),
+        );
+
+        /// Add Spacer
+        spacedChildren.add(newBox);
+      }
+
+      /// Add new child
+      spacedChildren.add(child);
     }
-    return children;
+
+    return spacedChildren;
   }
 }

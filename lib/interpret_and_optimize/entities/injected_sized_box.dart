@@ -8,11 +8,11 @@ class IntermediateSizedBox extends PBVisualIntermediateNode {
 
   IntermediateSizedBox({
     String UUID,
-    Rectangle3D<num> Rectangle3D,
+    Rectangle3D<num> frame,
     String name,
     this.width,
     this.height,
-  }) : super(UUID, Rectangle3D, name) {
+  }) : super(UUID, frame, name) {
     generator = PBSizedBoxGenerator();
   }
 }
