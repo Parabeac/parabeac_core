@@ -102,8 +102,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
           child.frame,
           null,
         );
-
-        context.tree.wrapNode(wrapper, child);
+        context.tree.addEdges(wrapper, [child]);
 
         return wrapper;
         break;
