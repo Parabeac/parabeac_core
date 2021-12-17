@@ -36,6 +36,9 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   InjectedPadding padding;
 
+  bool showWidth;
+  bool showHeight;
+
   InheritedContainer(
     String UUID,
     Rectangle3D frame, {
@@ -45,6 +48,8 @@ class InheritedContainer extends PBVisualIntermediateNode
     double alignY,
     this.isBackgroundVisible = true,
     this.prototypeNode,
+    this.showWidth = true,
+    this.showHeight = true,
     PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
