@@ -117,7 +117,7 @@ class InheritedText extends PBVisualIntermediateNode
     )
       ..attributeName = inheritedText.attributeName
       ..layoutCrossAxisSizing = inheritedText.layoutCrossAxisSizing
-      ..layoutMainAxisSizing = inheritedText.layoutCrossAxisSizing;
+      ..layoutMainAxisSizing = inheritedText.layoutMainAxisSizing;
     tree.addEdges(container, [inheritedText]);
 
     // Return an [InheritedContainer] that wraps this text
