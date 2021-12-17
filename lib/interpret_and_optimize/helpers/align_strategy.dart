@@ -112,8 +112,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         /// we are no center, since there is no need in either axis
         tree.addEdges(injectedPositioned, [child]);
       } else {
-        if (child is! PBIntermediateColumnLayout &&
-            child is! PBIntermediateRowLayout) {
+        if (child is! InjectedContainer) {
           var center = InjectedCenter(
               null,
               child.frame.boundingBox(child.frame),
