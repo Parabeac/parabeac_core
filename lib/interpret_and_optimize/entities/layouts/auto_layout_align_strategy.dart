@@ -1,3 +1,5 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/alignments/expanded.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -11,41 +13,31 @@ import '../injected_sized_box.dart';
 class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
   @override
   void align(PBContext context, node) {
-    if (node is PBIntermediateColumnLayout) {
-      if (needsSpacing(node)) {
-        _insertBoxes(context, node, true);
-      }
-    } else if (node is PBIntermediateRowLayout) {
-      if (needsSpacing(node)) {
-        _insertBoxes(context, node, false);
-      }
-    }
-  }
+    // TODO: Look for a way to not have to check if it is a col or row
 
-  bool needsSpacing(node) =>
-      node.layoutProperties.spacing != null &&
-      node.layoutProperties.primaryAxisAlignment !=
-          IntermediateAxisAlignment.SPACE_BETWEEN;
-
-  void _insertBoxes(PBContext context, node, bool isVertical) {
-    var children = context.tree.childrenOf(node);
-
-    var newChildren =
-        _addBoxes(children, isVertical, node.layoutProperties.spacing);
-
-    context.tree.replaceChildrenOf(node, newChildren);
-  }
-
-  List<PBIntermediateNode> _addBoxes(
-      List<PBIntermediateNode> children, bool isVertical, num space) {
+    // New children list
     var spacedChildren = <PBIntermediateNode>[];
+    var children = context.tree.childrenOf(node);
+    var isVertical = true;
+    num space;
+
+    // Add boxes if necessary for Column
+    if (node is PBIntermediateColumnLayout) {
+      isVertical = true;
+      space = node.layoutProperties.spacing;
+    }
+    // Add boxes if necessary for Column
+    else if (node is PBIntermediateRowLayout) {
+      isVertical = false;
+      space = node.layoutProperties.spacing;
+    }
 
     for (var i = 0; i < children.length; i++) {
       var child = children[i];
 
       /// Do not add spacing for first and last child.
       /// This is not allowed
-      if (i > 0 && i < children.length) {
+      if (needsSpacing(node) && i > 0 && i < children.length) {
         var tHeight = isVertical ? space : null;
         var tWidth = isVertical ? null : space;
 
@@ -74,9 +66,67 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       }
 
       /// Add new child
-      spacedChildren.add(child);
+      spacedChildren.add(_handleLayoutChild(child, isVertical, context));
+      // spacedChildren.add(child);
     }
 
-    return spacedChildren;
+    context.tree.replaceChildrenOf(node, spacedChildren);
   }
+
+  // This boolean let us know if the layout needs boxes or not
+  bool needsSpacing(node) =>
+      node.layoutProperties.spacing != null &&
+      node.layoutProperties.primaryAxisAlignment !=
+          IntermediateAxisAlignment.SPACE_BETWEEN;
+
+  PBIntermediateNode _handleLayoutChild(
+      PBIntermediateNode child, bool isVertical, PBContext context) {
+    // Cross axis sizing
+    switch (child.layoutCrossAxisSizing) {
+      case ParentLayoutSizing.STRETCH:
+        if (isVertical && child is InheritedContainer) {
+          child.showWidth = false;
+        } else if (!isVertical && child is InheritedContainer) {
+          child.showHeight = false;
+        }
+        break;
+      default:
+    }
+
+    // Main axis sizing
+    switch (child.layoutMainAxisSizing) {
+      case ParentLayoutSizing.STRETCH:
+        var wrapper = InjectedExpanded(
+          null,
+          child.frame,
+          null,
+        );
+
+        context.tree.wrapNode(wrapper, child);
+
+        return wrapper;
+        break;
+      default:
+    }
+
+    return child;
+  }
+
+  // // Replace children with new children in case boxes were added
+  // void _insertBoxes(PBContext context, node, bool isVertical) {
+  //   var children = context.tree.childrenOf(node);
+
+  //   var newChildren =
+  //       _addBoxes(children, isVertical, node.layoutProperties.spacing);
+
+  //   context.tree.replaceChildrenOf(node, newChildren);
+  // }
+
+  // // Add boxes between children
+  // List<PBIntermediateNode> _addBoxes(
+  //     List<PBIntermediateNode> children, bool isVertical, num space) {
+  //   var spacedChildren = <PBIntermediateNode>[];
+
+  //   return spacedChildren;
+  // }
 }
