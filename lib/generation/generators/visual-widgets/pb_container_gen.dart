@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_box_deco
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -15,7 +16,7 @@ class PBContainerGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    if (source is InjectedContainer || source is InheritedContainer) {
+    if (source is PBContainer) {
       var sourceChildren = context.tree.childrenOf(source);
       var buffer = StringBuffer();
       buffer.write('Container(');

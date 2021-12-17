@@ -1,4 +1,5 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/expanded.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
@@ -84,9 +85,9 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     // Cross axis sizing
     switch (child.layoutCrossAxisSizing) {
       case ParentLayoutSizing.STRETCH:
-        if (isVertical && child is InheritedContainer) {
+        if (isVertical && child is PBContainer) {
           child.showWidth = false;
-        } else if (!isVertical && child is InheritedContainer) {
+        } else if (!isVertical && child is PBContainer) {
           child.showHeight = false;
         }
         break;
