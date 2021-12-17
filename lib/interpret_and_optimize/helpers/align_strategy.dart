@@ -2,6 +2,7 @@ import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_center.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -112,12 +113,10 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         /// we are no center, since there is no need in either axis
         tree.addEdges(injectedPositioned, [child]);
       } else {
-        if (child is! InjectedContainer) {
-          var center = InjectedCenter(
-              null,
-              child.frame.boundingBox(child.frame),
-              '$InjectedCenter-${child.name}');
-
+        // Center widget to wrap child
+        var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
+            '$InjectedCenter-${child.name}');
+        if (child is! PBContainer) {
           /// The container is going to be used to control the point value height/width
           var container = InjectedContainer(
               null, child.frame.boundingBox(child.frame),
@@ -126,7 +125,8 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
           tree.addEdges(center, [container]);
           tree.addEdges(injectedPositioned, [center]);
         } else {
-          tree.addEdges(injectedPositioned, [child]);
+          tree.addEdges(center, [child]);
+          tree.addEdges(injectedPositioned, [center]);
         }
       }
     });
