@@ -119,14 +119,9 @@ class PBLayoutGenerationService extends AITHandler {
                 IntermediateAxisMode.FIXED,
           );
 
-          // Get layout children in order to not miss them
-          var children = tree.childrenOf(tempGroup);
-
           // Let the tree know that the layout will be
           // wrapped by the Container
-          tree.replaceNode(tempGroup, wrapper);
-          tree.addEdges(wrapper, [tempGroup]);
-          tree.addEdges(tempGroup, children);
+          tree.wrapNode(wrapper, tempGroup);
         }
       }
     });

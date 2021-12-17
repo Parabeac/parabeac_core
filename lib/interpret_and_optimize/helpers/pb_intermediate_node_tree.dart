@@ -203,6 +203,19 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     addEdges(parent, children.toList());
   }
 
+  /// Wrapping [node] with [wrapper]
+  ///
+  /// When we need to put a specific parent node to the node on the tree
+  void wrapNode(PBIntermediateNode wrapper, PBIntermediateNode node) {
+    // Save children so we don't lose them
+    var children = childrenOf(node);
+    // Replace node by the wrapper
+    replaceNode(node, wrapper);
+    // Add them back
+    addEdges(wrapper, [node]);
+    addEdges(node, children);
+  }
+
   /// Replacing [target] with [replacement]
   ///
   /// The entire subtree (starting with [target]) if [replacement] does not [acceptChildren],
