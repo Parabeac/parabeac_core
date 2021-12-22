@@ -1,9 +1,11 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/expanded.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -27,7 +29,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       isVertical = true;
       space = node.layoutProperties.spacing;
     }
-    // Add boxes if necessary for Column
+    // Add boxes if necessary for Row
     else if (node is PBIntermediateRowLayout) {
       isVertical = false;
       space = node.layoutProperties.spacing;
@@ -66,12 +68,38 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
         spacedChildren.add(newBox);
       }
 
+      var newChild = _needsContainer(child, isVertical, context);
+
       /// Add new child
-      spacedChildren.add(_handleLayoutChild(child, isVertical, context));
-      // spacedChildren.add(child);
+      spacedChildren.add(_handleLayoutChild(newChild, isVertical, context));
     }
 
     context.tree.replaceChildrenOf(node, spacedChildren);
+  }
+
+  /// Checks if child is a [PBLayoutIntermediateNode]
+  /// and adds a container on top of it
+  PBIntermediateNode _needsContainer(
+      child, bool isVertical, PBContext context) {
+    if (child is PBLayoutIntermediateNode ||
+        child is PBSharedInstanceIntermediateNode) {
+      // Creates container
+      var wrapper = InjectedContainer(
+        null,
+        child.frame,
+        pointValueHeight: isVertical
+            ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
+            : child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
+        pointValueWidth: isVertical
+            ? child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
+            : child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
+      )
+        ..layoutCrossAxisSizing = child.layoutCrossAxisSizing
+        ..layoutMainAxisSizing = child.layoutMainAxisSizing;
+      context.tree.addEdges(wrapper, [child]);
+      return wrapper;
+    }
+    return child;
   }
 
   // This boolean let us know if the layout needs boxes or not
