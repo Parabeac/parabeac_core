@@ -117,7 +117,9 @@ class PBLayoutGenerationService extends AITHandler {
                 IntermediateAxisMode.FIXED,
             showWidth: tempLayout.layoutProperties.crossAxisSizing ==
                 IntermediateAxisMode.FIXED,
-          );
+          )
+            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
+            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
 
           // Let the tree know that the layout will be
           // wrapped by the Container
@@ -159,7 +161,10 @@ class PBLayoutGenerationService extends AITHandler {
           PBIntermediateStackLayout(
             name: tempGroup.name,
             constraints: tempGroup.constraints.copyWith(),
-          )..frame = tempGroup.frame,
+          )
+            ..frame = tempGroup.frame
+            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
+            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing,
           acceptChildren: true);
     });
   }
