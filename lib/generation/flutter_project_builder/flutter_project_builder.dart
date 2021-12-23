@@ -15,8 +15,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management
 import 'package:quick_log/quick_log.dart';
 import 'package:tuple/tuple.dart';
 
-// String pathToFlutterProject = '${MainInfo().outputPath}/temp/';
-
 /// The [FlutterProjectBuilder] generates the actual flutter project,
 /// where the generated dart code will reside for the [project].
 ///

@@ -1,6 +1,7 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_material.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_polygon.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
@@ -30,6 +31,7 @@ class AbstractIntermediateNodeFactory {
     InheritedContainer('$InheritedContainer', null),
     InheritedOval('$InheritedOval', null),
     InheritedPolygon('$InheritedPolygon', null),
+    InheritedMaterial('$InheritedMaterial', null, null, null),
     InheritedScaffold('$InheritedScaffold', null, null, null),
     InheritedShapeGroup('$InheritedShapeGroup', null),
     InheritedShapePath('$InheritedShapePath', null),
