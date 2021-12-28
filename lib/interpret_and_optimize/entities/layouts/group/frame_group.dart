@@ -30,7 +30,7 @@ class FrameGroup extends Group
     Rectangle3D<num> frame, {
     String name,
     PrototypeNode prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame,
             name: name, prototypeNode: prototypeNode, constraints: constraints);
 

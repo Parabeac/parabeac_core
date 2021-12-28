@@ -1,36 +1,43 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'base_group.dart';
+part of 'row.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
-  return BaseGroup(
-    json['UUID'] as String,
-    Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
+PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
+    Map<String, dynamic> json) {
+  return PBIntermediateRowLayout(
     name: json['name'] as String,
-    prototypeNode: PrototypeNode.prototypeNodeFromJson(
-        json['prototypeNodeUUID'] as String),
-    constraints: json['constraints'] == null
+  )
+    ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>),
-  )
+            json['constraints'] as Map<String, dynamic>)
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutCrossAxisSizing'])
+    ..frame =
+        Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>)
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
             json['style'] as Map<String, dynamic>)
+    ..prototypeNode = json['prototypeNode'] == null
+        ? null
+        : PrototypeNode.fromJson(json['prototypeNode'] as Map<String, dynamic>)
+    ..layoutProperties = json['autoLayoutOptions'] == null
+        ? null
+        : LayoutProperties.fromJson(
+            json['autoLayoutOptions'] as Map<String, dynamic>)
     ..type = json['type'] as String;
 }
 
-Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
-      'UUID': instance.UUID,
+Map<String, dynamic> _$PBIntermediateRowLayoutToJson(
+        PBIntermediateRowLayout instance) =>
+    <String, dynamic>{
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
           _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
@@ -39,7 +46,8 @@ Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
-      'prototypeNodeUUID': instance.prototypeNode,
+      'prototypeNode': instance.prototypeNode,
+      'autoLayoutOptions': instance.layoutProperties,
       'type': instance.type,
     };
 

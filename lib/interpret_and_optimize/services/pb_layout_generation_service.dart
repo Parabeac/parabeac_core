@@ -1,6 +1,11 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/container_constraint_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
@@ -67,7 +72,9 @@ class PBLayoutGenerationService extends AITHandler {
       ///After all the layouts are generated, the [PostConditionRules] are going
       ///to be applyed to the layerss
       _applyPostConditionRules(tree.rootNode, context);
-      // return Future.value(tree);
+
+      _wrapLayout(tree, context);
+      return Future.value(tree);
     } catch (e) {
       MainInfo().captureException(
         e,
@@ -76,6 +83,50 @@ class PBLayoutGenerationService extends AITHandler {
     } finally {
       return Future.value(tree);
     }
+  }
+
+  void _wrapLayout(PBIntermediateTree tree, PBContext context) {
+    // Get all the LayoutIntermediateNodes from the tree
+    tree.whereType<PBLayoutIntermediateNode>().forEach((tempGroup) {
+      // Ignore Stacks
+      // We will get only Columns and Rows
+      if (tempGroup is! PBIntermediateStackLayout) {
+        // Let tempLayout be Column or Row
+        var tempLayout;
+        if (tempGroup is PBIntermediateColumnLayout) {
+          tempLayout = tempGroup;
+        } else if (tempGroup is PBIntermediateRowLayout) {
+          tempLayout = tempGroup;
+        }
+        if (tempLayout.layoutProperties != null) {
+          // Create the injected container to wrap the layout
+          var wrapper = InjectedContainer(
+            null,
+            tempGroup.frame.copyWith(),
+            // Add padding
+            padding: InjectedPadding(
+              left: tempLayout.layoutProperties.leftPadding,
+              right: tempLayout.layoutProperties.rightPadding,
+              top: tempLayout.layoutProperties.topPadding,
+              bottom: tempLayout.layoutProperties.bottomPadding,
+            ),
+            constraints: tempGroup.constraints.copyWith(),
+            // Let the Container know if it is going to show
+            // the width or height on the generation process
+            showHeight: tempLayout.layoutProperties.primaryAxisAlignment ==
+                IntermediateAxisMode.FIXED,
+            showWidth: tempLayout.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED,
+          )
+            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
+            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
+
+          // Let the tree know that the layout will be
+          // wrapped by the Container
+          tree.wrapNode(wrapper, tempGroup);
+        }
+      }
+    });
   }
 
   /// If this node is an unecessary [Group], from the [tree]
@@ -109,8 +160,11 @@ class PBLayoutGenerationService extends AITHandler {
           tempGroup,
           PBIntermediateStackLayout(
             name: tempGroup.name,
-            constraints: tempGroup.constraints.clone(),
-          )..frame = tempGroup.frame,
+            constraints: tempGroup.constraints.copyWith(),
+          )
+            ..frame = tempGroup.frame
+            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
+            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing,
           acceptChildren: true);
     });
   }

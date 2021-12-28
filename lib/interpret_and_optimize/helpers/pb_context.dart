@@ -78,7 +78,7 @@ class PBContext {
   PBContext clone() {
     var context = PBContext(configuration,
         tree: tree,
-        contextConstraints: contextConstraints.clone(),
+        contextConstraints: contextConstraints.copyWith(),
         masterNode: masterNode,
         project: project,
         canvasFrame: canvasFrame,

@@ -50,14 +50,22 @@ class PBIntermediateConstraints {
 
   Map<String, dynamic> toJson() => _$PBIntermediateConstraintsToJson(this);
 
-  PBIntermediateConstraints clone() {
+  PBIntermediateConstraints copyWith({
+    bool pinBottom,
+    bool pinTop,
+    bool pinRight,
+    bool pinLeft,
+    bool fixedHeight,
+    bool fixedWidth,
+  }) {
     return PBIntermediateConstraints(
-        pinBottom: pinBottom,
-        pinTop: pinTop,
-        pinRight: pinRight,
-        pinLeft: pinLeft,
-        fixedHeight: fixedHeight,
-        fixedWidth: fixedWidth);
+      pinBottom: pinBottom ?? this.pinBottom,
+      pinTop: pinTop ?? this.pinTop,
+      pinRight: pinRight ?? this.pinRight,
+      pinLeft: pinLeft ?? this.pinLeft,
+      fixedHeight: fixedHeight ?? this.fixedHeight,
+      fixedWidth: fixedWidth ?? this.fixedWidth,
+    );
   }
 
   factory PBIntermediateConstraints.mergeFromContraints(

@@ -113,8 +113,11 @@ class InheritedText extends PBVisualIntermediateNode
       // bottomRightCorner: inheritedText .frame.bottomRight,
       name: inheritedText.name,
       originalRef: json,
-      constraints: inheritedText.constraints.clone(),
-    )..attributeName = inheritedText.attributeName;
+      constraints: inheritedText.constraints.copyWith(),
+    )
+      ..attributeName = inheritedText.attributeName
+      ..layoutCrossAxisSizing = inheritedText.layoutCrossAxisSizing
+      ..layoutMainAxisSizing = inheritedText.layoutMainAxisSizing;
     tree.addEdges(container, [inheritedText]);
 
     // Return an [InheritedContainer] that wraps this text

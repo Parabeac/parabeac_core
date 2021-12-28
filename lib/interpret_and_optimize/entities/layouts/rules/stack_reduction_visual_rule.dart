@@ -1,3 +1,4 @@
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
@@ -77,6 +78,5 @@ class StackReductionVisualRule extends PostConditionRule {
   /// Returns true if `node` is a Container with a null child
   bool _isEmptyContainer(
           PBIntermediateTree tree, PBVisualIntermediateNode node) =>
-      tree.childrenOf(node).isEmpty &&
-      (node is InheritedContainer || node is InjectedContainer);
+      tree.childrenOf(node).isEmpty && (node is PBContainer);
 }

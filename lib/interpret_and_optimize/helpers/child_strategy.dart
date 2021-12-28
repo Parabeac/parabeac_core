@@ -130,7 +130,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
         null,
         target.frame,
         name: '${target.name}Group',
-        constraints: target.constraints.clone(),
+        constraints: target.constraints.copyWith(),
       );
       addChild(temp, children);
 
