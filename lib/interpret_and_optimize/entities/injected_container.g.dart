@@ -22,6 +22,10 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
             json['constraints'] as Map<String, dynamic>),
   )
     ..subsemantic = json['subsemantic'] as String
+    ..layoutMainAxisSizing = _$enumDecodeNullable(
+        _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
+    ..layoutCrossAxisSizing = _$enumDecodeNullable(
+        _$ParentLayoutSizingEnumMap, json['layoutCrossAxisSizing'])
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -33,6 +37,10 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
+      'layoutMainAxisSizing':
+          _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
+      'layoutCrossAxisSizing':
+          _$ParentLayoutSizingEnumMap[instance.layoutCrossAxisSizing],
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
@@ -41,3 +49,40 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'pointValueWidth': instance.pointValueWidth,
       'pointValueHeight': instance.pointValueHeight,
     };
+
+T _$enumDecode<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError('A value must be provided. Supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+
+  final value = enumValues.entries
+      .singleWhere((e) => e.value == source, orElse: () => null)
+      ?.key;
+
+  if (value == null && unknownValue == null) {
+    throw ArgumentError('`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+  return value ?? unknownValue;
+}
+
+T _$enumDecodeNullable<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$ParentLayoutSizingEnumMap = {
+  ParentLayoutSizing.INHERIT: 'INHERIT',
+  ParentLayoutSizing.STRETCH: 'STRETCH',
+};

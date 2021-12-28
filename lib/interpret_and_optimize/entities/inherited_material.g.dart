@@ -1,23 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'base_group.dart';
+part of 'inherited_material.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
-  return BaseGroup(
+InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
+  return InheritedMaterial(
     json['UUID'] as String,
     Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
-    name: json['name'] as String,
+    json['name'] as String,
+    json['originalRef'] as Map<String, dynamic>,
+    isHomeScreen: json['isFlowHome'] as bool ?? false,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-    constraints: json['constraints'] == null
-        ? null
-        : PBIntermediateConstraints.fromJson(
-            json['constraints'] as Map<String, dynamic>),
+    constraints: json['constraints'],
   )
+    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -29,7 +29,9 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String;
 }
 
-Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
+Map<String, dynamic> _$InheritedMaterialToJson(InheritedMaterial instance) =>
+    <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
@@ -40,7 +42,9 @@ Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,
+      'isFlowHome': instance.isHomeScreen,
       'type': instance.type,
+      'originalRef': instance.originalRef,
     };
 
 T _$enumDecode<T>(

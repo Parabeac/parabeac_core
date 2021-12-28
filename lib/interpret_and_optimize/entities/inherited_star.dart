@@ -44,7 +44,7 @@ class InheritedStar extends PBVisualIntermediateNode
     name,
     Uint8List image,
     this.prototypeNode,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();

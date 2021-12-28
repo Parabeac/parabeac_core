@@ -1,29 +1,23 @@
-import 'dart:math';
-
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_container_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+
+import 'container.dart';
+import 'injected_container.dart';
 
 part 'inherited_container.g.dart';
 
 @JsonSerializable()
 class InheritedContainer extends PBVisualIntermediateNode
-    implements PBInheritedIntermediate, IntermediateNodeFactory {
+    implements PBInheritedIntermediate, IntermediateNodeFactory, PBContainer {
   @override
   @JsonKey(
       fromJson: PrototypeNode.prototypeNodeFromJson, name: 'prototypeNodeUUID')
@@ -40,6 +34,15 @@ class InheritedContainer extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
+  @override
+  @JsonKey(ignore: true)
+  InjectedPadding padding;
+
+  @override
+  bool showWidth;
+  @override
+  bool showHeight;
+
   InheritedContainer(
     String UUID,
     Rectangle3D frame, {
@@ -49,7 +52,9 @@ class InheritedContainer extends PBVisualIntermediateNode
     double alignY,
     this.isBackgroundVisible = true,
     this.prototypeNode,
-    constraints,
+    this.showWidth = true,
+    this.showHeight = true,
+    PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
     childrenStrategy = TempChildrenStrategy('child');

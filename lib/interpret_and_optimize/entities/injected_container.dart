@@ -11,6 +11,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
+import 'container.dart';
+
 part 'injected_container.g.dart';
 
 @JsonSerializable()
@@ -18,7 +20,8 @@ class InjectedContainer extends PBVisualIntermediateNode
     implements
         PBInjectedIntermediate,
         PrototypeEnable,
-        IntermediateNodeFactory {
+        IntermediateNodeFactory,
+        PBContainer {
   @override
   @JsonKey(fromJson: PrototypeNode.prototypeNodeFromJson)
   PrototypeNode prototypeNode;
@@ -29,6 +32,15 @@ class InjectedContainer extends PBVisualIntermediateNode
 
   bool pointValueWidth;
   bool pointValueHeight;
+
+  @override
+  bool showWidth;
+  @override
+  bool showHeight;
+
+  @override
+  @JsonKey(ignore: true)
+  InjectedPadding padding;
 
   InjectedContainer(
     UUID,
@@ -41,7 +53,10 @@ class InjectedContainer extends PBVisualIntermediateNode
     this.type,
     this.pointValueHeight = false,
     this.pointValueWidth = false,
-    constraints,
+    PBIntermediateConstraints constraints,
+    this.showWidth = true,
+    this.showHeight = true,
+    this.padding,
   }) : super(
           UUID,
           frame,
@@ -59,4 +74,15 @@ class InjectedContainer extends PBVisualIntermediateNode
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
           PBIntermediateNode parent, PBIntermediateTree tree) =>
       InjectedContainer.fromJson(json);
+}
+
+// Class for injected container to inject padding
+class InjectedPadding {
+  num left, right, top, bottom;
+  InjectedPadding({
+    this.left,
+    this.right,
+    this.top,
+    this.bottom,
+  });
 }

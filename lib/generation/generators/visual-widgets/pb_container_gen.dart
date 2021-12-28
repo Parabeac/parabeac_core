@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_box_deco
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -15,23 +16,33 @@ class PBContainerGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    if (source is InjectedContainer || source is InheritedContainer) {
+    if (source is PBContainer) {
       var sourceChildren = context.tree.childrenOf(source);
       var buffer = StringBuffer();
       buffer.write('Container(');
 
       //TODO(ivanV): please clean my if statement :(
       if (source is InjectedContainer) {
-        if (source.pointValueHeight) {
+        if (source.padding != null) {
+          buffer.write(getPadding(source.padding));
+        }
+        if (source.pointValueHeight &&
+            source.frame.height > 0 &&
+            source.showHeight) {
           buffer.write('height: ${source.frame.height},');
         }
-        if (source.pointValueWidth) {
+        if (source.pointValueWidth &&
+            source.frame.width > 0 &&
+            source.showWidth) {
           buffer.write('width: ${source.frame.width},');
         }
         if (!source.pointValueHeight && !source.pointValueWidth) {
           buffer.write(PBSizeHelper().generate(source, context));
         }
-      }else {
+      } else if (source is InheritedContainer) {
+        if (source.padding != null) {
+          buffer.write(getPadding(source.padding));
+        }
         buffer.write(PBSizeHelper().generate(source, context));
       }
 
@@ -58,5 +69,22 @@ class PBContainerGenerator extends PBGenerator {
       return buffer.toString();
     }
     return '';
+  }
+
+  String getPadding(InjectedPadding padding) {
+    var buffer = StringBuffer();
+
+    buffer.write('padding: EdgeInsets.only(');
+
+    buffer.write('left: ${padding.left ?? 0},');
+
+    buffer.write('right: ${padding.right ?? 0},');
+
+    buffer.write('top: ${padding.top ?? 0},');
+
+    buffer.write('bottom: ${padding.bottom ?? 0},');
+
+    buffer.write('),');
+    return buffer.toString();
   }
 }

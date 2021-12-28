@@ -226,6 +226,8 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
         name: element.name,
         originalRef: element.originalRef,
       )
+        ..layoutCrossAxisSizing = element.layoutCrossAxisSizing
+        ..layoutMainAxisSizing = element.layoutMainAxisSizing
         ..constraints = element.constraints
         ..auxiliaryData = element.auxiliaryData;
       tree.replaceNode(element, newInstance);

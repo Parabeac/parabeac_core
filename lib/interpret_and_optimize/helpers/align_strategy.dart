@@ -2,7 +2,10 @@ import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_center.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -87,7 +90,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       var centerY = false;
       var centerX = false;
       var injectedPositioned = InjectedPositioned(null, child.frame,
-          constraints: child.constraints.clone(),
+          constraints: child.constraints.copyWith(),
           valueHolder: PositionedValueHolder(
               top: child.frame.topLeft.y - node.frame.topLeft.y,
               bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
@@ -110,16 +113,21 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         /// we are no center, since there is no need in either axis
         tree.addEdges(injectedPositioned, [child]);
       } else {
+        // Center widget to wrap child
         var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
             '$InjectedCenter-${child.name}');
-
-        /// The container is going to be used to control the point value height/width
-        var container = InjectedContainer(
-            null, child.frame.boundingBox(child.frame),
-            pointValueHeight: centerY, pointValueWidth: centerX);
-        tree.addEdges(container, [child]);
-        tree.addEdges(center, [container]);
-        tree.addEdges(injectedPositioned, [center]);
+        if (child is! PBContainer) {
+          /// The container is going to be used to control the point value height/width
+          var container = InjectedContainer(
+              null, child.frame.boundingBox(child.frame),
+              pointValueHeight: centerY, pointValueWidth: centerX);
+          tree.addEdges(container, [child]);
+          tree.addEdges(center, [container]);
+          tree.addEdges(injectedPositioned, [center]);
+        } else {
+          tree.addEdges(center, [child]);
+          tree.addEdges(injectedPositioned, [center]);
+        }
       }
     });
     tree.replaceChildrenOf(node, alignedChildren);

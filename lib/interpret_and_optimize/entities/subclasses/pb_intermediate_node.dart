@@ -54,6 +54,11 @@ abstract class PBIntermediateNode
   @JsonKey(ignore: true)
   AlignStrategy alignStrategy = NoAlignment();
 
+  @JsonKey(ignore: false)
+  ParentLayoutSizing layoutMainAxisSizing;
+  @JsonKey(ignore: false)
+  ParentLayoutSizing layoutCrossAxisSizing;
+
   @JsonKey(
       ignore: false,
       name: 'boundaryRectangle',
@@ -80,8 +85,8 @@ abstract class PBIntermediateNode
         super(null) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
-      logger.debug(
-          'Generating UUID for $runtimeType-$name as its UUID is null');
+      logger
+          .debug('Generating UUID for $runtimeType-$name as its UUID is null');
       _UUID = Uuid().v4();
     }
 
@@ -259,6 +264,22 @@ class Rectangle3D<T extends num> extends Rectangle<T> {
         'y': Rectangle3D.top,
         'z': Rectangle3D.z
       };
+
+  Rectangle3D copyWith({
+    num left,
+    num top,
+    num width,
+    num height,
+    num z,
+  }) {
+    return Rectangle3D(
+      left ?? this.left,
+      top ?? this.top,
+      width ?? this.width,
+      height ?? this.height,
+      z ?? this.z,
+    );
+  }
 }
 
 extension DeserializedRectangle3D on Rectangle3D {
@@ -303,3 +324,5 @@ extension DeserializedRectangle3D on Rectangle3D {
             topLeft, bottomRight, frame.topLeft, frame.bottomRight);
   }
 }
+
+enum ParentLayoutSizing { INHERIT, STRETCH }

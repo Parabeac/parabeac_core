@@ -5,8 +5,13 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 abstract class PBVisualIntermediateNode extends PBIntermediateNode {
   PBVisualIntermediateNode(
     String UUID,
-    Rectangle3D Rectangle3D,
+    Rectangle3D rectangle3d,
     String name, {
     constraints,
-  }) : super(UUID, Rectangle3D, name, constraints: constraints);
+  }) : super(
+          UUID,
+          rectangle3d,
+          name,
+          constraints: constraints,
+        );
 }

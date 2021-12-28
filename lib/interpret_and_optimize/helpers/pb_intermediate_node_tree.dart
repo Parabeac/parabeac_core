@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_material.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -66,7 +67,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       _rootNode = rootNode;
       _identifier ??= rootNode?.name?.snakeCase ?? name.snakeCase;
 
-      if (rootNode is InheritedScaffold) {
+      if (rootNode is InheritedScaffold || rootNode is InheritedMaterial) {
         tree_type = TREE_TYPE.SCREEN;
       } else if (rootNode is PBSharedMasterNode) {
         tree_type = TREE_TYPE.VIEW;
@@ -201,6 +202,19 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       PBIntermediateNode parent, List<PBIntermediateNode> children) {
     removeEdges(parent);
     addEdges(parent, children.toList());
+  }
+
+  /// Wrapping [node] with [wrapper]
+  ///
+  /// When we need to put a specific parent node to the node on the tree
+  void wrapNode(PBIntermediateNode wrapper, PBIntermediateNode node) {
+    // Save children so we don't lose them
+    var children = childrenOf(node);
+    // Replace node by the wrapper
+    replaceNode(node, wrapper);
+    // Add them back
+    addEdges(wrapper, [node]);
+    addEdges(node, children);
   }
 
   /// Replacing [target] with [replacement]

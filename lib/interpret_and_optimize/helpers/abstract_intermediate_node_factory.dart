@@ -1,6 +1,7 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_circle.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_material.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_oval.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_polygon.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
@@ -9,9 +10,11 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_pa
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_star.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_triangle.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -28,6 +31,7 @@ class AbstractIntermediateNodeFactory {
     InheritedContainer('$InheritedContainer', null),
     InheritedOval('$InheritedOval', null),
     InheritedPolygon('$InheritedPolygon', null),
+    InheritedMaterial('$InheritedMaterial', null, null, null),
     InheritedScaffold('$InheritedScaffold', null, null, null),
     InheritedShapeGroup('$InheritedShapeGroup', null),
     InheritedShapePath('$InheritedShapePath', null),
@@ -38,6 +42,8 @@ class AbstractIntermediateNodeFactory {
     PBSharedMasterNode('$PBSharedMasterNode', null),
     BaseGroup('$Group', null),
     FrameGroup('$FrameGroup', null),
+    PBIntermediateColumnLayout(null),
+    PBIntermediateRowLayout(),
   };
 
   AbstractIntermediateNodeFactory();

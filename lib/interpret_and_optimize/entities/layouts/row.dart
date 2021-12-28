@@ -6,14 +6,26 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/exceptions
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/handle_flex.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'auto_layout_align_strategy.dart';
+import 'layout_properties.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'row.g.dart';
+
+@JsonSerializable(createToJson: true)
 
 ///Row contains nodes that are all `horizontal` to each other, without overlapping eachother
 
-class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
+class PBIntermediateRowLayout extends PBLayoutIntermediateNode
+    implements IntermediateNodeFactory {
   static final List<LayoutRule> ROW_RULES = [HorizontalNodesLayoutRule()];
 
   static final List<LayoutException> ROW_EXCEPTIONS = [
@@ -24,7 +36,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   PrototypeNode prototypeNode;
 
   @override
-  AlignStrategy alignStrategy = RowAlignment();
+  AlignStrategy alignStrategy = AutoLayoutAlignStrategy();
 
   PBIntermediateRowLayout({String name})
       : super(null, null, ROW_RULES, ROW_EXCEPTIONS, name) {
@@ -36,78 +48,27 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
       PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
-   //FIXME children.forEach((child) => row.addChild(child));
+    //FIXME children.forEach((child) => row.addChild(child));
     return row;
   }
 
-  // @override
-  // void sortChildren() => replaceChildren(children
-  //   ..sort((child0, child1) =>
-  //       child0..frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
-}
+  @JsonKey(name: 'autoLayoutOptions')
+  LayoutProperties layoutProperties;
 
-class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   @override
-  void align(PBContext context, PBIntermediateRowLayout node) {
-    // node.checkCrossAxisAlignment();
-    // if (context.configuration.widgetSpacing == 'Expanded') {
-    //   _addPerpendicularAlignment(node, context);
-    //   _addParallelAlignment(node, context);
-    // } else {
-    //   assert(false,
-    //       'We don\'t support Configuration [${context.configuration.widgetSpacing}] yet.');
-    // }
+  String type = 'row';
+
+  @override
+  PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
+      PBIntermediateNode parent, PBIntermediateTree tree) {
+    var tempRow = _$PBIntermediateRowLayoutFromJson(json)
+      ..mapRawChildren(json, tree);
+    return tempRow;
   }
 
-  // void _addParallelAlignment(PBIntermediateRowLayout node, PBContext context) {
-  //   var newchildren = handleFlex(false, node.frame.topLeft,
-  //       node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
-  //   node.replaceChildren(newchildren, context);
-  // }
-
-  // void _addPerpendicularAlignment(
-  //     PBIntermediateRowLayout node, PBContext context) {
-  //   var rowMinY = node.frame.topLeft.y;
-  //   var rowMaxY = node.frame.bottomRight.y;
-
-  //   if (node.frame.topLeft.y < context.screenFrame.topLeft.y) {
-  //     rowMinY = context.screenFrame.topLeft.y;
-  //   }
-  //   if (node.frame.bottomRight.y > context.screenFrame.bottomRight.y) {
-  //     rowMaxY = context.screenFrame.bottomRight.y;
-  //   }
-
-  //   for (var i = 0; i < node.children.length; i++) {
-  //     var padding = Padding(
-  //       null,
-  //       node.frame,
-  //       node.children[i].constraints,
-  //       top: node.children[i].frame.topLeft.y - rowMinY ?? 0.0,
-  //       bottom: rowMaxY - node.children[i].frame.bottomRight.y ?? 0.0,
-  //       left: 0.0,
-  //       right: 0.0,
-  //     );
-  //  //FIXME   padding.addChild(node.children[i]);
-
-  //     //Replace Children.
-  //     node.children[i] = padding;
-  //   }
-  // }
-
   @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
-    var row = PBIntermediateRowLayout(name: name);
-    // row.prototypeNode = prototypeNode;
-   //FIXME children.forEach((child) => row.addChild(child));
-    return row;
+  void sortChildren(List<PBIntermediateNode> children) {
+    children.sort((child0, child1) =>
+        child0.frame.topLeft.x.compareTo(child1.frame.topLeft.x));
   }
-
-  // @override
-  // void sortChildren() => replaceChildren(children
-  //   ..sort((child0, child1) =>
-  //       child0 .frame.topLeft.x.compareTo(child1 .frame.topLeft.x)));
-
-  @override
-  PBIntermediateNode fromJson(Map<String, dynamic> json) => null;
 }

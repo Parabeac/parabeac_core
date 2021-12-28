@@ -1,6 +1,7 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
@@ -33,7 +34,7 @@ class PBBitmapGenerator extends PBGenerator {
       buffer.write('${styleOverride.propertyName} ?? ');
     }
 
-    var boxFit = _getBoxFit(source.constraints);
+    var boxFit = _getBoxFit(source);
 
     var imagePath = source is InheritedBitmap
         ? 'assets/${source.referenceImage}' // Assuming PBDL will give us reference to image in the form of `image/<image_name>.png`
@@ -44,7 +45,18 @@ class PBBitmapGenerator extends PBGenerator {
     return buffer.toString();
   }
 
-  String _getBoxFit(PBIntermediateConstraints constraints) {
+  String _getBoxFit(PBIntermediateNode node) {
+    var isVertical = node.parent is PBIntermediateColumnLayout;
+    if (node.layoutCrossAxisSizing == ParentLayoutSizing.STRETCH &&
+        node.layoutMainAxisSizing == ParentLayoutSizing.STRETCH) {
+      return 'fit: BoxFit.fill,';
+    } else if (node.layoutCrossAxisSizing == ParentLayoutSizing.STRETCH) {
+      return isVertical ? 'fit: BoxFit.fitWidth,' : 'fit: BoxFit.fitHeight,';
+    } else if (node.layoutMainAxisSizing == ParentLayoutSizing.STRETCH) {
+      return isVertical ? 'fit: BoxFit.fitHeight,' : 'fit: BoxFit.fitWidth,';
+    }
+
+    var constraints = node.constraints;
     if (constraints.pinLeft &&
         constraints.pinBottom &&
         constraints.pinRight &&
