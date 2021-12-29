@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_symbol_storage.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
@@ -40,6 +41,14 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('}\n');
       // end of LayoutBuilder()
       buffer.write(')');
+      // To write the override properties for the class
+      if (source.parent is CustomTag) {
+        buffer.write(',' +
+            overridesToString(
+              source.sharedParamValues,
+              generatorContext,
+            ));
+      }
       return buffer.toString();
     }
     return '';
@@ -102,22 +111,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         return override == null || override.value == null;
       });
 
-      _formatNameAndValues(overrideValues, context);
-      for (var element in overrideValues) {
-        if (element.overrideName != null && element.initialValue != null) {
-          // If the type is image, we should print the whole widget
-          // so the end user can place whatever kind of widget
-          // TODO: Refactor so it place the image from the instance not from component
-          if (element.type == 'image') {
-            var elementCode =
-                element.value.generator.generate(element.value, context);
-
-            buffer.write('${element.overrideName}: $elementCode,');
-          } else {
-            buffer.write('${element.overrideName}: ${element.valueName},');
-          }
-        }
-      }
+      formatNameAndValues(overrideValues, context);
+      buffer.write(overridesToString(overrideValues, context));
     }
 
     buffer.write(')\n');
@@ -125,9 +120,30 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     return buffer.toString();
   }
 
+  // Traverse all overridable properties to write them for class use
+  String overridesToString(
+      List<PBInstanceOverride> overrideValues, PBContext context) {
+    var buffer = StringBuffer();
+    for (var element in overrideValues) {
+      if (element.overrideName != null && element.initialValue != null) {
+        // If the type is image, we should print the whole widget
+        // so the end user can place whatever kind of widget
+        // TODO: Refactor so it place the image from the instance not from component
+        if (element.type == 'image') {
+          var elementCode =
+              element.value.generator.generate(element.value, context);
+
+          buffer.write('${element.overrideName}: $elementCode,');
+        } else {
+          buffer.write('${element.overrideName}: ${element.valueName},');
+        }
+      }
+    }
+    return buffer.toString();
+  }
+
   /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
-  void _formatNameAndValues(
-      List<PBInstanceOverride> params, PBContext context) {
+  void formatNameAndValues(List<PBInstanceOverride> params, PBContext context) {
     params.forEach((param) {
       var overrideProp = OverrideHelper.getProperty(param.UUID, param.type);
 
