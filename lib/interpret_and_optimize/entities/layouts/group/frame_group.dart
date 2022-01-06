@@ -39,7 +39,8 @@ class FrameGroup extends Group
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var tempFrame = _$FrameGroupFromJson(json);
 
-    var tempChild = injectAContainer(json, tempFrame.frame);
+    var tempChild = injectAContainer(json, tempFrame.frame)
+      ..constraints = tempFrame.constraints.copyWith();
 
     if (tempChild != null) {
       tree.addEdges(tempFrame, [tempChild]);
