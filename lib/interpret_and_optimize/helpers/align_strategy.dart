@@ -119,8 +119,12 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         if (child is! PBContainer) {
           /// The container is going to be used to control the point value height/width
           var container = InjectedContainer(
-              null, child.frame.boundingBox(child.frame),
-              pointValueHeight: centerY, pointValueWidth: centerX);
+            null,
+            child.frame.boundingBox(child.frame),
+            pointValueHeight: centerY,
+            pointValueWidth: centerX,
+            constraints: child.constraints.copyWith(),
+          );
           tree.addEdges(container, [child]);
           tree.addEdges(center, [container]);
           tree.addEdges(injectedPositioned, [center]);
