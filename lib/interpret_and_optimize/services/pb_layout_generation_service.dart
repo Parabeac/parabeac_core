@@ -110,7 +110,7 @@ class PBLayoutGenerationService extends AITHandler {
               top: tempLayout.layoutProperties.topPadding,
               bottom: tempLayout.layoutProperties.bottomPadding,
             ),
-            constraints: tempGroup.constraints.copyWith(),
+            constraints: tempLayout.constraints.copyWith(),
             // Let the Container know if it is going to show
             // the width or height on the generation process
             showHeight: tempLayout.layoutProperties.primaryAxisAlignment ==
@@ -118,12 +118,12 @@ class PBLayoutGenerationService extends AITHandler {
             showWidth: tempLayout.layoutProperties.crossAxisSizing ==
                 IntermediateAxisMode.FIXED,
           )
-            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
-            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
+            ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
+            ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing;
 
           // Let the tree know that the layout will be
           // wrapped by the Container
-          tree.wrapNode(wrapper, tempGroup);
+          tree.wrapNode(wrapper, tempLayout);
         }
       }
     });

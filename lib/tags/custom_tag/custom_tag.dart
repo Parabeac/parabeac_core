@@ -25,11 +25,17 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
 
+  @override
+  ParentLayoutSizing layoutCrossAxisSizing;
+  @override
+  ParentLayoutSizing layoutMainAxisSizing;
   CustomTag(
     String UUID,
     Rectangle3D frame,
     String name, {
     PBIntermediateConstraints constraints,
+    this.layoutCrossAxisSizing,
+    this.layoutMainAxisSizing,
   }) : super(
           UUID,
           frame,
@@ -60,6 +66,8 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       frame,
       originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
       constraints: originalRef.constraints.copyWith(),
+      layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
+      layoutMainAxisSizing: originalRef.layoutMainAxisSizing,
     );
   }
 

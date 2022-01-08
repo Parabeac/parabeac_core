@@ -95,6 +95,7 @@ class InjectedTabBar extends PBTag implements PBInjectedIntermediate {
         null,
         child.frame,
         name: child.name,
+        constraints: child.constraints.copyWith(),
       )..attributeName = child.attributeName;
       context.tree.removeEdges(child.parent, [child]);
       context.tree.addEdges(container, [child]);

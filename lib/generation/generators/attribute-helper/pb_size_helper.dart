@@ -51,6 +51,9 @@ class PBSizeHelper extends PBAttributesHelper {
 
       widthString = 'width: $width,';
     } else if (context.sizingContext == SizingValueContext.LayoutBuilderValue) {
+      relativeWidth = relativeWidth / screenWidth;
+      relativeHeight = relativeHeight / screenHeight;
+
       // Size for LayoutBuilder
       widthString =
           'width: constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},';
