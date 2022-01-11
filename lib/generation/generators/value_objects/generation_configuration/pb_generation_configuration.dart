@@ -28,6 +28,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orient
 import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
+import 'package:sentry/sentry.dart';
 
 abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
   FileStructureStrategy fileStructureStrategy;
@@ -124,7 +125,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     ///First we are going to perform a dry run in the generation to
     ///gather all the necessary information
     await setUpConfiguration(pb_project);
-    
+
     fileStructureStrategy.addFileObserver(_importProcessor);
     // pb_project.fileStructureStrategy = fileStructureStrategy;
 
@@ -234,12 +235,11 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         poLinker.getPlatformOrientationData(screenName);
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
-      map.forEach((key, tree) {
+      map.forEach((key, tree) async {
         var uuidImport = _importProcessor.getImport(tree.UUID);
         if (uuidImport == null) {
-          MainInfo().sentry.captureException(
-              exception: Exception(
-                  'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
+          await Sentry.captureException(Exception(
+              'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
         } else {
           imports.addAll(_importProcessor.getImport(tree.UUID));
         }

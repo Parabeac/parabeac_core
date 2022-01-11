@@ -1,7 +1,5 @@
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
@@ -17,6 +15,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:sentry/sentry.dart';
 
 /// PBLayoutGenerationService:
 /// Inject PBLayoutIntermediateNode to a PBIntermediateNode Tree that signifies the grouping of PBItermediateNodes in a given direction. There should not be any PBAlignmentIntermediateNode in the input tree.
@@ -61,7 +60,7 @@ class PBLayoutGenerationService extends AITHandler {
   }
 
   Future<PBIntermediateTree> extractLayouts(
-      PBIntermediateTree tree, PBContext context) {
+      PBIntermediateTree tree, PBContext context) async {
     if (tree.rootNode == null) {
       return Future.value(tree);
     }
@@ -75,10 +74,8 @@ class PBLayoutGenerationService extends AITHandler {
 
       _wrapLayout(tree, context);
       return Future.value(tree);
-    } catch (e) {
-      MainInfo().captureException(
-        e,
-      );
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       logger.error(e.toString());
     } finally {
       return Future.value(tree);
