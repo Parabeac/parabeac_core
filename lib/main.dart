@@ -60,10 +60,17 @@ final parser = ArgParser()
       help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
   ..addFlag('exclude-styles',
       help: 'If this flag is set, it will exclude output styles document');
-void main(List<String> args) async {
-  await Sentry.init((p0) => p0.dsn =
-      'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747');
 
+Future<void> main(List<String> args) async {
+  await Sentry.init(
+    (p0) => p0.dsn =
+        'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
+    appRunner: () async => runParabeac(args),
+  );
+  await Sentry.close();
+}
+
+Future<void> runParabeac(List<String> args) async {
   await checkConfigFile();
   var log = Logger('Main');
   var pubspec = File('pubspec.yaml');
@@ -325,10 +332,11 @@ PBConfiguration generateConfiguration(String path) {
     configuration =
         PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
   } catch (e, stackTrace) {
-    Sentry.captureException(
-      e,
-      stackTrace: stackTrace,
-    );
+    print(e);
+    // Sentry.captureException(
+    //   e,
+    //   stackTrace: stackTrace,
+    // );
   }
   configuration ??= PBConfiguration.genericConfiguration();
   return configuration;
