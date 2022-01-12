@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -62,11 +63,16 @@ final parser = ArgParser()
       help: 'If this flag is set, it will exclude output styles document');
 
 Future<void> main(List<String> args) async {
-  await Sentry.init(
-    (p0) => p0.dsn =
-        'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
-    appRunner: () async => runParabeac(args),
-  );
+  await runZonedGuarded(() async {
+    await Sentry.init(
+      (p0) => p0.dsn =
+          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
+    );
+    await runParabeac(args);
+  }, (error, stackTrace) async {
+    await Sentry.captureException(error);
+    await Sentry.close();
+  });
   await Sentry.close();
 }
 
