@@ -338,11 +338,7 @@ PBConfiguration generateConfiguration(String path) {
     configuration =
         PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
   } catch (e, stackTrace) {
-    print(e);
-    // Sentry.captureException(
-    //   e,
-    //   stackTrace: stackTrace,
-    // );
+    Sentry.captureException(e, stackTrace: stackTrace);
   }
   configuration ??= PBConfiguration.genericConfiguration();
   return configuration;

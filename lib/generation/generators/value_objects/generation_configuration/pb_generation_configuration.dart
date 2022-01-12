@@ -235,10 +235,10 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
         poLinker.getPlatformOrientationData(screenName);
     var imports = <String>{};
     platformOrientationMap.forEach((key, map) {
-      map.forEach((key, tree) async {
+      map.forEach((key, tree) {
         var uuidImport = _importProcessor.getImport(tree.UUID);
         if (uuidImport == null) {
-          await Sentry.captureException(Exception(
+          Sentry.captureException(Exception(
               'Import for tree with UUID ${tree.UUID} was null when getting imports from processor.'));
         } else {
           imports.addAll(_importProcessor.getImport(tree.UUID));
