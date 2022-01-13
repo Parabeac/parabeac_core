@@ -1,9 +1,9 @@
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_align.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:sentry/sentry.dart';
 
 class PBAlignGenerator extends PBGenerator {
   var log = Logger('Align Generator');
@@ -24,10 +24,7 @@ class PBAlignGenerator extends PBGenerator {
         buffer.write(
             'child: ${sourceChild.generator.generate(sourceChild, context)},');
       } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
+        Sentry.captureException(e, stackTrace: stackTrace);
         log.error(e.toString());
       }
 

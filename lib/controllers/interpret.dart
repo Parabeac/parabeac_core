@@ -12,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orient
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/state_management_node_interpreter.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:sentry/sentry.dart';
 import 'package:tuple/tuple.dart';
 
 class Interpret {
@@ -160,8 +161,8 @@ class AITServiceBuilder {
               'The $name returned a null \"$treeName\" $PBIntermediateTree (or its rootnode is null)\n after its transformation, this will remove the tree from the process!');
           // throw NullThrownError();
         }
-      } catch (e) {
-        MainInfo().captureException(e);
+      } catch (e, stackTrace) {
+        await Sentry.captureException(e, stackTrace: stackTrace);
         log.error('${e.toString()} at $name');
       } finally {
         _stopwatch.stop();

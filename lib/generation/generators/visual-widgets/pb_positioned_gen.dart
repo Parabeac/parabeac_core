@@ -1,10 +1,9 @@
-import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:tuple/tuple.dart';
+import 'package:sentry/sentry.dart';
 
 class PBPositionedGenerator extends PBGenerator {
   /// The Flutter Position class allows it to override the `height` and the
@@ -61,11 +60,9 @@ class PBPositionedGenerator extends PBGenerator {
         // source.child.currentContext = source.currentContext;
         buffer.write(
             'child: ${sourceChildren.first.generator.generate(sourceChildren.first, context)},');
-      } catch (e) {
+      } catch (e, stackTrace) {
         logger.error(e.toString());
-        MainInfo().captureException(
-          e,
-        );
+        Sentry.captureException(e, stackTrace: stackTrace);
       }
 
       buffer.write(')');
