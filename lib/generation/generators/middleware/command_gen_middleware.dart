@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_platform_orientation_generation_mixin.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -62,11 +63,19 @@ class CommandGenMiddleware extends Middleware
             ?.isEmpty ??
         true) {
       // TODO: Find a more optimal way to exclude state management nodes
+      var relativePath = tree.name;
+      if (tree.rootNode is PBSharedMasterNode) {
+        var componentSetName =
+            (tree.rootNode as PBSharedMasterNode).componentSetName;
+        relativePath = componentSetName != null
+            ? relativePath + '/' + componentSetName.snakeCase
+            : relativePath;
+      }
       command = WriteSymbolCommand(
         tree.UUID,
         tree.identifier,
         generationManager.generate(tree.rootNode, context),
-        relativePath: tree.name,
+        relativePath: relativePath,
       );
     }
     if (command != null) {
