@@ -51,6 +51,12 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
+  @JsonKey(ignore: false)
+  String componentSetName;
+
+  @JsonKey(ignore: false)
+  String sharedNodeSetID;
+
   PBSharedMasterNode(
     String UUID,
     Rectangle3D frame, {
@@ -60,6 +66,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.overridableProperties,
     this.prototypeNode,
     PBIntermediateConstraints constraints,
+    this.componentSetName,
+    this.sharedNodeSetID,
   }) : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
 
