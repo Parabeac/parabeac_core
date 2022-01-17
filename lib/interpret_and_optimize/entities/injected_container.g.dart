@@ -20,6 +20,8 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
         ? null
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
+    showWidth: json['showWidth'] as bool,
+    showHeight: json['showHeight'] as bool,
   )
     ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
@@ -48,6 +50,8 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'type': instance.type,
       'pointValueWidth': instance.pointValueWidth,
       'pointValueHeight': instance.pointValueHeight,
+      'showWidth': instance.showWidth,
+      'showHeight': instance.showHeight,
     };
 
 T _$enumDecode<T>(

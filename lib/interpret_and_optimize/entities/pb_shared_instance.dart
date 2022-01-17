@@ -53,6 +53,9 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
+  @JsonKey(ignore: false)
+  String sharedNodeSetID;
+
   PBSharedInstanceIntermediateNode(
     String UUID,
     Rectangle3D frame, {
@@ -62,6 +65,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.prototypeNode,
     this.overrideValues,
     String name,
+    this.sharedNodeSetID,
   }) : super(
           UUID,
           frame,
