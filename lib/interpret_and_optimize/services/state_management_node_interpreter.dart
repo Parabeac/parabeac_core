@@ -17,16 +17,16 @@ class StateManagementNodeInterpreter extends AITHandler {
     }
     var node = tree.rootNode;
     var smHelper = PBStateManagementHelper();
-    if (smHelper.isValidStateNode(node.name)) {
-      if (smHelper.isDefaultNode(node)) {
-        smHelper.interpretStateManagementNode(node, tree);
-        return Future.value(tree);
-      } else {
-        /// Remove tree entirely
-        smHelper.interpretStateManagementNode(node, tree);
-        return Future.value(null);
-      }
-    }
+    // if (smHelper.isValidStateNode(node)) {
+    //   if (smHelper.isDefaultNode(node)) {
+    //     smHelper.interpretStateManagementNode(node, tree);
+    //     return Future.value(tree);
+    //   } else {
+    //     /// Remove tree entirely
+    //     smHelper.interpretStateManagementNode(node, tree);
+    //     return Future.value(null);
+    //   }
+    // }
     return Future.value(tree);
   }
 }
