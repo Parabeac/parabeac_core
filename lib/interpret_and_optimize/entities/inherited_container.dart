@@ -39,7 +39,9 @@ class InheritedContainer extends PBVisualIntermediateNode
   InjectedPadding padding;
 
   @override
+  @JsonKey(ignore: true)
   bool showWidth;
+  @JsonKey(ignore: true)
   @override
   bool showHeight;
 
