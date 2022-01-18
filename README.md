@@ -1,11 +1,11 @@
 # <center>Parabeac-Core
 
-![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/master/repo_assets/parabeac_core_image.png)
+![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
 
 
 Parabeac-Core converts design files into isolated & responsive Flutter code, continuously.
 
-[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/master/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
+[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
   <a href="https://docs.parabeac.com/docs/hello-world-guide">Hello World</a>
@@ -95,7 +95,7 @@ We recommend following our [Hello World guide](https://docs.parabeac.com/docs/he
 
 
 ### Running a Figma Frame/Screen
-![Figma Frame Example](https://github.com/Parabeac/Parabeac-Core/blob/master/repo_assets/figma_frame_example.png)
+![Figma Frame Example](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/figma_frame_example.png?raw=true)
 #### Steps
 1. Open your generated project (Will be at the absolute path you set or in the parabeac_core directory)
 2. If your frame was designed to be a screen, you can quickly test it by editing the MaterialApp widget in main.dart like the following:
@@ -114,7 +114,7 @@ We recommend following our [Hello World guide](https://docs.parabeac.com/docs/he
 ```
 3. Save `main.dart` and execute `flutter run` 
 ### Running a Figma Component
-![Figma Component Example](https://github.com/Parabeac/Parabeac-Core/blob/master/repo_assets/figma_component_example.png)
+![Figma Component Example](https://github.com/Parabeac/Parabeac-Core/blob/master/repo_assets/figma_component_example.png?raw=true)
 
 1. Navigate to a widget/screen where you can add in your component as a child.
 2. Reference the component by providing a LayoutBuilder widget like the following:
