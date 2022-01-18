@@ -14,6 +14,8 @@ InheritedContainer _$InheritedContainerFromJson(Map<String, dynamic> json) {
     isBackgroundVisible: json['isBackgroundVisible'] as bool ?? true,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
+    showWidth: json['showWidth'] as bool,
+    showHeight: json['showHeight'] as bool,
     constraints: json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -46,6 +48,8 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
       'prototypeNodeUUID': instance.prototypeNode,
       'isBackgroundVisible': instance.isBackgroundVisible,
       'type': instance.type,
+      'showWidth': instance.showWidth,
+      'showHeight': instance.showHeight,
     };
 
 T _$enumDecode<T>(

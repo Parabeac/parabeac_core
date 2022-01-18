@@ -3,6 +3,7 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
+import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
@@ -12,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -23,11 +25,17 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   @override
   String semanticName = '<custom>';
 
+  @override
+  ParentLayoutSizing layoutCrossAxisSizing;
+  @override
+  ParentLayoutSizing layoutMainAxisSizing;
   CustomTag(
     String UUID,
     Rectangle3D frame,
     String name, {
     PBIntermediateConstraints constraints,
+    this.layoutCrossAxisSizing,
+    this.layoutMainAxisSizing,
   }) : super(
           UUID,
           frame,
@@ -58,6 +66,8 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       frame,
       originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
       constraints: originalRef.constraints.copyWith(),
+      layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
+      layoutMainAxisSizing: originalRef.layoutMainAxisSizing,
     );
   }
 
@@ -129,10 +139,14 @@ class CustomTagGenerator extends PBGenerator {
     ));
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
-            Uuid().v4(), cleanName, customBoilerPlate(titleName),
-            relativePath: '$DIRECTORY_GEN',
-            symbolPath: 'lib',
-            ownership: FileOwnership.DEV));
+      Uuid().v4(),
+      cleanName,
+      customBoilerPlate(
+          titleName, context.tree.childrenOf(source).first, context),
+      relativePath: '$DIRECTORY_GEN',
+      symbolPath: 'lib',
+      ownership: FileOwnership.DEV,
+    ));
 
     if (source is CustomTag) {
       return '''
@@ -144,13 +158,35 @@ class CustomTagGenerator extends PBGenerator {
     return '';
   }
 
-  String customBoilerPlate(String className) {
+  String customBoilerPlate(
+      String className, PBIntermediateNode child, PBContext context) {
+    var variableList = <String>[];
+    if (child is PBSharedInstanceIntermediateNode) {
+      if (child.sharedParamValues != null) {
+        child.sharedParamValues.removeWhere((value) {
+          var override = OverrideHelper.getProperty(value.UUID, value.type);
+          return override == null || override.value == null;
+        });
+
+        PBSymbolInstanceGenerator()
+            .formatNameAndValues(child.sharedParamValues, context);
+        for (var element in child.sharedParamValues) {
+          if (element.overrideName != null && element.initialValue != null) {
+            // print(element.overrideName);
+            // print(element.initialValue);
+
+            variableList.add(element.overrideName);
+          }
+        }
+      }
+    }
     return '''
       import 'package:flutter/material.dart';
 
       class $className extends StatefulWidget{
         final Widget? child;
-        $className({Key? key, this.child}) : super (key: key);
+        ${_printVariables(variableList)}
+        $className({Key? key, this.child, ${_printVariables(variableList, true)}}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();
@@ -163,5 +199,19 @@ class CustomTagGenerator extends PBGenerator {
         }
       }
       ''';
+  }
+
+  String _printVariables(List<String> variables,
+      [bool forConstructor = false]) {
+    var buffer = StringBuffer();
+    for (var variable in variables) {
+      var preVariable = forConstructor ? 'this.' : 'final ';
+
+      var postVariable = forConstructor ? ', ' : ';';
+
+      buffer.write(preVariable + variable + postVariable);
+    }
+
+    return buffer.toString();
   }
 }

@@ -20,7 +20,9 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
     name: json['name'] as String,
+    sharedNodeSetID: json['sharedNodeSetID'] as String,
   )
+    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -39,6 +41,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
 Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
         PBSharedInstanceIntermediateNode instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
       'layoutMainAxisSizing':
@@ -53,6 +56,7 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
           instance.sharedParamValues?.map((e) => e?.toJson())?.toList(),
       'prototypeNodeUUID': instance.prototypeNode?.toJson(),
       'type': instance.type,
+      'sharedNodeSetID': instance.sharedNodeSetID,
     };
 
 T _$enumDecode<T>(

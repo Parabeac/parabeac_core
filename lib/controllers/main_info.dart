@@ -6,12 +6,6 @@ import 'package:path/path.dart' as p;
 class MainInfo {
   static final MainInfo _singleton = MainInfo._internal();
 
-  final _sentry = DummySentry();
-
-  @Deprecated(
-      'Use the function handle error for logging and capturing the error')
-  get sentry => _sentry;
-
   /// Path representing where the output of parabeac-core will be produced to.
   ///
   /// First, we are going to check the if any path was passed as a flag to [outputPath],
@@ -99,11 +93,6 @@ class MainInfo {
     return p.normalize(p.absolute(path));
   }
 
-  /// Decoupling the exception capture client from the services that report the [exception]
-  void captureException(exception) {
-    // _sentry.captureException(exception: exception);
-  }
-
   factory MainInfo() {
     return _singleton;
   }
@@ -113,10 +102,3 @@ class MainInfo {
 
 /// The type of design that is being processed by Parabeac Core.
 enum DesignType { SKETCH, FIGMA, PBDL, UNKNOWN }
-
-class DummySentry {
-  /// Decoupling the exception capture client from the services that report the [exception]
-  void captureException({exception, stackTrace}) {
-    return;
-  }
-}

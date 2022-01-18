@@ -32,7 +32,8 @@ class PBStateManagementLinker {
 
   List<Future> stateQueue;
 
-  bool containsElement(String name) => _rootNameToGraph.containsKey(name);
+  bool containsElement(String sharedNodeSetID) =>
+      _rootNameToGraph.containsKey(sharedNodeSetID);
 
   /// Returns true if `name` exists in the statemap and it is
   /// a symbol instance.
@@ -40,11 +41,11 @@ class PBStateManagementLinker {
       _rootNameToGraph.containsKey(name) &&
       _rootNameToGraph[name] is PBSharedInstanceIntermediateNode;
 
-  void processVariation(PBIntermediateNode node, String rootNodeName,
+  void processVariation(PBIntermediateNode node, String sharedNodeSetID,
       PBIntermediateTree tree) async {
     // if `node` is default, create a new graph
-    if (!containsElement(rootNodeName)) {
-      _rootNameToGraph[rootNodeName] = DirectedStateGraph(node);
+    if (!containsElement(sharedNodeSetID)) {
+      _rootNameToGraph[sharedNodeSetID] = DirectedStateGraph(node);
     }
 
     // Add variation to default state node
@@ -55,13 +56,13 @@ class PBStateManagementLinker {
         tempSym?.forEach((element) => element.isMasterState = true);
       }
       stateQueue.add(_interpretVariationNode(node, tree).then((processedNode) =>
-          _rootNameToGraph[rootNodeName].addVariation(processedNode)));
+          _rootNameToGraph[sharedNodeSetID].addVariation(processedNode)));
     }
   }
 
   /// Gets the [DirectedStateGraph] of `rootNodeName` or `null` if it does not exist.
-  DirectedStateGraph getDirectedStateGraphOfName(String rootNodeName) =>
-      _rootNameToGraph[rootNodeName];
+  DirectedStateGraph getDirectedStateGraphOfName(String sharedNodeSetID) =>
+      _rootNameToGraph[sharedNodeSetID];
 
   /// Runs the state management [PBIntermediateNode] through
   /// the necessary interpretation services.

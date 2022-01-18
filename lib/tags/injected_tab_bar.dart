@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:recase/recase.dart';
+import 'package:sentry/sentry.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -95,6 +96,7 @@ class InjectedTabBar extends PBTag implements PBInjectedIntermediate {
         null,
         child.frame,
         name: child.name,
+        constraints: child.constraints.copyWith(),
       )..attributeName = child.attributeName;
       context.tree.removeEdges(child.parent, [child]);
       context.tree.addEdges(container, [child]);
@@ -147,10 +149,7 @@ class PBTabBarGenerator extends PBGenerator {
           buffer.write('),');
         }
       } catch (e, stackTrace) {
-        MainInfo().sentry.captureException(
-              exception: e,
-              stackTrace: stackTrace,
-            );
+        Sentry.captureException(e, stackTrace: stackTrace);
         buffer.write('),');
       }
       buffer.write('],');
