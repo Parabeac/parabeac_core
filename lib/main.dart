@@ -1,14 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
-import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -19,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/fig
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
@@ -63,7 +61,22 @@ final parser = ArgParser()
       help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
   ..addFlag('exclude-styles',
       help: 'If this flag is set, it will exclude output styles document');
-void main(List<String> args) async {
+
+Future<void> main(List<String> args) async {
+  await runZonedGuarded(() async {
+    await Sentry.init(
+      (p0) => p0.dsn =
+          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
+    );
+    await runParabeac(args);
+  }, (error, stackTrace) async {
+    await Sentry.captureException(error);
+    await Sentry.close();
+  });
+  await Sentry.close();
+}
+
+Future<void> runParabeac(List<String> args) async {
   await checkConfigFile();
   var log = Logger('Main');
   var pubspec = File('pubspec.yaml');
@@ -75,7 +88,7 @@ void main(List<String> args) async {
 
   MainInfo().cwd = Directory.current;
 
-//error handler using logger package
+  //error handler using logger package
   void handleError(String msg) {
     log.error(msg);
     exitCode = 2;
@@ -325,10 +338,7 @@ PBConfiguration generateConfiguration(String path) {
     configuration =
         PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
   } catch (e, stackTrace) {
-    MainInfo().sentry.captureException(
-          exception: e,
-          stackTrace: stackTrace,
-        );
+    Sentry.captureException(e, stackTrace: stackTrace);
   }
   configuration ??= PBConfiguration.genericConfiguration();
   return configuration;

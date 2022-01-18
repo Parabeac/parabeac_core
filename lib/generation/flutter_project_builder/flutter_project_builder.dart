@@ -6,13 +6,12 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:archive/archive.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
-import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management_linker.dart';
 import 'package:quick_log/quick_log.dart';
+import 'package:sentry/sentry.dart';
 import 'package:tuple/tuple.dart';
 
 /// The [FlutterProjectBuilder] generates the actual flutter project,
@@ -80,8 +79,8 @@ class FlutterProjectBuilder {
         });
       }
       return tuple;
-    } catch (e) {
-      MainInfo().captureException(e);
+    } catch (e, stackStrace) {
+      await Sentry.captureException(e, stackTrace: stackStrace);
       log.error(e.toString());
     }
   }
@@ -104,8 +103,8 @@ class FlutterProjectBuilder {
             workingDirectory: projectDir,
             runInShell: true)
         .then((result) => result.exitCode == 2 ? result.stderr : result.stdout)
-        .catchError((error) {
-      MainInfo().captureException(error);
+        .catchError((error, stackTrace) async {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       log.error(error.toString());
     });
   }
