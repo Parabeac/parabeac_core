@@ -114,7 +114,7 @@ We recommend following our [Hello World guide](https://docs.parabeac.com/docs/he
 ```
 3. Save `main.dart` and execute `flutter run` 
 ### Running a Figma Component
-![Figma Component Example](https://github.com/Parabeac/Parabeac-Core/blob/master/repo_assets/figma_component_example.png?raw=true)
+![Figma Component Example](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/repo_assets/figma_component_example.png)
 
 1. Navigate to a widget/screen where you can add in your component as a child.
 2. Reference the component by providing a LayoutBuilder widget like the following:
