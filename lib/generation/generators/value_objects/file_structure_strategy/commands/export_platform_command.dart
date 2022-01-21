@@ -12,13 +12,9 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
   static final String WIDGET_PATH = 'lib/screens';
 
   ExportPlatformCommand(
-    String UUID,
-    this.platform,
-    this.folderName,
-    this.fileName,
-    String code,
-    {FileOwnership ownership = FileOwnership.PBC}
-  ) : super(UUID, code, ownership);
+      String UUID, this.platform, this.folderName, this.fileName, String code,
+      {FileOwnership ownership = FileOwnership.PBC})
+      : super(UUID, code, ownership);
 
   @override
   Future write(FileStructureStrategy strategy) async {
@@ -28,6 +24,7 @@ class ExportPlatformCommand extends NodeFileStructureCommand {
       folderName,
       platform.toString().toLowerCase().replaceAll('platform.', ''),
     );
-    strategy.writeDataToFile(code, path, fileName, UUID: UUID, ownership: ownership);
+    strategy.writeDataToFile(code, path, fileName,
+        UUID: UUID, ownership: ownership);
   }
 }
