@@ -23,7 +23,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_help
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 
 class AbstractIntermediateNodeFactory {
-  static final String INTERMEDIATE_TYPE = 'type';
+  static final String INTERMEDIATE_TYPE = 'pbdlType';
 
   static final Set<IntermediateNodeFactory> _intermediateNodes = {
     InheritedBitmap('$InheritedBitmap', null),
