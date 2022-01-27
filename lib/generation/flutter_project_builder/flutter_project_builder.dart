@@ -65,7 +65,7 @@ class FlutterProjectBuilder {
   static Future<Tuple2> createFlutterProject(String flutterProjectName,
       {String projectDir,
       bool createAssetsDir = true,
-      String assetsDir = 'assets/images/'}) async {
+      String assetsDir = 'lib/assets/images/'}) async {
     try {
       var result = await Process.run('flutter', ['create', flutterProjectName],
           workingDirectory: projectDir, runInShell: true);
