@@ -19,21 +19,23 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
       }
       if (borderInfo != null) {
-        if (borderInfo.shape == 'circle') {
+        if (borderInfo.borders[0].type == 'circle') {
           buffer.write('shape: BoxShape.circle,');
-        } else if (borderInfo.borderRadius != null) {
+        } else if (borderInfo.cornerRadius != null) {
           // Write border radius if it exists
           buffer.write(
-              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
+              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.cornerRadius})),');
           // Write border outline properties if applicable
-          if (borderInfo.isBorderOutlineVisible &&
-              (borderInfo.color != null || borderInfo.thickness != null)) {
+          if (borderInfo.borders[0].visible &&
+              (borderInfo.borders[0].color != null ||
+                  borderInfo.strokeWeight != null)) {
             buffer.write('border: Border.all(');
-            if (borderInfo.color != null) {
-              buffer.write('color: Color(${borderInfo.color.toString()}),');
+            if (borderInfo.borders[0].color != null) {
+              buffer.write(
+                  'color: Color(${borderInfo.borders[0].color.toString()}),');
             }
-            if (borderInfo.thickness != null) {
-              buffer.write('width: ${borderInfo.thickness},');
+            if (borderInfo.strokeWeight != null) {
+              buffer.write('width: ${borderInfo.strokeWeight},');
             }
             buffer.write('),'); // end of Border.all(
           }

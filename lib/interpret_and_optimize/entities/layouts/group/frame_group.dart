@@ -1,7 +1,7 @@
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/intermediate_border_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_border_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
@@ -59,26 +59,27 @@ class FrameGroup extends Group
       name: json['name'],
     );
     var gateKeeper = false;
-    if (json['style']['borderOptions']['cornerRadius'] != null) {
-      tempChild.auxiliaryData.borderInfo = IntermediateBorderInfo(
-          borderRadius: json['style']['borderOptions']['cornerRadius']);
-      tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-      gateKeeper = true;
-    }
-    if (json['style']['backgroundColor'] != null) {
-      tempChild.auxiliaryData.color =
-          PBColor.fromJson(json['style']['backgroundColor']);
-      gateKeeper = true;
-    }
-    if (json['style']['borders'][0]['isEnabled']) {
-      tempChild.auxiliaryData.borderInfo ??= IntermediateBorderInfo();
-      tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-      tempChild.auxiliaryData.borderInfo.color =
-          PBColor.fromJson(json['style']['borders'][0]['color']);
-      tempChild.auxiliaryData.borderInfo.thickness =
-          json['style']['borders'][0]['thickness'];
-      gateKeeper = true;
-    }
+    // TODO: Fix
+    // if (json['style']['borderOptions']['cornerRadius'] != null) {
+    //   tempChild.auxiliaryData.borderInfo = IntermediateBorderInfo(
+    //       borderRadius: json['style']['borderOptions']['cornerRadius']);
+    //   tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
+    //   gateKeeper = true;
+    // }
+    // if (json['style']['backgroundColor'] != null) {
+    //   tempChild.auxiliaryData.color =
+    //       PBColor.fromJson(json['style']['backgroundColor']);
+    //   gateKeeper = true;
+    // }
+    // if (json['style']['borders'][0]['isEnabled']) {
+    //   tempChild.auxiliaryData.borderInfo ??= IntermediateBorderInfo();
+    //   tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
+    //   tempChild.auxiliaryData.borderInfo.color =
+    //       PBColor.fromJson(json['style']['borders'][0]['color']);
+    //   tempChild.auxiliaryData.borderInfo.thickness =
+    //       json['style']['borders'][0]['thickness'];
+    //   gateKeeper = true;
+    // }
 
     return gateKeeper ? tempChild : null;
   }

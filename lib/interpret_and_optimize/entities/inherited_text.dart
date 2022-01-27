@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
@@ -6,17 +5,12 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inhe
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
-import 'package:uuid/uuid.dart';
 
 part 'inherited_text.g.dart';
 
@@ -91,16 +85,14 @@ class InheritedText extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedTextFromJson(json)
-        ..originalRef = json
-        ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
-        ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
-        ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
-        ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
-        ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
-        ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json)
-        ..auxiliaryData.color =
-            PBColor.fromJson(json['style']['textStyle']['fontColor']);
+      _$InheritedTextFromJson(json)..originalRef = json
+      // ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
+      // ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
+      // ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
+      // ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
+      // ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
+      // ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json)
+      ;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
