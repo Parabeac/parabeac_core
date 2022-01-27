@@ -12,8 +12,9 @@ class FigmaToPBDLService implements DesignToPBDLService {
     return PBDL.fromFigma(
       info.figmaProjectID,
       info.figmaKey,
+      outputPath: p.join(info.genProjectPath, 'assets'),
       // Generating all assets inside lib folder for package isolation
-      outputPath: p.join(info.genProjectPath, 'lib', 'assets'),
+      pngPath: p.join(info.genProjectPath, 'lib', 'assets', 'images'),
       exportPbdlJson: info.exportPBDL,
       projectName: info.projectName,
     );
