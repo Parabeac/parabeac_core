@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
+import 'package:yaml_modify/yaml_modify.dart';
+import 'package:path/path.dart' as p;
 
 ///Responsible for writing code into files in the desired folder structure
 class PBFlutterWriter implements PBPageWriter {
@@ -10,7 +12,6 @@ class PBFlutterWriter implements PBPageWriter {
   static final PBFlutterWriter _instance = PBFlutterWriter._internal();
 
   factory PBFlutterWriter() => _instance;
-
 
   ///[fileAbsPath] should be the absolute path of the file
   @override
@@ -76,27 +77,59 @@ class MyApp extends StatelessWidget {
   }
 
   void submitDependencies(
-      String yamlAbsPath, Map<String, String> dependencies) async {
-    var line = 0;
-    var readYaml = File(yamlAbsPath).readAsLinesSync();
-    if (dependencies.isNotEmpty) {
-      line = readYaml.indexOf('dependencies:');
-      if (line > 0) {
-        dependencies.forEach((packageName, version) {
-          if (!readYaml.contains('  $packageName: $version')) {
-            readYaml.insert(++line, '  $packageName: $version');
-          }
-        });
+      String yamlAbsPath, Map<String, String> dependencies) {
+    var yamlStr = File(yamlAbsPath).readAsStringSync();
+    var modifiableyaml = getModifiableNode(loadYaml(yamlStr)) as Map;
 
-        dependencies.clear(); // Clear dependencies to prevent duplicates
+    /// Add new dependencies to pubspec.yaml
+    if (dependencies.isNotEmpty && modifiableyaml.containsKey('dependencies')) {
+      var yamlDeps = modifiableyaml['dependencies'] as Map;
+
+      /// Check if dependency already exists.
+      /// Add dependency if it does not exist already.
+      dependencies.forEach((name, version) {
+        if (!yamlDeps.containsKey(name)) {
+          yamlDeps[name] = version;
+        }
+      });
+
+      dependencies.clear();
+    }
+
+    /// Add assets
+    if (modifiableyaml.containsKey('flutter')) {
+      /// Create `assets` entry if does not exist
+      if (!modifiableyaml['flutter'].containsKey('assets')) {
+        modifiableyaml['flutter']['assets'] = [];
+      }
+
+      var yamlAssets = (modifiableyaml['flutter']['assets'] as List).cast<String>();
+
+      var assets = _getAssetFileNames();
+
+      /// Add dependency for each asset
+      for (var assetName in assets) {
+        if (!yamlAssets.any((str) => str.endsWith(assetName))) {
+          yamlAssets.add(
+              'packages/${MainInfo().projectName}/assets/images/$assetName');
+        }
       }
     }
-    line = readYaml.indexOf('flutter:');
-    if (line > 0) {
-      if (!readYaml.contains('  assets:')) {
-        readYaml.insert(++line, '  assets:\n    - assets/images/');
-      }
+
+    /// Write the new yaml file
+    File(yamlAbsPath).writeAsStringSync(toYamlString(modifiableyaml));
+  }
+
+  /// Returns a [List<String>] of all the `filenames` of `pngs` listed under `assets/images/`
+  List<String> _getAssetFileNames() {
+    try {
+      return Directory(MainInfo().pngPath)
+          .listSync()
+          .where((element) => element.path.endsWith('.png'))
+          .map((file) => p.basename(file.path))
+          .toList();
+    } catch (e) {
+      return [];
     }
-    File(yamlAbsPath).writeAsStringSync(readYaml.join('\n'));
   }
 }

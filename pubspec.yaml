@@ -26,6 +26,7 @@ dependencies:
     path: ./pbdl
   directed_graph: ^0.2.3
   sentry: ^6.2.2
+  yaml_modify: ^1.0.1
 
 dev_dependencies:
   pedantic: ^1.8.0

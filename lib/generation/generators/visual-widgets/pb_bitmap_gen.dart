@@ -40,8 +40,11 @@ class PBBitmapGenerator extends PBGenerator {
         ? 'assets/${source.referenceImage}' // Assuming PBDL will give us reference to image in the form of `image/<image_name>.png`
         : ('assets/images/' + source.UUID + '.png');
 
-    buffer.write(
-        '\'$imagePath\', ${_sizehelper.generate(source, generatorContext)} $boxFit)');
+    buffer.write('\'$imagePath\', ');
+    // Point package to self (for component isolation support)
+    buffer.write('package: \'${MainInfo().projectName}\',');
+    buffer.write('${_sizehelper.generate(source, generatorContext)} $boxFit)');
+
     return buffer.toString();
   }
 

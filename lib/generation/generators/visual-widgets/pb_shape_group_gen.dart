@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_shape_group.dart';
@@ -15,7 +16,7 @@ class PBShapeGroupGen extends PBGenerator {
     if (source is InheritedShapeGroup) {
       var buffer = StringBuffer();
       buffer.write(
-          'Image.asset(\'assets/images/${source.UUID}.png\', ${_sizehelper.generate(source)})');
+          'Image.asset(\'assets/images/${source.UUID}.png\', ${_sizehelper.generate(source)}), package: \'${MainInfo().projectName}\',');
       return buffer.toString();
     }
   }
