@@ -285,7 +285,7 @@ void collectArguments(ArgResults arguments) {
 
   /// In the future when we are generating certain dart files only.
   /// At the moment we are only generating in the flutter project.
-  info.pngPath = p.join(info.genProjectPath, 'assets/images');
+  info.pngPath = p.join(info.genProjectPath, 'lib/assets/images');
 }
 
 /// Determine the [MainInfo.designType] from the [arguments]
