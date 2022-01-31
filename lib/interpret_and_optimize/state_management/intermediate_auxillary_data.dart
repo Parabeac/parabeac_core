@@ -14,10 +14,11 @@ class IntermediateAuxiliaryData {
   Map alignment;
 
   /// All colors that may be needed
+  @JsonKey(name: 'fills')
   List<PBFill> colors;
 
   /// Info relating to a elements borders.
-  @JsonKey(ignore: true)
+  @JsonKey(name: 'borderOptions')
   PBBorderInfo borderInfo;
 
   /// Effect for widgets
