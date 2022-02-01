@@ -60,9 +60,11 @@ class Interpret {
       return Future.value(node);
     }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
         (PBContext context, PBIntermediateTree tree) {
-      tree
-          .whereType<BaseGroup>()
-          .forEach((node) => tree.remove(node, keepChildren: true));
+      //
+      var baseGroupList = tree.whereType<BaseGroup>();
+
+      baseGroupList.forEach((group) => tree.remove(group, keepChildren: true));
+
       return Future.value(tree);
     }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 
