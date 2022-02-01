@@ -48,9 +48,10 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
-
-    ImageReferenceStorage().addReferenceAndWrite(
-        UUID, p.join(MainInfo().outputPath, 'assets/images'), image);
+    if (image != null) {
+      ImageReferenceStorage().addReferenceAndWrite(
+          UUID, p.join(MainInfo().outputPath, 'assets/images'), image);
+    }
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {

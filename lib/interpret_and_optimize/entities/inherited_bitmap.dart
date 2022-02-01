@@ -44,9 +44,10 @@ class InheritedBitmap extends PBVisualIntermediateNode
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
-
-    ImageReferenceStorage()
-        .addReference(UUID, '${MainInfo().outputPath}assets/images');
+    if (name != null && name.isNotEmpty) {
+      ImageReferenceStorage()
+          .addReference(UUID, '${MainInfo().outputPath}assets/images');
+    }
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
