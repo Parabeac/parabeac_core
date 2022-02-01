@@ -59,7 +59,7 @@ class Interpret {
       elementStorage.elementToTree[node.UUID] = tree.UUID;
       return Future.value(node);
     }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
-        (PBContext context, PBIntermediateTree tree) {
+        (PBContext context, PBIntermediateTree tree) async {
       //
       var baseGroupList = tree.whereType<BaseGroup>();
 
