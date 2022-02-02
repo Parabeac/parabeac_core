@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_page_writer.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:yaml_modify/yaml_modify.dart';
-import 'package:path/path.dart' as p;
 
 ///Responsible for writing code into files in the desired folder structure
 class PBFlutterWriter implements PBPageWriter {
@@ -103,7 +103,8 @@ class MyApp extends StatelessWidget {
         modifiableyaml['flutter']['assets'] = [];
       }
 
-      var yamlAssets = (modifiableyaml['flutter']['assets'] as List).cast<String>();
+      var yamlAssets =
+          (modifiableyaml['flutter']['assets'] as List).cast<String>();
 
       var assets = _getAssetFileNames();
 
@@ -123,10 +124,10 @@ class MyApp extends StatelessWidget {
   /// Returns a [List<String>] of all the `filenames` of `pngs` listed under `assets/images/`
   List<String> _getAssetFileNames() {
     try {
-      return Directory(MainInfo().pngPath)
-          .listSync()
-          .where((element) => element.path.endsWith('.png'))
-          .map((file) => p.basename(file.path))
+      // Return names inside image reference storage
+      return ImageReferenceStorage()
+          .names
+          .map((imageName) => '${imageName.replaceAll(':', '_')}.png')
           .toList();
     } catch (e) {
       return [];
