@@ -13,11 +13,10 @@ class PBContext {
 
   Rectangle3D _screenFrame;
   Rectangle3D get screenFrame => _screenFrame;
-  set screenFrame(Rectangle3D frame){
+  set screenFrame(Rectangle3D frame) {
     canvasFrame ??= Rectangle3D.fromPoints(frame.topLeft, frame.bottomRight);
     _screenFrame = frame;
   }
-
 
   /// These values represent the current "focus area" size as it travels down the
   /// tree.
@@ -70,9 +69,7 @@ class PBContext {
     if (size == 0) {
       return size;
     }
-    return isHorizontal
-        ? size / screenFrame.width
-        : size / screenFrame.height;
+    return isHorizontal ? size / screenFrame.width : size / screenFrame.height;
   }
 
   PBContext clone() {
@@ -85,6 +82,30 @@ class PBContext {
         generationManager: generationManager);
     context.screenFrame = _screenFrame;
     return context;
+  }
+
+  PBContext copyWith({
+    PBConfiguration configuration,
+    PBIntermediateTree tree,
+    PBIntermediateConstraints contextConstraints,
+    PBSharedMasterNode masterNode,
+    PBProject project,
+    Rectangle3D canvasFrame,
+    PBGenerationManager generationManager,
+    SizingValueContext sizingContext,
+    Rectangle3D screenFrame,
+  }) {
+    return PBContext(
+      configuration ?? this.configuration,
+      tree: tree ?? this.tree,
+      contextConstraints: contextConstraints ?? this.contextConstraints,
+      masterNode: masterNode ?? this.masterNode,
+      project: project ?? this.project,
+      canvasFrame: canvasFrame ?? this.canvasFrame,
+      generationManager: generationManager ?? this.generationManager,
+    )
+      ..sizingContext = sizingContext ?? this.sizingContext
+      ..screenFrame = screenFrame ?? this.screenFrame;
   }
 }
 

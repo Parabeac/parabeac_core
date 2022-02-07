@@ -9,11 +9,12 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class PBTextGen extends PBGenerator {
   PBTextGen() : super();
 
+  static String cleanString(String text) =>
+      text.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
-      var cleanText =
-          source.text?.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
+      var cleanText = cleanString(source.text);
       context.project.genProjectData.addDependencies('auto_size_text', '3.0.0');
 
       context.managerData
