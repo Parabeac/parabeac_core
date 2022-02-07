@@ -11,7 +11,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
   return PBIntermediateRowLayout(
     name: json['name'] as String,
   )
-    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -39,7 +38,6 @@ PBIntermediateRowLayout _$PBIntermediateRowLayoutFromJson(
 Map<String, dynamic> _$PBIntermediateRowLayoutToJson(
         PBIntermediateRowLayout instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
           _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
