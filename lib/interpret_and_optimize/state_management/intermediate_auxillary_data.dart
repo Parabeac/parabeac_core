@@ -27,7 +27,7 @@ class IntermediateAuxiliaryData {
   /// Style for text
   PBTextStyle intermediateTextStyle;
 
-  /// Blanded color
+  /// Blended color
   @JsonKey(ignore: true)
   PBColor color;
 
@@ -37,7 +37,9 @@ class IntermediateAuxiliaryData {
     this.effects,
     this.intermediateTextStyle,
   }) {
-    color = _calculateBlendColor();
+    if (colors != null) {
+      color = _calculateBlendColor();
+    }
   }
 
   factory IntermediateAuxiliaryData.fromJson(Map<String, dynamic> json) =>
@@ -50,7 +52,7 @@ class IntermediateAuxiliaryData {
     var tempColor = [];
     if (colors.isNotEmpty) {
       colors.forEach((fill) {
-        if (fill.type == 'SOLID') {
+        if (fill.type == 'SOLID' && fill.isEnabled) {
           if (tempColor.isEmpty) {
             tempColor = _colorToList(fill);
           } else {
@@ -59,6 +61,9 @@ class IntermediateAuxiliaryData {
           }
         }
       });
+      if (tempColor.isEmpty) {
+        return null;
+      }
       return PBColor(tempColor[3], tempColor[0], tempColor[1], tempColor[2]);
     } else {
       return null;
@@ -69,11 +74,17 @@ class IntermediateAuxiliaryData {
   List<double> _addColors(List<double> base, List<double> added) {
     var tempColor = <double>[];
 
+    var calculatedPercentage = (added[3] + base[3]) / 100;
+
+    var addedPercentage = (added[3] / calculatedPercentage) / 100;
+
+    var basePercentage = (base[3] / calculatedPercentage) / 100;
+
     var calculatedAlpha = 1 - (1 - added[3]) * (1 - base[3]);
 
-    tempColor.add(((added[0] / 2) + (base[0] / 2)).roundToDouble());
-    tempColor.add(((added[1] / 2) + (base[1] / 2)).roundToDouble());
-    tempColor.add(((added[2] / 2) + (base[2] / 2)).roundToDouble());
+    tempColor.add((added[0] * addedPercentage) + (base[0] * basePercentage));
+    tempColor.add((added[1] * addedPercentage) + (base[1] * basePercentage));
+    tempColor.add((added[2] * addedPercentage) + (base[2] * basePercentage));
     tempColor.add(calculatedAlpha);
 
     return tempColor;
