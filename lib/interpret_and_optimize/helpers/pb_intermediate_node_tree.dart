@@ -125,6 +125,25 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     _elementStorage = ElementStorage();
   }
 
+  /// Finds a [PBIntermediateNode] that is a child of `parent` of `type` in the [PBIntermediateTree], containing `name`.
+  ///
+  /// Returns null if not found.
+  PBIntermediateNode findChild(PBIntermediateNode parent, String name, Type type) {
+    /// Check if the node is a match
+    if (parent.name.contains(name) && parent.runtimeType == type) {
+      return parent;
+    }
+
+    /// Check if node's children are a match
+    for (var child in childrenOf(parent)) {
+      var result = findChild(child, name, type);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
+  }
+
   /// These are observers of [Vertex<PBIntermediateNode>] that will be added into [this]
   void addChildrenObeserver(String UUID, ChildrenModEventHandler oberver) {
     var mods = _childrenModObservers[UUID] ?? [];
