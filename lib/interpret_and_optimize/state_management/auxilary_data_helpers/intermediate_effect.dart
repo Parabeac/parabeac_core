@@ -1,14 +1,14 @@
-import 'package:pbdl/pbdl.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'intermediate_effect.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PBEffect {
-  EffectType type;
+  String type;
   bool visible;
   num radius;
-  PBDLColor color;
+  PBColor color;
   String blendMode;
   Map offset;
   bool showShadowBehindNode;
@@ -28,11 +28,4 @@ class PBEffect {
   Map<String, dynamic> toJson() => _$PBEffectToJson(this);
   factory PBEffect.fromJson(Map<String, dynamic> json) =>
       _$PBEffectFromJson(json);
-}
-
-enum EffectType {
-  LAYER_BLUR,
-  DROP_SHADOW,
-  INNER_SHADOW,
-  BACKGROUND_BLUR,
 }
