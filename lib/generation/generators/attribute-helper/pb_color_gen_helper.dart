@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribut
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBColorGenHelper extends PBAttributesHelper {
@@ -39,6 +40,14 @@ class PBColorGenHelper extends PBAttributesHelper {
             ? 'color: $defaultColor,\n'
             : 'color: Color($color),\n';
     }
+  }
+
+  /// Get String from Color
+  String getHexColor(PBColor color) {
+    if (color == null) {
+      return '';
+    }
+    return 'color : Color(${color.toString()}),';
   }
 
   /// Finds default color based on common hex patterns.
