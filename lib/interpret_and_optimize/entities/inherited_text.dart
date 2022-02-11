@@ -35,18 +35,6 @@ class InheritedText extends PBVisualIntermediateNode
 
   @JsonKey(name: 'content')
   String text;
-  @JsonKey(ignore: true)
-  num fontSize;
-  @JsonKey(ignore: true)
-  String fontName;
-  @JsonKey(ignore: true)
-  String fontWeight; // one of the w100-w900 weights
-  @JsonKey(ignore: true)
-  String fontStyle; // normal, or italic
-  @JsonKey(ignore: true)
-  String textAlignment;
-  @JsonKey(ignore: true)
-  num letterSpacing;
 
   @override
   @JsonKey(ignore: true)
@@ -58,15 +46,9 @@ class InheritedText extends PBVisualIntermediateNode
     this.originalRef,
     name,
     this.alignmenttype,
-    this.fontName,
-    this.fontSize,
-    this.fontStyle,
-    this.fontWeight,
     this.isTextParameter,
-    this.letterSpacing,
     this.prototypeNode,
     this.text,
-    this.textAlignment,
   }) : super(
           UUID,
           frame,
@@ -85,14 +67,7 @@ class InheritedText extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedTextFromJson(json)..originalRef = json
-      // ..fontSize = InheritedTextPBDLHelper.fontSizeFromJson(json)
-      // ..fontName = InheritedTextPBDLHelper.fontNameFromJson(json)
-      // ..fontWeight = InheritedTextPBDLHelper.fontWeightFromJson(json)
-      // ..fontStyle = InheritedTextPBDLHelper.fontStyleFromJson(json)
-      // ..textAlignment = InheritedTextPBDLHelper.textAlignmentFromJson(json)
-      // ..letterSpacing = InheritedTextPBDLHelper.letterSpacingFromJson(json)
-      ;
+      _$InheritedTextFromJson(json)..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
