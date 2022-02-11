@@ -21,6 +21,7 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
     componentSetName: json['componentSetName'] as String,
     sharedNodeSetID: json['sharedNodeSetID'] as String,
   )
+    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -34,6 +35,7 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
       'layoutMainAxisSizing':
@@ -89,7 +91,7 @@ const _$ParentLayoutSizingEnumMap = {
 
 PBMasterOverride _$PBMasterOverrideFromJson(Map<String, dynamic> json) {
   return PBMasterOverride(
-    json['type'] as String,
+    json['pbdlType'] as String,
     PBMasterOverride._propertyNameFromJson(json['name'] as String),
     json['UUID'] as String,
   );
@@ -97,7 +99,7 @@ PBMasterOverride _$PBMasterOverrideFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBMasterOverrideToJson(PBMasterOverride instance) =>
     <String, dynamic>{
-      'type': instance.type,
+      'pbdlType': instance.type,
       'name': instance.propertyName,
       'UUID': instance.UUID,
     };
