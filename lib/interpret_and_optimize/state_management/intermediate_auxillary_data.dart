@@ -25,6 +25,7 @@ class IntermediateAuxiliaryData {
   List<PBEffect> effects;
 
   /// Style for text
+  @JsonKey(name: 'textStyle')
   PBTextStyle intermediateTextStyle;
 
   /// Blended color
@@ -52,20 +53,25 @@ class IntermediateAuxiliaryData {
     var tempColor = [];
     if (colors.isNotEmpty) {
       colors.forEach((fill) {
-        if (fill.type == 'SOLID' && fill.isEnabled) {
-          if (tempColor.isEmpty) {
-            tempColor = _colorToList(fill);
-          } else {
-            var temp = _colorToList(fill);
-            tempColor = _addColors(tempColor, temp);
+        if (fill.isEnabled) {
+          if (fill.type == 'SOLID') {
+            if (tempColor.isEmpty) {
+              tempColor = _colorToList(fill);
+            } else {
+              var temp = _colorToList(fill);
+              tempColor = _addColors(tempColor, temp);
+            }
           }
         }
       });
+      // In case tempColor never gets data
       if (tempColor.isEmpty) {
         return null;
       }
       return PBColor(tempColor[3], tempColor[0], tempColor[1], tempColor[2]);
-    } else {
+    }
+    // In case colors is empty
+    else {
       return null;
     }
   }

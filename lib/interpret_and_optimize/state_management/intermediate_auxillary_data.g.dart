@@ -20,10 +20,9 @@ IntermediateAuxiliaryData _$IntermediateAuxiliaryDataFromJson(
         ?.map((e) =>
             e == null ? null : PBEffect.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    intermediateTextStyle: json['intermediateTextStyle'] == null
+    intermediateTextStyle: json['textStyle'] == null
         ? null
-        : PBTextStyle.fromJson(
-            json['intermediateTextStyle'] as Map<String, dynamic>),
+        : PBTextStyle.fromJson(json['textStyle'] as Map<String, dynamic>),
   )..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
@@ -34,5 +33,5 @@ Map<String, dynamic> _$IntermediateAuxiliaryDataToJson(
       'fills': instance.colors?.map((e) => e?.toJson())?.toList(),
       'borderOptions': instance.borderInfo?.toJson(),
       'effects': instance.effects?.map((e) => e?.toJson())?.toList(),
-      'intermediateTextStyle': instance.intermediateTextStyle?.toJson(),
+      'textStyle': instance.intermediateTextStyle?.toJson(),
     };
