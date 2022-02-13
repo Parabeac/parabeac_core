@@ -1,4 +1,4 @@
-# <center>Parabeac-Core
+# <center>parabeac_core
 
 ![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
 
