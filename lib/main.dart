@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
@@ -11,6 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
+import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/component_isolation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
@@ -113,6 +115,7 @@ ${parser.usage}
   }
 
   collectArguments(argResults);
+
   var processInfo = MainInfo();
   if (processInfo.designType == DesignType.UNKNOWN) {
     throw UnsupportedError('We have yet to support this DesignType! ');
@@ -160,12 +163,20 @@ ${parser.usage}
 
   pbProject.forest.addAll(tempForest);
 
-  ///
-
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
+
   await fpb.preGenTasks();
+
+  /// Get ComponentIsolationService (if any), and add it to the list of services
+  var isolationTuple = ComponentIsolationFactory.getTuple(
+      MainInfo().configuration.componentIsolation);
+  if (isolationTuple != null) {
+    interpretService.aitHandlers.add(isolationTuple.service);
+    fpb.postGenTasks.add(IsolationPostGenTask(
+        isolationTuple.configuration, fpb.generationConfiguration));
+  }
   await indexFileFuture;
 
   var trees = <PBIntermediateTree>[];
@@ -200,6 +211,8 @@ ${parser.usage}
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, false);
   }
+
+  fpb.executePostGenTasks();
 
   exitCode = 0;
 }
