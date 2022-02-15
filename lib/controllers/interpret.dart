@@ -30,7 +30,7 @@ class Interpret {
 
   PBPrototypeLinkerService _pbPrototypeLinkerService;
 
-  final List<AITHandler> aitHandlers = [
+  List<AITHandler> aitHandlers = [
     StateManagementNodeInterpreter(),
     PBSymbolLinkerService(),
     // PBPluginControlService(),
@@ -43,9 +43,13 @@ class Interpret {
   Future<PBIntermediateTree> interpretAndOptimize(
       PBIntermediateTree tree, PBContext context, PBProject project,
       {List<AITHandler> handlers, AITServiceBuilder aitServiceBuilder}) async {
-    handlers ??= aitHandlers;
+    if (handlers == null || handlers.isEmpty) {
+      handlers = aitHandlers;
+    } else {
+      handlers.addAll(aitHandlers);
+    }
 
-    aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
+    aitServiceBuilder ??= AITServiceBuilder(handlers);
     var elementStorage = ElementStorage();
 
     elementStorage.elementToTree[tree.rootNode.UUID] = tree.UUID;
