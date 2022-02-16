@@ -1,12 +1,20 @@
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
-import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/component_isolation_configuration.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/component_isolation_generator.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
+import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/widgetbook_service.dart';
 
-class WidgetbookConfiguration implements ComponentIsolationConfiguration {
+class WidgetbookGenerator implements ComponentIsolationGenerator {
   @override
   String fileName = 'main_widgetbook.dart';
+
+  WidgetbookGenerator(this.projectData) {
+    projectData.addDependencies('widgetbook', '2.0.5-beta');
+  }
+
+  @override
+  PBGenerationProjectData projectData;
 
   @override
   String generateCode(ImportHelper helper) {

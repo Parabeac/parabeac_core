@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/widgetbook/entities/widgetbook_category.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/widgetbook/entities/widgetbook_folder.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/widgetbook/entities/widgetbook_use_case.dart';
@@ -8,10 +9,9 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/component_isolation_service.dart';
 import 'package:recase/recase.dart';
 
-class WidgetBookService extends ComponentIsolationService {
+class WidgetBookService extends AITHandler {
   /// Map that holds the name of the folder as its key, and the folder as its value.
 
   // FIXME: The reason these are static is because otherwise we'd need a service that can
@@ -21,6 +21,7 @@ class WidgetBookService extends ComponentIsolationService {
   static Map<String, WidgetBookWidget> _widgetBookWidgets;
   static WidgetBookCategory category = WidgetBookCategory();
   static final treeIds = <String>[];
+
   WidgetBookService() {
     _widgetBookFolders = {};
     _widgetBookWidgets = {};

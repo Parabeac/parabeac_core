@@ -7,12 +7,12 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/component_isolation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/component_isolation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
@@ -170,12 +170,14 @@ ${parser.usage}
   await fpb.preGenTasks();
 
   /// Get ComponentIsolationService (if any), and add it to the list of services
-  var isolationTuple = ComponentIsolationFactory.getTuple(
-      MainInfo().configuration.componentIsolation);
-  if (isolationTuple != null) {
-    interpretService.aitHandlers.add(isolationTuple.service);
+  var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
+    MainInfo().configuration.componentIsolation,
+    pbProject.genProjectData,
+  );
+  if (isolationConfiguration != null) {
+    interpretService.aitHandlers.add(isolationConfiguration.service);
     fpb.postGenTasks.add(IsolationPostGenTask(
-        isolationTuple.configuration, fpb.generationConfiguration));
+        isolationConfiguration.generator, fpb.generationConfiguration));
   }
   await indexFileFuture;
 
