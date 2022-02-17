@@ -57,6 +57,7 @@ final parser = ArgParser()
     help:
         'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
   )
+  ..addOption('oauth', help: 'Figma OAuth Token')
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
   ..addFlag('export-pbdl',
@@ -280,6 +281,7 @@ void collectArguments(ArgResults arguments) {
   /// Detect platform
   info.platform = Platform.operatingSystem;
 
+  info.figmaOauthToken = arguments['oauth'];
   info.figmaKey = arguments['figKey'];
   info.figmaProjectID = arguments['fig'];
 
@@ -311,7 +313,8 @@ void collectArguments(ArgResults arguments) {
 /// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
 /// to [DesignType.UNKNOWN].
 DesignType determineDesignTypeFromArgs(ArgResults arguments) {
-  if (arguments['figKey'] != null && arguments['fig'] != null) {
+  if ((arguments['figKey'] != null || arguments['oauth'] != null) &&
+      arguments['fig'] != null) {
     return DesignType.FIGMA;
   } else if (arguments['path'] != null) {
     return DesignType.SKETCH;
@@ -398,7 +401,7 @@ void addToAmplitude() async {
 /// types of intake to parabeac-core
 bool hasTooManyArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null || args['fig'] != null;
+  var hasFigma = args['figKey'] != null || args['fig'] != null || args['oauth'];
   var hasPbdl = args['pbdl-in'] != null;
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
@@ -410,7 +413,8 @@ bool hasTooManyArgs(ArgResults args) {
 /// to parabeac-core
 bool hasTooFewArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null && args['fig'] != null;
+  var hasFigma =
+      (args['figKey'] != null || args['oauth'] != null) && args['fig'] != null;
   var hasPbdl = args['pbdl-in'] != null;
 
   return !(hasSketch || hasFigma || hasPbdl);
