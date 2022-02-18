@@ -3,27 +3,27 @@
 ![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
 
 
-parabeac_core converts design files into isolated & responsive Flutter code, continuously.
+parabeac_core converts design files into isolated & responsive Flutter code for continuos design & development.
 
-[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/Parabeac-Core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
+[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/parabeac_core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
   <a href="https://docs.parabeac.com/docs/hello-world-guide">Hello World</a>
+  <span> · </span>
+  <a href="https://docs.parabeac.com/docs/creating-a-production-app/fundamental-laws-of-parabeac">Fundamental Laws of Parabeac</a>
   <span> · </span>
   <a href="https://discord.gg/qUrghes">Discord Community/Support</a>
   <span> · </span>
   <a href="https://dev.to/parabeac">Dev.to</a>
   <span> · </span>
   <a href="https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w">Youtube</a>
-    <span> · </span>
-    <a href="https://docs.parabeac.com/docs/creating-a-production-app/fundamental-laws-of-parabeac">Tutorials</a>
   <span> · </span>
-<a href="https://parabeac.notion.site/Parabeac-Reference-519a159f65cd4087b2672eea1807b721">Reference Docs</a>
+  <a href="https://parabeac.notion.site/Parabeac-Reference-519a159f65cd4087b2672eea1807b721">Reference Docs</a>
 
 </h3>
 
 # Why are we here?
-The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. Parabeac-Core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
+The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. parabeac_core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
 # Table of Contents
   * [Dependencies](#dependencies)
   * [Cloning parabeac_core](#cloning-parabeac_core)
@@ -38,7 +38,7 @@ The handoff between designers & developers is one of the most costly and frustra
 
 # Get Started
   
-  _If it's easier, you can run the code generation & send it to your Github repo by creating a free account using [Parabeac Nest](app.parabeac.com)._
+  You can run the code generation by creating a free account with [Parabeac Nest](https://app.parabeac.com) or by following the instructions below.
 
 ### Dependencies
 
@@ -48,9 +48,9 @@ The handoff between designers & developers is one of the most costly and frustra
  - [Figma File](https://figma.com) - [Sample](https://www.figma.com/file/Ysnjcij14HaE98ucq1iwW1/Parabeac-Counter-App-Demo?node-id=0%3A1)
 
 ## Cloning parabeac_core
-Because parabeac-core contains submodules, it is easiest to clone using the following command:
+Because parabeac_core contains submodules, it is easiest to clone using the following command:
 ```
-git clone --recurse-submodules https://github.com/Parabeac/Parabeac-Core.git
+git clone --recurse-submodules https://github.com/Parabeac/parabeac_core.git
 ```
 
 If you have already cloned you may need to pull the submodules:
@@ -97,7 +97,7 @@ We recommend following our [Hello World guide](https://docs.parabeac.com/docs/he
 
 
 ### Running a Figma Frame/Screen
-![Figma Frame Example](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/figma_frame_example.png?raw=true)
+![Figma Frame Example](https://github.com/Parabeac/parabeac_core/blob/stable/repo_assets/figma_frame_example.png?raw=true)
 #### Steps
 1. Open your generated project (Will be at the absolute path you set or in the parabeac_core directory)
 2. If your frame was designed to be a screen, you can quickly test it by editing the MaterialApp widget in main.dart like the following:
@@ -131,6 +131,13 @@ Container(
 ```
 1. Save the class and execute `flutter run` in your terminal & navigate your app to the expected location where the component should show up.
 
+# What's Next?
+Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world-guide) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
+  
+## Enabling the design team to create pull requests
+If you find the viability in the code generation to support continuous design changes, create a free account on [Parabeac Nest](https://app.parabeac.com) where you can create an integration between Figma & the project Github repo.
+## Stay up to date
+Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w), [Dev.to](https://dev.to/parabeac) &/or [Newsletter](https://share.hsforms.com/1uu1ZTrhPSwK69T2md__lCw5i54a) to stay up to date on product releases. And if you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose) or join our [Discord](https://discord.gg/qUrghes), we'd love to hear your feedback.
 # Other
 ## Metrics
-Parabeac-Core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
