@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_fill.dart';
 
 class PBColorGenHelper extends PBAttributesHelper {
   PBColorGenHelper() : super();
@@ -12,6 +13,13 @@ class PBColorGenHelper extends PBAttributesHelper {
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source == null) {
       return '';
+    }
+
+    if (source.auxiliaryData.colors != null &&
+        source.auxiliaryData.colors.first.type
+            .toLowerCase()
+            .contains('gradient')) {
+      return _gradientColor(source.auxiliaryData.colors.first);
     }
 
     var color = source.auxiliaryData.color?.toString();
@@ -40,6 +48,34 @@ class PBColorGenHelper extends PBAttributesHelper {
             ? 'color: $defaultColor,\n'
             : 'color: Color($color),\n';
     }
+  }
+
+  /// Generate gradient for decoration box
+  String _gradientColor(PBFill gradient) {
+    var beginX = _roundNumber(gradient.gradientHandlePositions[0].x);
+    var beginY = _roundNumber(gradient.gradientHandlePositions[0].y);
+    var endX = _roundNumber(gradient.gradientHandlePositions[1].x);
+    var endY = _roundNumber(gradient.gradientHandlePositions[1].y);
+
+    return '''
+    gradient: LinearGradient(
+          begin: Alignment($beginX,$beginY),
+          end: Alignment($endX,$endY), 
+          colors: <Color>[
+            Color(${gradient.gradientStops[0].color.toString()}),
+            Color(${gradient.gradientStops[1].color.toString()}),
+          ], 
+          stops: [
+            ${gradient.gradientStops[0].position},
+            ${gradient.gradientStops[1].position},
+          ],
+          tileMode: TileMode.clamp, 
+        ),
+    ''';
+  }
+
+  num _roundNumber(num coordinate) {
+    return (2 * coordinate) - 1;
   }
 
   /// Get String from Color
