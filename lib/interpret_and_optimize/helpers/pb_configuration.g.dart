@@ -17,6 +17,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     json['breakpoints'] as Map<String, dynamic>,
     json['scaling'] as bool ?? true,
     json['enablePrototyping'] as bool ?? false,
+    json['componentIsolation'] as String ?? 'None',
   );
 }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/writers/pb_flutter_writer.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -40,6 +41,9 @@ class FlutterProjectBuilder {
   FileSystemAnalyzer fileSystemAnalyzer;
 
   bool _configured = false;
+
+  /// Tasks to be run after generation is complete.
+  List<PostGenTask> postGenTasks = [];
 
   FlutterProjectBuilder(
     this.generationConfiguration,
@@ -121,6 +125,11 @@ class FlutterProjectBuilder {
     ]);
 
     ;
+  }
+
+  /// Runs all the tasks in
+  void executePostGenTasks() {
+    postGenTasks.forEach((task) => task.execute());
   }
 
   Future<void> genAITree(
