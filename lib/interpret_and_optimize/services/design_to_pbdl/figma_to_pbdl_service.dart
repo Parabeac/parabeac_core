@@ -11,7 +11,8 @@ class FigmaToPBDLService implements DesignToPBDLService {
   Future<PBDLProject> callPBDL(MainInfo info) {
     return PBDL.fromFigma(
       info.figmaProjectID,
-      info.figmaKey,
+      key: info.figmaKey,
+      oauthKey: info.figmaOauthToken,
       outputPath: p.join(info.genProjectPath, 'lib', 'assets'),
       // Generating all assets inside lib folder for package isolation
       pngPath: p.join(info.genProjectPath, 'lib', 'assets', 'images'),

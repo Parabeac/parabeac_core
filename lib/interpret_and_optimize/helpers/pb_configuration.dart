@@ -52,6 +52,9 @@ class PBConfiguration {
   @JsonKey(defaultValue: false)
   final bool enablePrototyping;
 
+  @JsonKey(defaultValue: 'None')
+  final String componentIsolation;
+
   PBConfiguration(
     this.widgetStyle,
     this.widgetType,
@@ -61,6 +64,7 @@ class PBConfiguration {
     this.breakpoints,
     this.scaling,
     this.enablePrototyping,
+    this.componentIsolation,
   );
 
   /// Converting the [json] into a [PBConfiguration] object.
