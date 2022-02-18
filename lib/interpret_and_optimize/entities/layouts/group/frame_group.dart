@@ -39,48 +39,27 @@ class FrameGroup extends Group
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var tempFrame = _$FrameGroupFromJson(json);
 
-    var tempChild = injectAContainer(json, tempFrame.frame)
-      ..constraints = tempFrame.constraints.copyWith();
+    // var tempChild = injectAContainer(json, tempFrame.frame);
 
-    if (tempChild != null) {
-      tree.addEdges(tempFrame, [tempChild]);
-    }
+    // if (tempChild != null) {
+    //   tempChild.constraints = tempFrame.constraints.copyWith();
+    //   tree.addEdges(tempFrame, [tempChild]);
+    // }
     return tempFrame
       ..mapRawChildren(json, tree)
       ..originalRef = json;
   }
 
-  PBIntermediateNode injectAContainer(
-      Map<String, dynamic> json, Rectangle3D parentFrame) {
-    var tempChild = InjectedContainer(
-      null,
-      Rectangle3D(parentFrame.left, parentFrame.top, parentFrame.width,
-          parentFrame.height, 0),
-      name: json['name'],
-    );
-    var gateKeeper = false;
-    // TODO: Fix
-    // if (json['style']['borderOptions']['cornerRadius'] != null) {
-    //   tempChild.auxiliaryData.borderInfo = IntermediateBorderInfo(
-    //       borderRadius: json['style']['borderOptions']['cornerRadius']);
-    //   tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-    //   gateKeeper = true;
-    // }
-    // if (json['style']['backgroundColor'] != null) {
-    //   tempChild.auxiliaryData.color =
-    //       PBColor.fromJson(json['style']['backgroundColor']);
-    //   gateKeeper = true;
-    // }
-    // if (json['style']['borders'][0]['isEnabled']) {
-    //   tempChild.auxiliaryData.borderInfo ??= IntermediateBorderInfo();
-    //   tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-    //   tempChild.auxiliaryData.borderInfo.color =
-    //       PBColor.fromJson(json['style']['borders'][0]['color']);
-    //   tempChild.auxiliaryData.borderInfo.thickness =
-    //       json['style']['borders'][0]['thickness'];
-    //   gateKeeper = true;
-    // }
+  // PBIntermediateNode injectAContainer(
+  //     Map<String, dynamic> json, Rectangle3D parentFrame) {
+  //   var tempChild = InjectedContainer(
+  //     null,
+  //     Rectangle3D(parentFrame.left, parentFrame.top, parentFrame.width,
+  //         parentFrame.height, 0),
+  //     name: json['name'],
+  //   );
+  //   var gateKeeper = false;
 
-    return gateKeeper ? tempChild : null;
-  }
+  //   return gateKeeper ? tempChild : null;
+  // }
 }
