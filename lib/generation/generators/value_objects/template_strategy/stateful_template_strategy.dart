@@ -14,11 +14,30 @@ class StatefulTemplateStrategy extends TemplateStrategy {
     var constructorName = '$widgetName';
     var returnStatement = node.generator.generate(node, generatorContext);
 
+    /// Represents the overrides for the constructor.
+    var overrides = '';
+
+    /// Represents the overrides for the class variables.
+    var overrideVars = '';
+
+    if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
+      node.overridableProperties.forEach((prop) {
+        var overrideType = 'Widget?';
+        if (prop.type == 'stringValue') {
+          overrideType = 'String?';
+        }
+        overrides += 'this.${prop.propertyName}, ';
+        overrideVars += 'final $overrideType ${prop.propertyName};';
+      });
+    }
+
     return '''
 ${manager.generateImports()}
 
 class $widgetName extends StatefulWidget{
-  const $widgetName({Key? key}) : super(key: key);
+  ${node is PBSharedMasterNode ? 'final constraints;' : ''}
+  $overrideVars
+  const $widgetName(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, $overrides}) : super(key: key);
   @override
   _$widgetName createState() => _$widgetName();
 }
