@@ -154,15 +154,16 @@ class PBLayoutGenerationService extends AITHandler {
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<Group>().forEach((tempGroup) {
       tree.replaceNode(
-          tempGroup,
-          PBIntermediateStackLayout(
-            name: tempGroup.name,
-            constraints: tempGroup.constraints.copyWith(),
-          )
-            ..frame = tempGroup.frame
-            ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
-            ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing,
-          acceptChildren: true);
+        tempGroup,
+        PBIntermediateStackLayout(
+          name: tempGroup.name,
+          constraints: tempGroup.constraints.copyWith(),
+        )
+          ..frame = tempGroup.frame.copyWith()
+          ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
+          ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing,
+        acceptChildren: true,
+      );
     });
   }
 
