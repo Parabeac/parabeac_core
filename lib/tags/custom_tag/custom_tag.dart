@@ -1,4 +1,3 @@
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -17,7 +16,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dar
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:parabeac_core/tags/custom_tag/custom_tag_bloc_generator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -26,13 +24,16 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   String semanticName = '<custom>';
 
   @override
+  String name;
+
+  @override
   ParentLayoutSizing layoutCrossAxisSizing;
   @override
   ParentLayoutSizing layoutMainAxisSizing;
   CustomTag(
     String UUID,
     Rectangle3D frame,
-    String name, {
+    this.name, {
     PBIntermediateConstraints constraints,
     this.layoutCrossAxisSizing,
     this.layoutMainAxisSizing,
@@ -63,7 +64,7 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       PBIntermediateTree tree) {
     return CustomTag(
       null,
-      frame,
+      frame.copyWith(),
       originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
       constraints: originalRef.constraints.copyWith(),
       layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
