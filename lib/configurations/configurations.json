@@ -10,5 +10,6 @@
     "desktop": 1280
   },
   "scaling": true,
-  "enablePrototyping": false
+  "enablePrototyping": false,
+  "componentIsolation": "none"
 }

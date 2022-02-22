@@ -30,7 +30,7 @@ class Interpret {
 
   PBPrototypeLinkerService _pbPrototypeLinkerService;
 
-  final List<AITHandler> aitHandlers = [
+  List<AITHandler> aitHandlers = [
     StateManagementNodeInterpreter(),
     PBSymbolLinkerService(),
     // PBPluginControlService(),
@@ -43,9 +43,13 @@ class Interpret {
   Future<PBIntermediateTree> interpretAndOptimize(
       PBIntermediateTree tree, PBContext context, PBProject project,
       {List<AITHandler> handlers, AITServiceBuilder aitServiceBuilder}) async {
-    handlers ??= aitHandlers;
+    if (handlers == null || handlers.isEmpty) {
+      handlers = aitHandlers;
+    } else {
+      handlers.addAll(aitHandlers);
+    }
 
-    aitServiceBuilder ??= AITServiceBuilder(aitHandlers);
+    aitServiceBuilder ??= AITServiceBuilder(handlers);
     var elementStorage = ElementStorage();
 
     elementStorage.elementToTree[tree.rootNode.UUID] = tree.UUID;
@@ -59,10 +63,12 @@ class Interpret {
       elementStorage.elementToTree[node.UUID] = tree.UUID;
       return Future.value(node);
     }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
-        (PBContext context, PBIntermediateTree tree) {
-      tree
-          .whereType<BaseGroup>()
-          .forEach((node) => tree.remove(node, keepChildren: true));
+        (PBContext context, PBIntermediateTree tree) async {
+      //
+      var baseGroupList = tree.whereType<BaseGroup>();
+
+      baseGroupList.forEach((group) => tree.remove(group, keepChildren: true));
+
       return Future.value(tree);
     }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
 

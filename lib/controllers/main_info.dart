@@ -57,7 +57,10 @@ class MainInfo {
   String get projectName => _projectName ?? configuration?.projectName;
   set projectName(String name) => _projectName = name;
 
-  /// API needed to do API callls
+  /// OAuth Token to call Figma API
+  String figmaOauthToken;
+
+  /// API key needed to do API calls
   String figmaKey;
 
   /// Project ID on Figma

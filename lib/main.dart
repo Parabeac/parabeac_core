@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/component_isolation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -55,6 +57,7 @@ final parser = ArgParser()
     help:
         'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
   )
+  ..addOption('oauth', help: 'Figma OAuth Token')
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
   ..addFlag('export-pbdl',
@@ -113,6 +116,7 @@ ${parser.usage}
   }
 
   collectArguments(argResults);
+
   var processInfo = MainInfo();
   if (processInfo.designType == DesignType.UNKNOWN) {
     throw UnsupportedError('We have yet to support this DesignType! ');
@@ -160,12 +164,22 @@ ${parser.usage}
 
   pbProject.forest.addAll(tempForest);
 
-  ///
-
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
+
   await fpb.preGenTasks();
+
+  /// Get ComponentIsolationService (if any), and add it to the list of services
+  var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
+    MainInfo().configuration.componentIsolation,
+    pbProject.genProjectData,
+  );
+  if (isolationConfiguration != null) {
+    interpretService.aitHandlers.add(isolationConfiguration.service);
+    fpb.postGenTasks.add(IsolationPostGenTask(
+        isolationConfiguration.generator, fpb.generationConfiguration));
+  }
   await indexFileFuture;
 
   var trees = <PBIntermediateTree>[];
@@ -200,6 +214,8 @@ ${parser.usage}
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, false);
   }
+
+  fpb.executePostGenTasks();
 
   exitCode = 0;
 }
@@ -265,6 +281,7 @@ void collectArguments(ArgResults arguments) {
   /// Detect platform
   info.platform = Platform.operatingSystem;
 
+  info.figmaOauthToken = arguments['oauth'];
   info.figmaKey = arguments['figKey'];
   info.figmaProjectID = arguments['fig'];
 
@@ -285,7 +302,7 @@ void collectArguments(ArgResults arguments) {
 
   /// In the future when we are generating certain dart files only.
   /// At the moment we are only generating in the flutter project.
-  info.pngPath = p.join(info.genProjectPath, 'assets/images');
+  info.pngPath = p.join(info.genProjectPath, 'lib/assets/images');
 }
 
 /// Determine the [MainInfo.designType] from the [arguments]
@@ -296,7 +313,8 @@ void collectArguments(ArgResults arguments) {
 /// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
 /// to [DesignType.UNKNOWN].
 DesignType determineDesignTypeFromArgs(ArgResults arguments) {
-  if (arguments['figKey'] != null && arguments['fig'] != null) {
+  if ((arguments['figKey'] != null || arguments['oauth'] != null) &&
+      arguments['fig'] != null) {
     return DesignType.FIGMA;
   } else if (arguments['path'] != null) {
     return DesignType.SKETCH;
@@ -383,7 +401,7 @@ void addToAmplitude() async {
 /// types of intake to parabeac-core
 bool hasTooManyArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null || args['fig'] != null;
+  var hasFigma = args['figKey'] != null || args['fig'] != null || args['oauth'];
   var hasPbdl = args['pbdl-in'] != null;
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
@@ -395,7 +413,8 @@ bool hasTooManyArgs(ArgResults args) {
 /// to parabeac-core
 bool hasTooFewArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null && args['fig'] != null;
+  var hasFigma =
+      (args['figKey'] != null || args['oauth'] != null) && args['fig'] != null;
   var hasPbdl = args['pbdl-in'] != null;
 
   return !(hasSketch || hasFigma || hasPbdl);
