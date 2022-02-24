@@ -24,14 +24,18 @@ class PBAlignGenerationService extends AITHandler {
       if (element is PBIntermediateNode &&
           (element.parent?.constraints?.fixedHeight ?? false)) {
         element.constraints.fixedHeight = true;
-        element.constraints.pinTop = true;
-        element.constraints.pinBottom = false;
+        if (element.constraints.pinTop == element.constraints.pinBottom) {
+          element.constraints.pinTop = true;
+          element.constraints.pinBottom = false;
+        }
       }
       if (element is PBIntermediateNode &&
           (element.parent?.constraints?.fixedWidth ?? false)) {
         element.constraints.fixedWidth = true;
-        element.constraints.pinLeft = true;
-        element.constraints.pinRight = false;
+        if (element.constraints.pinLeft == element.constraints.pinBottom) {
+          element.constraints.pinLeft = true;
+          element.constraints.pinRight = false;
+        }
       }
     });
     tree.rootNode.align(context);
