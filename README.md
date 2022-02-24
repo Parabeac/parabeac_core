@@ -150,7 +150,11 @@ If you find the viability in the code generation to support continuous design ch
 Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w), [Dev.to](https://dev.to/parabeac) &/or [Newsletter](https://share.hsforms.com/1uu1ZTrhPSwK69T2md__lCw5i54a) to stay up to date on product releases. And if you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose) or join our [Discord](https://discord.gg/qUrghes), we'd love to hear your feedback.
 # Other
 ## All parabeac_core Configurations
-  /// Some Table
+* `"componentIsolation"` - _Valid Values Below_
+  * `"none"`
+  * `"widgetbook"` -- Generates a Widgetbook file 
+* `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
+  * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
   
 ## Metrics
 parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
