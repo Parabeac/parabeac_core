@@ -155,7 +155,11 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 >>>>>>> 82e3e33a (Update README for Widgetbook Support)
 # Other
 ## All parabeac_core Configurations
-  /// Some Table
+* `"componentIsolation"` - _Valid Values Below_
+  * `"none"`
+  * `"widgetbook"` -- Generates a Widgetbook file 
+* `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
+  * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
   
 ## Metrics
 Parabeac-Core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
