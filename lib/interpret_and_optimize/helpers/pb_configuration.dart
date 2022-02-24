@@ -28,23 +28,23 @@ class PBConfiguration {
 
   String outputDirPath;
 
-  @JsonKey(defaultValue: 'Material')
-  final String widgetStyle;
+  // @JsonKey(defaultValue: 'Material')
+  final String widgetStyle = 'Material';
 
   @JsonKey(defaultValue: true)
   final bool scaling;
 
-  @JsonKey(defaultValue: 'Stateless')
-  final String widgetType;
+  // @JsonKey(defaultValue: 'Stateless')
+  final String widgetType = 'Stateless';
 
-  @JsonKey(defaultValue: 'Expanded')
-  final String widgetSpacing;
+  // @JsonKey(defaultValue: 'Expanded')
+  final String widgetSpacing = 'Expanded';
 
-  @JsonKey(defaultValue: 'None', name: 'state-management')
-  final String stateManagement;
+  // @JsonKey(defaultValue: 'None', name: 'state-management')
+  final String stateManagement = 'none';
 
-  @JsonKey(defaultValue: ['column', 'row', 'stack'])
-  final List<String> layoutPrecedence;
+  // @JsonKey(defaultValue: ['column', 'row', 'stack'])
+  final List<String> layoutPrecedence = ['column', 'row', 'stack'];
 
   @JsonKey(name: 'breakpoints')
   final Map breakpoints;
@@ -56,11 +56,11 @@ class PBConfiguration {
   final String componentIsolation;
 
   PBConfiguration(
-    this.widgetStyle,
-    this.widgetType,
-    this.widgetSpacing,
-    this.stateManagement,
-    this.layoutPrecedence,
+    // this.widgetStyle,
+    // this.widgetType,
+    // this.widgetSpacing,
+    // this.stateManagement,
+    // this.layoutPrecedence,
     this.breakpoints,
     this.scaling,
     this.enablePrototyping,
@@ -73,8 +73,8 @@ class PBConfiguration {
   /// value that is comming from [stateManagement].
   factory PBConfiguration.fromJson(Map<String, dynamic> json) {
     var configuration = _$PBConfigurationFromJson(json);
-    configuration.generationConfiguration =
-        availableGenConfigs[configuration.stateManagement.toLowerCase()];
+    // configuration.generationConfiguration =
+    //     availableGenConfigs[configuration.stateManagement.toLowerCase()];
     configuration.generationConfiguration ??= StatefulGenerationConfiguration();
     return configuration;
   }
@@ -83,11 +83,11 @@ class PBConfiguration {
   /// to take in.
   factory PBConfiguration.genericConfiguration() {
     var defaultConfigs = <String, dynamic>{
-      'widgetStyle': 'Material',
-      'widgetType': 'Stateless',
-      'widgetSpacing': 'Expanded',
-      'layoutPrecedence': ['columns', 'rows', 'stack'],
-      'state-management': 'None'
+      // 'widgetStyle': 'Material',
+      // 'widgetType': 'Stateless',
+      // 'widgetSpacing': 'Expanded',
+      // 'layoutPrecedence': ['columns', 'rows', 'stack'],
+      // 'state-management': 'None'
     };
     return PBConfiguration.fromJson(defaultConfigs);
   }
