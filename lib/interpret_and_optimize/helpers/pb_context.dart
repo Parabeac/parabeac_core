@@ -119,6 +119,9 @@ enum SizingValueContext {
   /// Should conform to the Layout Builder code, usually used when calling views.
   LayoutBuilderValue,
 
+  /// Same as LayoutBuilderValue, but gets constraints from the parent.
+  LayoutBuilderStatefulValue,
+
   /// TODO: Remove
   AppBarChild,
 }
