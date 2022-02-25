@@ -149,4 +149,9 @@ class PBMasterOverride {
 
   static String _propertyNameFromJson(String name) =>
       name.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').camelCase;
+
+  /// Generated the given [PBMasterOverride]
+  String generateOverride() {
+    return 'widget.$propertyName ?? ';
+  }
 }
