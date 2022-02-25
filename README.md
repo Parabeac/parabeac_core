@@ -3,7 +3,7 @@
 ![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
 
 
-parabeac_core converts design files into isolated & responsive Flutter code for continuos design & development.
+parabeac_core converts design files into isolated & responsive Flutter code for continuous design & development.
 
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/parabeac_core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
@@ -33,8 +33,10 @@ The handoff between designers & developers is one of the most costly and frustra
   * [Running the generated code](#running-the-generated-code)
     * [Running a Figma Frame/Screen](#running-a-figma-framescreen)
     * [Running a Figma Component](#running-a-figma-component)
+    * [Running a Component Package with Widgetbook](#running-a-component-package)
   * [Other](#other)
-    * [Metrics](#metrics)
+    * [All parabeac_core configurations](#all-parabeac_core-configurations)
+    * [Metrics](#metrics)   
 
 # Get Started
   
@@ -130,7 +132,15 @@ Container(
 )
 ```
 1. Save the class and execute `flutter run` in your terminal & navigate your app to the expected location where the component should show up.
+  
+  
+### Running a component package
+The best way to run and test a component package is to use tools like Storybook.js. We have an autogen for [Widgetbook](https://github.com/widgetbook/widgetbook). If you head over to `parabeac_core/lib/configurations/configurations.json` you can assign the property "componentIsolation" to "widgetbook" like the following.
+  
+<img width="418" alt="Configurations for Widgetbook" src="https://user-images.githubusercontent.com/13757212/155424179-18156f1f-41ad-44e7-bd70-180bfc9d8ccc.png">
 
+  _Be sure to use Figma Components_  
+  
 # What's Next?
 Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world-guide) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
   
@@ -139,5 +149,12 @@ If you find the viability in the code generation to support continuous design ch
 ## Stay up to date
 Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w), [Dev.to](https://dev.to/parabeac) &/or [Newsletter](https://share.hsforms.com/1uu1ZTrhPSwK69T2md__lCw5i54a) to stay up to date on product releases. And if you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose) or join our [Discord](https://discord.gg/qUrghes), we'd love to hear your feedback.
 # Other
+## All parabeac_core Configurations
+* `"componentIsolation"` - _Valid Values Below_
+  * `"none"`
+  * `"widgetbook"` -- Generates a Widgetbook file 
+* `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
+  * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
+  
 ## Metrics
 parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
