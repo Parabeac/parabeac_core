@@ -137,7 +137,7 @@ Container(
 ### Running a component package
 The best way to run and test a component package is to use tools like Storybook.js. We have an autogen for [Widgetbook](https://github.com/widgetbook/widgetbook). If you head over to `parabeac_core/lib/configurations/configurations.json` you can assign the property "componentIsolation" to "widgetbook" like the following.
   
-<img width="418" alt="Configurations for Widgetbook" src="https://user-images.githubusercontent.com/13757212/155424179-18156f1f-41ad-44e7-bd70-180bfc9d8ccc.png">
+<img width="533" alt="Configurations for Widgetbook" src="https://user-images.githubusercontent.com/13757212/156039026-bb3e22f7-5d55-4f68-ba1a-d420177594cb.png">
 
   _Be sure to use Figma Components_  
   
