@@ -20,14 +20,26 @@ class StatefulTemplateStrategy extends TemplateStrategy {
     /// Represents the overrides for the class variables.
     var overrideVars = '';
 
+    /// Represents the override name and how many times it appears on the list.
+    var ovrCount = <String, int>{};
+
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
-        var overrideType = 'Widget?';
-        if (prop.type == 'stringValue') {
-          overrideType = 'String?';
+        /// Add the property to the overrides if not repeated.
+        ///
+        /// TODO: Add support for repeated properties.
+        /// The issue is that for instances, we cannot change the name from PBDL,
+        /// so we need a way to detect repeated overrides in a single place.
+        if (!ovrCount.containsKey(prop.propertyName)) {
+          ovrCount[prop.propertyName] = 0;
+
+          var overrideType = 'Widget?';
+          if (prop.type == 'stringValue') {
+            overrideType = 'String?';
+          }
+          overrides += 'this.${prop.propertyName}, ';
+          overrideVars += 'final $overrideType ${prop.propertyName};';
         }
-        overrides += 'this.${prop.propertyName}, ';
-        overrideVars += 'final $overrideType ${prop.propertyName};';
       });
     }
 
