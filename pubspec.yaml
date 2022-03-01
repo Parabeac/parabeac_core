@@ -25,7 +25,7 @@ dependencies:
   pbdl:
     git: 
       url: git@github.com:Parabeac/pbdl.git
-      ref: dev #TODO: Change this to stable once the PR on PBDL gets merged
+      ref: master
   directed_graph: ^0.2.3
   sentry: ^6.2.2
   yaml_modify: ^1.0.1
