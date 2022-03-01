@@ -99,7 +99,8 @@ class MyApp extends StatelessWidget {
     /// Add assets
     if (modifiableyaml.containsKey('flutter')) {
       /// Create `assets` entry if does not exist
-      if (!modifiableyaml['flutter'].containsKey('assets')) {
+      if (!modifiableyaml['flutter'].containsKey('assets') ||
+          modifiableyaml['flutter']['assets'] == null) {
         modifiableyaml['flutter']['assets'] = [];
       }
 
