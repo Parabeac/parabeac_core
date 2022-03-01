@@ -99,7 +99,8 @@ class MyApp extends StatelessWidget {
     /// Add assets
     if (modifiableyaml.containsKey('flutter')) {
       /// Create `assets` entry if does not exist
-      if (!modifiableyaml['flutter'].containsKey('assets')) {
+      if (!modifiableyaml['flutter'].containsKey('assets') ||
+          modifiableyaml['flutter']['assets'] == null) {
         modifiableyaml['flutter']['assets'] = [];
       }
 
@@ -110,7 +111,7 @@ class MyApp extends StatelessWidget {
 
       /// Add dependency for each asset
       for (var assetName in assets) {
-        if (!yamlAssets.any((str) => str.endsWith(assetName))) {
+        if (!yamlAssets.any((str) => str.endsWith('/$assetName'))) {
           yamlAssets.add(
               'packages/${MainInfo().projectName}/assets/images/$assetName');
         }
