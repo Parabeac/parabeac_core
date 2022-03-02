@@ -14,11 +14,42 @@ class StatefulTemplateStrategy extends TemplateStrategy {
     var constructorName = '$widgetName';
     var returnStatement = node.generator.generate(node, generatorContext);
 
+    /// Represents the overrides for the constructor.
+    var overrides = '';
+
+    /// Represents the overrides for the class variables.
+    var overrideVars = '';
+
+    /// Represents the override name and how many times it appears on the list.
+    var ovrCount = <String, int>{};
+
+    if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
+      node.overridableProperties.forEach((prop) {
+        /// Add the property to the overrides if not repeated.
+        ///
+        /// TODO: Add support for repeated properties.
+        /// The issue is that for instances, we cannot change the name from PBDL,
+        /// so we need a way to detect repeated overrides in a single place.
+        if (!ovrCount.containsKey(prop.propertyName)) {
+          ovrCount[prop.propertyName] = 0;
+
+          var overrideType = 'Widget?';
+          if (prop.type == 'stringValue') {
+            overrideType = 'String?';
+          }
+          overrides += 'this.${prop.propertyName}, ';
+          overrideVars += 'final $overrideType ${prop.propertyName};';
+        }
+      });
+    }
+
     return '''
 ${manager.generateImports()}
 
 class $widgetName extends StatefulWidget{
-  const $widgetName({Key? key}) : super(key: key);
+  ${node is PBSharedMasterNode ? 'final constraints;' : ''}
+  $overrideVars
+  const $widgetName(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, $overrides}) : super(key: key);
   @override
   _$widgetName createState() => _$widgetName();
 }

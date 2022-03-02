@@ -1,5 +1,7 @@
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -29,4 +31,45 @@ abstract class PBTag extends PBVisualIntermediateNode {
       PBIntermediateTree tree);
 
   void extractInformation(PBIntermediateNode incomingNode);
+
+  /// Handles `iNode` to convert into a [PBTag].
+  ///
+  /// Returns the [PBIntermediateNode] that should go into the [PBIntermediateTree]
+  PBIntermediateNode handleIntermediateNode(
+    PBIntermediateNode iNode,
+    PBIntermediateNode parent,
+    PBTag tag,
+    PBIntermediateTree tree,
+  ) {
+    iNode.name = iNode.name.replaceAll(tag.semanticName, '');
+
+    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
+    // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
+    // `iNode` at the end.
+    if (iNode is PBSharedMasterNode) {
+      return iNode;
+    } else if (iNode is PBSharedInstanceIntermediateNode) {
+      iNode.parent = parent;
+
+      tree.replaceNode(iNode, tag);
+
+      tree.addEdges(tag, [iNode]);
+
+      return tag;
+    } else {
+      // [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
+      iNode.parent = parent;
+      // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
+      if (tree.childrenOf(iNode).isEmpty || iNode is PBLayoutIntermediateNode) {
+        /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
+        tree.removeEdges(iNode.parent, [iNode]);
+        tree.addEdges(tag, [iNode]);
+        tree.addEdges(parent, [tag]);
+        return tag;
+      }
+      tree.replaceNode(iNode, tag, acceptChildren: true);
+
+      return tag;
+    }
+  }
 }
