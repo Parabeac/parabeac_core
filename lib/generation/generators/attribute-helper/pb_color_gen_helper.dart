@@ -57,21 +57,33 @@ class PBColorGenHelper extends PBAttributesHelper {
     var endX = _roundNumber(gradient.gradientHandlePositions[1].x);
     var endY = _roundNumber(gradient.gradientHandlePositions[1].y);
 
+    var gradientInfo = _getGradientInfo(gradient);
+
     return '''
     gradient: LinearGradient(
           begin: Alignment($beginX,$beginY),
           end: Alignment($endX,$endY), 
           colors: <Color>[
-            Color(${gradient.gradientStops[0].color.toString()}),
-            Color(${gradient.gradientStops[1].color.toString()}),
+            ${gradientInfo[0]}
           ], 
           stops: [
-            ${gradient.gradientStops[0].position},
-            ${gradient.gradientStops[1].position},
+            ${gradientInfo[1]}
           ],
           tileMode: TileMode.clamp, 
         ),
     ''';
+  }
+
+  /// Gradient info is a list
+  /// 0 is for gradient color
+  /// 1 is for gradient stop position
+  List<String> _getGradientInfo(PBFill gradient) {
+    var gradientInfo = <String>['', ''];
+    for (var stop in gradient.gradientStops) {
+      gradientInfo[0] += 'Color(${stop.color.toString()}),';
+      gradientInfo[1] += '${stop.position},';
+    }
+    return gradientInfo;
   }
 
   num _roundNumber(num coordinate) {
