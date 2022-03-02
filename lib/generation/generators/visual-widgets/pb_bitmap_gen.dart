@@ -2,12 +2,10 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_size_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:path/path.dart' as p;
 
 class PBBitmapGenerator extends PBGenerator {
   var _sizehelper;
@@ -24,14 +22,14 @@ class PBBitmapGenerator extends PBGenerator {
     var buffer = StringBuffer();
     var imageOverride = OverrideHelper.getProperty(source.UUID, 'image');
     if (imageOverride != null) {
-      buffer.write('${imageOverride.propertyName} ?? ');
+      buffer.write(imageOverride.generateOverride());
     }
 
     buffer.write('Image.asset(');
 
     var styleOverride = OverrideHelper.getProperty(source.UUID, 'layerStyle');
     if (styleOverride != null) {
-      buffer.write('${styleOverride.propertyName} ?? ');
+      buffer.write(styleOverride.generateOverride());
     }
 
     var boxFit = _getBoxFit(source);

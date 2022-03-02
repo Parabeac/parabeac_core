@@ -14,7 +14,7 @@ class ComponentIsolationConfiguration {
 
   factory ComponentIsolationConfiguration.getConfiguration(
       String type, PBGenerationProjectData projectData) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'widgetbook':
         return ComponentIsolationConfiguration._internal(
             WidgetbookGenerator(projectData), WidgetBookService());

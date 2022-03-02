@@ -29,14 +29,14 @@ class PBTextGen extends PBGenerator {
         var textOverride =
             OverrideHelper.getProperty(source.UUID, 'stringValue');
         if (textOverride != null) {
-          buffer.write('${textOverride.propertyName} ?? ');
+          buffer.write(textOverride.generateOverride());
         }
         buffer.write(('\'$cleanText\'') + ',\n');
       }
       buffer.write('style: ');
       var styleOverride = OverrideHelper.getProperty(source.UUID, 'textStyle');
       if (styleOverride != null) {
-        buffer.write('${styleOverride.propertyName} ?? ');
+        buffer.write(styleOverride.generateOverride());
       }
 
       buffer.write('TextStyle(\n');

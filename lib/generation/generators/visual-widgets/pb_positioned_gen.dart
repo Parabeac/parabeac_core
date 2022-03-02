@@ -79,6 +79,13 @@ class PBPositionedGenerator extends PBGenerator {
       } else {
         return 'constraints.maxHeight *';
       }
+    } else if (sizingValueContext ==
+        SizingValueContext.LayoutBuilderStatefulValue) {
+      if (_positionedValue.isXAxis) {
+        return 'widget.constraints.maxWidth *';
+      } else {
+        return 'widget.constraints.maxHeight *';
+      }
     }
 
     if (_positionedValue.remainPointValue ||
