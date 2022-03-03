@@ -60,6 +60,17 @@ class PBSizeHelper extends PBAttributesHelper {
 
       heightString =
           'height: constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},';
+    } else if (context.sizingContext ==
+        SizingValueContext.LayoutBuilderStatefulValue) {
+      relativeWidth = relativeWidth / screenWidth;
+      relativeHeight = relativeHeight / screenHeight;
+
+      // Size for LayoutBuilder
+      widthString =
+          'width: widget.constraints.maxWidth * ${relativeWidth.toStringAsFixed(3)},';
+
+      heightString =
+          'height: widget.constraints.maxHeight * ${relativeHeight.toStringAsFixed(3)},';
     } else {
       // Size for constants value
       widthString = 'width: ${relativeWidth.toStringAsFixed(3)},';
