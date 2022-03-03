@@ -13,6 +13,7 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
       final buffer = StringBuffer();
       buffer.write('decoration: BoxDecoration(');
       var borderInfo = source.auxiliaryData.borderInfo;
+      var effectsInfo = source.auxiliaryData.effects;
       var colors = source.auxiliaryData.colors;
       if (colors != null && colors.isNotEmpty) {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
@@ -47,6 +48,25 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
             }
           }
         }
+      }
+
+      if (effectsInfo != null &&
+          effectsInfo.isNotEmpty &&
+          effectsInfo.first.type.toLowerCase().contains('shadow')) {
+        buffer.write('boxShadow: [');
+
+        for (var effect in effectsInfo) {
+          buffer.write('''
+            BoxShadow(
+              ${PBColorGenHelper().getHexColor(effect.color)}
+              spreadRadius: ${effect.radius},
+              blurRadius: ${effect.radius},
+              offset: Offset(${effect.offset['x']}, ${effect.offset['y']}),
+            ),
+          ''');
+        }
+
+        buffer.write('],');
       }
       buffer.write('),');
 
