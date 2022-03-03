@@ -83,7 +83,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     PBSharedMasterNode master = PBSharedMasterNode.fromJson(json)
-      ..mapRawChildren(json, tree);
+      ..mapRawChildren(json, tree)
+      ..parent = parent;
 
     /// Map overridableProperties which need parent and tree
     master.overridableProperties = (json['overrideProperties'] as List)
