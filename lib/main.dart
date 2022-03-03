@@ -227,7 +227,7 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
     if (element is PBSharedMasterNode && element.parent != null) {
       var tempTree = PBIntermediateTree(name: element.name)
         ..rootNode = element
-        ..tree_type = TREE_TYPE.SCREEN
+        ..tree_type = TREE_TYPE.VIEW
         ..generationViewData = PBGenerationViewData();
 
       var stack = <PBIntermediateNode>[];
@@ -401,7 +401,8 @@ void addToAmplitude() async {
 /// types of intake to parabeac-core
 bool hasTooManyArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null || args['fig'] != null || args['oauth'] != null;
+  var hasFigma =
+      args['figKey'] != null || args['fig'] != null || args['oauth'] != null;
   var hasPbdl = args['pbdl-in'] != null;
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
