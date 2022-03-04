@@ -105,8 +105,8 @@ class MyApp extends StatelessWidget {
       /// Add dependency for each asset
       for (var assetName in assets) {
         if (!yamlAssets.any((str) => str.endsWith('/$assetName'))) {
-          yamlAssets.add(
-              'packages/${MainInfo().projectName}/assets/images/$assetName');
+          yamlAssets
+              .add('packages/${MainInfo().projectName}/assets/$assetName');
         }
       }
 
@@ -131,7 +131,7 @@ class MyApp extends StatelessWidget {
       // Return names inside image reference storage
       return ImageReferenceStorage()
           .names
-          .map((imageName) => '${imageName}.png')
+          .map((imageName) => '${imageName}')
           .toList();
     } catch (e) {
       return [];
