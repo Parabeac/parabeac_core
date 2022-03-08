@@ -8,13 +8,6 @@ part of 'pb_configuration.dart';
 
 PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
   return PBConfiguration(
-    // Temporary Fix till null safety migration.
-    // json['widgetStyle'] as String ?? 'Material',
-    // json['widgetType'] as String ?? 'Stateless',
-    // json['widgetSpacing'] as String ?? 'Expanded',
-    // json['state-management'] as String ?? 'None',
-    // (json['layoutPrecedence'] as List)?.map((e) => e as String)?.toList() ??
-    //     ['column', 'row', 'stack'],
     json['breakpoints'] as Map<String, dynamic>,
     json['scaling'] as bool ?? true,
     json['enablePrototyping'] as bool ?? false,
@@ -24,12 +17,8 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
     <String, dynamic>{
-      'widgetStyle': instance.widgetStyle,
       'scaling': instance.scaling,
-      'widgetType': instance.widgetType,
-      'widgetSpacing': instance.widgetSpacing,
-      'state-management': instance.stateManagement,
-      'layoutPrecedence': instance.layoutPrecedence,
       'breakpoints': instance.breakpoints,
       'enablePrototyping': instance.enablePrototyping,
+      'componentIsolation': instance.componentIsolation,
     };

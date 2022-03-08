@@ -19,34 +19,22 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
       }
       if (borderInfo != null) {
-        if (borderInfo.cornerRadius != null) {
+        if (borderInfo.borderRadius != null) {
           // Write border radius if it exists
           buffer.write(
-              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.cornerRadius})),');
-        } else if (borderInfo.borders.isNotEmpty &&
-            borderInfo.borders[0].type == 'circle') {
+              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
+        } else if (borderInfo.type == 'circle') {
           buffer.write('shape: BoxShape.circle,');
         }
 
         // Write border outline properties if applicable
-        if (borderInfo.borders.isNotEmpty &&
-            borderInfo.strokeWeight != null &&
-            borderInfo.strokeWeight > 0) {
-          for (var i = 0; i < borderInfo.borders.length; i++) {
-            //
-            if (!borderInfo.borders[i].visible) {
-              continue;
-            } else {
-              buffer.write('border: Border.all(');
-              if (borderInfo.borders[i].color != null) {
-                buffer.write(
-                    'color: Color(${borderInfo.borders[i].color.toString()}),');
-              }
-              buffer.write('width: ${borderInfo.strokeWeight},');
-              buffer.write('),'); // end of Border.all(
-              break;
-            }
+        if (borderInfo.thickness > 0 && borderInfo.visible) {
+          buffer.write('border: Border.all(');
+          if (borderInfo.color != null) {
+            buffer.write('color: Color(${borderInfo.color.toString()}),');
           }
+          buffer.write('width: ${borderInfo.thickness},');
+          buffer.write('),'); // end of Border.all(
         }
       }
 
