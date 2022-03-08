@@ -141,6 +141,8 @@ The best way to run and test a component package is to use tools like Storybook.
 
   _Be sure to use Figma Components_  
   
+  To run the widgetbook, instead of running the normal `flutter run`, you want to run `flutter run lib/main_widgetbook.g.dart`.
+  
 # What's Next?
 Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world-guide) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
   
