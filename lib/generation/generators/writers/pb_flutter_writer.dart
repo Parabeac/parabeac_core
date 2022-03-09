@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
         assets.forEach((asset) {
           if (!existingAssets.any((e) => e.endsWith('/$asset'))) {
             existingAssets
-                .add('packages/${MainInfo().projectName}/assets/images/$asset');
+                .add('packages/${MainInfo().projectName}/assets/$asset');
           }
         });
       }
@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
       /// Add all elements to the yaml
       else {
         modifiableyaml['flutter']['assets'] = assets
-            .map((e) => 'packages/${MainInfo().projectName}/assets/images/$e')
+            .map((e) => 'packages/${MainInfo().projectName}/assets/$e')
             .toList();
       }
     }
