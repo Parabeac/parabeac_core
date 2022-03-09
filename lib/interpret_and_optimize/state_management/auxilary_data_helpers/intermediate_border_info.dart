@@ -32,13 +32,13 @@ class IntermediateBorderInfo {
   /// These gets are used in order to not break existing tag files
   /// that use these attributes directly. We can deprecate these over time
   /// or rethink the way borders is structured.
-  String get blendMode => border.blendMode;
+  String get blendMode => border?.blendMode;
 
-  String get type => border.type;
+  String get type => border?.type;
 
-  PBColor get color => border.color;
+  PBColor get color => border?.color;
 
-  bool get visible => border.visible;
+  bool get visible => border?.visible;
 
   IntermediateBorderInfo({
     this.border,
