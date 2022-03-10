@@ -46,8 +46,9 @@ class InheritedBitmap extends PBVisualIntermediateNode
     generator = PBBitmapGenerator();
     childrenStrategy = NoChildStrategy();
     if (name != null && name.isNotEmpty) {
-      ImageReferenceStorage()
-          .addReference(name, '${MainInfo().outputPath}assets/images');
+      ImageReferenceStorage().addReference(
+          referenceImage.split('.').first.replaceAll('images/', ''),
+          '${MainInfo().outputPath}assets/images');
     }
   }
 
