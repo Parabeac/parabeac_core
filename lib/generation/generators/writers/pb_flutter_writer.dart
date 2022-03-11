@@ -98,26 +98,30 @@ class MyApp extends StatelessWidget {
 
     /// Add assets
     if (modifiableyaml.containsKey('flutter')) {
-      var yamlAssets = <String>[];
-
       var assets = _getAssetFileNames();
 
-      /// Add dependency for each asset
-      for (var assetName in assets) {
-        if (!yamlAssets.any((str) => str.endsWith('/$assetName'))) {
-          yamlAssets.add(
-              'packages/${MainInfo().projectName}/assets/images/$assetName');
-        }
+      /// If there are no assets to add, simply return.
+      if (assets.isEmpty) {
+        return;
       }
 
-      if (yamlAssets.isNotEmpty) {
-        /// Create `assets` entry if does not exist
-        if (!modifiableyaml['flutter'].containsKey('assets') ||
-            modifiableyaml['flutter']['assets'] == null) {
-          modifiableyaml['flutter']['assets'] = yamlAssets;
-        } else {
-          modifiableyaml['flutter']['assets'].addAll(yamlAssets);
-        }
+      /// Add only elements that are not already in the yaml
+      if (modifiableyaml['flutter'].containsKey('assets') &&
+          modifiableyaml['flutter']['assets'] != null) {
+        var existingAssets = (modifiableyaml['flutter']['assets'] as List);
+        assets.forEach((asset) {
+          if (!existingAssets.any((e) => e.endsWith('/$asset'))) {
+            existingAssets
+                .add('packages/${MainInfo().projectName}/assets/images/$asset');
+          }
+        });
+      }
+
+      /// Add all elements to the yaml
+      else {
+        modifiableyaml['flutter']['assets'] = assets
+            .map((e) => 'packages/${MainInfo().projectName}/assets/images/$e')
+            .toList();
       }
     }
 
