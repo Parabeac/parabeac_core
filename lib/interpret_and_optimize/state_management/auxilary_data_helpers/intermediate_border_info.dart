@@ -38,7 +38,7 @@ class IntermediateBorderInfo {
 
   PBColor get color => border?.color;
 
-  bool get visible => border?.visible;
+  bool get visible => border?.visible ?? false;
 
   IntermediateBorderInfo({
     this.border,

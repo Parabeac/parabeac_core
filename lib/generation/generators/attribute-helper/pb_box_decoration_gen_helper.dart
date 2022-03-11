@@ -18,7 +18,7 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
       if (colors != null && colors.isNotEmpty) {
         buffer.write(PBColorGenHelper().generate(source, generatorContext));
       }
-      if (borderInfo != null && borderInfo.border != null) {
+      if (borderInfo != null) {
         if (borderInfo.borderRadius != null) {
           // Write border radius if it exists
           buffer.write(
