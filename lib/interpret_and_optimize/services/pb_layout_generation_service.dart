@@ -169,7 +169,11 @@ class PBLayoutGenerationService extends AITHandler {
       );
 
       if (tempGroup.auxiliaryData.colors != null) {
-        var tempContainer = InjectedContainer(null, tempGroup.frame.copyWith())
+        var tempContainer = InjectedContainer(
+          null,
+          tempGroup.frame.copyWith(),
+          constraints: tempGroup.constraints.copyWith(),
+        )
           ..auxiliaryData = tempGroup.auxiliaryData
           ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
           ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
