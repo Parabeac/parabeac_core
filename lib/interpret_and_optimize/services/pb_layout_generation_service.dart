@@ -100,6 +100,7 @@ class PBLayoutGenerationService extends AITHandler {
           var wrapper = InjectedContainer(
             null,
             tempGroup.frame.copyWith(),
+            name: tempGroup.name,
             // Add padding
             padding: InjectedPadding(
               left: tempLayout.layoutProperties.leftPadding,
@@ -169,7 +170,11 @@ class PBLayoutGenerationService extends AITHandler {
       );
 
       if (tempGroup.auxiliaryData.colors != null) {
-        var tempContainer = InjectedContainer(null, tempGroup.frame.copyWith())
+        var tempContainer = InjectedContainer(
+          null,
+          tempGroup.frame.copyWith(),
+          name: tempGroup.name,
+        )
           ..auxiliaryData = tempGroup.auxiliaryData
           ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
           ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
