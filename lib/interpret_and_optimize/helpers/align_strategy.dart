@@ -125,6 +125,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
           var container = InjectedContainer(
             null,
             child.frame.boundingBox(child.frame),
+            name: child.name,
             pointValueHeight: centerY,
             pointValueWidth: centerX,
             constraints: child.constraints.copyWith(),
