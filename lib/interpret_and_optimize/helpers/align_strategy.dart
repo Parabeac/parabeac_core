@@ -89,15 +89,19 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     nodeChildren.forEach((child) {
       var centerY = false;
       var centerX = false;
-      var injectedPositioned = InjectedPositioned(null, child.frame,
-          constraints: child.constraints.copyWith(),
-          valueHolder: PositionedValueHolder(
-              top: child.frame.topLeft.y - node.frame.topLeft.y,
-              bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
-              left: child.frame.topLeft.x - node.frame.topLeft.x,
-              right: node.frame.bottomRight.x - child.frame.bottomRight.x,
-              width: child.frame.width,
-              height: child.frame.height));
+      var injectedPositioned = InjectedPositioned(
+        child.name,
+        null,
+        child.frame,
+        constraints: child.constraints.copyWith(),
+        valueHolder: PositionedValueHolder(
+            top: child.frame.topLeft.y - node.frame.topLeft.y,
+            bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
+            left: child.frame.topLeft.x - node.frame.topLeft.x,
+            right: node.frame.bottomRight.x - child.frame.bottomRight.x,
+            width: child.frame.width,
+            height: child.frame.height),
+      );
       if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
           child.constraints.fixedWidth) {
         injectedPositioned.constraints.fixedWidth = false;
@@ -121,6 +125,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
           var container = InjectedContainer(
             null,
             child.frame.boundingBox(child.frame),
+            name: child.name,
             pointValueHeight: centerY,
             pointValueWidth: centerX,
             constraints: child.constraints.copyWith(),

@@ -62,7 +62,7 @@ class PBFlutterGenerator extends PBGenerationManager {
     var it = data.globalVariables;
     while (it.moveNext()) {
       param = it.current;
-      stringBuffer.write(param.type +
+      stringBuffer.write(param.pbdlType +
           ' ' +
           param.variableName +
           (param.defaultValue == null ? '' : ' = ${param.defaultValue}') +

@@ -98,9 +98,9 @@ void main() {
       when(mockGroup.name).thenReturn('testGroup');
       when(container.name).thenReturn('testContainer');
 
-      when(artboard.type).thenReturn('artboard');
-      when(mockGroup.type).thenReturn('group');
-      when(container.type).thenReturn('text');
+      when(artboard.pbdlType).thenReturn('artboard');
+      when(mockGroup.pbdlType).thenReturn('group');
+      when(container.pbdlType).thenReturn('text');
 
       when(page.name).thenReturn('testName');
       when(mockGroup.children).thenReturn([container]);

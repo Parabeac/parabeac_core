@@ -2,7 +2,9 @@ import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribut
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_fill.dart';
 
 class PBColorGenHelper extends PBAttributesHelper {
   PBColorGenHelper() : super();
@@ -11,6 +13,13 @@ class PBColorGenHelper extends PBAttributesHelper {
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source == null) {
       return '';
+    }
+
+    if (source.auxiliaryData.colors != null &&
+        source.auxiliaryData.colors.first.type
+            .toLowerCase()
+            .contains('gradient')) {
+      return _gradientColor(source.auxiliaryData.colors.first);
     }
 
     var color = source.auxiliaryData.color?.toString();
@@ -39,6 +48,54 @@ class PBColorGenHelper extends PBAttributesHelper {
             ? 'color: $defaultColor,\n'
             : 'color: Color($color),\n';
     }
+  }
+
+  /// Generate gradient for decoration box
+  String _gradientColor(PBFill gradient) {
+    var beginX = _roundNumber(gradient.gradientHandlePositions[0].x);
+    var beginY = _roundNumber(gradient.gradientHandlePositions[0].y);
+    var endX = _roundNumber(gradient.gradientHandlePositions[1].x);
+    var endY = _roundNumber(gradient.gradientHandlePositions[1].y);
+
+    var gradientInfo = _getGradientInfo(gradient);
+
+    return '''
+    gradient: LinearGradient(
+          begin: Alignment($beginX,$beginY),
+          end: Alignment($endX,$endY), 
+          colors: <Color>[
+            ${gradientInfo[0]}
+          ], 
+          stops: [
+            ${gradientInfo[1]}
+          ],
+          tileMode: TileMode.clamp, 
+        ),
+    ''';
+  }
+
+  /// Gradient info is a list
+  /// 0 is for gradient color
+  /// 1 is for gradient stop position
+  List<String> _getGradientInfo(PBFill gradient) {
+    var gradientInfo = <String>['', ''];
+    for (var stop in gradient.gradientStops) {
+      gradientInfo[0] += 'Color(${stop.color.toString()}),';
+      gradientInfo[1] += '${stop.position},';
+    }
+    return gradientInfo;
+  }
+
+  num _roundNumber(num coordinate) {
+    return (2 * coordinate) - 1;
+  }
+
+  /// Get String from Color
+  String getHexColor(PBColor color) {
+    if (color == null) {
+      return '';
+    }
+    return 'color : Color(${color.toString()}),';
   }
 
   /// Finds default color based on common hex patterns.

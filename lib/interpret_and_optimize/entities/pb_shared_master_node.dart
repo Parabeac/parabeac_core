@@ -111,6 +111,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
 @JsonSerializable()
 class PBMasterOverride {
+  @JsonKey(name: 'pbdlType')
   final String type;
 
   @JsonKey(ignore: true)

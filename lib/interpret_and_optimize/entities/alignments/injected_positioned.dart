@@ -11,7 +11,11 @@ class InjectedPositioned extends PBIntermediateNode
   @override
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');
 
+  @override
+  String name;
+
   InjectedPositioned(
+    this.name,
     String UUID,
     Rectangle3D frame, {
     this.valueHolder,

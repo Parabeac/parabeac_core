@@ -70,8 +70,6 @@ class InheritedContainer extends PBVisualIntermediateNode
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)..originalRef = json;
 
-    container.auxiliaryData.borderInfo.borderRadius = json['fixedRadius'];
-
     return container;
   }
 

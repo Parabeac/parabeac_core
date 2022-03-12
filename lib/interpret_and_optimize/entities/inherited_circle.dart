@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_bitmap_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/intermediate_border_info.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_border_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -46,8 +46,8 @@ class InheritedCircle extends PBVisualIntermediateNode
     generator = PBBitmapGenerator();
     childrenStrategy = TempChildrenStrategy('child');
 
-    auxiliaryData.borderInfo = IntermediateBorderInfo();
-    auxiliaryData.borderInfo.shape = 'circle';
+    // auxiliaryData.borderInfo = IntermediateBorderInfo();
+    // auxiliaryData.borderInfo.shape = 'circle';
     auxiliaryData.alignment = alignX != null && alignY != null
         ? {'alignX': alignX, 'alignY': alignY}
         : null;
