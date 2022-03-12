@@ -173,6 +173,7 @@ class PBLayoutGenerationService extends AITHandler {
         var tempContainer = InjectedContainer(
           null,
           tempGroup.frame.copyWith(),
+          constraints: tempGroup.constraints.copyWith(),
           name: tempGroup.name,
         )
           ..auxiliaryData = tempGroup.auxiliaryData

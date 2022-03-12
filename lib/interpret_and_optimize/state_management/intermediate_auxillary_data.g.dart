@@ -15,7 +15,8 @@ IntermediateAuxiliaryData _$IntermediateAuxiliaryDataFromJson(
         ?.toList(),
     borderInfo: json['borderOptions'] == null
         ? null
-        : PBBorderInfo.fromJson(json['borderOptions'] as Map<String, dynamic>),
+        : IntermediateBorderInfo.fromJson(
+            json['borderOptions'] as Map<String, dynamic>),
     effects: (json['effects'] as List)
         ?.map((e) =>
             e == null ? null : PBEffect.fromJson(e as Map<String, dynamic>))
