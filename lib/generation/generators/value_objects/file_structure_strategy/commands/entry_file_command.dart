@@ -32,7 +32,9 @@ class EntryFileCommand extends NodeFileStructureCommand {
       this.projectName = 'Parabeac-Core Generated Project',
       this.mainCode = 'runApp(MyApp());',
       FileOwnership ownership = FileOwnership.DEV})
-      : super('ENTRY_FILE', '''
+      : super(
+            'ENTRY_FILE',
+            '''
 import 'package:flutter/material.dart';
 $entryScreenImport
 
@@ -55,7 +57,8 @@ class MyApp extends StatelessWidget {
   }
 }
   
-  ''', ownership) {
+  ''',
+            ownership) {
     if ((entryScreenImport == null && entryScreenName != null) ||
         (entryScreenName == null && entryScreenName != null)) {
       throw NullThrownError();
@@ -66,7 +69,6 @@ class MyApp extends StatelessWidget {
   Future write(FileStructureStrategy strategy) {
     strategy.writeDataToFile(
         code, strategy.GENERATED_PROJECT_PATH, p.join('lib', mainFileName),
-        UUID: UUID,
-        ownership: ownership);
+        UUID: UUID, ownership: ownership);
   }
 }
