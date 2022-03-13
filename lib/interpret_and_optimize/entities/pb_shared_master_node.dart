@@ -83,7 +83,8 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
     PBSharedMasterNode master = PBSharedMasterNode.fromJson(json)
-      ..mapRawChildren(json, tree);
+      ..mapRawChildren(json, tree)
+      ..parent = parent;
 
     /// Map overridableProperties which need parent and tree
     master.overridableProperties = (json['overrideProperties'] as List)
@@ -110,6 +111,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
 @JsonSerializable()
 class PBMasterOverride {
+  @JsonKey(name: 'pbdlType')
   final String type;
 
   @JsonKey(ignore: true)
@@ -149,4 +151,9 @@ class PBMasterOverride {
 
   static String _propertyNameFromJson(String name) =>
       name.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').camelCase;
+
+  /// Generated the given [PBMasterOverride]
+  String generateOverride() {
+    return 'widget.$propertyName ?? ';
+  }
 }

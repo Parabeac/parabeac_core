@@ -1,4 +1,3 @@
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -17,7 +16,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dar
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:parabeac_core/tags/custom_tag/custom_tag_bloc_generator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
 
@@ -26,13 +24,16 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   String semanticName = '<custom>';
 
   @override
+  String name;
+
+  @override
   ParentLayoutSizing layoutCrossAxisSizing;
   @override
   ParentLayoutSizing layoutMainAxisSizing;
   CustomTag(
     String UUID,
     Rectangle3D frame,
-    String name, {
+    this.name, {
     PBIntermediateConstraints constraints,
     this.layoutCrossAxisSizing,
     this.layoutMainAxisSizing,
@@ -63,58 +64,12 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       PBIntermediateTree tree) {
     return CustomTag(
       null,
-      frame,
+      frame.copyWith(),
       originalRef.name.replaceAll('<custom>', '').pascalCase + 'Custom',
       constraints: originalRef.constraints.copyWith(),
       layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
       layoutMainAxisSizing: originalRef.layoutMainAxisSizing,
     );
-  }
-
-  /// Handles `iNode` to convert into a [CustomTag].
-  ///
-  /// Returns the [PBIntermediateNode] that should go into the [PBIntermediateTree]
-  PBIntermediateNode handleIntermediateNode(
-    PBIntermediateNode iNode,
-    PBIntermediateNode parent,
-    CustomTag tag,
-    PBIntermediateTree tree,
-  ) {
-    iNode.name = iNode.name.replaceAll('<custom>', '');
-
-    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
-    // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
-    // `iNode` at the end.
-    if (iNode is PBSharedMasterNode) {
-      // TODO: temporal fix, uncomment later
-      // tree.addEdges(
-      //     newTag, tree.childrenOf(iNode).cast<Vertex<PBIntermediateNode>>());
-
-      // tree.replaceChildrenOf(iNode, [tag]);
-      return iNode;
-    } else if (iNode is PBSharedInstanceIntermediateNode) {
-      iNode.parent = parent;
-
-      tree.replaceNode(iNode, tag);
-
-      tree.addEdges(tag, [iNode]);
-
-      return tag;
-    } else {
-      // [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
-      iNode.parent = parent;
-      // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
-      if (tree.childrenOf(iNode).isEmpty || iNode is PBLayoutIntermediateNode) {
-        /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
-        tree.removeEdges(iNode.parent, [iNode]);
-        tree.addEdges(tag, [iNode]);
-        tree.addEdges(parent, [tag]);
-        return tag;
-      }
-      tree.replaceNode(iNode, tag, acceptChildren: true);
-
-      return tag;
-    }
   }
 }
 

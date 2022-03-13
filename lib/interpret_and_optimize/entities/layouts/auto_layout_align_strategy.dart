@@ -86,6 +86,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       var wrapper = InjectedContainer(
         null,
         child.frame,
+        name: child.name,
         pointValueHeight: isVertical
             ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
             : child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,

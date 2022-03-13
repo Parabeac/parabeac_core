@@ -46,8 +46,6 @@ Map<String, dynamic> _$InheritedContainerToJson(InheritedContainer instance) =>
       'prototypeNodeUUID': instance.prototypeNode,
       'isBackgroundVisible': instance.isBackgroundVisible,
       'type': instance.type,
-      'showWidth': instance.showWidth,
-      'showHeight': instance.showHeight,
     };
 
 T _$enumDecode<T>(

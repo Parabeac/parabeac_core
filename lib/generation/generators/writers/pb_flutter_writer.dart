@@ -98,22 +98,30 @@ class MyApp extends StatelessWidget {
 
     /// Add assets
     if (modifiableyaml.containsKey('flutter')) {
-      /// Create `assets` entry if does not exist
-      if (!modifiableyaml['flutter'].containsKey('assets')) {
-        modifiableyaml['flutter']['assets'] = [];
-      }
-
-      var yamlAssets =
-          (modifiableyaml['flutter']['assets'] as List).cast<String>();
-
       var assets = _getAssetFileNames();
 
-      /// Add dependency for each asset
-      for (var assetName in assets) {
-        if (!yamlAssets.any((str) => str.endsWith('/$assetName'))) {
-          yamlAssets.add(
-              'packages/${MainInfo().projectName}/assets/images/$assetName');
-        }
+      /// If there are no assets to add, simply return.
+      if (assets.isEmpty) {
+        return;
+      }
+
+      /// Add only elements that are not already in the yaml
+      if (modifiableyaml['flutter'].containsKey('assets') &&
+          modifiableyaml['flutter']['assets'] != null) {
+        var existingAssets = (modifiableyaml['flutter']['assets'] as List);
+        assets.forEach((asset) {
+          if (!existingAssets.any((e) => e.endsWith('/$asset'))) {
+            existingAssets
+                .add('packages/${MainInfo().projectName}/assets/images/$asset');
+          }
+        });
+      }
+
+      /// Add all elements to the yaml
+      else {
+        modifiableyaml['flutter']['assets'] = assets
+            .map((e) => 'packages/${MainInfo().projectName}/assets/images/$e')
+            .toList();
       }
     }
 
@@ -127,7 +135,7 @@ class MyApp extends StatelessWidget {
       // Return names inside image reference storage
       return ImageReferenceStorage()
           .names
-          .map((imageName) => '${imageName.replaceAll(':', '_')}.png')
+          .map((imageName) => '${imageName}.png')
           .toList();
     } catch (e) {
       return [];

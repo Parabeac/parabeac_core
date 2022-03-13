@@ -69,4 +69,14 @@ class ColorUtils {
     }
     return null;
   }
+
+  // static List<PBColor> getColorListFromJsonFIlls(List<Map<String, dynamic>> json){
+  //   var tempList = <PBColor>[];
+
+  //   for(var fill in json){
+  //     tempList
+  //   }
+
+  //   return tempList;
+  // }
 }

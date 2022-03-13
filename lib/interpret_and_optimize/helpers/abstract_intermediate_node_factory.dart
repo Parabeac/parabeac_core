@@ -23,7 +23,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_help
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 
 class AbstractIntermediateNodeFactory {
-  static final String INTERMEDIATE_TYPE = 'type';
+  static final String INTERMEDIATE_TYPE = 'pbdlType';
 
   static final Set<IntermediateNodeFactory> _intermediateNodes = {
     InheritedBitmap('$InheritedBitmap', null),
@@ -60,16 +60,7 @@ class AbstractIntermediateNodeFactory {
               PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
           // Return tag if it exists
           if (tag != null) {
-            /// TODO: Each Tag could potentially implement how it should handle converting from PBIntermediate to a PBTag
-            if (tag is CustomTag) {
-              return tag.handleIntermediateNode(iNode, parent, tag, tree);
-            } else {
-              //  [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
-              iNode.parent = parent;
-              tree.replaceNode(iNode, tag, acceptChildren: true);
-
-              return tag;
-            }
+            return tag.handleIntermediateNode(iNode, parent, tag, tree);
           }
           if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);

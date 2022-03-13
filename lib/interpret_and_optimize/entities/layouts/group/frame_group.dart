@@ -1,13 +1,10 @@
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/intermediate_border_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
@@ -39,47 +36,27 @@ class FrameGroup extends Group
       PBIntermediateNode parent, PBIntermediateTree tree) {
     var tempFrame = _$FrameGroupFromJson(json);
 
-    var tempChild = injectAContainer(json, tempFrame.frame)
-      ..constraints = tempFrame.constraints.copyWith();
+    // var tempChild = injectAContainer(json, tempFrame.frame);
 
-    if (tempChild != null) {
-      tree.addEdges(tempFrame, [tempChild]);
-    }
+    // if (tempChild != null) {
+    //   tempChild.constraints = tempFrame.constraints.copyWith();
+    //   tree.addEdges(tempFrame, [tempChild]);
+    // }
     return tempFrame
       ..mapRawChildren(json, tree)
       ..originalRef = json;
   }
 
-  PBIntermediateNode injectAContainer(
-      Map<String, dynamic> json, Rectangle3D parentFrame) {
-    var tempChild = InjectedContainer(
-      null,
-      Rectangle3D(parentFrame.left, parentFrame.top, parentFrame.width,
-          parentFrame.height, 0),
-      name: json['name'],
-    );
-    var gateKeeper = false;
-    if (json['style']['borderOptions']['cornerRadius'] != null) {
-      tempChild.auxiliaryData.borderInfo = IntermediateBorderInfo(
-          borderRadius: json['style']['borderOptions']['cornerRadius']);
-      tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-      gateKeeper = true;
-    }
-    if (json['style']['backgroundColor'] != null) {
-      tempChild.auxiliaryData.color =
-          PBColor.fromJson(json['style']['backgroundColor']);
-      gateKeeper = true;
-    }
-    if (json['style']['borders'][0]['isEnabled']) {
-      tempChild.auxiliaryData.borderInfo ??= IntermediateBorderInfo();
-      tempChild.auxiliaryData.borderInfo.isBorderOutlineVisible = true;
-      tempChild.auxiliaryData.borderInfo.color =
-          PBColor.fromJson(json['style']['borders'][0]['color']);
-      tempChild.auxiliaryData.borderInfo.thickness =
-          json['style']['borders'][0]['thickness'];
-      gateKeeper = true;
-    }
+  // PBIntermediateNode injectAContainer(
+  //     Map<String, dynamic> json, Rectangle3D parentFrame) {
+  //   var tempChild = InjectedContainer(
+  //     null,
+  //     Rectangle3D(parentFrame.left, parentFrame.top, parentFrame.width,
+  //         parentFrame.height, 0),
+  //     name: json['name'],
+  //   );
+  //   var gateKeeper = false;
 
-    return gateKeeper ? tempChild : null;
-  }
+  //   return gateKeeper ? tempChild : null;
+  // }
 }

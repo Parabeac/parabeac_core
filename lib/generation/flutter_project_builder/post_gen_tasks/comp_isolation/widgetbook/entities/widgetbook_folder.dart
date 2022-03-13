@@ -15,7 +15,7 @@ class WidgetBookFolder extends IsolationNode {
       WidgetbookFolder(
         name: '$name',
         ${genWidgets.isNotEmpty ? 'widgets: [\n$genWidgets\n],\n' : ''}
-      )
+      ),
     ''';
   }
 }
