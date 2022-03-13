@@ -7,16 +7,16 @@ class DashBookStory extends IsolationNode {
 
   @override
   String generate() {
-    var useCases = getType<DashBookChapter>();
-    var useCasesGen = '';
-    if (useCases != null && useCases.isNotEmpty) {
-      useCasesGen = useCases.map((useCase) => useCase.generate()).join('\n');
+    var chapters = getType<DashBookChapter>();
+    var chaptersGen = '';
+    if (chapters != null && chapters.isNotEmpty) {
+      chaptersGen = chapters.map((chapter) => chapter.generate()).join('\n');
     }
     return '''
       dashbook
       .storiesOf('$name')
       .decorator(CenterDecorator())
-      $useCasesGen
+      $chaptersGen
       ;
     ''';
   }
