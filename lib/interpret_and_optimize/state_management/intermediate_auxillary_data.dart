@@ -19,7 +19,7 @@ class IntermediateAuxiliaryData {
 
   /// Info relating to a elements borders.
   @JsonKey(name: 'borderOptions')
-  PBBorderInfo borderInfo;
+  IntermediateBorderInfo borderInfo;
 
   /// Effect for widgets
   List<PBEffect> effects;

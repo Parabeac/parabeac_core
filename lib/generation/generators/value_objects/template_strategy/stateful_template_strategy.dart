@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/generators/value_objects/template_strat
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
+import 'package:recase/recase.dart';
 
 ///Generating a [StatefulWidget]
 class StatefulTemplateStrategy extends TemplateStrategy {
@@ -10,7 +11,7 @@ class StatefulTemplateStrategy extends TemplateStrategy {
   String generateTemplate(PBIntermediateNode node, PBGenerationManager manager,
       PBContext generatorContext,
       {args}) {
-    var widgetName = retrieveNodeName(node);
+    var widgetName = retrieveNodeName(node.name.pascalCase);
     var constructorName = '$widgetName';
     var returnStatement = node.generator.generate(node, generatorContext);
 
