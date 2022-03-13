@@ -135,7 +135,7 @@ class MyApp extends StatelessWidget {
       // Return names inside image reference storage
       return ImageReferenceStorage()
           .names
-          .map((imageName) => '${imageName}.png')
+          .map((imageName) => '${imageName}')
           .toList();
     } catch (e) {
       return [];
