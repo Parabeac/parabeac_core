@@ -58,19 +58,26 @@ class Interpret {
     /// This is a workaround for adding missing information to either the [PBContext] or any of the
     /// [PBIntermediateNode]s.
     aitServiceBuilder.addTransformation(
-        (PBContext context, PBIntermediateNode node, PBIntermediateTree tree) {
-      elementStorage.treeUUIDs[tree.UUID] = tree;
-      elementStorage.elementToTree[node.UUID] = tree.UUID;
-      return Future.value(node);
-    }, index: 0, id: 'Indexing ${tree.name}').addTransformation(
-        (PBContext context, PBIntermediateTree tree) async {
-      //
-      var baseGroupList = tree.whereType<BaseGroup>();
+      (PBContext context, PBIntermediateNode node, PBIntermediateTree tree) {
+        elementStorage.treeUUIDs[tree.UUID] = tree;
+        elementStorage.elementToTree[node.UUID] = tree.UUID;
+        return Future.value(node);
+      },
+      index: 0,
+      id: 'Indexing ${tree.name}',
+    ).addTransformation(
+      (PBContext context, PBIntermediateTree tree) async {
+        //
+        var baseGroupList = tree.whereType<BaseGroup>();
 
-      baseGroupList.forEach((group) => tree.remove(group, keepChildren: true));
+        baseGroupList
+            .forEach((group) => tree.remove(group, keepChildren: true));
 
-      return Future.value(tree);
-    }, index: 1, id: 'Removing the $BaseGroup from ${tree.name}');
+        return Future.value(tree);
+      },
+      index: 1,
+      id: 'Removing the $BaseGroup from ${tree.name}',
+    );
 
     // TODO: We should dynamically add the [PBPrototypeLinkerService] to `aitHandlers`
     // somewhere else so that it does not check the configuration every time
