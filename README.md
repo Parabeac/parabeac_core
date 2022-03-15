@@ -8,7 +8,7 @@ parabeac_core converts design files into isolated & responsive Flutter code for 
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/parabeac_core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a>
 
 <h3>
-  <a href="https://docs.parabeac.com/docs/hello-world-guide">Hello World</a>
+  <a href="https://docs.parabeac.com/docs/hello-world">Hello World</a>
   <span> · </span>
   <a href="https://docs.parabeac.com/docs/creating-a-production-app/fundamental-laws-of-parabeac">Fundamental Laws of Parabeac</a>
   <span> · </span>
@@ -89,7 +89,7 @@ Due to the lack of requested support for Sketch and the major updates to this pr
 
 # Running the generated code
 
-We recommend following our [Hello World guide](https://docs.parabeac.com/docs/hello-world-guide) but if you feel experienced enough with Flutter, feel free to jump right in here:
+We recommend following our [Hello World guide](https://docs.parabeac.com/docs/hello-world) but if you feel experienced enough with Flutter, feel free to jump right in here:
 
 ### Running a Figma Frame/Screen
 ![Figma Frame Example](https://github.com/Parabeac/parabeac_core/blob/stable/repo_assets/figma_frame_example.png?raw=true)
@@ -143,7 +143,7 @@ The best way to run and test a component package is to use tools like Storybook.
   To run the widgetbook, instead of running the normal `flutter run`, you want to run `flutter run lib/main_widgetbook.g.dart`.
   
 # What's Next?
-Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world-guide) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
+Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
   
 ## Enabling the design team to create pull requests
 If you find the viability in the code generation to support continuous design changes, create a free account on [Parabeac Nest](https://app.parabeac.com) where you can create an integration between Figma & the project Github repo.
