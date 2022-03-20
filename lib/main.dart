@@ -401,7 +401,7 @@ void addToAmplitude() async {
 /// types of intake to parabeac-core
 bool hasTooManyArgs(ArgResults args) {
   var hasSketch = args['path'] != null;
-  var hasFigma = args['figKey'] != null || args['fig'] != null || args['oauth'];
+  var hasFigma = args['figKey'] != null || args['fig'] != null || args['oauth'] != null;
   var hasPbdl = args['pbdl-in'] != null;
 
   var hasAll = hasSketch && hasFigma && hasPbdl;
