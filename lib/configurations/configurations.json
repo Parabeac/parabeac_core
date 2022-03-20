@@ -11,5 +11,5 @@
   },
   "scaling": true,
   "enablePrototyping": false,
-  "componentIsolation": "none"
+  "componentIsolation": "widgetbook"
 }
