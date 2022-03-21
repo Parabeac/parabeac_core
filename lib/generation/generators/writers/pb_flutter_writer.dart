@@ -97,14 +97,8 @@ class MyApp extends StatelessWidget {
     }
 
     /// Add assets
-    if (modifiableyaml.containsKey('flutter')) {
-      var assets = _getAssetFileNames();
-
-      /// If there are no assets to add, simply return.
-      if (assets.isEmpty) {
-        return;
-      }
-
+    var assets = _getAssetFileNames();
+    if (modifiableyaml.containsKey('flutter') && assets.isNotEmpty) {
       /// Add only elements that are not already in the yaml
       if (modifiableyaml['flutter'].containsKey('assets') &&
           modifiableyaml['flutter']['assets'] != null) {
