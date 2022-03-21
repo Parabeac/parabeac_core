@@ -74,6 +74,8 @@ In your terminal, change your directory to the root parabeac_core directory and 
 2. Navigate to your user profile and select `Settings`
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: `64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed`)
+  
+  Having trouble? View this video instead: https://youtu.be/uUv-IZX4KYg
 
 #### Name (Optional): -n
 
