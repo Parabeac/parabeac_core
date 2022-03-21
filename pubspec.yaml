@@ -1,7 +1,7 @@
 name: parabeac_core
 description: Continuous Design / Continuous Integration for Figma-to-Flutter
 
-version: 2.6.0
+version: 2.6.1
 # homepage: https://www.example.com
 
 environment:
