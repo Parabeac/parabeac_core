@@ -68,10 +68,11 @@ final parser = ArgParser()
 
 Future<void> main(List<String> args) async {
   await runZonedGuarded(() async {
-    await Sentry.init(
-      (p0) => p0.dsn =
-          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
-    );
+    await Sentry.init((p0) {
+      p0.dsn =
+          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747';
+      p0.tracesSampleRate = 1.0;
+    });
     await runParabeac(args);
   }, (error, stackTrace) async {
     await Sentry.captureException(error);
@@ -167,17 +168,20 @@ ${parser.usage}
 
   // TODO: Add sentry
 
-  SentryService.startTransaction('Flutter Project Builder', 'Builder');
+  var parent =
+      SentryService.startTransaction('Flutter Project Builder', 'Builder');
 
-  SentryService.startChildTransactionFrom('Flutter Project Builder', 'Builder');
+  var child = SentryService.startChildTransactionFrom(
+      'Flutter Project Builder', 'Builder');
 
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
 
-  await SentryService.finishTransaction('Builder');
+  var closingChild = await SentryService.finishTransaction('Builder');
 
-  await SentryService.finishTransaction('Flutter Project Builder');
+  var closingParent =
+      await SentryService.finishTransaction('Flutter Project Builder');
 
   await fpb.preGenTasks();
 
