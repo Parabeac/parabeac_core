@@ -10,9 +10,8 @@ class SentryService {
 
   /// Starts a main transaction.
   ///
-  /// @id The unique name of the transaction.
-  /// @operation The operation that is being performed.
-  /// @description Optional description of the transaction.
+  /// The [id] is the unique name of the transaction. The [operation] is what is being performed.
+  /// The optional [description] is used to provide more context on the [operation] within Sentry.
   static void startTransaction(String id, String operation,
       {String description}) {
     if (!transactions.containsKey(id)) {
@@ -28,9 +27,9 @@ class SentryService {
 
   /// Starts a child transaction from a parent transaction with a unique [id].
   ///
-  /// @id The unique name of the `parent` transaction.
-  /// @operation The `unique` operation that is being performed by the `child`. This will be used to identify child transactions.
-  /// @description Optional description of the transaction.
+  /// The [id] refers to the `parent` transaction.
+  /// The [operation] is what the `child` transaction is performing, and must be unique.
+  /// The optional [description] is used to provide more context on the [operation] within Sentry.
   static void startChildTransactionFrom(String id, String operation,
       {String description}) {
     if (transactions.containsKey(id) && !transactions.containsKey(operation)) {
@@ -45,15 +44,13 @@ class SentryService {
   }
 
   /// Finishes transaction with a unique [id].
-  ///
-  /// @id The unique name of the transaction.
   static Future<void> finishTransaction(String id) async {
     if (transactions.containsKey(id)) {
       await transactions[id].finish();
       transactions.remove(id);
     } else {
-      _logger.error(
-          'Transaction $id does not exist. Cannot finish transaction.');
+      _logger
+          .error('Transaction $id does not exist. Cannot finish transaction.');
     }
   }
 }
