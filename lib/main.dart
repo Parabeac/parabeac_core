@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -164,9 +165,19 @@ ${parser.usage}
 
   pbProject.forest.addAll(tempForest);
 
+  // TODO: Add sentry
+
+  SentryService.startTransaction('Flutter Project Builder', 'Builder');
+
+  SentryService.startChildTransactionFrom('Flutter Project Builder', 'Builder');
+
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
+
+  await SentryService.finishTransaction('Builder');
+
+  await SentryService.finishTransaction('Flutter Project Builder');
 
   await fpb.preGenTasks();
 
