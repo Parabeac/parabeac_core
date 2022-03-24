@@ -82,6 +82,10 @@ Future<void> main(List<String> args) async {
 }
 
 Future<void> runParabeac(List<String> args) async {
+  // Start sentry transaction
+  SentryService.startTransaction('Run Parabeac', 'runner',
+      description: 'Run Parabeac Main');
+
   await checkConfigFile();
   var log = Logger('Main');
   var pubspec = File('pubspec.yaml');
@@ -142,6 +146,7 @@ ${parser.usage}
   // Exit if only generating PBDL
   if (MainInfo().exportPBDL) {
     exitCode = 0;
+    await SentryService.finishTransaction('Run Parabeac');
     return;
   }
   var pbProject = PBProject.fromJson(pbdl.toJson());
@@ -166,24 +171,14 @@ ${parser.usage}
 
   pbProject.forest.addAll(tempForest);
 
-  // TODO: Add sentry
-
-  var parent =
-      SentryService.startTransaction('Flutter Project Builder', 'Builder');
-
-  var child = SentryService.startChildTransactionFrom(
-      'Flutter Project Builder', 'Builder');
-
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
 
-  var closingChild = await SentryService.finishTransaction('Builder');
-
-  var closingParent =
-      await SentryService.finishTransaction('Flutter Project Builder');
-
+  SentryService.startChildTransactionFrom('Run Parabeac', 'Pre Gen Tasks',
+      description: 'Pre generation tasks on main');
   await fpb.preGenTasks();
+  await SentryService.finishTransaction('Pre Gen Tasks');
 
   /// Get ComponentIsolationService (if any), and add it to the list of services
   var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
@@ -199,6 +194,10 @@ ${parser.usage}
 
   var trees = <PBIntermediateTree>[];
 
+  SentryService.startChildTransactionFrom(
+      'Run Parabeac', 'Interpret Service Loop',
+      description: 'Interpret Service Loop');
+
   for (var tree in pbProject.forest) {
     var context = PBContext(processInfo.configuration);
     context.project = pbProject;
@@ -210,27 +209,55 @@ ${parser.usage}
     context.tree = tree;
     tree.context = context;
 
+    SentryService.startChildTransactionFrom(
+        'Interpret Service Loop', 'Handle Children',
+        description: 'Handle Children Loop');
+
     tree.forEach((child) => child.handleChildren(context));
+
+    await SentryService.finishTransaction('Handle Children');
+
+    SentryService.startChildTransactionFrom(
+        'Interpret Service Loop', 'Interpret and Optimize',
+        description: 'Interpret and optimize generating candidate tree');
 
     var candidateTree =
         await interpretService.interpretAndOptimize(tree, context, pbProject);
+
+    await SentryService.finishTransaction('Interpret and Optimize');
 
     if (candidateTree != null) {
       trees.add(candidateTree);
     }
   }
 
-  fpb.runCommandQueue();
+  await SentryService.finishTransaction('Interpret Service Loop');
 
+  SentryService.startChildTransactionFrom('Run Parabeac', 'Run Command Queue',
+      description: 'Run command queue');
+  fpb.runCommandQueue();
+  await SentryService.finishTransaction('Run Command Queue');
+
+  SentryService.startChildTransactionFrom('Run Parabeac', 'Gen AIT Dry Run',
+      description: 'Generating AIT on dry run trees loop');
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, true);
   }
+  await SentryService.finishTransaction('Gen AIT Dry Run');
 
+  SentryService.startChildTransactionFrom('Run Parabeac', 'Gen AIT',
+      description: 'Generating AIR on trees loop');
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, false);
   }
+  await SentryService.finishTransaction('Gen AIT');
 
+  SentryService.startChildTransactionFrom('Run Parabeac', 'Post Gen Tasks',
+      description: 'Executing post generation tasks');
   fpb.executePostGenTasks();
+  await SentryService.finishTransaction('Post Gen Tasks');
+
+  await SentryService.finishTransaction('Run Parabeac');
 
   exitCode = 0;
 }

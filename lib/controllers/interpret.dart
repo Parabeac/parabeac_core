@@ -1,3 +1,4 @@
+import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
@@ -149,10 +150,17 @@ class AITServiceBuilder {
     var treeName = _intermediateTree.name;
     log.fine('Transforming $treeName ...');
 
+    SentryService.startChildTransactionFrom(
+        'Interpret and Optimize', 'Interpret Transformation Build',
+        description: 'Iterating through transformations');
+
     for (var transformationTuple in _transformations) {
       var transformation = transformationTuple.item2;
       var name = transformationTuple.item1;
 
+      SentryService.startChildTransactionFrom(
+          'Interpret Transformation Build', 'Applying Transformation',
+          description: 'Applying transformation');
       _stopwatch.start();
       log.debug('Started running $name...');
       try {
@@ -179,10 +187,13 @@ class AITServiceBuilder {
         log.error('${e.toString()} at $name');
       } finally {
         _stopwatch.stop();
+        await SentryService.finishTransaction('Applying Transformation');
         log.debug(
             'Stoped running $name (${_stopwatch.elapsed.inMilliseconds})');
       }
     }
+
+    await SentryService.finishTransaction('Interpret Transformation Build');
     log.fine('Finish transforming $treeName');
     return _intermediateTree;
   }
