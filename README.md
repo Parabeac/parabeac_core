@@ -153,7 +153,11 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 ## All parabeac_core Configurations
 * `"componentIsolation"` - _Valid Values Below_
   * `"none"`
-  * `"widgetbook"` -- Generates a Widgetbook file 
+  * `"widgetbook"` -- Generates a Widgetbook File 
+  * `"dashbook"` -- Generates a Dashbook File
+  
+_To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or `flutter run lib/main_dashbook.g.dart`_
+  
 * `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
   * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
   
