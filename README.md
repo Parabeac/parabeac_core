@@ -26,7 +26,6 @@ parabeac_core converts design files into isolated & responsive Flutter code for 
 The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. parabeac_core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
 # Table of Contents
   * [Dependencies](#dependencies)
-  * [Cloning parabeac_core](#cloning-parabeac_core)
   * [Running parabeac_core](#running-parabeac_core)
     * [Figma](#figma)
     * [Sketch](#sketch)
@@ -46,7 +45,6 @@ The handoff between designers & developers is one of the most costly and frustra
 
 - [Dart](https://dart.dev/get-dart)
 - [Flutter](https://flutter.dev/docs/get-started/install)
-- [node.js](https://nodejs.org/en/download/)
 - [Figma File](https://figma.com) - [Sample](https://www.figma.com/file/Ysnjcij14HaE98ucq1iwW1/Parabeac-Counter-App-Demo?node-id=0%3A1)
 
 ## Running parabeac_core
