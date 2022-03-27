@@ -251,7 +251,8 @@ ${parser.usage}
   SentryService.startChildTransactionFrom(
     RUN_PARABEAC,
     GENERATION,
-    description: 'Tasks that happen after interpretation of trees. These have to do with generating code, writing files, etc.',
+    description:
+        'Tasks that happen after interpretation of trees. These have to do with generating code, writing files, etc.',
   );
 
   SentryService.startChildTransactionFrom(
