@@ -1,3 +1,5 @@
+import 'package:parabeac_core/analytics/analytics_constants.dart';
+import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/base_group.dart';
@@ -153,6 +155,11 @@ class AITServiceBuilder {
       var transformation = transformationTuple.item2;
       var name = transformationTuple.item1;
 
+      SentryService.startChildTransactionFrom(
+        INTERMEDIATE_SERVICES,
+        name,
+        description: 'Applying transformation: $name',
+      );
       _stopwatch.start();
       log.debug('Started running $name...');
       try {
@@ -179,10 +186,12 @@ class AITServiceBuilder {
         log.error('${e.toString()} at $name');
       } finally {
         _stopwatch.stop();
+        await SentryService.finishTransaction(name);
         log.debug(
             'Stoped running $name (${_stopwatch.elapsed.inMilliseconds})');
       }
     }
+
     log.fine('Finish transforming $treeName');
     return _intermediateTree;
   }
