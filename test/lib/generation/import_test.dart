@@ -1,5 +1,6 @@
-import 'dart:io';
+@Skip('Fix how imports are generated')
 
+import 'dart:io';
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/util/topo_tree_iterator.dart';

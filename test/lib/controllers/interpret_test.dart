@@ -1,3 +1,5 @@
+@Skip('Interpret test need to be rewritten')
+
 import 'package:mockito/mockito.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/input/sketch/helper/sketch_project.dart';

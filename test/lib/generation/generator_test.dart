@@ -1,5 +1,6 @@
-import 'dart:math';
+@Skip('Fix generator not taking context')
 
+import 'dart:math';
 import 'package:parabeac_core/generation/flutter_project_builder/import_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_flutter_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
