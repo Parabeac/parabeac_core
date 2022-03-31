@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:test/test.dart';
 
 void main() {
-  group('Golden File Test Group', () {
-    var projectName = 'golden_testing_project';
+  final projectName = 'golden_testing_project';
+  final goldenFilePath = 'test/golden/golden_files/styling.golden';
+  final runtimeFilePath =
+      '../$projectName/lib/screens/styling/silver_screen.g.dart';
+  group('Styling Golden Test', () {
     setUp(() async {
       // Run Parabeac core to generate test file
-      var parabeaccore = await Process.start('dart', [
+      await Process.run('dart', [
         'parabeac.dart',
         '-f',
         'AVFG9SWJOzJ4VAfM7uMVzr',
@@ -17,20 +20,11 @@ void main() {
         '-n',
         '$projectName'
       ]);
-
-      // Await for output so it has time to create screens
-      await for (var event in parabeaccore.stdout.transform(utf8.decoder)) {
-        print(event);
-      }
-      await for (var event in parabeaccore.stderr.transform(utf8.decoder)) {
-        print(event);
-      }
     });
-    test('Golden File Test', () async {
-      var goldenFile = File('test/lib/golden/golden_file.txt');
+    test('Generating Styling and Comparing Golden File', () async {
+      var goldenFile = File(goldenFilePath);
 
-      var silverFile =
-          File('../$projectName/lib/screens/styling/silver_screen.g.dart');
+      var silverFile = File(runtimeFilePath);
 
       var goldenList = goldenFile.readAsLinesSync();
 
