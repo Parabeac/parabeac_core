@@ -25,14 +25,14 @@ pull_request_rules:
   - name: Backport PR to dev if merging to stable
     conditions:
       - base=stable
-      - "#approved-reviews-by>=1" #Two approvals needed
+      - "#approved-reviews-by>=1"
     actions:
       backport:
         branches: ["dev"]
 
   - name: Merge pull request on approval
     conditions:
-      - "#approved-reviews-by>=1" # Two approvals needed
+      - "#approved-reviews-by>=1"
       - -closed
       - label!=review-required # Only merge PRs that are NOT labeled review-required.
     actions:
