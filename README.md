@@ -26,7 +26,6 @@ parabeac_core converts design files into isolated & responsive Flutter code for 
 The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. parabeac_core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
 # Table of Contents
   * [Dependencies](#dependencies)
-  * [Cloning parabeac_core](#cloning-parabeac_core)
   * [Running parabeac_core](#running-parabeac_core)
     * [Figma](#figma)
     * [Sketch](#sketch)
@@ -46,7 +45,6 @@ The handoff between designers & developers is one of the most costly and frustra
 
 - [Dart](https://dart.dev/get-dart)
 - [Flutter](https://flutter.dev/docs/get-started/install)
-- [node.js](https://nodejs.org/en/download/)
 - [Figma File](https://figma.com) - [Sample](https://www.figma.com/file/Ysnjcij14HaE98ucq1iwW1/Parabeac-Counter-App-Demo?node-id=0%3A1)
 
 ## Running parabeac_core
@@ -74,6 +72,8 @@ In your terminal, change your directory to the root parabeac_core directory and 
 2. Navigate to your user profile and select `Settings`
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: `64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed`)
+  
+  Having trouble? View this video instead: https://youtu.be/uUv-IZX4KYg
 
 #### Name (Optional): -n
 
@@ -153,7 +153,11 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 ## All parabeac_core Configurations
 * `"componentIsolation"` - _Valid Values Below_
   * `"none"`
-  * `"widgetbook"` -- Generates a Widgetbook file 
+  * `"widgetbook"` -- Generates a Widgetbook File 
+  * `"dashbook"` -- Generates a Dashbook File
+  
+_To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or `flutter run lib/main_dashbook.g.dart`_
+  
 * `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
   * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
   
