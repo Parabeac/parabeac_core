@@ -200,7 +200,15 @@ class PBLayoutGenerationService extends AITHandler {
           /// This conditional statement is to not mixup the elements that pertain to different [currentNode.attributeName].
           /// For example, if [currentNode.attributeName] is an `appBar` and [nextNode.attributeName] is a `stack`,
           /// then you would not generate a [PBLayoutIntermediateNode] to encapsulate them both.
-          if (currentNode.attributeName != nextNode.attributeName) {
+          ///
+          /// currentNode and parent shall be skipped if they are either a Row or Column
+          /// because they should not be interpreted as Stack even though, their children
+          /// are too close to each other.
+          if (currentNode.attributeName != nextNode.attributeName ||
+              currentNode is PBIntermediateColumnLayout ||
+              currentNode is PBIntermediateRowLayout ||
+              parent is PBIntermediateColumnLayout ||
+              parent is PBIntermediateRowLayout) {
             break;
           }
           if (layout.satisfyRules(context, currentNode, nextNode) &&
