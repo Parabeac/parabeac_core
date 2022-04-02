@@ -9,42 +9,41 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
 
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
-    if (source is PBContainer) {
-      final buffer = StringBuffer();
-      buffer.write('decoration: BoxDecoration(');
-      var borderInfo = source.auxiliaryData.borderInfo;
-      var effectsInfo = source.auxiliaryData.effects;
-      var colors = source.auxiliaryData.colors;
-      if (colors != null && colors.isNotEmpty) {
-        buffer.write(PBColorGenHelper().generate(source, generatorContext));
-      }
-      if (borderInfo != null) {
-        if (borderInfo.borderRadius != null) {
-          // Write border radius if it exists
-          buffer.write(
-              'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
-        } else if (borderInfo.type == 'circle') {
-          buffer.write('shape: BoxShape.circle,');
-        }
-
-        // Write border outline properties if applicable
-        if (borderInfo.thickness > 0 && borderInfo.visible) {
-          buffer.write('border: Border.all(');
-          if (borderInfo.color != null) {
-            buffer.write('color: Color(${borderInfo.color.toString()}),');
-          }
-          buffer.write('width: ${borderInfo.thickness},');
-          buffer.write('),'); // end of Border.all(
-        }
+    final buffer = StringBuffer();
+    buffer.write('decoration: BoxDecoration(');
+    var borderInfo = source.auxiliaryData.borderInfo;
+    var effectsInfo = source.auxiliaryData.effects;
+    var colors = source.auxiliaryData.colors;
+    if (colors != null && colors.isNotEmpty) {
+      buffer.write(PBColorGenHelper().generate(source, generatorContext));
+    }
+    if (borderInfo != null) {
+      if (borderInfo.borderRadius != null) {
+        // Write border radius if it exists
+        buffer.write(
+            'borderRadius: BorderRadius.all(Radius.circular(${borderInfo.borderRadius})),');
+      } else if (borderInfo.type == 'circle') {
+        buffer.write('shape: BoxShape.circle,');
       }
 
-      if (effectsInfo != null &&
-          effectsInfo.isNotEmpty &&
-          effectsInfo.first.type.toLowerCase().contains('shadow')) {
-        buffer.write('boxShadow: [');
+      // Write border outline properties if applicable
+      if (borderInfo.thickness > 0 && borderInfo.visible) {
+        buffer.write('border: Border.all(');
+        if (borderInfo.color != null) {
+          buffer.write('color: Color(${borderInfo.color.toString()}),');
+        }
+        buffer.write('width: ${borderInfo.thickness},');
+        buffer.write('),'); // end of Border.all(
+      }
+    }
 
-        for (var effect in effectsInfo) {
-          buffer.write('''
+    if (effectsInfo != null &&
+        effectsInfo.isNotEmpty &&
+        effectsInfo.first.type.toLowerCase().contains('shadow')) {
+      buffer.write('boxShadow: [');
+
+      for (var effect in effectsInfo) {
+        buffer.write('''
             BoxShadow(
               ${PBColorGenHelper().getHexColor(effect.color)}
               spreadRadius: ${effect.radius},
@@ -52,14 +51,12 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
               offset: Offset(${effect.offset['x']}, ${effect.offset['y']}),
             ),
           ''');
-        }
-
-        buffer.write('],');
       }
-      buffer.write('),');
 
-      return buffer.toString();
+      buffer.write('],');
     }
-    return '';
+    buffer.write('),');
+
+    return buffer.toString();
   }
 }
