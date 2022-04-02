@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -73,12 +74,40 @@ class PBLayoutGenerationService extends AITHandler {
       _applyPostConditionRules(tree.rootNode, context);
 
       _wrapLayout(tree, context);
+      if (tree.rootNode is PBSharedMasterNode) {
+        _applyComponentRules(tree, tree.rootNode);
+      }
       return Future.value(tree);
     } catch (e, stackTrace) {
       await Sentry.captureException(e, stackTrace: stackTrace);
       logger.error(e.toString());
     } finally {
       return Future.value(tree);
+    }
+  }
+
+  /// Method that applies specific layout rules that only apply to the [PBSharedMasterNode]s.
+  ///
+  /// Namely, when a [PBSharedMasterNode] has only one child, we need to inject
+  /// a stack to ensure alignment.
+  void _applyComponentRules(
+      PBIntermediateTree tree, PBSharedMasterNode component) {
+    if (tree.childrenOf(component).length == 1 &&
+        tree.childrenOf(component).first is! Group) {
+      var child = tree.childrenOf(component).first;
+
+      /// TODO: Improve the way we create Stacks
+      var stack = PBIntermediateStackLayout(
+        name: component.name,
+        constraints: component.constraints.copyWith(),
+      )
+        ..auxiliaryData = component.auxiliaryData
+        ..frame = component.frame.copyWith()
+        ..layoutCrossAxisSizing = component.layoutCrossAxisSizing
+        ..layoutMainAxisSizing = component.layoutMainAxisSizing;
+
+      /// Insert the stack below the component.
+      tree.injectBetween(insertee: stack, parent: component, child: child);
     }
   }
 
