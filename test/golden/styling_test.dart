@@ -1,13 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as path;
 
 import 'package:test/test.dart';
 
 void main() {
   final projectName = 'golden_testing_project';
-  final goldenFilePath = 'test/golden/golden_files/styling.golden';
-  final runtimeFilePath =
-      '../$projectName/lib/screens/styling/silver_screen.g.dart';
+  final basePath = path.join(path.current, 'test', 'golden');
+  final runtimeFilePath = path.join(basePath, projectName, 'lib');
+  final goldenFilesPath = path.join(basePath, 'golden_files');
   group('Styling Golden Test', () {
     setUp(() async {
       // Run Parabeac core to generate test file
@@ -18,30 +18,30 @@ void main() {
         '-k',
         '346172-e6b93eec-364f-4baa-bee8-24bf1e4d26da',
         '-n',
-        '$projectName'
+        '$projectName',
+        '-o',
+        '$basePath'
       ]);
     });
     test('Generating Styling and Comparing Golden File', () async {
-      var goldenFile = File(goldenFilePath);
+      var goldenScreen = File(path.join(goldenFilesPath, 'styling.golden'));
 
-      var silverFile = File(runtimeFilePath);
+      var runtimeFile = File(path.join(
+          runtimeFilePath, 'screens', 'styling', 'styling_screen.g.dart'));
 
-      var goldenList = goldenFile.readAsLinesSync();
+      var goldenScreenList = goldenScreen.readAsLinesSync();
 
-      var silverList = silverFile.readAsLinesSync();
+      var runtimeList = runtimeFile.readAsLinesSync();
 
       // Compare screens line by line
-      for (var i = 0; i < goldenList.length; i++) {
-        expect(goldenList[i], silverList[i]);
+      for (var i = 0; i < goldenScreenList.length; i++) {
+        expect(runtimeList[i], goldenScreenList[i], reason: 'Line ${i + 1}');
       }
     });
 
     tearDown(() async {
-      // Remove temporal project
-      await Process.start('rm', [
-        '-rf',
-        '../$projectName',
-      ]);
+      // Remove temporary project
+      await Process.start('rm', ['-rf', path.join(basePath, projectName)]);
     });
   });
 }
