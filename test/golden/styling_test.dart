@@ -7,7 +7,7 @@ void main() {
   final projectName = 'golden_testing_project';
   final basePath = path.join(path.current, 'test', 'golden');
   final runtimeFilePath = path.join(basePath, projectName, 'lib');
-  final goldenFilesPath = path.join(basePath, 'golden_files');
+  final goldenFilesPath = path.join(basePath, 'golden_files', 'styling');
   group('Styling Golden Test', () {
     setUp(() async {
       // Run Parabeac core to generate test file
@@ -24,18 +24,62 @@ void main() {
       ]);
     });
     test('Generating Styling and Comparing Golden File', () async {
-      var goldenScreen = File(path.join(goldenFilesPath, 'styling.golden'));
+      /// Screen containing styling frames and rectangles
+      final goldenScreen = File(path.join(goldenFilesPath, 'styling.golden'));
 
-      var runtimeFile = File(path.join(
+      /// Empty frame containing single text that says "Hello World"
+      final helloWorldFrame =
+          File(path.join(goldenFilesPath, 'helloworld.golden'));
+
+      /// Component that uses Color grouping directly on the component.
+      final primaryButton =
+          File(path.join(goldenFilesPath, 'primary_button.golden'));
+
+      /// Component that uses Color grouping through a rectangle inside the component.
+      final primaryButtonRect =
+          File(path.join(goldenFilesPath, 'primary_button_rect.golden'));
+
+      /// Component that uses a secondary Color grouping directly on the component.
+      final secondaryButton =
+          File(path.join(goldenFilesPath, 'secondary_button.golden'));
+      final goldenFiles = <File>[
+        goldenScreen,
+        helloWorldFrame,
+        primaryButton,
+        primaryButtonRect,
+        secondaryButton
+      ];
+
+      /// Runtime files corresponding to the above golden files
+      final widgetPath = path.join(runtimeFilePath, 'widgets', 'styling');
+      final runtimeFile = File(path.join(
           runtimeFilePath, 'screens', 'styling', 'styling_screen.g.dart'));
+      final helloWorldRuntimeFile =
+          File(path.join(widgetPath, 'helloworld.g.dart'));
+      final primaryButtonRuntimeFile =
+          File(path.join(widgetPath, 'primary_button.g.dart'));
+      final primaryButtonRectRuntimeFile =
+          File(path.join(widgetPath, 'primary_button_rect.g.dart'));
+      final secondaryButtonRuntimeFile =
+          File(path.join(widgetPath, 'secondary_button.g.dart'));
+      final runtimeFiles = <File>[
+        runtimeFile,
+        helloWorldRuntimeFile,
+        primaryButtonRuntimeFile,
+        primaryButtonRectRuntimeFile,
+        secondaryButtonRuntimeFile
+      ];
 
-      var goldenScreenList = goldenScreen.readAsLinesSync();
+      /// Iterate through golden/runtime files and compare them
+      for (var i = 0; i < goldenFiles.length; i++) {
+        var goldenFile = goldenFiles[i];
+        var runtimeFile = runtimeFiles[i];
+        var goldenFileLines = goldenFile.readAsLinesSync();
+        var runtimeFileLines = runtimeFile.readAsLinesSync();
 
-      var runtimeList = runtimeFile.readAsLinesSync();
-
-      // Compare screens line by line
-      for (var i = 0; i < goldenScreenList.length; i++) {
-        expect(runtimeList[i], goldenScreenList[i], reason: 'Line ${i + 1}');
+        for (var j = 0; j < goldenFileLines.length; j++) {
+          expect(runtimeFileLines[j], goldenFileLines[j]);
+        }
       }
     });
 
