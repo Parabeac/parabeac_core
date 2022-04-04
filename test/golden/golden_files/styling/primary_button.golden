@@ -1,0 +1,60 @@
+// *********************************************************************************
+// PARABEAC-GENERATED CODE. DO NOT MODIFY.
+//
+// FOR MORE INFORMATION ON HOW TO USE PARABEAC, PLEASE VISIT docs.parabeac.com
+// *********************************************************************************
+
+import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+class PrimaryButton extends StatefulWidget {
+  final constraints;
+  final String? ovrClickMe;
+  const PrimaryButton(
+    this.constraints, {
+    Key? key,
+    this.ovrClickMe,
+  }) : super(key: key);
+  @override
+  _PrimaryButton createState() => _PrimaryButton();
+}
+
+class _PrimaryButton extends State<PrimaryButton> {
+  _PrimaryButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Color(0xff59afff),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
+        child: Stack(children: [
+          Positioned(
+            left: widget.constraints.maxWidth * 0.336,
+            width: widget.constraints.maxWidth * 0.328,
+            top: widget.constraints.maxHeight * 0.39,
+            height: widget.constraints.maxHeight * 0.23,
+            child: Container(
+                width: widget.constraints.maxWidth * 0.328,
+                height: widget.constraints.maxHeight * 0.230,
+                child: AutoSizeText(
+                  widget.ovrClickMe ?? 'Click Me',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.0,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.left,
+                )),
+          ),
+        ]));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
