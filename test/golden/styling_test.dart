@@ -78,7 +78,8 @@ void main() {
         var runtimeFileLines = runtimeFile.readAsLinesSync();
 
         for (var j = 0; j < goldenFileLines.length; j++) {
-          expect(runtimeFileLines[j], goldenFileLines[j]);
+          expect(runtimeFileLines[j], goldenFileLines[j],
+              reason: 'File ${path.basename(goldenFile.path)} Line $j');
         }
       }
     });
