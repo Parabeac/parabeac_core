@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class SilverScreen extends StatefulWidget {
-  const SilverScreen({
+class StylingScreen extends StatefulWidget {
+  const StylingScreen({
     Key? key,
   }) : super(key: key);
   @override
-  _SilverScreen createState() => _SilverScreen();
+  _StylingScreen createState() => _StylingScreen();
 }
 
-class _SilverScreen extends State<SilverScreen> {
-  _SilverScreen();
+class _StylingScreen extends State<StylingScreen> {
+  _StylingScreen();
 
   @override
   Widget build(BuildContext context) {
