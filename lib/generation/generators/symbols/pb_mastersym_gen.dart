@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/attribute-helper/pb_box_decoration_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/stateful_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -30,7 +31,10 @@ class PBMasterSymbolGenerator extends PBGenerator {
       if (generatedWidget == null || generatedWidget.isEmpty) {
         return '';
       }
+      var decoration = PBBoxDecorationHelper().generate(source, context);
+      buffer.write('Container($decoration child:');
       buffer.write(generatedWidget);
+      buffer.write(')');
       return buffer.toString();
     } else {
       return '';

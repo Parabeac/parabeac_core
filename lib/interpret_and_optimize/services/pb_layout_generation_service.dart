@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layo
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/stack_reduction_visual_rule.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
@@ -73,12 +74,40 @@ class PBLayoutGenerationService extends AITHandler {
       _applyPostConditionRules(tree.rootNode, context);
 
       _wrapLayout(tree, context);
+      if (tree.rootNode is PBSharedMasterNode) {
+        _applyComponentRules(tree, tree.rootNode);
+      }
       return Future.value(tree);
     } catch (e, stackTrace) {
       await Sentry.captureException(e, stackTrace: stackTrace);
       logger.error(e.toString());
     } finally {
       return Future.value(tree);
+    }
+  }
+
+  /// Method that applies specific layout rules that only apply to the [PBSharedMasterNode]s.
+  ///
+  /// Namely, when a [PBSharedMasterNode] has only one child, we need to inject
+  /// a stack to ensure alignment.
+  void _applyComponentRules(
+      PBIntermediateTree tree, PBSharedMasterNode component) {
+    if (tree.childrenOf(component).length == 1 &&
+        tree.childrenOf(component).first is! Group) {
+      var child = tree.childrenOf(component).first;
+
+      /// TODO: Improve the way we create Stacks
+      var stack = PBIntermediateStackLayout(
+        name: component.name,
+        constraints: component.constraints.copyWith(),
+      )
+        ..auxiliaryData = component.auxiliaryData
+        ..frame = component.frame.copyWith()
+        ..layoutCrossAxisSizing = component.layoutCrossAxisSizing
+        ..layoutMainAxisSizing = component.layoutMainAxisSizing;
+
+      /// Insert the stack below the component.
+      tree.injectBetween(insertee: stack, parent: component, child: child);
     }
   }
 
@@ -200,7 +229,15 @@ class PBLayoutGenerationService extends AITHandler {
           /// This conditional statement is to not mixup the elements that pertain to different [currentNode.attributeName].
           /// For example, if [currentNode.attributeName] is an `appBar` and [nextNode.attributeName] is a `stack`,
           /// then you would not generate a [PBLayoutIntermediateNode] to encapsulate them both.
-          if (currentNode.attributeName != nextNode.attributeName) {
+          ///
+          /// currentNode and parent shall be skipped if they are either a Row or Column
+          /// because they should not be interpreted as Stack even though, their children
+          /// are too close to each other.
+          if (currentNode.attributeName != nextNode.attributeName ||
+              currentNode is PBIntermediateColumnLayout ||
+              currentNode is PBIntermediateRowLayout ||
+              parent is PBIntermediateColumnLayout ||
+              parent is PBIntermediateRowLayout) {
             break;
           }
           if (layout.satisfyRules(context, currentNode, nextNode) &&

@@ -128,7 +128,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Finds a [PBIntermediateNode] that is a child of `parent` of `type` in the [PBIntermediateTree], containing `name`.
   ///
   /// Returns null if not found.
-  PBIntermediateNode findChild(PBIntermediateNode parent, String name, Type type) {
+  @Deprecated('Use `this.where()` instead')
+  PBIntermediateNode findChild(
+      PBIntermediateNode parent, String name, Type type) {
     /// Check if the node is a match
     if (parent.name.contains(name) && parent.runtimeType == type) {
       return parent;
@@ -258,6 +260,25 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 
     addEdges(target.parent, [replacement]);
     return true;
+  }
+
+  /// Inserts [insertee] between [parent] and [child].
+  ///
+  /// As a side effect, [insertee] will be the new parent of [child].
+  /// Additionally, [insertee] will be the new child of [parent].
+  void injectBetween(
+      {PBIntermediateNode parent,
+      PBIntermediateNode child,
+      PBIntermediateNode insertee}) {
+    assert(parent != null && child != null && insertee != null);
+
+    addEdges(insertee, [child]);
+    removeEdges(parent, [child]);
+    addEdges(parent, [insertee]);
+
+    if(child.parent != insertee || insertee.parent != parent) {
+      _logger.warning('Injecting `insertee` may have had side effects on the graph.');
+    }
   }
 
   /// Checks if the [PBIntermediateTree] is a [TREE_TYPE.SCREEN],

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:parabeac_core/analytics/analytics_constants.dart';
+import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -67,10 +69,11 @@ final parser = ArgParser()
 
 Future<void> main(List<String> args) async {
   await runZonedGuarded(() async {
-    await Sentry.init(
-      (p0) => p0.dsn =
-          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747',
-    );
+    await Sentry.init((p0) {
+      p0.dsn =
+          'https://6e011ce0d8cd4b7fb0ff284a23c5cb37@o433482.ingest.sentry.io/5388747';
+      p0.tracesSampleRate = 1.0;
+    });
     await runParabeac(args);
   }, (error, stackTrace) async {
     await Sentry.captureException(error);
@@ -80,6 +83,13 @@ Future<void> main(List<String> args) async {
 }
 
 Future<void> runParabeac(List<String> args) async {
+  // Start sentry transaction
+  SentryService.startTransaction(
+    RUN_PARABEAC,
+    'Conversion',
+    description: 'Total runtime of parabeac_core.',
+  );
+
   await checkConfigFile();
   var log = Logger('Main');
   var pubspec = File('pubspec.yaml');
@@ -140,6 +150,7 @@ ${parser.usage}
   // Exit if only generating PBDL
   if (MainInfo().exportPBDL) {
     exitCode = 0;
+    await SentryService.finishTransaction(RUN_PARABEAC);
     return;
   }
   var pbProject = PBProject.fromJson(pbdl.toJson());
@@ -168,7 +179,13 @@ ${parser.usage}
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
 
+  SentryService.startChildTransactionFrom(
+    RUN_PARABEAC,
+    PRE_GEN,
+    description: 'Tasks to be done before generating the project.',
+  );
   await fpb.preGenTasks();
+  await SentryService.finishTransaction(PRE_GEN);
 
   /// Get ComponentIsolationService (if any), and add it to the list of services
   var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
@@ -184,6 +201,13 @@ ${parser.usage}
 
   var trees = <PBIntermediateTree>[];
 
+  SentryService.startChildTransactionFrom(
+    RUN_PARABEAC,
+    INTERPRETATION,
+    description:
+        'Runs services that interpret and optimize PBIntermediateNodes.',
+  );
+
   for (var tree in pbProject.forest) {
     var context = PBContext(processInfo.configuration);
     context.project = pbProject;
@@ -195,27 +219,81 @@ ${parser.usage}
     context.tree = tree;
     tree.context = context;
 
+    SentryService.startChildTransactionFrom(
+      INTERPRETATION,
+      HANDLE_CHILDREN,
+      description: 'Lets each node in the tree detect and handle its children.',
+    );
+
     tree.forEach((child) => child.handleChildren(context));
+
+    await SentryService.finishTransaction(HANDLE_CHILDREN);
+
+    SentryService.startChildTransactionFrom(
+      INTERPRETATION,
+      INTERMEDIATE_SERVICES,
+      description:
+          'Runs a variety of services to the tree to map it closely to Flutter.',
+    );
 
     var candidateTree =
         await interpretService.interpretAndOptimize(tree, context, pbProject);
+
+    await SentryService.finishTransaction(INTERMEDIATE_SERVICES);
 
     if (candidateTree != null) {
       trees.add(candidateTree);
     }
   }
 
-  fpb.runCommandQueue();
+  await SentryService.finishTransaction(INTERPRETATION);
 
+  SentryService.startChildTransactionFrom(
+    RUN_PARABEAC,
+    GENERATION,
+    description:
+        'Tasks that happen after interpretation of trees. These have to do with generating code, writing files, etc.',
+  );
+
+  SentryService.startChildTransactionFrom(
+    GENERATION,
+    COMMAND_QUEUE,
+    description:
+        'Run command queue, which contains tasks like writing screens, symbols, etc.',
+  );
+  fpb.runCommandQueue();
+  await SentryService.finishTransaction(COMMAND_QUEUE);
+
+  SentryService.startChildTransactionFrom(
+    GENERATION,
+    GEN_DRY_RUN,
+    description: 'Dry run to gather necessary information from trees.',
+  );
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, true);
   }
+  await SentryService.finishTransaction(GEN_DRY_RUN);
 
+  SentryService.startChildTransactionFrom(
+    GENERATION,
+    GEN_AIT,
+    description: 'Generates the code inside each tree.',
+  );
   for (var tree in trees) {
     await fpb.genAITree(tree, tree.context, false);
   }
+  await SentryService.finishTransaction(GEN_AIT);
+  await SentryService.finishTransaction(GENERATION);
 
+  SentryService.startChildTransactionFrom(
+    RUN_PARABEAC,
+    POST_GEN,
+    description: 'Executes post generation tasks.',
+  );
   fpb.executePostGenTasks();
+  await SentryService.finishTransaction(POST_GEN);
+
+  await SentryService.finishTransaction(RUN_PARABEAC);
 
   exitCode = 0;
 }

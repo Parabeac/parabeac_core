@@ -1,0 +1,431 @@
+// *********************************************************************************
+// PARABEAC-GENERATED CODE. DO NOT MODIFY.
+//
+// FOR MORE INFORMATION ON HOW TO USE PARABEAC, PLEASE VISIT docs.parabeac.com
+// *********************************************************************************
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+class StylingScreen extends StatefulWidget {
+  const StylingScreen({
+    Key? key,
+  }) : super(key: key);
+  @override
+  _StylingScreen createState() => _StylingScreen();
+}
+
+class _StylingScreen extends State<StylingScreen> {
+  _StylingScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: Stack(children: [
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 0,
+          height: 124.0,
+          child: Container(
+            width: 197.000,
+            height: 124.000,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(1.0000000596046466, -0.999999849557967),
+                end: Alignment(-1.0, 1.0000002100466796),
+                colors: <Color>[
+                  Color(0xffff0000),
+                  Color(0x00c4c4c4),
+                ],
+                stops: [
+                  0.0,
+                  1.0,
+                ],
+                tileMode: TileMode.clamp,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 154.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x70991d66),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 304.0,
+          height: 120.0,
+          child: Image.asset(
+            'assets/images/circleradius.png',
+            package: 'golden_testing_project',
+            width: 197.000,
+            height: 120.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 454.0,
+          height: 120.0,
+          child: Image.asset(
+            'assets/images/diamond.png',
+            package: 'golden_testing_project',
+            width: 197.000,
+            height: 120.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 604.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99b63a4c),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          width: 197.0,
+          top: 754.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99378c59),
+              border: Border.all(
+                color: Color(0xff0085ff),
+                width: 3.0,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 754.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99378c59),
+              border: Border.all(
+                color: Color(0xff0085ff),
+                width: 3.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 4.0,
+                  blurRadius: 4.0,
+                  offset: Offset(-5.0, 4.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 604.0,
+          height: 120.0,
+          child: Image.asset(
+            'assets/images/2stroke.png',
+            package: 'golden_testing_project',
+            width: 197.000,
+            height: 120.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 454.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99378c59),
+              border: Border.all(
+                color: Color(0xff0085ff),
+                width: 3.0,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 304.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99378c59),
+              border: Border.all(
+                color: Color(0xff0085ff),
+                width: 3.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 4.0,
+                  blurRadius: 4.0,
+                  offset: Offset(-5.0, 4.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 154.0,
+          height: 120.0,
+          child: Image.asset(
+            'assets/images/imagewithtint.png',
+            package: 'golden_testing_project',
+            width: 197.000,
+            height: 120.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 231.0,
+          width: 197.0,
+          top: 4.0,
+          height: 120.0,
+          child: Container(
+            width: 197.000,
+            height: 120.000,
+            decoration: BoxDecoration(
+              color: Color(0x99378c59),
+              border: Border.all(
+                color: Color(0xff0085ff),
+                width: 3.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 4.0,
+                  blurRadius: 4.0,
+                  offset: Offset(-5.0, 4.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 495.0,
+          width: 133.0,
+          top: 0,
+          height: 124.0,
+          child: Image.asset(
+            'assets/images/ellipse1.png',
+            package: 'golden_testing_project',
+            width: 133.000,
+            height: 124.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 495.0,
+          width: 142.0,
+          top: 154.0,
+          height: 120.0,
+          child: SvgPicture.asset(
+            'assets/images/polygon1.svg',
+            package: 'golden_testing_project',
+            width: 142.000,
+            height: 120.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 507.0,
+          width: 110.0,
+          top: 304.0,
+          height: 126.0,
+          child: SvgPicture.asset(
+            'assets/images/star1.svg',
+            package: 'golden_testing_project',
+            width: 110.000,
+            height: 126.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 507.0,
+          width: 109.5,
+          top: 467.5,
+          height: 102.5,
+          child: SvgPicture.asset(
+            'assets/images/vector1.svg',
+            package: 'golden_testing_project',
+            width: 109.500,
+            height: 102.500,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 483.0,
+          width: 154.0,
+          top: 604.0,
+          height: 118.0,
+          child: SvgPicture.asset(
+            'assets/images/emptyframe.svg',
+            package: 'golden_testing_project',
+            width: 154.000,
+            height: 118.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 483.0,
+          width: 154.0,
+          top: 754.0,
+          height: 118.0,
+          child: Container(
+              width: 154.000,
+              height: 118.000,
+              decoration: BoxDecoration(
+                color: Color(0x99cd4900),
+              ),
+              child: Stack(children: [
+                Positioned(
+                  left: 39.0,
+                  width: 67.0,
+                  top: 42.0,
+                  height: 42.0,
+                  child: Container(
+                      width: 67.000,
+                      height: 42.000,
+                      child: AutoSizeText(
+                        'Howdy',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.0,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.left,
+                      )),
+                ),
+              ])),
+        ),
+        Positioned(
+          left: 703.0,
+          width: 154.0,
+          top: 3.0,
+          height: 118.0,
+          child: Container(
+              width: 154.000,
+              height: 118.000,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(0.0, -1.0),
+                  end: Alignment(0.0, 0.9999999999999998),
+                  colors: <Color>[
+                    Color(0xff0038ff),
+                    Color(0x0052ff00),
+                  ],
+                  stops: [
+                    0.0,
+                    1.0,
+                  ],
+                  tileMode: TileMode.clamp,
+                ),
+              ),
+              child: Stack(children: [
+                Positioned(
+                  left: 39.0,
+                  width: 67.0,
+                  top: 42.0,
+                  height: 42.0,
+                  child: Container(
+                      width: 67.000,
+                      height: 42.000,
+                      child: AutoSizeText(
+                        'Howdy',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.0,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.left,
+                      )),
+                ),
+              ])),
+        ),
+        Positioned(
+          left: 764.0,
+          width: 1.0,
+          top: 235.0,
+          height: 77.007,
+          child: SvgPicture.asset(
+            'assets/images/line1.svg',
+            package: 'golden_testing_project',
+            width: 1.000,
+            height: 77.007,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 764.0,
+          width: 1.0,
+          top: 341.0,
+          height: 89.0,
+          child: SvgPicture.asset(
+            'assets/images/line2.svg',
+            package: 'golden_testing_project',
+            width: 1.000,
+            height: 89.000,
+            fit: BoxFit.none,
+          ),
+        ),
+        Positioned(
+          left: 748.0,
+          width: 176.0,
+          top: 607.0,
+          height: 127.0,
+          child: Image.asset(
+            'assets/images/rectangle1.png',
+            package: 'golden_testing_project',
+            width: 176.000,
+            height: 127.000,
+            fit: BoxFit.none,
+          ),
+        ),
+      ]),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
