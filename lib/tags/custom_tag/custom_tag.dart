@@ -92,6 +92,7 @@ class CustomTagGenerator extends PBGenerator {
       '$DIRECTORY_GEN/$cleanName.dart',
       MainInfo().projectName,
     ));
+
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(WriteSymbolCommand(
       Uuid().v4(),
@@ -135,7 +136,21 @@ class CustomTagGenerator extends PBGenerator {
         }
       }
     }
+
+    /// Clean name for import
+    var componentCleanName = PBInputFormatter.formatLabel(
+        child.name.replaceAll('<custom>Group', '').snakeCase);
+
+    // Dynamic import, hot fix
+    var import = FlutterImport(
+      '${WriteSymbolCommand.DEFAULT_SYMBOL_PATH}/${context.tree.name}/$componentCleanName.g.dart',
+      MainInfo().projectName,
+    ).toString();
+
+    var componentName = className.replaceAll('Custom', '');
+
     return '''
+      $import
       import 'package:flutter/material.dart';
 
       class $className extends StatefulWidget{
@@ -150,7 +165,7 @@ class CustomTagGenerator extends PBGenerator {
       class _${className}State extends State<$className> {
         @override
         Widget build(BuildContext context){
-          return widget.child!;
+          return widget.child ?? $componentName(BoxConstraints(maxWidth: ${child.parent.frame.width}, maxHeight: ${child.parent.frame.height},));
         }
       }
       ''';
