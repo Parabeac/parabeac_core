@@ -47,6 +47,9 @@ abstract class PBTag extends PBVisualIntermediateNode {
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
     // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
+      tree.injectBetween(
+          parent: iNode, child: tree.childrenOf(iNode).first, insertee: tag);
+
       return iNode;
     } else if (iNode is PBSharedInstanceIntermediateNode) {
       iNode.parent = parent;
