@@ -153,7 +153,7 @@ class CustomTagGenerator extends PBGenerator {
     }
 
     /// Import variable in case we need to import
-    /// component file inside component
+    /// component file inside custom file
     var import = '';
     /// Suffix to be appended after `widget.child`.
     /// The '!' is for null safety. Optionally,
