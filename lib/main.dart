@@ -19,6 +19,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/des
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
+import 'package:parabeac_core/services/version_checker.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -26,7 +27,6 @@ import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
 import 'controllers/interpret.dart';
 import 'controllers/main_info.dart';
-import 'package:yaml/yaml.dart';
 import 'package:path/path.dart' as p;
 
 import 'interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -83,6 +83,7 @@ Future<void> main(List<String> args) async {
 }
 
 Future<void> runParabeac(List<String> args) async {
+  await checkVersions();
   // Start sentry transaction
   SentryService.startTransaction(
     RUN_PARABEAC,
@@ -92,12 +93,6 @@ Future<void> runParabeac(List<String> args) async {
 
   await checkConfigFile();
   var log = Logger('Main');
-  var pubspec = File('pubspec.yaml');
-  await pubspec.readAsString().then((String text) {
-    Map yaml = loadYaml(text);
-    log.info('Current version: ${yaml['version']}');
-  });
-  log.info(args.toString());
 
   MainInfo().cwd = Directory.current;
 
