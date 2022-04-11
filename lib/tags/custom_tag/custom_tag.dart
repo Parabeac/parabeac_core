@@ -10,7 +10,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inje
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -18,6 +17,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:uuid/uuid.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as path;
 
 class CustomTag extends PBTag implements PBInjectedIntermediate {
   @override
@@ -30,6 +30,8 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
   ParentLayoutSizing layoutCrossAxisSizing;
   @override
   ParentLayoutSizing layoutMainAxisSizing;
+
+  bool isComponent;
   CustomTag(
     String UUID,
     Rectangle3D frame,
@@ -37,6 +39,7 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
     PBIntermediateConstraints constraints,
     this.layoutCrossAxisSizing,
     this.layoutMainAxisSizing,
+    this.isComponent,
   }) : super(
           UUID,
           frame,
@@ -69,6 +72,8 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       constraints: originalRef.constraints.copyWith(),
       layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
       layoutMainAxisSizing: originalRef.layoutMainAxisSizing,
+      isComponent: originalRef is PBSharedMasterNode &&
+          originalRef.componentSetName == null, //Variable used to add extra info. to custom file.
     );
   }
 }
@@ -94,15 +99,21 @@ class CustomTagGenerator extends PBGenerator {
     ));
 
     context.configuration.generationConfiguration.fileStructureStrategy
-        .commandCreated(WriteSymbolCommand(
-      Uuid().v4(),
-      cleanName,
-      customBoilerPlate(
-          titleName, context.tree.childrenOf(source).first, context),
-      relativePath: '$DIRECTORY_GEN',
-      symbolPath: 'lib',
-      ownership: FileOwnership.DEV,
-    ));
+        .commandCreated(
+      WriteSymbolCommand(
+        Uuid().v4(),
+        cleanName,
+        customBoilerPlate(
+          titleName,
+          context.tree.childrenOf(source).first,
+          context,
+          source,
+        ),
+        relativePath: '$DIRECTORY_GEN',
+        symbolPath: 'lib',
+        ownership: FileOwnership.DEV,
+      ),
+    );
 
     if (source is CustomTag) {
       return '''
@@ -115,7 +126,11 @@ class CustomTagGenerator extends PBGenerator {
   }
 
   String customBoilerPlate(
-      String className, PBIntermediateNode child, PBContext context) {
+    String className,
+    PBIntermediateNode child,
+    PBContext context,
+    CustomTag source,
+  ) {
     var variableList = <String>[];
     if (child is PBSharedInstanceIntermediateNode) {
       if (child.sharedParamValues != null) {
@@ -137,17 +152,23 @@ class CustomTagGenerator extends PBGenerator {
       }
     }
 
-    /// Clean name for import
-    var componentCleanName = PBInputFormatter.formatLabel(
-        child.name.replaceAll('<custom>Group', '').snakeCase);
-
-    // Dynamic import, hot fix
-    var import = FlutterImport(
-      '${WriteSymbolCommand.DEFAULT_SYMBOL_PATH}/${context.tree.name}/$componentCleanName.g.dart',
-      MainInfo().projectName,
-    ).toString();
-
-    var componentName = className.replaceAll('Custom', '');
+    /// Import variable in case we need to import
+    /// component file inside component
+    var import = '';
+    /// Suffix to be appended after `widget.child`.
+    /// The '!' is for null safety. Optionally,
+    /// we can also add reference to the component.
+    var suffix = '!';
+    if (source.isComponent) {
+      var baseCompName = className.replaceAll('Custom', '');
+      import = FlutterImport(
+        path.join(WriteSymbolCommand.DEFAULT_SYMBOL_PATH, context.tree.name,
+            '${baseCompName.snakeCase}.g.dart'),
+        MainInfo().projectName,
+      ).toString();
+      suffix =
+          '?? $baseCompName(BoxConstraints(maxWidth: ${child.parent.frame.width}, maxHeight: ${child.parent.frame.height},))';
+    }
 
     return '''
       $import
@@ -165,7 +186,7 @@ class CustomTagGenerator extends PBGenerator {
       class _${className}State extends State<$className> {
         @override
         Widget build(BuildContext context){
-          return widget.child ?? $componentName(BoxConstraints(maxWidth: ${child.parent.frame.width}, maxHeight: ${child.parent.frame.height},));
+          return widget.child $suffix;
         }
       }
       ''';
