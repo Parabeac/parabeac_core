@@ -39,7 +39,6 @@ class Interpret {
     PBLayoutGenerationService(),
     // PBConstraintGenerationService(),
     PBAlignGenerationService(),
-    PBPlatformOrientationLinkerService(),
   ];
 
   Future<PBIntermediateTree> interpretAndOptimize(
