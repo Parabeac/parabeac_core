@@ -1,10 +1,12 @@
 import 'package:parabeac_core/generation/flutter_project_builder/file_writer_observer.dart';
 import 'package:path/path.dart' as p;
+import 'package:quick_log/quick_log.dart';
 import 'package:recase/recase.dart';
 
 class ImportHelper implements FileWriterObserver {
   final Map<String, Set<String>> imports = {};
-  final List<String> _importBaseNames = [];
+  final Set<String> _importBaseNames = {};
+  final Logger _logger = const Logger('ImportHelper');
 
   /// Traverse the [node] tree, check if any nodes need importing,
   /// and add the relative import from [path] to the [node]
@@ -55,10 +57,14 @@ class ImportHelper implements FileWriterObserver {
     return getImport(UUID)?.map(importMapper)?.toList() ?? [];
   }
 
-  /// Looks that we are not tracking the file in the imports by comparing the
-  /// [import]s basename with the collection of [_importBaseNames].
-  bool containsBaseName(String import) {
-    return _importBaseNames.contains(p.basename(import));
+  /// Returns whether a file with the same [basename] as `import`, but with different [path] exists.
+  ///
+  /// This is done to alert the user that there may be conflicting imports.
+  /// For example, if we have file `page_1/widget.dart` and file `page_2/widget.dart`,
+  /// this method will return `true`.
+  bool conflictsWithExistingImport(String import) {
+    return _importBaseNames.any((element) =>
+        p.basename(element) == p.basename(import) && element != import);
   }
 
   /// Adding [import] to the [imports], allowing other callers to lookup their dependencies using
@@ -66,15 +72,20 @@ class ImportHelper implements FileWriterObserver {
   ///
   /// Multiple [import]s could be added under the same [UUID]. This is to allow the
   /// callers of [addImport] to add additional imports for other packages or files that are
-  /// certain to be required. The only contrain is that the [import] basename need to be
-  /// unique across all [imports], if its not, its not going to be added to the [imports]. For example,
-  /// when we [addImport] `<path>/example.dart`, then `<another-path>/example.dart`, only
-  /// the `<path>/example.dart` is going to be recorded in [imports].
+  /// certain to be required.
+  ////// The only contrain is that the [import] basename need to be
+  ////// unique across all [imports], if its not, its not going to be added to the [imports]. For example,
+  ////// when we [addImport] `<path>/example.dart`, then `<another-path>/example.dart`, only
+  ////// the `<path>/example.dart` is going to be recorded in [imports].
   void addImport(String import, String UUID) {
-    if (import != null && UUID != null && !containsBaseName(import)) {
+    if (conflictsWithExistingImport(import)) {
+      _logger.warning(
+          'A different file with the basename `${p.basename(import)}` has already been added. This will cause import conflicts in certain cases. Make sure your elements are uniquely named and correctly referenced.');
+    }
+    if (import != null && UUID != null) {
       imports[UUID] ??= {};
       imports[UUID].add(import);
-      _importBaseNames.add(p.basename(import));
+      _importBaseNames.add(import);
     }
   }
 
