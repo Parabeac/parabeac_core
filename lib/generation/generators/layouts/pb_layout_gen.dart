@@ -27,8 +27,13 @@ abstract class PBLayoutGenerator extends PBGenerator {
       buffer.write(')');
     }
 
-    // Return complete layout generated
-    return buffer.toString();
+    // Return generated layout wrapped with a container (for styling)
+    return containerWrapper(
+      buffer.toString(),
+      source,
+      context,
+      includeSize: false,
+    );
   }
 
   String getChildren(List<PBIntermediateNode> children, PBContext context) {
