@@ -9,6 +9,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_n
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/component_isolation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -304,6 +305,11 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
   var forest = [tree];
   for (var element in tree) {
     if (element is PBSharedMasterNode && element.parent != null) {
+      var elementConstraints = element.constraints.copyWith();
+
+      /// Since this is now a [PBSharedMasterNode], we need to remove the constraints
+      /// and pass them on to the instance.
+      element.constraints = PBIntermediateConstraints.defaultConstraints();
       var tempTree = PBIntermediateTree(name: element.name)
         ..rootNode = element
         ..tree_type = TREE_TYPE.VIEW
@@ -336,7 +342,7 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
       )
         ..layoutCrossAxisSizing = element.layoutCrossAxisSizing
         ..layoutMainAxisSizing = element.layoutMainAxisSizing
-        ..constraints = element.constraints
+        ..constraints = elementConstraints
         ..auxiliaryData = element.auxiliaryData;
       tree.replaceNode(element, newInstance);
     }
