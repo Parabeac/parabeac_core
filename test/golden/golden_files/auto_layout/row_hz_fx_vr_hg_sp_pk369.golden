@@ -35,6 +35,9 @@ class _RowHzFxVrHgSpPk369 extends State<RowHzFxVrHgSpPk369> {
                 top: 10.0,
                 bottom: 10.0,
               ),
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
