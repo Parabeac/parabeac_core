@@ -4,10 +4,14 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:quick_log/quick_log.dart';
 
+import 'attribute-helper/pb_box_decoration_gen_helper.dart';
+
 abstract class PBGenerator {
   final String OBJECTID = 'UUID';
-  static String MEDIAQUERY_HORIZONTAL_BOILERPLATE = 'MediaQuery.of(context).size.width';
-  static String MEDIAQUERY_VERTICAL_BOILERPLATE = 'MediaQuery.of(context).size.height';
+  static String MEDIAQUERY_HORIZONTAL_BOILERPLATE =
+      'MediaQuery.of(context).size.width';
+  static String MEDIAQUERY_VERTICAL_BOILERPLATE =
+      'MediaQuery.of(context).size.height';
 
   Logger logger;
 
@@ -23,4 +27,24 @@ abstract class PBGenerator {
   }
 
   String generate(PBIntermediateNode source, PBContext context);
+
+  /// Method that wraps `this` with a `Container`.
+  ///
+  /// The container will also contain the [source]'s `styling` properties if applicable.
+  /// The container will contain [source]'s `width` and `height` properties if [includeSize] is `true`.
+  String containerWrapper(
+    String body,
+    PBIntermediateNode source,
+    PBContext context, {
+    bool includeSize = true,
+  }) {
+    var decoration = PBBoxDecorationHelper().generate(source, context);
+    return '''
+      Container(
+        ${includeSize ? 'width: ${source.frame.width}, height: ${source.frame.height},' : ''}
+        ${decoration.isEmpty || decoration.contains('BoxDecoration()') ? '' : '$decoration'}
+        child: $body,
+      )
+    ''';
+  }
 }

@@ -27,7 +27,6 @@ abstract class PBLayoutGenerator extends PBGenerator {
       buffer.write(')');
     }
 
-    // Return complete layout generated
     return buffer.toString();
   }
 

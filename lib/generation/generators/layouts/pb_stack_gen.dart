@@ -27,20 +27,10 @@ class PBStackGenerator extends PBGenerator {
         buffer.write(')');
       }
       if (source.parent is InjectedAppbar) {
-        return containerWrapper(buffer.toString(), source);
+        return containerWrapper(buffer.toString(), source, context);
       }
       return buffer.toString();
     }
     return '';
-  }
-
-  String containerWrapper(String body, PBIntermediateNode source) {
-    return '''
-      Container(
-        height: ${source.frame.height},
-        width: ${source.frame.width},
-        child: $body
-      )
-    ''';
   }
 }
