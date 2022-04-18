@@ -21,6 +21,12 @@ class PBContainerGenerator extends PBGenerator {
       var buffer = StringBuffer();
       buffer.write('Container(');
 
+      /// Add clip behavior in case children needs to be clipped
+      /// TODO: Extend to different kinds of clip
+      if (source.auxiliaryData.clipsContent ?? false) {
+        buffer.write('clipBehavior: Clip.hardEdge,');
+      }
+
       //TODO(ivanV): please clean my if statement :(
       if (source is InjectedContainer) {
         if (source.padding != null) {
