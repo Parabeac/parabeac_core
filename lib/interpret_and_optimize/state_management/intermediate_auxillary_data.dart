@@ -32,11 +32,15 @@ class IntermediateAuxiliaryData {
   @JsonKey(ignore: true)
   PBColor color;
 
+  @JsonKey(defaultValue: false)
+  bool clipsContent;
+
   IntermediateAuxiliaryData({
     this.colors,
     this.borderInfo,
     this.effects,
     this.intermediateTextStyle,
+    this.clipsContent,
   }) {
     if (colors != null) {
       color = _calculateBlendColor();
