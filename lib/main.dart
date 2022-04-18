@@ -83,6 +83,7 @@ Future<void> main(List<String> args) async {
 }
 
 Future<void> runParabeac(List<String> args) async {
+  Logger.writer = ConsolePrinter(minLevel: LogLevel.info);
   // Start sentry transaction
   SentryService.startTransaction(
     RUN_PARABEAC,
