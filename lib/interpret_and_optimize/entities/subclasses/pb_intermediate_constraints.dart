@@ -39,6 +39,7 @@ class PBIntermediateConstraints {
   factory PBIntermediateConstraints.fromJson(Map<String, dynamic> json) =>
       _$PBIntermediateConstraintsFromJson(json);
 
+  /// Returns a `PBIntermediateConstraints` instance where all values are set to false.
   factory PBIntermediateConstraints.defaultConstraints() =>
       PBIntermediateConstraints(
           pinBottom: false,
