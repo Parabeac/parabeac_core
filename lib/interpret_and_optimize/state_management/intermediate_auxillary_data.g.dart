@@ -24,6 +24,7 @@ IntermediateAuxiliaryData _$IntermediateAuxiliaryDataFromJson(
     intermediateTextStyle: json['textStyle'] == null
         ? null
         : PBTextStyle.fromJson(json['textStyle'] as Map<String, dynamic>),
+    clipsContent: json['clipsContent'] as bool ?? false,
   )..alignment = json['alignment'] as Map<String, dynamic>;
 }
 
@@ -35,4 +36,5 @@ Map<String, dynamic> _$IntermediateAuxiliaryDataToJson(
       'borderOptions': instance.borderInfo?.toJson(),
       'effects': instance.effects?.map((e) => e?.toJson())?.toList(),
       'textStyle': instance.intermediateTextStyle?.toJson(),
+      'clipsContent': instance.clipsContent,
     };
