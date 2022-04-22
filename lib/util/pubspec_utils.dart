@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:yaml_modify/yaml_modify.dart';
 
 /// Class that is in charge of interacting with the public yaml file.
-class PubspecService {
+class PubspecUtils {
   /// TODO: Add all methods that edit or read the yaml file.
 
   String pubspecAbsolutePath;
 
-  PubspecService(this.pubspecAbsolutePath);
+  PubspecUtils(this.pubspecAbsolutePath);
 
   /// Method that returns the version inside the pubspec.yaml file.
   String getPackageVersion() {

@@ -19,7 +19,7 @@ import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/des
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
-import 'package:parabeac_core/services/version_checker.dart';
+import 'package:parabeac_core/util/version_checker.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -83,7 +83,7 @@ Future<void> main(List<String> args) async {
 }
 
 Future<void> runParabeac(List<String> args) async {
-  await checkVersions();
+  await checkAllVersions();
   // Start sentry transaction
   SentryService.startTransaction(
     RUN_PARABEAC,
