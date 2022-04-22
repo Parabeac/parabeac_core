@@ -35,6 +35,9 @@ class _ColHzHgVrFxSpSb258 extends State<ColHzHgVrFxSpSb258> {
                 top: 10.0,
                 bottom: 10.0,
               ),
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,

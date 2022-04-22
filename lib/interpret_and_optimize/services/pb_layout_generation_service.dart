@@ -146,7 +146,8 @@ class PBLayoutGenerationService extends AITHandler {
                 IntermediateAxisMode.FIXED,
           )
             ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
-            ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing;
+            ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing
+            ..auxiliaryData = tempGroup.auxiliaryData;
 
           // Let the tree know that the layout will be
           // wrapped by the Container
