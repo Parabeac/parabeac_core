@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/analytics/analytics_constants.dart';
 import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/component_isolation_configuration.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
@@ -127,7 +128,14 @@ ${parser.usage}
         'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   }
 
-  collectArguments(argResults);
+  /// Pass MainInfo the argument results
+  /// so it can interpret and store them for later use
+  MainInfo().collectArguments(argResults);
+
+  /// Register the PathService singleton
+  /// for PBC to know in the future the type of architecture
+  GetIt.I.registerSingleton<PathService>(PathService.fromConfiguration(
+      MainInfo().configuration.folderArchitecture));
 
   var processInfo = MainInfo();
   if (processInfo.designType == DesignType.UNKNOWN) {
@@ -351,64 +359,6 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
   return forest;
 }
 
-/// Populates the corresponding fields of the [MainInfo] object with the
-/// corresponding [arguments].
-///
-/// Remember that [MainInfo] is a Singleton, therefore, nothing its going to
-/// be return from the function. When you use [MainInfo] again, its going to
-/// contain the proper values from [arguments]
-void collectArguments(ArgResults arguments) {
-  var info = MainInfo();
-
-  info.configuration =
-      generateConfiguration(p.normalize(arguments['config-path']));
-
-  /// Detect platform
-  info.platform = Platform.operatingSystem;
-
-  info.figmaOauthToken = arguments['oauth'];
-  info.figmaKey = arguments['figKey'];
-  info.figmaProjectID = arguments['fig'];
-
-  info.designFilePath = arguments['path'];
-  if (arguments['pbdl-in'] != null) {
-    info.pbdlPath = arguments['pbdl-in'];
-  }
-
-  info.designType = determineDesignTypeFromArgs(arguments);
-  info.exportStyles = !arguments['exclude-styles'];
-  info.projectName ??= arguments['project-name'];
-
-  /// If outputPath is empty, assume we are outputting to design file path
-  info.outputPath = arguments['out'] ??
-      p.dirname(info.designFilePath ?? Directory.current.path);
-
-  info.exportPBDL = arguments['export-pbdl'] ?? false;
-
-  /// In the future when we are generating certain dart files only.
-  /// At the moment we are only generating in the flutter project.
-  info.pngPath = p.join(info.genProjectPath, 'lib/assets/images');
-}
-
-/// Determine the [MainInfo.designType] from the [arguments]
-///
-/// If [arguments] include `figKey` or `fig`, that implies that [MainInfo.designType]
-/// should be [DesignType.FIGMA]. If there is a `path`, then the [MainInfo.designType]
-/// should be [DesignType.SKETCH]. Otherwise, if it includes the flag `pndl-in`, the type
-/// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
-/// to [DesignType.UNKNOWN].
-DesignType determineDesignTypeFromArgs(ArgResults arguments) {
-  if ((arguments['figKey'] != null || arguments['oauth'] != null) &&
-      arguments['fig'] != null) {
-    return DesignType.FIGMA;
-  } else if (arguments['path'] != null) {
-    return DesignType.SKETCH;
-  } else if (arguments['pbdl-in'] != null) {
-    return DesignType.PBDL;
-  }
-  return DesignType.UNKNOWN;
-}
-
 /// Checks whether a configuration file is made already,
 /// and makes one if necessary
 Future<void> checkConfigFile() async {
@@ -430,21 +380,6 @@ Future<void> checkConfigFile() async {
   }
 
   addToAmplitude();
-}
-
-/// Generating the [PBConfiguration] based in the configuration file in [path]
-PBConfiguration generateConfiguration(String path) {
-  var configuration;
-  try {
-    ///SET CONFIGURATION
-    // Setting configurations globally
-    configuration =
-        PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
-  } catch (e, stackTrace) {
-    Sentry.captureException(e, stackTrace: stackTrace);
-  }
-  configuration ??= PBConfiguration.genericConfiguration();
-  return configuration;
 }
 
 /// Gets the homepath of the user according to their OS

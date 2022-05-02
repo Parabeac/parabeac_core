@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:args/args.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:path/path.dart' as p;
+import 'package:sentry/sentry.dart';
 
 class MainInfo {
   static final MainInfo _singleton = MainInfo._internal();
@@ -94,6 +96,79 @@ class MainInfo {
       return path;
     }
     return p.normalize(p.absolute(path));
+  }
+
+  /// Populates the corresponding fields of the [MainInfo] object with the
+  /// corresponding [arguments].
+  ///
+  /// Remember that [MainInfo] is a Singleton, therefore, nothing its going to
+  /// be return from the function. When you use [MainInfo] again, its going to
+  /// contain the proper values from [arguments]
+  void collectArguments(ArgResults arguments) {
+    var info = MainInfo();
+
+    info.configuration =
+        generateConfiguration(p.normalize(arguments['config-path']));
+
+    /// Detect platform
+    info.platform = Platform.operatingSystem;
+
+    info.figmaOauthToken = arguments['oauth'];
+    info.figmaKey = arguments['figKey'];
+    info.figmaProjectID = arguments['fig'];
+
+    info.designFilePath = arguments['path'];
+    if (arguments['pbdl-in'] != null) {
+      info.pbdlPath = arguments['pbdl-in'];
+    }
+
+    info.designType = determineDesignTypeFromArgs(arguments);
+    info.exportStyles = !arguments['exclude-styles'];
+    info.projectName ??= arguments['project-name'];
+
+    /// If outputPath is empty, assume we are outputting to design file path
+    info.outputPath = arguments['out'] ??
+        p.dirname(info.designFilePath ?? Directory.current.path);
+
+    info.exportPBDL = arguments['export-pbdl'] ?? false;
+
+    /// In the future when we are generating certain dart files only.
+    /// At the moment we are only generating in the flutter project.
+    info.pngPath = p.join(info.genProjectPath, 'lib/assets/images');
+  }
+
+  /// Generating the [PBConfiguration] based in the configuration file in [path]
+  PBConfiguration generateConfiguration(String path) {
+    var configuration;
+    try {
+      ///SET CONFIGURATION
+      // Setting configurations globally
+      configuration =
+          PBConfiguration.fromJson(json.decode(File(path).readAsStringSync()));
+    } catch (e, stackTrace) {
+      Sentry.captureException(e, stackTrace: stackTrace);
+    }
+    configuration ??= PBConfiguration.genericConfiguration();
+    return configuration;
+  }
+
+  /// Determine the [MainInfo.designType] from the [arguments]
+  ///
+  /// If [arguments] include `figKey` or `fig`, that implies that [MainInfo.designType]
+  /// should be [DesignType.FIGMA]. If there is a `path`, then the [MainInfo.designType]
+  /// should be [DesignType.SKETCH]. Otherwise, if it includes the flag `pndl-in`, the type
+  /// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
+  /// to [DesignType.UNKNOWN].
+  DesignType determineDesignTypeFromArgs(ArgResults arguments) {
+    if ((arguments['figKey'] != null || arguments['oauth'] != null) &&
+        arguments['fig'] != null) {
+      return DesignType.FIGMA;
+    } else if (arguments['path'] != null) {
+      return DesignType.SKETCH;
+    } else if (arguments['pbdl-in'] != null) {
+      return DesignType.PBDL;
+    }
+    return DesignType.UNKNOWN;
   }
 
   factory MainInfo() {
