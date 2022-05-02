@@ -55,6 +55,11 @@ class PBConfiguration {
   @JsonKey(defaultValue: 'None')
   final String componentIsolation;
 
+  /// The type of folder architecture that Parabeac-Core should follow
+  /// It will be domain, as default
+  @JsonKey(defaultValue: 'domain')
+  final String folderArchitecture;
+
   PBConfiguration(
     // this.widgetStyle,
     // this.widgetType,
@@ -65,6 +70,7 @@ class PBConfiguration {
     this.scaling,
     this.enablePrototyping,
     this.componentIsolation,
+    this.folderArchitecture,
   );
 
   /// Converting the [json] into a [PBConfiguration] object.
