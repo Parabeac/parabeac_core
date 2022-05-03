@@ -318,7 +318,7 @@ Future<List<PBIntermediateTree>> treeHasMaster(PBIntermediateTree tree) async {
       /// Since this is now a [PBSharedMasterNode], we need to remove the constraints
       /// and pass them on to the instance.
       element.constraints = PBIntermediateConstraints.defaultConstraints();
-      var tempTree = PBIntermediateTree(name: element.name)
+      var tempTree = PBIntermediateTree(name: tree.name)
         ..rootNode = element
         ..tree_type = TREE_TYPE.VIEW
         ..generationViewData = PBGenerationViewData();
