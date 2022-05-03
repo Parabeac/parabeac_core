@@ -22,14 +22,12 @@ abstract class PathService {
 }
 
 class DomainPathService extends PathService {
-  static final String _widgetsPath = 'lib/widgets';
-
   @override
   final String viewsRelativePath = 'lib/views';
   @override
-  final String widgetsRelativePath = '$_widgetsPath';
+  final String widgetsRelativePath = 'lib/widgets';
   @override
-  final String customRelativePath = '$_widgetsPath/custom';
+  final String customRelativePath = 'custom';
   @override
   final String constantsRelativePath = 'lib/constants';
 
