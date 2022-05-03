@@ -75,7 +75,7 @@ class CommandGenMiddleware extends Middleware
         tree.UUID,
         tree.identifier,
         generationManager.generate(tree.rootNode, context),
-        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH + relativePath,
+        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH + '/' + relativePath,
       );
     }
     if (command != null) {
