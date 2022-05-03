@@ -83,11 +83,14 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
 
 class CustomTagGenerator extends PBGenerator {
   /// Variable that dictates in what directory the tag will be generated.
-  static String DIRECTORY_GEN = GetIt.I.get<PathService>().customRelativePath;
+  static String DIRECTORY_GEN = GetIt.I.get<PathService>().widgetsRelativePath;
+  static String DIRECTORY_CUSTOM =
+      GetIt.I.get<PathService>().customRelativePath;
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    var customDirectory = DIRECTORY_GEN + '/' + context.tree.name;
+    var customDirectory =
+        DIRECTORY_GEN + '/' + context.tree.name + '/' + DIRECTORY_CUSTOM;
     var children = context.tree.childrenOf(source);
     var titleName = PBInputFormatter.formatLabel(
       source.name,
