@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -6,6 +7,7 @@ import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.d
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
@@ -73,17 +75,19 @@ class CustomTag extends PBTag implements PBInjectedIntermediate {
       layoutCrossAxisSizing: originalRef.layoutCrossAxisSizing,
       layoutMainAxisSizing: originalRef.layoutMainAxisSizing,
       isComponent: originalRef is PBSharedMasterNode &&
-          originalRef.componentSetName == null, //Variable used to add extra info. to custom file.
+          originalRef.componentSetName ==
+              null, //Variable used to add extra info. to custom file.
     );
   }
 }
 
 class CustomTagGenerator extends PBGenerator {
   /// Variable that dictates in what directory the tag will be generated.
-  static const DIRECTORY_GEN = 'controller/tag';
+  static String DIRECTORY_GEN = GetIt.I.get<PathService>().customRelativePath;
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
+    var customDirectory = DIRECTORY_GEN + '/' + context.tree.name;
     var children = context.tree.childrenOf(source);
     var titleName = PBInputFormatter.formatLabel(
       source.name,
@@ -94,7 +98,7 @@ class CustomTagGenerator extends PBGenerator {
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
-      '$DIRECTORY_GEN/$cleanName.dart',
+      '$customDirectory/$cleanName.dart',
       MainInfo().projectName,
     ));
 
@@ -109,8 +113,7 @@ class CustomTagGenerator extends PBGenerator {
           context,
           source,
         ),
-        relativePath: '$DIRECTORY_GEN',
-        symbolPath: 'lib',
+        symbolPath: '$customDirectory',
         ownership: FileOwnership.DEV,
       ),
     );
@@ -155,6 +158,7 @@ class CustomTagGenerator extends PBGenerator {
     /// Import variable in case we need to import
     /// component file inside custom file
     var import = '';
+
     /// Suffix to be appended after `widget.child`.
     /// The '!' is for null safety. Optionally,
     /// we can also add reference to the component.
@@ -162,8 +166,11 @@ class CustomTagGenerator extends PBGenerator {
     if (source.isComponent) {
       var baseCompName = className.replaceAll('Custom', '');
       import = FlutterImport(
-        path.join(WriteSymbolCommand.DEFAULT_SYMBOL_PATH, context.tree.name,
-            '${baseCompName.snakeCase}.g.dart'),
+        path.join(
+          WriteSymbolCommand.DEFAULT_SYMBOL_PATH,
+          context.tree.name,
+          '${baseCompName.snakeCase}.g.dart',
+        ),
         MainInfo().projectName,
       ).toString();
       suffix =
