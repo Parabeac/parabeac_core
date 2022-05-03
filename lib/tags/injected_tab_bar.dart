@@ -171,7 +171,6 @@ class PBTabBarGenerator extends PBGenerator {
         className.snakeCase,
         tabBarBody(
             className, buffer.toString(), context.managerData.importsList),
-        relativePath: 'controller',
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
       ));
