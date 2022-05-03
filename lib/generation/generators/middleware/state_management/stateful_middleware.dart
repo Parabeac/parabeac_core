@@ -71,7 +71,8 @@ class StatefulMiddleware extends StateManagementMiddleware {
         tree.UUID,
         state.name.snakeCase,
         tree.context.generationManager.generate(state, tree.context),
-        relativePath: ImportHelper.getName(node.name).snakeCase,
+        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH +
+            ImportHelper.getName(node.name).snakeCase,
       ));
     });
 
