@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:path/path.dart' as p;
 
@@ -28,10 +30,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  static final RELATIVE_VIEW_PATH = 'lib/widgets/';
+  static final RELATIVE_VIEW_PATH =
+      GetIt.I.get<PathService>().viewsRelativePath;
 
   ///The `default` path of where all the screens are going to be generated.
-  static final RELATIVE_SCREEN_PATH = 'lib/screens/';
+  static final RELATIVE_SCREEN_PATH =
+      GetIt.I.get<PathService>().widgetsRelativePath;
 
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
