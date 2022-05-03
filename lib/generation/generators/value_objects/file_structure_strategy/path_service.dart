@@ -2,10 +2,12 @@ abstract class PathService {
   final String viewsRelativePath;
   final String widgetsRelativePath;
   final String customRelativePath;
+  final String constantsRelativePath;
   PathService(
     this.viewsRelativePath,
     this.widgetsRelativePath,
     this.customRelativePath,
+    this.constantsRelativePath,
   );
 
   factory PathService.fromConfiguration(String architecture) {
@@ -20,22 +22,26 @@ abstract class PathService {
 }
 
 class DomainPathService extends PathService {
-  static String viewsPath = 'lib/views';
+  static final String _widgetsPath = 'lib/widgets';
 
   @override
-  final String viewsRelativePath = '$viewsPath';
+  final String viewsRelativePath = 'lib/views';
   @override
-  final String widgetsRelativePath = 'lib/widgets';
+  final String widgetsRelativePath = '$_widgetsPath';
   @override
-  final String customRelativePath = '$viewsPath/custom';
+  final String customRelativePath = '$_widgetsPath/custom';
+  @override
+  final String constantsRelativePath = 'lib/constants';
 
   DomainPathService({
     String viewsRelativePath,
     String widgetsRelativePath,
     String customRelativePath,
+    String constantsRelativePath,
   }) : super(
           viewsRelativePath,
           widgetsRelativePath,
           customRelativePath,
+          constantsRelativePath,
         );
 }
