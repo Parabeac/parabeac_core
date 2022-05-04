@@ -1,3 +1,9 @@
+/// PathService class helps file writers commands to determine
+/// the right path for their views, widgets, custom and constants
+/// by centralizing the path to this class
+///
+/// The class can be extended to create different types of PathService
+/// by default we made [DomainPathService]
 abstract class PathService {
   final String viewsRelativePath;
   final String widgetsRelativePath;
@@ -11,6 +17,7 @@ abstract class PathService {
   );
 
   factory PathService.fromConfiguration(String architecture) {
+    // TODO: Once we add more if statements, we can declare `domain` case as the else statement
     if (architecture.toLowerCase() == 'domain') {
       return DomainPathService();
     }

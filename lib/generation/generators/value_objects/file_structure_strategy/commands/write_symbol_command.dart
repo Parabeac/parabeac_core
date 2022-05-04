@@ -13,11 +13,10 @@ class WriteSymbolCommand extends NodeFileStructureCommand {
   String symbolPath;
   String fileName;
 
-  /// The [relativePath] within the [symbolPath]
+  /// The [symbolPath] has the relative path within
   ///
   /// For example, you are looking for `lib/widgets/some_element/element.dart`,
-  /// then the [relativePath] would be `some_element/` and the [fileName] would be `element.dart`.
-  // String relativePath;
+  /// then the [symbolPath] would be `lib/widgets/some_element/`
 
   WriteSymbolCommand(
     String UUID,
