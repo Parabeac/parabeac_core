@@ -119,4 +119,21 @@ class IntermediateAuxiliaryData {
       return opacity.toDouble();
     }
   }
+
+  IntermediateAuxiliaryData copyWith({
+    List<PBFill> colors,
+    IntermediateBorderInfo borderInfo,
+    List<PBEffect> effects,
+    PBTextStyle intermediateTextStyle,
+    bool clipsContent,
+  }) {
+    return IntermediateAuxiliaryData(
+      colors: colors ?? this.colors,
+      borderInfo: borderInfo ?? this.borderInfo,
+      effects: effects ?? this.effects,
+      intermediateTextStyle:
+          intermediateTextStyle ?? this.intermediateTextStyle,
+      clipsContent: clipsContent ?? this.clipsContent,
+    );
+  }
 }

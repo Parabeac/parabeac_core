@@ -71,15 +71,20 @@ abstract class PBIntermediateNode
 
   /// Auxillary Data of the node. Contains properties such as BorderInfo, Alignment, Color & a directed graph of states relating to this element.
   @JsonKey(name: 'style')
-  IntermediateAuxiliaryData auxiliaryData = IntermediateAuxiliaryData();
+  IntermediateAuxiliaryData auxiliaryData;
 
   /// Name of the element if available.
   @JsonKey(ignore: false)
   String name;
 
-  PBIntermediateNode(this._UUID, this.frame, this.name,
-      {this.subsemantic, this.constraints})
-      :
+  PBIntermediateNode(
+    this._UUID,
+    this.frame,
+    this.name, {
+    this.subsemantic,
+    this.constraints,
+    this.auxiliaryData,
+  }) :
 
         /// We are not using the [Vertex] attribute as it represents the [PBIntermediateNode]
         super(null) {
@@ -95,7 +100,7 @@ abstract class PBIntermediateNode
           'Constraints are null for $runtimeType-$name, assigning it default constraints');
       constraints = PBIntermediateConstraints.defaultConstraints();
     }
-    // _attributes = [];
+    auxiliaryData ??= IntermediateAuxiliaryData();
   }
 
   /// Returns the [PBAttribute] named `attributeName`. Returns
