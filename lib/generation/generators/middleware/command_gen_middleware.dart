@@ -15,6 +15,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_state_management
 import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/directed_state_graph.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 class CommandGenMiddleware extends Middleware
     with PBPlatformOrientationGeneration {
@@ -68,14 +69,16 @@ class CommandGenMiddleware extends Middleware
         var componentSetName =
             (tree.rootNode as PBSharedMasterNode).componentSetName;
         relativePath = componentSetName != null
-            ? relativePath + '/' + componentSetName.snakeCase
+            ? p.join(relativePath, componentSetName.snakeCase)
             : relativePath;
       }
+
       command = WriteSymbolCommand(
         tree.UUID,
         tree.identifier,
         generationManager.generate(tree.rootNode, context),
-        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH + '/' + relativePath,
+        symbolPath:
+            p.join(WriteSymbolCommand.DEFAULT_SYMBOL_PATH, relativePath),
       );
     }
     if (command != null) {

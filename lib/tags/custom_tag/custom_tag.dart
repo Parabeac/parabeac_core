@@ -90,7 +90,8 @@ class CustomTagGenerator extends PBGenerator {
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     var customDirectory =
-        DIRECTORY_GEN + '/' + context.tree.name + '/' + DIRECTORY_CUSTOM;
+        path.join(DIRECTORY_GEN, context.tree.name, DIRECTORY_CUSTOM);
+
     var children = context.tree.childrenOf(source);
     var titleName = PBInputFormatter.formatLabel(
       source.name,
