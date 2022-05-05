@@ -66,7 +66,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return p.join(
       fileStrategy.GENERATED_PROJECT_PATH,
-      FileStructureStrategy.RELATIVE_VIEW_PATH,
+      FileStructureStrategy.RELATIVE_WIDGET_PATH,
       '${generalStateName.snakeCase}_bloc',
       '${ImportHelper.getName(symbolMaster.name).snakeCase}_bloc',
     );
@@ -193,14 +193,14 @@ class BLoCMiddleware extends StateManagementMiddleware {
         tree.UUID,
         state.name.snakeCase,
         tree.context.generationManager.generate(state, tree.context),
-        relativePath: generalName,
+        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH + generalName,
       ));
     });
 
     // Generate default node's view page
     fileStrategy.commandCreated(WriteSymbolCommand('${context.tree.UUID}',
         node.name.snakeCase, generationManager.generate(node, context),
-        relativePath: generalName));
+        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH + generalName));
 
     /// Creates cubit page
     context.managerData.addImport(FlutterImport('meta.dart', 'meta'));

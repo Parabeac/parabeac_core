@@ -39,7 +39,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
         ? p.join(fileStrategy.RELATIVE_MODEL_PATH,
             ImportHelper.getName(symbolMaster.name).snakeCase)
         : p.join(
-            FileStructureStrategy.RELATIVE_VIEW_PATH,
+            FileStructureStrategy.RELATIVE_WIDGET_PATH,
             ImportHelper.getName(symbolMaster.name).snakeCase,
             node.functionCallName.snakeCase);
     return p.join(fileStrategy.GENERATED_PROJECT_PATH, import);
@@ -105,7 +105,8 @@ class ProviderMiddleware extends StateManagementMiddleware {
     }
     watcherName = getNameOfNode(node);
 
-    var parentDirectory = ImportHelper.getName(node.name).snakeCase;
+    var parentDirectory = WriteSymbolCommand.DEFAULT_SYMBOL_PATH +
+        ImportHelper.getName(node.name).snakeCase;
 
     // Generate model's imports
     var modelGenerator = PBFlutterGenerator(ImportHelper(),
@@ -125,9 +126,12 @@ class ProviderMiddleware extends StateManagementMiddleware {
         ownership: FileOwnership.DEV,
       ),
       // Generate default node's view page
-      WriteSymbolCommand(context.tree.UUID, node.name.snakeCase,
-          generationManager.generate(node, context),
-          relativePath: parentDirectory),
+      WriteSymbolCommand(
+        context.tree.UUID,
+        node.name.snakeCase,
+        generationManager.generate(node, context),
+        symbolPath: parentDirectory,
+      ),
     ].forEach(fileStrategy.commandCreated);
 
     (configuration as ProviderGenerationConfiguration)
@@ -150,7 +154,7 @@ class ProviderMiddleware extends StateManagementMiddleware {
         tree.UUID,
         state.name.snakeCase,
         tree.context.generationManager.generate(state, tree.context),
-        relativePath: parentDirectory,
+        symbolPath: parentDirectory,
       ));
     });
 

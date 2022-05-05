@@ -89,7 +89,8 @@ class RiverpodMiddleware extends StateManagementMiddleware {
     }
     watcherName = getNameOfNode(node);
 
-    var parentDirectory = ImportHelper.getName(node.name).snakeCase;
+    var parentDirectory = WriteSymbolCommand.DEFAULT_SYMBOL_PATH +
+        ImportHelper.getName(node.name).snakeCase;
 
     // Generate model's imports
     var modelGenerator = PBFlutterGenerator(ImportHelper(),
@@ -109,9 +110,12 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         ownership: FileOwnership.DEV,
       ),
       // Generate default node's view page
-      WriteSymbolCommand(context.tree.UUID, node.name.snakeCase,
-          generationManager.generate(node, context),
-          relativePath: parentDirectory),
+      WriteSymbolCommand(
+        context.tree.UUID,
+        node.name.snakeCase,
+        generationManager.generate(node, context),
+        symbolPath: parentDirectory,
+      ),
     ].forEach(fileStrategy.commandCreated);
 
     var nodeStateGraph = stmgHelper.getStateGraphOfNode(node);
@@ -129,7 +133,7 @@ class RiverpodMiddleware extends StateManagementMiddleware {
         tree.UUID,
         state.name.snakeCase,
         tree.context.generationManager.generate(state, tree.context),
-        relativePath: parentDirectory,
+        symbolPath: parentDirectory,
       ));
     });
 

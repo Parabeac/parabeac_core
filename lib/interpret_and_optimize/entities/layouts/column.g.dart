@@ -28,6 +28,7 @@ PBIntermediateColumnLayout _$PBIntermediateColumnLayoutFromJson(
     ..prototypeNode = json['prototypeNode'] == null
         ? null
         : PrototypeNode.fromJson(json['prototypeNode'] as Map<String, dynamic>)
+    ..alignment = json['alignment'] as Map<String, dynamic>
     ..layoutProperties = json['autoLayoutOptions'] == null
         ? null
         : LayoutProperties.fromJson(
@@ -48,6 +49,7 @@ Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,
+      'alignment': instance.alignment,
       'autoLayoutOptions': instance.layoutProperties,
       'type': instance.type,
     };
