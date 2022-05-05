@@ -66,7 +66,7 @@ class BLoCMiddleware extends StateManagementMiddleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     return p.join(
       fileStrategy.GENERATED_PROJECT_PATH,
-      FileStructureStrategy.RELATIVE_VIEW_PATH,
+      FileStructureStrategy.RELATIVE_WIDGET_PATH,
       '${generalStateName.snakeCase}_bloc',
       '${ImportHelper.getName(symbolMaster.name).snakeCase}_bloc',
     );

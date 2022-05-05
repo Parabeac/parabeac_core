@@ -30,12 +30,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///
   ///The views is anything that is not a screen, for example, symbol masters
   ///are going to be generated in this folder if not specified otherwise.
-  static final RELATIVE_VIEW_PATH =
-      GetIt.I.get<PathService>().viewsRelativePath;
+  static final RELATIVE_WIDGET_PATH =
+      GetIt.I.get<PathService>().widgetsRelativePath;
 
   ///The `default` path of where all the screens are going to be generated.
   static final RELATIVE_SCREEN_PATH =
-      GetIt.I.get<PathService>().widgetsRelativePath;
+      GetIt.I.get<PathService>().viewsRelativePath;
 
   ///Path of where the project is generated
   final String GENERATED_PROJECT_PATH;
@@ -107,12 +107,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   ///Setting up the required directories for the [FileStructureStrategy] to write the corresponding files.
   ///
   ///Default directories that are going to be generated is the
-  ///[RELATIVE_VIEW_PATH] and [RELATIVE_SCREEN_PATH].
+  ///[RELATIVE_WIDGET_PATH] and [RELATIVE_SCREEN_PATH].
   Future<void> setUpDirectories() async {
     if (!isSetUp) {
       _screenDirectoryPath =
           p.join(GENERATED_PROJECT_PATH, RELATIVE_SCREEN_PATH);
-      _viewDirectoryPath = p.join(GENERATED_PROJECT_PATH, RELATIVE_VIEW_PATH);
+      _viewDirectoryPath = p.join(GENERATED_PROJECT_PATH, RELATIVE_WIDGET_PATH);
       // _pbProject.forest.forEach((dir) {
       //   if (dir.rootNode != null) {
       //     addImportsInfo(dir, context);
