@@ -8,7 +8,6 @@ part of 'pb_intermediate_node.dart';
 
 Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
       'layoutMainAxisSizing':
@@ -18,8 +17,6 @@ Map<String, dynamic> _$PBIntermediateNodeToJson(PBIntermediateNode instance) =>
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
-      'hashCode': instance.hashCode,
-      'id': instance.id,
     };
 
 const _$ParentLayoutSizingEnumMap = {

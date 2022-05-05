@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -5,7 +7,8 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import '../file_ownership_policy.dart';
 
 class OrientationBuilderCommand extends FileStructureCommand {
-  static final DIR_TO_ORIENTATION_BUILDER = 'lib/widgets/';
+  static final DIR_TO_ORIENTATION_BUILDER =
+      GetIt.I.get<PathService>().widgetsRelativePath;
   static final NAME_TO_ORIENTAION_BUILDER =
       'responsive_orientation_builder.dart';
 

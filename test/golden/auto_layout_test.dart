@@ -1,11 +1,13 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {
   final projectName = 'golden_auto_layout_testing_project';
   final basePath = path.join(path.current, 'test', 'golden');
-  final runtimeFilePath = path.join(basePath, projectName, 'lib');
+  final runtimeFilePath =
+      path.join(basePath, projectName, DomainPathService().viewsRelativePath);
   final goldenFilesPath = path.join(basePath, 'golden_files', 'auto_layout');
   group('Auto Layout Golden Test', () {
     setUp(() async {
@@ -38,7 +40,7 @@ void main() {
         goldenFiles.add(
             File(path.join(goldenFilesPath, '${fileNamesLines[i]}.golden')));
 
-        runtimeFiles.add(File(path.join(runtimeFilePath, 'screens',
+        runtimeFiles.add(File(path.join(runtimeFilePath,
             'auto_layout_permutations', '${fileNamesLines[i]}.g.dart')));
       }
 
