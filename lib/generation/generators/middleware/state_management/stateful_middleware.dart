@@ -27,7 +27,7 @@ class StatefulMiddleware extends StateManagementMiddleware {
         PBSymbolStorage().getSharedMasterNodeBySymbolID(node.SYMBOL_ID);
     var path = p.join(
         fileStrategy.GENERATED_PROJECT_PATH,
-        FileStructureStrategy.RELATIVE_VIEW_PATH,
+        FileStructureStrategy.RELATIVE_WIDGET_PATH,
         ImportHelper.getName(symbolMaster.name).snakeCase,
         node.functionCallName.snakeCase);
     return path;
@@ -71,7 +71,8 @@ class StatefulMiddleware extends StateManagementMiddleware {
         tree.UUID,
         state.name.snakeCase,
         tree.context.generationManager.generate(state, tree.context),
-        relativePath: ImportHelper.getName(node.name).snakeCase,
+        symbolPath: WriteSymbolCommand.DEFAULT_SYMBOL_PATH +
+            ImportHelper.getName(node.name).snakeCase,
       ));
     });
 

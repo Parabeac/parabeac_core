@@ -27,7 +27,8 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     var cleanName = PBInputFormatter.formatLabel(source.name.snakeCase);
     var packageName = MainInfo().projectName;
 
-    var blocRelativePath = p.join('bloc', '$cleanName');
+    var blocRelativePath =
+        p.join(WriteSymbolCommand.DEFAULT_SYMBOL_PATH, 'bloc', '$cleanName');
 
     // TODO: correct import
     context.managerData.addImport(FlutterImport(
@@ -63,8 +64,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         Uuid().v4(),
         stateName,
         _generateStateBoilerplate(titleName, initialStates),
-        relativePath: blocRelativePath,
-        symbolPath: 'lib',
+        symbolPath: blocRelativePath,
         ownership: FileOwnership.DEV,
       ),
     );
@@ -80,8 +80,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         Uuid().v4(),
         cubitName,
         _generateCubitBoilerplate(titleName, stateImport),
-        relativePath: blocRelativePath,
-        symbolPath: 'lib',
+        symbolPath: blocRelativePath,
         ownership: FileOwnership.DEV,
       ),
     );
@@ -96,8 +95,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
         Uuid().v4(),
         cleanName,
         _customBoilerPlate(titleName, cubitImport, stateImport),
-        relativePath: CustomTagGenerator.DIRECTORY_GEN,
-        symbolPath: 'lib',
+        symbolPath: CustomTagGenerator.DIRECTORY_GEN,
         ownership: FileOwnership.DEV,
       ),
     );

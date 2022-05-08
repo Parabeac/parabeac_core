@@ -307,6 +307,7 @@ class _StylingScreen extends State<StylingScreen> {
           top: 754.0,
           height: 118.0,
           child: Container(
+              clipBehavior: Clip.hardEdge,
               width: 154.000,
               height: 118.000,
               decoration: BoxDecoration(
@@ -341,6 +342,7 @@ class _StylingScreen extends State<StylingScreen> {
           top: 3.0,
           height: 118.0,
           child: Container(
+              clipBehavior: Clip.hardEdge,
               width: 154.000,
               height: 118.000,
               decoration: BoxDecoration(

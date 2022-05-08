@@ -1,4 +1,6 @@
+import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
@@ -9,7 +11,8 @@ class AddConstantCommand extends FileStructureCommand {
   String name;
   String type;
   String value;
-  final String CONST_DIR_PATH = 'lib/constants/';
+  final String CONST_DIR_PATH =
+      GetIt.I.get<PathService>().constantsRelativePath;
   final String CONST_FILE_NAME = 'constants.dart';
 
   AddConstantCommand(String UUID, this.name, this.type, this.value)

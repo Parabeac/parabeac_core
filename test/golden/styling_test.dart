@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:test/test.dart';
@@ -6,7 +7,7 @@ import 'package:test/test.dart';
 void main() {
   final projectName = 'golden_testing_project';
   final basePath = path.join(path.current, 'test', 'golden');
-  final runtimeFilePath = path.join(basePath, projectName, 'lib');
+  final runtimeFilePath = path.join(basePath, projectName);
   final goldenFilesPath = path.join(basePath, 'golden_files', 'styling');
   group('Styling Golden Test', () {
     setUp(() async {
@@ -51,9 +52,17 @@ void main() {
       ];
 
       /// Runtime files corresponding to the above golden files
-      final widgetPath = path.join(runtimeFilePath, 'widgets', 'styling');
+      final widgetPath = path.join(
+        runtimeFilePath,
+        DomainPathService().widgetsRelativePath,
+        'styling',
+      );
       final runtimeFile = File(path.join(
-          runtimeFilePath, 'screens', 'styling', 'styling_screen.g.dart'));
+        runtimeFilePath,
+        DomainPathService().viewsRelativePath,
+        'styling',
+        'styling_screen.g.dart',
+      ));
       final helloWorldRuntimeFile =
           File(path.join(widgetPath, 'helloworld.g.dart'));
       final primaryButtonRuntimeFile =

@@ -12,6 +12,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     json['scaling'] as bool ?? true,
     json['enablePrototyping'] as bool ?? false,
     json['componentIsolation'] as String ?? 'None',
+    json['folderArchitecture'] as String ?? 'domain',
   );
 }
 
@@ -21,4 +22,5 @@ Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
       'breakpoints': instance.breakpoints,
       'enablePrototyping': instance.enablePrototyping,
       'componentIsolation': instance.componentIsolation,
+      'folderArchitecture': instance.folderArchitecture,
     };

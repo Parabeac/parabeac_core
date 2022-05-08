@@ -153,7 +153,6 @@ class PBAppBarGenerator extends PBGenerator {
         className.snakeCase,
         appBarBody(className, buffer.toString(),
             generatorContext.managerData.importsList),
-        relativePath: 'controller',
         symbolPath: 'lib',
         ownership: FileOwnership.DEV,
       ));
