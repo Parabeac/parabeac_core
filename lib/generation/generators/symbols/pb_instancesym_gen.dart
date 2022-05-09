@@ -106,7 +106,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
     // Make sure override property of every value is overridable
     if (overrideValues != null) {
       overrideValues.removeWhere((value) {
-        var override = OverrideHelper.getProperty(value.UUID, value.type);
+        var override = OverrideHelper.getProperty(value.UUID, value.ovrType);
         return override == null || override.value == null;
       });
 
@@ -128,7 +128,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         // If the type is image, we should print the whole widget
         // so the end user can place whatever kind of widget
         // TODO: Refactor so it place the image from the instance not from component
-        if (element.type == 'image') {
+        if (element.ovrType == 'image') {
           var elementCode =
               element.value.generator.generate(element.value, context);
 
@@ -144,12 +144,12 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
   void formatNameAndValues(List<PBInstanceOverride> params, PBContext context) {
     params.forEach((param) {
-      var overrideProp = OverrideHelper.getProperty(param.UUID, param.type);
+      var overrideProp = OverrideHelper.getProperty(param.UUID, param.ovrType);
 
       if (overrideProp != null) {
         param.overrideName = overrideProp.propertyName;
         // Find and reference symbol master if overriding a symbol
-        if (param.type == 'symbolID') {
+        if (param.ovrType == 'symbolID') {
           var instance = PBSharedInstanceIntermediateNode(
             param.UUID,
             null,

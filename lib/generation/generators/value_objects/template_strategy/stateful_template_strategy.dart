@@ -35,7 +35,7 @@ class StatefulTemplateStrategy extends TemplateStrategy {
           ovrCount[prop.propertyName] = 0;
 
           var overrideType = 'Widget?';
-          if (prop.type == 'stringValue') {
+          if (prop.ovrType == 'stringValue') {
             overrideType = 'String?';
           }
           overrides += 'this.${prop.propertyName}, ';
