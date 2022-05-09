@@ -142,7 +142,7 @@ class CustomTagGenerator extends PBGenerator {
     if (child is PBSharedInstanceIntermediateNode) {
       if (child.sharedParamValues != null) {
         child.sharedParamValues.removeWhere((value) {
-          var override = OverrideHelper.getProperty(value.UUID, value.type);
+          var override = OverrideHelper.getProperty(value.UUID, value.ovrType);
           return override == null || override.value == null;
         });
 
