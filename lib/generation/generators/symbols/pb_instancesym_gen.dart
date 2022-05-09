@@ -40,14 +40,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       buffer.write('}\n');
       // end of LayoutBuilder()
       buffer.write(')');
-      // To write the override properties for the class
-      if (source.parent is CustomTag) {
-        buffer.write(',' +
-            overridesToString(
-              source.sharedParamValues,
-              generatorContext,
-            ));
-      }
       return buffer.toString();
     }
     return '';

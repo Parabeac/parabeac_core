@@ -138,27 +138,6 @@ class CustomTagGenerator extends PBGenerator {
     PBContext context,
     CustomTag source,
   ) {
-    var variableList = <String>[];
-    if (child is PBSharedInstanceIntermediateNode) {
-      if (child.sharedParamValues != null) {
-        child.sharedParamValues.removeWhere((value) {
-          var override = OverrideHelper.getProperty(value.UUID, value.ovrType);
-          return override == null || override.value == null;
-        });
-
-        PBSymbolInstanceGenerator()
-            .formatNameAndValues(child.sharedParamValues, context);
-        for (var element in child.sharedParamValues) {
-          if (element.overrideName != null && element.initialValue != null) {
-            // print(element.overrideName);
-            // print(element.initialValue);
-
-            variableList.add(element.overrideName);
-          }
-        }
-      }
-    }
-
     /// Import variable in case we need to import
     /// component file inside custom file
     var import = '';
@@ -187,8 +166,7 @@ class CustomTagGenerator extends PBGenerator {
 
       class $className extends StatefulWidget{
         final Widget? child;
-        ${_printVariables(variableList)}
-        $className({Key? key, this.child, ${_printVariables(variableList, true)}}) : super (key: key);
+        $className({Key? key, this.child,}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();
@@ -201,19 +179,5 @@ class CustomTagGenerator extends PBGenerator {
         }
       }
       ''';
-  }
-
-  String _printVariables(List<String> variables,
-      [bool forConstructor = false]) {
-    var buffer = StringBuffer();
-    for (var variable in variables) {
-      var preVariable = forConstructor ? 'this.' : 'final ';
-
-      var postVariable = forConstructor ? ', ' : ';';
-
-      buffer.write(preVariable + variable + postVariable);
-    }
-
-    return buffer.toString();
   }
 }
