@@ -111,8 +111,7 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
 
 @JsonSerializable()
 class PBMasterOverride {
-  @JsonKey(name: 'pbdlType')
-  final String type;
+  final String ovrType;
 
   @JsonKey(ignore: true)
   PBIntermediateNode value;
@@ -123,7 +122,7 @@ class PBMasterOverride {
   final String UUID;
 
   PBMasterOverride(
-    this.type,
+    this.ovrType,
     this.propertyName,
     this.UUID,
   );

@@ -3,7 +3,6 @@ import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
-import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
@@ -13,7 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/element_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
@@ -89,8 +88,21 @@ class CustomTagGenerator extends PBGenerator {
 
   @override
   String generate(PBIntermediateNode source, PBContext context) {
-    var customDirectory =
-        path.join(DIRECTORY_GEN, context.tree.name, DIRECTORY_CUSTOM);
+    var firstChild = context.tree.childrenOf(source).first;
+    var customDirectory;
+
+    /// Need to check if the custom tag belongs to a different page.
+    /// This is because we need to get the correct tree name for importing.
+    if (firstChild is PBSharedInstanceIntermediateNode) {
+      var storage = ElementStorage();
+      var treeId = storage.elementToTree[firstChild.SYMBOL_ID];
+      var componentTree = storage.treeUUIDs[treeId];
+      customDirectory =
+          path.join(DIRECTORY_GEN, componentTree.name, DIRECTORY_CUSTOM);
+    } else {
+      customDirectory =
+          path.join(DIRECTORY_GEN, context.tree.name, DIRECTORY_CUSTOM);
+    }
 
     var children = context.tree.childrenOf(source);
     var titleName = PBInputFormatter.formatLabel(
@@ -138,27 +150,6 @@ class CustomTagGenerator extends PBGenerator {
     PBContext context,
     CustomTag source,
   ) {
-    var variableList = <String>[];
-    if (child is PBSharedInstanceIntermediateNode) {
-      if (child.sharedParamValues != null) {
-        child.sharedParamValues.removeWhere((value) {
-          var override = OverrideHelper.getProperty(value.UUID, value.type);
-          return override == null || override.value == null;
-        });
-
-        PBSymbolInstanceGenerator()
-            .formatNameAndValues(child.sharedParamValues, context);
-        for (var element in child.sharedParamValues) {
-          if (element.overrideName != null && element.initialValue != null) {
-            // print(element.overrideName);
-            // print(element.initialValue);
-
-            variableList.add(element.overrideName);
-          }
-        }
-      }
-    }
-
     /// Import variable in case we need to import
     /// component file inside custom file
     var import = '';
@@ -187,8 +178,7 @@ class CustomTagGenerator extends PBGenerator {
 
       class $className extends StatefulWidget{
         final Widget? child;
-        ${_printVariables(variableList)}
-        $className({Key? key, this.child, ${_printVariables(variableList, true)}}) : super (key: key);
+        $className({Key? key, this.child,}) : super (key: key);
 
         @override
         _${className}State createState() => _${className}State();
@@ -201,19 +191,5 @@ class CustomTagGenerator extends PBGenerator {
         }
       }
       ''';
-  }
-
-  String _printVariables(List<String> variables,
-      [bool forConstructor = false]) {
-    var buffer = StringBuffer();
-    for (var variable in variables) {
-      var preVariable = forConstructor ? 'this.' : 'final ';
-
-      var postVariable = forConstructor ? ', ' : ';';
-
-      buffer.write(preVariable + variable + postVariable);
-    }
-
-    return buffer.toString();
   }
 }

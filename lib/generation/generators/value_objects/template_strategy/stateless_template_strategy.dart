@@ -20,7 +20,7 @@ class StatelessTemplateStrategy extends TemplateStrategy {
     if (node is PBSharedMasterNode && node.overridableProperties.isNotEmpty) {
       node.overridableProperties.forEach((prop) {
         var overrideType = 'Widget?';
-        if (prop.type == 'stringValue') {
+        if (prop.ovrType == 'stringValue') {
           overrideType = 'String?';
         }
         overrides += 'this.${prop.propertyName}, ';

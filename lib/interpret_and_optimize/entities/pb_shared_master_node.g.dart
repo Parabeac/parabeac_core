@@ -89,7 +89,7 @@ const _$ParentLayoutSizingEnumMap = {
 
 PBMasterOverride _$PBMasterOverrideFromJson(Map<String, dynamic> json) {
   return PBMasterOverride(
-    json['pbdlType'] as String,
+    json['ovrType'] as String,
     PBMasterOverride._propertyNameFromJson(json['name'] as String),
     json['UUID'] as String,
   );
@@ -97,7 +97,7 @@ PBMasterOverride _$PBMasterOverrideFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBMasterOverrideToJson(PBMasterOverride instance) =>
     <String, dynamic>{
-      'pbdlType': instance.type,
+      'ovrType': instance.ovrType,
       'name': instance.propertyName,
       'UUID': instance.UUID,
     };

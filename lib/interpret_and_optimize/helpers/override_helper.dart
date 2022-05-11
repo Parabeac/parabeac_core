@@ -23,7 +23,7 @@ class OverrideHelper {
   static PBMasterOverride getProperty(String uuid, String type) {
     if (SN_UUIDtoVarName.containsKey(uuid)) {
       return SN_UUIDtoVarName[uuid]
-          .firstWhere((element) => element.type == type, orElse: () => null);
+          .firstWhere((element) => element.ovrType == type, orElse: () => null);
     }
     return null;
   }
