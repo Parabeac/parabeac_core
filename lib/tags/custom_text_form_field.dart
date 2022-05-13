@@ -88,12 +88,12 @@ class CustomTextFormFieldGenerator extends PBGenerator {
     );
 
     var prefixicon = context.tree.firstWhere(
-      (element) => element.name.contains(prefixIconSemantic),
+      (element) => element.name?.contains(prefixIconSemantic) ?? false,
       orElse: () => null,
     );
 
     var suffixIcon = context.tree.firstWhere(
-      (element) => element.name.contains(suffixIconSemantic),
+      (element) => element.name?.contains(suffixIconSemantic) ?? false,
       orElse: () => null,
     );
 
@@ -221,18 +221,21 @@ class CustomTextFormFieldGenerator extends PBGenerator {
 
   /// Extracts information from [boxDecoration] and generates [OutlineInputBorder].
   String _generateOutlineInputBorder(IntermediateBorderInfo borderInfo) {
-    if (borderInfo != null) {
-      return '''
+    var borderside = '';
+    var borderRadius = '';
+
+    borderside =
+        'borderSide: BorderSide(color: Color(${borderInfo?.border?.color ?? '0x00ffffff'},), width: ${borderInfo?.thickness ?? 1},),';
+
+    borderRadius =
+        'borderRadius: BorderRadius.circular(${borderInfo.borderRadius ?? 1}),';
+
+    return '''
         OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(${borderInfo.color ?? '0xFFFFFFFF'}),
-            width: ${borderInfo.thickness ?? 1},
-          ),
-          borderRadius: BorderRadius.circular(${borderInfo.borderRadius ?? 0}),
+          $borderside
+          $borderRadius
         )
       ''';
-    }
-    return '';
   }
 
   /// The logic for the concrete TextFormField.
