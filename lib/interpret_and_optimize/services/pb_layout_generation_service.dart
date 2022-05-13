@@ -16,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 import 'package:sentry/sentry.dart';
 
 /// PBLayoutGenerationService:
@@ -92,23 +93,36 @@ class PBLayoutGenerationService extends AITHandler {
   /// a stack to ensure alignment.
   void _applyComponentRules(
       PBIntermediateTree tree, PBSharedMasterNode component) {
-    if (tree.childrenOf(component).length == 1 &&
-        tree.childrenOf(component).first is! Group) {
-      var child = tree.childrenOf(component).first;
+    var firstChild = tree.childrenOf(component).first;
+    if (firstChild is CustomTag &&
+        tree.childrenOf(firstChild).length == 1 &&
+        tree.childrenOf(firstChild).first is! Group) {
+      /// Get child's child
+      var grandChild = tree.childrenOf(firstChild).first;
 
-      /// TODO: Improve the way we create Stacks
-      var stack = PBIntermediateStackLayout(
-        name: component.name,
-        constraints: component.constraints.copyWith(),
-      )
-        ..auxiliaryData = component.auxiliaryData
-        ..frame = component.frame.copyWith()
-        ..layoutCrossAxisSizing = component.layoutCrossAxisSizing
-        ..layoutMainAxisSizing = component.layoutMainAxisSizing;
-
-      /// Insert the stack below the component.
-      tree.injectBetween(insertee: stack, parent: component, child: child);
+      _addStack(tree, firstChild, grandChild);
+    } else if (tree.childrenOf(component).length == 1 && firstChild is! Group) {
+      _addStack(tree, component, firstChild);
     }
+  }
+
+  void _addStack(
+    PBIntermediateTree tree,
+    PBIntermediateNode parent,
+    PBIntermediateNode child,
+  ) {
+    /// TODO: Improve the way we create Stacks
+    var stack = PBIntermediateStackLayout(
+      name: parent.name,
+      constraints: parent.constraints.copyWith(),
+    )
+      ..auxiliaryData = parent.auxiliaryData
+      ..frame = parent.frame.copyWith()
+      ..layoutCrossAxisSizing = parent.layoutCrossAxisSizing
+      ..layoutMainAxisSizing = parent.layoutMainAxisSizing;
+
+    /// Insert the stack below the component.
+    tree.injectBetween(insertee: stack, parent: parent, child: child);
   }
 
   void _wrapLayout(PBIntermediateTree tree, PBContext context) {
