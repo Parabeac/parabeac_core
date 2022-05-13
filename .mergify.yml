@@ -1,10 +1,10 @@
 pull_request_rules:
 
-  - name: Close PR if it's going to stable but it's not a hotfix or a release
+  - name: Close PR if it's going to stable but it's not dev or a hotfix 
     conditions:
       - base=stable      # Merging into stable
       - -head~=(?i)^hotfix # Name of branch does not start with hotfix
-      - -head~=^release # Name of branch does not start with release
+      - -head~=^dev$ # Branch is not dev
     actions:
       close:
         message: "Please ensure that you are merging any non-hotfix branches

@@ -1,10 +1,12 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
 
 abstract class PBTag extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
@@ -14,12 +16,14 @@ abstract class PBTag extends PBVisualIntermediateNode {
     String UUID,
     Rectangle3D frame,
     String name, {
-    contraints,
+    PBIntermediateConstraints contraints,
+    IntermediateAuxiliaryData auxiliaryData,
   }) : super(
           UUID,
           frame,
           name,
           constraints: contraints,
+          auxiliaryData: auxiliaryData,
         );
 
   /// Override this function if you want to make tree modification prior to the layout service.
@@ -43,7 +47,7 @@ abstract class PBTag extends PBVisualIntermediateNode {
   ) {
     iNode.name = iNode.name.replaceAll(tag.semanticName, '');
 
-    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomEgg] betweeen the
+    // If `iNode` is [PBSharedMasterNode] we need to place the [CustomTag] betweeen the
     // [PBSharedMasterNode] and the [PBSharedMasterNode]'s children. That is why we are returing
     // `iNode` at the end.
     if (iNode is PBSharedMasterNode) {
