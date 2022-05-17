@@ -14,6 +14,10 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import '../injected_sized_box.dart';
 
 class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
+  ///Sort children
+  void sortChildren(List<PBIntermediateNode> children) => children.sort(
+      (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
+
   @override
   void align(PBContext context, node) {
     // TODO: Look for a way to not have to check if it is a col or row
@@ -21,6 +25,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     // New children list
     var spacedChildren = <PBIntermediateNode>[];
     var children = context.tree.childrenOf(node);
+    sortChildren(children);
     var isVertical = true;
     num space;
 
