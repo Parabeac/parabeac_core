@@ -93,7 +93,9 @@ class PBLayoutGenerationService extends AITHandler {
   /// a stack to ensure alignment.
   void _applyComponentRules(
       PBIntermediateTree tree, PBSharedMasterNode component) {
-    var firstChild = tree.childrenOf(component).first;
+    /// Check that children is not an empty list
+    var children = tree.childrenOf(component);
+    var firstChild = children.isNotEmpty ? children.first : null;
     if (firstChild is CustomTag &&
         tree.childrenOf(firstChild).length == 1 &&
         tree.childrenOf(firstChild).first is! Group) {
