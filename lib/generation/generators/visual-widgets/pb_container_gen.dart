@@ -27,48 +27,53 @@ class PBContainerGenerator extends PBGenerator {
         buffer.write('clipBehavior: Clip.hardEdge,');
       }
 
+      /// Write container padding
+      if (source.padding != null) {
+        buffer.write(getPadding(source.padding));
+      }
+
       //TODO(ivanV): please clean my if statement :(
       if (source is InjectedContainer) {
-        if (source.padding != null) {
-          buffer.write(getPadding(source.padding));
-        }
         if (source.pointValueHeight &&
             source.frame.height > 0 &&
             source.showHeight) {
           buffer.write('height: ${source.frame.height},');
+        } else if (!source.pointValueHeight) {
+          buffer.write(
+              PBSizeHelper().getSize(source, context, DIMENTIONS.Height));
         }
+
         if (source.pointValueWidth &&
             source.frame.width > 0 &&
             source.showWidth) {
           buffer.write('width: ${source.frame.width},');
+        } else if (!source.pointValueWidth) {
+          buffer
+              .write(PBSizeHelper().getSize(source, context, DIMENTIONS.Width));
         }
-        if (!source.pointValueHeight && !source.pointValueWidth) {
-          buffer.write(PBSizeHelper().generate(source, context));
-        }
-      } else if (source is InheritedContainer) {
-        if (source.padding != null) {
-          buffer.write(getPadding(source.padding));
-        }
+      }
+
+      /// If source is [InheritedContainer] get both width and heigt
+      else if (source is InheritedContainer) {
         buffer.write(PBSizeHelper().generate(source, context));
       }
 
+      /// If border info exists, use box decoration for auxiliary data
       if (source.auxiliaryData.borderInfo != null) {
         buffer.write(PBBoxDecorationHelper().generate(source, context));
-      } else {
+      }
+
+      /// Else assing the color through the container
+      else {
         buffer.write(PBColorGenHelper().generate(source, context));
       }
 
-      // if (source.auxiliaryData.alignment != null) {
-      //   buffer.write(
-      //       'alignment: Alignment(${(source.auxiliaryData.alignment['alignX'] as double).toStringAsFixed(2)}, ${(source.auxiliaryData.alignment['alignY'] as double).toStringAsFixed(2)}),');
-      // }
+      /// Check if container has a child
       var child = sourceChildren.isEmpty ? null : sourceChildren.first;
       if (child != null) {
         child.frame = source.frame;
-        // source.child.currentContext = source.currentContext;
-        var statement = child != null
-            ? 'child: ${child.generator.generate(child, context)}'
-            : '';
+        var statement = 'child: ${child.generator.generate(child, context)}';
+
         buffer.write(statement);
       }
       buffer.write(')');
@@ -78,6 +83,13 @@ class PBContainerGenerator extends PBGenerator {
   }
 
   String getPadding(InjectedPadding padding) {
+    /// If there are no paddings to write, do not write any padding
+    if ((padding.left == null) &&
+        (padding.right == null) &&
+        (padding.top == null) &&
+        (padding.bottom == null)) {
+      return '';
+    }
     var buffer = StringBuffer();
 
     buffer.write('padding: EdgeInsets.only(');
