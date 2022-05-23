@@ -8,15 +8,29 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 
 /// Command used to add a constant to the project's constants file
 class AddConstantCommand extends FileStructureCommand {
-  String name;
-  String type;
-  String value;
+  /// Optional filename to export the constant to
+  String filename;
+
+  /// Optional imports to be appended to the file
+  String imports;
+
+  /// Optional [FileOwnership] of the file to be written.
+  ///
+  /// Will be [FileOwnership.DEV] by default.
+  FileOwnership ownershipPolicy;
+
+  List<ConstantHolder> constants;
   final String CONST_DIR_PATH =
       GetIt.I.get<PathService>().constantsRelativePath;
   final String CONST_FILE_NAME = 'constants.dart';
 
-  AddConstantCommand(String UUID, this.name, this.type, this.value)
-      : super(UUID);
+  AddConstantCommand(
+    String UUID,
+    this.constants, {
+    this.filename,
+    this.imports = '',
+    this.ownershipPolicy,
+  }) : super(UUID);
 
   /// Adds a constant containing `type`, `name` and `value` to `constants.dart` file
   @override
@@ -24,17 +38,38 @@ class AddConstantCommand extends FileStructureCommand {
     strategy.appendDataToFile(
       _addConstant,
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
-      CONST_FILE_NAME,
-      ownership: FileOwnership.DEV,
+      (filename == null || filename.isEmpty) ? CONST_FILE_NAME : filename,
+      ownership: ownershipPolicy ?? FileOwnership.DEV,
     );
   }
 
+  /// Adds the constants of [this] to the list of [lines].
+  ///
+  /// If any constant of [this] already exists in [lines], it will simply be ignored.
   List<String> _addConstant(List<String> lines) {
-    var constStr = 'const $type $name = $value;';
-    var result = List<String>.from(lines);
-    if (!result.contains(constStr)) {
-      result.add(constStr);
+    var result = List<String>.from(lines)..add(imports);
+    for (var constant in constants) {
+      var constStr =
+          'const ${constant.type} ${constant.name} = ${constant.value};';
+      if (!result.contains(constStr)) {
+        result.add(constStr);
+      }
     }
     return result;
   }
+}
+
+class ConstantHolder {
+  // Name of the constant to be added
+  String name;
+  // Type of the constant to be added
+  String type;
+  // What the constant's value is
+  String value;
+
+  ConstantHolder(
+    this.type,
+    this.name,
+    this.value,
+  );
 }

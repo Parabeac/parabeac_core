@@ -185,9 +185,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   void writeDataToFile(String data, String directory, String name,
       {String UUID, FileOwnership ownership, String ext = '.dart'}) {
     var file = getFile(
-        directory,
-        p.setExtension(
-            name, fileOwnershipPolicy.getFileExtension(ownership, ext)));
+      directory,
+      p.setExtension(
+        name,
+        fileOwnershipPolicy.getFileExtension(ownership, ext),
+      ),
+    );
 
     if (FileOwnership.PBC == ownership) {
       data = _setHeader(data);
