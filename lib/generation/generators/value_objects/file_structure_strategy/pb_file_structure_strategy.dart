@@ -230,11 +230,11 @@ abstract class FileStructureStrategy implements CommandInvoker {
       bool createFileIfNotFound = true,
       String ext = '.dart',
       FileOwnership ownership}) {
-    name = ownership == null
+    var extName = ownership == null
         ? p.setExtension(name, ext)
         : p.setExtension(
             name, fileOwnershipPolicy.getFileExtension(ownership, ext));
-    var file = getFile(directory, name);
+    var file = getFile(directory, extName);
     if (file.existsSync()) {
       var fileLines = file.readAsLinesSync();
       var length = fileLines.length;
