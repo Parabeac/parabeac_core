@@ -235,16 +235,15 @@ abstract class FileStructureStrategy implements CommandInvoker {
         : p.setExtension(
             name, fileOwnershipPolicy.getFileExtension(ownership, ext));
     var file = getFile(directory, extName);
-    if (file.existsSync()) {
+
+    /// We can only modify files that are owned by PBC.
+    if (file.existsSync() && ownership == FileOwnership.PBC) {
       var fileLines = file.readAsLinesSync();
-      var length = fileLines.length;
       var modLines = modFile(fileLines);
 
-      if (modLines.length != length) {
-        var buffer = StringBuffer();
-        modLines.forEach(buffer.writeln);
-        file.writeAsStringSync(buffer.toString());
-      }
+      var buffer = StringBuffer();
+      modLines.forEach(buffer.writeln);
+      file.writeAsStringSync(buffer.toString());
     } else if (createFileIfNotFound) {
       var modLines = modFile([]);
       var buffer = StringBuffer();

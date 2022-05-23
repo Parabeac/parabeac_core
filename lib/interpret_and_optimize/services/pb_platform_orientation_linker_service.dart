@@ -225,7 +225,7 @@ class PBPlatformOrientationLinkerService extends AITHandler {
           value.toString(),
         ));
       });
-      var cmd = AddConstantCommand(tree.UUID, constants);
+      var cmd = WriteConstantsCommand(tree.UUID, constants);
       context.configuration.generationConfiguration.commandQueue.add(cmd);
     }
   }

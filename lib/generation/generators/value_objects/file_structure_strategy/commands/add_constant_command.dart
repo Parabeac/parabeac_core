@@ -6,8 +6,8 @@ import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
-/// Command used to add a constant to the project's constants file
-class AddConstantCommand extends FileStructureCommand {
+/// Command used to write constants to the project's constants file
+class WriteConstantsCommand extends FileStructureCommand {
   /// Optional filename to export the constant to
   String filename;
 
@@ -24,7 +24,7 @@ class AddConstantCommand extends FileStructureCommand {
       GetIt.I.get<PathService>().constantsRelativePath;
   final String CONST_FILE_NAME = 'constants.dart';
 
-  AddConstantCommand(
+  WriteConstantsCommand(
     String UUID,
     this.constants, {
     this.filename,
@@ -32,30 +32,22 @@ class AddConstantCommand extends FileStructureCommand {
     this.ownershipPolicy,
   }) : super(UUID);
 
-  /// Adds a constant containing `type`, `name` and `value` to `constants.dart` file
+  /// Writes constants containing `type`, `name` and `value` to `constants.dart` file
   @override
   Future<void> write(FileStructureStrategy strategy) async {
-    strategy.appendDataToFile(
-      _addConstant,
-      p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
-      (filename == null || filename.isEmpty) ? CONST_FILE_NAME : filename,
-      ownership: ownershipPolicy ?? FileOwnership.DEV,
-    );
-  }
+    var constBuffer = StringBuffer()..writeln(imports);
 
-  /// Adds the constants of [this] to the list of [lines].
-  ///
-  /// If any constant of [this] already exists in [lines], it will simply be ignored.
-  List<String> _addConstant(List<String> lines) {
-    var result = List<String>.from(lines)..add(imports);
-    for (var constant in constants) {
-      var constStr =
-          'const ${constant.type} ${constant.name} = ${constant.value};';
-      if (!result.contains(constStr)) {
-        result.add(constStr);
-      }
-    }
-    return result;
+    constants.forEach(
+      (constant) => constBuffer.writeln(
+        'const ${constant.type} ${constant.name} = ${constant.value};',
+      ),
+    );
+    strategy.writeDataToFile(
+      constBuffer.toString(),
+      p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
+      filename ?? CONST_FILE_NAME,
+      ownership: ownershipPolicy ?? FileOwnership.PBC,
+    );
   }
 }
 

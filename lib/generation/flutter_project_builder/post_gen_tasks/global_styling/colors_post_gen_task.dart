@@ -30,7 +30,7 @@ class ColorsPostGenTask extends PostGenTask {
 
     /// Write colors to constants file in `colors.g.dart`
     generationConfiguration.fileStructureStrategy.commandCreated(
-      AddConstantCommand(
+      WriteConstantsCommand(
         Uuid().v4(),
         constColors,
         filename: 'colors',
