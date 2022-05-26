@@ -81,7 +81,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
   /// and adds a container on top of it
   PBIntermediateNode _needsContainer(
       child, bool isVertical, PBContext context) {
-    if (child is! InheritedContainer && child is! InjectedContainer) {
+    if (child is! InheritedContainer || child is! InjectedContainer) {
       // Creates container
       var wrapper = InjectedContainer(
         null,
