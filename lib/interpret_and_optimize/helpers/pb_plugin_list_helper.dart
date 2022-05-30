@@ -5,6 +5,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 import 'package:parabeac_core/tags/injected_app_bar.dart';
 import 'package:parabeac_core/tags/injected_tab_bar.dart';
+import 'package:parabeac_core/tags/custom_text_form_field.dart';
 
 /// Helping understand indirect and direct semantics that should remove a node from a tree.
 class PBPluginListHelper {
@@ -32,6 +33,7 @@ class PBPluginListHelper {
         '',
       ),
       '<custom>': CustomTag(null, null, ''),
+      '<textformfield>': CustomTextFormField(null, null, ''),
     };
   }
 

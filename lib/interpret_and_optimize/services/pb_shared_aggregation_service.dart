@@ -58,7 +58,7 @@ class PBSharedInterAggregationService {
         // add Designer Warning here, not even sure if this is the designers fault or not
         log.warning('UUID: $targetUUID not found in searchNodeByUUID');
       }
-      if ((prop.value != null) && (prop.type == 'symbolID')) {
+      if ((prop.value != null) && (prop.ovrType == 'symbolID')) {
         // prop.value.currentContext = rootChildNode.currentContext;
 
         ///if the [PBSharedMasterNode] contains [PBSharedInstanceIntermediateNode] as parameters

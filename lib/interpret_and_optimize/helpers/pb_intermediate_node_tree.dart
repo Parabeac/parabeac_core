@@ -128,7 +128,6 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Finds a [PBIntermediateNode] that is a child of `parent` of `type` in the [PBIntermediateTree], containing `name`.
   ///
   /// Returns null if not found.
-  @Deprecated('Use `this.where()` instead')
   PBIntermediateNode findChild(
       PBIntermediateNode parent, String name, Type type) {
     /// Check if the node is a match

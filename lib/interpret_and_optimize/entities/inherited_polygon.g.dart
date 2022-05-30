@@ -18,7 +18,6 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -32,7 +31,6 @@ InheritedPolygon _$InheritedPolygonFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedPolygonToJson(InheritedPolygon instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':

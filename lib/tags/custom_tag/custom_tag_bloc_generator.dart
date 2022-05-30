@@ -45,7 +45,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     var firstChild = context.tree.childrenOf(source).first;
     if (firstChild is PBSharedInstanceIntermediateNode) {
       firstChild.sharedParamValues.forEach((value) {
-        var prop = OverrideHelper.getProperty(value.UUID, value.type);
+        var prop = OverrideHelper.getProperty(value.UUID, value.ovrType);
 
         if (prop != null) {
           initialStates.add(prop);
@@ -159,7 +159,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     initialStates.forEach((state) {
       classVars.write('var ${state.propertyName};');
       thisVars.write('this.${state.propertyName},');
-      if (state.type == 'stringValue' && state.value is InheritedText) {
+      if (state.ovrType == 'stringValue' && state.value is InheritedText) {
         defaultValues.write(
           '\'${(state.value as InheritedText).text}\',',
         );
