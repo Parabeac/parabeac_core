@@ -81,20 +81,22 @@ class CustomTextFormFieldGenerator extends PBGenerator {
     String suffixIconGen;
 
     /// Get subsemantic nodes
-    var hinttext = context.tree.firstWhere(
-      (element) =>
-          element.name.contains(hintTextSemantic) && element is InheritedText,
-      orElse: () => null,
+    var hinttext = context.tree.findChild(
+      source,
+      hintTextSemantic,
+      InheritedText,
     );
 
-    var prefixicon = context.tree.firstWhere(
-      (element) => element.name?.contains(prefixIconSemantic) ?? false,
-      orElse: () => null,
+    var prefixIcon = context.tree.findChild(
+      source,
+      prefixIconSemantic,
+      PBIntermediateNode,
     );
 
-    var suffixIcon = context.tree.firstWhere(
-      (element) => element.name?.contains(suffixIconSemantic) ?? false,
-      orElse: () => null,
+    var suffixIcon = context.tree.findChild(
+      source,
+      suffixIconSemantic,
+      PBIntermediateNode,
     );
 
     /// Generate [OutlineInputBorder] from [boxDecoration].
@@ -110,10 +112,10 @@ class CustomTextFormFieldGenerator extends PBGenerator {
       hintStyle = 'TextStyle(color: Color(${hinttext.auxiliaryData.color}))';
     }
 
-    /// Generate [prefixIconGen] from [prefixicon].
-    if (prefixicon != null) {
-      prefixIconGen = prefixicon.generator.generate(
-            prefixicon,
+    /// Generate [prefixIconGen] from [prefixIcon].
+    if (prefixIcon != null) {
+      prefixIconGen = prefixIcon.generator.generate(
+            prefixIcon,
             context.copyWith(sizingContext: SizingValueContext.ScaleValue),
           ) ??
           '';
