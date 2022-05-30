@@ -156,10 +156,10 @@ class PBLayoutGenerationService extends AITHandler {
             constraints: tempLayout.constraints.copyWith(),
             // Let the Container know if it is going to show
             // the width or height on the generation process
-            showHeight: tempLayout.layoutProperties.primaryAxisAlignment ==
-                IntermediateAxisMode.FIXED,
-            showWidth: tempLayout.layoutProperties.crossAxisSizing ==
-                IntermediateAxisMode.FIXED,
+            showHeight:
+                tempLayout.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
+            showWidth:
+                tempLayout.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
           )
             ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
             ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing
