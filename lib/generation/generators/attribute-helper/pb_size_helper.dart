@@ -50,9 +50,9 @@ class PBSizeHelper extends PBAttributesHelper {
               ? source.constraints.fixedHeight
               : source.constraints.fixedWidth)
           ? (isHeight
-              ? source.frame.height.toStringAsFixed(3)
-              : source.frame.width.toStringAsFixed(3))
-          : 'MediaQuery.of(context).size.$lowerCaseDimentionString * ${relativeSize.toStringAsFixed(3)}';
+              ? source.frame.height.toString()
+              : source.frame.width.toString())
+          : 'MediaQuery.of(context).size.$lowerCaseDimentionString * ${relativeSize.toString()}';
 
       sizeString = '$lowerCaseDimentionString: $size,';
     } else if (context.sizingContext == SizingValueContext.LayoutBuilderValue) {
@@ -60,18 +60,17 @@ class PBSizeHelper extends PBAttributesHelper {
 
       // Size for LayoutBuilder
       sizeString =
-          '$lowerCaseDimentionString: constraints.max$dimentionString * ${relativeSize.toStringAsFixed(3)},';
+          '$lowerCaseDimentionString: constraints.max$dimentionString * ${relativeSize.toString()},';
     } else if (context.sizingContext ==
         SizingValueContext.LayoutBuilderStatefulValue) {
       relativeSize = relativeSize / screenSize;
 
       // Size for LayoutBuilder
       sizeString =
-          '$lowerCaseDimentionString: widget.constraints.max$dimentionString * ${relativeSize.toStringAsFixed(3)},';
+          '$lowerCaseDimentionString: widget.constraints.max$dimentionString * ${relativeSize.toString()},';
     } else {
       // Size for constants value
-      sizeString =
-          '$lowerCaseDimentionString: ${relativeSize.toStringAsFixed(3)},';
+      sizeString = '$lowerCaseDimentionString: ${relativeSize.toString()},';
     }
 
     // Determine if it is going to show width and height
