@@ -253,7 +253,7 @@ class $className extends TextFormFieldLogic {
   $className(BuildContext context): super(context);
 
   /// TODO: Override any logic method here. See example below
-  /// See [TextFieldFormLogic] for overridable methods.
+  /// See [TextFormFieldLogic] for overridable methods.
   @override
   ValueChanged<String>? get onChanged => (value) {
     //print('Value changed to \$value');
