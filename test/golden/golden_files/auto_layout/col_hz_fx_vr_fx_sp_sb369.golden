@@ -35,7 +35,8 @@ class _ColHzFxVrFxSpSb369 extends State<ColHzFxVrFxSpSb369> {
                 top: 10.0,
                 bottom: 10.0,
               ),
-              width: 326.000,
+              height: 200.0,
+              width: 326.0,
               decoration: BoxDecoration(
                 color: Colors.black,
               ),
@@ -44,56 +45,47 @@ class _ColHzFxVrFxSpSb369 extends State<ColHzFxVrFxSpSb369> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
-                        height: 15.0,
                         width: 24.0,
-                        child: Container(
-                            width: 24.000,
-                            height: 15.000,
-                            child: AutoSizeText(
-                              'Left',
-                              style: TextStyle(
-                                fontFamily: 'Sanchez',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.0,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.left,
-                            ))),
-                    Container(
                         height: 15.0,
+                        child: AutoSizeText(
+                          'Left',
+                          style: TextStyle(
+                            fontFamily: 'Sanchez',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.left,
+                        )),
+                    Container(
                         width: 39.0,
-                        child: Container(
-                            width: 39.000,
-                            height: 15.000,
-                            child: AutoSizeText(
-                              'Middle',
-                              style: TextStyle(
-                                fontFamily: 'Sanchez',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.0,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.left,
-                            ))),
-                    Container(
                         height: 15.0,
+                        child: AutoSizeText(
+                          'Middle',
+                          style: TextStyle(
+                            fontFamily: 'Sanchez',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.left,
+                        )),
+                    Container(
                         width: 31.0,
-                        child: Container(
-                            width: 31.000,
-                            height: 15.000,
-                            child: AutoSizeText(
-                              'Right',
-                              style: TextStyle(
-                                fontFamily: 'Sanchez',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.0,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.left,
-                            ))),
+                        height: 15.0,
+                        child: AutoSizeText(
+                          'Right',
+                          style: TextStyle(
+                            fontFamily: 'Sanchez',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.left,
+                        )),
                   ])),
         ),
       ]),
