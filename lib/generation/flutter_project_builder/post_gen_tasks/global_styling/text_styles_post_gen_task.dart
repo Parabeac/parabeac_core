@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:pbdl/pbdl.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
@@ -45,6 +46,7 @@ TextStyle(
   letterSpacing: ${textStyle.letterSpacing},
   fontFamily: \'${textStyle.fontFamily}\',
   color: Color(${textStyle.fills.first.color.toHex()}),
+  decoration: ${PBTextGen.getDecoration(textStyle.textDecoration)},
 )
 ''';
   }

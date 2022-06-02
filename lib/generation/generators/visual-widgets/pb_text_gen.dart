@@ -12,6 +12,21 @@ class PBTextGen extends PBGenerator {
 
   static String cleanString(String text) =>
       text.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
+
+  /// Maps PBDL decoration to Flutter decoration
+  static final Map<String, String> _decorationMap = {
+    'NONE': 'TextDecoration.none',
+    'UNDERLINE': 'TextDecoration.underline',
+    'STRIKETHROUGH': 'TextDecoration.lineThrough',
+  };
+
+  static String getDecoration(String decoration) {
+    if (_decorationMap.containsKey(decoration)) {
+      return _decorationMap[decoration];
+    }
+    return _decorationMap['NONE'];
+  }
+
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
