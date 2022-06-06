@@ -228,6 +228,10 @@ class PBLayoutGenerationService extends AITHandler {
           pointValueWidth: isVertical
               ? tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
               : tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
+          showHeight:
+              tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
+          showWidth:
+              tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
         )
           ..auxiliaryData = tempGroup.auxiliaryData
           ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing

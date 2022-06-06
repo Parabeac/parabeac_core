@@ -9,6 +9,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -25,13 +26,15 @@ class CustomTextFormField extends PBTag {
   CustomTextFormField(
     String UUID,
     Rectangle3D frame,
-    String name, {
+    String name,
+    PBIntermediateConstraints constraints, {
     IntermediateAuxiliaryData auxiliaryData,
   }) : super(
           UUID,
           frame,
           name,
           auxiliaryData: auxiliaryData,
+          contraints: constraints,
         ) {
     generator = CustomTextFormFieldGenerator();
     childrenStrategy = MultipleChildStrategy('children');
@@ -59,6 +62,7 @@ class CustomTextFormField extends PBTag {
       null,
       frame.copyWith(),
       originalRef.name.replaceAll(semanticName, '').pascalCase,
+      originalRef.constraints.copyWith(),
       auxiliaryData: originalRef.auxiliaryData.copyWith(),
     );
   }
