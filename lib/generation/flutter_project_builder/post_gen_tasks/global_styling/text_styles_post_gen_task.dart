@@ -24,6 +24,7 @@ class TextStylesPostGenTask extends PostGenTask {
         'TextStyle',
         globalTextStyle.name.camelCase,
         _textStyleStr(globalTextStyle.textStyle),
+        description: globalTextStyle.description,
       ));
     });
 
@@ -38,6 +39,7 @@ class TextStylesPostGenTask extends PostGenTask {
     );
   }
 
+  // TODO: Abstract so that Text and this use the same TextStyle generator.
   String _textStyleStr(PBDLTextStyle textStyle) {
     return '''
 TextStyle(
@@ -47,6 +49,7 @@ TextStyle(
   fontFamily: \'${textStyle.fontFamily}\',
   color: Color(${textStyle.fills.first.color.toHex()}),
   decoration: ${PBTextGen.getDecoration(textStyle.textDecoration)},
+  fontStyle: ${textStyle.italics ? 'FontStyle.italic' : 'FontStyle.normal'},
 )
 ''';
   }

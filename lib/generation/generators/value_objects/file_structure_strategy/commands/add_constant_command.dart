@@ -37,11 +37,14 @@ class WriteConstantsCommand extends FileStructureCommand {
   Future<void> write(FileStructureStrategy strategy) async {
     var constBuffer = StringBuffer()..writeln(imports);
 
-    constants.forEach(
-      (constant) => constBuffer.writeln(
-        'const ${constant.type} ${constant.name} = ${constant.value};',
-      ),
-    );
+    constants.forEach((constant) {
+      var description =
+          constant.description.isNotEmpty ? '/// ${constant.description}' : '';
+      var constStr =
+          'const ${constant.type} ${constant.name} = ${constant.value};';
+
+      constBuffer.writeln('$description\n$constStr');
+    });
     strategy.writeDataToFile(
       constBuffer.toString(),
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
@@ -52,16 +55,22 @@ class WriteConstantsCommand extends FileStructureCommand {
 }
 
 class ConstantHolder {
-  // Name of the constant to be added
+  /// Name of the constant to be added
   String name;
-  // Type of the constant to be added
+
+  /// Type of the constant to be added
   String type;
-  // What the constant's value is
+
+  /// What the constant's value is
   String value;
+
+  /// Optional description to put as comment above the constant
+  String description;
 
   ConstantHolder(
     this.type,
     this.name,
-    this.value,
-  );
+    this.value, {
+    this.description = '',
+  });
 }

@@ -25,6 +25,7 @@ class ColorsPostGenTask extends PostGenTask {
         'Color',
         color.name.camelCase,
         'Color(${color.color.toHex()})',
+        description: color.description,
       ));
     });
 
