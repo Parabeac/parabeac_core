@@ -1,7 +1,7 @@
 name: parabeac_core
 description: Continuous Design / Continuous Integration for Figma-to-Flutter
 
-version: 3.0.1
+version: 3.1.0
 # homepage: https://www.example.com
 
 environment:
@@ -27,7 +27,7 @@ dependencies:
   pbdl:
     git:
       url: https://github.com/Parabeac/pbdl.git
-      ref: feat/global-styling
+      ref: master
   directed_graph: ^0.2.3
   sentry: ^6.2.2
   yaml_modify: ^1.0.1
