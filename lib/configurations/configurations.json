@@ -4,6 +4,6 @@
     "tablet": 600,
     "desktop": 1280
   },
-  "componentIsolation": "widgetbook",
+  "componentIsolation": "none",
   "folderArchitecture": "domain"
 }
