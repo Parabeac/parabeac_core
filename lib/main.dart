@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/analytics/analytics_constants.dart';
 import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/global_styling_aggregator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -163,6 +164,7 @@ ${parser.usage}
     await SentryService.finishTransaction(RUN_PARABEAC);
     return;
   }
+
   var pbProject = PBProject.fromJson(pbdl.toJson());
   pbProject.projectAbsPath =
       p.join(processInfo.outputPath, processInfo.projectName);
@@ -188,6 +190,11 @@ ${parser.usage}
   var fpb = FlutterProjectBuilder(
       MainInfo().configuration.generationConfiguration, fileSystemAnalyzer,
       project: pbProject);
+
+  /// Check whether there are any global styles to be generated.
+  if (pbdl.globalStyles != null) {
+    GlobalStylingAggregator.addPostGenTasks(fpb, pbdl.globalStyles);
+  }
 
   SentryService.startChildTransactionFrom(
     RUN_PARABEAC,

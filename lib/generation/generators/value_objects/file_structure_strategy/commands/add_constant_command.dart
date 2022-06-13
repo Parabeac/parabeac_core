@@ -6,35 +6,71 @@ import 'package:path/path.dart' as p;
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
 
-/// Command used to add a constant to the project's constants file
-class AddConstantCommand extends FileStructureCommand {
-  String name;
-  String type;
-  String value;
+/// Command used to write constants to the project's constants file
+class WriteConstantsCommand extends FileStructureCommand {
+  /// Optional filename to export the constant to
+  String filename;
+
+  /// Optional imports to be appended to the file
+  String imports;
+
+  /// Optional [FileOwnership] of the file to be written.
+  ///
+  /// Will be [FileOwnership.DEV] by default.
+  FileOwnership ownershipPolicy;
+
+  List<ConstantHolder> constants;
   final String CONST_DIR_PATH =
       GetIt.I.get<PathService>().constantsRelativePath;
   final String CONST_FILE_NAME = 'constants.dart';
 
-  AddConstantCommand(String UUID, this.name, this.type, this.value)
-      : super(UUID);
+  WriteConstantsCommand(
+    String UUID,
+    this.constants, {
+    this.filename,
+    this.imports = '',
+    this.ownershipPolicy,
+  }) : super(UUID);
 
-  /// Adds a constant containing `type`, `name` and `value` to `constants.dart` file
+  /// Writes constants containing `type`, `name` and `value` to `constants.dart` file
   @override
   Future<void> write(FileStructureStrategy strategy) async {
-    strategy.appendDataToFile(
-      _addConstant,
+    var constBuffer = StringBuffer()..writeln(imports);
+
+    constants.forEach((constant) {
+      var description =
+          constant.description.isNotEmpty ? '/// ${constant.description}' : '';
+      var constStr =
+          'const ${constant.type} ${constant.name} = ${constant.value};';
+
+      constBuffer.writeln('$description\n$constStr');
+    });
+    strategy.writeDataToFile(
+      constBuffer.toString(),
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
-      CONST_FILE_NAME,
-      ownership: FileOwnership.DEV,
+      filename ?? CONST_FILE_NAME,
+      ownership: ownershipPolicy ?? FileOwnership.PBC,
     );
   }
+}
 
-  List<String> _addConstant(List<String> lines) {
-    var constStr = 'const $type $name = $value;';
-    var result = List<String>.from(lines);
-    if (!result.contains(constStr)) {
-      result.add(constStr);
-    }
-    return result;
-  }
+class ConstantHolder {
+  /// Name of the constant to be added
+  String name;
+
+  /// Type of the constant to be added
+  String type;
+
+  /// What the constant's value is
+  String value;
+
+  /// Optional description to put as comment above the constant
+  String description;
+
+  ConstantHolder(
+    this.type,
+    this.name,
+    this.value, {
+    this.description = '',
+  });
 }
