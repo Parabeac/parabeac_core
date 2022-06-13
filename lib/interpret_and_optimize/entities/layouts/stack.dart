@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/layout_rule.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -20,7 +21,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
 
   PBIntermediateStackLayout({
     String name,
-    constraints,
+    PBIntermediateConstraints constraints,
   }) : super(null, null, STACK_RULES, [], name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
