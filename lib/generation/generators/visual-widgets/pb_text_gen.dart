@@ -68,7 +68,8 @@ class PBTextGen extends PBGenerator {
             'fontWeight: FontWeight.w${textStyle.fontWeight.toString()},\n');
       }
       if (textStyle.italics != null) {
-        buffer.write('fontStyle: FontStyle.${textStyle.italics},\n');
+        buffer.write(
+            'fontStyle: ${(textStyle.italics ?? false) ? 'FontStyle.italic' : 'FontStyle.normal'},\n');
       }
       if (textStyle.letterSpacing != null) {
         buffer.write('letterSpacing: ${textStyle.letterSpacing},\n');

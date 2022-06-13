@@ -49,7 +49,7 @@ TextStyle(
   fontFamily: \'${textStyle.fontFamily}\',
   color: Color(${textStyle.fills.first.color.toHex()}),
   decoration: ${PBTextGen.getDecoration(textStyle.textDecoration)},
-  fontStyle: ${textStyle.italics ? 'FontStyle.italic' : 'FontStyle.normal'},
+  fontStyle: ${(textStyle.italics ?? false) ? 'FontStyle.italic' : 'FontStyle.normal'},
 )
 ''';
   }
