@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
@@ -18,6 +19,7 @@ class ColorsPostGenTask extends PostGenTask {
   @override
   void execute() {
     var constColors = <ConstantHolder>[];
+    var mainInfo = MainInfo();
 
     /// Format colors to be added to constants file
     colors.forEach((color) {
@@ -34,7 +36,7 @@ class ColorsPostGenTask extends PostGenTask {
       WriteConstantsCommand(
         Uuid().v4(),
         constColors,
-        filename: 'colors',
+        filename: '${mainInfo.projectName.snakeCase}_colors',
         ownershipPolicy: FileOwnership.PBC,
         imports: 'import \'package:flutter/material.dart\';',
       ),

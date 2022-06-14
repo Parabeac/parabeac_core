@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
@@ -17,6 +18,7 @@ class TextStylesPostGenTask extends PostGenTask {
   @override
   void execute() {
     var constTextStyles = <ConstantHolder>[];
+    var mainInfo = MainInfo();
 
     /// Format text styles to be added to constants file
     textStyles.forEach((globalTextStyle) {
@@ -32,7 +34,7 @@ class TextStylesPostGenTask extends PostGenTask {
       WriteConstantsCommand(
         Uuid().v4(),
         constTextStyles,
-        filename: 'text_styles',
+        filename: '${mainInfo.projectName.snakeCase}_text_styles',
         ownershipPolicy: FileOwnership.PBC,
         imports: 'import \'package:flutter/material.dart\';',
       ),

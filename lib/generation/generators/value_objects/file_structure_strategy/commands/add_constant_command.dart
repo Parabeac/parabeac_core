@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
+import 'package:recase/recase.dart';
 
 /// Command used to write constants to the project's constants file
 class WriteConstantsCommand extends FileStructureCommand {
@@ -37,14 +38,24 @@ class WriteConstantsCommand extends FileStructureCommand {
   Future<void> write(FileStructureStrategy strategy) async {
     var constBuffer = StringBuffer()..writeln(imports);
 
+    var className = filename.pascalCase;
+
+    /// Write class declaration
+    constBuffer.writeln('class $className {');
+
+    /// Write constants
     constants.forEach((constant) {
       var description =
           constant.description.isNotEmpty ? '/// ${constant.description}' : '';
       var constStr =
-          'const ${constant.type} ${constant.name} = ${constant.value};';
+          'static const ${constant.type} ${constant.name} = ${constant.value};';
 
       constBuffer.writeln('$description\n$constStr');
     });
+
+    constBuffer.writeln('}');
+
+    /// Write file
     strategy.writeDataToFile(
       constBuffer.toString(),
       p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
