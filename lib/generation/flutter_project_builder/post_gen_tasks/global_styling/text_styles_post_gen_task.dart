@@ -49,7 +49,6 @@ TextStyle(
   fontWeight: FontWeight.w${textStyle.fontWeight},
   letterSpacing: ${textStyle.letterSpacing},
   fontFamily: \'${textStyle.fontFamily}\',
-  color: Color(${textStyle.fills.first.color.toHex()}),
   decoration: ${PBTextGen.getDecoration(textStyle.textDecoration)},
   fontStyle: ${(textStyle.italics ?? false) ? 'FontStyle.italic' : 'FontStyle.normal'},
 )
