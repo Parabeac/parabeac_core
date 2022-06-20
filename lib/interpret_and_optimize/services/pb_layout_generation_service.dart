@@ -173,30 +173,6 @@ class PBLayoutGenerationService extends AITHandler {
     });
   }
 
-  /// If this node is an unecessary [Group], from the [tree]
-  ///
-  /// Ex: Designer put a group with one child that was a group
-  /// and that group contained the visual nodes.
-  void _removingMeaninglessGroup(PBIntermediateTree tree) {
-    tree
-        .where((node) => node is Group && tree.childrenOf(node).length <= 1)
-        .cast<Group>()
-        .forEach((tempGroup) {
-      var tempChildren = tree.childrenOf(tempGroup);
-      tree.replaceNode(
-          tempGroup,
-          tempChildren.isNotEmpty
-              ? _replaceNode(tempGroup, tempChildren.first)
-              : _replaceNode(
-                  tempGroup,
-                  InjectedContainer(
-                    tempGroup.UUID, tempGroup.frame,
-                    name: tempGroup.name,
-                    // constraints: tempGroup.constraints
-                  )));
-    });
-  }
-
   /// Transforming the [Group] into regular [PBLayoutIntermediateNode]
   void _transformGroup(PBIntermediateTree tree) {
     tree.whereType<Group>().forEach((tempGroup) {

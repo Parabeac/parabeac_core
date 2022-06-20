@@ -13,7 +13,7 @@ abstract class PBLayoutGenerator extends PBGenerator {
     var buffer = StringBuffer();
     var children = context.tree.childrenOf(source);
     // Write the type of Layout, Column or Row
-    buffer.write('${type}(');
+    buffer.write('$type(');
     if (children.isNotEmpty) {
       var layoutProperties = source.layoutProperties;
 
