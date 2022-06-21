@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/domain_path_service.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 

@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/file_structure_command.dart';
@@ -20,6 +20,9 @@ class WriteConstantsCommand extends FileStructureCommand {
   /// Will be [FileOwnership.DEV] by default.
   FileOwnership ownershipPolicy;
 
+  /// Optional path to export the constants.
+  String relativePath;
+
   List<ConstantHolder> constants;
   final String CONST_DIR_PATH =
       GetIt.I.get<PathService>().constantsRelativePath;
@@ -31,7 +34,10 @@ class WriteConstantsCommand extends FileStructureCommand {
     this.filename,
     this.imports = '',
     this.ownershipPolicy,
-  }) : super(UUID);
+    this.relativePath,
+  }) : super(UUID) {
+    relativePath ??= CONST_DIR_PATH;
+  }
 
   /// Writes constants containing `type`, `name` and `value` to `constants.dart` file
   @override
@@ -58,7 +64,10 @@ class WriteConstantsCommand extends FileStructureCommand {
     /// Write file
     strategy.writeDataToFile(
       constBuffer.toString(),
-      p.join(strategy.GENERATED_PROJECT_PATH, CONST_DIR_PATH),
+      p.join(
+        strategy.GENERATED_PROJECT_PATH,
+        relativePath,
+      ),
       filename ?? CONST_FILE_NAME,
       ownership: ownershipPolicy ?? FileOwnership.PBC,
     );
