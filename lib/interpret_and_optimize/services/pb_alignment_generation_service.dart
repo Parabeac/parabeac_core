@@ -14,22 +14,12 @@ class PBAlignGenerationService extends AITHandler {
   /// Should find all layout nodes
   Future<PBIntermediateTree> addAlignmentToLayouts(
       PBIntermediateTree tree, PBContext context) {
-    var originalRoot = tree.rootNode;
-    if (originalRoot == null) {
+    if (tree.rootNode == null) {
       logger.warning(
           '[PBAlignmentGenerationService] generate() attempted to generate a non-existing tree');
       return null;
     }
-    tree.topologicalOrdering.forEach((element) {
-      if (element is PBIntermediateNode &&
-          (element.parent?.constraints?.fixedHeight ?? false)) {
-        element.constraints.fixedHeight = true;
-      }
-      if (element is PBIntermediateNode &&
-          (element.parent?.constraints?.fixedWidth ?? false)) {
-        element.constraints.fixedWidth = true;
-      }
-    });
+
     tree.rootNode.align(context);
 
     return Future.value(tree);
