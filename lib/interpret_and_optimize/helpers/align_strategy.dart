@@ -86,6 +86,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     var alignedChildren = <PBIntermediateNode>[];
     var tree = context.tree;
     var nodeChildren = context.tree.childrenOf(node);
+
     nodeChildren.forEach((child) {
       var centerY = false;
       var centerX = false;
@@ -102,13 +103,16 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             width: child.frame.width,
             height: child.frame.height),
       );
+
+      // Checks if child's parent has fixed height and width
+      // or child has fixed height and width to determine the positioned constraints
       if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
-          child.constraints.fixedWidth) {
+          (node.constraints.fixedWidth || child.constraints.fixedWidth)) {
         injectedPositioned.constraints.fixedWidth = false;
         centerX = true;
       }
       if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
-          child.constraints.fixedHeight) {
+          (node.constraints.fixedHeight || child.constraints.fixedHeight)) {
         injectedPositioned.constraints.fixedHeight = false;
         centerY = true;
       }
@@ -142,23 +146,4 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     tree.replaceChildrenOf(node, alignedChildren);
     // super.setConstraints(context, node);
   }
-
-  //  tree.topologicalOrdering.forEach((element) {
-  //     if (element is PBIntermediateNode &&
-  //         (element.parent?.constraints?.fixedHeight ?? false)) {
-  //       element.constraints.fixedHeight = true;
-  //       if (!element.constraints.pinTop && !element.constraints.pinBottom) {
-  //         element.constraints.pinTop = true;
-  //         element.constraints.pinBottom = false;
-  //       }
-  //     }
-  //     if (element is PBIntermediateNode &&
-  //         (element.parent?.constraints?.fixedWidth ?? false)) {
-  //       element.constraints.fixedWidth = true;
-  //       if (!element.constraints.pinLeft && !element.constraints.pinRight) {
-  //         element.constraints.pinLeft = true;
-  //         element.constraints.pinRight = false;
-  //       }
-  //     }
-  //   });
 }
