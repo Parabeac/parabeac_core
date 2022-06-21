@@ -217,11 +217,16 @@ class PBPlatformOrientationLinkerService extends AITHandler {
   void _addBreakpoints(PBIntermediateTree tree, PBContext context) {
     if (MainInfo().configuration.breakpoints != null) {
       var bp = MainInfo().configuration.breakpoints.cast<String, num>();
+      var constants = <ConstantHolder>[];
       bp.forEach((key, value) {
-        var cmd = AddConstantCommand(
-            tree.UUID, key + 'Breakpoint', 'num', value.toString());
-        context.configuration.generationConfiguration.commandQueue.add(cmd);
+        constants.add(ConstantHolder(
+          'num',
+          '${key}Breakpoint',
+          value.toString(),
+        ));
       });
+      var cmd = WriteConstantsCommand(tree.UUID, constants);
+      context.configuration.generationConfiguration.commandQueue.add(cmd);
     }
   }
 

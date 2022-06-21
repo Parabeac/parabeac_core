@@ -5,7 +5,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -85,20 +85,22 @@ class CustomTextFormFieldGenerator extends PBGenerator {
     String suffixIconGen;
 
     /// Get subsemantic nodes
-    var hinttext = context.tree.firstWhere(
-      (element) =>
-          element.name.contains(hintTextSemantic) && element is InheritedText,
-      orElse: () => null,
+    var hinttext = context.tree.findChild(
+      source,
+      hintTextSemantic,
+      InheritedText,
     );
 
-    var prefixicon = context.tree.firstWhere(
-      (element) => element.name?.contains(prefixIconSemantic) ?? false,
-      orElse: () => null,
+    var prefixIcon = context.tree.findChild(
+      source,
+      prefixIconSemantic,
+      PBIntermediateNode,
     );
 
-    var suffixIcon = context.tree.firstWhere(
-      (element) => element.name?.contains(suffixIconSemantic) ?? false,
-      orElse: () => null,
+    var suffixIcon = context.tree.findChild(
+      source,
+      suffixIconSemantic,
+      PBIntermediateNode,
     );
 
     /// Generate [OutlineInputBorder] from [boxDecoration].
@@ -114,10 +116,10 @@ class CustomTextFormFieldGenerator extends PBGenerator {
       hintStyle = 'TextStyle(color: Color(${hinttext.auxiliaryData.color}))';
     }
 
-    /// Generate [prefixIconGen] from [prefixicon].
-    if (prefixicon != null) {
-      prefixIconGen = prefixicon.generator.generate(
-            prefixicon,
+    /// Generate [prefixIconGen] from [prefixIcon].
+    if (prefixIcon != null) {
+      prefixIconGen = prefixIcon.generator.generate(
+            prefixIcon,
             context.copyWith(sizingContext: SizingValueContext.ScaleValue),
           ) ??
           '';
@@ -255,7 +257,7 @@ class $className extends TextFormFieldLogic {
   $className(BuildContext context): super(context);
 
   /// TODO: Override any logic method here. See example below
-  /// See [TextFieldFormLogic] for overridable methods.
+  /// See [TextFormFieldLogic] for overridable methods.
   @override
   ValueChanged<String>? get onChanged => (value) {
     //print('Value changed to \$value');

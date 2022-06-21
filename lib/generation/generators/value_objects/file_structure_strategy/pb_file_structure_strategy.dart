@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/file_system_analyzer.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:path/path.dart' as p;
 
@@ -185,9 +185,12 @@ abstract class FileStructureStrategy implements CommandInvoker {
   void writeDataToFile(String data, String directory, String name,
       {String UUID, FileOwnership ownership, String ext = '.dart'}) {
     var file = getFile(
-        directory,
-        p.setExtension(
-            name, fileOwnershipPolicy.getFileExtension(ownership, ext)));
+      directory,
+      p.setExtension(
+        name,
+        fileOwnershipPolicy.getFileExtension(ownership, ext),
+      ),
+    );
 
     if (FileOwnership.PBC == ownership) {
       data = _setHeader(data);
@@ -227,21 +230,20 @@ abstract class FileStructureStrategy implements CommandInvoker {
       bool createFileIfNotFound = true,
       String ext = '.dart',
       FileOwnership ownership}) {
-    name = ownership == null
+    var extName = ownership == null
         ? p.setExtension(name, ext)
         : p.setExtension(
             name, fileOwnershipPolicy.getFileExtension(ownership, ext));
-    var file = getFile(directory, name);
-    if (file.existsSync()) {
+    var file = getFile(directory, extName);
+
+    /// We can only modify files that are owned by PBC.
+    if (file.existsSync() && ownership == FileOwnership.PBC) {
       var fileLines = file.readAsLinesSync();
-      var length = fileLines.length;
       var modLines = modFile(fileLines);
 
-      if (modLines.length != length) {
-        var buffer = StringBuffer();
-        modLines.forEach(buffer.writeln);
-        file.writeAsStringSync(buffer.toString());
-      }
+      var buffer = StringBuffer();
+      modLines.forEach(buffer.writeln);
+      file.writeAsStringSync(buffer.toString());
     } else if (createFileIfNotFound) {
       var modLines = modFile([]);
       var buffer = StringBuffer();
