@@ -24,74 +24,78 @@ void main() {
         '$basePath'
       ]);
     });
-    test('Generating Styling and Comparing Golden File', () async {
-      /// Screen containing styling frames and rectangles
-      final goldenScreen = File(path.join(goldenFilesPath, 'styling.golden'));
+    test(
+      'Generating Styling and Comparing Golden File',
+      () async {
+        /// Screen containing styling frames and rectangles
+        final goldenScreen = File(path.join(goldenFilesPath, 'styling.golden'));
 
-      /// Empty frame containing single text that says "Hello World"
-      final helloWorldFrame =
-          File(path.join(goldenFilesPath, 'helloworld.golden'));
+        /// Empty frame containing single text that says "Hello World"
+        final helloWorldFrame =
+            File(path.join(goldenFilesPath, 'helloworld.golden'));
 
-      /// Component that uses Color grouping directly on the component.
-      final primaryButton =
-          File(path.join(goldenFilesPath, 'primary_button.golden'));
+        /// Component that uses Color grouping directly on the component.
+        final primaryButton =
+            File(path.join(goldenFilesPath, 'primary_button.golden'));
 
-      /// Component that uses Color grouping through a rectangle inside the component.
-      final primaryButtonRect =
-          File(path.join(goldenFilesPath, 'primary_button_rect.golden'));
+        /// Component that uses Color grouping through a rectangle inside the component.
+        final primaryButtonRect =
+            File(path.join(goldenFilesPath, 'primary_button_rect.golden'));
 
-      /// Component that uses a secondary Color grouping directly on the component.
-      final secondaryButton =
-          File(path.join(goldenFilesPath, 'secondary_button.golden'));
-      final goldenFiles = <File>[
-        goldenScreen,
-        helloWorldFrame,
-        primaryButton,
-        primaryButtonRect,
-        secondaryButton
-      ];
+        /// Component that uses a secondary Color grouping directly on the component.
+        final secondaryButton =
+            File(path.join(goldenFilesPath, 'secondary_button.golden'));
+        final goldenFiles = <File>[
+          goldenScreen,
+          helloWorldFrame,
+          primaryButton,
+          primaryButtonRect,
+          secondaryButton
+        ];
 
-      /// Runtime files corresponding to the above golden files
-      final widgetPath = path.join(
-        runtimeFilePath,
-        DomainPathService().widgetsRelativePath,
-        'styling',
-      );
-      final runtimeFile = File(path.join(
-        runtimeFilePath,
-        DomainPathService().viewsRelativePath,
-        'styling',
-        'styling_screen.g.dart',
-      ));
-      final helloWorldRuntimeFile =
-          File(path.join(widgetPath, 'helloworld.g.dart'));
-      final primaryButtonRuntimeFile =
-          File(path.join(widgetPath, 'primary_button.g.dart'));
-      final primaryButtonRectRuntimeFile =
-          File(path.join(widgetPath, 'primary_button_rect.g.dart'));
-      final secondaryButtonRuntimeFile =
-          File(path.join(widgetPath, 'secondary_button.g.dart'));
-      final runtimeFiles = <File>[
-        runtimeFile,
-        helloWorldRuntimeFile,
-        primaryButtonRuntimeFile,
-        primaryButtonRectRuntimeFile,
-        secondaryButtonRuntimeFile
-      ];
+        /// Runtime files corresponding to the above golden files
+        final widgetPath = path.join(
+          runtimeFilePath,
+          DomainPathService().widgetsRelativePath,
+          'styling',
+        );
+        final runtimeFile = File(path.join(
+          runtimeFilePath,
+          DomainPathService().viewsRelativePath,
+          'styling',
+          'styling_screen.g.dart',
+        ));
+        final helloWorldRuntimeFile =
+            File(path.join(widgetPath, 'helloworld.g.dart'));
+        final primaryButtonRuntimeFile =
+            File(path.join(widgetPath, 'primary_button.g.dart'));
+        final primaryButtonRectRuntimeFile =
+            File(path.join(widgetPath, 'primary_button_rect.g.dart'));
+        final secondaryButtonRuntimeFile =
+            File(path.join(widgetPath, 'secondary_button.g.dart'));
+        final runtimeFiles = <File>[
+          runtimeFile,
+          helloWorldRuntimeFile,
+          primaryButtonRuntimeFile,
+          primaryButtonRectRuntimeFile,
+          secondaryButtonRuntimeFile
+        ];
 
-      /// Iterate through golden/runtime files and compare them
-      for (var i = 0; i < goldenFiles.length; i++) {
-        var goldenFile = goldenFiles[i];
-        var runtimeFile = runtimeFiles[i];
-        var goldenFileLines = goldenFile.readAsLinesSync();
-        var runtimeFileLines = runtimeFile.readAsLinesSync();
+        /// Iterate through golden/runtime files and compare them
+        for (var i = 0; i < goldenFiles.length; i++) {
+          var goldenFile = goldenFiles[i];
+          var runtimeFile = runtimeFiles[i];
+          var goldenFileLines = goldenFile.readAsLinesSync();
+          var runtimeFileLines = runtimeFile.readAsLinesSync();
 
-        for (var j = 0; j < goldenFileLines.length; j++) {
-          expect(runtimeFileLines[j], goldenFileLines[j],
-              reason: 'File ${path.basename(goldenFile.path)} Line $j');
+          for (var j = 0; j < goldenFileLines.length; j++) {
+            expect(runtimeFileLines[j], goldenFileLines[j],
+                reason: 'File ${path.basename(goldenFile.path)} Line $j');
+          }
         }
-      }
-    });
+      },
+      timeout: Timeout(Duration(minutes: 1)),
+    );
 
     tearDown(() async {
       // Remove temporary project
