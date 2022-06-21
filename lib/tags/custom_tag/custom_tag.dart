@@ -6,7 +6,7 @@ import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart'
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
