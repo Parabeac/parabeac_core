@@ -34,6 +34,7 @@ The handoff between designers & developers is one of the most costly and frustra
     * [Running a Figma Component](#running-a-figma-component)
     * [Running a Component Package with Widgetbook](#running-a-component-package)
   * [Other](#other)
+    * [Global Theming](#global-theming)
     * [All parabeac_core configurations](#all-parabeac_core-configurations)
     * [Metrics](#metrics)   
 
@@ -150,6 +151,78 @@ If you find the viability in the code generation to support continuous design ch
 ## Stay up to date
 Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w), [Dev.to](https://dev.to/parabeac) &/or [Newsletter](https://share.hsforms.com/1uu1ZTrhPSwK69T2md__lCw5i54a) to stay up to date on product releases. And if you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose) or join our [Discord](https://discord.gg/qUrghes), we'd love to hear your feedback.
 # Other
+## Global Theming
+* parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
+
+### TextStyles
+* If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
+
+```dart
+class <YourPackageName>TextStyles {
+  /// Parabeac Style Description
+  static const TextStyle parabeacTextStyle = TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 6.0,
+    fontFamily: 'Inter',
+    decoration: TextDecoration.none,
+    fontStyle: FontStyle.italic,
+  );
+
+  static const TextStyle newStyle = TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.0,
+    fontFamily: 'Inter',
+    decoration: TextDecoration.none,
+    fontStyle: FontStyle.normal,
+  );
+}
+```
+### Colors
+* If parabeac_core detects global Colors in the design file, it will export a file under `lib/theme/<your_package_name>_colors.g.dart`. This file will contain all global TextStyles of the design in the following format:
+```dart
+class <YourPackageName>Colors {
+  /// Parabeac Red Description
+  static const Color parabeacRed = Color(0xffff0d0d);
+
+  static const Color parabeacBlue = Color(0xff28e5ff);
+
+  static const Color parabeacGreen = Color(0xff49ff0a);
+}
+```
+
+<!-- TODO: Add Global theming documentation when it is ready. -->
+
+### Internal use
+
+Styling classes can be used easily within the parabeac-generated package by simply importing the file as follows: 
+
+```dart
+/// Text Styles import
+import 'package:<your_package_name>/theme/<your_package_name>_text_styles.g.dart';
+/// Colors import
+import 'package:<your_package_name>/theme/<your_package_name>_colors.g.dart';
+```
+and using them like so:
+```dart
+/// To use a TextStyle
+<YourPackageName>TextStyles.parabeacTextStyles;
+
+/// To use a Color
+<YourPackageName>Colors.parabeacRed;
+
+```
+
+### External use with another Flutter package
+In order to use global styling with another Flutter package, you must add the parabeac-generate package to your own Flutter package as follows:
+```yaml
+dependencies:
+  <your_package_name>:
+    path: path/to/<your_package_name>
+```
+For more options on how to import this package, see the following [Dart package dependency docs](https://dart.dev/tools/pub/dependencies).
+
 ## All parabeac_core Configurations
 * `"componentIsolation"` - _Valid Values Below_
   * `"none"`
