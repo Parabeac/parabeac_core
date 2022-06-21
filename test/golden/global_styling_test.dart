@@ -32,7 +32,7 @@ void main() {
           File(path.join(goldenFilesPath, 'styling_colors.golden'));
       final runtimeFile = File(path.join(
         runtimeFilePath,
-        DomainPathService().constantsRelativePath,
+        DomainPathService().themingRelativePath,
         'golden_testing_project_colors.g.dart',
       ));
       expect(runtimeFile.readAsStringSync(), goldenFile.readAsStringSync());
@@ -44,7 +44,7 @@ void main() {
           File(path.join(goldenFilesPath, 'styling_text_styles.golden'));
       final runtimeFile = File(path.join(
         runtimeFilePath,
-        DomainPathService().constantsRelativePath,
+        DomainPathService().themingRelativePath,
         'golden_testing_project_text_styles.g.dart',
       ));
       expect(runtimeFile.readAsStringSync(), goldenFile.readAsStringSync());
