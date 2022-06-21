@@ -23,8 +23,8 @@ jobs:
       uses: subosito/flutter-action@v1.4.0    
     
     - name: Install dependencies
-      run: flutter pub get
+      run: dart pub get
     - name: Run tests
-      run: flutter pub run test
+      run: dart run test
       env:
         FIG_API_KEY: ${{ secrets.FIG_API_KEY }}
