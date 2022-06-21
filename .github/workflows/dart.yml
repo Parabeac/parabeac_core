@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Flutter action
-      uses: subosito/flutter-action@v1.4.0    
+      uses: subosito/flutter-action@v2
     
     - name: Install dependencies
       run: dart pub get
