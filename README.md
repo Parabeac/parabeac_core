@@ -35,6 +35,11 @@ The handoff between designers & developers is one of the most costly and frustra
     * [Running a Component Package with Widgetbook](#running-a-component-package)
   * [Other](#other)
     * [Global Theming](#global-theming)
+      * [TextStyles](#textstyles)
+      * [Colors](#colors)
+      * [Internal Use](#internal-use)
+      * [External Use With Another Flutter Package](#external-use-with-another-flutter-package)
+      
     * [All parabeac_core configurations](#all-parabeac_core-configurations)
     * [Metrics](#metrics)   
 
@@ -194,7 +199,7 @@ class <YourPackageName>Colors {
 
 <!-- TODO: Add Global theming documentation when it is ready. -->
 
-### Internal use
+### Internal Use
 
 Styling classes can be used easily within the parabeac-generated package by simply importing the file as follows: 
 
@@ -214,7 +219,7 @@ and using them like so:
 
 ```
 
-### External use with another Flutter package
+### External Use With Another Flutter Package
 In order to use global styling with another Flutter package, you must add the parabeac-generate package to your own Flutter package as follows:
 ```yaml
 dependencies:
