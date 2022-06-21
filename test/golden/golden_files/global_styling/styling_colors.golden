@@ -6,7 +6,7 @@
     
 
 import 'package:flutter/material.dart';
-class GoldenTestingProjectColors {
+class GlobalStylingGoldenTestingProjectColors {
 /// Parabeac Red Description
 static const Color parabeacRed = Color(0xffff0d0d);
 

@@ -6,7 +6,7 @@
     
 
 import 'package:flutter/material.dart';
-class GoldenTestingProjectTextStyles {
+class GlobalStylingGoldenTestingProjectTextStyles {
 /// Parabeac Style Description
 static const TextStyle parabeacTextStyle = TextStyle(
   fontSize: 12.0,

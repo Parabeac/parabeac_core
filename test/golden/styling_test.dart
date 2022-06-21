@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {
-  final projectName = 'golden_testing_project';
+  final projectName = 'styling_golden_testing_project';
   final basePath = path.join(path.current, 'test', 'golden');
   final runtimeFilePath = path.join(basePath, projectName);
   final goldenFilesPath = path.join(basePath, 'golden_files', 'styling');

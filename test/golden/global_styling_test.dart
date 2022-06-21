@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {
-  final projectName = 'golden_testing_project';
+  final projectName = 'global_styling_golden_testing_project';
   final basePath = path.join(path.current, 'test', 'golden');
   final runtimeFilePath = path.join(basePath, projectName);
   final goldenFilesPath = path.join(basePath, 'golden_files', 'global_styling');
@@ -33,7 +33,7 @@ void main() {
       final runtimeFile = File(path.join(
         runtimeFilePath,
         DomainPathService().themingRelativePath,
-        'golden_testing_project_colors.g.dart',
+        '${projectName}_colors.g.dart',
       ));
       expect(runtimeFile.readAsStringSync(), goldenFile.readAsStringSync());
     });
@@ -45,10 +45,11 @@ void main() {
       final runtimeFile = File(path.join(
         runtimeFilePath,
         DomainPathService().themingRelativePath,
-        'golden_testing_project_text_styles.g.dart',
+        '${projectName}_text_styles.g.dart',
       ));
       expect(runtimeFile.readAsStringSync(), goldenFile.readAsStringSync());
     });
+
     tearDownAll(() async {
       // Remove temporary project
       await Process.start('rm', ['-rf', path.join(basePath, projectName)]);
