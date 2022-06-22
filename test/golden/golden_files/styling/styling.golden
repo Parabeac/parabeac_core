@@ -69,7 +69,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 120.0,
           child: Image.asset(
             'assets/images/circleradius.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 197.000,
             height: 120.000,
             fit: BoxFit.none,
@@ -82,7 +82,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 120.0,
           child: Image.asset(
             'assets/images/diamond.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 197.000,
             height: 120.000,
             fit: BoxFit.none,
@@ -150,7 +150,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 120.0,
           child: Image.asset(
             'assets/images/2stroke.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 197.000,
             height: 120.000,
             fit: BoxFit.none,
@@ -205,7 +205,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 120.0,
           child: Image.asset(
             'assets/images/imagewithtint.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 197.000,
             height: 120.000,
             fit: BoxFit.none,
@@ -243,7 +243,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 124.0,
           child: Image.asset(
             'assets/images/ellipse1.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 133.000,
             height: 124.000,
             fit: BoxFit.none,
@@ -256,7 +256,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 120.0,
           child: SvgPicture.asset(
             'assets/images/polygon1.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 142.000,
             height: 120.000,
             fit: BoxFit.none,
@@ -269,7 +269,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 126.0,
           child: SvgPicture.asset(
             'assets/images/star1.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 110.000,
             height: 126.000,
             fit: BoxFit.none,
@@ -282,7 +282,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 102.5,
           child: SvgPicture.asset(
             'assets/images/vector1.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 109.500,
             height: 102.500,
             fit: BoxFit.none,
@@ -295,7 +295,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 118.0,
           child: SvgPicture.asset(
             'assets/images/emptyframe.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 154.000,
             height: 118.000,
             fit: BoxFit.none,
@@ -390,7 +390,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 77.007,
           child: SvgPicture.asset(
             'assets/images/line1.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 1.000,
             height: 77.007,
             fit: BoxFit.none,
@@ -403,7 +403,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 89.0,
           child: SvgPicture.asset(
             'assets/images/line2.svg',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 1.000,
             height: 89.000,
             fit: BoxFit.none,
@@ -416,7 +416,7 @@ class _StylingScreen extends State<StylingScreen> {
           height: 127.0,
           child: Image.asset(
             'assets/images/rectangle1.png',
-            package: 'golden_testing_project',
+            package: 'styling_golden_testing_project',
             width: 176.000,
             height: 127.000,
             fit: BoxFit.none,

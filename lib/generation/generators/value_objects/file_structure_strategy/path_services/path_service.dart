@@ -1,3 +1,5 @@
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/domain_path_service.dart';
+
 /// PathService class helps file writers commands to determine
 /// the right path for their views, widgets, custom and constants
 /// by centralizing the path to this class
@@ -9,11 +11,13 @@ abstract class PathService {
   final String widgetsRelativePath;
   final String customRelativePath;
   final String constantsRelativePath;
+  final String themingRelativePath;
   PathService(
     this.viewsRelativePath,
     this.widgetsRelativePath,
     this.customRelativePath,
     this.constantsRelativePath,
+    this.themingRelativePath,
   );
 
   factory PathService.fromConfiguration(String architecture) {
@@ -26,27 +30,4 @@ abstract class PathService {
     /// we will return DomainPathService as default
     return DomainPathService();
   }
-}
-
-class DomainPathService extends PathService {
-  @override
-  final String viewsRelativePath = 'lib/views';
-  @override
-  final String widgetsRelativePath = 'lib/widgets';
-  @override
-  final String customRelativePath = 'custom';
-  @override
-  final String constantsRelativePath = 'lib/constants';
-
-  DomainPathService({
-    String viewsRelativePath,
-    String widgetsRelativePath,
-    String customRelativePath,
-    String constantsRelativePath,
-  }) : super(
-          viewsRelativePath,
-          widgetsRelativePath,
-          customRelativePath,
-          constantsRelativePath,
-        );
 }

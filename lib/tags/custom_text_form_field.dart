@@ -5,7 +5,7 @@ import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
-import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_service.dart';
+import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
@@ -253,7 +253,7 @@ class $className extends TextFormFieldLogic {
   $className(BuildContext context): super(context);
 
   /// TODO: Override any logic method here. See example below
-  /// See [TextFieldFormLogic] for overridable methods.
+  /// See [TextFormFieldLogic] for overridable methods.
   @override
   ValueChanged<String>? get onChanged => (value) {
     //print('Value changed to \$value');

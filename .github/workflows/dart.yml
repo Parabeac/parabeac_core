@@ -20,11 +20,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Flutter action
-      uses: subosito/flutter-action@v1.4.0    
+      uses: subosito/flutter-action@v2
     
     - name: Install dependencies
-      run: flutter pub get
+      run: dart pub get
     - name: Run tests
-      run: flutter pub run test
+      run: dart run test
       env:
         FIG_API_KEY: ${{ secrets.FIG_API_KEY }}

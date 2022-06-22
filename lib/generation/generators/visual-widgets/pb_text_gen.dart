@@ -12,6 +12,21 @@ class PBTextGen extends PBGenerator {
 
   static String cleanString(String text) =>
       text.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
+
+  /// Maps PBDL decoration to Flutter decoration
+  static final Map<String, String> _decorationMap = {
+    'NONE': 'TextDecoration.none',
+    'UNDERLINE': 'TextDecoration.underline',
+    'STRIKETHROUGH': 'TextDecoration.lineThrough',
+  };
+
+  static String getDecoration(String decoration) {
+    if (_decorationMap.containsKey(decoration)) {
+      return _decorationMap[decoration];
+    }
+    return _decorationMap['NONE'];
+  }
+
   @override
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
@@ -53,7 +68,8 @@ class PBTextGen extends PBGenerator {
             'fontWeight: FontWeight.w${textStyle.fontWeight.toString()},\n');
       }
       if (textStyle.italics != null) {
-        buffer.write('fontStyle: FontStyle.${textStyle.italics},\n');
+        buffer.write(
+            'fontStyle: ${(textStyle.italics ?? false) ? 'FontStyle.italic' : 'FontStyle.normal'},\n');
       }
       if (textStyle.letterSpacing != null) {
         buffer.write('letterSpacing: ${textStyle.letterSpacing},\n');
