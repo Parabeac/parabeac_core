@@ -1,5 +1,6 @@
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribute_gen_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
@@ -63,11 +64,23 @@ class PBSizeHelper extends PBAttributesHelper {
           '$lowerCaseDimentionString: constraints.max$dimentionString * ${relativeSize.toString()},';
     } else if (context.sizingContext ==
         SizingValueContext.LayoutBuilderStatefulValue) {
-      relativeSize = relativeSize / screenSize;
+      // Add Container case where width and/or height is static
+      var isPointValue = false;
+      if (source is InjectedContainer) {
+        isPointValue =
+            isHeight ? source.pointValueHeight : source.pointValueWidth;
+      }
 
-      // Size for LayoutBuilder
-      sizeString =
-          '$lowerCaseDimentionString: widget.constraints.max$dimentionString * ${relativeSize.toString()},';
+      if (!isPointValue) {
+        // Size for constants value
+        sizeString = '$lowerCaseDimentionString: ${relativeSize.toString()},';
+      } else {
+        relativeSize = relativeSize / screenSize;
+
+        // Size for LayoutBuilder
+        sizeString =
+            '$lowerCaseDimentionString: widget.constraints.max$dimentionString * ${relativeSize.toString()},';
+      }
     } else {
       // Size for constants value
       sizeString = '$lowerCaseDimentionString: ${relativeSize.toString()},';
