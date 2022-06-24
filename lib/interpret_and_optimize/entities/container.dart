@@ -5,6 +5,8 @@ import 'injected_container.dart';
 class PBContainer extends PBIntermediateNode {
   bool showWidth;
   bool showHeight;
+  bool pointValueHeight;
+  bool pointValueWidth;
   InjectedPadding padding;
 
   PBContainer({String UUID, Rectangle3D<num> frame, String name})

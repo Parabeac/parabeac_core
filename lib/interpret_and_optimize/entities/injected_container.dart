@@ -30,7 +30,9 @@ class InjectedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'injected_container';
 
+  @override
   bool pointValueWidth;
+  @override
   bool pointValueHeight;
 
   @override
