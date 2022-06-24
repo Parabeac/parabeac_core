@@ -73,6 +73,10 @@ class PBPositionedGenerator extends PBGenerator {
   /// Getting the boilerplate needed to fill in the generation depending on the [sizingValueContext].
   String _getBoilerplate(SizingValueContext sizingValueContext,
       _PositionedValue _positionedValue) {
+    if (_positionedValue.remainPointValue) {
+      return '';
+    }
+
     if (sizingValueContext == SizingValueContext.LayoutBuilderValue) {
       if (_positionedValue.isXAxis) {
         return 'constraints.maxWidth *';
@@ -86,11 +90,6 @@ class PBPositionedGenerator extends PBGenerator {
       } else {
         return 'widget.constraints.maxHeight *';
       }
-    }
-
-    if (_positionedValue.remainPointValue ||
-        sizingValueContext != SizingValueContext.ScaleValue) {
-      return '';
     }
 
     if (_positionedValue.isXAxis) {
