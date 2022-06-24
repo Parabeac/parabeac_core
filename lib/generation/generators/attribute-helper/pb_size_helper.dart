@@ -64,14 +64,12 @@ class PBSizeHelper extends PBAttributesHelper {
           '$lowerCaseDimentionString: constraints.max$dimentionString * ${relativeSize.toString()},';
     } else if (context.sizingContext ==
         SizingValueContext.LayoutBuilderStatefulValue) {
-      // Add Container case where width and/or height is static
-      var isPointValue = false;
-      if (source is PBContainer) {
-        isPointValue =
-            isHeight ? source.pointValueHeight : source.pointValueWidth;
-      }
+      // Add case where width and/or height is static
+      var isFixed = isHeight
+          ? source.constraints.fixedHeight
+          : source.constraints.fixedWidth;
 
-      if (!isPointValue) {
+      if (isFixed) {
         // Size for constants value
         sizeString = '$lowerCaseDimentionString: ${relativeSize.toString()},';
       } else {
