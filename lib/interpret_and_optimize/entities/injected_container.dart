@@ -31,11 +31,6 @@ class InjectedContainer extends PBVisualIntermediateNode
   String type = 'injected_container';
 
   @override
-  bool pointValueWidth;
-  @override
-  bool pointValueHeight;
-
-  @override
   bool showWidth;
   @override
   bool showHeight;
@@ -53,8 +48,6 @@ class InjectedContainer extends PBVisualIntermediateNode
     String color,
     this.prototypeNode,
     this.type,
-    this.pointValueHeight = false,
-    this.pointValueWidth = false,
     PBIntermediateConstraints constraints,
     this.showWidth = true,
     this.showHeight = true,

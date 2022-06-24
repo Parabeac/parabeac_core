@@ -19,6 +19,7 @@ class PBContainerGenerator extends PBGenerator {
     if (source is PBContainer) {
       var sourceChildren = context.tree.childrenOf(source);
       var buffer = StringBuffer();
+      // buffer.write('\n \/* ${source.name} *\/ \n');
       buffer.write('Container(');
 
       /// Add clip behavior in case children needs to be clipped
@@ -34,20 +35,20 @@ class PBContainerGenerator extends PBGenerator {
 
       //TODO(ivanV): please clean my if statement :(
       if (source is InjectedContainer) {
-        if (source.pointValueHeight &&
+        if (source.constraints.fixedHeight &&
             source.frame.height > 0 &&
             source.showHeight) {
           buffer.write('height: ${source.frame.height},');
-        } else if (!source.pointValueHeight) {
+        } else if (!source.constraints.fixedHeight) {
           buffer.write(
               PBSizeHelper().getSize(source, context, DIMENTIONS.Height));
         }
 
-        if (source.pointValueWidth &&
+        if (source.constraints.fixedWidth &&
             source.frame.width > 0 &&
             source.showWidth) {
           buffer.write('width: ${source.frame.width},');
-        } else if (!source.pointValueWidth) {
+        } else if (!source.constraints.fixedWidth) {
           buffer
               .write(PBSizeHelper().getSize(source, context, DIMENTIONS.Width));
         }

@@ -94,12 +94,6 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
         null,
         child.frame,
         name: child.name,
-        pointValueHeight: isVertical
-            ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
-            : child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
-        pointValueWidth: isVertical
-            ? child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
-            : child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
         constraints: child.constraints.copyWith(),
       )
         ..layoutCrossAxisSizing = child.layoutCrossAxisSizing

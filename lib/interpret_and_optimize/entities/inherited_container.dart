@@ -56,8 +56,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     this.prototypeNode,
     this.showWidth = true,
     this.showHeight = true,
-    this.pointValueHeight = false,
-    this.pointValueWidth = false,
     PBIntermediateConstraints constraints,
   }) : super(UUID, frame, name, constraints: constraints) {
     generator = PBContainerGenerator();
@@ -80,10 +78,4 @@ class InheritedContainer extends PBVisualIntermediateNode
       PBIntermediateNode parent, PBIntermediateTree tree) {
     return InheritedContainer.fromJson(json)..mapRawChildren(json, tree);
   }
-
-  @override
-  bool pointValueHeight;
-
-  @override
-  bool pointValueWidth;
 }

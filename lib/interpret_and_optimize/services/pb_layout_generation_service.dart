@@ -192,18 +192,11 @@ class PBLayoutGenerationService extends AITHandler {
       );
 
       if (tempGroup.auxiliaryData.colors != null) {
-        var isVertical = tempGroup.parent is PBIntermediateColumnLayout;
         var tempContainer = InjectedContainer(
           null,
           tempGroup.frame.copyWith(),
           constraints: tempGroup.constraints.copyWith(),
           name: tempGroup.name,
-          pointValueHeight: isVertical
-              ? tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
-              : tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
-          pointValueWidth: isVertical
-              ? tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
-              : tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
           showHeight:
               tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
           showWidth:

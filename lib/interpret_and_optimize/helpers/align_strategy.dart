@@ -130,8 +130,6 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             null,
             child.frame.boundingBox(child.frame),
             name: child.name,
-            pointValueHeight: centerY,
-            pointValueWidth: centerX,
             constraints: child.constraints.copyWith(),
           );
           tree.addEdges(container, [child]);
