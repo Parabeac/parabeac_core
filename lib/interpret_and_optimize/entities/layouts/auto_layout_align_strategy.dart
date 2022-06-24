@@ -72,6 +72,8 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       var newChild = _needsContainer(child, isVertical, context);
 
       /// Add new child
+      /// and _handleLayoutChild removes the crossAxisSizing of children
+      /// in case the parent is fill on the cross axis
       spacedChildren.add(_handleLayoutChild(newChild, isVertical, context));
     }
 
@@ -85,7 +87,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
   /// Checks if child is a [PBLayoutIntermediateNode]
   /// and adds a container on top of it
   PBIntermediateNode _needsContainer(
-      child, bool isVertical, PBContext context) {
+      PBIntermediateNode child, bool isVertical, PBContext context) {
     if (child is! PBContainer) {
       // Creates container
       var wrapper = InjectedContainer(
@@ -145,22 +147,4 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
 
     return child;
   }
-
-  // // Replace children with new children in case boxes were added
-  // void _insertBoxes(PBContext context, node, bool isVertical) {
-  //   var children = context.tree.childrenOf(node);
-
-  //   var newChildren =
-  //       _addBoxes(children, isVertical, node.layoutProperties.spacing);
-
-  //   context.tree.replaceChildrenOf(node, newChildren);
-  // }
-
-  // // Add boxes between children
-  // List<PBIntermediateNode> _addBoxes(
-  //     List<PBIntermediateNode> children, bool isVertical, num space) {
-  //   var spacedChildren = <PBIntermediateNode>[];
-
-  //   return spacedChildren;
-  // }
 }
