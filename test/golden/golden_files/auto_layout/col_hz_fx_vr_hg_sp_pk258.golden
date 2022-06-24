@@ -35,7 +35,6 @@ class _ColHzFxVrHgSpPk258 extends State<ColHzFxVrHgSpPk258> {
                 top: 10.0,
                 bottom: 10.0,
               ),
-              height: 85.0,
               width: 326.0,
               decoration: BoxDecoration(
                 color: Colors.black,

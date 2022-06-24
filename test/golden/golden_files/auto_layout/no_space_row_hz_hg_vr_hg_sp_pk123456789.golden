@@ -37,8 +37,6 @@ class _NoSpaceRowHzHgVrHgSpPk123456789
                 top: 10.0,
                 bottom: 10.0,
               ),
-              height: 35.0,
-              width: 114.0,
               decoration: BoxDecoration(
                 color: Colors.black,
               ),

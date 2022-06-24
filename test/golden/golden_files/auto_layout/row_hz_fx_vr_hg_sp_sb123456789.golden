@@ -36,7 +36,6 @@ class _RowHzFxVrHgSpSb123456789 extends State<RowHzFxVrHgSpSb123456789> {
                 bottom: 10.0,
               ),
               height: 35.0,
-              width: 322.0,
               decoration: BoxDecoration(
                 color: Colors.black,
               ),

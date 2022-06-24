@@ -35,7 +35,6 @@ class _RowHzHgVrFxSpPk258 extends State<RowHzHgVrFxSpPk258> {
                 top: 10.0,
                 bottom: 10.0,
               ),
-              height: 100.0,
               width: 134.0,
               decoration: BoxDecoration(
                 color: Colors.black,
