@@ -66,7 +66,7 @@ class PBSizeHelper extends PBAttributesHelper {
         SizingValueContext.LayoutBuilderStatefulValue) {
       // Add Container case where width and/or height is static
       var isPointValue = false;
-      if (source is InjectedContainer) {
+      if (source is PBContainer) {
         isPointValue =
             isHeight ? source.pointValueHeight : source.pointValueWidth;
       }
