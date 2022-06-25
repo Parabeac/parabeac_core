@@ -35,6 +35,7 @@ The handoff between designers & developers is one of the most costly and frustra
     * [Running a Component Package with Widgetbook](#running-a-component-package)
   * [Other](#other)
     * [Global Theming](#global-theming)
+      * [Current Limitations](#current-limitations)
       * [TextStyles](#textstyles)
       * [Colors](#colors)
       * [Internal Use](#internal-use)
@@ -159,6 +160,9 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 ## Global Theming
 * parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
 * For more information on how to set up Global Styles in your design file, read the following [Global Styling Docs](https://docs.parabeac.com/docs/learn-the-parabeac-way/global-styling).
+
+### Current limitations
+* At the moment, we only generate global styling nodes that are actually being used inside a frame of the Figma project. This is because of Figma's API limitations. We are currently working on a way to completely decouple this so that we are able to get the styling information without depending on them being used inside the Figma project.
 
 ### TextStyles
 * If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
