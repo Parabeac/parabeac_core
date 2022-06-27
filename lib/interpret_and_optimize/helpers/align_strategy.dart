@@ -106,16 +106,19 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
 
       // Checks if child's parent has fixed height and width
       // or child has fixed height and width to determine the positioned constraints
-      if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
+      if (node.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT &&
+          (!child.constraints.pinLeft && !child.constraints.pinRight) &&
           (node.constraints.fixedWidth || child.constraints.fixedWidth)) {
         injectedPositioned.constraints.fixedWidth = false;
         centerX = true;
       }
-      if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
+      if (node.layoutMainAxisSizing == ParentLayoutSizing.INHERIT &&
+          (!child.constraints.pinTop && !child.constraints.pinBottom) &&
           (node.constraints.fixedHeight || child.constraints.fixedHeight)) {
         injectedPositioned.constraints.fixedHeight = false;
         centerY = true;
       }
+
       alignedChildren.add(injectedPositioned);
       if (!(centerX || centerY)) {
         /// we are no center, since there is no need in either axis
