@@ -16,16 +16,14 @@ class PBSizeHelper extends PBAttributesHelper {
 
     final buffer = StringBuffer();
 
-    buffer.write(getSize(source, context, DIMENTIONS.Width));
-    buffer.write(getSize(source, context, DIMENTIONS.Height));
+    buffer.write(getSize(source, context, false));
+    buffer.write(getSize(source, context, true));
 
     return buffer.toString();
   }
 
-  String getSize(
-      PBIntermediateNode source, PBContext context, DIMENTIONS dimention) {
-    var isHeight = dimention == DIMENTIONS.Height;
-    var dimentionString = dimention.toShortString();
+  String getSize(PBIntermediateNode source, PBContext context, bool isHeight) {
+    var dimentionString = isHeight ? 'Height' : 'Width';
     var lowerCaseDimentionString = dimentionString.toLowerCase();
     String sizeString;
     final buffer = StringBuffer();
@@ -95,13 +93,5 @@ class PBSizeHelper extends PBAttributesHelper {
     }
 
     return buffer.toString();
-  }
-}
-
-enum DIMENTIONS { Height, Width }
-
-extension DimentionToString on DIMENTIONS {
-  String toShortString() {
-    return this.toString().split('.').last;
   }
 }

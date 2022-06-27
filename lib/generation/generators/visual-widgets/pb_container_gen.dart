@@ -40,8 +40,7 @@ class PBContainerGenerator extends PBGenerator {
             source.showHeight) {
           buffer.write('height: ${source.frame.height},');
         } else if (!source.constraints.fixedHeight) {
-          buffer.write(
-              PBSizeHelper().getSize(source, context, DIMENTIONS.Height));
+          buffer.write(PBSizeHelper().getSize(source, context, true));
         }
 
         if (source.constraints.fixedWidth &&
@@ -49,8 +48,7 @@ class PBContainerGenerator extends PBGenerator {
             source.showWidth) {
           buffer.write('width: ${source.frame.width},');
         } else if (!source.constraints.fixedWidth) {
-          buffer
-              .write(PBSizeHelper().getSize(source, context, DIMENTIONS.Width));
+          buffer.write(PBSizeHelper().getSize(source, context, false));
         }
       }
 
