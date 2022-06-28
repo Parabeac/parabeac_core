@@ -57,9 +57,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
           bottom: 0,
           child: AdminCitySectionScrollViewCustom(
               child: Container(
-                  height:
-                      MediaQuery.of(context).size.height * 2.110997963340122,
-                  width: MediaQuery.of(context).size.width * 0.9599313108185461,
                   decoration: BoxDecoration(),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -125,100 +122,78 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                                   .size
                                                   .height *
                                               0.065,
-                                          child: Center(
-                                              child: Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.06517311608961303,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.7931922078473812,
-                                                  child: TagSectionTitleCustom(
-                                                      child: AutoSizeText(
-                                                    'Experience Your City’s Unique Values ',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Poppins',
-                                                      fontSize: 50.0,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      letterSpacing:
-                                                          0.9999998807907104,
-                                                      color: Color(0xff14142b),
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  )))),
+                                          child: TagSectionTitleCustom(
+                                              child: AutoSizeText(
+                                            'Experience Your City’s Unique Values ',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 50.0,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.9999998807907104,
+                                              color: Color(0xff14142b),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          )),
                                         ),
                                         Positioned(
                                           right: 0,
                                           width: 143.948,
                                           top: 0,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.073,
-                                          child: Center(
+                                          height: 72.0,
+                                          child: AddTagButtonCustom(
                                               child: Container(
-                                                  height: 72.0,
+                                                  padding: EdgeInsets.only(
+                                                    left: 32.0,
+                                                    right: 32.0,
+                                                    top: 19.0,
+                                                    bottom: 19.0,
+                                                  ),
                                                   width: 143.947509765625,
-                                                  child: AddTagButtonCustom(
-                                                      child: Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                            left: 32.0,
-                                                            right: 32.0,
-                                                            top: 19.0,
-                                                            bottom: 19.0,
-                                                          ),
-                                                          height: 72.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Color(
-                                                                0xff00497b),
-                                                            borderRadius:
-                                                                BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        16.0)),
-                                                          ),
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff00497b),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                16.0)),
+                                                  ),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.034623217922606926,
+                                                            child: AutoSizeText(
+                                                              'Add (+)',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 17.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                letterSpacing:
+                                                                    0.75,
+                                                                color: Color(
+                                                                    0xfffcfcfc),
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
                                                                       .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Container(
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.0412135088723526,
-                                                                    height: MediaQuery.of(context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.034623217922606926,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      'Add (+)',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            'Poppins',
-                                                                        fontSize:
-                                                                            17.0,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                        letterSpacing:
-                                                                            0.75,
-                                                                        color: Color(
-                                                                            0xfffcfcfc),
-                                                                      ),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                    )),
-                                                              ]))))),
+                                                            )),
+                                                      ]))),
                                         ),
                                       ])),
                                   SizedBox(
@@ -231,10 +206,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                       child: CurrentTagsCustom(
                                           child: Container(
                                               height: 75.0,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.813966800228964,
                                               decoration: BoxDecoration(),
                                               child: Row(
                                                   mainAxisAlignment:
@@ -369,68 +340,61 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                           right: 0.052,
                                           width: 143.948,
                                           top: 0,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.073,
-                                          child: Center(
+                                          height: 72.0,
+                                          child: AddAdditionalImageButtonCustom(
                                               child: Container(
-                                                  height: 72.0,
+                                                  padding: EdgeInsets.only(
+                                                    left: 32.0,
+                                                    right: 32.0,
+                                                    top: 19.0,
+                                                    bottom: 19.0,
+                                                  ),
                                                   width: 143.947509765625,
-                                                  child:
-                                                      AddAdditionalImageButtonCustom(
-                                                          child: Container(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .only(
-                                                                left: 32.0,
-                                                                right: 32.0,
-                                                                top: 19.0,
-                                                                bottom: 19.0,
-                                                              ),
-                                                              height: 72.0,
-                                                              decoration:
-                                                                  BoxDecoration(
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff00497b),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                16.0)),
+                                                  ),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.034623217922606926,
+                                                            child: AutoSizeText(
+                                                              'Add (+)',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 17.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                letterSpacing:
+                                                                    0.75,
                                                                 color: Color(
-                                                                    0xff00497b),
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            16.0)),
+                                                                    0xfffcfcfc),
                                                               ),
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Container(
-                                                                        width: MediaQuery.of(context).size.width *
-                                                                            0.0412135088723526,
-                                                                        height: MediaQuery.of(context).size.height *
-                                                                            0.034623217922606926,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          'Add (+)',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Poppins',
-                                                                            fontSize:
-                                                                                17.0,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                            letterSpacing:
-                                                                                0.75,
-                                                                            color:
-                                                                                Color(0xfffcfcfc),
-                                                                          ),
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                        )),
-                                                                  ]))))),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            )),
+                                                      ]))),
                                         ),
                                       ])),
                                   SizedBox(
@@ -508,11 +472,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                             child: Center(
                                                 child: Container(
                                                     width: 74.0,
-                                                    height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .height *
-                                                        0.034623217922606926,
+                                                    height: 34.0,
                                                     child: AutoSizeText(
                                                       'Save',
                                                       style: TextStyle(
