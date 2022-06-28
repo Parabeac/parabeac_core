@@ -27,4 +27,34 @@ static const TextStyle newStyle = TextStyle(
   fontStyle: FontStyle.normal,
 )
 ;
+/// headline1 description
+static const TextStyle headline1 = TextStyle(
+  fontSize: 12.0,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.0,
+  fontFamily: 'Inter',
+  decoration: TextDecoration.none,
+  fontStyle: FontStyle.normal,
+)
+;
+
+static const TextStyle mynewStyle = TextStyle(
+  fontSize: 12.0,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.0,
+  fontFamily: 'Poppins',
+  decoration: TextDecoration.none,
+  fontStyle: FontStyle.normal,
+)
+;
+
+static const TextStyle headline2 = TextStyle(
+  fontSize: 12.0,
+  fontWeight: FontWeight.w700,
+  letterSpacing: 6.0,
+  fontFamily: 'Inter',
+  decoration: TextDecoration.none,
+  fontStyle: FontStyle.italic,
+)
+;
 }

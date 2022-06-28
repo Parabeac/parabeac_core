@@ -158,8 +158,7 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 # Other
 ## Global Theming
 * parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
-* For more information on how to set up Global Styles in your design file, read the following [docs]().
-<!-- TODO: Add link to parabeac docs for info. on how to set up Global Docs. -->
+* For more information on how to set up Global Styles in your design file, read the following [Global Styling Docs](https://docs.parabeac.com/docs/learn-the-parabeac-way/global-styling).
 
 ### TextStyles
 * If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
