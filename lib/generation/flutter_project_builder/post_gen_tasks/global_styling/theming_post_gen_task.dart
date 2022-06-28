@@ -37,6 +37,13 @@ class ThemingPostGenTask extends PostGenTask {
       textThemeBoilerplate,
     );
 
+    final themeConstant = ConstantHolder(
+      'ThemeData',
+      'themeData',
+      'ThemeData(textTheme: textTheme,)',
+      isconst: false,
+    );
+
     var pathService = GetIt.I.get<PathService>();
 
     /// Imports for material and the [TextStyles].
@@ -48,7 +55,7 @@ import 'package:${projectName.snakeCase}/${pathService.themingRelativePath.repla
     generationConfiguration.fileStructureStrategy.commandCreated(
       WriteConstantsCommand(
         Uuid().v4(),
-        [textConstant],
+        [themeConstant, textConstant],
         filename: '${projectName.snakeCase}_theme',
         ownershipPolicy: FileOwnership.PBC,
         imports: imports,
