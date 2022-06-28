@@ -1,11 +1,13 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/expanded.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -94,7 +96,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
         null,
         child.frame,
         name: child.name,
-        constraints: child.constraints.copyWith(),
+        constraints: _getConstraints(child, isVertical),
       )
         ..layoutCrossAxisSizing = child.layoutCrossAxisSizing
         ..layoutMainAxisSizing = child.layoutMainAxisSizing;
@@ -102,6 +104,33 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       return wrapper;
     }
     return child;
+  }
+
+  PBIntermediateConstraints _getConstraints(
+      PBIntermediateNode node, bool isVertical) {
+    PBIntermediateConstraints newConstraints = node.constraints.copyWith();
+    if (node is InheritedBitmap) {
+      if (isVertical) {
+        if (!node.constraints.fixedHeight &&
+            node.layoutMainAxisSizing != ParentLayoutSizing.STRETCH) {
+          newConstraints.fixedHeight = true;
+        }
+        if (!node.constraints.fixedWidth &&
+            node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
+          newConstraints.fixedWidth = true;
+        }
+      } else {
+        if (!node.constraints.fixedHeight &&
+            node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
+          newConstraints.fixedHeight = true;
+        }
+        if (!node.constraints.fixedWidth &&
+            node.layoutMainAxisSizing != ParentLayoutSizing.STRETCH) {
+          newConstraints.fixedWidth = true;
+        }
+      }
+    }
+    return newConstraints.copyWith();
   }
 
   // This boolean let us know if the layout needs boxes or not
