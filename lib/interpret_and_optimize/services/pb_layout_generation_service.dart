@@ -135,10 +135,12 @@ class PBLayoutGenerationService extends AITHandler {
       if (tempGroup is! PBIntermediateStackLayout) {
         // Let tempLayout be Column or Row
         var tempLayout;
+        var isVertical = true;
         if (tempGroup is PBIntermediateColumnLayout) {
           tempLayout = tempGroup;
         } else if (tempGroup is PBIntermediateRowLayout) {
           tempLayout = tempGroup;
+          isVertical = false;
         }
         if (tempLayout.layoutProperties != null) {
           // Create the injected container to wrap the layout
@@ -156,10 +158,18 @@ class PBLayoutGenerationService extends AITHandler {
             constraints: tempLayout.constraints.copyWith(),
             // Let the Container know if it is going to show
             // the width or height on the generation process
-            showHeight: tempLayout.layoutProperties.primaryAxisSizing ==
-                IntermediateAxisMode.FIXED,
-            showWidth: tempLayout.layoutProperties.crossAxisSizing ==
-                IntermediateAxisMode.FIXED,
+            // showHeight: shouldBeShown(tempLayout, true, isVertical),
+            // showWidth: shouldBeShown(tempLayout, false, isVertical),
+            showHeight: isVertical
+                ? tempLayout.layoutProperties.primaryAxisSizing ==
+                    IntermediateAxisMode.FIXED
+                : tempLayout.layoutProperties.crossAxisSizing ==
+                    IntermediateAxisMode.FIXED,
+            showWidth: isVertical
+                ? tempLayout.layoutProperties.crossAxisSizing ==
+                    IntermediateAxisMode.FIXED
+                : tempLayout.layoutProperties.crossAxisSizing ==
+                    IntermediateAxisMode.FIXED,
           )
             ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
             ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing
@@ -192,15 +202,21 @@ class PBLayoutGenerationService extends AITHandler {
       );
 
       if (tempGroup.auxiliaryData.colors != null) {
+        var isVertical = true;
+        if (tempGroup is PBIntermediateRowLayout) {
+          isVertical = false;
+        }
         var tempContainer = InjectedContainer(
           null,
           tempGroup.frame.copyWith(),
           constraints: tempGroup.constraints.copyWith(),
           name: tempGroup.name,
-          showHeight:
-              tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
-          showWidth:
-              tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
+          showHeight: isVertical
+              ? tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
+              : tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
+          showWidth: isVertical
+              ? tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
+              : tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
         )
           ..auxiliaryData = tempGroup.auxiliaryData
           ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
