@@ -104,17 +104,33 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             height: child.frame.height),
       );
 
+      if (node.constraints.fixedHeight) {
+        child.constraints.fixedHeight = true;
+        if (!child.constraints.pinTop && !child.constraints.pinBottom) {
+          child.constraints.pinTop = true;
+          child.constraints.pinBottom = false;
+        }
+      }
+      if (node.constraints.fixedWidth) {
+        child.constraints.fixedWidth = true;
+        if (!child.constraints.pinLeft && !child.constraints.pinRight) {
+          child.constraints.pinLeft = true;
+          child.constraints.pinRight = false;
+        }
+      }
+
       // Checks if child's parent has fixed height and width
       // or child has fixed height and width to determine the positioned constraints
-      if (node.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT &&
+      if (node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH &&
           (!child.constraints.pinLeft && !child.constraints.pinRight) &&
-          (node.constraints.fixedWidth || child.constraints.fixedWidth)) {
+          child.constraints.fixedWidth) {
         injectedPositioned.constraints.fixedWidth = false;
+
         centerX = true;
       }
-      if (node.layoutMainAxisSizing == ParentLayoutSizing.INHERIT &&
+      if (node.layoutMainAxisSizing != ParentLayoutSizing.STRETCH &&
           (!child.constraints.pinTop && !child.constraints.pinBottom) &&
-          (node.constraints.fixedHeight || child.constraints.fixedHeight)) {
+          child.constraints.fixedHeight) {
         injectedPositioned.constraints.fixedHeight = false;
         centerY = true;
       }
