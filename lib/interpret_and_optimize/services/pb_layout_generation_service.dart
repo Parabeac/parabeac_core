@@ -158,18 +158,8 @@ class PBLayoutGenerationService extends AITHandler {
             constraints: tempLayout.constraints.copyWith(),
             // Let the Container know if it is going to show
             // the width or height on the generation process
-            // showHeight: shouldBeShown(tempLayout, true, isVertical),
-            // showWidth: shouldBeShown(tempLayout, false, isVertical),
-            showHeight: isVertical
-                ? tempLayout.layoutProperties.primaryAxisSizing ==
-                    IntermediateAxisMode.FIXED
-                : tempLayout.layoutProperties.crossAxisSizing ==
-                    IntermediateAxisMode.FIXED,
-            showWidth: isVertical
-                ? tempLayout.layoutProperties.crossAxisSizing ==
-                    IntermediateAxisMode.FIXED
-                : tempLayout.layoutProperties.crossAxisSizing ==
-                    IntermediateAxisMode.FIXED,
+            showHeight: _shouldBeShown(tempLayout, true, isVertical),
+            showWidth: _shouldBeShown(tempLayout, false, isVertical),
           )
             ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
             ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing
@@ -181,6 +171,30 @@ class PBLayoutGenerationService extends AITHandler {
         }
       }
     });
+  }
+
+  bool _shouldBeShown(dynamic node, bool isHeight, bool isVertical) {
+    PBIntermediateConstraints constraints = node.constraints;
+    // TODO: Expand cases
+    if (isHeight && constraints.pinBottom && constraints.pinTop) {
+      return false;
+    } else if (!isHeight && constraints.pinRight && constraints.pinLeft) {
+      return false;
+    } else {
+      if (isVertical) {
+        return isHeight
+            ? node.layoutProperties.primaryAxisSizing ==
+                IntermediateAxisMode.FIXED
+            : node.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED;
+      } else {
+        return isHeight
+            ? node.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED
+            : node.layoutProperties.primaryAxisSizing ==
+                IntermediateAxisMode.FIXED;
+      }
+    }
   }
 
   /// Transforming the [Group] into regular [PBLayoutIntermediateNode]
