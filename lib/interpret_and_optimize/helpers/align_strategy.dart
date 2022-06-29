@@ -90,19 +90,6 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     nodeChildren.forEach((child) {
       var centerY = false;
       var centerX = false;
-      var injectedPositioned = InjectedPositioned(
-        child.name,
-        null,
-        child.frame,
-        constraints: child.constraints.copyWith(),
-        valueHolder: PositionedValueHolder(
-            top: child.frame.topLeft.y - node.frame.topLeft.y,
-            bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
-            left: child.frame.topLeft.x - node.frame.topLeft.x,
-            right: node.frame.bottomRight.x - child.frame.bottomRight.x,
-            width: child.frame.width,
-            height: child.frame.height),
-      );
 
       if (node.constraints.fixedHeight) {
         child.constraints.fixedHeight = true;
@@ -118,6 +105,20 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
           child.constraints.pinRight = false;
         }
       }
+
+      var injectedPositioned = InjectedPositioned(
+        child.name,
+        null,
+        child.frame,
+        constraints: child.constraints.copyWith(),
+        valueHolder: PositionedValueHolder(
+            top: child.frame.topLeft.y - node.frame.topLeft.y,
+            bottom: node.frame.bottomRight.y - child.frame.bottomRight.y,
+            left: child.frame.topLeft.x - node.frame.topLeft.x,
+            right: node.frame.bottomRight.x - child.frame.bottomRight.x,
+            width: child.frame.width,
+            height: child.frame.height),
+      );
 
       // Checks if child's parent has fixed height and width
       // or child has fixed height and width to determine the positioned constraints
