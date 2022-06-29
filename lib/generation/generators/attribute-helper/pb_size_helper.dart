@@ -16,8 +16,8 @@ class PBSizeHelper extends PBAttributesHelper {
 
     final buffer = StringBuffer();
 
-    buffer.write(getSize(source, context, false));
     buffer.write(getSize(source, context, true));
+    buffer.write(getSize(source, context, false));
 
     return buffer.toString();
   }
