@@ -46,8 +46,8 @@ class _NoSpaceColHzHgVrHgSpPk123456789
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                        width: 24.0,
                         height: 15.0,
+                        width: 24.0,
                         child: AutoSizeText(
                           'Left',
                           style: TextStyle(
@@ -60,8 +60,8 @@ class _NoSpaceColHzHgVrHgSpPk123456789
                           textAlign: TextAlign.left,
                         )),
                     Container(
-                        width: 39.0,
                         height: 15.0,
+                        width: 39.0,
                         child: AutoSizeText(
                           'Middle',
                           style: TextStyle(
@@ -74,8 +74,8 @@ class _NoSpaceColHzHgVrHgSpPk123456789
                           textAlign: TextAlign.left,
                         )),
                     Container(
-                        width: 31.0,
                         height: 15.0,
+                        width: 31.0,
                         child: AutoSizeText(
                           'Right',
                           style: TextStyle(

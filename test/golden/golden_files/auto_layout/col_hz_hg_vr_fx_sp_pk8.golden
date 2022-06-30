@@ -44,8 +44,8 @@ class _ColHzHgVrFxSpPk8 extends State<ColHzHgVrFxSpPk8> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                        width: 24.0,
                         height: 15.0,
+                        width: 24.0,
                         child: AutoSizeText(
                           'Left',
                           style: TextStyle(
@@ -61,8 +61,8 @@ class _ColHzHgVrFxSpPk8 extends State<ColHzHgVrFxSpPk8> {
                       height: 10.0,
                     ),
                     Container(
-                        width: 39.0,
                         height: 15.0,
+                        width: 39.0,
                         child: AutoSizeText(
                           'Middle',
                           style: TextStyle(
@@ -78,8 +78,8 @@ class _ColHzHgVrFxSpPk8 extends State<ColHzHgVrFxSpPk8> {
                       height: 10.0,
                     ),
                     Container(
-                        width: 31.0,
                         height: 15.0,
+                        width: 31.0,
                         child: AutoSizeText(
                           'Right',
                           style: TextStyle(

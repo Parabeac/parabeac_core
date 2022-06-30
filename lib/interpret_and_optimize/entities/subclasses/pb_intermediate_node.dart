@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
@@ -193,11 +194,30 @@ abstract class PBIntermediateNode
 
   void mapRawChildren(Map<String, dynamic> json, PBIntermediateTree tree) {
     var rawChildren = json['children'] as List;
+    var parentConstraints = json['constraints'];
     rawChildren?.forEach((rawChild) {
       if (rawChild != null) {
+        /// Child inherit Parent's constraints if they are fixed
+        /// on that axis
+        /// This rule was added for Auto Layouts since we will not be using
+        /// LayoutBuilder for the moment
+        if (this is FrameGroup) {
+          if (parentConstraints['fixedHeight']) {
+            rawChild['constraints']['fixedHeight'] =
+                parentConstraints['fixedHeight'];
+            rawChild['constraints']['pinTop'] = parentConstraints['pinTop'];
+            rawChild['constraints']['pinBottom'] =
+                parentConstraints['pinBottom'];
+          }
+
+          if (parentConstraints['fixedWidth']) {
+            rawChild['constraints']['fixedWidth'] =
+                parentConstraints['fixedWidth'];
+            rawChild['constraints']['pinLeft'] = parentConstraints['pinLeft'];
+            rawChild['constraints']['pinRight'] = parentConstraints['pinRight'];
+          }
+        }
         PBIntermediateNode.fromJson(rawChild, this, tree);
-        // tree.addEdges(Vertex(rawChild), [Vertex(parent)]);
-        // addChild();PBIntermediateNode.fromJson(rawChild)
       }
     });
   }

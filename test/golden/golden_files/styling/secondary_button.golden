@@ -40,8 +40,8 @@ class _SecondaryButton extends State<SecondaryButton> {
             top: widget.constraints.maxHeight * 0.39,
             height: widget.constraints.maxHeight * 0.23,
             child: Container(
-                width: widget.constraints.maxWidth * 0.3276595744680851,
                 height: widget.constraints.maxHeight * 0.23,
+                width: widget.constraints.maxWidth * 0.3276595744680851,
                 child: AutoSizeText(
                   widget.ovrClickMe ?? 'Click Me',
                   style: TextStyle(

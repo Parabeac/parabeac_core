@@ -30,8 +30,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 0,
           height: 124.0,
           child: Container(
-            width: 197.0,
             height: 124.0,
+            width: 197.0,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment(1.0000000596046466, -0.999999849557967),
@@ -55,8 +55,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 154.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x70991d66),
             ),
@@ -70,8 +70,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/circleradius.png',
             package: 'styling_golden_testing_project',
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             fit: BoxFit.none,
           ),
         ),
@@ -83,8 +83,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/diamond.png',
             package: 'styling_golden_testing_project',
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             fit: BoxFit.none,
           ),
         ),
@@ -94,8 +94,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 604.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99b63a4c),
             ),
@@ -107,8 +107,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 754.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99378c59),
               border: Border.all(
@@ -124,8 +124,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 754.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99378c59),
               border: Border.all(
@@ -151,8 +151,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/2stroke.png',
             package: 'styling_golden_testing_project',
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             fit: BoxFit.none,
           ),
         ),
@@ -162,8 +162,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 454.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99378c59),
               border: Border.all(
@@ -179,8 +179,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 304.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99378c59),
               border: Border.all(
@@ -206,8 +206,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/imagewithtint.png',
             package: 'styling_golden_testing_project',
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             fit: BoxFit.none,
           ),
         ),
@@ -217,8 +217,8 @@ class _StylingScreen extends State<StylingScreen> {
           top: 4.0,
           height: 120.0,
           child: Container(
-            width: 197.0,
             height: 120.0,
+            width: 197.0,
             decoration: BoxDecoration(
               color: Color(0x99378c59),
               border: Border.all(
@@ -244,8 +244,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/ellipse1.png',
             package: 'styling_golden_testing_project',
-            width: 133.0,
             height: 124.0,
+            width: 133.0,
             fit: BoxFit.none,
           ),
         ),
@@ -257,8 +257,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/polygon1.svg',
             package: 'styling_golden_testing_project',
-            width: 142.0,
             height: 120.0,
+            width: 142.0,
             fit: BoxFit.none,
           ),
         ),
@@ -270,8 +270,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/star1.svg',
             package: 'styling_golden_testing_project',
-            width: 110.0,
             height: 126.0,
+            width: 110.0,
             fit: BoxFit.none,
           ),
         ),
@@ -283,8 +283,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/vector1.svg',
             package: 'styling_golden_testing_project',
-            width: 109.5,
             height: 102.5,
+            width: 109.5,
             fit: BoxFit.none,
           ),
         ),
@@ -296,8 +296,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/emptyframe.svg',
             package: 'styling_golden_testing_project',
-            width: 154.0,
             height: 118.0,
+            width: 154.0,
             fit: BoxFit.none,
           ),
         ),
@@ -320,8 +320,8 @@ class _StylingScreen extends State<StylingScreen> {
                   top: 42.0,
                   height: 42.0,
                   child: Container(
-                      width: 67.0,
                       height: 42.0,
+                      width: 67.0,
                       child: AutoSizeText(
                         'Howdy',
                         style: TextStyle(
@@ -367,8 +367,8 @@ class _StylingScreen extends State<StylingScreen> {
                   top: 42.0,
                   height: 42.0,
                   child: Container(
-                      width: 67.0,
                       height: 42.0,
+                      width: 67.0,
                       child: AutoSizeText(
                         'Howdy',
                         style: TextStyle(
@@ -391,8 +391,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/line1.svg',
             package: 'styling_golden_testing_project',
-            width: 1.0,
             height: 77.00650024414062,
+            width: 1.0,
             fit: BoxFit.none,
           ),
         ),
@@ -404,8 +404,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: SvgPicture.asset(
             'assets/images/line2.svg',
             package: 'styling_golden_testing_project',
-            width: 1.0,
             height: 89.0,
+            width: 1.0,
             fit: BoxFit.none,
           ),
         ),
@@ -417,8 +417,8 @@ class _StylingScreen extends State<StylingScreen> {
           child: Image.asset(
             'assets/images/rectangle1.png',
             package: 'styling_golden_testing_project',
-            width: 176.0,
             height: 127.0,
+            width: 176.0,
             fit: BoxFit.none,
           ),
         ),

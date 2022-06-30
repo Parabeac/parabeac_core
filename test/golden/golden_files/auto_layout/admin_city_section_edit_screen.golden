@@ -86,7 +86,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                               ),
                               Positioned(
                                 left: 0,
-                                right: 0,
+                                width: 1677.0,
                                 top: 84.0,
                                 height: 335.0,
                                 child: LayoutBuilder(
@@ -113,15 +113,9 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                       child: Stack(children: [
                                         Positioned(
                                           left: 0,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.793,
+                                          width: 1385.707,
                                           top: 0,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.065,
+                                          height: 64.0,
                                           child: TagSectionTitleCustom(
                                               child: AutoSizeText(
                                             'Experience Your City’s Unique Values ',
@@ -136,7 +130,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                           )),
                                         ),
                                         Positioned(
-                                          right: 0,
+                                          left: 1533.052,
                                           width: 143.948,
                                           top: 0,
                                           height: 72.0,
@@ -165,16 +159,16 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                                               .center,
                                                       children: [
                                                         Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.0412135088723526,
                                                             height: MediaQuery.of(
                                                                         context)
                                                                     .size
                                                                     .height *
                                                                 0.034623217922606926,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
                                                             child: AutoSizeText(
                                                               'Add (+)',
                                                               style: TextStyle(
@@ -337,9 +331,9 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                           )),
                                         ),
                                         Positioned(
-                                          right: 0.052,
+                                          left: 1533.0,
                                           width: 143.948,
-                                          top: 0,
+                                          top: 0.25,
                                           height: 72.0,
                                           child: AddAdditionalImageButtonCustom(
                                               child: Container(
@@ -366,16 +360,16 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                                               .center,
                                                       children: [
                                                         Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.0412135088723526,
                                                             height: MediaQuery.of(
                                                                         context)
                                                                     .size
                                                                     .height *
                                                                 0.034623217922606926,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
                                                             child: AutoSizeText(
                                                               'Add (+)',
                                                               style: TextStyle(
@@ -441,17 +435,14 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                             decoration: BoxDecoration(),
                             child: Stack(children: [
                               Positioned(
-                                left: MediaQuery.of(context).size.width * 0.191,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.579,
-                                bottom: 0,
+                                left: 333.034,
+                                width: 1011.932,
+                                top: 0,
                                 height: 72.0,
                                 child: SaveButtonCustom(
                                     child: Container(
                                         height: 72.0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5792399833866986,
+                                        width: 1011.9322509765625,
                                         decoration: BoxDecoration(
                                           color: Color(0xff00497b),
                                           borderRadius: BorderRadius.all(
@@ -459,34 +450,24 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                         ),
                                         child: Stack(children: [
                                           Positioned(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.269,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.042,
+                                            left: 469.286,
+                                            width: 74.0,
                                             top: 19.25,
-                                            bottom: 18.75,
-                                            child: Center(
-                                                child: Container(
-                                                    width: 74.0,
-                                                    height: 34.0,
-                                                    child: AutoSizeText(
-                                                      'Save',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 17.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        letterSpacing: 0.75,
-                                                        color:
-                                                            Color(0xfffcfcfc),
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ))),
+                                            height: 34.0,
+                                            child: Container(
+                                                height: 34.0,
+                                                width: 74.0,
+                                                child: AutoSizeText(
+                                                  'Save',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 17.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 0.75,
+                                                    color: Color(0xfffcfcfc),
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                )),
                                           ),
                                         ]))),
                               ),
