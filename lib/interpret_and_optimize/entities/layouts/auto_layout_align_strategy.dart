@@ -96,7 +96,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
         null,
         child.frame,
         name: child.name,
-        constraints: _getConstraints(child, isVertical),
+        constraints: child.constraints.copyWith(),
       )
         ..layoutCrossAxisSizing = child.layoutCrossAxisSizing
         ..layoutMainAxisSizing = child.layoutMainAxisSizing;
@@ -104,33 +104,6 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       return wrapper;
     }
     return child;
-  }
-
-  PBIntermediateConstraints _getConstraints(
-      PBIntermediateNode node, bool isVertical) {
-    PBIntermediateConstraints newConstraints = node.constraints.copyWith();
-    if (node is InheritedBitmap) {
-      if (isVertical) {
-        if (!node.constraints.fixedHeight &&
-            node.layoutMainAxisSizing != ParentLayoutSizing.STRETCH) {
-          newConstraints.fixedHeight = true;
-        }
-        if (!node.constraints.fixedWidth &&
-            node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
-          newConstraints.fixedWidth = true;
-        }
-      } else {
-        if (!node.constraints.fixedHeight &&
-            node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
-          newConstraints.fixedHeight = true;
-        }
-        if (!node.constraints.fixedWidth &&
-            node.layoutMainAxisSizing != ParentLayoutSizing.STRETCH) {
-          newConstraints.fixedWidth = true;
-        }
-      }
-    }
-    return newConstraints.copyWith();
   }
 
   // This boolean let us know if the layout needs boxes or not

@@ -194,29 +194,8 @@ abstract class PBIntermediateNode
 
   void mapRawChildren(Map<String, dynamic> json, PBIntermediateTree tree) {
     var rawChildren = json['children'] as List;
-    var parentConstraints = json['constraints'];
     rawChildren?.forEach((rawChild) {
       if (rawChild != null) {
-        /// Child inherit Parent's constraints if they are fixed
-        /// on that axis
-        /// This rule was added for Auto Layouts since we will not be using
-        /// LayoutBuilder for the moment
-        if (this is FrameGroup) {
-          if (parentConstraints['fixedHeight']) {
-            rawChild['constraints']['fixedHeight'] =
-                parentConstraints['fixedHeight'];
-            rawChild['constraints']['pinTop'] = parentConstraints['pinTop'];
-            rawChild['constraints']['pinBottom'] =
-                parentConstraints['pinBottom'];
-          }
-
-          if (parentConstraints['fixedWidth']) {
-            rawChild['constraints']['fixedWidth'] =
-                parentConstraints['fixedWidth'];
-            rawChild['constraints']['pinLeft'] = parentConstraints['pinLeft'];
-            rawChild['constraints']['pinRight'] = parentConstraints['pinRight'];
-          }
-        }
         PBIntermediateNode.fromJson(rawChild, this, tree);
       }
     });
