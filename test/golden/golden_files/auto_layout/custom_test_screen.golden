@@ -85,8 +85,10 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase34Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -129,13 +131,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase12Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -232,8 +236,10 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase14Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -323,13 +329,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase22Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -374,26 +382,30 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             width: 50.0,
                             top: 0,
                             height: 50.0,
-                            child: SubFrameCase23Custom(
+                            child: Center(
                                 child: Container(
                                     height: 50.0,
                                     width: 50.0,
-                                    decoration: BoxDecoration(),
-                                    child: Stack(children: [
-                                      Positioned(
-                                        left: 0,
-                                        width: 50.0,
-                                        top: 0,
-                                        height: 50.0,
+                                    child: SubFrameCase23Custom(
                                         child: Container(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff2400ff),
-                                          ),
-                                        ),
-                                      ),
-                                    ]))),
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff2400ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -419,13 +431,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            width: MediaQuery.of(context).size.width * 0.128,
                             top: 0,
                             height: 50.0,
                             child: SubFrameCase24Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -517,13 +531,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase32Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -616,12 +632,13 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                           Positioned(
                             left: 0,
                             width: 50.0,
-                            top: 0,
+                            bottom: 0,
                             height: 50.0,
                             child: SubFrameCase11Custom(
                                 child: Container(
                                     height: 50.0,
-                                    width: 50.0,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -711,13 +728,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase42Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -762,26 +781,30 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             width: 50.0,
                             top: 0,
                             height: 50.0,
-                            child: SubFrameCase43Custom(
+                            child: Center(
                                 child: Container(
                                     height: 50.0,
                                     width: 50.0,
-                                    decoration: BoxDecoration(),
-                                    child: Stack(children: [
-                                      Positioned(
-                                        left: 0,
-                                        width: 50.0,
-                                        top: 0,
-                                        height: 50.0,
+                                    child: SubFrameCase43Custom(
                                         child: Container(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffdb00ff),
-                                          ),
-                                        ),
-                                      ),
-                                    ]))),
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xffdb00ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -807,13 +830,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            width: MediaQuery.of(context).size.width * 0.128,
                             top: 0,
                             height: 50.0,
                             child: SubFrameCase44Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1095,13 +1120,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase72Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1196,8 +1223,10 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase134Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1289,13 +1318,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase92Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1392,8 +1423,10 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase94Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1483,13 +1516,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase102Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1534,26 +1569,30 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             width: 50.0,
                             top: 0,
                             height: 50.0,
-                            child: SubFrameCase103Custom(
+                            child: Center(
                                 child: Container(
                                     height: 50.0,
                                     width: 50.0,
-                                    decoration: BoxDecoration(),
-                                    child: Stack(children: [
-                                      Positioned(
-                                        left: 0,
-                                        width: 50.0,
-                                        top: 0,
-                                        height: 50.0,
+                                    child: SubFrameCase103Custom(
                                         child: Container(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff929292),
-                                          ),
-                                        ),
-                                      ),
-                                    ]))),
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff929292),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -1579,13 +1618,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            width: MediaQuery.of(context).size.width * 0.128,
                             top: 0,
                             height: 50.0,
                             child: SubFrameCase104Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1675,13 +1716,15 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                         child: Stack(children: [
                           Positioned(
                             left: 0,
-                            width: 50.0,
+                            right: 0,
                             top: 0,
-                            height: 50.0,
+                            bottom: 0,
                             child: SubFrameCase132Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1776,8 +1819,10 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase74Custom(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
