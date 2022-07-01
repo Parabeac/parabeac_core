@@ -7,6 +7,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 /// [AlignStrategy] uses the strategy pattern to define the alignment logic for
@@ -89,15 +90,18 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       var centerY = false;
       var centerX = false;
 
-      final parent = node.parent;
       var heightLayoutSizing = ParentLayoutSizing.INHERIT;
       var widthLayoutSizing = ParentLayoutSizing.INHERIT;
 
+      var parentLayout = _findNearestParentLayout(node);
+
       /// Assign proper axis sizing for checking constraint replacements
-      if (parent is PBIntermediateColumnLayout) {
+
+      if (parentLayout != null && parentLayout is PBIntermediateColumnLayout) {
         heightLayoutSizing = node.layoutMainAxisSizing;
         widthLayoutSizing = node.layoutCrossAxisSizing;
-      } else if (parent is PBIntermediateRowLayout) {
+      } else if (parentLayout != null &&
+          parentLayout is PBIntermediateRowLayout) {
         heightLayoutSizing = node.layoutCrossAxisSizing;
         widthLayoutSizing = node.layoutMainAxisSizing;
       }
@@ -177,5 +181,26 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     });
     tree.replaceChildrenOf(node, alignedChildren);
     // super.setConstraints(context, node);
+  }
+
+  /// Traverses [node] upwards and returns the first [PBLayoutIntermediateNode].
+  ///
+  /// Returns [null] if there is none.
+  PBLayoutIntermediateNode _findNearestParentLayout(PBIntermediateNode node) {
+    //TODO: We could abstract this method to [PBIntermediateTree] to look for any type of node up the tree using generics.
+    if (node == null) {
+      return null;
+    }
+    var iter = node.parent;
+
+    /// Go up the tree in search of a [PBLayoutIntermediateNode]
+    while (iter != null) {
+      if (iter is PBLayoutIntermediateNode) {
+        return iter;
+      }
+      iter = iter.parent;
+    }
+
+    return null;
   }
 }
