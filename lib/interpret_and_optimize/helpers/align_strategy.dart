@@ -143,14 +143,22 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       /// Rules to center child horizontally
       if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
           child.constraints.fixedWidth) {
-        injectedPositioned.constraints.fixedWidth = false;
+        if (widthLayoutSizing == ParentLayoutSizing.STRETCH) {
+          injectedPositioned.constraints.fixedWidth = true;
+        } else if (widthLayoutSizing == ParentLayoutSizing.INHERIT) {
+          injectedPositioned.constraints.fixedWidth = false;
+        }
         centerX = true;
       }
 
       /// Rules to center child vertically
       if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
           child.constraints.fixedHeight) {
-        injectedPositioned.constraints.fixedHeight = false;
+        if (heightLayoutSizing == ParentLayoutSizing.STRETCH) {
+          injectedPositioned.constraints.fixedHeight = true;
+        } else if (heightLayoutSizing == ParentLayoutSizing.INHERIT) {
+          injectedPositioned.constraints.fixedHeight = false;
+        }
         centerY = true;
       }
 
