@@ -3,6 +3,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injecte
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
@@ -87,9 +89,22 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       var centerY = false;
       var centerX = false;
 
+      final parent = node.parent;
+      var heightLayoutSizing = ParentLayoutSizing.INHERIT;
+      var widthLayoutSizing = ParentLayoutSizing.INHERIT;
+
+      /// Assign proper axis sizing for checking constraint replacements
+      if (parent is PBIntermediateColumnLayout) {
+        heightLayoutSizing = node.layoutMainAxisSizing;
+        widthLayoutSizing = node.layoutCrossAxisSizing;
+      } else if (parent is PBIntermediateRowLayout) {
+        heightLayoutSizing = node.layoutCrossAxisSizing;
+        widthLayoutSizing = node.layoutMainAxisSizing;
+      }
+
       /// Rule to inherit fixed height to children
       if (node.constraints.fixedHeight &&
-          node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
+          heightLayoutSizing != ParentLayoutSizing.STRETCH) {
         child.constraints.fixedHeight = true;
         if (!child.constraints.pinTop && !child.constraints.pinBottom) {
           child.constraints.pinTop = true;
@@ -99,7 +114,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
 
       /// Rule to inherit fixed width to children
       if (node.constraints.fixedWidth &&
-          node.layoutCrossAxisSizing != ParentLayoutSizing.STRETCH) {
+          widthLayoutSizing != ParentLayoutSizing.STRETCH) {
         child.constraints.fixedWidth = true;
         if (!child.constraints.pinLeft && !child.constraints.pinRight) {
           child.constraints.pinLeft = true;
@@ -127,6 +142,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
         injectedPositioned.constraints.fixedWidth = false;
         centerX = true;
       }
+
       /// Rules to center child vertically
       if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
           child.constraints.fixedHeight) {
