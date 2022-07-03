@@ -16,6 +16,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layo
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_visual_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
 import 'package:sentry/sentry.dart';
 
 /// PBLayoutGenerationService:
@@ -92,23 +93,38 @@ class PBLayoutGenerationService extends AITHandler {
   /// a stack to ensure alignment.
   void _applyComponentRules(
       PBIntermediateTree tree, PBSharedMasterNode component) {
-    if (tree.childrenOf(component).length == 1 &&
-        tree.childrenOf(component).first is! Group) {
-      var child = tree.childrenOf(component).first;
+    /// Check that children is not an empty list
+    var children = tree.childrenOf(component);
+    var firstChild = children.isNotEmpty ? children.first : null;
+    if (firstChild is CustomTag &&
+        tree.childrenOf(firstChild).length == 1 &&
+        tree.childrenOf(firstChild).first is! Group) {
+      /// Get child's child
+      var grandChild = tree.childrenOf(firstChild).first;
 
-      /// TODO: Improve the way we create Stacks
-      var stack = PBIntermediateStackLayout(
-        name: component.name,
-        constraints: component.constraints.copyWith(),
-      )
-        ..auxiliaryData = component.auxiliaryData
-        ..frame = component.frame.copyWith()
-        ..layoutCrossAxisSizing = component.layoutCrossAxisSizing
-        ..layoutMainAxisSizing = component.layoutMainAxisSizing;
-
-      /// Insert the stack below the component.
-      tree.injectBetween(insertee: stack, parent: component, child: child);
+      _addStack(tree, firstChild, grandChild);
+    } else if (tree.childrenOf(component).length == 1 && firstChild is! Group) {
+      _addStack(tree, component, firstChild);
     }
+  }
+
+  void _addStack(
+    PBIntermediateTree tree,
+    PBIntermediateNode parent,
+    PBIntermediateNode child,
+  ) {
+    /// TODO: Improve the way we create Stacks
+    var stack = PBIntermediateStackLayout(
+      name: parent.name,
+      constraints: parent.constraints.copyWith(),
+    )
+      ..auxiliaryData = parent.auxiliaryData
+      ..frame = parent.frame.copyWith()
+      ..layoutCrossAxisSizing = parent.layoutCrossAxisSizing
+      ..layoutMainAxisSizing = parent.layoutMainAxisSizing;
+
+    /// Insert the stack below the component.
+    tree.injectBetween(insertee: stack, parent: parent, child: child);
   }
 
   void _wrapLayout(PBIntermediateTree tree, PBContext context) {
@@ -119,10 +135,12 @@ class PBLayoutGenerationService extends AITHandler {
       if (tempGroup is! PBIntermediateStackLayout) {
         // Let tempLayout be Column or Row
         var tempLayout;
+        var isVertical = true;
         if (tempGroup is PBIntermediateColumnLayout) {
           tempLayout = tempGroup;
         } else if (tempGroup is PBIntermediateRowLayout) {
           tempLayout = tempGroup;
+          isVertical = false;
         }
         if (tempLayout.layoutProperties != null) {
           // Create the injected container to wrap the layout
@@ -140,10 +158,8 @@ class PBLayoutGenerationService extends AITHandler {
             constraints: tempLayout.constraints.copyWith(),
             // Let the Container know if it is going to show
             // the width or height on the generation process
-            showHeight: tempLayout.layoutProperties.primaryAxisAlignment ==
-                IntermediateAxisMode.FIXED,
-            showWidth: tempLayout.layoutProperties.crossAxisSizing ==
-                IntermediateAxisMode.FIXED,
+            showHeight: _shouldBeShown(tempLayout, true, isVertical),
+            showWidth: _shouldBeShown(tempLayout, false, isVertical),
           )
             ..layoutCrossAxisSizing = tempLayout.layoutCrossAxisSizing
             ..layoutMainAxisSizing = tempLayout.layoutMainAxisSizing
@@ -157,28 +173,28 @@ class PBLayoutGenerationService extends AITHandler {
     });
   }
 
-  /// If this node is an unecessary [Group], from the [tree]
-  ///
-  /// Ex: Designer put a group with one child that was a group
-  /// and that group contained the visual nodes.
-  void _removingMeaninglessGroup(PBIntermediateTree tree) {
-    tree
-        .where((node) => node is Group && tree.childrenOf(node).length <= 1)
-        .cast<Group>()
-        .forEach((tempGroup) {
-      var tempChildren = tree.childrenOf(tempGroup);
-      tree.replaceNode(
-          tempGroup,
-          tempChildren.isNotEmpty
-              ? _replaceNode(tempGroup, tempChildren.first)
-              : _replaceNode(
-                  tempGroup,
-                  InjectedContainer(
-                    tempGroup.UUID, tempGroup.frame,
-                    name: tempGroup.name,
-                    // constraints: tempGroup.constraints
-                  )));
-    });
+  bool _shouldBeShown(dynamic node, bool isHeight, bool isVertical) {
+    PBIntermediateConstraints constraints = node.constraints;
+    // TODO: Expand cases
+    if (isHeight && constraints.pinBottom && constraints.pinTop) {
+      return false;
+    } else if (!isHeight && constraints.pinRight && constraints.pinLeft) {
+      return false;
+    } else {
+      if (isVertical) {
+        return isHeight
+            ? node.layoutProperties.primaryAxisSizing ==
+                IntermediateAxisMode.FIXED
+            : node.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED;
+      } else {
+        return isHeight
+            ? node.layoutProperties.crossAxisSizing ==
+                IntermediateAxisMode.FIXED
+            : node.layoutProperties.primaryAxisSizing ==
+                IntermediateAxisMode.FIXED;
+      }
+    }
   }
 
   /// Transforming the [Group] into regular [PBLayoutIntermediateNode]
@@ -200,11 +216,21 @@ class PBLayoutGenerationService extends AITHandler {
       );
 
       if (tempGroup.auxiliaryData.colors != null) {
+        var isVertical = true;
+        if (tempGroup is PBIntermediateRowLayout) {
+          isVertical = false;
+        }
         var tempContainer = InjectedContainer(
           null,
           tempGroup.frame.copyWith(),
           constraints: tempGroup.constraints.copyWith(),
           name: tempGroup.name,
+          showHeight: isVertical
+              ? tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
+              : tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
+          showWidth: isVertical
+              ? tempGroup.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
+              : tempGroup.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
         )
           ..auxiliaryData = tempGroup.auxiliaryData
           ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing

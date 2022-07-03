@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/frame_group.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
@@ -196,8 +197,6 @@ abstract class PBIntermediateNode
     rawChildren?.forEach((rawChild) {
       if (rawChild != null) {
         PBIntermediateNode.fromJson(rawChild, this, tree);
-        // tree.addEdges(Vertex(rawChild), [Vertex(parent)]);
-        // addChild();PBIntermediateNode.fromJson(rawChild)
       }
     });
   }

@@ -1,0 +1,1854 @@
+// *********************************************************************************
+// PARABEAC-GENERATED CODE. DO NOT MODIFY.
+//
+// FOR MORE INFORMATION ON HOW TO USE PARABEAC, PLEASE VISIT docs.parabeac.com
+// *********************************************************************************
+
+import 'package:flutter/material.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case34_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case12_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case13_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case14_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case21_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case22_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case23_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case24_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case31_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case32_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case33_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case11_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case41_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case42_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case43_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case44_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case51_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case52_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case53_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case54_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case71_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case72_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case73_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case134_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case91_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case92_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case93_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case94_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case101_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case102_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case103_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case104_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case131_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case132_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case133_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case74_custom.dart';
+
+class CustomTestScreen extends StatefulWidget {
+  const CustomTestScreen({
+    Key? key,
+  }) : super(key: key);
+  @override
+  _CustomTestScreen createState() => _CustomTestScreen();
+}
+
+class _CustomTestScreen extends State<CustomTestScreen> {
+  _CustomTestScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: Stack(children: [
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 201.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase34Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 35.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase12Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 35.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase13Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 35.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase14Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase21Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff2400ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase22Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff2400ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase23Custom(
+                                        child: Container(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff2400ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: MediaQuery.of(context).size.width * 0.128,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase24Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff2400ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 201.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase31Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 201.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase32Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 201.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase33Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 35.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            bottom: 0,
+                            height: 50.0,
+                            child: SubFrameCase11Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase41Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffdb00ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase42Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffdb00ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase43Custom(
+                                        child: Container(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xffdb00ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: MediaQuery.of(context).size.width * 0.128,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase44Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffdb00ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 367.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase51Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 367.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase52Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 367.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase53Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 367.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase54Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 450.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase71Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 450.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase72Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 450.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase73Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 699.0,
+          height: 50.0,
+          child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase134Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 533.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase91Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 533.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase92Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 533.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase93Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 533.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase94Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase101Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff929292),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase102Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff929292),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase103Custom(
+                                        child: Container(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff929292),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: MediaQuery.of(context).size.width * 0.128,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase104Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff929292),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 38.0,
+          width: 50.0,
+          top: 699.0,
+          height: 50.0,
+          child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase131Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 699.0,
+          height: 50.0,
+          child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase132Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 699.0,
+          height: 50.0,
+          child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase133Custom(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 287.0,
+          width: 50.0,
+          top: 450.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: SubFrameCase74Custom(
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05924170616113744,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.1282051282051282,
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+      ]),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}

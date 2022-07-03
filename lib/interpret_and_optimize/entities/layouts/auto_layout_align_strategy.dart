@@ -1,11 +1,13 @@
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/expanded.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_bitmap.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
@@ -21,6 +23,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     // New children list
     var spacedChildren = <PBIntermediateNode>[];
     var children = context.tree.childrenOf(node);
+    sortChildren(children);
     var isVertical = true;
     num space;
 
@@ -71,28 +74,28 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       var newChild = _needsContainer(child, isVertical, context);
 
       /// Add new child
+      /// and _handleLayoutChild removes the crossAxisSizing of children
+      /// in case the parent is fill on the cross axis
       spacedChildren.add(_handleLayoutChild(newChild, isVertical, context));
     }
 
     context.tree.replaceChildrenOf(node, spacedChildren);
   }
 
+  ///Sort children
+  void sortChildren(List<PBIntermediateNode> children) => children.sort(
+      (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
+
   /// Checks if child is a [PBLayoutIntermediateNode]
   /// and adds a container on top of it
   PBIntermediateNode _needsContainer(
-      child, bool isVertical, PBContext context) {
-    if (child is! InheritedContainer || child is! InjectedContainer) {
+      PBIntermediateNode child, bool isVertical, PBContext context) {
+    if (child is! PBContainer) {
       // Creates container
       var wrapper = InjectedContainer(
         null,
         child.frame,
         name: child.name,
-        pointValueHeight: isVertical
-            ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
-            : child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT,
-        pointValueWidth: isVertical
-            ? child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
-            : child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT,
         constraints: child.constraints.copyWith(),
       )
         ..layoutCrossAxisSizing = child.layoutCrossAxisSizing
@@ -140,22 +143,4 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
 
     return child;
   }
-
-  // // Replace children with new children in case boxes were added
-  // void _insertBoxes(PBContext context, node, bool isVertical) {
-  //   var children = context.tree.childrenOf(node);
-
-  //   var newChildren =
-  //       _addBoxes(children, isVertical, node.layoutProperties.spacing);
-
-  //   context.tree.replaceChildrenOf(node, newChildren);
-  // }
-
-  // // Add boxes between children
-  // List<PBIntermediateNode> _addBoxes(
-  //     List<PBIntermediateNode> children, bool isVertical, num space) {
-  //   var spacedChildren = <PBIntermediateNode>[];
-
-  //   return spacedChildren;
-  // }
 }
