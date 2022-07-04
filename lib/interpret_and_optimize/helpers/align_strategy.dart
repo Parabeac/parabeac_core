@@ -1,4 +1,3 @@
-import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_center.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
@@ -8,8 +7,8 @@ import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/stack.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:uuid/uuid.dart';
 
 /// [AlignStrategy] uses the strategy pattern to define the alignment logic for
 /// the [PBIntermediateNode].
@@ -86,9 +85,47 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     var alignedChildren = <PBIntermediateNode>[];
     var tree = context.tree;
     var nodeChildren = context.tree.childrenOf(node);
+
     nodeChildren.forEach((child) {
       var centerY = false;
       var centerX = false;
+
+      var heightLayoutSizing = ParentLayoutSizing.INHERIT;
+      var widthLayoutSizing = ParentLayoutSizing.INHERIT;
+
+      var parentLayout = _findNearestParentLayout(node);
+
+      /// Assign proper axis sizing for checking constraint replacements
+
+      if (parentLayout != null && parentLayout is PBIntermediateColumnLayout) {
+        heightLayoutSizing = node.layoutMainAxisSizing;
+        widthLayoutSizing = node.layoutCrossAxisSizing;
+      } else if (parentLayout != null &&
+          parentLayout is PBIntermediateRowLayout) {
+        heightLayoutSizing = node.layoutCrossAxisSizing;
+        widthLayoutSizing = node.layoutMainAxisSizing;
+      }
+
+      /// Rule to inherit fixed height to children
+      if (node.constraints.fixedHeight &&
+          heightLayoutSizing != ParentLayoutSizing.STRETCH) {
+        child.constraints.fixedHeight = true;
+        if (!child.constraints.pinTop && !child.constraints.pinBottom) {
+          child.constraints.pinTop = true;
+          child.constraints.pinBottom = false;
+        }
+      }
+
+      /// Rule to inherit fixed width to children
+      if (node.constraints.fixedWidth &&
+          widthLayoutSizing != ParentLayoutSizing.STRETCH) {
+        child.constraints.fixedWidth = true;
+        if (!child.constraints.pinLeft && !child.constraints.pinRight) {
+          child.constraints.pinLeft = true;
+          child.constraints.pinRight = false;
+        }
+      }
+
       var injectedPositioned = InjectedPositioned(
         child.name,
         null,
@@ -102,16 +139,29 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             width: child.frame.width,
             height: child.frame.height),
       );
+
+      /// Rules to center child horizontally
       if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
           child.constraints.fixedWidth) {
-        injectedPositioned.constraints.fixedWidth = false;
+        if (widthLayoutSizing == ParentLayoutSizing.STRETCH) {
+          injectedPositioned.constraints.fixedWidth = true;
+        } else if (widthLayoutSizing == ParentLayoutSizing.INHERIT) {
+          injectedPositioned.constraints.fixedWidth = false;
+        }
         centerX = true;
       }
+
+      /// Rules to center child vertically
       if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
           child.constraints.fixedHeight) {
-        injectedPositioned.constraints.fixedHeight = false;
+        if (heightLayoutSizing == ParentLayoutSizing.STRETCH) {
+          injectedPositioned.constraints.fixedHeight = true;
+        } else if (heightLayoutSizing == ParentLayoutSizing.INHERIT) {
+          injectedPositioned.constraints.fixedHeight = false;
+        }
         centerY = true;
       }
+
       alignedChildren.add(injectedPositioned);
       if (!(centerX || centerY)) {
         /// we are no center, since there is no need in either axis
@@ -126,8 +176,6 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             null,
             child.frame.boundingBox(child.frame),
             name: child.name,
-            pointValueHeight: centerY,
-            pointValueWidth: centerX,
             constraints: child.constraints.copyWith(),
           );
           tree.addEdges(container, [child]);
@@ -141,5 +189,26 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
     });
     tree.replaceChildrenOf(node, alignedChildren);
     // super.setConstraints(context, node);
+  }
+
+  /// Traverses [node] upwards and returns the first [PBLayoutIntermediateNode].
+  ///
+  /// Returns [null] if there is none.
+  PBLayoutIntermediateNode _findNearestParentLayout(PBIntermediateNode node) {
+    //TODO: We could abstract this method to [PBIntermediateTree] to look for any type of node up the tree using generics.
+    if (node == null) {
+      return null;
+    }
+    var iter = node.parent;
+
+    /// Go up the tree in search of a [PBLayoutIntermediateNode]
+    while (iter != null) {
+      if (iter is PBLayoutIntermediateNode) {
+        return iter;
+      }
+      iter = iter.parent;
+    }
+
+    return null;
   }
 }

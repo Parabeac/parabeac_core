@@ -33,7 +33,7 @@ class PBPluginListHelper {
         '',
       ),
       '<custom>': CustomTag(null, null, ''),
-      '<textformfield>': CustomTextFormField(null, null, ''),
+      '<textformfield>': CustomTextFormField(null, null, '', null),
     };
   }
 

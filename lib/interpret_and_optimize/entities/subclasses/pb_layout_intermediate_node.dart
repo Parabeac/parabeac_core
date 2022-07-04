@@ -93,45 +93,4 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   ///NOTE: make sure that the children that are going to be added satisfy the reles of the [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode generateLayout(
       List<PBIntermediateNode> children, PBContext currentContext, String name);
-
-  void checkCrossAxisAlignment() {
-    // if (attributes.first.attributeNode != null) {
-    //   var attributesTopLeft = attributes.first.attributeNode.frame.topLeft;
-
-    //   var attributesBottomRight =
-    //       attributes.last.attributeNode.frame.bottomRight;
-
-    //   var leftDifference = (frame.topLeft.x - attributesTopLeft.x).abs();
-
-    //   var rightDifference =
-    //       (frame.bottomRight.x - attributesBottomRight.x).abs();
-
-    //   var topDifference = (frame.topLeft.y - attributesTopLeft.y).abs();
-
-    //   var bottomDifference =
-    //       (frame.bottomRight.y - attributesBottomRight.y).abs();
-
-    //   if (leftDifference < rightDifference) {
-    //     alignment['mainAxisAlignment'] =
-    //         'mainAxisAlignment: MainAxisAlignment.start,';
-    //   } else if (leftDifference > rightDifference) {
-    //     alignment['mainAxisAlignment'] =
-    //         'mainAxisAlignment: MainAxisAlignment.end,';
-    //   } else {
-    //     alignment['mainAxisAlignment'] =
-    //         'mainAxisAlignment: MainAxisAlignment.center,';
-    //   }
-
-    //   if (topDifference < bottomDifference) {
-    //     alignment['crossAxisAlignment'] =
-    //         'crossAxisAlignment: CrossAxisAlignment.start,';
-    //   } else if (topDifference > bottomDifference) {
-    //     alignment['crossAxisAlignment'] =
-    //         'crossAxisAlignment: CrossAxisAlignment.end,';
-    //   } else {
-    //     alignment['crossAxisAlignment'] =
-    //         'crossAxisAlignment: CrossAxisAlignment.center,';
-    //   }
-    // }
-  }
 }

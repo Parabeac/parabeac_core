@@ -30,9 +30,6 @@ class InjectedContainer extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'injected_container';
 
-  bool pointValueWidth;
-  bool pointValueHeight;
-
   @override
   bool showWidth;
   @override
@@ -51,8 +48,6 @@ class InjectedContainer extends PBVisualIntermediateNode
     String color,
     this.prototypeNode,
     this.type,
-    this.pointValueHeight = false,
-    this.pointValueWidth = false,
     PBIntermediateConstraints constraints,
     this.showWidth = true,
     this.showHeight = true,

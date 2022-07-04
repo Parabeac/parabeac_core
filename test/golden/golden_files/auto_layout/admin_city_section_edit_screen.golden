@@ -1,0 +1,501 @@
+// *********************************************************************************
+// PARABEAC-GENERATED CODE. DO NOT MODIFY.
+//
+// FOR MORE INFORMATION ON HOW TO USE PARABEAC, PLEASE VISIT docs.parabeac.com
+// *********************************************************************************
+
+import 'package:flutter/material.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/admin_city_section_scroll_view_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/section_description_title_custom.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/tag_section_title_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/add_tag_button_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/current_tags_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/edit_main_image_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/main_image_section_title_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/additional_images_section_title_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/add_additional_image_button_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/additional_images_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/save_button_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/orca_city_admin_header.g.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/full_article.g.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/label_button.g.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/edit_main_image.g.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/circle_actions_close.g.dart';
+
+class AdminCitySectionEditScreen extends StatefulWidget {
+  const AdminCitySectionEditScreen({
+    Key? key,
+  }) : super(key: key);
+  @override
+  _AdminCitySectionEditScreen createState() => _AdminCitySectionEditScreen();
+}
+
+class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
+  _AdminCitySectionEditScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Color(0xfff7f7fc),
+      child: Stack(children: [
+        Positioned(
+          left: 46.0,
+          right: 44.0,
+          top: 0,
+          height: 280.0,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return OrcaCityAdminHeader(
+              constraints,
+            );
+          }),
+        ),
+        Positioned(
+          left: 36.0,
+          right: 34.0,
+          top: 280.0,
+          bottom: 0,
+          child: AdminCitySectionScrollViewCustom(
+              child: Container(
+                  decoration: BoxDecoration(),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            height: 419.0,
+                            decoration: BoxDecoration(),
+                            child: Stack(children: [
+                              Positioned(
+                                left: 9.0,
+                                width: 1066.0,
+                                top: 0,
+                                height: 64.0,
+                                child: SectionDescriptionTitleCustom(
+                                    child: AutoSizeText(
+                                  'Present the Unique Values Your City Has',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 50.0,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.9999998807907104,
+                                    color: Color(0xff14142b),
+                                  ),
+                                  textAlign: TextAlign.left,
+                                )),
+                              ),
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 84.0,
+                                height: 335.0,
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  return FullArticle(
+                                    constraints,
+                                  );
+                                }),
+                              ),
+                            ])),
+                        SizedBox(
+                          height: 32.0,
+                        ),
+                        Container(
+                            decoration: BoxDecoration(),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                      height: 72.0,
+                                      decoration: BoxDecoration(),
+                                      child: Stack(children: [
+                                        Positioned(
+                                          left: 0,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.793,
+                                          top: 0,
+                                          height: 64.0,
+                                          child: TagSectionTitleCustom(
+                                              child: AutoSizeText(
+                                            'Experience Your City’s Unique Values ',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 50.0,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.9999998807907104,
+                                              color: Color(0xff14142b),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          )),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          width: 143.948,
+                                          top: 0,
+                                          height: 72.0,
+                                          child: AddTagButtonCustom(
+                                              child: Container(
+                                                  padding: EdgeInsets.only(
+                                                    left: 32.0,
+                                                    right: 32.0,
+                                                    top: 19.0,
+                                                    bottom: 19.0,
+                                                  ),
+                                                  width: 143.947509765625,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff00497b),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                16.0)),
+                                                  ),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.034623217922606926,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
+                                                            child: AutoSizeText(
+                                                              'Add (+)',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 17.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                letterSpacing:
+                                                                    0.75,
+                                                                color: Color(
+                                                                    0xfffcfcfc),
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            )),
+                                                      ]))),
+                                        ),
+                                      ])),
+                                  SizedBox(
+                                    height: 32.0,
+                                  ),
+                                  Container(
+                                      height: 75.0,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.813966800228964,
+                                      child: CurrentTagsCustom(
+                                          child: Container(
+                                              height: 75.0,
+                                              decoration: BoxDecoration(),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                        height: 75.0,
+                                                        width: 75.0,
+                                                        child: LayoutBuilder(
+                                                            builder: (context,
+                                                                constraints) {
+                                                          return LabelButton(
+                                                            constraints,
+                                                          );
+                                                        })),
+                                                    SizedBox(
+                                                      width: 16.0,
+                                                    ),
+                                                    Container(
+                                                        height: 75.0,
+                                                        width: 75.0,
+                                                        child: LayoutBuilder(
+                                                            builder: (context,
+                                                                constraints) {
+                                                          return LabelButton(
+                                                            constraints,
+                                                          );
+                                                        })),
+                                                    SizedBox(
+                                                      width: 16.0,
+                                                    ),
+                                                    Container(
+                                                        height: 75.0,
+                                                        width: 75.0,
+                                                        child: LayoutBuilder(
+                                                            builder: (context,
+                                                                constraints) {
+                                                          return LabelButton(
+                                                            constraints,
+                                                          );
+                                                        })),
+                                                  ])))),
+                                ])),
+                        SizedBox(
+                          height: 32.0,
+                        ),
+                        Container(
+                            height: 389.75,
+                            width: 678.0,
+                            decoration: BoxDecoration(),
+                            child: Stack(children: [
+                              Positioned(
+                                left: 0,
+                                width: 540.0,
+                                top: 86.0,
+                                height: 303.75,
+                                child: EditMainImageCustom(
+                                    child: Container(
+                                        height: 303.75,
+                                        width: 540.0,
+                                        decoration: BoxDecoration(),
+                                        child: Stack(children: [
+                                          Positioned(
+                                            left: 0,
+                                            width: 540.0,
+                                            top: 0,
+                                            height: 303.75,
+                                            child: LayoutBuilder(builder:
+                                                (context, constraints) {
+                                              return EditMainImage(
+                                                constraints,
+                                              );
+                                            }),
+                                          ),
+                                        ]))),
+                              ),
+                              Positioned(
+                                left: 0,
+                                width: 678.0,
+                                top: 0,
+                                height: 64.0,
+                                child: MainImageSectionTitleCustom(
+                                    child: AutoSizeText(
+                                  'Upload Image For Section',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 50.0,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.9999998807907104,
+                                    color: Color(0xff14142b),
+                                  ),
+                                  textAlign: TextAlign.left,
+                                )),
+                              ),
+                            ])),
+                        SizedBox(
+                          height: 32.0,
+                        ),
+                        Container(
+                            decoration: BoxDecoration(),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                      height: 72.0,
+                                      decoration: BoxDecoration(),
+                                      child: Stack(children: [
+                                        Positioned(
+                                          left: 0,
+                                          width: 843.0,
+                                          top: 0,
+                                          height: 64.0,
+                                          child:
+                                              AdditionalImagesSectionTitleCustom(
+                                                  child: AutoSizeText(
+                                            'Upload Additional Images/Data',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 50.0,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.9999998807907104,
+                                              color: Color(0xff14142b),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          )),
+                                        ),
+                                        Positioned(
+                                          right: 0.052,
+                                          width: 143.948,
+                                          top: 0.25,
+                                          height: 72.0,
+                                          child: AddAdditionalImageButtonCustom(
+                                              child: Container(
+                                                  padding: EdgeInsets.only(
+                                                    left: 32.0,
+                                                    right: 32.0,
+                                                    top: 19.0,
+                                                    bottom: 19.0,
+                                                  ),
+                                                  width: 143.947509765625,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff00497b),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                16.0)),
+                                                  ),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.034623217922606926,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.0412135088723526,
+                                                            child: AutoSizeText(
+                                                              'Add (+)',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 17.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                letterSpacing:
+                                                                    0.75,
+                                                                color: Color(
+                                                                    0xfffcfcfc),
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            )),
+                                                      ]))),
+                                        ),
+                                      ])),
+                                  SizedBox(
+                                    height: 19.0,
+                                  ),
+                                  Container(
+                                      height: 689.0,
+                                      child: AdditionalImagesCustom(
+                                          child: Container(
+                                              height: 689.0,
+                                              decoration: BoxDecoration(),
+                                              child: Stack(children: [
+                                                Positioned(
+                                                  left: 0,
+                                                  width: 540.0,
+                                                  top: 0,
+                                                  height: 335.0,
+                                                  child: LayoutBuilder(builder:
+                                                      (context, constraints) {
+                                                    return DeleteImageComponent(
+                                                      constraints,
+                                                    );
+                                                  }),
+                                                ),
+                                                Positioned(
+                                                  left: 0,
+                                                  width: 540.0,
+                                                  top: 354.0,
+                                                  height: 335.0,
+                                                  child: LayoutBuilder(builder:
+                                                      (context, constraints) {
+                                                    return DeleteImageComponent(
+                                                      constraints,
+                                                    );
+                                                  }),
+                                                ),
+                                              ])))),
+                                ])),
+                        SizedBox(
+                          height: 32.0,
+                        ),
+                        Container(
+                            height: 72.0,
+                            decoration: BoxDecoration(),
+                            child: Stack(children: [
+                              Positioned(
+                                left: MediaQuery.of(context).size.width * 0.191,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.579,
+                                bottom: 0,
+                                height: 72.0,
+                                child: SaveButtonCustom(
+                                    child: Container(
+                                        height: 72.0,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5792399833866986,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xff00497b),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(16.0)),
+                                        ),
+                                        child: Stack(children: [
+                                          Positioned(
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.269,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.042,
+                                            top: 19.25,
+                                            bottom: 18.75,
+                                            child: Center(
+                                                child: Container(
+                                                    height: 34.0,
+                                                    width: 74.0,
+                                                    child: AutoSizeText(
+                                                      'Save',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        fontSize: 17.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        letterSpacing: 0.75,
+                                                        color:
+                                                            Color(0xfffcfcfc),
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ))),
+                                          ),
+                                        ]))),
+                              ),
+                            ])),
+                      ]))),
+        ),
+      ]),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
