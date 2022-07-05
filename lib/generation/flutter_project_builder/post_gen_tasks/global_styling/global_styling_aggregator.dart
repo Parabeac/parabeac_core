@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/text_styles_post_gen_task.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/theming_post_gen_task.dart';
 import 'package:pbdl/pbdl.dart';
+import 'package:recase/recase.dart';
 
 class GlobalStylingAggregator {
   /// List of all supported TextStyles that should be exported
@@ -62,7 +63,7 @@ class GlobalStylingAggregator {
     var themeTextStyles = <PBDLGlobalTextStyle>[];
 
     for (var style in globalStyles.textStyles) {
-      if (_textStyleList.contains(style.name)) {
+      if (_textStyleList.contains(style.name.camelCase)) {
         /// Add Text Style to Global theming list
         themeTextStyles.add(style);
       }
