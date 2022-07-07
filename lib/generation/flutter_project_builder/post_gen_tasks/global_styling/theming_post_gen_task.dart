@@ -27,7 +27,7 @@ class ThemingPostGenTask extends PostGenTask {
     /// Map the [TextStyle] attributes in the project for [TextTheme]
     final textThemeAttributes = textStyles
         .map((style) =>
-            '${style.name}: ${projectName.pascalCase}TextStyles.${style.name},')
+            '${style.name.camelCase}: ${projectName.pascalCase}TextStyles.${style.name.camelCase},')
         .join();
     final textThemeBoilerplate = 'TextTheme($textThemeAttributes)';
 
