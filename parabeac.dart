@@ -24,8 +24,6 @@ main(List<String> args) async {
         defaultsTo: 'default:lib/configurations/configurations.json')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
-    ..addOption('url',
-        help: 'S3 bucket link to download and install Parabeac Eggs', abbr: 'u')
     ..addOption('key', help: 'key for S3 bucket account', abbr: 'e')
     ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
     ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
@@ -36,6 +34,16 @@ main(List<String> args) async {
           'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project. The user should specify the absolute path of the location of the PBDL JSON file following this option. Example: `dart parabeac.dart --pbdl-in /path/to/pbdl.json -o /path/to/output/dir/`',
     )
     ..addOption('oauth', help: 'Figma OAuth Token')
+    ..addOption('folderArchitecture',
+        help:
+            'Folder Architecture type to use.\n[domain](default)\tGenerates a domain-layered folder architecture.')
+    ..addOption(
+      'componentIsolation',
+      help: '''
+Component Isolation configuration to use.\n[widgetbook] (default)  Use Widgetbook for Component Isolation.\n[dashbook]              Use Dashbook for Component Isolation.  
+[none]                  Do not use any Component Isolation packages.
+    ''',
+    )
     ..addFlag('export-pbdl',
         help:
             'This flag outputs Parabeac Design Logic (PBDL) in JSON format. This flag is to be used along with Figma or Sketch conversion options.')
@@ -61,19 +69,6 @@ ${parser.usage}
   var sKey = argResults['secret-key'];
 
   arguments.addAll(argResults.arguments);
-
-  String _basePath;
-  String _os;
-
-  if (io.Platform.isMacOS || io.Platform.isLinux) {
-    _os = 'UIX';
-  } else if (io.Platform.isWindows) {
-    _os = 'WIN';
-  } else {
-    _os = 'OTH';
-  }
-
-  _basePath = io.Directory.current.path;
 
   var install = await Process.start('bash', [
     '${Directory.current.path}/pb-scripts/install.sh',
