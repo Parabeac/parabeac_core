@@ -12,7 +12,6 @@ PBIntermediateColumnLayout _$PBIntermediateColumnLayoutFromJson(
     Rectangle3D.fromJson(json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
   )
-    ..subsemantic = json['subsemantic'] as String
     ..constraints = json['constraints'] == null
         ? null
         : PBIntermediateConstraints.fromJson(
@@ -28,7 +27,6 @@ PBIntermediateColumnLayout _$PBIntermediateColumnLayoutFromJson(
     ..prototypeNode = json['prototypeNode'] == null
         ? null
         : PrototypeNode.fromJson(json['prototypeNode'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
     ..layoutProperties = json['autoLayoutOptions'] == null
         ? null
         : LayoutProperties.fromJson(
@@ -39,7 +37,6 @@ PBIntermediateColumnLayout _$PBIntermediateColumnLayoutFromJson(
 Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
         PBIntermediateColumnLayout instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
           _$ParentLayoutSizingEnumMap[instance.layoutMainAxisSizing],
@@ -49,7 +46,6 @@ Map<String, dynamic> _$PBIntermediateColumnLayoutToJson(
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,
-      'alignment': instance.alignment,
       'autoLayoutOptions': instance.layoutProperties,
       'type': instance.type,
     };

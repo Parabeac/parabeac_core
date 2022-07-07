@@ -8,19 +8,6 @@ import 'package:sentry/sentry.dart';
 class MainInfo {
   static final MainInfo _singleton = MainInfo._internal();
 
-  /// Path representing where the output of parabeac-core will be produced to.
-  ///
-  /// First, we are going to check the if any path was passed as a flag to [outputPath],
-  /// then check in the [configuration] to see if there are any paths saved ([PBConfiguration.outputDirPath]).
-  String _outputPath;
-  String get outputPath => _outputPath ?? configuration?.outputDirPath;
-  set outputPath(String path) => _outputPath = _validatePath(path);
-
-  /// Path to the user's sketch file
-  String _designFilePath;
-  String get designFilePath => _designFilePath;
-  set designFilePath(String path) => _designFilePath = _validatePath(path);
-
   /// Absolute path of where the flutter project is going to be generating at.
   ///
   /// If its PBC is generating the flutter project, its going to [p.join] the
@@ -28,18 +15,14 @@ class MainInfo {
   /// into the flutter directory. Otherwise, the code is going to be generated within the directory
   /// specified in the [outputPath].
   String get genProjectPath {
-    return p.join(outputPath, projectName ?? '');
+    return p.join(configuration.outputPath, configuration.projectName ?? '');
   }
 
+  /// User's platform
   String platform;
 
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
-
-  /// The path of where the PBDL file is at.
-  String _pbdlPath;
-  String get pbdlPath => _pbdlPath;
-  set pbdlPath(String path) => _pbdlPath = _validatePath(path);
 
   /// Specific [configuration] items specified by the user, or attributes that
   /// are derived straight from the configuration items that the user provided.
@@ -48,31 +31,8 @@ class MainInfo {
   /// based on the JSON file the user used for configuration.
   PBConfiguration configuration;
 
-  // the type of configuration you want to set, 'default' is default type.
-  String configurationType;
-
   /// Unique ID for the device running parabeac-core
   String deviceId;
-
-  /// Name of the project
-  String _projectName;
-  String get projectName => _projectName ?? configuration?.projectName;
-  set projectName(String name) => _projectName = name;
-
-  /// OAuth Token to call Figma API
-  String figmaOauthToken;
-
-  /// API key needed to do API calls
-  String figmaKey;
-
-  /// Project ID on Figma
-  String figmaProjectID;
-
-  /// Boolean that indicates whether a `styles` document is created.
-  bool exportStyles;
-
-  /// Exporting the PBDL JSON file instead of generating the actual Flutter code.
-  bool exportPBDL;
 
   Map pbdl;
 
@@ -85,7 +45,11 @@ class MainInfo {
   String get pngPath => _pngPath;
   set pngPath(String path) => _pngPath = _validatePath(path ?? _defaultPNGPath);
 
-  String get _defaultPNGPath => p.join(outputPath ?? cwd, 'pngs');
+  String get projectName => configuration.projectName;
+
+  String get _defaultPNGPath => p.join(configuration.outputPath ?? cwd, 'pngs');
+
+  String get outputPath => configuration.outputPath;
 
   /// Checks if the [path] is `null`, if its not, it will [p.absolute] and finally,
   /// run [p.normalize] on the [path].
@@ -113,24 +77,24 @@ class MainInfo {
     /// Detect platform
     info.platform = Platform.operatingSystem;
 
-    info.figmaOauthToken = arguments['oauth'];
-    info.figmaKey = arguments['figKey'];
-    info.figmaProjectID = arguments['fig'];
+    // info.figmaOauthToken = arguments['oauth'];
+    // info.figmaKey = arguments['figKey'];
+    // info.figmaProjectID = arguments['fig'];
 
-    info.designFilePath = arguments['path'];
+    // info.designFilePath = arguments['path'];
     if (arguments['pbdl-in'] != null) {
-      info.pbdlPath = arguments['pbdl-in'];
+      // info.pbdlPath = arguments['pbdl-in'];
     }
 
     info.designType = determineDesignTypeFromArgs(arguments);
-    info.exportStyles = !arguments['exclude-styles'];
-    info.projectName ??= arguments['project-name'];
+    // info.exportStyles = !arguments['exclude-styles'];
+    // info.projectName ??= arguments['project-name'];
 
     /// If outputPath is empty, assume we are outputting to design file path
-    info.outputPath = arguments['out'] ??
-        p.dirname(info.designFilePath ?? Directory.current.path);
+    configuration.outputPath =
+        arguments['out'] ?? p.dirname(Directory.current.path);
 
-    info.exportPBDL = arguments['export-pbdl'] ?? false;
+    // info.exportPBDL = arguments['export-pbdl'] ?? false;
 
     /// In the future when we are generating certain dart files only.
     /// At the moment we are only generating in the flutter project.

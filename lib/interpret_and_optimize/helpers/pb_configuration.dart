@@ -8,6 +8,7 @@ import 'package:parabeac_core/generation/generators/value_objects/generation_con
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/stateful_generation_configuration.dart';
 part 'pb_configuration.g.dart';
 
+/// Class that represents Parabeac project configuration
 @JsonSerializable(nullable: true, ignoreUnannotated: true)
 class PBConfiguration {
   static final Map<String, GenerationConfiguration> availableGenConfigs = {
@@ -17,6 +18,38 @@ class PBConfiguration {
     'none': StatefulGenerationConfiguration(),
   };
 
+  /// TODO: Abstract this when we have a Figma Command and change command-line names
+  /// OAuth Token to call Figma API
+  @JsonKey(name: 'oauth')
+  String figmaOauthToken;
+
+  /// API key needed to do API calls
+  @JsonKey(name: 'figKey')
+  String figmaKey;
+
+  @JsonKey(name: 'fig')
+  String figmaProjectID;
+
+  /// Name to be given to the exported project
+  @JsonKey(name: 'project-name')
+  String projectName;
+
+  /// Where the conversion result will be output.
+  @JsonKey(name: 'out')
+  String outputPath;
+
+  /// Path to PBDL file
+  @JsonKey(name: 'pbdl-in')
+  String pbdlPath;
+
+  /// Whether parabeac_core should export a PBDL file
+  @JsonKey(name: 'export-pbdl')
+  bool exportPBDL;
+
+  //TODO: Invert this logic?
+  @JsonKey(name: 'exclude-styles')
+  bool exportStyles;
+
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
   ///
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
@@ -24,53 +57,27 @@ class PBConfiguration {
 
   String platform;
 
-  String projectName;
-
-  String outputDirPath;
-
-  // @JsonKey(defaultValue: 'Material')
   final String widgetStyle = 'Material';
-
-  @JsonKey(defaultValue: true)
-  final bool scaling;
-
-  // @JsonKey(defaultValue: 'Stateless')
-  final String widgetType = 'Stateless';
-
-  // @JsonKey(defaultValue: 'Expanded')
-  final String widgetSpacing = 'Expanded';
-
-  // @JsonKey(defaultValue: 'None', name: 'state-management')
-  final String stateManagement = 'none';
-
-  // @JsonKey(defaultValue: ['column', 'row', 'stack'])
-  final List<String> layoutPrecedence = ['column', 'row', 'stack'];
-
-  @JsonKey(name: 'breakpoints')
-  final Map breakpoints;
-
-  @JsonKey(defaultValue: false)
-  final bool enablePrototyping;
-
-  @JsonKey(defaultValue: 'None')
-  final String componentIsolation;
 
   /// The type of folder architecture that Parabeac-Core should follow
   /// It will be domain, as default
   @JsonKey(defaultValue: 'domain')
   final String folderArchitecture;
 
+  @JsonKey(defaultValue: true)
+  final bool scaling;
+
+  @JsonKey(name: 'breakpoints')
+  final Map breakpoints;
+
+  @JsonKey(defaultValue: 'None')
+  final String componentIsolation;
+
   PBConfiguration(
-    // this.widgetStyle,
-    // this.widgetType,
-    // this.widgetSpacing,
-    // this.stateManagement,
-    // this.layoutPrecedence,
-    this.breakpoints,
-    this.scaling,
-    this.enablePrototyping,
-    this.componentIsolation,
     this.folderArchitecture,
+    this.scaling,
+    this.breakpoints,
+    this.componentIsolation,
   );
 
   /// Converting the [json] into a [PBConfiguration] object.

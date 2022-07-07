@@ -21,7 +21,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -37,7 +36,6 @@ import 'interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 final designToPBDLServices = <DesignToPBDLService>[
   JsonToPBDLService(),
-  SketchToPBDLService(),
   FigmaToPBDLService(),
 ];
 FileSystemAnalyzer fileSystemAnalyzer;
@@ -63,6 +61,16 @@ final parser = ArgParser()
         'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
   )
   ..addOption('oauth', help: 'Figma OAuth Token')
+  ..addOption('folderArchitecture',
+      help:
+          'Folder Architecture type to use.\n[domain](default)\tGenerates a domain-layered folder architecture.')
+  ..addOption(
+    'componentIsolation',
+    help: '''
+Component Isolation configuration to use.\n[widgetbook] (default)  Use Widgetbook for Component Isolation.\n[dashbook]              Use Dashbook for Component Isolation.  
+[none]                  Do not use any Component Isolation packages.
+    ''',
+  )
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
   ..addFlag('export-pbdl',
@@ -159,7 +167,7 @@ ${parser.usage}
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
   // Exit if only generating PBDL
-  if (MainInfo().exportPBDL) {
+  if (MainInfo().configuration.exportPBDL) {
     exitCode = 0;
     await SentryService.finishTransaction(RUN_PARABEAC);
     return;
