@@ -90,6 +90,27 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
   /// and adds a container on top of it
   PBIntermediateNode _needsContainer(
       PBIntermediateNode child, bool isVertical, PBContext context) {
+    /// Special case for InheritedBitmap
+    /// Check parent constraints and if it is not stretch, set them to
+    /// CENTER defaults
+    /// TODO: Improve if statements
+    if (child is InheritedBitmap) {
+      if (isVertical) {
+        if (child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT) {
+          child.constraints.fixedHeight = true;
+        }
+        if (child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT) {
+          child.constraints.fixedWidth = true;
+        }
+      } else {
+        if (child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT) {
+          child.constraints.fixedWidth = true;
+        }
+        if (child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT) {
+          child.constraints.fixedHeight = true;
+        }
+      }
+    }
     if (child is! PBContainer) {
       // Creates container
       var wrapper = InjectedContainer(
