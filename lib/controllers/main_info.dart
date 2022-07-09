@@ -69,36 +69,28 @@ class MainInfo {
   /// be return from the function. When you use [MainInfo] again, its going to
   /// contain the proper values from [arguments]
   void collectArguments(ArgResults arguments) {
-    var info = MainInfo();
-
-    info.configuration =
-        generateConfiguration(p.normalize(arguments['config-path']));
-
-    /// Detect platform
-    info.platform = Platform.operatingSystem;
-
-    // info.figmaOauthToken = arguments['oauth'];
-    // info.figmaKey = arguments['figKey'];
-    // info.figmaProjectID = arguments['fig'];
-
-    // info.designFilePath = arguments['path'];
-    if (arguments['pbdl-in'] != null) {
-      // info.pbdlPath = arguments['pbdl-in'];
+    if (arguments['config-path'] != null) {
+      final configFile = File(arguments['config-path']);
+      if (configFile.existsSync()) {
+        final configJson = jsonDecode(configFile.readAsStringSync());
+        configuration = PBConfiguration.fromJson(configJson);
+      }
     }
 
-    info.designType = determineDesignTypeFromArgs(arguments);
-    // info.exportStyles = !arguments['exclude-styles'];
-    // info.projectName ??= arguments['project-name'];
+    configuration.mergeWithArgs(arguments);
+
+    /// Detect platform
+    platform = Platform.operatingSystem;
+
+    designType = determineDesignTypeFromArgs(arguments);
 
     /// If outputPath is empty, assume we are outputting to design file path
     configuration.outputPath =
         arguments['out'] ?? p.dirname(Directory.current.path);
 
-    // info.exportPBDL = arguments['export-pbdl'] ?? false;
-
     /// In the future when we are generating certain dart files only.
     /// At the moment we are only generating in the flutter project.
-    info.pngPath = p.join(info.genProjectPath, 'lib/assets/images');
+    pngPath = p.join(genProjectPath, 'lib/assets/images');
   }
 
   /// Generating the [PBConfiguration] based in the configuration file in [path]

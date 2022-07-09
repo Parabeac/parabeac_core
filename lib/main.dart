@@ -46,13 +46,15 @@ final parser = ArgParser()
   ..addOption('path',
       help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
   ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
-  ..addOption('project-name',
-      help: 'The name of the project', abbr: 'n', defaultsTo: 'foo')
-  ..addOption('config-path',
-      help: 'Path of the configuration file',
-      abbr: 'c',
-      defaultsTo:
-          '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
+  ..addOption('project-name', help: 'The name of the project', abbr: 'n')
+  ..addOption(
+    'config-path',
+    help: 'Path of the configuration file',
+    abbr: 'c',
+    defaultsTo: p.setExtension(
+        p.join('lib', 'configurations', 'configurations'), '.json'),
+  )
+  // '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
   ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
   ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
   ..addOption(
@@ -61,15 +63,31 @@ final parser = ArgParser()
         'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
   )
   ..addOption('oauth', help: 'Figma OAuth Token')
-  ..addOption('folderArchitecture',
-      help:
-          'Folder Architecture type to use.\n[domain](default)\tGenerates a domain-layered folder architecture.')
+  ..addOption(
+    'folderArchitecture',
+    help: 'Folder Architecture type to use.',
+    allowedHelp: {
+      'domain':
+          'Default Option. Generates a domain-layered folder architecture.'
+    },
+  )
   ..addOption(
     'componentIsolation',
-    help: '''
-Component Isolation configuration to use.\n[widgetbook] (default)  Use Widgetbook for Component Isolation.\n[dashbook]              Use Dashbook for Component Isolation.  
-[none]                  Do not use any Component Isolation packages.
-    ''',
+    help: 'Component Isolation configuration to use.',
+    allowedHelp: {
+      'widgetbook': 'Default option. Use widgetbook for component isolation.',
+      'dashbook': 'Use dashbook for component isolation.',
+      'none': 'Do not use any component isolation packages.',
+    },
+  )
+  ..addOption(
+    'level',
+    help: 'Level of integration to generate.',
+    allowedHelp: {
+      'screen': 'Default Option. Generate a full app.',
+      'component': 'Generate a component package.',
+      'theming': 'Generate theme information.',
+    },
   )
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
