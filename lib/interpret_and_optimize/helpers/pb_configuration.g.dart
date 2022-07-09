@@ -13,13 +13,13 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     figmaOauthToken: json['oauth'] as String,
     figmaKey: json['figKey'] as String,
     figmaProjectID: json['fig'] as String,
-    projectName: json['project-name'] as String,
+    projectName: json['project-name'] as String ?? 'foo',
     outputPath: json['out'] as String,
     pbdlPath: json['pbdl-in'] as String,
-    exportPBDL: json['export-pbdl'] as bool,
+    exportPBDL: json['export-pbdl'] as bool ?? false,
     folderArchitecture: json['folderArchitecture'] as String ?? 'domain',
     componentIsolation: json['componentIsolation'] as String ?? 'None',
-    level: json['level'] as String,
+    level: json['level'] as String ?? 'screen',
   );
 }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -31,7 +33,7 @@ class PBConfiguration {
   String figmaProjectID;
 
   /// Name to be given to the exported project
-  @JsonKey(name: 'project-name')
+  @JsonKey(name: 'project-name', defaultValue: 'foo')
   String projectName;
 
   /// Where the conversion result will be output.
@@ -43,7 +45,7 @@ class PBConfiguration {
   String pbdlPath;
 
   /// Whether parabeac_core should export a PBDL file
-  @JsonKey(name: 'export-pbdl')
+  @JsonKey(name: 'export-pbdl', defaultValue: false)
   bool exportPBDL;
 
   ///The [GenerationConfiguration] that is going to be use in the generation of the code
@@ -68,7 +70,7 @@ class PBConfiguration {
   String componentIsolation;
 
   /// The level of integration of this project
-  @JsonKey()
+  @JsonKey(defaultValue: 'screen')
   String level;
 
   PBConfiguration(
@@ -123,4 +125,36 @@ class PBConfiguration {
     return PBConfiguration.fromJson(defaultConfigs);
   }
   Map<String, dynamic> toJson() => _$PBConfigurationToJson(this);
+
+  void validate() {
+    if (_hasTooFewArgs()) {
+      throw Exception(
+          'Missing required arguments: Ensure you provided a valid Figma Key and Project ID.');
+    } else if (_hasTooManyArgs()) {
+      throw Exception(
+          'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
+    }
+  }
+
+  /// Returns true if `args` contains two or more
+  /// types of intake to parabeac-core
+  bool _hasTooManyArgs() {
+    var hasFigma =
+        figmaKey != null || figmaProjectID != null || figmaOauthToken != null;
+    var hasPbdl = pbdlPath != null;
+
+    return hasFigma && hasPbdl;
+  }
+
+  /// Returns true if `args` does not contain any intake
+  /// to parabeac-core
+  bool _hasTooFewArgs() {
+    /// Verify that we have a project ID and some sort of authentication method
+    var hasFigma =
+        (figmaKey != null || figmaOauthToken != null) && figmaProjectID != null;
+
+    var hasPbdl = pbdlPath != null;
+
+    return !(hasFigma || hasPbdl);
+  }
 }

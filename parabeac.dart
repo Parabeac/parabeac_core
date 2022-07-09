@@ -13,8 +13,6 @@ main(List<String> args) async {
   //wil set the hide option for help flag to true to
   //prevent the help usage from being printed twice in console
   final parser = ArgParser()
-    ..addOption('path',
-        help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
     ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
     ..addOption('project-name',
         help: 'The name of the project', abbr: 'n', defaultsTo: 'temp')

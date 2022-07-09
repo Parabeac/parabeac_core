@@ -43,8 +43,6 @@ Interpret interpretService = Interpret();
 
 ///sets up parser
 final parser = ArgParser()
-  ..addOption('path',
-      help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
   ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
   ..addOption('project-name', help: 'The name of the project', abbr: 'n')
   ..addOption(
@@ -141,18 +139,12 @@ Future<void> runParabeac(List<String> args) async {
   var argResults = parser.parse(args);
 
   /// Check if no args passed or only -h/--help passed
-  if (argResults['help'] || argResults.arguments.isEmpty) {
+  if (argResults['help']) {
     print('''
   ** PARABEAC HELP **
 ${parser.usage}
     ''');
     exit(0);
-  } else if (hasTooFewArgs(argResults)) {
-    handleError(
-        'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
-  } else if (hasTooManyArgs(argResults)) {
-    handleError(
-        'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   }
 
   /// Pass MainInfo the argument results
@@ -448,28 +440,4 @@ void addToAmplitude() async {
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: body,
   );
-}
-
-/// Returns true if `args` contains two or more
-/// types of intake to parabeac-core
-bool hasTooManyArgs(ArgResults args) {
-  var hasSketch = args['path'] != null;
-  var hasFigma =
-      args['figKey'] != null || args['fig'] != null || args['oauth'] != null;
-  var hasPbdl = args['pbdl-in'] != null;
-
-  var hasAll = hasSketch && hasFigma && hasPbdl;
-
-  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
-}
-
-/// Returns true if `args` does not contain any intake
-/// to parabeac-core
-bool hasTooFewArgs(ArgResults args) {
-  var hasSketch = args['path'] != null;
-  var hasFigma =
-      (args['figKey'] != null || args['oauth'] != null) && args['fig'] != null;
-  var hasPbdl = args['pbdl-in'] != null;
-
-  return !(hasSketch || hasFigma || hasPbdl);
 }

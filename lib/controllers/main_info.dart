@@ -79,18 +79,18 @@ class MainInfo {
 
     configuration.mergeWithArgs(arguments);
 
+    configuration.outputPath ??= p.dirname(Directory.current.path);
+
     /// Detect platform
     platform = Platform.operatingSystem;
 
-    designType = determineDesignTypeFromArgs(arguments);
-
-    /// If outputPath is empty, assume we are outputting to design file path
-    configuration.outputPath =
-        arguments['out'] ?? p.dirname(Directory.current.path);
+    designType = _determineDesignTypeFromConfig();
 
     /// In the future when we are generating certain dart files only.
     /// At the moment we are only generating in the flutter project.
     pngPath = p.join(genProjectPath, 'lib/assets/images');
+
+    configuration.validate();
   }
 
   /// Generating the [PBConfiguration] based in the configuration file in [path]
@@ -115,13 +115,12 @@ class MainInfo {
   /// should be [DesignType.SKETCH]. Otherwise, if it includes the flag `pndl-in`, the type
   /// is [DesignType.PBDL].Finally, if none of the [DesignType] applies, its going to default
   /// to [DesignType.UNKNOWN].
-  DesignType determineDesignTypeFromArgs(ArgResults arguments) {
-    if ((arguments['figKey'] != null || arguments['oauth'] != null) &&
-        arguments['fig'] != null) {
+  DesignType _determineDesignTypeFromConfig() {
+    if ((configuration.figmaKey != null ||
+            configuration.figmaOauthToken != null) &&
+        configuration.figmaProjectID != null) {
       return DesignType.FIGMA;
-    } else if (arguments['path'] != null) {
-      return DesignType.SKETCH;
-    } else if (arguments['pbdl-in'] != null) {
+    } else if (configuration.pbdlPath != null) {
       return DesignType.PBDL;
     }
     return DesignType.UNKNOWN;
