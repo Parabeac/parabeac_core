@@ -5,5 +5,7 @@
     "desktop": 1280
   },
   "componentIsolation": "widgetbook",
-  "folderArchitecture": "domain"
+  "folderArchitecture": "domain",
+  "project-name": "foo",
+  "level": "screen"
 }
