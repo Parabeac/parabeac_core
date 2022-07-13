@@ -329,4 +329,8 @@ extension DeserializedRectangle3D on Rectangle3D {
   }
 }
 
-enum ParentLayoutSizing { INHERIT, STRETCH }
+enum ParentLayoutSizing {
+  INHERIT,
+  STRETCH,
+  NONE,
+}
