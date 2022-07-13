@@ -22,9 +22,25 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   PBIntermediateStackLayout({
     String name,
     PBIntermediateConstraints constraints,
+    layoutCrossAxisSizing,
+    layoutMainAxisSizing,
   }) : super(null, null, STACK_RULES, [], name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
+    if (layoutCrossAxisSizing != ParentLayoutSizing.NONE &&
+        layoutMainAxisSizing != ParentLayoutSizing.NONE) {
+      this.constraints = PBIntermediateConstraints.defaultConstraints()
+          .copyWith(
+              pinLeft: true, pinTop: true, fixedHeight: true, fixedWidth: true);
+      if (layoutMainAxisSizing == ParentLayoutSizing.STRETCH) {
+        this.constraints =
+            this.constraints.copyWith(fixedHeight: false, pinTop: false);
+      }
+      if (layoutCrossAxisSizing == ParentLayoutSizing.STRETCH) {
+        this.constraints =
+            this.constraints.copyWith(fixedWidth: false, pinLeft: false);
+      }
+    }
   }
 
   // @override
