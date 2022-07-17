@@ -3,6 +3,7 @@ import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/dashbook/dashbook_generator.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/widgetbook/widgetbook_generator.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/dashbook_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/component_isolation/widgetbook_service.dart';
 
@@ -15,7 +16,13 @@ class ComponentIsolationConfiguration {
   ComponentIsolationConfiguration._internal(this.generator, this.service);
 
   factory ComponentIsolationConfiguration.getConfiguration(
-      String type, PBGenerationProjectData projectData) {
+    String type,
+    PBGenerationProjectData projectData,
+    IntegrationLevel integrationLevel,
+  ) {
+    if (integrationLevel == IntegrationLevel.theming) {
+      return null;
+    }
     switch (type.toLowerCase()) {
       case 'widgetbook':
         return ComponentIsolationConfiguration._internal(

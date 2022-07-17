@@ -21,6 +21,7 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
     componentSetName: json['componentSetName'] as String,
     sharedNodeSetID: json['sharedNodeSetID'] as String,
   )
+    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -34,6 +35,7 @@ PBSharedMasterNode _$PBSharedMasterNodeFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PBSharedMasterNodeToJson(PBSharedMasterNode instance) =>
     <String, dynamic>{
+      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints?.toJson(),
       'layoutMainAxisSizing':

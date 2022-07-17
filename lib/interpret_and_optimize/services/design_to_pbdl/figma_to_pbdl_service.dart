@@ -18,6 +18,8 @@ class FigmaToPBDLService implements DesignToPBDLService {
       pngPath: p.join(info.genProjectPath, 'lib', 'assets', 'images'),
       exportPbdlJson: info.configuration.exportPBDL,
       projectName: info.projectName,
+      integrationStrategy:
+          info.configuration.integrationLevel.toString().split('.').last,
     );
   }
 }

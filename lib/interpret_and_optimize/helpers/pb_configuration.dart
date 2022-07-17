@@ -70,8 +70,8 @@ class PBConfiguration {
   String componentIsolation;
 
   /// The level of integration of this project
-  @JsonKey(defaultValue: 'screen')
-  String level;
+  @JsonKey(defaultValue: IntegrationLevel.screen)
+  IntegrationLevel integrationLevel;
 
   PBConfiguration(
     this.scaling,
@@ -85,7 +85,7 @@ class PBConfiguration {
     this.exportPBDL,
     this.folderArchitecture,
     this.componentIsolation,
-    this.level,
+    this.integrationLevel,
   });
 
   /// Converting the [json] into a [PBConfiguration] object.
@@ -108,8 +108,10 @@ class PBConfiguration {
     figmaOauthToken = arguments['oauth'] ?? figmaOauthToken;
     folderArchitecture = arguments['folderArchitecture'] ?? folderArchitecture;
     componentIsolation = arguments['componentIsolation'] ?? componentIsolation;
-    level = arguments['level'] ?? level;
-    exportPBDL = arguments['export-pbdl'] ?? exportPBDL;
+    integrationLevel = arguments['level'] ?? integrationLevel;
+
+    /// export-pbdl is non-negatable, therefore if it's not set, we go with the config's value.
+    exportPBDL = arguments['export-pbdl'] ? true : exportPBDL;
   }
 
   /// Generating the default configuration if there is no json file found for [PBConfiguration]
@@ -157,4 +159,10 @@ class PBConfiguration {
 
     return !(hasFigma || hasPbdl);
   }
+}
+
+enum IntegrationLevel {
+  theming,
+  component,
+  screen,
 }

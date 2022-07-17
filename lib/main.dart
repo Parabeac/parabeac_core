@@ -89,8 +89,11 @@ final parser = ArgParser()
   )
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
-  ..addFlag('export-pbdl',
-      help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
+  ..addFlag(
+    'export-pbdl',
+    help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.',
+    negatable: false,
+  )
   ..addFlag('exclude-styles',
       help: 'If this flag is set, it will exclude output styles document');
 
@@ -226,6 +229,7 @@ ${parser.usage}
   var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
     MainInfo().configuration.componentIsolation,
     pbProject.genProjectData,
+    MainInfo().configuration.integrationLevel,
   );
   if (isolationConfiguration != null) {
     interpretService.aitHandlers.add(isolationConfiguration.service);
