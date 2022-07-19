@@ -132,13 +132,6 @@ Future<void> runParabeac(List<String> args) async {
 
   MainInfo().cwd = Directory.current;
 
-  //error handler using logger package
-  void handleError(String msg) {
-    log.error(msg);
-    exitCode = 2;
-    exit(2);
-  }
-
   var argResults = parser.parse(args);
 
   /// Check if no args passed or only -h/--help passed
