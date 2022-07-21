@@ -29,9 +29,6 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     alignStrategy = PositionedAlignment();
     if (layoutCrossAxisSizing != ParentLayoutSizing.NONE &&
         layoutMainAxisSizing != ParentLayoutSizing.NONE) {
-      this.constraints = PBIntermediateConstraints.defaultConstraints()
-          .copyWith(
-              pinLeft: true, pinTop: true, fixedHeight: true, fixedWidth: true);
       if (layoutMainAxisSizing == ParentLayoutSizing.STRETCH) {
         this.constraints =
             this.constraints.copyWith(fixedHeight: false, pinTop: false);
