@@ -35,6 +35,7 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -closed
       - label!=review-required # Only merge PRs that are NOT labeled review-required.
+      - check-success=Dart CI
     actions:
       merge:
         method: merge
