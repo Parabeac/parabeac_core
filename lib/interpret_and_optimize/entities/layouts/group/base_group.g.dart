@@ -27,7 +27,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
         ? null
         : IntermediateAuxiliaryData.fromJson(
             json['style'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
     ..type = json['type'] as String;
 }
 
@@ -42,7 +41,6 @@ Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
-      'alignment': instance.alignment,
       'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
     };

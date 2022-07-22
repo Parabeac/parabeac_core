@@ -39,26 +39,7 @@ class PBLayoutGenerationService extends AITHandler {
   PBLayoutIntermediateNode _defaultLayout;
 
   PBLayoutGenerationService() {
-    var layoutHandlers = <String, PBLayoutIntermediateNode>{
-      // 'column': PBIntermediateColumnLayout(
-      //   '',
-      //   currentContext: currentContext,
-      //   UUID: Uuid().v4(),
-      // ),
-      // 'row': PBIntermediateRowLayout('', Uuid().v4(),
-      //     currentContext: currentContext),
-      'stack': PBIntermediateStackLayout(),
-    };
-
-    for (var layoutType
-        in MainInfo().configuration.layoutPrecedence ?? ['column']) {
-      layoutType = layoutType.toLowerCase();
-      if (layoutHandlers.containsKey(layoutType)) {
-        _availableLayouts.add(layoutHandlers[layoutType]);
-      }
-    }
-
-    _defaultLayout = _availableLayouts[0];
+    _defaultLayout = PBIntermediateStackLayout();
   }
 
   Future<PBIntermediateTree> extractLayouts(
