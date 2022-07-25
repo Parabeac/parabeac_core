@@ -97,8 +97,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     if (child is InheritedBitmap) {
       child.constraints.fixedHeight = isVertical
           ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
-          : child.constraints.fixedHeight =
-              child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT;
+          : child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT;
       child.constraints.fixedWidth = isVertical
           ? child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
           : child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT;
