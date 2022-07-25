@@ -95,21 +95,13 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     /// CENTER defaults
     /// TODO: Improve if statements
     if (child is InheritedBitmap) {
-      if (isVertical) {
-        if (child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT) {
-          child.constraints.fixedHeight = true;
-        }
-        if (child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT) {
-          child.constraints.fixedWidth = true;
-        }
-      } else {
-        if (child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT) {
-          child.constraints.fixedWidth = true;
-        }
-        if (child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT) {
-          child.constraints.fixedHeight = true;
-        }
-      }
+      child.constraints.fixedHeight = isVertical
+          ? child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT
+          : child.constraints.fixedHeight =
+              child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT;
+      child.constraints.fixedWidth = isVertical
+          ? child.layoutCrossAxisSizing == ParentLayoutSizing.INHERIT
+          : child.layoutMainAxisSizing == ParentLayoutSizing.INHERIT;
     }
     if (child is! PBContainer) {
       // Creates container
