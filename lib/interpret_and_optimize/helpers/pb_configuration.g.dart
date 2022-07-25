@@ -19,9 +19,9 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     exportPBDL: json['export-pbdl'] as bool ?? false,
     folderArchitecture: json['folderArchitecture'] as String ?? 'domain',
     componentIsolation: json['componentIsolation'] as String ?? 'None',
-    integrationLevel: _$enumDecodeNullable(
-            _$IntegrationlevelEnumMap, json['integrationLevel']) ??
-        IntegrationLevel.screen,
+    integrationLevel:
+        _$enumDecodeNullable(_$IntegrationLevelEnumMap, json['level']) ??
+            IntegrationLevel.screen,
   );
 }
 
@@ -38,7 +38,7 @@ Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
       'scaling': instance.scaling,
       'breakpoints': instance.breakpoints,
       'componentIsolation': instance.componentIsolation,
-      'integrationLevel': _$IntegrationlevelEnumMap[instance.integrationLevel],
+      'level': _$IntegrationLevelEnumMap[instance.integrationLevel],
     };
 
 T _$enumDecode<T>(
@@ -73,7 +73,7 @@ T _$enumDecodeNullable<T>(
   return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
 }
 
-const _$IntegrationlevelEnumMap = {
+const _$IntegrationLevelEnumMap = {
   IntegrationLevel.theming: 'theming',
   IntegrationLevel.component: 'component',
   IntegrationLevel.screen: 'screen',

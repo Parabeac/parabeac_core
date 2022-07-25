@@ -70,7 +70,7 @@ class PBConfiguration {
   String componentIsolation;
 
   /// The level of integration of this project
-  @JsonKey(defaultValue: IntegrationLevel.screen)
+  @JsonKey(defaultValue: IntegrationLevel.screen, name: 'level')
   IntegrationLevel integrationLevel;
 
   PBConfiguration(
@@ -108,7 +108,11 @@ class PBConfiguration {
     figmaOauthToken = arguments['oauth'] ?? figmaOauthToken;
     folderArchitecture = arguments['folderArchitecture'] ?? folderArchitecture;
     componentIsolation = arguments['componentIsolation'] ?? componentIsolation;
-    integrationLevel = arguments['level'] ?? integrationLevel;
+
+    if (arguments['level'] != null) {
+      integrationLevel =
+          _$enumDecode(_$IntegrationLevelEnumMap, arguments['level']);
+    }
 
     /// export-pbdl is non-negatable, therefore if it's not set, we go with the config's value.
     exportPBDL = arguments['export-pbdl'] ? true : exportPBDL;
