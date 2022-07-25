@@ -76,6 +76,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -84,21 +85,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase34Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff05ff00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -121,6 +123,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -129,21 +132,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             bottom: 0,
                             child: SubFrameCase12Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0000),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -166,6 +170,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -174,21 +179,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase13Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0000),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -211,6 +217,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -219,21 +226,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase14Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0000),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -255,6 +263,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -263,99 +272,8 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase21Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff2400ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 121.0,
-          width: 50.0,
-          top: 118.0,
-          height: 50.0,
-          child: Container(
-              height: 50.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            child: SubFrameCase22Custom(
-                                child: Container(
-                                    child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff2400ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 204.0,
-          width: 50.0,
-          top: 118.0,
-          height: 50.0,
-          child: Container(
-              height: 50.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            width: 50.0,
-                            top: 0,
-                            height: 50.0,
-                            child: Center(
-                                child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    child: SubFrameCase23Custom(
-                                        child: Container(
-                                            child: Stack(children: [
                                       Positioned(
                                         left: 0,
                                         width: 50.0,
@@ -369,7 +287,103 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           ),
                                         ),
                                       ),
-                                    ]))))),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase22Custom(
+                                child: Container(
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff2400ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 118.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase23Custom(
+                                        child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff2400ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -391,6 +405,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -399,21 +414,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase24Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff2400ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff2400ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -436,6 +452,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -444,21 +461,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase31Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff05ff00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -481,6 +499,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -489,21 +508,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             bottom: 0,
                             child: SubFrameCase32Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff05ff00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -526,6 +546,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -534,21 +555,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase33Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff05ff00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff05ff00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -571,6 +593,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -579,21 +602,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase11Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0000),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0000),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -615,6 +639,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -623,99 +648,8 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase41Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffdb00ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 121.0,
-          width: 50.0,
-          top: 284.0,
-          height: 50.0,
-          child: Container(
-              height: 50.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            child: SubFrameCase42Custom(
-                                child: Container(
-                                    child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffdb00ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 204.0,
-          width: 50.0,
-          top: 284.0,
-          height: 50.0,
-          child: Container(
-              height: 50.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            width: 50.0,
-                            top: 0,
-                            height: 50.0,
-                            child: Center(
-                                child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    child: SubFrameCase43Custom(
-                                        child: Container(
-                                            child: Stack(children: [
                                       Positioned(
                                         left: 0,
                                         width: 50.0,
@@ -729,7 +663,103 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           ),
                                         ),
                                       ),
-                                    ]))))),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase42Custom(
+                                child: Container(
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffdb00ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 284.0,
+          height: 50.0,
+          child: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase43Custom(
+                                        child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xffdb00ff),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -751,6 +781,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -759,21 +790,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase44Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffdb00ff),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffdb00ff),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -795,6 +827,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -803,21 +836,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase51Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffffd600),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -839,6 +873,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -847,21 +882,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase52Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffffd600),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -883,6 +919,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -891,21 +928,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase53Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffffd600),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -927,6 +965,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -935,21 +974,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase54Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffffd600),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffffd600),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -971,6 +1011,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -979,21 +1020,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase71Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1015,6 +1057,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1023,21 +1066,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             bottom: 0,
                             child: SubFrameCase72Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1059,6 +1103,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1067,21 +1112,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase73Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1103,6 +1149,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1111,21 +1158,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase134Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff6b00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1148,6 +1196,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1156,21 +1205,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase91Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0099),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1193,6 +1243,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1201,21 +1252,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             bottom: 0,
                             child: SubFrameCase92Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0099),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1238,6 +1290,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1246,21 +1299,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase93Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0099),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1283,6 +1337,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1291,21 +1346,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase94Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff0099),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff0099),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1327,6 +1383,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1335,99 +1392,8 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase101Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff929292),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 121.0,
-          width: 50.0,
-          top: 616.0,
-          height: 50.0,
-          child: Container(
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            child: SubFrameCase102Custom(
-                                child: Container(
-                                    child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff929292),
-                                  ),
-                                ),
-                              ),
-                            ]))),
-                          ),
-                        ])),
-                  ])),
-        ),
-        Positioned(
-          left: 204.0,
-          width: 50.0,
-          top: 616.0,
-          height: 50.0,
-          child: Container(
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        height: 50.0,
-                        child: Stack(children: [
-                          Positioned(
-                            left: 0,
-                            width: 50.0,
-                            top: 0,
-                            height: 50.0,
-                            child: Center(
-                                child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    child: SubFrameCase103Custom(
-                                        child: Container(
-                                            child: Stack(children: [
                                       Positioned(
                                         left: 0,
                                         width: 50.0,
@@ -1441,7 +1407,103 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           ),
                                         ),
                                       ),
-                                    ]))))),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 121.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: SubFrameCase102Custom(
+                                child: Container(
+                                    decoration: BoxDecoration(),
+                                    child: Stack(children: [
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff929292),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
+                          ),
+                        ])),
+                  ])),
+        ),
+        Positioned(
+          left: 204.0,
+          width: 50.0,
+          top: 616.0,
+          height: 50.0,
+          child: Container(
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(),
+                        child: Stack(children: [
+                          Positioned(
+                            left: 0,
+                            width: 50.0,
+                            top: 0,
+                            height: 50.0,
+                            child: Center(
+                                child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: SubFrameCase103Custom(
+                                        child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Stack(children: [
+                                              Positioned(
+                                                left: 0,
+                                                width: 50.0,
+                                                top: 0,
+                                                height: 50.0,
+                                                child: Container(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff929292),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]))))),
                           ),
                         ])),
                   ])),
@@ -1463,6 +1525,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   children: [
                     Container(
                         height: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1471,21 +1534,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase104Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff929292),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff929292),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1507,6 +1571,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1515,21 +1580,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase131Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff6b00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1551,6 +1617,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1559,21 +1626,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             bottom: 0,
                             child: SubFrameCase132Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff6b00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1595,6 +1663,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1603,21 +1672,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase133Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffff6b00),
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff6b00),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
@@ -1639,6 +1709,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                     Container(
                         height: 50.0,
                         width: 50.0,
+                        decoration: BoxDecoration(),
                         child: Stack(children: [
                           Positioned(
                             left: 0,
@@ -1647,21 +1718,22 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             height: 50.0,
                             child: SubFrameCase74Custom(
                                 child: Container(
+                                    decoration: BoxDecoration(),
                                     child: Stack(children: [
-                              Positioned(
-                                left: 0,
-                                width: 50.0,
-                                top: 0,
-                                height: 50.0,
-                                child: Container(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ]))),
+                                      Positioned(
+                                        left: 0,
+                                        width: 50.0,
+                                        top: 0,
+                                        height: 50.0,
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ]))),
                           ),
                         ])),
                   ])),
