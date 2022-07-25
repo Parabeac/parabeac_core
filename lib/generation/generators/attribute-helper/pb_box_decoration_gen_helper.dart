@@ -9,8 +9,8 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
   @override
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     final buffer = StringBuffer();
-    final headBuffer = StringBuffer();
-    headBuffer.write('decoration: BoxDecoration(');
+
+    buffer.write('decoration: BoxDecoration(');
     var borderInfo = source.auxiliaryData.borderInfo;
     var effectsInfo = source.auxiliaryData.effects;
     var colors = source.auxiliaryData.colors;
@@ -55,13 +55,9 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
 
       buffer.write('],');
     }
-    if (buffer.isEmpty) {
-      return '';
-    }
 
-    headBuffer.write(buffer.toString());
-    headBuffer.write('),');
+    buffer.write('),');
 
-    return headBuffer.toString();
+    return buffer.toString();
   }
 }
