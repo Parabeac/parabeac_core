@@ -48,8 +48,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -96,8 +94,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -144,8 +140,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -192,8 +186,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -239,8 +231,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -286,9 +276,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -335,8 +322,6 @@ class _TestScreen extends State<TestScreen> {
                             height: 50.0,
                             child: Center(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -382,9 +367,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -431,8 +413,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -479,8 +459,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -527,8 +505,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -575,8 +551,6 @@ class _TestScreen extends State<TestScreen> {
                             bottom: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -622,8 +596,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -669,9 +641,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -718,8 +687,6 @@ class _TestScreen extends State<TestScreen> {
                             height: 50.0,
                             child: Center(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -765,9 +732,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -813,8 +777,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -860,8 +822,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -907,8 +867,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -954,8 +912,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1001,8 +957,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1048,8 +1002,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1095,8 +1047,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1142,8 +1092,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1190,8 +1138,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1238,8 +1184,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1286,8 +1230,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1334,8 +1276,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1381,8 +1321,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1428,9 +1366,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1477,8 +1412,6 @@ class _TestScreen extends State<TestScreen> {
                             height: 50.0,
                             child: Center(
                                 child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
                                       Positioned(
@@ -1524,9 +1457,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: MediaQuery.of(context).size.width *
-                                    0.1282051282051282,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1572,8 +1502,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1619,8 +1547,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             bottom: 0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1666,8 +1592,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(
@@ -1713,8 +1637,6 @@ class _TestScreen extends State<TestScreen> {
                             top: 0,
                             height: 50.0,
                             child: Container(
-                                height: 50.0,
-                                width: 50.0,
                                 decoration: BoxDecoration(),
                                 child: Stack(children: [
                                   Positioned(

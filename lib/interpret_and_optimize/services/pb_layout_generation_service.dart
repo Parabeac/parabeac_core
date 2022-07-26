@@ -184,11 +184,11 @@ class PBLayoutGenerationService extends AITHandler {
       var newStack = PBIntermediateStackLayout(
         name: tempGroup.name,
         constraints: tempGroup.constraints.copyWith(),
+        layoutCrossAxisSizing: tempGroup.layoutCrossAxisSizing,
+        layoutMainAxisSizing: tempGroup.layoutMainAxisSizing,
       )
         ..auxiliaryData = tempGroup.auxiliaryData
-        ..frame = tempGroup.frame.copyWith()
-        ..layoutCrossAxisSizing = tempGroup.layoutCrossAxisSizing
-        ..layoutMainAxisSizing = tempGroup.layoutMainAxisSizing;
+        ..frame = tempGroup.frame.copyWith();
 
       tree.replaceNode(
         tempGroup,

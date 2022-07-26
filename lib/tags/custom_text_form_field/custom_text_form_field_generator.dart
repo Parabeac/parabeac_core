@@ -2,73 +2,21 @@ import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
-import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_gen.dart';
+import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_style_gen_mixin.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_constraints.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_border_info.dart';
-import 'package:parabeac_core/interpret_and_optimize/state_management/intermediate_auxillary_data.dart';
+import 'package:parabeac_core/tags/custom_text_form_field/custom_text_form_field.dart';
+import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
-import 'package:recase/recase.dart';
 
-class CustomTextFormField extends PBTag {
-  @override
-  final String semanticName = '<textformfield>';
-  CustomTextFormField(
-    String UUID,
-    Rectangle3D frame,
-    String name,
-    PBIntermediateConstraints constraints, {
-    IntermediateAuxiliaryData auxiliaryData,
-  }) : super(
-          UUID,
-          frame,
-          name,
-          auxiliaryData: auxiliaryData,
-          contraints: constraints,
-        ) {
-    generator = CustomTextFormFieldGenerator();
-    childrenStrategy = MultipleChildStrategy('children');
-  }
-
-  @override
-  PBIntermediateNode handleIntermediateNode(PBIntermediateNode iNode,
-      PBIntermediateNode parent, PBTag tag, PBIntermediateTree tree) {
-    /// Need to remove auxiliary data from component so it's not duplicated
-    if (iNode is PBSharedMasterNode) {
-      iNode.auxiliaryData = IntermediateAuxiliaryData();
-    }
-    return super.handleIntermediateNode(iNode, parent, tag, tree);
-  }
-
-  @override
-  void extractInformation(PBIntermediateNode incomingNode) {
-    // TODO: implement extractInformation
-  }
-
-  @override
-  PBTag generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
-      PBIntermediateTree tree) {
-    return CustomTextFormField(
-      null,
-      frame.copyWith(),
-      originalRef.name.replaceAll(semanticName, '').pascalCase,
-      originalRef.constraints.copyWith(),
-      auxiliaryData: originalRef.auxiliaryData.copyWith(),
-    );
-  }
-}
-
-class CustomTextFormFieldGenerator extends PBGenerator {
+class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
   /// Subsemantics for the text field.
   final String hintTextSemantic = '<hinttext>';
   final String prefixIconSemantic = '<prefixIcon>';
@@ -113,7 +61,7 @@ class CustomTextFormFieldGenerator extends PBGenerator {
     /// Get [hinttextGen] from [hinttext].
     if (hinttext != null && hinttext is InheritedText) {
       hinttextGen = PBTextGen.cleanString(hinttext.text);
-      hintStyle = 'TextStyle(color: Color(${hinttext.auxiliaryData.color}))';
+      hintStyle = getStyle(hinttext, context);
     }
 
     /// Generate [prefixIconGen] from [prefixIcon].

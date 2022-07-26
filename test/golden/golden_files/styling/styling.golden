@@ -308,8 +308,6 @@ class _StylingScreen extends State<StylingScreen> {
           height: 118.0,
           child: Container(
               clipBehavior: Clip.hardEdge,
-              height: 118.0,
-              width: 154.0,
               decoration: BoxDecoration(
                 color: Color(0x99cd4900),
               ),
@@ -343,8 +341,6 @@ class _StylingScreen extends State<StylingScreen> {
           height: 118.0,
           child: Container(
               clipBehavior: Clip.hardEdge,
-              height: 118.0,
-              width: 154.0,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment(0.0, -1.0),
