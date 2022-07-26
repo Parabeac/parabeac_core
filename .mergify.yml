@@ -5,6 +5,7 @@ pull_request_rules:
       - base=stable      # Merging into stable
       - -head~=(?i)^hotfix # Name of branch does not start with hotfix
       - -head~=^dev$ # Branch is not dev
+      - -head~=^mergify
     actions:
       close:
         message: "Please ensure that you are merging any non-hotfix branches
@@ -35,6 +36,7 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -closed
       - label!=review-required # Only merge PRs that are NOT labeled review-required.
+      - check-success=build
     actions:
       merge:
         method: merge
