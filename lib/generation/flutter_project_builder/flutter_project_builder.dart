@@ -120,7 +120,7 @@ class FlutterProjectBuilder {
       Process.run('rm', ['-rf', '.dart_tool/build'],
           runInShell: true,
           environment: Platform.environment,
-          workingDirectory: MainInfo().outputPath),
+          workingDirectory: MainInfo().configuration.outputPath),
       generationConfiguration.generateProject(project)
     ]);
 
@@ -143,7 +143,7 @@ class FlutterProjectBuilder {
         tree, project, context, isDryRun);
     generationConfiguration.generatePlatformAndOrientationInstance(project);
     await formatProject(project.projectAbsPath,
-        projectDir: MainInfo().outputPath);
+        projectDir: MainInfo().configuration.outputPath);
   }
 
   void runCommandQueue() {

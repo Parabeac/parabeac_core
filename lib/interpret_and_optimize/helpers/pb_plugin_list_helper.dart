@@ -3,9 +3,9 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
 import 'package:parabeac_core/tags/custom_tag/custom_tag.dart';
+import 'package:parabeac_core/tags/custom_text_form_field/custom_text_form_field.dart';
 import 'package:parabeac_core/tags/injected_app_bar.dart';
 import 'package:parabeac_core/tags/injected_tab_bar.dart';
-import 'package:parabeac_core/tags/custom_text_form_field.dart';
 
 /// Helping understand indirect and direct semantics that should remove a node from a tree.
 class PBPluginListHelper {

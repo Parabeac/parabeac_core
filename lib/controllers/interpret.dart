@@ -10,7 +10,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_nod
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_alignment_generation_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_layout_generation_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/pb_platform_orientation_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/pb_symbol_linker_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/state_management_node_interpreter.dart';
 import 'package:quick_log/quick_log.dart';
@@ -79,14 +78,6 @@ class Interpret {
       index: 1,
       id: 'Removing the $BaseGroup from ${tree.name}',
     );
-
-    // TODO: We should dynamically add the [PBPrototypeLinkerService] to `aitHandlers`
-    // somewhere else so that it does not check the configuration every time
-    // we process a tree
-    if (MainInfo().configuration.enablePrototyping) {
-      await _pbPrototypeLinkerService.linkPrototypeNodes(tree, context);
-    }
-    // await PBPrototypeAggregationService().linkDanglingPrototypeNodes();
 
     return aitServiceBuilder.build(tree: tree, context: context);
   }

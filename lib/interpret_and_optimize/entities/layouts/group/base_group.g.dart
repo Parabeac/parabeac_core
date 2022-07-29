@@ -18,7 +18,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -27,12 +26,10 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
         ? null
         : IntermediateAuxiliaryData.fromJson(
             json['style'] as Map<String, dynamic>)
-    ..alignment = json['alignment'] as Map<String, dynamic>
     ..type = json['type'] as String;
 }
 
 Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
@@ -42,7 +39,6 @@ Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
       'boundaryRectangle': Rectangle3D.toJson(instance.frame),
       'style': instance.auxiliaryData,
       'name': instance.name,
-      'alignment': instance.alignment,
       'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
     };
@@ -82,4 +78,5 @@ T _$enumDecodeNullable<T>(
 const _$ParentLayoutSizingEnumMap = {
   ParentLayoutSizing.INHERIT: 'INHERIT',
   ParentLayoutSizing.STRETCH: 'STRETCH',
+  ParentLayoutSizing.NONE: 'NONE',
 };

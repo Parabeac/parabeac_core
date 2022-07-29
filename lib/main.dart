@@ -21,7 +21,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/json_to_pbdl_service.dart';
-import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/sketch_to_pbdl_service.dart';
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
@@ -37,7 +36,6 @@ import 'interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 
 final designToPBDLServices = <DesignToPBDLService>[
   JsonToPBDLService(),
-  SketchToPBDLService(),
   FigmaToPBDLService(),
 ];
 FileSystemAnalyzer fileSystemAnalyzer;
@@ -45,16 +43,16 @@ Interpret interpretService = Interpret();
 
 ///sets up parser
 final parser = ArgParser()
-  ..addOption('path',
-      help: 'Path to the design file', valueHelp: 'path', abbr: 'p')
   ..addOption('out', help: 'The output path', valueHelp: 'path', abbr: 'o')
-  ..addOption('project-name',
-      help: 'The name of the project', abbr: 'n', defaultsTo: 'foo')
-  ..addOption('config-path',
-      help: 'Path of the configuration file',
-      abbr: 'c',
-      defaultsTo:
-          '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
+  ..addOption('project-name', help: 'The name of the project', abbr: 'n')
+  ..addOption(
+    'config-path',
+    help: 'Path of the configuration file',
+    abbr: 'c',
+    defaultsTo: p.setExtension(
+        p.join('lib', 'configurations', 'configurations'), '.json'),
+  )
+  // '${p.setExtension(p.join('lib/configurations/', 'configurations'), '.json')}')
   ..addOption('fig', help: 'The ID of the figma file', abbr: 'f')
   ..addOption('figKey', help: 'Your personal API Key', abbr: 'k')
   ..addOption(
@@ -63,10 +61,39 @@ final parser = ArgParser()
         'Takes in a Parabeac Design Logic (PBDL) JSON file and exports it to a project',
   )
   ..addOption('oauth', help: 'Figma OAuth Token')
+  ..addOption(
+    'folderArchitecture',
+    help: 'Folder Architecture type to use.',
+    allowedHelp: {
+      'domain':
+          'Default Option. Generates a domain-layered folder architecture.'
+    },
+  )
+  ..addOption(
+    'componentIsolation',
+    help: 'Component Isolation configuration to use.',
+    allowedHelp: {
+      'widgetbook': 'Default option. Use widgetbook for component isolation.',
+      'dashbook': 'Use dashbook for component isolation.',
+      'none': 'Do not use any component isolation packages.',
+    },
+  )
+  ..addOption(
+    'level',
+    help: 'Level of integration to generate.',
+    allowedHelp: {
+      'screen': 'Default Option. Generate a full app.',
+      'component': 'Generate a component package.',
+      'theming': 'Generate theme information.',
+    },
+  )
   ..addFlag('help',
       help: 'Displays this help information.', abbr: 'h', negatable: false)
-  ..addFlag('export-pbdl',
-      help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.')
+  ..addFlag(
+    'export-pbdl',
+    help: 'This flag outputs Parabeac Design Logic (PBDL) in JSON format.',
+    negatable: false,
+  )
   ..addFlag('exclude-styles',
       help: 'If this flag is set, it will exclude output styles document');
 
@@ -105,28 +132,15 @@ Future<void> runParabeac(List<String> args) async {
 
   MainInfo().cwd = Directory.current;
 
-  //error handler using logger package
-  void handleError(String msg) {
-    log.error(msg);
-    exitCode = 2;
-    exit(2);
-  }
-
   var argResults = parser.parse(args);
 
   /// Check if no args passed or only -h/--help passed
-  if (argResults['help'] || argResults.arguments.isEmpty) {
+  if (argResults['help']) {
     print('''
   ** PARABEAC HELP **
 ${parser.usage}
     ''');
     exit(0);
-  } else if (hasTooFewArgs(argResults)) {
-    handleError(
-        'Missing required argument: path to Sketch file or both Figma Key and Project ID.');
-  } else if (hasTooManyArgs(argResults)) {
-    handleError(
-        'Too many arguments: Please provide either the path to Sketch file or the Figma File ID and API Key');
   }
 
   /// Pass MainInfo the argument results
@@ -159,7 +173,7 @@ ${parser.usage}
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
   // Exit if only generating PBDL
-  if (MainInfo().exportPBDL) {
+  if (MainInfo().configuration.exportPBDL) {
     exitCode = 0;
     await SentryService.finishTransaction(RUN_PARABEAC);
     return;
@@ -208,6 +222,7 @@ ${parser.usage}
   var isolationConfiguration = ComponentIsolationConfiguration.getConfiguration(
     MainInfo().configuration.componentIsolation,
     pbProject.genProjectData,
+    MainInfo().configuration.integrationLevel,
   );
   if (isolationConfiguration != null) {
     interpretService.aitHandlers.add(isolationConfiguration.service);
@@ -422,28 +437,4 @@ void addToAmplitude() async {
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: body,
   );
-}
-
-/// Returns true if `args` contains two or more
-/// types of intake to parabeac-core
-bool hasTooManyArgs(ArgResults args) {
-  var hasSketch = args['path'] != null;
-  var hasFigma =
-      args['figKey'] != null || args['fig'] != null || args['oauth'] != null;
-  var hasPbdl = args['pbdl-in'] != null;
-
-  var hasAll = hasSketch && hasFigma && hasPbdl;
-
-  return hasAll || !(hasSketch ^ hasFigma ^ hasPbdl);
-}
-
-/// Returns true if `args` does not contain any intake
-/// to parabeac-core
-bool hasTooFewArgs(ArgResults args) {
-  var hasSketch = args['path'] != null;
-  var hasFigma =
-      (args['figKey'] != null || args['oauth'] != null) && args['fig'] != null;
-  var hasPbdl = args['pbdl-in'] != null;
-
-  return !(hasSketch || hasFigma || hasPbdl);
 }

@@ -94,6 +94,7 @@ T _$enumDecodeNullable<T>(
 const _$ParentLayoutSizingEnumMap = {
   ParentLayoutSizing.INHERIT: 'INHERIT',
   ParentLayoutSizing.STRETCH: 'STRETCH',
+  ParentLayoutSizing.NONE: 'NONE',
 };
 
 PBInstanceOverride _$PBInstanceOverrideFromJson(Map<String, dynamic> json) {

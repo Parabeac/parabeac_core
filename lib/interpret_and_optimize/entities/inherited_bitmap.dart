@@ -53,10 +53,7 @@ class InheritedBitmap extends PBVisualIntermediateNode
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
-      _$InheritedBitmapFromJson(json)
-        // . .frame.topLeft = Point.topLeftFromJson(json)
-        // . .frame.bottomRight = Point.bottomRightFromJson(json)
-        ..originalRef = json;
+      _$InheritedBitmapFromJson(json)..originalRef = json;
 
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,

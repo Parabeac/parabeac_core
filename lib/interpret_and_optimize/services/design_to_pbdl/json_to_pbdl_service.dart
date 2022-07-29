@@ -8,7 +8,8 @@ import 'package:path/path.dart' as p;
 class JsonToPBDLService implements DesignToPBDLService {
   @override
   Future<PBDLProject> callPBDL(MainInfo info) async {
-    var pbdlJson = jsonDecode(File(MainInfo().pbdlPath).readAsStringSync());
+    var pbdlJson =
+        jsonDecode(File(MainInfo().configuration.pbdlPath).readAsStringSync());
     return await PBDL.fromJson(pbdlJson);
   }
 

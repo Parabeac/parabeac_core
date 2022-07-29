@@ -17,7 +17,6 @@ InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
         json['prototypeNodeUUID'] as String),
     constraints: json['constraints'],
   )
-    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -31,7 +30,6 @@ InheritedMaterial _$InheritedMaterialFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$InheritedMaterialToJson(InheritedMaterial instance) =>
     <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':
@@ -82,4 +80,5 @@ T _$enumDecodeNullable<T>(
 const _$ParentLayoutSizingEnumMap = {
   ParentLayoutSizing.INHERIT: 'INHERIT',
   ParentLayoutSizing.STRETCH: 'STRETCH',
+  ParentLayoutSizing.NONE: 'NONE',
 };

@@ -263,8 +263,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                 height: 303.75,
                                 child: EditMainImageCustom(
                                     child: Container(
-                                        height: 303.75,
-                                        width: 540.0,
                                         decoration: BoxDecoration(),
                                         child: Stack(children: [
                                           Positioned(
@@ -445,10 +443,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                 height: 72.0,
                                 child: SaveButtonCustom(
                                     child: Container(
-                                        height: 72.0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5792399833866986,
                                         decoration: BoxDecoration(
                                           color: Color(0xff00497b),
                                           borderRadius: BorderRadius.all(

@@ -5,5 +5,10 @@
     "desktop": 1280
   },
   "componentIsolation": "widgetbook",
-  "folderArchitecture": "domain"
+  "folderArchitecture": "domain",
+  "project-name": "foo",
+  "level": "screen",
+  "fig": "Enter your Figma File ID here",
+  "figKey": "Enter your Figma API Key here",
+  "out": "/absolute/path/to/output/directory"
 }
