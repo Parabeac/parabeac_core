@@ -30,6 +30,9 @@ class TextStylesPostGenTask extends PostGenTask {
         _textStyleStr(globalTextStyle.textStyle),
         description: globalTextStyle.description,
       ));
+
+      // Add theme styling count
+      addToAnalytics('Number of theme text styles');
     });
 
     generationConfiguration.fileStructureStrategy.commandCreated(

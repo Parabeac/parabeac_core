@@ -31,6 +31,9 @@ class ColorsPostGenTask extends PostGenTask {
         'Color(${color.color.toHex()})',
         description: color.description,
       ));
+
+      // Add theme color count
+      addToAnalytics('Number of theme colors');
     });
 
     /// Write colors to constants file in `colors.g.dart`
