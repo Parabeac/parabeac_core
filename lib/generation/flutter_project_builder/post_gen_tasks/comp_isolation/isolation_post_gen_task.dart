@@ -22,4 +22,7 @@ class IsolationPostGenTask implements PostGenTask {
     generationConfiguration.fileStructureStrategy.commandCreated(
         WriteSymbolCommand(null, fileName, isolationCode, symbolPath: 'lib/'));
   }
+
+  @override
+  noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
