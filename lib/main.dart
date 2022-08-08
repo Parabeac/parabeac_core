@@ -327,6 +327,7 @@ ${parser.usage}
 
   await SentryService.finishTransaction(RUN_PARABEAC);
 
+  addToAmplitude();
   exitCode = 0;
 }
 
@@ -400,8 +401,6 @@ Future<void> checkConfigFile() async {
     var configMap = jsonDecode(configFile.readAsStringSync());
     MainInfo().deviceId = configMap['device_id'];
   }
-
-  addToAmplitude();
 }
 
 /// Gets the homepath of the user according to their OS
@@ -427,14 +426,37 @@ void addToAmplitude() async {
   var lambdaEndpt =
       'https://jsr2rwrw5m.execute-api.us-east-1.amazonaws.com/default/pb-lambda-microservice';
 
-  var body = json.encode({
-    'id': MainInfo().deviceId,
-    'eventProperties': {'eggs': PBPluginListHelper.names ?? {}}
+  var eventProperties = MainInfo().amplitudMap['eventProperties'];
+
+  eventProperties['eggs'] = PBPluginListHelper.names ?? [];
+
+  eventProperties['Design specification'] =
+      MainInfo().configuration.widgetStyle;
+
+  eventProperties['Percentage of Auto Layout as UI'] =
+      getPercentageOfAutoLayout();
+
+  MainInfo().amplitudMap.addAll({
+    // 'id': MainInfo().deviceId,
+    'id': 'Testing Analytics'
   });
+
+  var body = json.encode(MainInfo().amplitudMap);
 
   await http.post(
     Uri.parse(lambdaEndpt),
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: body,
   );
+}
+
+String getPercentageOfAutoLayout() {
+  var numStacks =
+      MainInfo().amplitudMap['eventProperties'].remove('Number of stacks');
+  var numAutoLayouts = MainInfo()
+      .amplitudMap['eventProperties']
+      .remove('Number of auto layouts');
+
+  return ((numAutoLayouts / (numAutoLayouts + numStacks)) * 100)
+      .toStringAsFixed(2);
 }
