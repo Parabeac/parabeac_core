@@ -135,6 +135,9 @@ class CustomTagGenerator extends PBGenerator {
     );
 
     if (source is CustomTag) {
+      // Add tag to analytics
+      addTagToAnalytics('CustomTag');
+
       return '''
         $titleName(
           child: ${children[0].generator.generate(children[0], context)}

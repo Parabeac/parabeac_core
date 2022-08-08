@@ -168,6 +168,9 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
       ),
     );
     if (source is CustomTextFormField) {
+      // Add tag to analytics
+      addTagToAnalytics('CustomTextFormField');
+
       return '${widgetFilename.pascalCase}()';
     }
     return '';

@@ -26,7 +26,8 @@ abstract class PBLayoutGenerator extends PBGenerator {
 
       buffer.write(')');
     }
-
+    // Add number of auto layouts to analytics
+    addToAnalytics('Number of auto layouts');
     return buffer.toString();
   }
 
