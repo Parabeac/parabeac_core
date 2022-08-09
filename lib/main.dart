@@ -434,11 +434,14 @@ void addToAmplitude() async {
       MainInfo().configuration.widgetStyle;
 
   eventProperties['Percentage of Auto Layout as UI'] =
-      getPercentageOfAutoLayout();
+      getPercentage('Number of auto layouts', ['Number of stacks']);
+
+  eventProperties['Percentage of design specification'] =
+      getPercentage('Number of theme text styles', ['Number of theme colors']);
 
   MainInfo().amplitudMap.addAll({
-    // 'id': MainInfo().deviceId,
-    'id': 'Testing Analytics'
+    'id': MainInfo().deviceId,
+    // 'id': 'Testing Analytics'
   });
 
   var body = json.encode(MainInfo().amplitudMap);
@@ -450,13 +453,13 @@ void addToAmplitude() async {
   );
 }
 
-String getPercentageOfAutoLayout() {
-  var numStacks =
-      MainInfo().amplitudMap['eventProperties'].remove('Number of stacks');
-  var numAutoLayouts = MainInfo()
-      .amplitudMap['eventProperties']
-      .remove('Number of auto layouts');
+String getPercentage(String property, List<String> properties) {
+  var quantityOfProperty = MainInfo().amplitudMap['eventProperties'][property];
 
-  return ((numAutoLayouts / (numAutoLayouts + numStacks)) * 100)
-      .toStringAsFixed(2);
+  var totalQuantity = quantityOfProperty;
+  for (var name in properties) {
+    totalQuantity += MainInfo().amplitudMap['eventProperties'][name];
+  }
+
+  return ((quantityOfProperty / totalQuantity) * 100).toStringAsFixed(2);
 }
