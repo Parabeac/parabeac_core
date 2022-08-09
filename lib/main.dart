@@ -454,12 +454,16 @@ void addToAmplitude() async {
 }
 
 String getPercentage(String property, List<String> properties) {
-  var quantityOfProperty = MainInfo().amplitudMap['eventProperties'][property];
+  var quantityOfProperty =
+      MainInfo().amplitudMap['eventProperties'][property] ?? 0;
 
   var totalQuantity = quantityOfProperty;
   for (var name in properties) {
-    totalQuantity += MainInfo().amplitudMap['eventProperties'][name];
+    totalQuantity += MainInfo().amplitudMap['eventProperties'][name] ?? 0;
   }
 
+  if (totalQuantity == 0) {
+    return '0.00';
+  }
   return ((quantityOfProperty / totalQuantity) * 100).toStringAsFixed(2);
 }
