@@ -30,7 +30,9 @@ class PBStackGenerator extends PBGenerator {
         return containerWrapper(buffer.toString(), source, context);
       }
       // Add number of stacks to analytics
-      addToAnalytics('Number of stacks');
+      if (!context.tree.lockData) {
+        addToAnalytics('Number of stacks');
+      }
       return buffer.toString();
     }
     return '';
