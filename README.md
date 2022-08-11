@@ -97,6 +97,7 @@ Specifies the level of export. At the time of writing, there are three levels: *
 - **Theming** - will export global styles, such as text styles and global colors to a file in `lib/theme`.
 - **Component** - will export theming as well as individual reusable UI components to `lib/widgets`.
 - **Screen** [**default**] - will export all of the above and a full UI screen to `lib/views`.
+
 The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen--essentially, a full running app.
   
   
