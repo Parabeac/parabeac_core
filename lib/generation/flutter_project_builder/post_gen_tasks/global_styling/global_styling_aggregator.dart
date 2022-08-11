@@ -42,39 +42,44 @@ class GlobalStylingAggregator {
   /// Examines [globalStyles] and adds PostGenTasks to [builder]
   static void addPostGenTasks(
       FlutterProjectBuilder builder, PBDLGlobalStyles globalStyles) {
-    if (globalStyles.colors != null && globalStyles.colors.isNotEmpty) {
+    /// Check whether there are theme or global colors
+    if ((globalStyles.colors != null && globalStyles.colors.isNotEmpty) ||
+        (globalStyles.themeColors != null &&
+            globalStyles.themeColors.isNotEmpty)) {
+      /// Aggregate all colors
+      final globalColors = globalStyles.colors
+        ..addAll(globalStyles.themeColors);
       builder.postGenTasks.add(
         ColorsPostGenTask(
           builder.generationConfiguration,
-          globalStyles.colors,
+          globalColors,
         ),
       );
     }
 
-    if (globalStyles.textStyles != null && globalStyles.textStyles.isNotEmpty) {
+    /// Check whether there are theme or global textstyles
+    if ((globalStyles.textStyles != null &&
+            globalStyles.textStyles.isNotEmpty) ||
+        (globalStyles.themeTextStyles != null &&
+            globalStyles.themeTextStyles.isNotEmpty)) {
+      final globalTextStyles = globalStyles.textStyles
+        ..addAll(globalStyles.themeTextStyles);
       builder.postGenTasks.add(
         TextStylesPostGenTask(
           builder.generationConfiguration,
-          globalStyles.textStyles,
+          globalTextStyles,
         ),
       );
     }
 
-    var themeTextStyles = <PBDLGlobalTextStyle>[];
-
-    for (var style in globalStyles.textStyles) {
-      if (_textStyleList.contains(style.name.camelCase)) {
-        /// Add Text Style to Global theming list
-        themeTextStyles.add(style);
-      }
-    }
-
-    if (themeTextStyles.isNotEmpty) {
+    if (globalStyles.themeTextStyles.isNotEmpty ||
+        globalStyles.themeColors.isNotEmpty) {
       /// Add Theme Styles to the Theme task
       builder.postGenTasks.add(
         ThemingPostGenTask(
           builder.generationConfiguration,
-          themeTextStyles,
+          globalStyles.themeTextStyles ?? [],
+          globalStyles.themeColors ?? [],
         ),
       );
     }
