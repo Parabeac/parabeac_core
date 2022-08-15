@@ -48,23 +48,4 @@ abstract class PBGenerator {
       )
     ''';
   }
-
-  void addTagToAnalytics(String tagName) {
-    if (MainInfo()
-        .amplitudMap['eventProperties']['tags']
-        .containsKey(tagName)) {
-      MainInfo().amplitudMap['eventProperties']['tags'][tagName]++;
-    } else {
-      MainInfo().amplitudMap['eventProperties']['tags'][tagName] = 1;
-    }
-    addToAnalytics('Number of custom generated');
-  }
-
-  void addToAnalytics(String propertyName) {
-    if (MainInfo().amplitudMap['eventProperties'].containsKey(propertyName)) {
-      MainInfo().amplitudMap['eventProperties'][propertyName]++;
-    } else {
-      MainInfo().amplitudMap['eventProperties'][propertyName] = 1;
-    }
-  }
 }
