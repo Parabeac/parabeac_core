@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/layout_properties.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -28,7 +30,7 @@ abstract class PBLayoutGenerator extends PBGenerator {
     }
     // Add number of auto layouts to analytics
     if (!context.tree.lockData) {
-      addToAnalytics('Number of auto layouts');
+      GetIt.I.get<AmplitudeService>().addToAnalytics('Number of auto layouts');
     }
     return buffer.toString();
   }

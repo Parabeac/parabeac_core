@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
@@ -87,7 +89,9 @@ class PBProject {
       // This avoid to generate pages set to not convert
       if (page.containsKey('convert') && page['convert']) {
         // Add count of pages processed
-        addToAnalytics('Number of design pages');
+        GetIt.I
+            .get<AmplitudeService>()
+            .addToAnalytics('Number of design pages');
 
         var screens = (page['screens'] as Iterable).map((screen) {
           // This avoid to generate screens set to not convert
@@ -98,10 +102,14 @@ class PBProject {
 
             if (tree.tree_type == TREE_TYPE.SCREEN) {
               // Add count of screens procesed
-              addToAnalytics('Number of screens generated');
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of screens generated');
             } else if (tree.tree_type == TREE_TYPE.VIEW) {
               // Add count of components procesed
-              addToAnalytics('Number of components generated');
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of components generated');
             }
 
             tree.generationViewData = PBGenerationViewData();
@@ -120,13 +128,5 @@ class PBProject {
     });
 
     return trees;
-  }
-
-  static void addToAnalytics(String propertyName) {
-    if (MainInfo().amplitudMap['eventProperties'].containsKey(propertyName)) {
-      MainInfo().amplitudMap['eventProperties'][propertyName]++;
-    } else {
-      MainInfo().amplitudMap['eventProperties'][propertyName] = 1;
-    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -170,7 +171,9 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
     if (source is CustomTextFormField) {
       // Add tag to analytics
       if (!context.tree.lockData) {
-        addTagToAnalytics('CustomTextFormField');
+        GetIt.I
+            .get<AmplitudeService>()
+            .addToSpecified('CustomTextFormField', 'custom');
       }
       return '${widgetFilename.pascalCase}()';
     }
