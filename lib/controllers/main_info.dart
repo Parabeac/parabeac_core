@@ -51,13 +51,6 @@ class MainInfo {
 
   String get outputPath => configuration.outputPath;
 
-  Map<String, dynamic> amplitudMap = {
-    'eventProperties': {
-      'tags': {},
-      'eggs': [],
-    },
-  };
-
   /// Checks if the [path] is `null`, if its not, it will [p.absolute] and finally,
   /// run [p.normalize] on the [path].
   ///
