@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/analytics/analytics_constants.dart';
 import 'package:parabeac_core/analytics/sentry_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/isolation_post_gen_task.dart';
@@ -16,7 +17,6 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/component_isolation_configuration.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_intermediate_node_tree.dart';
-import 'package:parabeac_core/interpret_and_optimize/helpers/pb_plugin_list_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_project.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/design_to_pbdl_service.dart';
 import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/figma_to_pbdl_service.dart';
@@ -24,7 +24,6 @@ import 'package:parabeac_core/interpret_and_optimize/services/design_to_pbdl/jso
 import 'package:quick_log/quick_log.dart';
 import 'package:sentry/sentry.dart';
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 import 'package:args/args.dart';
 import 'controllers/interpret.dart';
 import 'controllers/main_info.dart';
@@ -151,6 +150,10 @@ ${parser.usage}
   /// for PBC to know in the future the type of architecture
   GetIt.I.registerSingleton<PathService>(PathService.fromConfiguration(
       MainInfo().configuration.folderArchitecture));
+
+  /// Register the AmplitudeService singleton
+  /// too keep track of the analytics through PBC
+  GetIt.I.registerSingleton<AmplitudeService>(AmplitudeService());
 
   var processInfo = MainInfo();
   if (processInfo.designType == DesignType.UNKNOWN) {
@@ -327,7 +330,7 @@ ${parser.usage}
 
   await SentryService.finishTransaction(RUN_PARABEAC);
 
-  addToAmplitude();
+  GetIt.I.get<AmplitudeService>().sendToAmplitude();
   exitCode = 0;
 }
 
@@ -419,51 +422,4 @@ void createConfigFile(File configFile) {
   var configMap = {'device_id': Uuid().v4()};
   configFile.writeAsStringSync(jsonEncode(configMap));
   MainInfo().deviceId = configMap['device_id'];
-}
-
-/// Adds current run to amplitude metrics
-void addToAmplitude() async {
-  var lambdaEndpt =
-      'https://jsr2rwrw5m.execute-api.us-east-1.amazonaws.com/default/pb-lambda-microservice';
-
-  var eventProperties = MainInfo().amplitudMap['eventProperties'];
-
-  eventProperties['eggs'] = PBPluginListHelper.names ?? [];
-
-  eventProperties['Design specification'] =
-      MainInfo().configuration.widgetStyle;
-
-  eventProperties['Percentage of Auto Layout as UI'] =
-      getPercentage('Number of auto layouts', ['Number of stacks']);
-
-  eventProperties['Percentage of design specification'] =
-      getPercentage('Number of theme text styles', ['Number of theme colors']);
-
-  MainInfo().amplitudMap.addAll({
-    'id': MainInfo().deviceId,
-    // 'id': 'Testing Analytics'
-  });
-
-  var body = json.encode(MainInfo().amplitudMap);
-
-  await http.post(
-    Uri.parse(lambdaEndpt),
-    headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-    body: body,
-  );
-}
-
-String getPercentage(String property, List<String> properties) {
-  var quantityOfProperty =
-      MainInfo().amplitudMap['eventProperties'][property] ?? 0;
-
-  var totalQuantity = quantityOfProperty;
-  for (var name in properties) {
-    totalQuantity += MainInfo().amplitudMap['eventProperties'][name] ?? 0;
-  }
-
-  if (totalQuantity == 0) {
-    return '0.00';
-  }
-  return ((quantityOfProperty / totalQuantity) * 100).toStringAsFixed(2);
 }
