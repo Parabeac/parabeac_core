@@ -31,7 +31,6 @@ class AmplitudeService {
 
     _amplitudeMap.addAll({
       'id': MainInfo().deviceId,
-      // 'id': 'Testing Analytics 35',
       'eventProperties': _eventProperties,
     });
 
