@@ -89,6 +89,36 @@ Sets the name of the exported project. For instance, if you want to name your pr
 #### Absolute Path (Optional): -o
 
 Specifies the absolute path of the exported Flutter Project to be created. For instance, to export your Flutter project in the Documents folder, set your `-o` flag to `/Users/ParabeacUser/Documents/` Not setting this will export the project in the parabeac_core directory.
+  
+#### Level of Export (Optional): --level
+  
+  
+Specifies the level of export. At the time of writing, there are three levels: **theming**, **component**, and **screen**.
+- **Theming** - will export global styles, such as text styles and global colors to a file in `lib/theme`.
+- **Component** - will export theming as well as individual reusable UI components to `lib/widgets`.
+- **Screen** [**default**] - will export all of the above and a full UI screen to `lib/views`.
+
+The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen--essentially, a full running app.
+  
+  
+### Configurations.json
+To avoid repetitively entering the same flags in the command line, you can edit the configurations.json file. Just populate the corresponding fields with the information you would normally enter with the commands listed above.
+  
+The default configurations.json file is pictured below. It can be found in `lib/configurations`
+
+  ![image](https://user-images.githubusercontent.com/42812006/184252654-5fc55f48-502b-4eca-8bc5-029832a23d39.png)
+
+For example, take the following CLI command:
+  
+  
+```
+dart parabeac.dart -f AaGNw26baKo91CT0I4B2lJ -k figd_60xGD-VXvoA-ABRdk7VPGq2Zrk_vYj2oSzUPqi6D -o /Users/ivanvigliante/Documents/parabeac/core/debug
+```
+  
+This is the equivalent of the command above in the `configurations.json` file:
+  
+  ![image](https://user-images.githubusercontent.com/42812006/184252687-e4cd2e75-a116-4d33-a8a6-b40cac096f52.png)
+
 
 ### Sketch
 
@@ -160,9 +190,6 @@ Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](ht
 ## Global Theming
 * parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
 * For more information on how to set up Global Styles in your design file, read the following [Global Styling Docs](https://docs.parabeac.com/docs/learn-the-parabeac-way/global-styling).
-
-### Current limitations
-* At the moment, we only generate global styling nodes that are actually being used inside a frame of the Figma project. This is because of Figma's API limitations. We are currently working on a way to completely decouple this so that we are able to get the styling information without depending on them being used inside the Figma project.
 
 ### TextStyles
 * If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
