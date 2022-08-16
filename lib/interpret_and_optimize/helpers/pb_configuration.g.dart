@@ -21,7 +21,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     componentIsolation: json['componentIsolation'] as String ?? 'None',
     integrationLevel:
         _$enumDecodeNullable(_$IntegrationLevelEnumMap, json['level']) ??
-            IntegrationLevel.screen,
+            IntegrationLevel.screens,
   );
 }
 
@@ -74,7 +74,7 @@ T _$enumDecodeNullable<T>(
 }
 
 const _$IntegrationLevelEnumMap = {
-  IntegrationLevel.theming: 'theming',
-  IntegrationLevel.component: 'component',
-  IntegrationLevel.screen: 'screen',
+  IntegrationLevel.themes: 'themes',
+  IntegrationLevel.components: 'components',
+  IntegrationLevel.screens: 'screens',
 };

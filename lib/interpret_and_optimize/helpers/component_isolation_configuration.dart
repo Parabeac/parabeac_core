@@ -20,7 +20,7 @@ class ComponentIsolationConfiguration {
     PBGenerationProjectData projectData,
     IntegrationLevel integrationLevel,
   ) {
-    if (integrationLevel == IntegrationLevel.theming) {
+    if (integrationLevel == IntegrationLevel.themes) {
       return null;
     }
     switch (type.toLowerCase()) {

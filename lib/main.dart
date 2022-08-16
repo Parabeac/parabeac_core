@@ -79,12 +79,12 @@ final parser = ArgParser()
     },
   )
   ..addOption(
-    'level',
-    help: 'Level of integration to generate.',
+    'project-type',
+    help: 'Type of project to generate.',
     allowedHelp: {
-      'screen': 'Default Option. Generate a full app.',
-      'component': 'Generate a component package.',
-      'theming': 'Generate theme information.',
+      'screens': 'Default Option. Generate a full app.',
+      'components': 'Generate a component package.',
+      'themes': 'Generate theme information.',
     },
   )
   ..addFlag('help',
