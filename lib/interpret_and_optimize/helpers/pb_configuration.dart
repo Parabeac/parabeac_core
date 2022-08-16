@@ -70,7 +70,7 @@ class PBConfiguration {
   String componentIsolation;
 
   /// The level of integration of this project
-  @JsonKey(defaultValue: IntegrationLevel.screen, name: 'level')
+  @JsonKey(defaultValue: IntegrationLevel.screens, name: 'level')
   IntegrationLevel integrationLevel;
 
   PBConfiguration(
@@ -109,9 +109,9 @@ class PBConfiguration {
     folderArchitecture = arguments['folderArchitecture'] ?? folderArchitecture;
     componentIsolation = arguments['componentIsolation'] ?? componentIsolation;
 
-    if (arguments['level'] != null) {
+    if (arguments['project-type'] != null) {
       integrationLevel =
-          _$enumDecode(_$IntegrationLevelEnumMap, arguments['level']);
+          _$enumDecode(_$IntegrationLevelEnumMap, arguments['project-type']);
     }
 
     /// export-pbdl is non-negatable, therefore if it's not set, we go with the config's value.
@@ -166,7 +166,7 @@ class PBConfiguration {
 }
 
 enum IntegrationLevel {
-  theming,
-  component,
-  screen,
+  themes,
+  components,
+  screens,
 }
