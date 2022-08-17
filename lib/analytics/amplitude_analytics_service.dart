@@ -14,7 +14,7 @@ class AmplitudeService {
   Map<String, dynamic> _eventProperties = {
     'Total of material design': 0,
     'Number of design pages': 0,
-    'Number of frames': 0,
+    'Number of positional frames': 0,
     'Number of screens generated': 0,
     'Number of theme text styles': 0,
     'Number of theme colors': 0,
@@ -34,7 +34,8 @@ class AmplitudeService {
 
     _eventProperties['Percentage of Auto Layout as UI'] = _calculatePercentage(
         _eventProperties['Number of auto layouts'],
-        _eventProperties['Number of frames']);
+        _eventProperties['Number of positional frames'] +
+            _eventProperties['Number of auto layouts']);
 
     _eventProperties['Percentage of design specification'] =
         _calculatePercentage(
