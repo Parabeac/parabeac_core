@@ -172,7 +172,7 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
       // Add tag to analytics
       if (!context.tree.lockData) {
         GetIt.I.get<AmplitudeService>().addToSpecified(
-            'CustomTextFormField', 'tag', 'Number of custom generated');
+            'CustomTextFormField', 'tag', 'Number of tags generated');
       }
       return '${widgetFilename.pascalCase}()';
     }

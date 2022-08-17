@@ -8,17 +8,18 @@ class AmplitudeService {
   AmplitudeService();
 
   /// Map to go to amplitude
-  Map<String, dynamic> _amplitudeMap = {};
+  final Map<String, dynamic> _amplitudeMap = {};
 
   /// Map to hold all properties to go to amplitude
-  Map<String, dynamic> _eventProperties = {
+  final Map<String, dynamic> _eventProperties = {
     'Number of design pages': 0,
     'Number of positional frames': 0,
     'Number of screens generated': 0,
     'Number of theme text styles': 0,
     'Number of theme colors': 0,
     'Number of auto layouts': 0,
-    'Number of custom generated': 0,
+    'Number of tags generated': 0,
+    'Number of components generated': 0,
   };
 
   /// Adds current run to amplitude metrics
