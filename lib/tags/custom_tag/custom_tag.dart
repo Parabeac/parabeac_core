@@ -138,7 +138,9 @@ class CustomTagGenerator extends PBGenerator {
     if (source is CustomTag) {
       // Add tag to analytics
       if (!context.tree.lockData) {
-        GetIt.I.get<AmplitudeService>().addToSpecified('CustomTag', 'custom');
+        GetIt.I
+            .get<AmplitudeService>()
+            .addToSpecified('CustomTag', 'tag', 'Number of custom generated');
       }
       return '''
         $titleName(
