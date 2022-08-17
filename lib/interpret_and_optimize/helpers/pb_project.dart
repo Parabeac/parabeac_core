@@ -108,7 +108,7 @@ class PBProject {
               // Add count as Frame too
               GetIt.I
                   .get<AmplitudeService>()
-                  .addToAnalytics('Number of frames');
+                  .addToAnalytics('Number of positional frames');
             } else if (tree.tree_type == TREE_TYPE.VIEW) {
               // Add count of components procesed
               GetIt.I

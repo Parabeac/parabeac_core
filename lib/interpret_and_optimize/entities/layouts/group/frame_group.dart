@@ -38,7 +38,9 @@ class FrameGroup extends Group
       PBIntermediateNode parent, PBIntermediateTree tree) {
     // Add number of Frame groups to analytics
     if (!tree.lockData) {
-      GetIt.I.get<AmplitudeService>().addToAnalytics('Number of frames');
+      GetIt.I
+          .get<AmplitudeService>()
+          .addToAnalytics('Number of positional frames');
     }
     var tempFrame = _$FrameGroupFromJson(json);
     return tempFrame
