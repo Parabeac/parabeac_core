@@ -105,6 +105,10 @@ class PBProject {
               GetIt.I
                   .get<AmplitudeService>()
                   .addToAnalytics('Number of screens generated');
+              // Add count as Frame too
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of frames');
             } else if (tree.tree_type == TREE_TYPE.VIEW) {
               // Add count of components procesed
               GetIt.I
