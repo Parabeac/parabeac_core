@@ -31,10 +31,6 @@ class PBStackGenerator extends PBGenerator {
       if (source.parent is InjectedAppbar) {
         return containerWrapper(buffer.toString(), source, context);
       }
-      // Add number of stacks to analytics
-      if (!context.tree.lockData) {
-        GetIt.I.get<AmplitudeService>().addToAnalytics('Number of stacks');
-      }
       return buffer.toString();
     }
     return '';
