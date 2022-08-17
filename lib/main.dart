@@ -175,6 +175,13 @@ ${parser.usage}
     (service) => service.designType == processInfo.designType,
   );
   var pbdl = await pbdlService.callPBDL(processInfo);
+
+  /// Add to map the quantity of total material design
+  /// to compare with the one used by the user
+  GetIt.I
+      .get<AmplitudeService>()
+      .directAdd('Total of material design', pbdl.materialDesignCount);
+
   // Exit if only generating PBDL
   if (MainInfo().configuration.exportPBDL) {
     exitCode = 0;
