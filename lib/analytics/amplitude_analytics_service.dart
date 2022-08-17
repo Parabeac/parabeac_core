@@ -11,7 +11,16 @@ class AmplitudeService {
   Map<String, dynamic> _amplitudeMap = {};
 
   /// Map to hold all properties to go to amplitude
-  Map<String, dynamic> _eventProperties = {};
+  Map<String, dynamic> _eventProperties = {
+    'Total of material design': 0,
+    'Number of design pages': 0,
+    'Number of frames': 0,
+    'Number of screens generated': 0,
+    'Number of theme text styles': 0,
+    'Number of theme colors': 0,
+    'Number of auto layouts': 0,
+    'Number of custom generated': 0,
+  };
 
   /// Adds current run to amplitude metrics
   void sendToAmplitude() async {
@@ -23,11 +32,15 @@ class AmplitudeService {
     _eventProperties['Design specification'] =
         MainInfo().configuration.widgetStyle;
 
-    _eventProperties['Percentage of Auto Layout as UI'] =
-        _getPercentage('Number of auto layouts', ['Number of stacks']);
+    _eventProperties['Percentage of Auto Layout as UI'] = _calculatePercentage(
+        _eventProperties['Number of auto layouts'],
+        _eventProperties['Number of frames']);
 
-    _eventProperties['Percentage of design specification'] = _getPercentage(
-        'Number of theme text styles', ['Number of theme colors']);
+    _eventProperties['Percentage of design specification'] =
+        _calculatePercentage(
+            _eventProperties['Number of theme colors'] +
+                _eventProperties['Number of theme text styles'],
+            _eventProperties['Total of material design']);
 
     _amplitudeMap.addAll({
       'id': MainInfo().deviceId,
@@ -55,7 +68,7 @@ class AmplitudeService {
 
   /// Add tag to analytics
   /// then also added as element
-  void addToSpecified(String tagName, String subCategory) {
+  void addToSpecified(String tagName, String subCategory, String key) {
     if (!_eventProperties.containsKey(subCategory)) {
       _eventProperties[subCategory] = {};
     }
@@ -64,21 +77,17 @@ class AmplitudeService {
     } else {
       _eventProperties[subCategory][tagName] = 1;
     }
-    addToAnalytics('Number of $subCategory generated');
+    addToAnalytics(key);
   }
 
-  /// Calculate the percentage of property in the sum of properties
-  String _getPercentage(String property, List<String> properties) {
-    var quantityOfProperty = _eventProperties[property] ?? 0;
-
-    var totalQuantity = quantityOfProperty;
-    for (var name in properties) {
-      totalQuantity += _eventProperties[name] ?? 0;
-    }
-
-    if (totalQuantity == 0) {
-      return '0.00';
-    }
-    return ((quantityOfProperty / totalQuantity) * 100).toStringAsFixed(2);
+  /// Add elements to analytics map
+  /// creates element if key does not exists
+  void directAdd(String propertyName, dynamic value) {
+    _eventProperties[propertyName] = value;
   }
+
+  /// Calculate the percentes of [piece] on [pie]
+  // TODO: add a zero check
+  String _calculatePercentage(num piece, num pie) =>
+      ((piece / pie) * 100).toStringAsFixed(2);
 }
