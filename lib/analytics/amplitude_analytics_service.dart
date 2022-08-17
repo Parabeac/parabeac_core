@@ -12,7 +12,6 @@ class AmplitudeService {
 
   /// Map to hold all properties to go to amplitude
   Map<String, dynamic> _eventProperties = {
-    'Total of material design': 0,
     'Number of design pages': 0,
     'Number of positional frames': 0,
     'Number of screens generated': 0,
@@ -41,7 +40,7 @@ class AmplitudeService {
         _calculatePercentage(
             _eventProperties['Number of theme colors'] +
                 _eventProperties['Number of theme text styles'],
-            _eventProperties['Total of material design']);
+            _eventProperties.remove('Total of material design'));
 
     _amplitudeMap.addAll({
       'id': MainInfo().deviceId,
