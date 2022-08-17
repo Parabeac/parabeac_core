@@ -19,6 +19,7 @@ class AmplitudeService {
     'Number of theme colors': 0,
     'Number of auto layouts': 0,
     'Number of custom generated': 0,
+    'Number of components generated': 0,
   };
 
   /// Adds current run to amplitude metrics
