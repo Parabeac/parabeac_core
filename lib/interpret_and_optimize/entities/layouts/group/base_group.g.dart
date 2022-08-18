@@ -18,7 +18,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
         : PBIntermediateConstraints.fromJson(
             json['constraints'] as Map<String, dynamic>),
   )
-    ..subsemantic = json['subsemantic'] as String
     ..layoutMainAxisSizing = _$enumDecodeNullable(
         _$ParentLayoutSizingEnumMap, json['layoutMainAxisSizing'])
     ..layoutCrossAxisSizing = _$enumDecodeNullable(
@@ -31,7 +30,6 @@ BaseGroup _$BaseGroupFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$BaseGroupToJson(BaseGroup instance) => <String, dynamic>{
-      'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
       'constraints': instance.constraints,
       'layoutMainAxisSizing':

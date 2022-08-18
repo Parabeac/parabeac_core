@@ -70,7 +70,7 @@ class PBConfiguration {
   String componentIsolation;
 
   /// The level of integration of this project
-  @JsonKey(defaultValue: IntegrationLevel.screens, name: 'level')
+  @JsonKey(defaultValue: IntegrationLevel.screens, name: 'project-type')
   IntegrationLevel integrationLevel;
 
   PBConfiguration(
