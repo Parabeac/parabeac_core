@@ -90,15 +90,15 @@ Sets the name of the exported project. For instance, if you want to name your pr
 
 Specifies the absolute path of the exported Flutter Project to be created. For instance, to export your Flutter project in the Documents folder, set your `-o` flag to `/Users/ParabeacUser/Documents/` Not setting this will export the project in the parabeac_core directory.
   
-#### Level of Export (Optional): --level
+#### Project Type(Optional): --project-type
   
   
-Specifies the level of export. At the time of writing, there are three levels: **theming**, **component**, and **screen**.
-- **Theming** - will export global styles, such as text styles and global colors to a file in `lib/theme`.
-- **Component** - will export theming as well as individual reusable UI components to `lib/widgets`.
-- **Screen** [**default**] - will export all of the above and a full UI screen to `lib/views`.
+Specifies the project type. At the time of writing, there are three levels: **themes**, **components**, and **screens**.
+- **themes** - will export global styles, such as text styles and global colors to a file in `lib/theme`.
+- **components** - will export theming as well as individual reusable UI components to `lib/widgets`.
+- **screens** [**default**] - will export all of the above and a full UI screen to `lib/views`.
 
-The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen--essentially, a full running app.
+The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen-- essentially, a full running app.
   
   
 ### Configurations.json
