@@ -57,6 +57,7 @@ main(List<String> args) async {
         'components': 'Generate a component package.',
         'themes': 'Generate theme information.',
       },
+      aliases: ['level'],
     )
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
