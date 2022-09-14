@@ -54,8 +54,10 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
     /// Generate [OutlineInputBorder] from [boxDecoration].
     if (source.auxiliaryData != null) {
       fillColor = 'Color(${source.auxiliaryData.color ?? '0xFFFFFFFF'})';
-      outlineInputBorder =
-          _generateOutlineInputBorder(source.auxiliaryData.borderInfo);
+      if (source.auxiliaryData.borderInfo != null) {
+        outlineInputBorder =
+            _generateOutlineInputBorder(source.auxiliaryData.borderInfo);
+      }
     }
 
     /// Get [hinttextGen] from [hinttext].
