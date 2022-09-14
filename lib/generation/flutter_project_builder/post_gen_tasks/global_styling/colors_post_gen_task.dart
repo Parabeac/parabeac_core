@@ -6,6 +6,7 @@ import 'package:parabeac_core/generation/generators/value_objects/file_structure
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_fill.dart';
 import 'package:pbdl/pbdl.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
@@ -13,33 +14,65 @@ import 'package:uuid/uuid.dart';
 class ColorsPostGenTask extends PostGenTask {
   GenerationConfiguration generationConfiguration;
 
-  List<PBDLGlobalColor> colors;
+  List<PBDLGlobalStyle> fills;
 
   ColorsPostGenTask(
     this.generationConfiguration,
-    this.colors,
+    this.fills,
   );
   @override
   void execute() {
     var constColors = <ConstantHolder>[];
-    var mainInfo = MainInfo();
+    var constGradients = <ConstantHolder>[];
+    var constImages = <ConstantHolder>[];
+    // var mainInfo = MainInfo();
 
     /// Format colors to be added to constants file
-    colors.forEach((color) {
-      constColors.add(ConstantHolder(
-        'Color',
-        color.name.camelCase,
-        'Color(${color.color.toHex()})',
-        description: color.description,
-      ));
+    fills.forEach((fill) {
+      // To add Constant Colors
+      if (fill is PBDLGlobalColor) {
+        constColors.add(ConstantHolder(
+          'Color',
+          fill.name.camelCase,
+          'Color(${fill.color.toHex()})',
+          description: fill.description,
+        ));
+      }
+      // To add Constant Images
+      else if (fill is PBDLGlobalImage) {
+        print('');
+        constImages.add(ConstantHolder(
+          'Image',
+          fill.name.camelCase,
+          PBFill.fromJson(fill.image.toJson()).constantGenerator(),
+          description: fill.description,
+        ));
+      }
+      // To add Constant Gradients
+      else if (fill is PBDLGlobalGradient) {
+        print('');
+        constGradients.add(ConstantHolder(
+          'LinearGradient',
+          fill.name.camelCase,
+          PBFill.fromJson(fill.gradient.toJson()).constantGenerator(),
+          description: fill.description,
+        ));
+      }
     });
 
-    /// Write colors to constants file in `colors.g.dart`
+    /// Write list to constants file in `[$type].g.dart`
+    createCommand(constColors, 'colors');
+    createCommand(constGradients, 'gradients');
+    createCommand(constImages, 'images');
+  }
+
+  void createCommand(List<ConstantHolder> list, String type) {
+    var mainInfo = MainInfo();
     generationConfiguration.fileStructureStrategy.commandCreated(
       WriteConstantsCommand(
         Uuid().v4(),
-        constColors,
-        filename: '${mainInfo.projectName.snakeCase}_colors',
+        list,
+        filename: '${mainInfo.projectName.snakeCase}_$type',
         ownershipPolicy: FileOwnership.PBC,
         imports: 'import \'package:flutter/material.dart\';',
         relativePath: GetIt.I.get<PathService>().themingRelativePath,
