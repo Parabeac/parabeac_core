@@ -120,7 +120,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         // If the type is image, we should print the whole widget
         // so the end user can place whatever kind of widget
         // TODO: Refactor so it place the image from the instance not from component
-        if (element.ovrType == 'image') {
+        if (element.ovrType == 'image' && element.initialValue['isVisible']) {
           var elementCode =
               element.value.generator.generate(element.value, context);
 
