@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 
 part 'intermediate_fill.g.dart';
 
@@ -10,7 +12,7 @@ class PBFill {
   @JsonKey(fromJson: _pointsFromJson, toJson: _pointsToJson)
   List<Point> gradientHandlePositions;
 
-  // String that tidentifies the ID of the image
+  // String that identifies the ID of the image
   String imageRef;
 
   PBColor color;
@@ -34,7 +36,12 @@ class PBFill {
     this.isEnabled,
     this.color,
     this.imageRef,
-  });
+  }) {
+    if (imageRef != null && imageRef.isNotEmpty) {
+      ImageReferenceStorage().addReference(imageRef.replaceAll('images/', ''),
+          '${MainInfo().outputPath}assets/images');
+    }
+  }
 
   @override
   factory PBFill.fromJson(Map<String, dynamic> json) => _$PBFillFromJson(json);
@@ -57,6 +64,15 @@ class PBFill {
       }
     }
     return maps;
+  }
+
+  String constantGenerator() {
+    if (imageRef != null) {
+      return 'Image()';
+    } else if (type.toLowerCase().contains('gradient')) {
+      return 'Gradient()';
+    }
+    return '//TODO';
   }
 }
 
