@@ -54,7 +54,7 @@ class WriteConstantsCommand extends FileStructureCommand {
       var description =
           constant.description.isNotEmpty ? '/// ${constant.description}' : '';
       var constStr =
-          'static ${constant.isconst ? 'const' : ''} ${constant.type} ${constant.name} = ${constant.value};';
+          'static ${constant.isconst ? 'const ' : ''}${constant.type} ${constant.name} = ${constant.value};';
 
       constBuffer.writeln('$description\n$constStr');
     });
