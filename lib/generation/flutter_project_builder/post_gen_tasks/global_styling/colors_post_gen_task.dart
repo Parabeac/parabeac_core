@@ -1,11 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/append_to_yaml_post_gen_task.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/path_services/path_service.dart';
 import 'package:parabeac_core/generation/generators/value_objects/generation_configuration/pb_generation_configuration.dart';
+import 'package:parabeac_core/interpret_and_optimize/helpers/pb_image_reference_storage.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_fill.dart';
 import 'package:pbdl/pbdl.dart';
 import 'package:recase/recase.dart';
@@ -40,13 +42,18 @@ class ColorsPostGenTask extends PostGenTask {
       }
       // To add Constant Images
       else if (fill is PBDLGlobalImage) {
-        print('');
+        var imageFill = PBFill.fromJson(fill.image.toJson());
         constImages.add(ConstantHolder(
           'Image',
           fill.name.camelCase,
-          PBFill.fromJson(fill.image.toJson()).constantGenerator(),
+          imageFill.constantGenerator(),
           description: fill.description,
+          isconst: false,
         ));
+        if (imageFill.imageRef != null && imageFill.imageRef.isNotEmpty) {
+          AppendToYamlPostGenTask.addAsset(
+              imageFill.imageRef.replaceAll('images/', ''));
+        }
       }
       // To add Constant Gradients
       else if (fill is PBDLGlobalGradient) {
