@@ -68,7 +68,7 @@ class PBFill {
 
   String constantGenerator() {
     if (imageRef != null) {
-      return 'Image()';
+      return 'Image.asset(\'$imageRef\')';
     } else if (type.toLowerCase().contains('gradient')) {
       return 'Gradient()';
     }
