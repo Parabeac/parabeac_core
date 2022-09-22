@@ -40,7 +40,6 @@ class AppendToYamlPostGenTask implements PostGenTask {
 
     /// Write the new yaml file
     File(yamlAbsPath).writeAsStringSync(toYamlString(modifiableyaml));
-    print('hello');
   }
 
   static void addAsset(String name) {
