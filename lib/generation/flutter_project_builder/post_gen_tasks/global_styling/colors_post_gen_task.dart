@@ -46,10 +46,11 @@ class ColorsPostGenTask extends PostGenTask {
         constImages.add(ConstantHolder(
           'Image',
           fill.name.camelCase,
-          imageFill.constantGenerator(),
+          imageFill.initializerGenerator(),
           description: fill.description,
           isconst: false,
         ));
+        // Append image path to yaml so it can get expose to be used
         if (imageFill.imageRef != null && imageFill.imageRef.isNotEmpty) {
           AppendToYamlPostGenTask.addAsset(
               imageFill.imageRef.replaceAll('images/', ''));
@@ -57,11 +58,11 @@ class ColorsPostGenTask extends PostGenTask {
       }
       // To add Constant Gradients
       else if (fill is PBDLGlobalGradient) {
-        print('');
+        var gradientFill = PBFill.fromJson(fill.gradient.toJson());
         constGradients.add(ConstantHolder(
-          'LinearGradient',
+          _interpretType(gradientFill.type),
           fill.name.camelCase,
-          PBFill.fromJson(fill.gradient.toJson()).constantGenerator(),
+          gradientFill.initializerGenerator(),
           description: fill.description,
         ));
       }
@@ -71,6 +72,19 @@ class ColorsPostGenTask extends PostGenTask {
     createCommand(constColors, 'colors');
     createCommand(constGradients, 'gradients');
     createCommand(constImages, 'images');
+  }
+
+  String _interpretType(String type) {
+    switch (type) {
+      case 'GRADIENT_LINEAR':
+        return 'LinearGradient';
+      case 'GRADIENT_RADIAL':
+        return 'RadialGradient';
+      case 'GRADIENT_ANGULAR':
+        return 'SweepGradient';
+      default:
+        return 'Gradient';
+    }
   }
 
   void createCommand(List<ConstantHolder> list, String type) {
