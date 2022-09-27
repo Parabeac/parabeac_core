@@ -131,6 +131,8 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
       ),
     );
 
+    var formattedLogicFilename = logicFilename.pascalCase;
+
     /// Write the concrete TextFormField logic to a separate file.
     context.configuration.generationConfiguration.fileStructureStrategy
         .commandCreated(
@@ -138,7 +140,7 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
         Uuid().v4(),
         logicFilename,
         customBoilerPlate(
-          '${logicFilename.pascalCase}',
+          '$formattedLogicFilename',
           abstractLogicImport,
           hinttextGen,
         ),
@@ -174,7 +176,7 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
         GetIt.I.get<AmplitudeService>().addToSpecified(
             'CustomTextFormField', 'tag', 'Number of tags generated');
       }
-      return '${widgetFilename.pascalCase}()';
+      return '${widgetFilename.pascalCase}(logic: $formattedLogicFilename(context),)';
     }
     return '';
   }
@@ -247,17 +249,16 @@ import 'package:$concreteLogicImport';
 import 'package:$abstractLogicImport';
 class $className extends StatelessWidget {
 
-  late final TextFormFieldLogic _logic;
+  final TextFormFieldLogic logic;
 
-  $className({Key? key}) : super(key: key);
+  $className({Key? key, required this.logic,}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
-    _logic = ${logicClassName.pascalCase}(context);
     return TextFormField(
       style: $hintStyle,
       decoration: InputDecoration(
-        hintText: _logic.hintText,
+        hintText: logic.hintText,
         hintStyle: $hintStyle,
         prefixIcon: $prefixIcon,
         focusedBorder: $border,
@@ -266,29 +267,29 @@ class $className extends StatelessWidget {
         fillColor: $fillColor,
         suffixIcon: $suffixIcon,
       ),
-      controller: _logic.controller,
-      initialValue: _logic.initialValue,
-      keyboardType: _logic.keyboardType,
-      textCapitalization: _logic.textCapitalization,
-      autofocus: _logic.autofocus,
-      readOnly: _logic.readOnly,
-      obscureText: _logic.obscureText,
-      maxLengthEnforcement: _logic.maxLengthEnforcement,
-      minLines: _logic.minLines,
-      maxLines: _logic.maxLines,
-      expands: _logic.expands,
-      maxLength: _logic.maxLength,
-      onChanged: _logic.onChanged,
-      onTap: _logic.onTap,
-      onEditingComplete: _logic.onEditingComplete,
-      onFieldSubmitted: _logic.onFieldSubmitted,
-      onSaved: _logic.onSaved,
-      validator: _logic.validator,
-      inputFormatters: _logic.inputFormatters,
-      enabled: _logic.enabled,
-      scrollPhysics: _logic.scrollPhysics,
-      autovalidateMode: _logic.autovalidateMode,
-      scrollController: _logic.scrollController,
+      controller: logic.controller,
+      initialValue: logic.initialValue,
+      keyboardType: logic.keyboardType,
+      textCapitalization: logic.textCapitalization,
+      autofocus: logic.autofocus,
+      readOnly: logic.readOnly,
+      obscureText: logic.obscureText,
+      maxLengthEnforcement: logic.maxLengthEnforcement,
+      minLines: logic.minLines,
+      maxLines: logic.maxLines,
+      expands: logic.expands,
+      maxLength: logic.maxLength,
+      onChanged: logic.onChanged,
+      onTap: logic.onTap,
+      onEditingComplete: logic.onEditingComplete,
+      onFieldSubmitted: logic.onFieldSubmitted,
+      onSaved: logic.onSaved,
+      validator: logic.validator,
+      inputFormatters: logic.inputFormatters,
+      enabled: logic.enabled,
+      scrollPhysics: logic.scrollPhysics,
+      autovalidateMode: logic.autovalidateMode,
+      scrollController: logic.scrollController,
     );
   }
 
