@@ -77,7 +77,6 @@ class PBFill {
 
   String _interpretGradient() {
     if (type.toLowerCase().contains('radial')) {
-      print('radial');
       return '''
 RadialGradient(
   center: Alignment(0.0, 0.0),
@@ -85,7 +84,6 @@ RadialGradient(
 )
         ''';
     } else if (type.toLowerCase().contains('linear')) {
-      print('linear');
       return ''' 
 LinearGradient(
   begin: Alignment(${gradientHandlePositions[0].x}, ${gradientHandlePositions[0].y}),
@@ -96,7 +94,7 @@ LinearGradient(
       //
     } else if (type.toLowerCase().contains('angular')) {
       // TODO: add support for angular gradient
-      return 'SweepGradient(colors: []) // We will support it in the future';
+      return 'SweepGradient(colors: []); // We will support it in the future';
     } else {
       // Empty gradient TODO:
       return 'null /* Not supported gradient */';
