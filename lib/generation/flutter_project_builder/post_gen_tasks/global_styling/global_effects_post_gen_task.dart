@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/post_gen_task.dart';
 import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/add_constant_command.dart';
@@ -9,8 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:pbdl/pbdl.dart';
 import 'package:recase/recase.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../../../controllers/main_info.dart';
+import 'package:path/path.dart' as path;
 
 class EffectsPostGenTask extends PostGenTask {
   GenerationConfiguration generationConfiguration;
@@ -87,7 +87,8 @@ class EffectsPostGenTask extends PostGenTask {
         ownershipPolicy: FileOwnership.PBC,
         imports: 'import \'package:flutter/material.dart\';\n' +
             ((imports != null) ? imports.join() : '\n'),
-        relativePath: GetIt.I.get<PathService>().themingRelativePath,
+        relativePath: path.join(
+            GetIt.I.get<PathService>().themingRelativePath, 'effects'),
       ),
     );
   }
