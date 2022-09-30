@@ -1,4 +1,3 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_color_gen_helper.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_style_gen_mixin.dart';
@@ -6,13 +5,27 @@ import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dar
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/override_helper.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
-import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_effect.dart';
 
 class PBTextGen extends PBGenerator with PBTextStyleGen {
   PBTextGen() : super();
 
-  static String cleanString(String text) =>
-      text.replaceAll('\n', ' ')?.replaceAll('\'', '\\\'') ?? '';
+  /// A cleaning map,
+  /// The value on the left will be replaced by the value on the right
+  /// They will be applied in order from top to bottom
+  static final Map<dynamic, String> _replaceMap = {
+    '\n': r'\n',
+    '\'': '\\\'',
+    RegExp(r'\x0d'): '',
+  };
+
+  /// Applies the replacement list to text
+  static String cleanString(String text) {
+    var newText = text;
+    _replaceMap.forEach((target, replacement) {
+      newText = newText.replaceAll(target, replacement);
+    });
+    return newText ?? '';
+  }
 
   /// Maps PBDL decoration to Flutter decoration
   static final Map<String, String> _decorationMap = {
@@ -33,6 +46,7 @@ class PBTextGen extends PBGenerator with PBTextStyleGen {
     if (source is InheritedText) {
       var textStyle = source.auxiliaryData.intermediateTextStyle;
       var cleanText = cleanString(source.text);
+
       context.project.genProjectData.addDependencies('auto_size_text', '3.0.0');
 
       context.managerData
