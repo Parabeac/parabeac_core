@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
@@ -135,6 +136,12 @@ class CustomTagGenerator extends PBGenerator {
     );
 
     if (source is CustomTag) {
+      // Add tag to analytics
+      if (!context.tree.lockData) {
+        GetIt.I
+            .get<AmplitudeService>()
+            .addToSpecified('CustomTag', 'tag', 'Number of tags generated');
+      }
       return '''
         $titleName(
           child: ${children[0].generator.generate(children[0], context)}
