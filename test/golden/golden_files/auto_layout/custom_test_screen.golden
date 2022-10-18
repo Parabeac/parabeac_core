@@ -5,7 +5,7 @@
 // *********************************************************************************
 
 import 'package:flutter/material.dart';
-import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case34_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case11_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case12_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case13_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case14_custom.dart';
@@ -16,7 +16,7 @@ import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutati
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case31_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case32_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case33_custom.dart';
-import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case11_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case34_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case41_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case42_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case43_custom.dart';
@@ -28,7 +28,7 @@ import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutati
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case71_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case72_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case73_custom.dart';
-import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case134_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case74_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case91_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case92_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case93_custom.dart';
@@ -40,7 +40,7 @@ import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutati
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case131_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case132_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case133_custom.dart';
-import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case74_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/sub_frame_case134_custom.dart';
 
 class CustomTestScreen extends StatefulWidget {
   const CustomTestScreen({
@@ -59,9 +59,9 @@ class _CustomTestScreen extends State<CustomTestScreen> {
       color: Colors.white,
       child: Stack(children: [
         Positioned(
-          left: 287.0,
+          left: 38.0,
           width: 50.0,
-          top: 201.0,
+          top: 35.0,
           height: 50.0,
           child: Container(
               height: 50.0,
@@ -81,9 +81,9 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                           Positioned(
                             left: 0,
                             width: 50.0,
-                            top: 0,
+                            bottom: 0,
                             height: 50.0,
-                            child: SubFrameCase34Custom(
+                            child: SubFrameCase11Custom(
                                 child: Container(
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
@@ -96,7 +96,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           height: 50.0,
                                           width: 50.0,
                                           decoration: BoxDecoration(
-                                            color: Color(0xff05ff00),
+                                            color: Color(0xffff0000),
                                           ),
                                         ),
                                       ),
@@ -576,9 +576,9 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                   ])),
         ),
         Positioned(
-          left: 38.0,
+          left: 287.0,
           width: 50.0,
-          top: 35.0,
+          top: 201.0,
           height: 50.0,
           child: Container(
               height: 50.0,
@@ -598,9 +598,9 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                           Positioned(
                             left: 0,
                             width: 50.0,
-                            bottom: 0,
+                            top: 0,
                             height: 50.0,
-                            child: SubFrameCase11Custom(
+                            child: SubFrameCase34Custom(
                                 child: Container(
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
@@ -613,7 +613,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           height: 50.0,
                                           width: 50.0,
                                           decoration: BoxDecoration(
-                                            color: Color(0xffff0000),
+                                            color: Color(0xff05ff00),
                                           ),
                                         ),
                                       ),
@@ -1135,16 +1135,16 @@ class _CustomTestScreen extends State<CustomTestScreen> {
         Positioned(
           left: 287.0,
           width: 50.0,
-          top: 699.0,
+          top: 450.0,
           height: 50.0,
           child: Container(
+              height: 50.0,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                         height: 50.0,
@@ -1156,7 +1156,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             width: 50.0,
                             top: 0,
                             height: 50.0,
-                            child: SubFrameCase134Custom(
+                            child: SubFrameCase74Custom(
                                 child: Container(
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
@@ -1169,7 +1169,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           height: 50.0,
                                           width: 50.0,
                                           decoration: BoxDecoration(
-                                            color: Color(0xffff6b00),
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -1695,16 +1695,16 @@ class _CustomTestScreen extends State<CustomTestScreen> {
         Positioned(
           left: 287.0,
           width: 50.0,
-          top: 450.0,
+          top: 699.0,
           height: 50.0,
           child: Container(
-              height: 50.0,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                         height: 50.0,
@@ -1716,7 +1716,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                             width: 50.0,
                             top: 0,
                             height: 50.0,
-                            child: SubFrameCase74Custom(
+                            child: SubFrameCase134Custom(
                                 child: Container(
                                     decoration: BoxDecoration(),
                                     child: Stack(children: [
@@ -1729,7 +1729,7 @@ class _CustomTestScreen extends State<CustomTestScreen> {
                                           height: 50.0,
                                           width: 50.0,
                                           decoration: BoxDecoration(
-                                            color: Colors.black,
+                                            color: Color(0xffff6b00),
                                           ),
                                         ),
                                       ),

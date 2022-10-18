@@ -23,9 +23,9 @@ class _TestScreen extends State<TestScreen> {
       color: Colors.white,
       child: Stack(children: [
         Positioned(
-          left: 287.0,
+          left: 38.0,
           width: 50.0,
-          top: 201.0,
+          top: 35.0,
           height: 50.0,
           child: Container(
               height: 50.0,
@@ -45,7 +45,7 @@ class _TestScreen extends State<TestScreen> {
                           Positioned(
                             left: 0,
                             width: 50.0,
-                            top: 0,
+                            bottom: 0,
                             height: 50.0,
                             child: Container(
                                 decoration: BoxDecoration(),
@@ -59,7 +59,7 @@ class _TestScreen extends State<TestScreen> {
                                       height: 50.0,
                                       width: 50.0,
                                       decoration: BoxDecoration(
-                                        color: Color(0xff05ff00),
+                                        color: Color(0xffff0000),
                                       ),
                                     ),
                                   ),
@@ -526,9 +526,9 @@ class _TestScreen extends State<TestScreen> {
                   ])),
         ),
         Positioned(
-          left: 38.0,
+          left: 287.0,
           width: 50.0,
-          top: 35.0,
+          top: 201.0,
           height: 50.0,
           child: Container(
               height: 50.0,
@@ -548,7 +548,7 @@ class _TestScreen extends State<TestScreen> {
                           Positioned(
                             left: 0,
                             width: 50.0,
-                            bottom: 0,
+                            top: 0,
                             height: 50.0,
                             child: Container(
                                 decoration: BoxDecoration(),
@@ -562,7 +562,7 @@ class _TestScreen extends State<TestScreen> {
                                       height: 50.0,
                                       width: 50.0,
                                       decoration: BoxDecoration(
-                                        color: Color(0xffff0000),
+                                        color: Color(0xff05ff00),
                                       ),
                                     ),
                                   ),
@@ -1070,16 +1070,16 @@ class _TestScreen extends State<TestScreen> {
         Positioned(
           left: 287.0,
           width: 50.0,
-          top: 699.0,
+          top: 450.0,
           height: 50.0,
           child: Container(
+              height: 50.0,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                         height: 50.0,
@@ -1103,7 +1103,7 @@ class _TestScreen extends State<TestScreen> {
                                       height: 50.0,
                                       width: 50.0,
                                       decoration: BoxDecoration(
-                                        color: Color(0xffff6b00),
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -1615,16 +1615,16 @@ class _TestScreen extends State<TestScreen> {
         Positioned(
           left: 287.0,
           width: 50.0,
-          top: 450.0,
+          top: 699.0,
           height: 50.0,
           child: Container(
-              height: 50.0,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                         height: 50.0,
@@ -1648,7 +1648,7 @@ class _TestScreen extends State<TestScreen> {
                                       height: 50.0,
                                       width: 50.0,
                                       decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: Color(0xffff6b00),
                                       ),
                                     ),
                                   ),
