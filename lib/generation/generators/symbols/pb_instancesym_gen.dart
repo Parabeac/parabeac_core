@@ -152,8 +152,9 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           );
           var code = instance.generator.generate(instance, context);
           param.valueName = code;
-          // Add single quotes to parameter value for override
-        } else if (!param.valueName.contains('\'')) {
+        }
+        // Add single quotes to parameter value for override
+        else if (!param.valueName.startsWith('\'') && !param.valueName.endsWith('\'')) {
           param.valueName = '\'${param.valueName}\'';
         }
       }

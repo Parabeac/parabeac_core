@@ -110,7 +110,8 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       if (overrideValue.ovrType == 'stringValue') {
         overrideValue.valueName = overrideValue.valueName
             .replaceAll('\$', '\\\$')
-            .replaceAll('\n', '');
+            .replaceAll('\n', '')
+            .replaceAll('\'', '\\\'');
       } else if (overrideValue.ovrType == 'image') {
         overrideValue.valueName = 'assets/' + overrideValue.valueName;
       }
