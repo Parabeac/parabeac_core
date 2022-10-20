@@ -131,7 +131,8 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Returns null if not found.
   PBIntermediateNode findChild(
       PBIntermediateNode parent, String name, Type type) {
-    ///
+    /// In case Parent is a Instances we look up for the hinttext
+    /// inside the overridable properties and recursively call the method
     if (parent is PBSharedInstanceIntermediateNode) {
       for (var property in parent.sharedParamValues) {
         if (property.overrideName.contains(name)) {
