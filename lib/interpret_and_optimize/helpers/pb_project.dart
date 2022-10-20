@@ -1,3 +1,6 @@
+import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_project_data.dart';
 import 'package:parabeac_core/generation/generators/util/pb_generation_view_data.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/pb_file_structure_strategy.dart';
@@ -85,12 +88,33 @@ class PBProject {
     pages.forEach((page) {
       // This avoid to generate pages set to not convert
       if (page.containsKey('convert') && page['convert']) {
+        // Add count of pages processed
+        GetIt.I
+            .get<AmplitudeService>()
+            .addToAnalytics('Number of design pages');
+
         var screens = (page['screens'] as Iterable).map((screen) {
           // This avoid to generate screens set to not convert
           if ((screen.containsKey('convert') && screen['convert']) &&
               (screen.containsKey('isVisible') && screen['isVisible'])) {
-            // Generate Intermedite tree
+            // Generate Intermediate tree
             var tree = PBIntermediateTree.fromJson(screen)..name = page['name'];
+
+            if (tree.tree_type == TREE_TYPE.SCREEN) {
+              // Add count of screens procesed
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of screens generated');
+              // Add count as Frame too
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of positional frames');
+            } else if (tree.tree_type == TREE_TYPE.VIEW) {
+              // Add count of components procesed
+              GetIt.I
+                  .get<AmplitudeService>()
+                  .addToAnalytics('Number of components generated');
+            }
 
             tree.generationViewData = PBGenerationViewData();
 

@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/group/group.dart';
@@ -34,6 +36,12 @@ class FrameGroup extends Group
   @override
   PBIntermediateNode createIntermediateNode(Map<String, dynamic> json,
       PBIntermediateNode parent, PBIntermediateTree tree) {
+    // Add number of Frame groups to analytics
+    if (!tree.lockData) {
+      GetIt.I
+          .get<AmplitudeService>()
+          .addToAnalytics('Number of positional frames');
+    }
     var tempFrame = _$FrameGroupFromJson(json);
     return tempFrame
       ..mapRawChildren(json, tree)

@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/inline_template_strategy.dart';
 import 'package:parabeac_core/generation/generators/value_objects/template_strategy/pb_template_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';

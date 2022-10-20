@@ -106,7 +106,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// to be the [name] of the [rootNode].
   String _identifier;
   @JsonKey(name: 'name')
-  String get identifier => _identifier?.snakeCase ?? 'no_name_found';
+  String get identifier => _identifier?.camelCase?.snakeCase ?? 'no_name_found';
 
   @override
   @JsonKey(ignore: true)
@@ -275,8 +275,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     removeEdges(parent, [child]);
     addEdges(parent, [insertee]);
 
-    if(child.parent != insertee || insertee.parent != parent) {
-      _logger.warning('Injecting `insertee` may have had side effects on the graph.');
+    if (child.parent != insertee || insertee.parent != parent) {
+      _logger.warning(
+          'Injecting `insertee` may have had side effects on the graph.');
     }
   }
 

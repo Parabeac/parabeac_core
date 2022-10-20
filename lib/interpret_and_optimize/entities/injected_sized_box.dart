@@ -26,10 +26,18 @@ class PBSizedBoxGenerator extends PBGenerator {
       buffer.write('SizedBox(');
 
       if (source.height != null) {
-        buffer.write('height: ${source.height},');
+        if (source.height < 0) {
+          buffer.write('height: 0.0');
+        } else {
+          buffer.write('height: ${source.height},');
+        }
       }
       if (source.width != null) {
-        buffer.write('width: ${source.width},');
+        if (source.width < 0) {
+          buffer.write('width: 0.0');
+        } else {
+          buffer.write('width: ${source.width},');
+        }
       }
 
       buffer.write(')');
