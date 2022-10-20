@@ -2,6 +2,7 @@ import 'package:parabeac_core/generation/generators/util/pb_generation_view_data
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_material.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_instance.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/pb_shared_master_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/abstract_intermediate_node_factory.dart';
@@ -130,6 +131,15 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Returns null if not found.
   PBIntermediateNode findChild(
       PBIntermediateNode parent, String name, Type type) {
+    ///
+    if (parent is PBSharedInstanceIntermediateNode) {
+      for (var property in parent.sharedParamValues) {
+        if (property.overrideName.contains(name)) {
+          return findChild(property.value, name, type);
+        }
+      }
+    }
+
     /// Check if the node is a match
     if (parent.name.contains(name) && parent.runtimeType == type) {
       return parent;
