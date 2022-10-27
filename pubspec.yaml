@@ -25,10 +25,9 @@ dependencies:
   file: ^6.1.2
   get_it: ^7.2.0
   pbdl:
-    path: ../pbdl
-    # git:
-    #   url: https://github.com/Parabeac/pbdl.git
-    #   ref: master
+    git:
+      url: https://github.com/Parabeac/pbdl.git
+      ref: master
   directed_graph: ^0.2.3
   sentry: ^6.2.2
   yaml_modify: ^1.0.1
