@@ -62,6 +62,25 @@ class MainInfo {
     return p.normalize(p.absolute(path));
   }
 
+  /// A cleaning map,
+  /// The value on the left will be replaced by the value on the right
+  /// They will be applied in order from top to bottom
+  static final Map<dynamic, String> _replaceMap = {
+    '\n': ' ',
+    '\'': '\\\'',
+    '\$': '\\\$',
+    RegExp(r'[\x00-\x1f]'): '',
+  };
+
+  /// Applies the replacement list to text
+  static String cleanString(String text) {
+    var newText = text;
+    _replaceMap.forEach((target, replacement) {
+      newText = newText.replaceAll(target, replacement);
+    });
+    return newText ?? '';
+  }
+
   /// Populates the corresponding fields of the [MainInfo] object with the
   /// corresponding [arguments].
   ///
