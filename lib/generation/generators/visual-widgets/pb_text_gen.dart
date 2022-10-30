@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/import_generator.dart';
 import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/generation/generators/visual-widgets/pb_text_style_gen_mixin.dart';
@@ -8,24 +9,6 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
 class PBTextGen extends PBGenerator with PBTextStyleGen {
   PBTextGen() : super();
-
-  /// A cleaning map,
-  /// The value on the left will be replaced by the value on the right
-  /// They will be applied in order from top to bottom
-  static final Map<dynamic, String> _replaceMap = {
-    '\n': ' ',
-    '\'': '\\\'',
-    RegExp(r'[\x00-\x1f]'): '',
-  };
-
-  /// Applies the replacement list to text
-  static String cleanString(String text) {
-    var newText = text;
-    _replaceMap.forEach((target, replacement) {
-      newText = newText.replaceAll(target, replacement);
-    });
-    return newText ?? '';
-  }
 
   /// Maps PBDL decoration to Flutter decoration
   static final Map<String, String> _decorationMap = {
@@ -45,7 +28,7 @@ class PBTextGen extends PBGenerator with PBTextStyleGen {
   String generate(PBIntermediateNode source, PBContext context) {
     if (source is InheritedText) {
       var textStyle = source.auxiliaryData.intermediateTextStyle;
-      var cleanText = cleanString(source.text);
+      var cleanText = MainInfo.cleanString(source.text);
 
       context.project.genProjectData.addDependencies('auto_size_text', '3.0.0');
 
