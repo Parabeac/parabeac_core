@@ -15,7 +15,7 @@ class PBTextGen extends PBGenerator with PBTextStyleGen {
   static final Map<dynamic, String> _replaceMap = {
     '\n': ' ',
     '\'': '\\\'',
-    RegExp(r'\x0d'): '',
+    RegExp(r'[\x00-\x1f]'): '',
   };
 
   /// Applies the replacement list to text
