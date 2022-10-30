@@ -61,7 +61,7 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
 
     /// Get [hinttextGen] from [hinttext].
     if (hinttext != null && hinttext is InheritedText) {
-      hinttextGen = PBTextGen.cleanString(hinttext.text);
+      hinttextGen = MainInfo.cleanString(hinttext.text);
       hintStyle = getStyle(hinttext, context);
     }
 

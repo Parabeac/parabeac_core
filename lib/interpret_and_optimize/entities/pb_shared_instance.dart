@@ -1,3 +1,4 @@
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_instancesym_gen.dart';
 import 'package:parabeac_core/generation/generators/util/pb_input_formatter.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
@@ -108,10 +109,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
       List<PBInstanceOverride> vals, PBIntermediateTree tree) {
     vals.forEach((overrideValue) {
       if (overrideValue.ovrType == 'stringValue') {
-        overrideValue.valueName = overrideValue.valueName
-            .replaceAll('\$', '\\\$')
-            .replaceAll('\n', '')
-            .replaceAll('\'', '\\\'');
+        overrideValue.valueName = MainInfo.cleanString(overrideValue.valueName);
       } else if (overrideValue.ovrType == 'image') {
         overrideValue.valueName = 'assets/' + overrideValue.valueName;
       }
