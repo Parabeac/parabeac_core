@@ -116,7 +116,9 @@ class PBSymbolInstanceGenerator extends PBGenerator {
       List<PBInstanceOverride> overrideValues, PBContext context) {
     var buffer = StringBuffer();
     for (var element in overrideValues) {
-      if (element.overrideName != null && element.initialValue != null) {
+      if (element.overrideName != null &&
+          element.initialValue != null &&
+          element.value != null) {
         // If the type is image, we should print the whole widget
         // so the end user can place whatever kind of widget
         // TODO: Refactor so it place the image from the instance not from component
@@ -154,7 +156,8 @@ class PBSymbolInstanceGenerator extends PBGenerator {
           param.valueName = code;
         }
         // Add single quotes to parameter value for override
-        else if (!param.valueName.startsWith('\'') && !param.valueName.endsWith('\'')) {
+        else if (!param.valueName.startsWith('\'') &&
+            !param.valueName.endsWith('\'')) {
           param.valueName = '\'${param.valueName}\'';
         }
       }
