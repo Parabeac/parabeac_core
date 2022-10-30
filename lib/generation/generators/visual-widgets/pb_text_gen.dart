@@ -13,7 +13,7 @@ class PBTextGen extends PBGenerator with PBTextStyleGen {
   /// The value on the left will be replaced by the value on the right
   /// They will be applied in order from top to bottom
   static final Map<dynamic, String> _replaceMap = {
-    '\n': r'\n',
+    '\n': ' ',
     '\'': '\\\'',
     RegExp(r'\x0d'): '',
   };
