@@ -56,14 +56,6 @@ class InheritedText extends PBVisualIntermediateNode
         ) {
     generator = PBTextGen();
     childrenStrategy = NoChildStrategy();
-
-    if (text?.contains('\$') ?? false) {
-      text = _sanitizeText(text);
-    }
-  }
-
-  String _sanitizeText(String text) {
-    return text.replaceAll('\$', '\\\$');
   }
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
