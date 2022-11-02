@@ -120,7 +120,8 @@ class MyApp extends StatelessWidget {
     }
 
     /// Write the new yaml file
-    File(yamlAbsPath).writeAsStringSync(toYamlString(modifiableyaml));
+    File(yamlAbsPath)
+        .writeAsStringSync(toYamlString(modifiableyaml).replaceAll(r'\n', ''));
   }
 
   /// Returns a [List<String>] of all the `filenames` of `pngs` listed under `assets/images/`
