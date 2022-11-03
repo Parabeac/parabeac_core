@@ -9,13 +9,21 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 class PBTextGen extends PBGenerator with PBTextStyleGen {
   PBTextGen() : super();
 
+  /// Maps PBDL decoration to Flutter decoration
+  static final Map<String, String> _decorationMap = {
+    'NONE': 'TextDecoration.none',
+    'UNDERLINE': 'TextDecoration.underline',
+    'STRIKETHROUGH': 'TextDecoration.lineThrough',
+  };
+
   /// A cleaning map,
   /// The value on the left will be replaced by the value on the right
   /// They will be applied in order from top to bottom
   static final Map<dynamic, String> _replaceMap = {
     '\n': r'\n',
     '\'': '\\\'',
-    RegExp(r'\x0d'): '',
+    '\$': '\\\$',
+    RegExp(r'[\x00-\x1f]'): '',
   };
 
   /// Applies the replacement list to text
@@ -26,13 +34,6 @@ class PBTextGen extends PBGenerator with PBTextStyleGen {
     });
     return newText ?? '';
   }
-
-  /// Maps PBDL decoration to Flutter decoration
-  static final Map<String, String> _decorationMap = {
-    'NONE': 'TextDecoration.none',
-    'UNDERLINE': 'TextDecoration.underline',
-    'STRIKETHROUGH': 'TextDecoration.lineThrough',
-  };
 
   static String getDecoration(String decoration) {
     if (_decorationMap.containsKey(decoration)) {
