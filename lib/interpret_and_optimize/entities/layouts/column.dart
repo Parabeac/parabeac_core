@@ -63,4 +63,10 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
       ..mapRawChildren(json, tree);
     return tempCol;
   }
+
+  @override
+  void sortChildren(List<PBIntermediateNode> children) {
+    children.sort((child0, child1) =>
+        child0.frame.topLeft.y.compareTo(child1.frame.topLeft.y));
+  }
 }

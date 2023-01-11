@@ -205,10 +205,18 @@ abstract class PBIntermediateNode
 extension PBPointLegacyMethod on Point {
   Point clone() => Point(x, y);
 
-  int compareTo(Point anotherPoint) =>
-      y == anotherPoint.y || (y.abs() - anotherPoint.y.abs()).abs() < 3
-          ? x.compareTo(anotherPoint.x)
-          : y.compareTo(anotherPoint.y);
+  int compareTo(Point anotherPoint) {
+    // Get both comparation points
+    var yCompare = y.compareTo(anotherPoint.y);
+    var xCompare = x.compareTo(anotherPoint.x);
+
+    // Check who has a bigger difference and return it
+    if (yCompare.abs() > xCompare.abs()) {
+      return yCompare;
+    } else {
+      return xCompare;
+    }
+  }
 
   bool operator <(Object point) {
     if (point is Point) {
