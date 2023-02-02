@@ -129,26 +129,25 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Finds a [PBIntermediateNode] that is a child of `parent` of `type` in the [PBIntermediateTree], containing `name`.
   ///
   /// Returns null if not found.
-  PBIntermediateNode findChild(
-      PBIntermediateNode parent, String name, Type type) {
+  PBIntermediateNode findChild<T>(PBIntermediateNode parent, String name) {
     /// In case Parent is a Instances we look up for the hinttext
     /// inside the overridable properties and recursively call the method
     if (parent is PBSharedInstanceIntermediateNode) {
       for (var property in parent.sharedParamValues) {
         if (property.overrideName.contains(name)) {
-          return findChild(property.value, name, type);
+          return findChild<T>(property.value, name);
         }
       }
     }
 
     /// Check if the node is a match
-    if (parent.name.contains(name) && parent.runtimeType == type) {
+    if (parent.name.contains(name) && parent is T) {
       return parent;
     }
 
     /// Check if node's children are a match
     for (var child in childrenOf(parent)) {
-      var result = findChild(child, name, type);
+      var result = findChild<T>(child, name);
       if (result != null) {
         return result;
       }
