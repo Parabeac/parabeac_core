@@ -13,6 +13,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_inte
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_border_info.dart';
 import 'package:parabeac_core/tags/custom_text_form_field/custom_text_form_field.dart';
+import 'package:parabeac_core/tags/custom_text_form_field/text_form_field_object.dart';
 import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
@@ -34,22 +35,19 @@ class CustomTextFormFieldGenerator extends PBGenerator with PBTextStyleGen {
     String suffixIconGen;
 
     /// Get subsemantic nodes
-    var hinttext = context.tree.findChild(
+    var hinttext = context.tree.findChild<InheritedText>(
       source,
       hintTextSemantic,
-      InheritedText,
     );
 
-    var prefixIcon = context.tree.findChild(
+    var prefixIcon = context.tree.findChild<PBIntermediateNode>(
       source,
       prefixIconSemantic,
-      PBIntermediateNode,
     );
 
-    var suffixIcon = context.tree.findChild(
+    var suffixIcon = context.tree.findChild<PBIntermediateNode>(
       source,
       suffixIconSemantic,
-      PBIntermediateNode,
     );
 
     /// Generate [OutlineInputBorder] from [boxDecoration].
@@ -243,6 +241,7 @@ class $className extends TextFormFieldLogic {
     String fillColor,
     String hintStyle,
   }) {
+    var currentFields = _buildFields();
     return '''
 import 'package:flutter/material.dart';
 import 'package:$concreteLogicImport';
@@ -258,40 +257,17 @@ class $className extends StatelessWidget {
     return TextFormField(
       style: $hintStyle,
       decoration: InputDecoration(
-        hintText: logic.hintText,
         hintStyle: $hintStyle,
         prefixIcon: $prefixIcon,
-        focusedBorder: $border,
         enabledBorder: $border,
         filled: true, 
         fillColor: $fillColor,
-        suffixIcon: $suffixIcon,
+        suffixIcon: ${suffixIcon ?? 'logic.suffixIcon'},
+        focusedBorder: logic.focusedBorder,
+        hintText: logic.hintText,
+        label: logic.label,
       ),
-      controller: logic.controller,
-      initialValue: logic.initialValue,
-      keyboardType: logic.keyboardType,
-      textCapitalization: logic.textCapitalization,
-      autofocus: logic.autofocus,
-      readOnly: logic.readOnly,
-      obscureText: logic.obscureText,
-      maxLengthEnforcement: logic.maxLengthEnforcement,
-      minLines: logic.minLines,
-      maxLines: logic.maxLines,
-      expands: logic.expands,
-      maxLength: logic.maxLength,
-      onChanged: logic.onChanged,
-      onTap: logic.onTap,
-      onEditingComplete: logic.onEditingComplete,
-      onFieldSubmitted: logic.onFieldSubmitted,
-      onSaved: logic.onSaved,
-      validator: logic.validator,
-      inputFormatters: logic.inputFormatters,
-      enabled: logic.enabled,
-      scrollPhysics: logic.scrollPhysics,
-      autovalidateMode: logic.autovalidateMode,
-      scrollController: logic.scrollController,
-      textAlign: logic.textAlign,
-      textAlignVertical: logic.textAlignVertical,
+      ${currentFields[0]}
     );
   }
 
@@ -300,7 +276,7 @@ class $className extends StatelessWidget {
   }
 
   /// Boilerplate for the abstract logic file
-  static const String _textFieldLogicBoilerPlate = '''
+  static final String _textFieldLogicBoilerPlate = '''
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -312,88 +288,43 @@ class TextFormFieldLogic {
 
   TextFormFieldLogic(
     this.context, {
-    this.controller,
-    this.initialValue,
-    this.keyboardType,
-    this.textCapitalization = TextCapitalization.none,
-    this.autofocus = false,
-    this.readOnly = false,
-    this.obscureText = false,
-    this.maxLengthEnforcement,
-    this.minLines,
-    this.maxLines = 1,
-    this.expands = false,
-    this.maxLength,
-    this.onChanged,
-    this.onTap,
-    this.onEditingComplete,
-    this.onFieldSubmitted,
-    this.onSaved,
-    this.validator,
-    this.inputFormatters,
-    this.enabled,
-    this.scrollPhysics,
-    this.autovalidateMode,
-    this.scrollController,
-    this.hintText = '',
-    this.textAlign = TextAlign.start,
-    this.textAlignVertical,
+    $_constructorFields
   });
-
   final BuildContext context;
 
-  final TextEditingController? controller;
-
-  final String? initialValue;
-
-  final TextInputType? keyboardType;
-
-  final TextCapitalization textCapitalization;
-
-  final bool autofocus;
-
-  final bool readOnly;
-
-  final bool obscureText;
-
-  final MaxLengthEnforcement? maxLengthEnforcement;
-
-  final int? minLines;
-
-  final int? maxLines;
-
-  final bool expands;
-
-  final int? maxLength;
-
-  final ValueChanged<String>? onChanged;
-
-  final GestureTapCallback? onTap;
-
-  final VoidCallback? onEditingComplete;
-
-  final ValueChanged<String>? onFieldSubmitted;
-
-  final FormFieldSetter<String>? onSaved;
-
-  final FormFieldValidator<String>? validator;
-
-  final List<TextInputFormatter>? inputFormatters;
-
-  final bool? enabled;
-
-  final ScrollPhysics? scrollPhysics;
-
-  final AutovalidateMode? autovalidateMode;
-
-  final ScrollController? scrollController;
-
-  final String hintText;
-
-  final TextAlign textAlign;
-
-  final TextAlignVertical? textAlignVertical;
+  $_fields
 }
 
 ''';
+
+  static String get _constructorFields {
+    var buffer = StringBuffer();
+    textFormFieldList.forEach((element) {
+      var initialValue =
+          element.initialValue != null ? ' = ${element.initialValue}' : '';
+      buffer.write('this.${element.name}$initialValue,\n');
+    });
+    return buffer.toString();
+  }
+
+  static String get _fields {
+    var buffer = StringBuffer();
+    textFormFieldList.forEach((element) {
+      buffer.write('final ${element.type} ${element.name};\n\n');
+    });
+    return buffer.toString();
+  }
+
+  static List<String> _buildFields() {
+    var decorationBuffer = StringBuffer();
+    var buffer = StringBuffer();
+    textFormFieldList.forEach((element) {
+      if (element.isDecoration) {
+        decorationBuffer.write('${element.name} : logic.${element.name},\n');
+      } else {
+        buffer.write('${element.name} : logic.${element.name},\n');
+      }
+    });
+    return [buffer.toString(), decorationBuffer.toString()];
+  }
 }
