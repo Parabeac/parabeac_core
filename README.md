@@ -2,7 +2,6 @@
 
 ![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
 
-
 parabeac_core converts design files into isolated & responsive Flutter code for continuous design & development.
 
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) [![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/parabeac_core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a> [![Codesee Parabeac](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/codesee_badge.svg)](https://app.codesee.io/maps/public/4577db50-b604-11ec-a5a7-d7b90fb0bfe8)
@@ -23,30 +22,32 @@ parabeac_core converts design files into isolated & responsive Flutter code for 
 </h3>
 
 # Why are we here?
+
 The handoff between designers & developers is one of the most costly and frustrating bottlenecks in app development. As design iteration becomes more critical in the execution of app development, this problem is increasingly important to solve. parabeac_core solves this by interpreting designs from tools like Figma and generating isolated & responsive Flutter code. By creating isolated UI, design changes & updates are supported forever.
+
 # Table of Contents
-  * [Dependencies](#dependencies)
-  * [Running parabeac_core](#running-parabeac_core)
-    * [Figma](#figma)
-    * [Sketch](#sketch)
-  * [Running the generated code](#running-the-generated-code)
-    * [Running a Figma Frame/Screen](#running-a-figma-framescreen)
-    * [Running a Figma Component](#running-a-figma-component)
-    * [Running a Component Package with Widgetbook](#running-a-component-package)
-  * [Other](#other)
-    * [Global Theming](#global-theming)
-      * [Current Limitations](#current-limitations)
-      * [TextStyles](#textstyles)
-      * [Colors](#colors)
-      * [Internal Use](#internal-use)
-      * [External Use With Another Flutter Package](#external-use-with-another-flutter-package)
-      
-    * [All parabeac_core configurations](#all-parabeac_core-configurations)
-    * [Metrics](#metrics)   
+
+- [Dependencies](#dependencies)
+- [Running parabeac_core](#running-parabeac_core)
+  - [Figma](#figma)
+  - [Sketch](#sketch)
+- [Running the generated code](#running-the-generated-code)
+  - [Running a Figma Frame/Screen](#running-a-figma-framescreen)
+  - [Running a Figma Component](#running-a-figma-component)
+  - [Running a Component Package with Widgetbook](#running-a-component-package)
+- [Other](#other)
+  - [Global Theming](#global-theming)
+    - [Current Limitations](#current-limitations)
+    - [TextStyles](#textstyles)
+    - [Colors](#colors)
+    - [Internal Use](#internal-use)
+    - [External Use With Another Flutter Package](#external-use-with-another-flutter-package)
+  - [All parabeac_core configurations](#all-parabeac_core-configurations)
+  - [Metrics](#metrics)
 
 # Get Started
-  
-  You can run the code generation by creating a free account with [Parabeac Nest](https://app.parabeac.com) or by following the instructions below.
+
+You can run the code generation by creating a free account with [Parabeac Nest](https://app.parabeac.com) or by following the instructions below.
 
 ### Dependencies
 
@@ -79,46 +80,51 @@ In your terminal, change your directory to the root parabeac_core directory and 
 2. Navigate to your user profile and select `Settings`
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: `64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed`)
-  
-  Having trouble? View this video instead: https://youtu.be/uUv-IZX4KYg
+
+Having trouble? View this video instead: https://youtu.be/uUv-IZX4KYg
 
 #### Name (Optional): -n
 
-Sets the name of the exported project. For instance, if you want to name your project "cool_project", set the `-n` flag to `cool_project`. _Note: parabeac_core can only use [valid Flutter project names](https://dart.dev/tools/pub/pubspec#name)._
+Sets the name of the exported project. For instance, if you want to name your project "cool*project", set the `-n` flag to `cool_project`. \_Note: parabeac_core can only use [valid Flutter project names](https://dart.dev/tools/pub/pubspec#name).*
 
 #### Absolute Path (Optional): -o
 
 Specifies the absolute path of the exported Flutter Project to be created. For instance, to export your Flutter project in the Documents folder, set your `-o` flag to `/Users/ParabeacUser/Documents/` Not setting this will export the project in the parabeac_core directory.
-  
-#### Project Type(Optional): --project-type
-  
-  
+
+#### Project Type (Optional): --project-type
+
 Specifies the project type. At the time of writing, there are three levels: **themes**, **components**, and **screens**.
+
 - **themes** - will export global styles, such as text styles and global colors to a file in `lib/theme`.
 - **components** - will export theming as well as individual reusable UI components to `lib/widgets`.
 - **screens** [**default**] - will export all of the above and a full UI screen to `lib/views`.
 
 The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen-- essentially, a full running app.
-  
-  
+
+#### Design System (Optional):
+
+Specifies the project design system to export. At the time of writing, there are two options: **material2** and **material3**. Take into account that Material 2 will be deprecated and removed eventually.
+
+- **material2** - will export TextTheme using only the deprecated fields for it.
+- **material3** - will export TextTheme using only the non-deprecated fields for it.
+
 ### Configurations.json
+
 To avoid repetitively entering the same flags in the command line, you can edit the configurations.json file. Just populate the corresponding fields with the information you would normally enter with the commands listed above.
-  
+
 The default configurations.json file is pictured below. It can be found in `lib/configurations`
 
-  ![image](https://user-images.githubusercontent.com/42812006/184252654-5fc55f48-502b-4eca-8bc5-029832a23d39.png)
+![image](https://user-images.githubusercontent.com/42812006/184252654-5fc55f48-502b-4eca-8bc5-029832a23d39.png)
 
 For example, take the following CLI command:
-  
-  
+
 ```
 dart parabeac.dart -f AaGNw26baKo91CT0I4B2lJ -k figd_60xGD-VXvoA-ABRdk7VPGq2Zrk_vYj2oSzUPqi6D -o /Users/ivanvigliante/Documents/parabeac/core/debug
 ```
-  
-This is the equivalent of the command above in the `configurations.json` file:
-  
-  ![image](https://user-images.githubusercontent.com/42812006/184252687-e4cd2e75-a116-4d33-a8a6-b40cac096f52.png)
 
+This is the equivalent of the command above in the `configurations.json` file:
+
+![image](https://user-images.githubusercontent.com/42812006/184252687-e4cd2e75-a116-4d33-a8a6-b40cac096f52.png)
 
 ### Sketch
 
@@ -129,7 +135,9 @@ Due to the lack of requested support for Sketch and the major updates to this pr
 We recommend following our [Hello World guide](https://docs.parabeac.com/docs/hello-world) but if you feel experienced enough with Flutter, feel free to jump right in here:
 
 ### Running a Figma Frame/Screen
+
 ![Figma Frame Example](https://github.com/Parabeac/parabeac_core/blob/stable/repo_assets/figma_frame_example.png?raw=true)
+
 #### Steps
 
 1. Open your generated project (Will be at the absolute path you set or in the parabeac_core directory)
@@ -152,6 +160,7 @@ We recommend following our [Hello World guide](https://docs.parabeac.com/docs/he
 3. Save `main.dart` and execute `flutter run`
 
 ### Running a Figma Component
+
 ![Figma Component Example](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/repo_assets/figma_component_example.png)
 
 1. Navigate to a widget/screen where you can add in your component as a child.
@@ -168,31 +177,39 @@ Container(
 ```
 
 1. Save the class and execute `flutter run` in your terminal & navigate your app to the expected location where the component should show up.
-  
-  
+
 ### Running a component package
+
 The best way to run and test a component package is to use tools like Storybook.js. We have an autogen for [Widgetbook](https://github.com/widgetbook/widgetbook). If you head over to `parabeac_core/lib/configurations/configurations.json` you can assign the property "componentIsolation" to "widgetbook" like the following.
-  
+
 <img width="533" alt="Configurations for Widgetbook" src="https://user-images.githubusercontent.com/13757212/156039026-bb3e22f7-5d55-4f68-ba1a-d420177594cb.png">
 
-  _Be sure to use Figma Components_  
-  
-  To run the widgetbook, instead of running the normal `flutter run`, you want to run `flutter run lib/main_widgetbook.g.dart`.
-  
+_Be sure to use Figma Components_
+
+To run the widgetbook, instead of running the normal `flutter run`, you want to run `flutter run lib/main_widgetbook.g.dart`.
+
 # What's Next?
+
 Be sure to complete our [Hello World Guide](https://docs.parabeac.com/docs/hello-world) or read the [docs](https://docs.parabeac.com/) so you know how to handle the code generated.
-  
+
 ## Enabling the design team to create pull requests
+
 If you find the viability in the code generation to support continuous design changes, create a free account on [Parabeac Nest](https://app.parabeac.com) where you can create an integration between Figma & the project Github repo.
+
 ## Stay up to date
+
 Follow or subscribe to our [Twitter](https://twitter.com/parabeac), [Youtube](https://www.youtube.com/channel/UCgfDd4tQYZ5a_A5qxknmh8w), [Dev.to](https://dev.to/parabeac) &/or [Newsletter](https://share.hsforms.com/1uu1ZTrhPSwK69T2md__lCw5i54a) to stay up to date on product releases. And if you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose) or join our [Discord](https://discord.gg/qUrghes), we'd love to hear your feedback.
+
 # Other
+
 ## Global Theming
-* parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
-* For more information on how to set up Global Styles in your design file, read the following [Global Styling Docs](https://docs.parabeac.com/docs/learn-the-parabeac-way/global-styling).
+
+- parabeac_core has support for global theming for **TextStyles** and **Colors**. If detected, parabeac_core will export two files containing the styles ready for internal and external use.
+- For more information on how to set up Global Styles in your design file, read the following [Global Styling Docs](https://docs.parabeac.com/docs/learn-the-parabeac-way/global-styling).
 
 ### TextStyles
-* If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
+
+- If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
 
 ```dart
 class <YourPackageName>TextStyles {
@@ -216,8 +233,11 @@ class <YourPackageName>TextStyles {
   );
 }
 ```
+
 ### Colors
-* If parabeac_core detects global Colors in the design file, it will export a file under `lib/theme/<your_package_name>_colors.g.dart`. This file will contain all global TextStyles of the design in the following format:
+
+- If parabeac_core detects global Colors in the design file, it will export a file under `lib/theme/<your_package_name>_colors.g.dart`. This file will contain all global TextStyles of the design in the following format:
+
 ```dart
 class <YourPackageName>Colors {
   /// Parabeac Red Description
@@ -233,7 +253,7 @@ class <YourPackageName>Colors {
 
 ### Internal Use
 
-Styling classes can be used easily within the parabeac-generated package by simply importing the file as follows: 
+Styling classes can be used easily within the parabeac-generated package by simply importing the file as follows:
 
 ```dart
 /// Text Styles import
@@ -241,7 +261,9 @@ import 'package:<your_package_name>/theme/<your_package_name>_text_styles.g.dart
 /// Colors import
 import 'package:<your_package_name>/theme/<your_package_name>_colors.g.dart';
 ```
+
 and using them like so:
+
 ```dart
 /// To use a TextStyle
 <YourPackageName>TextStyles.parabeacTextStyles;
@@ -252,24 +274,29 @@ and using them like so:
 ```
 
 ### External Use With Another Flutter Package
+
 In order to use global styling with another Flutter package, you must add the parabeac-generate package to your own Flutter package as follows:
+
 ```yaml
 dependencies:
   <your_package_name>:
     path: path/to/<your_package_name>
 ```
+
 For more options on how to import this package, see the following [Dart package dependency docs](https://dart.dev/tools/pub/dependencies).
 
 ## All parabeac_core Configurations
-* `"componentIsolation"` - _Valid Values Below_
-  * `"none"`
-  * `"widgetbook"` -- Generates a Widgetbook File 
-  * `"dashbook"` -- Generates a Dashbook File
-  
+
+- `"componentIsolation"` - _Valid Values Below_
+  - `"none"`
+  - `"widgetbook"` -- Generates a Widgetbook File
+  - `"dashbook"` -- Generates a Dashbook File
+
 _To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or `flutter run lib/main_dashbook.g.dart`_
-  
-* `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
-  * An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
-  
+
+- `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
+  - An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
+
 ## Metrics
+
 parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
