@@ -101,7 +101,7 @@ Specifies the project type. At the time of writing, there are three levels: **th
 
 The first two levels, theming and component, export packages that one can import to an existing Flutter project. The third level, screen, exports both of those levels as well as the main screen-- essentially, a full running app.
 
-#### Design System (Optional):
+#### Design System (Optional): -d
 
 Specifies the project design system to export. At the time of writing, there are two options: **material2** and **material3**. Take into account that Material 2 will be deprecated and removed eventually.
 

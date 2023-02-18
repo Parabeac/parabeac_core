@@ -59,6 +59,8 @@ main(List<String> args) async {
       },
       aliases: ['level'],
     )
+    ..addOption('design-system',
+        help: 'Design system that the project will be exported', abbr: 'd')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addFlag(
