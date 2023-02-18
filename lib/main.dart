@@ -181,8 +181,8 @@ ${parser.usage}
 
   /// Add to map the quantity of total material design
   /// to compare with the one used by the user
-  GetIt.I.get<AmplitudeService>().directAdd('Total of material design',
-      pbdl.materialDesignCount(processInfo.configuration.designSystem));
+  GetIt.I.get<AmplitudeService>().directAdd(
+      'Total of material design', pbdl.designSystem.totalDesignCount);
 
   // Exit if only generating PBDL
   if (MainInfo().configuration.exportPBDL) {
