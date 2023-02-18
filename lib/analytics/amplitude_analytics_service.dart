@@ -30,7 +30,7 @@ class AmplitudeService {
     // var eventProperties = amplitudeMap['eventProperties'];
 
     _eventProperties['Design specification'] =
-        MainInfo().configuration.widgetStyle;
+        MainInfo().configuration.designSystem;
 
     _eventProperties['Percentage of Auto Layout as UI'] = _calculatePercentage(
         _eventProperties['Number of auto layouts'],

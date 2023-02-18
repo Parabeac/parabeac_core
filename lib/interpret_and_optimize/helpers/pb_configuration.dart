@@ -53,7 +53,8 @@ class PBConfiguration {
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
-  final String widgetStyle = 'Material';
+  @JsonKey(defaultValue: 'material2')
+  String designSystem;
 
   /// The type of folder architecture that Parabeac-Core should follow
   /// It will be domain, as default
