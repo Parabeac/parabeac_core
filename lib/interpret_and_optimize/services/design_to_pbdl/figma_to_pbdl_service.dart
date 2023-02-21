@@ -19,6 +19,7 @@ class FigmaToPBDLService implements DesignToPBDLService {
       exportPbdlJson: info.configuration.exportPBDL,
       projectName: info.projectName,
       integrationStrategy: info.configuration.integrationLevel.name,
+      designSystemType: info.configuration.designSystem,
     );
   }
 }

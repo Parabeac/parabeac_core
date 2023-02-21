@@ -22,7 +22,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     integrationLevel:
         _$enumDecodeNullable(_$IntegrationLevelEnumMap, json['project-type']) ??
             IntegrationLevel.screens,
-  );
+  )..designSystem = json['designSystem'] as String ?? 'material2';
 }
 
 Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
@@ -34,6 +34,7 @@ Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>
       'out': instance.outputPath,
       'pbdl-in': instance.pbdlPath,
       'export-pbdl': instance.exportPBDL,
+      'designSystem': instance.designSystem,
       'folderArchitecture': instance.folderArchitecture,
       'scaling': instance.scaling,
       'breakpoints': instance.breakpoints,
