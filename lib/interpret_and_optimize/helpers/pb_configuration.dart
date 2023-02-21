@@ -109,6 +109,7 @@ class PBConfiguration {
     figmaOauthToken = arguments['oauth'] ?? figmaOauthToken;
     folderArchitecture = arguments['folderArchitecture'] ?? folderArchitecture;
     componentIsolation = arguments['componentIsolation'] ?? componentIsolation;
+    designSystem = arguments['design-system'] ?? designSystem;
 
     if (arguments['project-type'] != null) {
       integrationLevel =
