@@ -51,8 +51,9 @@ class WriteConstantsCommand extends FileStructureCommand {
 
     /// Write constants
     constants.forEach((constant) {
-      var description =
-          constant.description.isNotEmpty ? '/// ${constant.description}' : '';
+      var description = constant.description.isNotEmpty
+          ? '/** ${constant.description} **/'
+          : '';
       var constStr =
           'static ${constant.isconst ? 'const' : ''} ${constant.type} ${constant.name} = ${constant.value};';
 
