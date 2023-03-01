@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 class GlobalStylingGoldenTestingProjectTextStyles {
-/// Parabeac Style Description
+/** Parabeac Style Description **/
 static const TextStyle parabeacTextStyle = TextStyle(
   fontSize: 12.0,
   fontWeight: FontWeight.w700,
@@ -27,7 +27,7 @@ static const TextStyle newStyle = TextStyle(
   fontStyle: FontStyle.normal,
 )
 ;
-/// headline1 description
+/** headline1 description **/
 static const TextStyle headline1 = TextStyle(
   fontSize: 12.0,
   fontWeight: FontWeight.w400,

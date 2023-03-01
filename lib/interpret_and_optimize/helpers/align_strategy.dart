@@ -2,6 +2,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injecte
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/inherited_text.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/column.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/row.dart';
@@ -141,8 +142,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       );
 
       /// Rules to center child horizontally
-      if ((!child.constraints.pinLeft && !child.constraints.pinRight) &&
-          child.constraints.fixedWidth) {
+      if (_needsHorizontalCenter(child)) {
         if (widthLayoutSizing == ParentLayoutSizing.STRETCH) {
           injectedPositioned.constraints.fixedWidth = true;
         } else if (widthLayoutSizing == ParentLayoutSizing.INHERIT) {
@@ -152,8 +152,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       }
 
       /// Rules to center child vertically
-      if ((!child.constraints.pinTop && !child.constraints.pinBottom) &&
-          child.constraints.fixedHeight) {
+      if (_needsVerticalCenter(child)) {
         if (heightLayoutSizing == ParentLayoutSizing.STRETCH) {
           injectedPositioned.constraints.fixedHeight = true;
         } else if (heightLayoutSizing == ParentLayoutSizing.INHERIT) {
@@ -182,14 +181,42 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
           tree.addEdges(center, [container]);
           tree.addEdges(injectedPositioned, [center]);
         } else {
-          tree.addEdges(center, [child]);
-          tree.addEdges(injectedPositioned, [center]);
+          var grandChildren = tree.childrenOf(child);
+          var grandChild =
+              grandChildren.isNotEmpty ? tree.childrenOf(child).first : null;
+
+          /// If the child is a text and it needs vertical center
+          /// it is wrapped on a center widget
+          if (grandChild is InheritedText && _needsVerticalCenter(grandChild)) {
+            var newCenter = InjectedCenter(
+                null,
+                grandChild.frame.boundingBox(grandChild.frame),
+                '$InjectedCenter-${grandChild.name}');
+            tree.addEdges(newCenter, [grandChild]);
+            tree.removeEdges(child);
+            tree.addEdges(child, [newCenter]);
+            tree.addEdges(center, [child]);
+            tree.addEdges(injectedPositioned, [center]);
+          } else {
+            tree.addEdges(center, [child]);
+            tree.addEdges(injectedPositioned, [center]);
+          }
         }
       }
     });
     tree.replaceChildrenOf(node, alignedChildren);
     // super.setConstraints(context, node);
   }
+
+  /// Check if child needs center horizontally
+  bool _needsHorizontalCenter(PBIntermediateNode child) =>
+      (!child.constraints.pinLeft && !child.constraints.pinRight) &&
+      child.constraints.fixedWidth;
+
+  /// Check if child needs center vertically
+  bool _needsVerticalCenter(PBIntermediateNode child) =>
+      (!child.constraints.pinTop && !child.constraints.pinBottom) &&
+      child.constraints.fixedHeight;
 
   /// Traverses [node] upwards and returns the first [PBLayoutIntermediateNode].
   ///
