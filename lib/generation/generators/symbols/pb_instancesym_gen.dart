@@ -19,9 +19,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   String generate(PBIntermediateNode source, PBContext generatorContext) {
     if (source is PBSharedInstanceIntermediateNode) {
       var buffer = StringBuffer();
-      buffer.write('LayoutBuilder( \n');
-      buffer.write('  builder: (context, constraints) {\n');
-      buffer.write('    return ');
 
       // If storage found an instance, get its master
       var masterSymbol =
@@ -34,12 +31,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
         generatorContext,
       ));
 
-      // end of return <genSymbolInstance>();
-      buffer.write(';\n');
-      // end of builder: (context, constraints) {
-      buffer.write('}\n');
-      // end of LayoutBuilder()
-      buffer.write(')');
       return buffer.toString();
     }
     return '';
@@ -93,7 +84,6 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
     buffer.write(symName.pascalCase);
     buffer.write('(\n');
-    buffer.write('constraints,\n');
 
     // Make sure override property of every value is overridable
     if (overrideValues != null) {
