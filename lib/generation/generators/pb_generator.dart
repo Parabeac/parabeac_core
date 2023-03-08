@@ -16,12 +16,18 @@ abstract class PBGenerator {
 
   Logger logger;
 
+  /// Chain of responsability restructure
+
+  PBGenerator next;
+
+  ///
+
   ///The [TemplateStrategy] that is going to be used to generate the boilerplate code around the node.
   ///
   ///The `default` [TemplateStrategy] is going to be [InlineTemplateStrategy]
   TemplateStrategy templateStrategy;
 
-  PBGenerator({TemplateStrategy strategy}) {
+  PBGenerator({TemplateStrategy strategy, this.next}) {
     templateStrategy = strategy;
     templateStrategy ??= InlineTemplateStrategy();
     logger = Logger(runtimeType.toString());
