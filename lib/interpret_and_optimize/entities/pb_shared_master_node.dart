@@ -1,3 +1,4 @@
+import 'package:parabeac_core/generation/generators/symbols/layout_builder_gen.dart';
 import 'package:parabeac_core/generation/generators/symbols/pb_mastersym_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
@@ -70,8 +71,9 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.sharedNodeSetID,
   }) : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
-
-    generator = PBMasterSymbolGenerator();
+    //
+    generator = LayoutBuilderGenerator(PBMasterSymbolGenerator());
+    //
     childrenStrategy = TempChildrenStrategy('child');
   }
 
