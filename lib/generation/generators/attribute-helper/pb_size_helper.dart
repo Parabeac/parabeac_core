@@ -75,7 +75,7 @@ class PBSizeHelper extends PBAttributesHelper {
 
         // Size for LayoutBuilder
         sizeString =
-            '$lowerCaseDimentionString: widget.constraints.max$dimentionString * ${relativeSize.toString()},';
+            '$lowerCaseDimentionString: constraints.max$dimentionString * ${relativeSize.toString()},';
       }
     } else {
       // Size for constants value
