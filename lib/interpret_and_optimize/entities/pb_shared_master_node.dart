@@ -71,7 +71,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.sharedNodeSetID,
   }) : super(UUID, frame, name, constraints: constraints) {
     overridableProperties ??= [];
-    //
     generator = LayoutBuilderGenerator(PBMasterSymbolGenerator());
     //
     childrenStrategy = TempChildrenStrategy('child');
