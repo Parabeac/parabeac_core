@@ -50,7 +50,7 @@ ${manager.generateImports()}
 class $widgetName extends StatefulWidget{
   ${node is PBSharedMasterNode ? 'final BoxConstraints constraints;' : ''}
   $overrideVars
-  const $widgetName(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, $overrides}) : super(key: key);
+  const $widgetName(${node is PBSharedMasterNode ? '@Deprecated(\'constraints will be completely removed in the next release 4.0.0. To migrate, you will have to remove all constraints from components when the release is live.\')this.constraints,' : ''} {Key? key, $overrides}) : super(key: key);
   @override
   _$widgetName createState() => _$widgetName();
 }
