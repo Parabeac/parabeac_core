@@ -52,7 +52,6 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
       if (context != null) {
         resize(context, children);
       }
-      sortChildren(children);
     }
   }
 

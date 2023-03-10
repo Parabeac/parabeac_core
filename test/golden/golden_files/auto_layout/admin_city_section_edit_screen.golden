@@ -11,8 +11,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/tag_section_title_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/add_tag_button_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/current_tags_custom.dart';
-import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/edit_main_image_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/main_image_section_title_custom.dart';
+import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/edit_main_image_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/additional_images_section_title_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/add_additional_image_button_custom.dart';
 import 'package:golden_auto_layout_testing_project/widgets/auto_layout_permutations/custom/additional_images_custom.dart';
@@ -40,17 +40,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
       color: Color(0xfff7f7fc),
       child: Stack(children: [
         Positioned(
-          left: 46.0,
-          right: 44.0,
-          top: 0,
-          height: 280.0,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return OrcaCityAdminHeader(
-              constraints,
-            );
-          }),
-        ),
-        Positioned(
           left: 36.0,
           right: 34.0,
           top: 280.0,
@@ -66,6 +55,18 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                             height: 419.0,
                             decoration: BoxDecoration(),
                             child: Stack(children: [
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 84.0,
+                                height: 335.0,
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  return FullArticle(
+                                    constraints,
+                                  );
+                                }),
+                              ),
                               Positioned(
                                 left: 9.0,
                                 width: 1066.0,
@@ -83,18 +84,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                   ),
                                   textAlign: TextAlign.left,
                                 )),
-                              ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 84.0,
-                                height: 335.0,
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                  return FullArticle(
-                                    constraints,
-                                  );
-                                }),
                               ),
                             ])),
                         SizedBox(
@@ -258,6 +247,24 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                             child: Stack(children: [
                               Positioned(
                                 left: 0,
+                                width: 678.0,
+                                top: 0,
+                                height: 64.0,
+                                child: MainImageSectionTitleCustom(
+                                    child: AutoSizeText(
+                                  'Upload Image For Section',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 50.0,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.9999998807907104,
+                                    color: Color(0xff14142b),
+                                  ),
+                                  textAlign: TextAlign.left,
+                                )),
+                              ),
+                              Positioned(
+                                left: 0,
                                 width: 540.0,
                                 top: 86.0,
                                 height: 303.75,
@@ -278,24 +285,6 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                             }),
                                           ),
                                         ]))),
-                              ),
-                              Positioned(
-                                left: 0,
-                                width: 678.0,
-                                top: 0,
-                                height: 64.0,
-                                child: MainImageSectionTitleCustom(
-                                    child: AutoSizeText(
-                                  'Upload Image For Section',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 50.0,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.9999998807907104,
-                                    color: Color(0xff14142b),
-                                  ),
-                                  textAlign: TextAlign.left,
-                                )),
                               ),
                             ])),
                         SizedBox(
@@ -483,6 +472,17 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                               ),
                             ])),
                       ]))),
+        ),
+        Positioned(
+          left: 46.0,
+          right: 44.0,
+          top: 0,
+          height: 280.0,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return OrcaCityAdminHeader(
+              constraints,
+            );
+          }),
         ),
       ]),
     );
