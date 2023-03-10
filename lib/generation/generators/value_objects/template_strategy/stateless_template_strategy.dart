@@ -31,9 +31,8 @@ class StatelessTemplateStrategy extends TemplateStrategy {
   ${manager.generateImports()}
 
 class ${widgetName.pascalCase} extends StatelessWidget{
-  ${node is PBSharedMasterNode ? 'final BoxConstraints constraints;' : ''}
   ${overrideVars.isNotEmpty ? overrideVars : ''}
-  const ${widgetName.pascalCase}(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
+  const ${widgetName.pascalCase}({Key? key, ${overrides.isNotEmpty ? overrides : ''}}) : super(key : key);
   ${manager.generateGlobalVariables()}
 
   @override

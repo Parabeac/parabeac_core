@@ -175,8 +175,7 @@ class CustomTagGenerator extends PBGenerator {
         ),
         MainInfo().projectName,
       ).toString();
-      suffix =
-          '?? $baseCompName(BoxConstraints(maxWidth: ${child.parent.frame.width}, maxHeight: ${child.parent.frame.height},))';
+      suffix = '?? const $baseCompName()';
     }
 
     return '''
