@@ -22,7 +22,7 @@ PBConfiguration _$PBConfigurationFromJson(Map<String, dynamic> json) {
     integrationLevel:
         _$enumDecodeNullable(_$IntegrationLevelEnumMap, json['project-type']) ??
             IntegrationLevel.screens,
-  )..designSystem = json['designSystem'] as String ?? 'material2';
+  )..designSystem = json['designSystem'] as String ?? 'material3';
 }
 
 Map<String, dynamic> _$PBConfigurationToJson(PBConfiguration instance) =>

@@ -53,7 +53,7 @@ class PBConfiguration {
   ///This is going to be defaulted to [GenerationConfiguration] if nothing else is specified.
   GenerationConfiguration generationConfiguration;
 
-  @JsonKey(defaultValue: 'material2')
+  @JsonKey(defaultValue: 'material3')
   String designSystem;
 
   /// The type of folder architecture that Parabeac-Core should follow
