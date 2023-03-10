@@ -11,7 +11,8 @@ class PrimaryButtonRect extends StatefulWidget {
   final BoxConstraints constraints;
   final String? ovrClickMe;
   const PrimaryButtonRect(
-    this.constraints, {
+    @Deprecated('constraints will be completely removed in the next release 4.0.0. To migrate, you will have to remove all constraints from components when the release is live.')
+        this.constraints, {
     Key? key,
     this.ovrClickMe,
   }) : super(key: key);
