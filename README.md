@@ -1,16 +1,10 @@
 # <center>parabeac_core
 
-![Parabeac Logo](https://github.com/Parabeac/Parabeac-Core/blob/stable/repo_assets/parabeac_core_image.png?raw=true)
+![Parabeac Logo](./repo_assets/parabeac_core_image.png)
 
 parabeac_core converts design files into isolated & responsive Flutter code for continuous design & development.
 
-[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qUrghes) 
-
-[![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/parabeac?lang=en) 
-
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/Parabeac/parabeac_core/blob/stable/CODE_OF_CONDUCT.md) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a> 
-
-[![Codesee Parabeac](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/codesee_badge.svg)](https://app.codesee.io/maps/public/4577db50-b604-11ec-a5a7-d7b90fb0bfe8)
+[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://bit.ly/3JajaPd)[![https://twitter.com/parabeac?lang=en](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](http://bit.ly/3l8FiBD) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](http://bit.ly/3FdNozR) <a href="https://dev.to/parabeac"><img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="bravemaster619's DEV Profile" height="22" width="22"></a> [![Codesee Parabeac](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/codesee_badge.svg)](https://app.codesee.io/maps/public/4577db50-b604-11ec-a5a7-d7b90fb0bfe8)
 
 <h3>
   <a href="http://bit.ly/3yvGsKL">Hello World</a>
@@ -34,7 +28,7 @@ The handoff between designers & developers is one of the most costly and frustra
 - [Dependencies](#dependencies)
 - [Running parabeac_core](#running-parabeac_core)
   - [Required Configurations](#required-configurations)
-  - [Optional Configuration](#optional-configurations)
+  - [Optional Configurations](#optional-configurations)
   - [Configuations.json file](#configurations.json)
 - [Running the generated code](#running-the-generated-code)
   - [Running a Figma Frame/Screen](#running-a-figma-framescreen)
@@ -45,12 +39,12 @@ The handoff between designers & developers is one of the most costly and frustra
       - [External Use with Another Flutter Package](#external-use-with-another-flutter-package)
       - [TextStyles](#textstyles)
       - [Colors](#colors)
-      - [Color Schemes](#color-schemes)
+      - [Light/Dark Themes](#light--dark-color-themes)
   - [Metrics](#metrics)
-  - [What's Next?](#whats-next)
-      - [Integrate with Github]()
-      - [Stay Up to Date]()
-      - [Influence this Project]()
+- [What's Next?](#whats-next)
+    - [Integrate with Github]()
+    - [Stay Up to Date]()
+    - [Influence this Project]()
 # Get Started
 
 You can run the code generation by creating a free account with [Parabeac Cloud](http://bit.ly/3yyUxXO) or by following the instructions below.
@@ -83,12 +77,12 @@ In your terminal, change your directory to the root parabeac_core directory and 
 
 #### Figma API Key (Required): -k
 
-1. Visit https://figma.com and log in.
+1. Visit [Figma](http://bit.ly/3yz3UXo)and log in.
 2. Navigate to your user profile and select `Settings`
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: `64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed`)
 
-Having trouble? View this video instead: https://youtu.be/uUv-IZX4KYg
+Having trouble? View [this video](http://bit.ly/3YFDdLm) instead.
 
 ### Required Configurations
 
@@ -220,11 +214,11 @@ Container(
 Parabeac_core has support for global theming in the form of:
  - **TextStyles**
  - **Colors**
- - **ColorSchemes** 
+ - **Themes** 
   
 If present, parabeac_core will export three files containing the detected styles ready for internal and external use.
 
-For more information on how to set up Global Styles in your Figma file, read the following [Global Styling Docs](http://bit.ly/3ZFB6Ix).
+For more information on how to convert global styles with parabeac_core read the [project type flag](#project-type-optional---project-type) section. For more information about TextStyles, ColorStyles, and Themes, see our [documentation on Themes](https://bit.ly/3ZFB6Ix).
 
 ### Internal Use
 
@@ -268,9 +262,9 @@ For more options on how to import this package, see the following [Dart package 
 
 ### TextStyles
 
-- If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. This file will contain all global TextStyles of the design file in the following format:
+- If parabeac_core detects global TextStyles in the design file, it will export a file under `lib/theme/<your_package_name>_text_styles.g.dart`. 
 
-<details><summary>TextStyle Sample</summary>
+<details><summary>This file will contain all global TextStyles of the design file in the following format:</summary>
 
 ```dart
 class <YourPackageName>TextStyles {
@@ -299,9 +293,9 @@ class <YourPackageName>TextStyles {
 
 ### Colors
 
-- If parabeac_core detects global Colors in the design file, it will export a file under `lib/theme/<your_package_name>_colors.g.dart`. This file will contain all global TextStyles of the design in the following format:
+- If parabeac_core detects global Colors in the design file, it will export a file under `lib/theme/<your_package_name>_colors.g.dart`. 
 
-<details><summary>ColorStyle Sample</summary>
+<details><summary>This file will contain all global ColorStyles of the design in the following format:</summary>
 
 ```dart
 class <YourPackageName>Colors {
@@ -318,9 +312,11 @@ class <YourPackageName>Colors {
 
 ### Light / Dark Color Themes
 
-- If parabeac_core detects colors formatted in the Material Design 2 or Material Design 3 specifications, it will export a file under `lib/theme/<your_package_name>_theme.g.dart`. This file will contain all global TextStyles of the design in the following format:
+- If parabeac_core detects colors formatted in the Material Design 2 or Material Design 3 specifications, it will export a file under `lib/theme/<your_package_name>_theme.g.dart`. 
 
-<details><summary> ThemeData sample</summary>
+To learn more about Material Design, check oout our [documentation on Themes](https://bit.ly/3ZFB6Ix).
+
+<details><summary>This file will contain Themes and ColorSchemes in the following format:</summary>
 
 ```dart
 import 'package:flutter/material.dart';import 'package:themedemo/theme/themedemo_text_styles.g.dart';
@@ -352,7 +348,8 @@ parabeac_core keeps track of a few data points to help us understand usage. Alth
 
 If you want to see more project ideas or be connected to video examples, be sure to check out our [documentation](http://bit.ly/3YBsrWk) and [youtube channel](https://bit.ly/3YHX24F). If you'd like to talk with other users or our team, join our community on [Discord](https://bit.ly/3JajaPd).
 
-## Enabling the design team to create pull requests -- Integrate with GitHub!
+## Integrate with GitHub!
+### Enabling the design team to create pull requests
 If you find viability in the code generation and want to support continuous design changes, create a free account on [Parabeac Cloud](http://bit.ly/3yyUxXO) where you can create an integration between Figma & the project Github repo.
 
 ## Stay up to Date
@@ -364,4 +361,4 @@ To stay up to date with our latest product releases, follow or subscribe to our
 - [Newsletter](http://bit.ly/3Jz48E8)
 
 ## Influence this Project
-If you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose), fill out our [product survey] or join our [Discord](https://discord.gg/qUrghes) to chat with the team and other users. We'd love to hear your feedback and ideas! ☆
+If you want to influence the direction of this project, create an [issue](https://github.com/Parabeac/parabeac_core/issues/new/choose), fill out our [product survey](http://bit.ly/3w169Bm) or join our [Discord](https://discord.gg/qUrghes) to chat with the team and other users. We'd love to hear your feedback and ideas! ☆
