@@ -40,7 +40,7 @@ The handoff between designers & developers is one of the most costly and frustra
       - [TextStyles](#textstyles)
       - [Colors](#colors)
       - [Light/Dark Themes](#light--dark-color-themes)
-  - [Metrics](#metrics)
+- [Metrics](#metrics)
 - [What's Next?](#whats-next)
     - [Integrate with Github]()
     - [Stay Up to Date]()
@@ -57,7 +57,7 @@ You can run the code generation by creating a free account with [Parabeac Cloud]
 
 ## Running parabeac_core
 
-### Basic Run Command
+## Basic Run Command
 
 In your terminal, change your directory to the root parabeac_core directory and run:
 
@@ -65,7 +65,7 @@ In your terminal, change your directory to the root parabeac_core directory and 
  $ pub get
  $ dart parabeac.dart -f <Figma File ID> -k <Figma API Key> -o <Absolute Path To Output Directory>
 ```
-### Required Configurations
+## Required Configurations
 
 #### Figma File ID (Required): -f
 
@@ -84,7 +84,7 @@ In your terminal, change your directory to the root parabeac_core directory and 
 
 Having trouble? View [this video](http://bit.ly/3YFDdLm) instead.
 
-### Required Configurations
+## Optional Configurations
 
 #### Name (Optional): -n
 
@@ -128,7 +128,7 @@ _To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or 
 
 
 
-### Configurations.json
+## Configurations.json
 
 To avoid repetitively entering the same configuration flags in the command line, you can edit the configurations.json file. Just populate the corresponding fields with the information you would normally enter with the commands listed above.
 
@@ -177,7 +177,7 @@ We recommend following our [Hello World guide](https://bit.ly/3yvGsKL) but if yo
 3. Save `main.dart` and execute `flutter run`
 
 
-### Running a component package
+## Running a component package
 
 The best way to run and test a component package is to use tools like Storybook.js. We have an autogen for [Widgetbook](https://github.com/widgetbook/widgetbook). If you head over to the configurations.json file (`parabeac_core/lib/configurations/configurations.json`) you can assign the property "componentIsolation" to "widgetbook". This will look like the following.
 
@@ -339,7 +339,7 @@ static  ThemeData themeDataDark = ThemeData(textTheme: textTheme, colorScheme: d
 </details>
 
 
-## Metrics
+# Metrics
 
 parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
 
