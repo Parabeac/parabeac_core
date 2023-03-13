@@ -53,7 +53,7 @@ You can run the code generation by creating a free account with [Parabeac Cloud]
 
 - [Dart](https://dart.dev/get-dart)
 - [Flutter](http://bit.ly/3mNPss1)
-- [Figma File](http://bit.ly/3yz3UXo) - [Sample](http://bit.ly/3J9G6OQ)
+- [Figma File](http://bit.ly/3yz3UXo) - you can test a [Sample Figma File](http://bit.ly/3J9G6OQ)
 
 ## Running parabeac_core
 
@@ -77,7 +77,7 @@ In your terminal, change your directory to the root parabeac_core directory and 
 
 #### Figma API Key (Required): -k
 
-1. Visit [Figma](http://bit.ly/3yz3UXo)and log in.
+1. Visit [Figma](http://bit.ly/3yz3UXo) and log in.
 2. Navigate to your user profile and select `Settings`
 3. Scroll Down to the "Create a new Personal Access Token"
 4. Create a new Personal Access Token and copy your new API key. (It should look something like this: `64522-a0e5509a-d5ce-47a8-880b-c295f9cb27ed`)
@@ -188,14 +188,13 @@ _Be sure to use Figma Components_
 *To run widgetbook, instead of running the normal `flutter run`, run `flutter run lib/main_widgetbook.g.dart`.*
 
 ## Utilizing a Figma Component
-
 ![Figma Component Example](https://raw.githubusercontent.com/Parabeac/parabeac_core/stable/repo_assets/figma_component_example.png)
 
 To use a generated component on an exisitng screen:
 
 1. Navigate to a widget/screen where you want to add in your component as a child.
 2. Reference the component by providing a LayoutBuilder widget like the following:
-
+3. Save the class and execute `flutter run` in your terminal & navigate your app to the expected location where the component should show up.
 ```
 Container(
   child: LayoutBuilder(builder: (context, constraints) {
@@ -206,15 +205,13 @@ Container(
 )
 ```
 
-1. Save the class and execute `flutter run` in your terminal & navigate your app to the expected location where the component should show up.
-
 
 ## Utilizing Themes
 
 Parabeac_core has support for global theming in the form of:
- - **TextStyles**
- - **Colors**
- - **Themes** 
+ - [**TextStyles**](#textstyles)
+ - [**Colors**](#colors)
+ - [**Themes**](#light--dark-color-themes) 
   
 If present, parabeac_core will export three files containing the detected styles ready for internal and external use.
 
