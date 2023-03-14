@@ -34,7 +34,7 @@ The handoff between designers & developers is one of the most costly and frustra
   - [Running a Figma Frame/Screen](#running-a-figma-framescreen)
   - [Running a Component Package with Widgetbook](#running-a-component-package)
   - [Utilizing a Figma Component](#utilizing-a-figma-component)
-  - [Utilizinging Themes](#utilizing-themes)
+  - [Utilizing Themes](#utilizing-themes)
       - [Internal Use in a Parabeac Project](#internal-use-in-an-parabeac-project)
       - [External Use with Another Flutter Package](#external-use-with-another-flutter-package)
       - [TextStyles](#textstyles)
