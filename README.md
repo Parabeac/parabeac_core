@@ -245,7 +245,7 @@ Styling classes can be used easily within the parabeac-generated package simply 
 
 ### External Use With Another Flutter Package
 
-In order to use global styling with another Flutter package, you must add the parabeac-generate package to your own Flutter package as follows:
+In order to use global styling with another Flutter package, you must add the parabeac-generated package to your own Flutter package as follows:
 
 ```yaml
 dependencies:
