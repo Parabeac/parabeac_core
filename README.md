@@ -121,12 +121,6 @@ Specifies the project design system to export. At the time of writing, there are
 
 _To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or `flutter run lib/main_dashbook.g.dart`_
 
-#### Breakpoints (optional):
-
-- `"breakpoints"` -- _(Beta)_ Describes where the breakpoints should be in the ResponsiveLayoutBuilder whenever there are multiple screens with the same name.
-  - An Array of Key Values: (`"name of breakpoint" : "breakpoint value (int)"`)
-
-
 
 ## Configurations.json
 
@@ -228,6 +222,8 @@ Styling classes can be used easily within the parabeac-generated package simply 
     import 'package:<your_package_name>/theme/<your_package_name>_text_styles.g.dart';
     /// Colors import
     import 'package:<your_package_name>/theme/<your_package_name>_colors.g.dart';
+    /// Theme import
+    import 'package:<your_package_name>/theme/<your_package_name>_theme.g.dart';
     ```
 
 2. referencing them as follows:
