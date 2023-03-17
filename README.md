@@ -98,7 +98,7 @@ Specifies the absolute path of the exported Flutter Project to be created. For i
 
 Specifies the project type. At the time of writing, there are three levels: **themes**, **components**, and **screens**.
 
-- **themes** - will export global styles, such as text styles, global colors, and light/dark colo schemes to a file in `lib/theme`.
+- **themes** - will export global styles, such as text styles, global colors, and light/dark color schemes to a file in `lib/theme`.
 - **components** - will export theming as well as individual reusable UI components to `lib/widgets`.
 - **screens** [**default**] - will export all of the above and a full UI screen to `lib/views`.
 
