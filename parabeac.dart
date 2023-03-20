@@ -61,6 +61,7 @@ main(List<String> args) async {
     )
     ..addOption('design-system',
         help: 'Design system that the project will be exported', abbr: 'd')
+    ..addOption('json-in')
     ..addFlag('help',
         help: 'Displays this help information.', abbr: 'h', negatable: false)
     ..addFlag(

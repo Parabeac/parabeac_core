@@ -21,6 +21,8 @@ class MainInfo {
   /// User's platform
   String platform;
 
+  String jsonPath;
+
   /// Current working directory; contains the path from where the script was called
   Directory cwd;
 
@@ -89,6 +91,8 @@ class MainInfo {
     /// In the future when we are generating certain dart files only.
     /// At the moment we are only generating in the flutter project.
     pngPath = p.join(genProjectPath, 'lib/assets/images');
+
+    jsonPath = arguments['json-in'];
 
     configuration.validate();
   }

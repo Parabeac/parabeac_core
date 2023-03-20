@@ -9,7 +9,5 @@
   "folderArchitecture": "domain",
   "project-name": "foo",
   "project-type": "screens",
-  "fig": "Enter your Figma File ID here",
-  "figKey": "Enter your Figma API Key here",
   "out": "/absolute/path/to/output/directory"
 }

@@ -87,6 +87,7 @@ final parser = ArgParser()
     },
     aliases: ['level'],
   )
+  ..addOption('json-in')
   ..addOption('design-system',
       help: 'Design system that the project will be exported', abbr: 'd')
   ..addFlag('help',

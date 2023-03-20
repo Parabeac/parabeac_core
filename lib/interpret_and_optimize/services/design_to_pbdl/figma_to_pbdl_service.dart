@@ -11,6 +11,7 @@ class FigmaToPBDLService implements DesignToPBDLService {
   Future<PBDLProject> callPBDL(MainInfo info) {
     return PBDL.fromFigma(
       info.configuration.figmaProjectID,
+      info.jsonPath,
       key: info.configuration.figmaKey,
       oauthKey: info.configuration.figmaOauthToken,
       outputPath: p.join(info.genProjectPath, 'lib', 'assets'),
