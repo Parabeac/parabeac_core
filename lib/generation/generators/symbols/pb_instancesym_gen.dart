@@ -97,10 +97,10 @@ class PBSymbolInstanceGenerator extends PBGenerator {
 
     // Make sure override property of every value is overridable
     if (overrideValues != null) {
-      overrideValues.removeWhere((value) {
-        var override = OverrideHelper.getProperty(value.UUID, value.ovrType);
-        return override == null || override.value == null;
-      });
+      // overrideValues.removeWhere((value) {
+      //   var override = OverrideHelper.getProperty(value.UUID, value.ovrType);
+      //   return override == null || override.value == null;
+      // });
 
       formatNameAndValues(overrideValues, context);
       buffer.write(overridesToString(overrideValues, context));
@@ -138,29 +138,31 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   /// Traverses `params` and attempts to find the override `name` and `value` for each parameter.
   void formatNameAndValues(List<PBInstanceOverride> params, PBContext context) {
     params.forEach((param) {
-      var overrideProp = OverrideHelper.getProperty(param.UUID, param.ovrType);
+      // var overrideProp = OverrideHelper.getProperty(param.UUID, param.ovrType);
 
-      if (overrideProp != null) {
-        param.overrideName = overrideProp.propertyName;
-        // Find and reference symbol master if overriding a symbol
-        if (param.ovrType == 'symbolID') {
-          var instance = PBSharedInstanceIntermediateNode(
-            param.UUID,
-            null,
-            SYMBOL_ID: param.valueName,
-            name: param.initialValue['name'],
-            overrideValues: [],
-            sharedParamValues: [],
-          );
-          var code = instance.generator.generate(instance, context);
-          param.valueName = code;
-        }
-        // Add single quotes to parameter value for override
-        else if (!param.valueName.startsWith('\'') &&
-            !param.valueName.endsWith('\'')) {
-          param.valueName = '\'${param.valueName}\'';
-        }
+      // if (overrideProp != null) {
+      if (!param.overrideName.startsWith('ovr')) {
+        param.overrideName = 'ovr' + param.overrideName;
       }
+      // Find and reference symbol master if overriding a symbol
+      if (param.ovrType == 'symbolID') {
+        var instance = PBSharedInstanceIntermediateNode(
+          param.UUID,
+          null,
+          SYMBOL_ID: param.valueName,
+          name: param.initialValue['name'],
+          overrideValues: [],
+          sharedParamValues: [],
+        );
+        var code = instance.generator.generate(instance, context);
+        param.valueName = code;
+      }
+      // Add single quotes to parameter value for override
+      else if (!param.valueName.startsWith('\'') &&
+          !param.valueName.endsWith('\'')) {
+        param.valueName = '\'${param.valueName}\'';
+      }
+      // }
     });
   }
 }
