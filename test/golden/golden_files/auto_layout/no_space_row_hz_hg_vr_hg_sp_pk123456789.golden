@@ -11,6 +11,7 @@ class NoSpaceRowHzHgVrHgSpPk123456789 extends StatefulWidget {
   const NoSpaceRowHzHgVrHgSpPk123456789({
     Key? key,
   }) : super(key: key);
+
   @override
   _NoSpaceRowHzHgVrHgSpPk123456789 createState() =>
       _NoSpaceRowHzHgVrHgSpPk123456789();

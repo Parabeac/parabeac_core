@@ -4,7 +4,7 @@
     "tablet": 600,
     "desktop": 1280
   },
-  "designSystem": "material2",
+  "designSystem": "material3",
   "componentIsolation": "widgetbook",
   "folderArchitecture": "domain",
   "project-name": "foo",

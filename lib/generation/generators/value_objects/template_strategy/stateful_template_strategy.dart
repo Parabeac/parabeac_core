@@ -48,9 +48,10 @@ class StatefulTemplateStrategy extends TemplateStrategy {
 ${manager.generateImports()}
 
 class $widgetName extends StatefulWidget{
-  ${node is PBSharedMasterNode ? 'final BoxConstraints constraints;' : ''}
   $overrideVars
-  const $widgetName(${node is PBSharedMasterNode ? 'this.constraints,' : ''} {Key? key, $overrides}) : super(key: key);
+
+  const $widgetName({Key? key, $overrides}) : super(key: key);
+
   @override
   _$widgetName createState() => _$widgetName();
 }

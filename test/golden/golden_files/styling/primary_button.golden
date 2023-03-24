@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class PrimaryButton extends StatefulWidget {
-  final BoxConstraints constraints;
   final String? ovrClickMe;
-  const PrimaryButton(
-    this.constraints, {
+
+  const PrimaryButton({
     Key? key,
     this.ovrClickMe,
   }) : super(key: key);
+
   @override
   _PrimaryButton createState() => _PrimaryButton();
 }
@@ -24,33 +24,35 @@ class _PrimaryButton extends State<PrimaryButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          color: Color(0xff59afff),
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        child: Stack(children: [
-          Positioned(
-            left: widget.constraints.maxWidth * 0.336,
-            width: widget.constraints.maxWidth * 0.328,
-            top: widget.constraints.maxHeight * 0.39,
-            height: widget.constraints.maxHeight * 0.23,
-            child: Container(
-                height: widget.constraints.maxHeight * 0.23,
-                width: widget.constraints.maxWidth * 0.3276595744680851,
-                child: AutoSizeText(
-                  widget.ovrClickMe ?? 'Click Me',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.0,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.left,
-                )),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+          decoration: BoxDecoration(
+            color: Color(0xff59afff),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
-        ]));
+          child: Stack(children: [
+            Positioned(
+              left: constraints.maxWidth * 0.336,
+              width: constraints.maxWidth * 0.328,
+              top: constraints.maxHeight * 0.39,
+              height: constraints.maxHeight * 0.23,
+              child: Container(
+                  height: constraints.maxHeight * 0.23,
+                  width: constraints.maxWidth * 0.3276595744680851,
+                  child: AutoSizeText(
+                    widget.ovrClickMe ?? 'Click Me',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.0,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.left,
+                  )),
+            ),
+          ]));
+    });
   }
 
   @override
