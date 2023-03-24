@@ -27,6 +27,7 @@ class AdminCitySectionEditScreen extends StatefulWidget {
   const AdminCitySectionEditScreen({
     Key? key,
   }) : super(key: key);
+
   @override
   _AdminCitySectionEditScreen createState() => _AdminCitySectionEditScreen();
 }

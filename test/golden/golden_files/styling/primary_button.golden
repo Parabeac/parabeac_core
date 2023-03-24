@@ -11,10 +11,10 @@ class PrimaryButton extends StatefulWidget {
   final String? ovrClickMe;
 
   const PrimaryButton({
-
     Key? key,
     this.ovrClickMe,
   }) : super(key: key);
+
   @override
   _PrimaryButton createState() => _PrimaryButton();
 }
