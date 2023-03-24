@@ -12,6 +12,7 @@ class StylingScreen extends StatefulWidget {
   const StylingScreen({
     Key? key,
   }) : super(key: key);
+
   @override
   _StylingScreen createState() => _StylingScreen();
 }

@@ -8,14 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class SecondaryButton extends StatefulWidget {
-  final BoxConstraints constraints;
   final String? ovrClickMe;
-  const SecondaryButton(
-    @Deprecated('constraints will be completely removed in the next release 4.0.0. To migrate, you will have to remove all constraints from components when the release is live.')
-        this.constraints, {
+
+  const SecondaryButton({
     Key? key,
     this.ovrClickMe,
   }) : super(key: key);
+
   @override
   _SecondaryButton createState() => _SecondaryButton();
 }
@@ -25,37 +24,39 @@ class _SecondaryButton extends State<SecondaryButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          border: Border.all(
-            color: Color(0xff000000),
-            width: 2.0,
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            border: Border.all(
+              color: Color(0xff000000),
+              width: 2.0,
+            ),
           ),
-        ),
-        child: Stack(children: [
-          Positioned(
-            left: widget.constraints.maxWidth * 0.336,
-            width: widget.constraints.maxWidth * 0.328,
-            top: widget.constraints.maxHeight * 0.39,
-            height: widget.constraints.maxHeight * 0.23,
-            child: Container(
-                height: widget.constraints.maxHeight * 0.23,
-                width: widget.constraints.maxWidth * 0.3276595744680851,
-                child: AutoSizeText(
-                  widget.ovrClickMe ?? 'Click Me',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.left,
-                )),
-          ),
-        ]));
+          child: Stack(children: [
+            Positioned(
+              left: constraints.maxWidth * 0.336,
+              width: constraints.maxWidth * 0.328,
+              top: constraints.maxHeight * 0.39,
+              height: constraints.maxHeight * 0.23,
+              child: Container(
+                  height: constraints.maxHeight * 0.23,
+                  width: constraints.maxWidth * 0.3276595744680851,
+                  child: AutoSizeText(
+                    widget.ovrClickMe ?? 'Click Me',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.0,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.left,
+                  )),
+            ),
+          ]));
+    });
   }
 
   @override

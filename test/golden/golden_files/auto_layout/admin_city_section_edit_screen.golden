@@ -27,6 +27,7 @@ class AdminCitySectionEditScreen extends StatefulWidget {
   const AdminCitySectionEditScreen({
     Key? key,
   }) : super(key: key);
+
   @override
   _AdminCitySectionEditScreen createState() => _AdminCitySectionEditScreen();
 }
@@ -44,11 +45,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
           right: 44.0,
           top: 0,
           height: 280.0,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return OrcaCityAdminHeader(
-              constraints,
-            );
-          }),
+          child: OrcaCityAdminHeader(),
         ),
         Positioned(
           left: 36.0,
@@ -89,12 +86,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                 right: 0,
                                 top: 84.0,
                                 height: 335.0,
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                  return FullArticle(
-                                    constraints,
-                                  );
-                                }),
+                                child: FullArticle(),
                               ),
                             ])),
                         SizedBox(
@@ -213,39 +205,21 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                                     Container(
                                                         height: 75.0,
                                                         width: 75.0,
-                                                        child: LayoutBuilder(
-                                                            builder: (context,
-                                                                constraints) {
-                                                          return LabelButton(
-                                                            constraints,
-                                                          );
-                                                        })),
+                                                        child: LabelButton()),
                                                     SizedBox(
                                                       width: 16.0,
                                                     ),
                                                     Container(
                                                         height: 75.0,
                                                         width: 75.0,
-                                                        child: LayoutBuilder(
-                                                            builder: (context,
-                                                                constraints) {
-                                                          return LabelButton(
-                                                            constraints,
-                                                          );
-                                                        })),
+                                                        child: LabelButton()),
                                                     SizedBox(
                                                       width: 16.0,
                                                     ),
                                                     Container(
                                                         height: 75.0,
                                                         width: 75.0,
-                                                        child: LayoutBuilder(
-                                                            builder: (context,
-                                                                constraints) {
-                                                          return LabelButton(
-                                                            constraints,
-                                                          );
-                                                        })),
+                                                        child: LabelButton()),
                                                   ])))),
                                 ])),
                         SizedBox(
@@ -270,12 +244,7 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                             width: 540.0,
                                             top: 0,
                                             height: 303.75,
-                                            child: LayoutBuilder(builder:
-                                                (context, constraints) {
-                                              return EditMainImage(
-                                                constraints,
-                                              );
-                                            }),
+                                            child: EditMainImage(),
                                           ),
                                         ]))),
                               ),
@@ -407,24 +376,14 @@ class _AdminCitySectionEditScreen extends State<AdminCitySectionEditScreen> {
                                                   width: 540.0,
                                                   top: 0,
                                                   height: 335.0,
-                                                  child: LayoutBuilder(builder:
-                                                      (context, constraints) {
-                                                    return DeleteImageComponent(
-                                                      constraints,
-                                                    );
-                                                  }),
+                                                  child: DeleteImageComponent(),
                                                 ),
                                                 Positioned(
                                                   left: 0,
                                                   width: 540.0,
                                                   top: 354.0,
                                                   height: 335.0,
-                                                  child: LayoutBuilder(builder:
-                                                      (context, constraints) {
-                                                    return DeleteImageComponent(
-                                                      constraints,
-                                                    );
-                                                  }),
+                                                  child: DeleteImageComponent(),
                                                 ),
                                               ])))),
                                 ])),

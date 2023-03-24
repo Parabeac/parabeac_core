@@ -11,6 +11,7 @@ class ColHzFxVrFxSpPk6 extends StatefulWidget {
   const ColHzFxVrFxSpPk6({
     Key? key,
   }) : super(key: key);
+
   @override
   _ColHzFxVrFxSpPk6 createState() => _ColHzFxVrFxSpPk6();
 }
