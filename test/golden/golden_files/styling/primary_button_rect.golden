@@ -9,7 +9,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 class PrimaryButtonRect extends StatefulWidget {
   final String? ovrClickMe;
+
   const PrimaryButtonRect({
+
     Key? key,
     this.ovrClickMe,
   }) : super(key: key);

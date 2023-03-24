@@ -49,7 +49,9 @@ ${manager.generateImports()}
 
 class $widgetName extends StatefulWidget{
   $overrideVars
+
   const $widgetName({Key? key, $overrides}) : super(key: key);
+
   @override
   _$widgetName createState() => _$widgetName();
 }
