@@ -36,10 +36,19 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
         buffer.write('),'); // end of Border.all(
       }
     }
+<<<<<<< HEAD
 
     if (effectsInfo != null &&
         effectsInfo.isNotEmpty &&
         effectsInfo.first.type.toLowerCase().contains('shadow')) {
+=======
+    final shadows = effectsInfo
+            ?.where((element) => element.type.toLowerCase().contains('shadow'))
+            ?.toList() ??
+        [];
+
+    if (shadows.isNotEmpty) {
+>>>>>>> 85c40c1d (Add null checks)
       buffer.write('boxShadow: [');
 
       for (var effect in effectsInfo) {
