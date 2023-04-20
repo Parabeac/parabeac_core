@@ -37,18 +37,20 @@ class PBBoxDecorationHelper extends PBAttributesHelper {
       }
     }
 
-    if (effectsInfo != null &&
-        effectsInfo.isNotEmpty &&
-        effectsInfo.first.type.toLowerCase().contains('shadow')) {
+    final shadows = effectsInfo
+        .where((element) => element.type.toLowerCase().contains('shadow'))
+        .toList();
+
+    if (shadows.isNotEmpty) {
       buffer.write('boxShadow: [');
 
-      for (var effect in effectsInfo) {
+      for (final shadow in shadows) {
         buffer.write('''
             BoxShadow(
-              ${PBColorGenHelper().getHexColor(effect.color)}
-              spreadRadius: ${effect.radius},
-              blurRadius: ${effect.radius},
-              offset: Offset(${effect.offset['x']}, ${effect.offset['y']}),
+              ${PBColorGenHelper().getHexColor(shadow.color)}
+              spreadRadius: ${shadow.radius},
+              blurRadius: ${shadow.radius},
+              offset: Offset(${shadow.offset['x']}, ${shadow.offset['y']}),
             ),
           ''');
       }
