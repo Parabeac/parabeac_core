@@ -23,19 +23,23 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     // New children list
     var spacedChildren = <PBIntermediateNode>[];
     var children = context.tree.childrenOf(node);
-    sortChildren(children);
+
     var isVertical = true;
     num space;
 
     // Add boxes if necessary for Column
     if (node is PBIntermediateColumnLayout) {
+      node.sortChildren(children);
       isVertical = true;
       space = node.layoutProperties.spacing;
     }
     // Add boxes if necessary for Row
     else if (node is PBIntermediateRowLayout) {
+      node.sortChildren(children);
       isVertical = false;
       space = node.layoutProperties.spacing;
+    } else {
+      sortChildren(children);
     }
 
     for (var i = 0; i < children.length; i++) {
