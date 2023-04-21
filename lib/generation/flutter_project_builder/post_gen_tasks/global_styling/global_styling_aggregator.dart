@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:parabeac_core/analytics/amplitude_analytics_service.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/flutter_project_builder.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/comp_isolation/append_to_yaml_post_gen_task.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/colors_post_gen_task.dart';
+import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/global_effects_post_gen_task.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/text_styles_post_gen_task.dart';
 import 'package:parabeac_core/generation/flutter_project_builder/post_gen_tasks/global_styling/theming_post_gen_task.dart';
 import 'package:pbdl/pbdl.dart';
@@ -66,6 +68,19 @@ class GlobalStylingAggregator {
         ColorsPostGenTask(
           builder.generationConfiguration,
           globalColors,
+        ),
+      );
+      builder.postGenTasks.add(
+        AppendToYamlPostGenTask(),
+      );
+    }
+
+    /// Check whether there are global effects
+    if (globalStyles.effects != null && globalStyles.effects.isNotEmpty) {
+      builder.postGenTasks.add(
+        EffectsPostGenTask(
+          builder.generationConfiguration,
+          globalStyles.effects,
         ),
       );
     }

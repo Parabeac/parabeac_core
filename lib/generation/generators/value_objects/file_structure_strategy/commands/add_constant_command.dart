@@ -55,7 +55,7 @@ class WriteConstantsCommand extends FileStructureCommand {
           ? '/** ${constant.description} **/'
           : '';
       var constStr =
-          'static ${constant.isconst ? 'const' : ''} ${constant.type} ${constant.name} = ${constant.value};';
+          'static ${constant.isconst ? 'const ' : ''}${constant.type} ${constant.name} =${constant.isFunction ? '>' : ''} ${constant.value};';
 
       constBuffer.writeln('$description\n$constStr');
     });
@@ -91,11 +91,15 @@ class ConstantHolder {
   /// Whether [this] should have "const" written in it.
   bool isconst; //TODO: Temporary bool in order to write theming file.
 
+  /// Whether [this] is declaring a funciton or a variable
+  bool isFunction;
+
   ConstantHolder(
     this.type,
     this.name,
     this.value, {
     this.isconst = true,
     this.description = '',
+    this.isFunction = false,
   });
 }
