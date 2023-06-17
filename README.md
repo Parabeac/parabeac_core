@@ -27,23 +27,38 @@ The handoff between designers & developers is one of the most costly and frustra
 
 # Table of Contents
 
-- [Dependencies](#dependencies)
-- [Running parabeac_core](#running-parabeac_core)
-  - [Figma](#figma)
-  - [Sketch](#sketch)
+- [parabeac\_core](#parabeac_core)
+- [Why are we here?](#why-are-we-here)
+- [Table of Contents](#table-of-contents)
+- [Get Started](#get-started)
+    - [Dependencies](#dependencies)
+  - [Running parabeac\_core](#running-parabeac_core)
+    - [Figma](#figma)
+      - [Figma File ID (Required): -f](#figma-file-id-required--f)
+      - [Figma API Key (Required): -k](#figma-api-key-required--k)
+      - [Name (Optional): -n](#name-optional--n)
+      - [Absolute Path (Optional): -o](#absolute-path-optional--o)
+      - [Project Type (Optional): --project-type](#project-type-optional---project-type)
+      - [Design System (Optional): -d](#design-system-optional--d)
+    - [Configurations.json](#configurationsjson)
+    - [Sketch](#sketch)
 - [Running the generated code](#running-the-generated-code)
-  - [Running a Figma Frame/Screen](#running-a-figma-framescreen)
-  - [Running a Figma Component](#running-a-figma-component)
-  - [Running a Component Package with Widgetbook](#running-a-component-package)
+    - [Running a Figma Frame/Screen](#running-a-figma-framescreen)
+      - [Steps](#steps)
+    - [Running a Figma Component](#running-a-figma-component)
+    - [Running a component package](#running-a-component-package)
+- [What's Next?](#whats-next)
+  - [Enabling the design team to create pull requests](#enabling-the-design-team-to-create-pull-requests)
+  - [Stay up to date](#stay-up-to-date)
 - [Other](#other)
   - [Global Theming](#global-theming)
-    - [Current Limitations](#current-limitations)
     - [TextStyles](#textstyles)
     - [Colors](#colors)
     - [Internal Use](#internal-use)
     - [External Use With Another Flutter Package](#external-use-with-another-flutter-package)
-  - [All parabeac_core configurations](#all-parabeac_core-configurations)
+  - [All parabeac\_core Configurations](#all-parabeac_core-configurations)
   - [Metrics](#metrics)
+  - [Docker](#docker)
 
 # Get Started
 
@@ -300,3 +315,13 @@ _To run dashbook or widgetbook, run `flutter run lib/main_widgetbook.g.dart` or 
 ## Metrics
 
 parabeac_core keeps track of a few data points to help us understand usage. Although we do not collect any personal information, you can turn off metrics at any time by creating the environment variable `PB_METRICS = "false"`.
+
+## Docker
+
+To run Parabeac Core within a Docker container use the following line:
+
+```zsh
+docker run parabeac/core:latest -v my/path:/var/tmp -n hello_world -f <figma_id> -k <figma_api_key> -o /var/tmp/
+```
+*FYI*: Make sure to mount a volume that matches the path declared to be the output (learn more: [Docker Volumes](https://docs.docker.com/storage/volumes/#choose-the--v-or---mount-flag)).
+- Example: -o /var/tmp/ ===> -v my/path:/var/tmp
