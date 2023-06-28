@@ -1,3 +1,4 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/controllers/interpret.dart';
 import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
@@ -230,8 +231,8 @@ class PBLayoutGenerationService extends AITHandler {
       var childPointer = 0;
       var reCheck = false;
       while (childPointer < children.length - 1) {
-        var currentNode = children[childPointer];
-        var nextNode = children[childPointer + 1];
+        var currentNode = children.elementAt(childPointer);
+        var nextNode = children.elementAt(childPointer + 1);
 
         for (var layout in _availableLayouts) {
           /// This conditional statement is to not mixup the elements that pertain to different [currentNode.attributeName].
@@ -254,23 +255,23 @@ class PBLayoutGenerationService extends AITHandler {
             ///then its going to use either one instead of creating a new [PBLayoutIntermediateNode].
             if (layout.runtimeType == currentNode.runtimeType) {
               //FIXME   tree.replaceNode(nextNode, currentNode);
-              tree.addEdges(currentNode, [nextNode]);
-              tree.removeEdges(parent, [nextNode]);
+              tree.addEdges(currentNode, {nextNode});
+              tree.removeEdges(parent, {nextNode});
             } else if (layout.runtimeType == nextNode.runtimeType) {
               //FIXME      tree.replaceNode(currentNode, nextNode);
-              tree.addEdges(nextNode, [currentNode]);
-              tree.removeEdges(parent, [currentNode]);
+              tree.addEdges(nextNode, {currentNode});
+              tree.removeEdges(parent, {currentNode});
             } else {
               ///If neither of the current nodes are of the same `runtimeType` as the layout, we are going to use the actual
               ///satified [PBLayoutIntermediateNode] to generate the layout. We place both of the nodes inside
               ///of the generated layout.
               //FIXME      tree.removeNode(currentNode, eliminateSubTree: true);
               //FIXME      tree.removeNode(nextNode, eliminateSubTree: true);
-              tree.removeEdges(parent, [currentNode, nextNode]);
-              tree.addEdges(parent, [
-                layout.generateLayout([currentNode, nextNode], context,
+              tree.removeEdges(parent, {currentNode, nextNode});
+              tree.addEdges(parent, {
+                layout.generateLayout({currentNode, nextNode}, context,
                     '${currentNode.name}${nextNode.name}${layout.runtimeType}')
-              ]);
+              });
             }
             reCheck = true;
             break;

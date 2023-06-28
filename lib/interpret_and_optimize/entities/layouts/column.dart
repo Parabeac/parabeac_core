@@ -40,8 +40,8 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
+  PBLayoutIntermediateNode generateLayout(
+      Set<PBIntermediateNode> children, PBContext currentContext, String name) {
     // TODO: fix this method
     var col = PBIntermediateColumnLayout(null, name: name);
     col.prototypeNode = prototypeNode;

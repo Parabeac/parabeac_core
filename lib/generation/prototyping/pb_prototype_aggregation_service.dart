@@ -84,7 +84,7 @@ class PBPrototypeAggregationService {
       )..name = 'Dest_${iNode.name}';
       // Save parent pointer of `iNode`
       destHolder.parent = iNode.parent;
-      context.tree.addEdges(destHolder, [iNode]);
+      context.tree.addEdges(destHolder, {iNode});
       return destHolder;
     }
 

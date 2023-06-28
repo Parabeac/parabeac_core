@@ -60,7 +60,7 @@ abstract class PBTag extends PBVisualIntermediateNode {
 
       tree.replaceNode(iNode, tag);
 
-      tree.addEdges(tag, [iNode]);
+      tree.addEdges(tag, {iNode});
 
       return tag;
     } else {
@@ -69,9 +69,9 @@ abstract class PBTag extends PBVisualIntermediateNode {
       // If `iNode` has no children, it likely means we want to wrap `iNode` in [CustomEgg]
       if (tree.childrenOf(iNode).isEmpty || iNode is PBLayoutIntermediateNode) {
         /// Wrap `iNode` in `newTag` and make `newTag` child of `parent`.
-        tree.removeEdges(iNode.parent, [iNode]);
-        tree.addEdges(tag, [iNode]);
-        tree.addEdges(parent, [tag]);
+        tree.removeEdges(iNode.parent, {iNode});
+        tree.addEdges(tag, {iNode});
+        tree.addEdges(parent, {tag});
         return tag;
       }
       tree.replaceNode(iNode, tag, acceptChildren: true);

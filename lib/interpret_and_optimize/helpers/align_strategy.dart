@@ -64,8 +64,8 @@ class PaddingAlignment extends AlignStrategy {
       top: (child.frame.topLeft.y - node.frame.topLeft.y).abs(),
       bottom: (child.frame.bottomRight.y - node.frame.bottomRight.y).abs(),
     );
-    context.tree.addEdges(padding, [child]);
-    context.tree.addEdges(node, [padding]);
+    context.tree.addEdges(padding, {child});
+    context.tree.addEdges(node, {padding});
 
     // super.setConstraints(context, node);
   }
@@ -83,7 +83,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
 
   @override
   void align(PBContext context, PBIntermediateStackLayout node) {
-    var alignedChildren = <PBIntermediateNode>[];
+    var alignedChildren = <PBIntermediateNode>{};
     var tree = context.tree;
     var nodeChildren = context.tree.childrenOf(node);
 
@@ -164,7 +164,7 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
       alignedChildren.add(injectedPositioned);
       if (!(centerX || centerY)) {
         /// we are no center, since there is no need in either axis
-        tree.addEdges(injectedPositioned, [child]);
+        tree.addEdges(injectedPositioned, {child});
       } else {
         // Center widget to wrap child
         var center = InjectedCenter(null, child.frame.boundingBox(child.frame),
@@ -177,9 +177,9 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
             name: child.name,
             constraints: child.constraints.copyWith(),
           );
-          tree.addEdges(container, [child]);
-          tree.addEdges(center, [container]);
-          tree.addEdges(injectedPositioned, [center]);
+          tree.addEdges(container, {child});
+          tree.addEdges(center, {container});
+          tree.addEdges(injectedPositioned, {center});
         } else {
           var grandChildren = tree.childrenOf(child);
           var grandChild =
@@ -192,14 +192,14 @@ class PositionedAlignment extends AlignStrategy<PBIntermediateStackLayout> {
                 null,
                 grandChild.frame.boundingBox(grandChild.frame),
                 '$InjectedCenter-${grandChild.name}');
-            tree.addEdges(newCenter, [grandChild]);
+            tree.addEdges(newCenter, {grandChild});
             tree.removeEdges(child);
-            tree.addEdges(child, [newCenter]);
-            tree.addEdges(center, [child]);
-            tree.addEdges(injectedPositioned, [center]);
+            tree.addEdges(child, {newCenter});
+            tree.addEdges(center, {child});
+            tree.addEdges(injectedPositioned, {child});
           } else {
-            tree.addEdges(center, [child]);
-            tree.addEdges(injectedPositioned, [center]);
+            tree.addEdges(center, {child});
+            tree.addEdges(injectedPositioned, {child});
           }
         }
       }

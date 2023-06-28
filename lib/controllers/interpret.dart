@@ -25,11 +25,11 @@ class Interpret {
 
   factory Interpret() {
     _interpret.log = Logger(_interpret.runtimeType.toString());
-    _interpret._pbPrototypeLinkerService ??= PBPrototypeLinkerService();
+    // _interpret._pbPrototypeLinkerService ??= PBPrototypeLinkerService();
     return _interpret;
   }
 
-  PBPrototypeLinkerService _pbPrototypeLinkerService;
+  // PBPrototypeLinkerService _pbPrototypeLinkerService;
 
   List<AITHandler> aitHandlers = [
     StateManagementNodeInterpreter(),

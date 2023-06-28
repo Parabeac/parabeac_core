@@ -28,10 +28,10 @@ class ContainerPostRule extends PostConditionRule {
     }
     var children = tree.childrenOf(layout);
     if (children.length == 2) {
-      if ((children[0] is PBVisualIntermediateNode &&
-              children[1] is PBLayoutIntermediateNode) ||
-          (children[1] is PBVisualIntermediateNode &&
-              children[0] is PBLayoutIntermediateNode)) {
+      if ((children.elementAt(0) is PBVisualIntermediateNode &&
+              children.elementAt(1) is PBLayoutIntermediateNode) ||
+          (children.elementAt(1) is PBVisualIntermediateNode &&
+              children.elementAt(0) is PBLayoutIntermediateNode)) {
         var pblayout = children
                 .firstWhere((element) => element is PBLayoutIntermediateNode),
             pbvisual = children
@@ -59,7 +59,7 @@ class ContainerPostRule extends PostConditionRule {
               .firstWhere((element) => element is PBLayoutIntermediateNode),
           pbvisual = layoutChildren
               .firstWhere((element) => element is PBVisualIntermediateNode);
-      tree.addEdges(pbvisual, [pblayout]);
+      tree.addEdges(pbvisual, {pblayout});
       //FIXME pbvisual.addChild(pblayout);
       layout = pbvisual;
       return layout;

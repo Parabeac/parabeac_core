@@ -35,14 +35,16 @@ abstract class PBLayoutGenerator extends PBGenerator {
     return buffer.toString();
   }
 
-  String getChildren(List<PBIntermediateNode> children, PBContext context) {
+  String getChildren(Set<PBIntermediateNode> children, PBContext context) {
     var buffer = StringBuffer();
     buffer.write('\nchildren: [');
     // Iterate through all the children
     // and generate them
     for (var index = 0; index < children.length; index++) {
-      var element =
-          children[index].generator.generate(children[index], context);
+      var element = children
+          .elementAt(index)
+          .generator
+          .generate(children.elementAt(index), context);
       buffer.write(element);
       var endingChar = element != null && element.isEmpty ? '' : ',';
       buffer.write(endingChar);

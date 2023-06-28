@@ -1,3 +1,4 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/layouts/rules/axis_comparison_rules.dart';
@@ -56,12 +57,12 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   // }
 
   @override
-  void sortChildren(List<PBIntermediateNode> children) =>
+  void sortChildren(Set<PBIntermediateNode> children) =>
       children.sort((c0, c1) => c0.frame.z.compareTo(c1.frame.z));
 
   @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
+  PBLayoutIntermediateNode generateLayout(
+      Set<PBIntermediateNode> children, PBContext currentContext, String name) {
     /// The width of this stack must be the full width of the Scaffold or Artboard. As discussed, at some point we can change this but for now, this makes the most sense.
     var frame = children.first.frame;
     children.forEach((element) => frame.boundingBox(element.frame));

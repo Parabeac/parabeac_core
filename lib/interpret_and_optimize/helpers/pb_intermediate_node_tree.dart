@@ -111,13 +111,14 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
 
   @override
   @JsonKey(ignore: true)
-  Comparator<Vertex<PBIntermediateNode>> get comparator => super.comparator;
+  Comparator<DirectedGraph<PBIntermediateNode>> get comparator =>
+      super.comparator;
 
   PBIntermediateTree({
     String name,
     this.context,
     Map<PBIntermediateNode, Set<PBIntermediateNode>> edges,
-    Comparator<Vertex<PBIntermediateNode>> comparator,
+    Comparator<DirectedGraph<PBIntermediateNode>> comparator,
   }) : super(edges ?? {}, comparator: comparator) {
     _name = name;
     _dependentsOn = {};
@@ -163,12 +164,12 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     _childrenModObservers[UUID] = mods;
   }
 
-  List<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
+  Set<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
       edges(node).cast<PBIntermediateNode>();
 
   @override
-  void addEdges(Vertex<PBIntermediateNode> parent,
-      [List<Vertex<PBIntermediateNode>> children]) {
+  void addEdges(DirectedGraph<PBIntermediateNode> parent,
+      [Set<DirectedGraph<PBIntermediateNode>> children]) {
     if (children == null) {}
     // var children = childrenVertices.map((e) => e).toList();
 
@@ -179,7 +180,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     /// one child.
     // ignore: omit_local_variable_types
     ChildrenMod<PBIntermediateNode> addChildren =
-        (PBIntermediateNode parent, List<PBIntermediateNode> children) {
+        (PBIntermediateNode parent, Set<PBIntermediateNode> children) {
       children.forEach((child) {
         child.parent = parent;
         child.attributeName = parent.getAttributeNameOf(child);
@@ -192,18 +193,17 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       if (parent is ChildrenObserver && context != null) {
         (parent as ChildrenObserver).childrenModified(children, context);
       }
-      return super.addEdges(parent, children);
+      return super.addEdges(parent, children.toSet());
     };
     (parent as PBIntermediateNode).childrenStrategy.addChild(
         parent, children.cast<PBIntermediateNode>(), addChildren, this);
   }
 
   @override
-  void removeEdges(Vertex<PBIntermediateNode> parent,
-      [List<Vertex<PBIntermediateNode>> children]) {
+  void removeEdges(DirectedGraph<PBIntermediateNode> parent,
+      [Set<DirectedGraph<PBIntermediateNode>> children]) {
     if (parent is ChildrenObserver) {
-      (parent as ChildrenObserver)
-          .childrenModified(children?.cast<PBIntermediateNode>(), context);
+      (parent as ChildrenObserver).childrenModified(children, context);
     }
     super.removeEdges(parent, children);
   }
@@ -213,9 +213,10 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   /// Essentially [super.remove()], however, if [keepChildren] is `true`, its going
   /// to add the [edges(vertex)] into the [vertex.parent]; preventing the lost of the
   /// [edges(vertex)].
-  void remove(Vertex<PBIntermediateNode> vertex, {bool keepChildren = false}) {
+  void remove(DirectedGraph<PBIntermediateNode> vertex,
+      {bool keepChildren = false}) {
     if (keepChildren && vertex is PBIntermediateNode) {
-      addEdges(vertex.parent, edges(vertex));
+      addEdges(vertex.parent, edges(vertex).toSet());
     }
     super.remove(vertex);
   }
@@ -230,9 +231,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   }
 
   void replaceChildrenOf(
-      PBIntermediateNode parent, List<PBIntermediateNode> children) {
+      PBIntermediateNode parent, Set<PBIntermediateNode> children) {
     removeEdges(parent);
-    addEdges(parent, children.toList());
+    addEdges(parent, children);
   }
 
   /// Wrapping [node] with [wrapper]
@@ -244,7 +245,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
     // Replace node by the wrapper
     replaceNode(node, wrapper);
     // Add them back
-    addEdges(wrapper, [node]);
+    addEdges(wrapper, {node});
     addEdges(node, children);
   }
 
@@ -268,7 +269,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       addEdges(replacement, children);
     }
 
-    addEdges(target.parent, [replacement]);
+    addEdges(target.parent, {replacement});
     return true;
   }
 
@@ -282,9 +283,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       PBIntermediateNode insertee}) {
     assert(parent != null && child != null && insertee != null);
 
-    addEdges(insertee, [child]);
-    removeEdges(parent, [child]);
-    addEdges(parent, [insertee]);
+    addEdges(insertee, {child});
+    removeEdges(parent, {child});
+    addEdges(parent, {insertee});
 
     if (child.parent != insertee || insertee.parent != parent) {
       _logger.warning(
@@ -347,14 +348,14 @@ abstract class ChildrenObserver {
   ///
   /// [context] could be `null` when when the [PBIntermediateTree] is being initialized. [ChildrenObserver]
   /// can still modify the [children] but it would be unable to add/remove children.
-  void childrenModified(List<PBIntermediateNode> children, [PBContext context]);
+  void childrenModified(Set<PBIntermediateNode> children, [PBContext context]);
 }
 
 enum CHILDREN_MOD { CREATED, REMOVED, MODIFIED }
 
 typedef ChildrenModEventHandler = void Function(
     CHILDREN_MOD, List<PBIntermediateNode>);
-typedef ChildrenMod<T> = void Function(T parent, List<T> children);
+typedef ChildrenMod<T> = void Function(T parent, Set<T> children);
 
 TREE_TYPE treeTypeFromJson(Map<String, dynamic> json) {
   switch (json['type']) {

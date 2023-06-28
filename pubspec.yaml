@@ -8,31 +8,31 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  args: ^2.2.0
-  archive: ^3.1.2
-  json_serializable: ^3.5.0
-  build_runner: ^1.10.0
-  mockito: ^5.0.7
-  hex: ^0.1.2
-  build: ^1.3.0
-  logger: ^1.1.0
-  uuid: ^3.0.0
-  quick_log: ^1.1.3
-  http2: ^1.0.1
-  recase: "^3.0.0"
-  tuple: ^2.0.0
-  path: ^1.6.0
-  file: ^6.1.2
-  get_it: ^7.2.0
+  args: ^2.4.2
+  archive: ^3.3.7
+  json_serializable: ^6.6.2
+  build_runner: ^2.3.3
+  mockito: ^5.4.2
+  hex: ^0.2.0
+  build: ^2.3.1
+  logger: ^1.4.0
+  uuid: ^3.0.7
+  quick_log: ^5.3.0
+  http2: ^2.0.1
+  recase: ^4.1.0
+  tuple: ^2.0.2
+  path: ^1.8.3
+  file: ^6.1.4
+  get_it: ^7.6.0
   pbdl:
     git:
       url: https://github.com/Parabeac/pbdl.git
-      ref: master
-  directed_graph: ^0.2.3
-  sentry: ^6.2.2
+      ref: feat/null-safety
+  directed_graph: ^0.3.9
+  sentry: ^7.8.0
   yaml_modify: ^1.0.1
 
 dev_dependencies:
-  pedantic: ^1.8.0
-  test: ^1.6.0
-  build_config: ^0.4.2
+  pedantic: ^1.11.1
+  test: ^1.24.3
+  build_config: ^1.1.1

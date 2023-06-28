@@ -47,12 +47,12 @@ class OneChildStrategy extends ChildrenStrategy {
       if (targetChildren.length > 1) {
         logger.warning(
             'Replacing children of ${target.runtimeType.toString()} with ${candidate.runtimeType.toString()}');
-        tree.replaceChildrenOf(target, [candidate]);
+        tree.replaceChildrenOf(target, {candidate});
       }
 
       /// Adding [candidate] to [target]
       else {
-        addChild(target, [candidate]);
+        addChild(target, {candidate});
       }
     } else {
       logger.warning(
@@ -68,10 +68,10 @@ class MultipleChildStrategy extends ChildrenStrategy {
   @override
   void addChild(PBIntermediateNode target, children,
       ChildrenMod<PBIntermediateNode> addChild, tree) {
-    if (children is List<PBIntermediateNode>) {
+    if (children is Set<PBIntermediateNode>) {
       addChild(target, children);
     } else if (children is PBIntermediateNode) {
-      addChild(target, [children]);
+      addChild(target, {children});
     }
   }
 }
@@ -114,7 +114,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
     var group = targetChildren.firstWhere(
         (element) => element is PBLayoutIntermediateNode,
         orElse: () => null);
-    children = children is List ? children : [children];
+    children = children is Set ? children : [children];
 
     // TempGroup is the only child inside `target`
     if (_containsSingleGroup(group, children)) {
@@ -141,7 +141,7 @@ class TempChildrenStrategy extends ChildrenStrategy {
       }
 
       _resizeFrameBasedOn(children, temp);
-      addChild(target, [temp]);
+      addChild(target, {temp});
     }
     // Adding a single child to empty `target`
     else {

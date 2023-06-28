@@ -51,8 +51,8 @@ abstract class Group extends PBLayoutIntermediateNode
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
+  PBLayoutIntermediateNode generateLayout(
+      Set<PBIntermediateNode> children, PBContext currentContext, String name) {
     assert(false, 'Attempted to generateLayout for class type [$runtimeType]');
     return null;
   }

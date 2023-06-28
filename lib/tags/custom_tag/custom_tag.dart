@@ -144,7 +144,7 @@ class CustomTagGenerator extends PBGenerator {
       }
       return '''
         $titleName(
-          child: ${children[0].generator.generate(children[0], context)}
+          child: ${children.elementAt(0).generator.generate(children.elementAt(0), context)}
         )
       ''';
     }

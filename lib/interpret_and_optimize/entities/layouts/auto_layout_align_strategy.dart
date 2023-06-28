@@ -21,9 +21,9 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     // TODO: Look for a way to not have to check if it is a col or row
 
     // New children list
-    var spacedChildren = <PBIntermediateNode>[];
+    var spacedChildren = <PBIntermediateNode>{};
     var children = context.tree.childrenOf(node);
-    sortChildren(children);
+    sortChildren(children.toList());
     var isVertical = true;
     num space;
 
@@ -39,7 +39,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
     }
 
     for (var i = 0; i < children.length; i++) {
-      var child = children[i];
+      var child = children.elementAt(i);
 
       /// Do not add spacing for first and last child.
       /// This is not allowed
@@ -57,9 +57,11 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
           frame: child.frame.copyWith(
             left: isVertical
                 ? 0
-                : children[i - 1].frame.left + children[i - 1].frame.width,
+                : children.elementAt(i - 1).frame.left +
+                    children.elementAt(i - 1).frame.width,
             top: isVertical
-                ? children[i - 1].frame.top + children[i - 1].frame.height
+                ? children.elementAt(i - 1).frame.top +
+                    children.elementAt(i - 1).frame.height
                 : 0,
             height: tHeight,
             width: tWidth,
@@ -112,7 +114,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
       )
         ..layoutCrossAxisSizing = child.layoutCrossAxisSizing
         ..layoutMainAxisSizing = child.layoutMainAxisSizing;
-      context.tree.addEdges(wrapper, [child]);
+      context.tree.addEdges(wrapper, {child});
       return wrapper;
     }
     return child;
@@ -146,7 +148,7 @@ class AutoLayoutAlignStrategy extends AlignStrategy<PBLayoutIntermediateNode> {
           child.frame,
           null,
         );
-        context.tree.addEdges(wrapper, [child]);
+        context.tree.addEdges(wrapper, {child});
 
         return wrapper;
         break;

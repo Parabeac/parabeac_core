@@ -93,10 +93,10 @@ class InheritedScaffold extends PBVisualIntermediateNode
       ..name = '$name-Group'
       ..attributeName = 'body'
       ..parent = this;
-    context.tree.addEdges(groupAtt, children.map((child) => child).toList());
+    context.tree.addEdges(groupAtt, children.map((child) => child).toSet());
 
     context.tree.replaceChildrenOf(this,
-        [groupAtt, appBar, tabBar]..removeWhere((element) => element == null));
+        {groupAtt, appBar, tabBar}..removeWhere((element) => element == null));
   }
 
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {

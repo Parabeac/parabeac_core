@@ -55,10 +55,10 @@ class InheritedMaterial extends PBVisualIntermediateNode
       ..name = '$name-Group'
       ..attributeName = 'child'
       ..parent = this;
-    context.tree.addEdges(groupAtt, children.map((child) => child).toList());
+    context.tree.addEdges(groupAtt, children.map((child) => child).toSet());
 
     context.tree.replaceChildrenOf(
-        this, [groupAtt]..removeWhere((element) => element == null));
+        this, {groupAtt}..removeWhere((element) => element == null));
   }
 
   List<PBIntermediateNode> layoutInstruction(List<PBIntermediateNode> layer) {

@@ -19,8 +19,10 @@ class PBStackGenerator extends PBGenerator {
       if (children.isNotEmpty) {
         buffer.write('\nchildren: [');
         for (var index = 0; index < children.length; index++) {
-          var element =
-              children[index].generator.generate(children[index], context);
+          var element = children
+              .elementAt(index)
+              .generator
+              .generate(children.elementAt(index), context);
           buffer.write(element);
           var endingChar = element != null && element.isEmpty ? '' : ',';
           buffer.write(endingChar);

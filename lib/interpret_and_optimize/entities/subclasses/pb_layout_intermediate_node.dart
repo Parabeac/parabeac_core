@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_prototype_enabled.dart';
@@ -46,8 +47,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   @override
-  void childrenModified(List<PBIntermediateNode> children,
-      [PBContext context]) {
+  void childrenModified(Set<PBIntermediateNode> children, [PBContext context]) {
     if (children != null && children.isNotEmpty) {
       if (context != null) {
         resize(context, children);
@@ -56,7 +56,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     }
   }
 
-  void resize(PBContext context, [List<PBIntermediateNode> children]) {
+  void resize(PBContext context, [Set<PBIntermediateNode> children]) {
     children = children ?? context.tree.edges(this);
     if (children.isEmpty) {
       logger
@@ -67,7 +67,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   }
 
   ///Sort children
-  void sortChildren(List<PBIntermediateNode> children) => children.sort(
+  void sortChildren(Set<PBIntermediateNode> children) => children.sort(
       (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
 
   ///The [PBLayoutIntermediateNode] contains a series of rules that determines if the children is part of that layout. All the children
@@ -92,5 +92,5 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   ///NOTE: make sure that the children that are going to be added satisfy the reles of the [PBLayoutIntermediateNode]
   PBLayoutIntermediateNode generateLayout(
-      List<PBIntermediateNode> children, PBContext currentContext, String name);
+      Set<PBIntermediateNode> children, PBContext currentContext, String name);
 }

@@ -103,7 +103,7 @@ class CustomTagBlocGenerator extends CustomTagGenerator {
     if (source is CustomTag) {
       return '''
         $titleName(
-          child: ${children[0].generator.generate(children[0], context)}
+          child: ${children.elementAt(0).generator.generate(children.elementAt(0), context)}
         )
       ''';
     }

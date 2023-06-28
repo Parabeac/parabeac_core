@@ -24,8 +24,8 @@ part 'pb_intermediate_node.g.dart';
 
 @JsonSerializable(
     explicitToJson: true, createFactory: false, ignoreUnannotated: true)
-abstract class PBIntermediateNode
-    extends Vertex<PBIntermediateNode> //extends Iterable<PBIntermediateNode>
+abstract class PBIntermediateNode extends DirectedGraph<
+    PBIntermediateNode> //extends Iterable<PBIntermediateNode>
 {
   @JsonKey(ignore: true)
   Logger logger;
@@ -88,7 +88,7 @@ abstract class PBIntermediateNode
   }) :
 
         /// We are not using the [Vertex] attribute as it represents the [PBIntermediateNode]
-        super(null) {
+        super({}) {
     logger = Logger(runtimeType.toString());
     if (_UUID == null) {
       logger
@@ -134,7 +134,7 @@ abstract class PBIntermediateNode
                   .cast<PBIntermediateNode>()
                   .map((child) => child.attributeName = attributeName)
               : tree.edges(this).first);
-      tree.addEdges(this, [node]);
+      tree.addEdges(this, {node});
     }
   }
 

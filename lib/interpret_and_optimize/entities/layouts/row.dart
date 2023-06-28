@@ -1,3 +1,4 @@
+import 'package:directed_graph/directed_graph.dart';
 import 'package:parabeac_core/generation/generators/layouts/pb_row_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/padding.dart';
@@ -44,8 +45,8 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode
   }
 
   @override
-  PBLayoutIntermediateNode generateLayout(List<PBIntermediateNode> children,
-      PBContext currentContext, String name) {
+  PBLayoutIntermediateNode generateLayout(
+      Set<PBIntermediateNode> children, PBContext currentContext, String name) {
     var row = PBIntermediateRowLayout(name: name);
     row.prototypeNode = prototypeNode;
     //FIXME children.forEach((child) => row.addChild(child));
@@ -67,7 +68,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode
   }
 
   @override
-  void sortChildren(List<PBIntermediateNode> children) {
+  void sortChildren(Set<PBIntermediateNode> children) {
     children.sort((child0, child1) =>
         child0.frame.topLeft.x.compareTo(child1.frame.topLeft.x));
   }

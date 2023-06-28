@@ -89,7 +89,7 @@ class InjectedTabBar extends PBTag implements PBInjectedIntermediate {
         .where((child) => child.attributeName == TAB_ATTR_NAME)
         .toList();
 
-    var validChildren = <PBIntermediateNode>[];
+    var validChildren = <PBIntermediateNode>{};
     for (var child in tabs) {
       // Inject a Container into Tabs for sizing
       var container = InjectedContainer(
@@ -98,8 +98,8 @@ class InjectedTabBar extends PBTag implements PBInjectedIntermediate {
         name: child.name,
         constraints: child.constraints.copyWith(),
       )..attributeName = child.attributeName;
-      context.tree.removeEdges(child.parent, [child]);
-      context.tree.addEdges(container, [child]);
+      context.tree.removeEdges(child.parent, {child});
+      context.tree.addEdges(container, {child});
       validChildren.add(container);
     }
 

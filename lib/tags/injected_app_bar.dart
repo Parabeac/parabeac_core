@@ -81,7 +81,7 @@ class InjectedAppbar extends PBTag implements PBInjectedIntermediate {
     var children = context.tree.childrenOf(this);
 
     // Remove children that have an invalid `attributeName`
-    var validChildren = children.where(_isValidNode).toList();
+    var validChildren = children.where(_isValidNode).toSet();
 
     context.tree.replaceChildrenOf(this, validChildren);
   }
