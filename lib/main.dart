@@ -37,7 +37,8 @@ final designToPBDLServices = <DesignToPBDLService>[
   JsonToPBDLService(),
   FigmaToPBDLService(),
 ];
-FileSystemAnalyzer fileSystemAnalyzer;
+//TODO: Make late
+/*late*/FileSystemAnalyzer fileSystemAnalyzer;
 Interpret interpretService = Interpret();
 
 ///sets up parser
@@ -152,7 +153,7 @@ ${parser.usage}
   /// Register the PathService singleton
   /// for PBC to know in the future the type of architecture
   GetIt.I.registerSingleton<PathService>(PathService.fromConfiguration(
-      MainInfo().configuration.folderArchitecture));
+      MainInfo().configuration/*!*/.folderArchitecture));
 
   /// Register the AmplitudeService singleton
   /// too keep track of the analytics through PBC

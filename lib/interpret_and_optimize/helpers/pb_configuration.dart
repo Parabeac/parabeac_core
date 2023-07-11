@@ -59,7 +59,7 @@ class PBConfiguration {
   /// The type of folder architecture that Parabeac-Core should follow
   /// It will be domain, as default
   @JsonKey(defaultValue: 'domain')
-  String folderArchitecture;
+  String/*!*/ folderArchitecture;
 
   @JsonKey(defaultValue: true)
   final bool scaling;
