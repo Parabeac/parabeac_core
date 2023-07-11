@@ -56,12 +56,6 @@ class AbstractIntermediateNodeFactory {
         if (candidate.type == className) {
           var iNode = candidate.createIntermediateNode(json, parent, tree);
 
-          var tag =
-              PBPluginListHelper().returnAllowListNodeIfExists(iNode, tree);
-          // Return tag if it exists
-          if (tag != null) {
-            return tag.handleIntermediateNode(iNode, parent, tag, tree);
-          }
           if (parent != null && iNode != null) {
             tree.addEdges(parent, [iNode]);
           }
