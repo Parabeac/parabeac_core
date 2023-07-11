@@ -192,10 +192,6 @@ abstract class FileStructureStrategy implements CommandInvoker {
       ),
     );
 
-    if (FileOwnership.PBC == ownership) {
-      data = _setHeader(data);
-    }
-
     if (_fileSystemAnalyzer.containsFile(file.path) &&
         ownership == FileOwnership.DEV) {
       /// file is going to be ignored
@@ -256,18 +252,6 @@ abstract class FileStructureStrategy implements CommandInvoker {
         ownership: ownership,
       );
     }
-  }
-
-  String _setHeader(String code) {
-    return '''
-// *********************************************************************************
-// PARABEAC-GENERATED CODE. DO NOT MODIFY.
-// 
-// FOR MORE INFORMATION ON HOW TO USE PARABEAC, PLEASE VISIT docs.parabeac.com
-// *********************************************************************************
-    ''' +
-        '\n\n' +
-        code;
   }
 
   File getFile(String directory, String name) => File(p.join(directory, name));
