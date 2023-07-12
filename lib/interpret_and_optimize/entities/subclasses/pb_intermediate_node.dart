@@ -41,7 +41,7 @@ abstract class PBIntermediateNode extends DirectedGraph<
 
   @JsonKey()
   String get UUID => _UUID;
-  String _UUID;
+  String /*!*/ _UUID;
 
   @JsonKey(ignore: false)
   PBIntermediateConstraints constraints;
@@ -65,7 +65,7 @@ abstract class PBIntermediateNode extends DirectedGraph<
       name: 'boundaryRectangle',
       fromJson: Rectangle3D.fromJson,
       toJson: Rectangle3D.toJson)
-  Rectangle3D frame;
+  Rectangle3D /*!*/ frame;
 
   // @JsonKey(ignore: true)
   // PBGenerationViewData get managerData => currentContext.tree;
@@ -76,7 +76,7 @@ abstract class PBIntermediateNode extends DirectedGraph<
 
   /// Name of the element if available.
   @JsonKey(ignore: false)
-  String name;
+  String /*!*/ name;
 
   PBIntermediateNode(
     this._UUID,
@@ -90,11 +90,6 @@ abstract class PBIntermediateNode extends DirectedGraph<
         /// We are not using the [Vertex] attribute as it represents the [PBIntermediateNode]
         super({}) {
     logger = Logger(runtimeType.toString());
-    if (_UUID == null) {
-      logger
-          .debug('Generating UUID for $runtimeType-$name as its UUID is null');
-      _UUID = Uuid().v4();
-    }
 
     if (constraints == null) {
       logger.debug(

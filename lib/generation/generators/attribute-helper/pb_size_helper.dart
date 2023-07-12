@@ -1,10 +1,10 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribute_gen_helper.dart';
+import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/injected_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 
-class PBSizeHelper extends PBAttributesHelper {
+class PBSizeHelper extends PBGenerator {
   PBSizeHelper() : super();
 
   @override

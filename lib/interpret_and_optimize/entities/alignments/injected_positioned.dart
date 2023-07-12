@@ -6,7 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart
 
 class InjectedPositioned extends PBIntermediateNode
     implements PBInjectedIntermediate {
-  final PositionedValueHolder valueHolder;
+  final PositionedValueHolder/*!*/ valueHolder;
 
   @override
   ChildrenStrategy childrenStrategy = OneChildStrategy('child');

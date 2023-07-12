@@ -1,4 +1,4 @@
-import 'package:parabeac_core/generation/generators/attribute-helper/pb_attribute_gen_helper.dart';
+import 'package:parabeac_core/generation/generators/pb_generator.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_container.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/inherited_scaffold.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -6,7 +6,7 @@ import 'package:parabeac_core/interpret_and_optimize/helpers/pb_color.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/state_management/auxilary_data_helpers/intermediate_fill.dart';
 
-class PBColorGenHelper extends PBAttributesHelper {
+class PBColorGenHelper extends PBGenerator {
   PBColorGenHelper() : super();
 
   @override

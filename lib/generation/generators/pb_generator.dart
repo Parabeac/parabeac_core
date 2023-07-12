@@ -31,7 +31,7 @@ abstract class PBGenerator {
     logger = Logger(runtimeType.toString());
   }
 
-  String generate(PBIntermediateNode source, PBContext context);
+  String generate(PBIntermediateNode/*!*/ source, PBContext/*!*/ context);
 
   /// Method that wraps `this` with a `Container`.
   ///

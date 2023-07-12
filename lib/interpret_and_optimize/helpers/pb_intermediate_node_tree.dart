@@ -27,8 +27,7 @@ enum TREE_TYPE {
 @JsonSerializable()
 class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   Logger _logger;
-  String _UUID;
-  String get UUID => _UUID;
+  /*late*/ String UUID;
 
   @JsonKey(ignore: true)
   PBContext context;
@@ -85,9 +84,9 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   Iterator<PBIntermediateTree> get dependentsOn => _dependentsOn.iterator;
 
   /// The [name] of the original [DesignPage] that the [PBIntermediateTree] belongs to.
-  String _name;
+  /*late*/ String /*!*/ _name;
   String get name => _name.snakeCase;
-  set name(String name) {
+  set name(String /*!*/ name) {
     if (!lockData) {
       _name = name;
     }
@@ -115,14 +114,15 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
       super.comparator;
 
   PBIntermediateTree({
-    String name,
+    String /*!*/ name,
     this.context,
-    Map<PBIntermediateNode, Set<PBIntermediateNode>> edges,
+    Map<PBIntermediateNode, Set<PBIntermediateNode>> edges = const {},
     Comparator<DirectedGraph<PBIntermediateNode>> comparator,
-  }) : super(edges ?? {}, comparator: comparator) {
+    this.convert = true,
+  }) : super(edges, comparator: comparator) {
     _name = name;
     _dependentsOn = {};
-    _UUID = Uuid().v4();
+    UUID = Uuid().v4();
     _logger = Logger(name ?? runtimeType.toString());
     _elementStorage = ElementStorage();
   }
@@ -165,7 +165,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
   }
 
   Set<PBIntermediateNode> childrenOf(PBIntermediateNode node) =>
-      edges(node).cast<PBIntermediateNode>();
+      edges(node).toSet();
 
   @override
   void addEdges(DirectedGraph<PBIntermediateNode> parent,
@@ -186,7 +186,7 @@ class PBIntermediateTree extends DirectedGraph<PBIntermediateNode> {
         child.attributeName = parent.getAttributeNameOf(child);
 
         if (!_elementStorage.elementToTree.containsKey(child.UUID)) {
-          _elementStorage.elementToTree[child.UUID] = _UUID;
+          _elementStorage.elementToTree[child.UUID] = UUID;
         }
       });
 

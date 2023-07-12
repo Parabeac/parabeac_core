@@ -14,7 +14,7 @@ import 'package:uuid/uuid.dart';
 /// Class that generates all global [TextStyles] and exports them to a file
 class TextStylesPostGenTask extends PostGenTask {
   GenerationConfiguration generationConfiguration;
-  List<PBDLGlobalTextStyle> textStyles;
+  List<PBDLGlobalTextStyle>/*!*/ textStyles;
 
   TextStylesPostGenTask(this.generationConfiguration, this.textStyles);
 

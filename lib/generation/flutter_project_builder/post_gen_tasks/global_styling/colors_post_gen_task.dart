@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 class ColorsPostGenTask extends PostGenTask {
   GenerationConfiguration generationConfiguration;
 
-  List<PBDLGlobalColor> colors;
+  List<PBDLGlobalColor>/*!*/ colors;
 
   ColorsPostGenTask(
     this.generationConfiguration,

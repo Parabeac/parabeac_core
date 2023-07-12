@@ -10,6 +10,7 @@ import 'package:parabeac_core/interpret_and_optimize/state_management/intermedia
 
 abstract class PBTag extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
+  /// TODO: Add [semanticName] as required parameter in constructor.
   String semanticName;
 
   PBTag(
