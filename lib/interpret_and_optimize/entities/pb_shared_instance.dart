@@ -59,7 +59,7 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
 
   PBSharedInstanceIntermediateNode(
     String UUID,
-    Rectangle3D frame, {
+    Rectangle3D/*?*/ frame, {
     this.originalRef,
     this.SYMBOL_ID,
     this.sharedParamValues,

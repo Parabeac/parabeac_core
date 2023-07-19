@@ -65,7 +65,7 @@ abstract class PBIntermediateNode extends DirectedGraph<
       name: 'boundaryRectangle',
       fromJson: Rectangle3D.fromJson,
       toJson: Rectangle3D.toJson)
-  Rectangle3D /*!*/ frame;
+  Rectangle3D /*?*/ frame;
 
   // @JsonKey(ignore: true)
   // PBGenerationViewData get managerData => currentContext.tree;

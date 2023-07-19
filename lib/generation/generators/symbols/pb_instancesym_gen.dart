@@ -54,7 +54,7 @@ class PBSymbolInstanceGenerator extends PBGenerator {
   }
 
   String genSymbolInstance(
-    String UUID,
+    String/*!*/ UUID,
     List<PBInstanceOverride> overrideValues,
     PBContext context, {
     bool topLevel = true,

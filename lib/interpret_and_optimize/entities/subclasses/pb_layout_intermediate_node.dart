@@ -35,14 +35,14 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
   Map alignment = {};
 
   PBLayoutIntermediateNode(
-    String UUID,
+    String /*!*/ UUID,
     Rectangle3D frame,
     this._layoutRules,
     this._exceptions,
     String name, {
     this.prototypeNode,
     constraints,
-  }) : super(UUID ?? Uuid().v4(), frame, name, constraints: constraints) {
+  }) : super(UUID, frame, name, constraints: constraints) {
     childrenStrategy = MultipleChildStrategy('children');
   }
 

@@ -25,7 +25,7 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     PBIntermediateConstraints constraints,
     layoutCrossAxisSizing,
     layoutMainAxisSizing,
-  }) : super(null, null, STACK_RULES, [], name, constraints: constraints) {
+  }) : super('', null, STACK_RULES, [], name, constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
     if (layoutCrossAxisSizing != ParentLayoutSizing.NONE &&

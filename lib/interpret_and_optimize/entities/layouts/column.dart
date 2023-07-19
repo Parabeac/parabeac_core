@@ -35,7 +35,7 @@ class PBIntermediateColumnLayout extends PBLayoutIntermediateNode
   AlignStrategy alignStrategy = AutoLayoutAlignStrategy();
 
   PBIntermediateColumnLayout(Rectangle3D frame, {String name})
-      : super(null, frame, COLUMN_RULES, COLUMN_EXCEPTIONS, name) {
+      : super('', frame, COLUMN_RULES, COLUMN_EXCEPTIONS, name) {
     generator = PBColumnGenerator();
   }
 

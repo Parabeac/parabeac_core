@@ -40,7 +40,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode
   AlignStrategy alignStrategy = AutoLayoutAlignStrategy();
 
   PBIntermediateRowLayout({String name})
-      : super(null, null, ROW_RULES, ROW_EXCEPTIONS, name) {
+      : super('', null, ROW_RULES, ROW_EXCEPTIONS, name) {
     generator = PBRowGenerator();
   }
 

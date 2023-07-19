@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/state_management/intermedia
 
 /// Represents a typical node that the end-user could see, it usually has properties such as size and color. It only contains a single child, unlike PBLayoutIntermediateNode that contains a set of children.
 /// Superclass: PBIntermediateNode
+// TODO: Remove this class since it's only a constructor that extends [PBIntermediateNode]
 abstract class PBVisualIntermediateNode extends PBIntermediateNode {
   PBVisualIntermediateNode(
     String UUID,
